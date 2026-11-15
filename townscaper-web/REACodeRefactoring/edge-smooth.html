@@ -1,0 +1,28 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><link rel="icon" href="data:,"><meta name="viewport" content="width=device-width,initial-scale=1"><title>分层平滑 · 规整度 · REACode 重构版</title>
+<style>body{margin:0;font:14px/1.6 system-ui;color:#203a42;background:#edf4f2}header{padding:10px 16px}p{margin:4px 0}#panels{display:flex;gap:10px;padding:0 16px}figure{margin:0;background:white;border:1px solid #ccd9d8;border-radius:6px;padding:6px;flex:1}figcaption{font-weight:600}canvas{width:100%;display:block}table{border-collapse:collapse;margin:10px 16px;background:white}td,th{border:1px solid #ccd9d8;padding:5px 10px;text-align:right}th:first-child,td:first-child{text-align:left}label{margin-right:12px}</style>
+<header><a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <b>无 / 普通 / 分层平滑（方格目标松弛）</b>
+<p>1670725072540106755 "no-, dumb- and hierarchical smoothing"；1670720537662836736 "Black is hard, red is game-tile-border and blue is material-border. Verts only get to pull at equal or lower order verts, and only along the appropriate edges"。</p>
+<p>输入是<b>未松弛</b>的四边形/混合网格（grid.js relaxPasses:0，即"底层怪网格的毛糙"），平滑 = grid.js 的方格目标松弛（REACode edgesmooth.js 末尾记下但没落地的正解）。黑 = 台阶/海岸（硬），红 = 有房/无房交界，蓝 = 不同墙色，灰 = 自由边。</p>
+<label>网格 <select id="grid"><option value="quad">四边形</option><option value="mixed">混合</option></select></label><label>种子 <input id="seed" type="number" value="3" style="width:4em"></label><label><input id="mat" type="checkbox">地表材质分区（r56：蓝 = 草/沙材质边）</label></header>
+<div id="panels"><figure><figcaption>无平滑</figcaption><canvas id="c0" width="520" height="520"></canvas></figure><figure><figcaption>普通平滑（不分边类）</figcaption><canvas id="c1" width="520" height="520"></canvas></figure><figure><figcaption>分层平滑</figcaption><canvas id="c2" width="520" height="520"></canvas></figure></div>
+<table><thead><tr><th>模式</th><th>regularity（全部格，°）</th><th>regularity（自由格，°）</th><th>硬边点平均位移</th><th>红线折角（°）</th><th>陆地面积漂移</th></tr></thead><tbody id="rows"></tbody></table>
+<script type="module">
+import{buildQuadGrid,buildMixedGrid}from'./src/core/grid.js';import{World}from'./src/core/world.js';
+import{squareRelax,relaxMetrics,classifyWorldEdges,EDGE_ORDER}from'./src/terrain/edge-square-relax.js';
+const $=s=>document.querySelector(s);
+function makeWorld(kind,seed){const g=(kind==='quad'?buildQuadGrid:buildMixedGrid)({radius:8,seed,relaxPasses:0}),w=new World(g);
+ for(const c of g.cells){const r=Math.hypot(c.cx,c.cz);if(r<6.6+Math.sin(c.cz*1.3+seed)*.8)w.fill(c,r<3.2+Math.cos(c.cx*1.1+seed)?2:1,{rock:true});}
+ // 同一高度上的"房子"（非岩石顶）→ 与岩石邻格之间是 tile 边；不同墙色之间是 material 边
+ for(const c of g.cells){const t=w.top(c);if(t===1&&Math.sin(c.cx*1.6+seed)*Math.cos(c.cz*1.25-seed)>.42){w.fill(c,1,{});w.color[c.id]=c.cx>0?1:2;}}
+ // r56 C08: ?materials=1 / 复选框 —— 岩石顶面按低频场分两种地表材质（草/沙），材质交界 = 蓝色 material 边
+ if($('#mat').checked)for(const c of g.cells){if(w.top(c)&&!w.topIsBuilt(c))w.color[c.id]=Math.sin(c.cx*.55+seed*.7)+Math.cos(c.cz*.48-seed)>.35?5:0;}
+ return w;}
+function draw(cv,w,r,cls){const x=cv.getContext('2d'),S=cv.width,k=S/19,X=v=>S/2+r.X[v]*k,Z=v=>S/2+r.Z[v]*k;x.fillStyle='#dbe9ee';x.fillRect(0,0,S,S);
+ const fill=['#dbe9ee','#cfe0b4','#a9c98f'];for(const c of w.grid.cells){const t=w.top(c);if(!t)continue;x.beginPath();c.pts.forEach((p,i)=>i?x.lineTo(X(p.id),Z(p.id)):x.moveTo(X(p.id),Z(p.id)));x.closePath();x.fillStyle=w.topIsBuilt(c)?(w.color[c.id]===1?'#e8b48e':'#e3d7a6'):(w.color[c.id]===5?'#eadfae':fill[Math.min(2,t)]);x.fill();}
+ const col=['#111','#d33','#2a6fd6','rgba(80,90,95,.35)'],wd=[2.2,2.2,2,1];for(const ord of[3,2,1,0])for(const e of cls.edges){if(e.order!==ord||(ord===0&&e.cb<0))continue;x.strokeStyle=col[ord];x.lineWidth=wd[ord];x.beginPath();x.moveTo(X(e.a),Z(e.a));x.lineTo(X(e.b),Z(e.b));x.stroke();}}
+function run(){const kind=$('#grid').value,seed=+$('#seed').value||3,w=makeWorld(kind,seed),cls=classifyWorldEdges(w),out={};
+ ['none','dumb','hierarchical'].forEach((mode,i)=>{const r=squareRelax(w,{mode,passes:60,classification:cls});draw($('#c'+i),w,r,cls);out[mode]=relaxMetrics(w,r);});
+ const f=(v,d=2)=>v===null?'—':v.toFixed(d);$('#rows').replaceChildren(...Object.entries(out).map(([m,o])=>{const tr=document.createElement('tr');for(const v of[{none:'无',dumb:'普通',hierarchical:'分层'}[m],f(o.regularity),f(o.regularityFree),f(o.hardShift,3),f(o.tileKink,1),(o.landAreaDrift*100).toFixed(2)+'%'])tr.insertAdjacentHTML('beforeend','<td>'+v+'</td>');return tr;}));
+ const cnt=[0,0,0,0];for(const v of cls.vrank)cnt[v]++;window.edgeSmoothReview={kind,seed,vrank:cnt,metrics:out};}
+$('#grid').onchange=$('#seed').onchange=$('#mat').onchange=run;$('#mat').checked=new URLSearchParams(location.search).get('materials')==='1';run();
+</script></html>

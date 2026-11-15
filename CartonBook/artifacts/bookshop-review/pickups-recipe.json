@@ -1,0 +1,311 @@
+{
+  "id": "bookshop-letter",
+  "title": "书店镇 · 门仍开着",
+  "subtitle": "霸天舰队来袭之日",
+  "scene": "messenger",
+  "gameUrl": "/TigerMessenger/?scene=messenger&autostart=1&dev=1&cartonCapture=1",
+  "timeOfDay": 0.38,
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "story": "潮退时，信使抵达书店镇。海堤托着红砖的 Hard To Find，三家工坊书店围住圆形广场。蝗虫还在修装卸架，蚂蚁捧着杯子，甲壳虫的车灯照着一箱没有封口的书。苍竹的信在门里等他，信封受了潮，边角像一片卷起的叶。\n\n港口忽然响了警报。霸天舰队越过水面，运输艇的影子爬上坡道。第一轮炮火落在货轨边，工人把书箱拖进拱廊。信使想往海堤跑，却看见一个孩子站在广场中央：他丢了一本书，正回头找。\n\n蝗虫先走出了自己的店。蚂蚁放下杯子，把沉重的身体挡在廊口；甲壳虫转动车灯，为钻进蒸汽的人们照路。三家店主没有关门。他们把读书的长桌让给伤员，把备件送到机器人脚边。Hard To Find 的店主递出那封信，又把信使往柱后推了一步。\n\n“边境那封？”信使问。店主摇头：“先看看背面。”纸上是苍竹添的一行小字：若有人无处可去，让他先进门。信使把信收进衣襟，折回广场，牵住那个孩子。廊灯一盏接一盏亮着，像几家书店在彼此回答。\n\n空降兵沿绳索落下，机器人与工人在广场边共同守住通路。吊车停住，货船留在码头，系泊飞艇也没有起飞：镇上所有能容人的地方，都在接人。蒸汽遮住了舰队，也遮住了守门者。信使不再数爆炸，只数从廊口跑过去的脚步。\n\n等到炮声向海面退去，蚂蚁才去捡那只杯子。杯沿缺了一块。孩子从湿书里抽出一页，垫在杯下。信使沿货轨走向飞艇坞，边境还在潮气以外等信。他回头时，几家书店的门都开着。镇没有变得更坚固，只是没有让任何一个人独自留在门外。",
+  "storyboard": [
+    {
+      "id": "s16",
+      "title": "招牌：门内有人",
+      "caption": "若有人无处可去，让他先进门。",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -3,
+          2.5,
+          6
+        ],
+        "aim": [
+          -2,
+          2,
+          0
+        ],
+        "fov": 48,
+        "waitMs": 700,
+        "battle": null
+      }
+    },
+    {
+      "id": "s17",
+      "title": "杯子与机械手",
+      "caption": "",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "object": "bookshop-robot-ant-articulated",
+        "eye": [
+          2,
+          2.4,
+          4
+        ],
+        "aim": [
+          0,
+          1.5,
+          0.7
+        ],
+        "fov": 48,
+        "waitMs": 700,
+        "battle": null
+      }
+    },
+    {
+      "id": "s18",
+      "title": "门廊向外看",
+      "caption": "信使转身，回到广场。",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          1,
+          1.7,
+          1
+        ],
+        "aim": [
+          0,
+          2,
+          22
+        ],
+        "fov": 60,
+        "waitMs": 700,
+        "battle": null
+      }
+    },
+    {
+      "id": "s21",
+      "title": "廊灯的回答",
+      "caption": "一盏，接着一盏。",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -9,
+          1,
+          14
+        ],
+        "aim": [
+          -9,
+          1,
+          -4
+        ],
+        "fov": 60,
+        "waitMs": 700,
+        "battle": null
+      }
+    },
+    {
+      "id": "s19",
+      "title": "机器人肩后的天空",
+      "caption": "它抬头时，舰队已经越过屋顶。",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "object": "locust-bookshop-court",
+        "eye": [
+          7,
+          5,
+          -1
+        ],
+        "aim": [
+          0,
+          20,
+          45
+        ],
+        "fov": 60,
+        "waitMs": 700,
+        "battle": "start"
+      }
+    },
+    {
+      "id": "s20",
+      "title": "从广场仰望旗舰",
+      "caption": "天空变窄了。",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          3,
+          35
+        ],
+        "aim": [
+          0,
+          55,
+          10
+        ],
+        "fov": 60,
+        "waitMs": 700,
+        "battle": null
+      }
+    },
+    {
+      "id": "s22",
+      "title": "广场空降",
+      "caption": "沿绳索落下的，是另一种脚步。",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          26,
+          12,
+          63
+        ],
+        "aim": [
+          0,
+          2,
+          35
+        ],
+        "fov": 60,
+        "waitMs": 700,
+        "battle": "ground"
+      }
+    }
+  ],
+  "pages": [
+    {
+      "id": "cover",
+      "kind": "cover",
+      "template": "cover",
+      "title": "书店镇 · 门仍开着",
+      "panels": [
+        {
+          "shotId": "cover"
+        }
+      ]
+    },
+    {
+      "id": "opening",
+      "kind": "prose",
+      "title": "门仍开着",
+      "template": "prose",
+      "panels": []
+    },
+    {
+      "id": "page-01",
+      "kind": "story",
+      "title": "潮退时",
+      "template": "edena-establish",
+      "panels": [
+        {
+          "shotId": "s01"
+        },
+        {
+          "shotId": "s02"
+        },
+        {
+          "shotId": "s03"
+        },
+        {
+          "shotId": "s04"
+        }
+      ]
+    },
+    {
+      "id": "page-02",
+      "kind": "story",
+      "title": "影子越过海堤",
+      "template": "edena-vertical",
+      "panels": [
+        {
+          "shotId": "s05"
+        },
+        {
+          "shotId": "s20"
+        },
+        {
+          "shotId": "s19"
+        }
+      ]
+    },
+    {
+      "id": "page-03",
+      "kind": "story",
+      "title": "彼此回答",
+      "template": "edena-reply",
+      "panels": [
+        {
+          "shotId": "s06"
+        },
+        {
+          "shotId": "s07"
+        },
+        {
+          "shotId": "s08"
+        }
+      ]
+    },
+    {
+      "id": "page-04",
+      "kind": "story",
+      "title": "信的背面",
+      "template": "edena-detail",
+      "panels": [
+        {
+          "shotId": "s09"
+        },
+        {
+          "shotId": "s16"
+        },
+        {
+          "shotId": "s18"
+        },
+        {
+          "shotId": "s21"
+        }
+      ]
+    },
+    {
+      "id": "page-05",
+      "kind": "story",
+      "title": "守住通路",
+      "template": "edena-battle",
+      "panels": [
+        {
+          "shotId": "s22"
+        },
+        {
+          "shotId": "s10"
+        },
+        {
+          "shotId": "s11"
+        }
+      ]
+    },
+    {
+      "id": "page-06",
+      "kind": "story",
+      "title": "留给最后一人",
+      "template": "edena-quiet",
+      "panels": [
+        {
+          "shotId": "s12"
+        },
+        {
+          "shotId": "s13"
+        },
+        {
+          "shotId": "s14"
+        },
+        {
+          "shotId": "s17"
+        }
+      ]
+    },
+    {
+      "id": "last",
+      "kind": "story",
+      "title": "门仍开着",
+      "template": "edena-splash",
+      "panels": [
+        {
+          "shotId": "s15"
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import {renderObjectEditPanel} from './object-edit-panel.js?v=sys-r11';
+import {renderObjectEditPanel} from './object-edit-panel.js?v=sys-r15';
 export function mountObjectBrowser({request}){
  const $=id=>document.getElementById(id),host=$('scene-object-browser'),list=$('scene-object-list'),note=$('scene-object-status'),scope=$('scene-object-scope'),refresh=$('refresh-scene-objects'),clear=$('clear-scene-object'),pick=$('pick-scene-object'),focus=$('focus-scene-object'),apply=$('preview');let selected=null,picking=false,busy=false,rows=[],editPanel=null;
  const el=(tag,text)=>{const node=document.createElement(tag);if(text)node.textContent=text;return node;};

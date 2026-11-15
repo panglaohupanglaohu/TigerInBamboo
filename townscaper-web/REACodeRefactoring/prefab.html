@@ -1,0 +1,45 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>强制模块：合成小块网格 → 缝进 → 3D prefab · REACode重构版</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:12px 22px 4px}a{color:#26758a}canvas{display:block;margin:4px 16px;background:#f7fbf9;border-radius:10px}
+#info{padding:0 22px;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace}code{background:#e4efec;padding:0 4px;border-radius:4px}</style>
+<header><a href="index.html" target="_top">首页</a> · <a href="patch.html">模块搜索</a> · <a href="gridpatch.html">规则补丁</a> ·
+<a href="?splice=1">合成并缝进</a> · <a href="?splice=0">只在原网格里找（对照）</a> · <a href="?splice=1&seed=3&x=1.5&z=-1">换位置</a>
+<p style="margin:4px 0;max-width:1180px">1751932427272909032「I can now force specific modules to appear. To do this I first generate the specific bit of grid they need」；1670794261669769217「条件苛刻的 tile 很久都不出现」；1579483114178768898「一个房子 tile 同时盖方格和三角格」。
+流程：<code>synthesizeModulePatch</code> 按邻接图用正多边形造出那一小块（4 方 + 3 三角）→ <code>spliceModulePatch</code> 在已有网格挖一个星形洞放进去，洞边与块边之间用耳切 + Lawson 翻边的三角带缝合（只用两圈已有顶点，无 T 形接头，半边闭合）→
+<code>layerGrid</code> 叠 3 层 → <code>solveWithPrefab</code>：两层高的 prefab 占 7 格 × 第 2–3 层，四周 W 墙、底层一扇 D 门、顶 R、底 S；内部面是成对唯一插槽，周围由共享 WFC 按 FORT 标签补齐（门外必须是空气 / 墙，底下必须有 S 顶面的台基）。</p></header>
+<canvas id="c" width="1260" height="560"></canvas><div id="info"></div>
+<script type="module">
+import{buildMixedGrid}from'./src/core/grid.js';import{findModulePatches}from'./src/core/module-search.js';import{findWFCConflicts}from'./src/core/wfc.js';
+import{CLIP,forcePrefab}from'./tests/fixtures/g5-prefab.mjs';
+const q=new URLSearchParams(location.search),SPLICE=q.get('splice')!=='0',seed=Number(q.get('seed')??1),at={x:Number(q.get('x')??.2),z:Number(q.get('z')??.3)};
+const g0=buildMixedGrid({radius:12,seed}),found=findModulePatches(g0,CLIP,{limit:6});
+const F=forcePrefab(g0,{seed,forceSplice:SPLICE,at}),ctx=document.querySelector('#c').getContext('2d');
+const g=F.grid,sp=g.splice,R=(sp?.holeRadius??2)+1.6,cx=sp?.x??(F.base?g.cells[F.base[0]].cx:0),cz=sp?.z??(F.base?g.cells[F.base[0]].cz:0);
+const plan=(grid,ox,oy,scale,fill)=>{for(const c of grid.cells){if(Math.hypot(c.cx-cx,c.cz-cz)>R+1)continue;ctx.beginPath();c.pts.forEach((p,i)=>{const x=ox+(p.x-cx)*scale,y=oy+(p.z-cz)*scale;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle=fill(c)??'#e5eeea';ctx.fill();ctx.strokeStyle='#5e7477';ctx.lineWidth=.8;ctx.stroke();}};
+const PS=150/R;
+ctx.save();ctx.beginPath();ctx.rect(10,30,330,330);ctx.clip();
+const removed=new Set(sp?.removedCells??[]);plan(g0,175,195,PS,c=>removed.has(c.id)?'#f2d3a0':null);ctx.restore();
+ctx.fillStyle='#20343c';ctx.font='13px system-ui';ctx.fillText('① 原网格：'+(found.matches.length?`有 ${found.matches.length} 处同构足迹`:'找不到这个 7 格模块')+(SPLICE?' · 黄 = 要切掉的洞':''),14,22);
+ctx.save();ctx.beginPath();ctx.rect(350,30,330,330);ctx.clip();
+const patch=new Set(sp?.patchCellIds??F.base??[]),seam=new Set(sp?.seamCellIds??[]);plan(g,515,195,PS,c=>patch.has(c.id)?'#6aa784':seam.has(c.id)?'#f0a36b':null);ctx.restore();
+ctx.fillText(SPLICE?`② 缝进后：绿 = 合成块 ${patch.size} 格，橙 = 接缝三角 ${seam.size} 个`:'② 原网格里的足迹（绿）',354,22);
+// ③ iso of the layered solve
+const r=F.result,lat=F.lattice,H=lat.H,cat=new Map(r.catalog.map(t=>[t.id,t])),RI=(sp?.holeRadius??1.6)+.2,S=165/RI,LH=34,OX=975,OY=320;
+const iso=(x,z,y)=>[OX+((x-cx)-(z-cz))*S*.866,OY+((x-cx)+(z-cz))*S*.5-y*LH];
+const near=g.cells.filter(c=>Math.hypot(c.cx-cx,c.cz-cz)<RI);
+for(const c of near){ctx.beginPath();c.pts.forEach((p,i)=>{const[x,y]=iso(p.x,p.z,0);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle=seam.has(c.id)?'#e9cfa9':'#bcd7b4';ctx.fill();ctx.strokeStyle='#9cbf95';ctx.lineWidth=.6;ctx.stroke();}
+const items=[];const prefabSet=new Set(F.mapping);
+for(const c of near)for(let k=1;k<=H;k++){const id=c.id*H+k-1,t=cat.get(r.tiles[id]);if(!t.solid)continue;items.push({c,k,id,t,pre:prefabSet.has(id),d:c.cx+c.cz});}
+items.sort((a,b)=>a.pre-b.pre||a.d-b.d||a.k-b.k);   // surroundings first (translucent), prefab last so its door socket stays visible
+const col=it=>it.pre?'#c0533a':{block:'#d8c79a',wall:'#e6dcc0',door:'#b48a5a',floor:'#cdbb8c',pillar:'#bfae86',window:'#9fc4d6',ledge:'#c9b893'}[it.t.name]??'#ddd';
+for(const it of items){const{c,k}=it,cc=col(it);ctx.globalAlpha=it.pre?1:.42;
+  for(let i=0;i<c.n;i++){const p=c.pts[i],p2=c.pts[(i+1)%c.n],a=iso(p.x,p.z,k-1),b=iso(p2.x,p2.z,k-1),b2=iso(p2.x,p2.z,k),a2=iso(p.x,p.z,k);
+    ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.lineTo(...b2);ctx.lineTo(...a2);ctx.closePath();ctx.fillStyle=cc;ctx.fill();ctx.fillStyle='rgba(20,30,40,.25)';ctx.fill();ctx.strokeStyle='rgba(32,52,60,.4)';ctx.lineWidth=.5;ctx.stroke();
+    // door socket marker on the prefab
+    const lab=it.pre?r.parts[F.mapping.indexOf(it.id)].edges[i]?.label:null;if(lab==='D'){ctx.fillStyle='#3b2416';const m=[(a[0]+b[0])/2,(a[1]+b[1])/2];ctx.fillRect(m[0]-5,m[1]-LH*.75,10,LH*.75);}}
+  ctx.beginPath();c.pts.forEach((p,i)=>{const[x,y]=iso(p.x,p.z,k);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle=cc;ctx.fill();ctx.strokeStyle='rgba(32,52,60,.4)';ctx.stroke();}
+ctx.globalAlpha=1;ctx.fillStyle='#20343c';ctx.fillText('③ 3 层 WFC：赭红 = 强制出现的 2 层 prefab（深色 = D 门），米色半透明 = 周围 FORT 标签 tile',700,22);
+const conflicts=findWFCConflicts(lat,r.tiles,r.catalog,{compatible:r.compatible}).length;
+const prefabCount=Object.values(r.tiles).filter(t=>t.startsWith('prefab#')).length;
+const stats={splice:SPLICE,originalMatches:found.matches.length,ok:r.ok,reason:r.reason,cells:g.cells.length,removed:sp?.removedCells.length??0,seam:seam.size,closure:F.closure,prefabParts:F.mapping.length,prefabCount,conflicts,solid:items.length,backtracks:r.backtracks};
+window.__prefab=stats;document.querySelector('#info').textContent=JSON.stringify(stats);
+</script></html>

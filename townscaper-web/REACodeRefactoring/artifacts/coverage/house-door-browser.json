@@ -1,0 +1,23 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "floor": 2,
+      "lower": 0.995,
+      "upper": 0.995,
+      "same": 1.01,
+      "lowerDef": 1.01,
+      "sameDef": 0.995
+    },
+    {
+      "grid": "mixed",
+      "floor": 6,
+      "lower": 0.995,
+      "upper": 0.995,
+      "same": 1.01,
+      "lowerDef": 1.01,
+      "sameDef": 0.995
+    }
+  ],
+  "errors": []
+}

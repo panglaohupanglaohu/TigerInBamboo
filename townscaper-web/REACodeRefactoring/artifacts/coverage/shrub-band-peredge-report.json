@@ -1,0 +1,36 @@
+{
+ "geo": {
+  "found": true,
+  "count": 49848,
+  "tris": 16616,
+  "constTri": 16616,
+  "notOne": 2915,
+  "tiers": 2336,
+  "fans": 719,
+  "ratios": 719,
+  "rMed": 1.4799301671420289,
+  "r90": 1.7657969425528506,
+  "topP10": 0.7674735188484192,
+  "topP90": 1.2991901636123657,
+  "edgeMinusOne": 29,
+  "nEdgeTiers": 4,
+  "topTris": 2876,
+  "topNotOne": 2847
+ },
+ "wall": null,
+ "off": {
+  "allOne": true,
+  "n": 49848
+ },
+ "problems": [],
+ "spot": {
+  "x": -6.581519248698693,
+  "z": -2.703026904213906,
+  "y": 4,
+  "drop": 8
+ },
+ "shots": [
+  "artifacts/coverage/shrub-band-peredge-on.png",
+  "artifacts/coverage/shrub-band-peredge-off.png"
+ ]
+}

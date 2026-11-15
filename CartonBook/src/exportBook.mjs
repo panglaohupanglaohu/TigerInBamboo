@@ -24,45 +24,60 @@ function esc(s) {
 export function exportBook(plan, opts) {
   const chapterDir = opts.chapterDir;
   const pagesDir = path.join(chapterDir, "pages");
+  const requiresLive = plan.noFixtures === true || ["bookshop-letter", "messenger-tide-letter"].includes(plan.id);
+  if (requiresLive) {
+    const manifestPath = path.join(chapterDir, "manifest.json");
+    if (!fs.existsSync(manifestPath)) throw new Error("正式导出需要 manifest.json");
+    const manifest = JSON.parse(fs.readFileSync(manifestPath, "utf8"));
+    if (!manifest.realCapture || manifest.mode !== "live" || manifest.shots?.some(e => !e.ok || !e.captureClean)) {
+      throw new Error("正式导出需要全部真实、无 HUD 截图；fixtures / incomplete / placeholder 均禁止发布");
+    }
+    if (plan.id === "bookshop-letter" && plan.story) {
+      const reviewed = new Set(manifest.visualReview?.approvedShotIds || []);
+      const missingReview = plan.shots.map(s => s.id).filter(id => !reviewed.has(id));
+      if (manifest.visualReview?.status !== "approved" || missingReview.length) {
+        throw new Error(`正式导出前必须逐张肉眼验收；未通过镜头: ${missingReview.join(", ") || "尚未签署视觉验收"}`);
+      }
+    }
+  }
   if (!fs.existsSync(pagesDir)) {
     throw new Error("pages/ 不存在，请先运行 layout");
   }
 
-  const pageFiles = fs
-    .readdirSync(pagesDir)
-    .filter((f) => f === "cover.html" || /^page-\d+\.html$/.test(f))
-    .sort((a, b) => {
-      if (a === "cover.html") return -1;
-      if (b === "cover.html") return 1;
-      return a.localeCompare(b);
-    });
+  let leafIndex = 0;
+  const pageFiles = plan.pages.map((page) => {
+    if (page.kind === "cover" || page.template === "cover") return "cover.html";
+    leafIndex += 1;
+    return `page-${String(leafIndex).padStart(2, "0")}.html`;
+  });
+  const missingPages = pageFiles.filter(f => !fs.existsSync(path.join(pagesDir, f)));
+  if (missingPages.length) throw new Error(`缺少本次计划页面，请先重新 layout: ${missingPages.join(", ")}`);
 
   if (pageFiles.length < 2) {
     throw new Error("需要封面 + 至少一页分镜 HTML");
   }
 
-  // 内联：用同文档多 section + 打印分页；导航切换显示
-  const sections = pageFiles
-    .map((f, i) => {
+  // 内联：用同文档多 section + 打印分页；显式 spread/single 决定翻页单位。
+  const useSpread = plan.layout !== "single";
+  const spreads = useSpread
+    ? [pageFiles.slice(0, 1), ...Array.from({ length: Math.ceil((pageFiles.length - 1) / 2) }, (_, i) => pageFiles.slice(1 + i * 2, 3 + i * 2))]
+    : pageFiles.map(f => [f]);
+  const sections = spreads.map((files, i) => {
+    const articles = files.map(f => {
       const raw = fs.readFileSync(path.join(pagesDir, f), "utf8");
-      const m = raw.match(/<article[\s\S]*?<\/article>/i);
-      let article = m ? m[0] : `<article class="book-page"><p>${esc(f)}</p></article>`;
-      // pages/ uses ../shots/; book.html sits beside shots/ so rewrite for the book document
-      // also normalize any accidental ../../shots/ or ./../shots/
-      article = article.replace(/(?:\.\.\/)+shots\//g, "shots/");
-      if (article.includes("../shots/")) {
-        throw new Error(`exportBook: failed to rewrite ../shots/ in ${f}`);
-      }
-      return `<section class="book-section" data-page="${i}" ${i === 0 ? "" : "hidden"}>\n${article}\n</section>`;
-    })
-    .join("\n");
-
-  const nav = pageFiles
-    .map((f, i) => {
-      const label = f === "cover.html" ? "封面" : f.replace(".html", "");
-      return `<button type="button" data-go="${i}" class="${i === 0 ? "is-active" : ""}">${esc(label)}</button>`;
-    })
-    .join("\n");
+      const match = raw.match(/<article[\s\S]*?<\/article>/i);
+      if (!match) throw new Error(`Missing article: ${f}`);
+      return match[0].replace(/(?:\.\.\/)+shots\//g, "shots/");
+    }).join("\n");
+    return `<section class="book-section ${files.length === 2 ? "spread-inner" : "spread-cover"}" data-page="${i}" ${i === 0 ? "" : "hidden"}>${articles}</section>`;
+  }).join("\n");
+  const pageButtons = spreads.map((files, i) => {
+    const label = i === 0 ? (useSpread ? "跨页封面" : "封面") : useSpread ? `${i * 2 - 1}${files.length === 2 ? `—${i * 2}` : ""}` : String(i);
+    return `<button type="button" data-go="${i}" class="${i === 0 ? "is-active" : ""}">${label}</button>`;
+  }).join("\n");
+  const turnLabel = useSpread ? "跨页" : "页";
+  const pdfName = `${String(plan.title || plan.id).replace(/[\\/:*?"<>|]/g, "-")}.pdf`;
+  const nav = `${pageButtons}\n<button type="button" data-go="prev">上一${turnLabel}</button><button type="button" data-go="next">下一${turnLabel}</button>\n<a class="download-pdf" id="download-pdf" href="book.pdf" download="${esc(pdfName)}">下载 PDF</a>`;
 
   const bookHtml = `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -74,18 +89,29 @@ export function exportBook(plan, opts) {
 <style>
   .book-section[hidden] { display: none !important; }
   @media print {
+    @page { size: 1380px 920px; margin: 0; }
+    html, body { width: 1380px; margin: 0 !important; padding: 0 !important; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .book-shell, .book-shell:has(.cover-spread), #book { width: 1380px; max-width: none; margin: 0; padding: 0; }
     .book-section[hidden] { display: block !important; }
-    .book-section { page-break-after: always; }
+    .book-section, .book-section.spread-cover, .book-section.spread-inner {
+      width: 1380px; height: 920px; min-height: 920px; max-width: none;
+      margin: 0; overflow: hidden; box-shadow: none;
+      break-after: page; page-break-after: always;
+    }
+    .book-section.spread-inner { display: grid !important; grid-template-columns: 1fr 1fr; gap: 0; }
+    .book-section.spread-cover { display: block !important; }
+    .book-section:last-child { break-after: auto; page-break-after: auto; }
+    .spread-inner .book-page { width: 690px; height: 920px; min-height: 920px; margin: 0; break-after: auto; page-break-after: auto; }
+    .book-page.cover-spread { width: 1380px; height: 920px; min-height: 0; aspect-ratio: auto; break-after: auto; page-break-after: auto; }
+    .book-nav, .hard-constraint { display: none !important; }
   }
 </style>
 </head>
 <body>
 <div class="book-shell">
-  <p class="hard-constraint">CartonBook · 所有画面来自 TigerMessenger 游戏截屏 · 禁止文生图</p>
+  <p class="hard-constraint">${esc(plan.title)}</p>
   <nav class="book-nav" id="nav">
 ${nav}
-    <button type="button" data-go="prev">上一页</button>
-    <button type="button" data-go="next">下一页</button>
   </nav>
   <div id="book">
 ${sections}
@@ -135,6 +161,8 @@ ${sections}
     }
     if (!src.startsWith("shots/")) {
       console.warn("[exportBook] unexpected img src (expected shots/...):", src);
+    } else if (!fs.existsSync(path.join(chapterDir, src))) {
+      throw new Error(`exportBook: 缺少图片 ${src}`);
     }
   }
   fs.writeFileSync(bookPath, bookHtml, "utf8");
@@ -162,6 +190,7 @@ function updateViewer(plan, bookPath) {
       let subtitle = "";
       let realCapture = null;
       let mode = "";
+      let visualStatus = "unknown";
       try {
         const p = JSON.parse(
           fs.readFileSync(path.join(chaptersRoot, id, "plan.json"), "utf8")
@@ -175,10 +204,13 @@ function updateViewer(plan, bookPath) {
         );
         realCapture = !!m.realCapture;
         mode = m.mode || (realCapture ? "live" : "fixtures");
+        visualStatus = m.visualReview?.status || (realCapture ? "pending" : "not-required");
       } catch {}
-      const badge = realCapture
-        ? `<span class="badge ok">真截屏</span>`
-        : `<span class="badge warn">样章/fixtures（仅排版）</span>`;
+      const badge = realCapture && visualStatus === "approved"
+        ? `<span class="badge ok">真截 · 已视觉验收</span>`
+        : realCapture
+          ? `<span class="badge warn">真截 · 待视觉验收</span>`
+          : `<span class="badge warn">${esc(mode || "unknown")}（仅排版 / 未验收）</span>`;
       return `<li class="chapter-card">
   <a class="chapter-link" href="../chapters/${esc(id)}/book.html">
     <strong>${esc(title)}</strong>

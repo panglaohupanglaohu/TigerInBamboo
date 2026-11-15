@@ -37,3 +37,8 @@ lightvolume.js可选distanceField，把太阳/点光射线接入此路径，原D
 程序笔触法线/切线贴图及表面着色、形变表面SDF、命中UV/mega-texture往返反馈、完整方向传播/低分辨率漏光、原版2.5D形因子与参考校验接口仍待补。610帧视频学习和本轮局部功能通过，不等于这些能力已全部验收。模块口径17增强/81静态对应/34部分；已有代码成果保留。
 
 补充回归：index/pipeline已显示52/285、剩余233及132模块，town/terrain/badnorth三主场景重新加载无pageerror；截图distance-progress-*.png。完整清单285个本地视频均匹配README，泳道缺项0。下一批1664566546683899905/1849732997945110651尚未计数。
+
+
+## 第 56 批（C08）
+
+- 1481661852887265288：复核：笔触法线已接 View（?shade=paintnormal），六向 AO / SDF 在 lightvolume.html。截图 C08-paintnormal-lightonly.png、C08-lightvolume-ao.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

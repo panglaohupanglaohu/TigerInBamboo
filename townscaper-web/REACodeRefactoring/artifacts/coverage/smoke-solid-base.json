@@ -1,0 +1,41 @@
+{
+  "report": {
+    "on": {
+      "solid": true,
+      "particles": 68,
+      "drawn": 21433,
+      "bulges": 8,
+      "emptyBins": 0,
+      "gapBins": 2,
+      "baseBins": 19,
+      "baseFill": 0.993,
+      "core": 0.76,
+      "axisDeg": 58
+    },
+    "off": {
+      "solid": false,
+      "particles": 68,
+      "drawn": 11036,
+      "bulges": 9,
+      "emptyBins": 0,
+      "gapBins": 11,
+      "baseBins": 19,
+      "baseFill": 0.84,
+      "core": 0.55,
+      "axisDeg": 59
+    },
+    "toggle": {
+      "off": {
+        "core": 0.55,
+        "u": 0.55,
+        "flag": false
+      },
+      "on": {
+        "core": 0.76,
+        "u": 0.76,
+        "flag": true
+      }
+    }
+  },
+  "errors": []
+}

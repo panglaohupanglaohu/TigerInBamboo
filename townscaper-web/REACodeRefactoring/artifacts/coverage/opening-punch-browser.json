@@ -1,0 +1,33 @@
+{
+  "metrics": {
+    "mode": "interior→mask→wall→decal",
+    "analyticHolePixels": 44236.8,
+    "measuredHolePixels": 44032,
+    "holePixelsError": -0.46,
+    "interiorVisibleSharePunch": 1,
+    "interiorVisibleShareDecal": 0,
+    "wallDriftPixels": 0,
+    "repeatDriftPixels": 0,
+    "meanLumaPunch": 79.33,
+    "meanLumaDecal": 65.22,
+    "openings": 11,
+    "doors": 2,
+    "coverage": 16.88
+  },
+  "shown": {
+    "mode": "interior→mask→wall→decal",
+    "analyticHolePixels": 44236.8,
+    "measuredHolePixels": 44032,
+    "holePixelsError": -0.46,
+    "interiorVisibleSharePunch": 1,
+    "interiorVisibleShareDecal": 0,
+    "wallDriftPixels": 0,
+    "repeatDriftPixels": 0,
+    "meanLumaPunch": 79.33,
+    "meanLumaDecal": 65.22,
+    "openings": 11,
+    "doors": 2,
+    "coverage": 16.88
+  },
+  "errors": []
+}

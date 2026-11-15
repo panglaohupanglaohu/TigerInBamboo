@@ -1,0 +1,79 @@
+{
+  "ok": true,
+  "checks": {
+    "A 页面默认吃遮挡": {
+      "pass": true,
+      "detail": "page=true layer=true 覆盖层数=7"
+    },
+    "A2 默认七层 depthTest 全 true": {
+      "pass": true,
+      "detail": "{\"mesh\":true,\"regions\":true,\"thick\":true,\"cand\":true,\"dots\":true,\"corners\":true,\"outline\":true}"
+    },
+    "B 关掉后七层全 false": {
+      "pass": true,
+      "detail": "{\"mesh\":false,\"regions\":false,\"thick\":false,\"cand\":false,\"dots\":false,\"corners\":false,\"outline\":false}"
+    },
+    "C 开/关像素不同": {
+      "pass": true,
+      "detail": "不同像素=70385/595100 (11.8%)"
+    },
+    "D 白格与黑格可见像素都减少": {
+      "pass": true,
+      "detail": "白 on=2833 off=6762 · 黑 on=61398 off=79205"
+    },
+    "E 候选铺面可见面积 ON<OFF（白格）": {
+      "pass": true,
+      "detail": "近白像素 on=2833 off=6762"
+    },
+    "F 无运行时错误": {
+      "pass": true,
+      "detail": "clean"
+    }
+  },
+  "flags": {
+    "def": {
+      "pageFlag": true,
+      "layerFlag": true,
+      "mats": {
+        "mesh": true,
+        "regions": true,
+        "thick": true,
+        "cand": true,
+        "dots": true,
+        "corners": true,
+        "outline": true
+      },
+      "renderOrder": 8
+    },
+    "off": {
+      "mesh": false,
+      "regions": false,
+      "thick": false,
+      "cand": false,
+      "dots": false,
+      "corners": false,
+      "outline": false
+    },
+    "on": {
+      "mesh": true,
+      "regions": true,
+      "thick": true,
+      "cand": true,
+      "dots": true,
+      "corners": true,
+      "outline": true
+    },
+    "n": 7,
+    "allTrue": true,
+    "allFalse": true,
+    "renderOrderKept": 8
+  },
+  "px": {
+    "diff": 70385,
+    "px": 595100,
+    "wOn": 2833,
+    "wOff": 6762,
+    "bOn": 61398,
+    "bOff": 79205
+  }
+}

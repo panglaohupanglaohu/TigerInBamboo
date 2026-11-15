@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" href="data:," />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OBJ 导出 → 独立查看器回看 · REACode 重构版（第 56 批 C06）</title>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; font: 13px/1.5 system-ui, "PingFang SC", sans-serif; background: #4b5563; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  iframe { position: fixed; left: -2000px; top: 0; width: 900px; height: 600px; border: 0; }
+  #ui { position: fixed; left: 14px; top: 14px; width: 360px; background: rgba(255,255,255,.93); color: #1d2f36; border-radius: 12px; padding: 10px 12px; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+  #ui h1 { font-size: 15px; margin: 0 0 4px; } #ui p { margin: 3px 0; font-size: 12px; color: #4d6369; }
+  #ui button, #ui select { font: inherit; font-size: 12px; border: 1px solid #c9d8d7; border-radius: 7px; background: #fff; padding: 3px 8px; cursor: pointer; }
+  #stat { font-size: 11.5px; color: #2f7f8a; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<iframe id="game" title="主场景（隐藏）"></iframe>
+<div id="ui">
+  <h1>OBJ 导出 → 另一个查看器</h1>
+  <p>1430224300003545091：主场景（隐藏 iframe）里用共享 <code>tools/objexport.js</code> 导出主体 OBJ 文本，本页用<b>独立解析器</b>（<code>tools/obj-parse-c06.js</code>，不看导出端数据）读回来，按 DCC 习惯灰白材质 + 地面网格显示。也可以拖入/选择任意 .obj。</p>
+  <div><select id="scene"><option value="town">小镇</option><option value="fusion">融合</option><option value="terrain">地形</option></select> <input type="file" id="file" accept=".obj"></div>
+  <div id="stat">载入主场景…</div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { geometryToOBJ } from './src/tools/objexport.js';
+import { parseOBJ } from './src/tools/obj-parse-c06.js';
+const q = new URLSearchParams(location.search);
+const canvas = document.getElementById('c'), statEl = document.getElementById('stat'), sceneEl = document.getElementById('scene'), frame = document.getElementById('game');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+const scene = new THREE.Scene();
+// DCC 视口：上浅下深的灰蓝渐变背景 + 地面网格
+const bg = document.createElement('canvas'); bg.width = 2; bg.height = 256; const g2 = bg.getContext('2d'); const gr = g2.createLinearGradient(0, 0, 0, 256); gr.addColorStop(0, '#8b95a3'); gr.addColorStop(1, '#3d4552'); g2.fillStyle = gr; g2.fillRect(0, 0, 2, 256);
+scene.background = new THREE.CanvasTexture(bg);
+const camera = new THREE.PerspectiveCamera(35, 1, .1, 500);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x666670, 1.5));
+const key = new THREE.DirectionalLight(0xffffff, 1.4); key.position.set(-8, 14, 10); scene.add(key);
+const gridH = new THREE.GridHelper(80, 80, 0x2b313b, 0x56606e); scene.add(gridH);
+let model = null, last = null;
+function show(text, source) {
+  const t0 = performance.now();
+  const r = parseOBJ(text);
+  const ms = performance.now() - t0;
+  if (model) { scene.remove(model); model.geometry.dispose(); }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(r.position, 3)); geo.setAttribute('normal', new THREE.BufferAttribute(r.normal, 3));
+  model = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: 0xd8d8d8, roughness: .85, flatShading: true }));
+  scene.add(model);
+  const c = r.box.min.map((m, d) => (m + r.box.max[d]) / 2), size = Math.max(...r.box.max.map((m, d) => m - r.box.min[d]));
+  gridH.position.y = r.box.min[1];
+  camera.position.set(c[0] + size * .7, c[1] + size * .62, c[2] + size * .95); camera.lookAt(c[0], c[1], c[2]);
+  last = { source, ...r, position: undefined, normal: undefined, parseMs: ms, bytes: text.length };
+  statEl.textContent = `${source} · ${(text.length / 1024).toFixed(0)} KB · 解析 ${ms.toFixed(0)} ms\nv ${r.vertices} · vn ${r.normals} · f ${r.polys} → ${r.faces} 三角 · 坏引用 ${r.badRefs}\n包围盒 ${r.box.min.map((x) => x.toFixed(2)).join(',')} → ${r.box.max.map((x) => x.toFixed(2)).join(',')}`;
+  return last;
+}
+function fromGame() {
+  const api = frame.contentWindow.rea, geo = api.view.worldMesh.geometry;
+  const exp = geometryToOBJ(geo, { name: 'townscaper_' + sceneEl.value });
+  const r = show(exp.text, `主场景 ${sceneEl.value} 导出`);
+  // 对账：导出端三角数 = 读回三角数；读回包围盒 = 源几何包围盒
+  geo.computeBoundingBox(); const bb = geo.boundingBox;
+  const boxErr = Math.max(...[bb.min.x - r.box.min[0], bb.min.y - r.box.min[1], bb.min.z - r.box.min[2], bb.max.x - r.box.max[0], bb.max.y - r.box.max[1], bb.max.z - r.box.max[2]].map(Math.abs));
+  window.objView = { ...r, exported: { faces: exp.faces, vertices: exp.vertices, sourceFaces: exp.sourceFaces, dropped: exp.droppedFaces }, boxErr, sameFaces: exp.faces === r.faces };
+  statEl.textContent += `\n导出端 ${exp.faces} 面（源 ${exp.sourceFaces}，丢 ${exp.droppedFaces}）· 读回一致 ${exp.faces === r.faces} · 包围盒误差 ${boxErr.toExponential(1)}`;
+}
+function load() { window.objView = null; statEl.textContent = '载入主场景…'; frame.src = 'index.html?scene=' + sceneEl.value; }
+frame.onload = () => { const ready = () => { const api = frame.contentWindow.rea; if (!api?.view?.worldMesh?.geometry?.attributes?.position?.count) { setTimeout(ready, 150); return; } setTimeout(fromGame, 300); }; ready(); };
+sceneEl.value = q.get('scene') || 'town'; sceneEl.onchange = load;
+document.getElementById('file').onchange = async (e) => { const f = e.target.files[0]; if (f) window.objView = show(await f.text(), f.name); };
+addEventListener('dragover', (e) => e.preventDefault()); addEventListener('drop', async (e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f) window.objView = show(await f.text(), f.name); });
+function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize(); load();
+renderer.setAnimationLoop(() => renderer.render(scene, camera));
+</script>
+</body>
+</html>

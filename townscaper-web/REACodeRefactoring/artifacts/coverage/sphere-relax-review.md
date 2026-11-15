@@ -23,3 +23,9 @@ tests/sphere-relax-browser.cjs：真实900点球面GPU完成all/one/none三控�
 本批2段708帧，累计130/285，剩155；局部代码接口验收1段，完整球面原视觉/系统接入仍待实现1段。原版只读，未同步TigerMessenger副本。
 
 收口：球面all/one截图及三个原有主场景已目视，逻辑/GPU与三场回归通过；708条观察/PTS连续一致，285素材/README匹配，管线缺0，空白检查通过。index/pipeline实际显示130/285、剩155并提供planet入口（sphere-relax-pages.json）。映射142模块33增强/51静态/58部分；下一批1670725072540106755、1670720537662836736分层平滑/边类型层级尚未学习，不计入累计。页面保留旧全部高地模式，真实多格最差误差公开列为缺口，不能记全岛保形完成。
+
+
+## 第 56 批（C08）
+
+- 1769641473895432220：新增 planet-relax-c08.js + planet.html?relaxanim=1：逐帧就是共享 cornerPositions 的真实弹簧迭代（0→40 次），顶环按面积比红/黄/青着色，可见山顶格收缩（面积比 1.90→1.35）。tests/planet-relax-c08.mjs；截图 C08-planet-relaxanim-t0/t1.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。
+- 1768627849529893109：新增 planet-smooth-c08.js + planet.html?smoothcoast=1：按层边界 Taubin 平滑 + 崖顶深色描线（转角 58°→22°，翻折 0）。tests/planet-smooth-c08.mjs；截图 C08-planet-smoothcoast.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

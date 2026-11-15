@@ -1,0 +1,37 @@
+<!doctype html>
+<!-- 苔庭松树前后对照取景（2026-11-11）：只加载真实 saihojiGarden SceneModule，
+     相机放在鲲背岛局部坐标；?view=far|near|side 。不是整局游戏截图。 -->
+<html><head><meta charset="utf-8"><style>body{margin:0;background:#aabfc3}</style>
+<script type="importmap">{"imports":{"three":"/TigerMessenger/vendor/three.module.js","three/addons/":"/TigerMessenger/vendor/jsm/"}}</script>
+</head><body>
+<script type="module">
+import * as T from 'three';
+import { saihojiGardenScene } from '/TigerMessenger/src/scenes/saihojiGarden.js';
+import { PLANET_RADIUS } from '/TigerMessenger/src/world/planet.js';
+const q = new URLSearchParams(location.search);
+const W = innerWidth, H = innerHeight;
+const scene = new T.Scene(); scene.background = new T.Color('#aabfc3');
+const loaded = saihojiGardenScene.load({ scene, planetRadius: PLANET_RADIUS, options: {} });
+scene.updateMatrixWorld(true);
+const whale = loaded.group, island = whale.getObjectByName('leviathan-island');
+const up = new T.Vector3(0, 1, 0).transformDirection(island.matrixWorld);
+const renderer = new T.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(W, H); renderer.setPixelRatio(1); renderer.outputColorSpace = T.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+scene.add(new T.HemisphereLight(0xf4f6ee, 0x535e49, 2));
+const sun = new T.DirectionalLight(0xffedcf, 1.8);
+sun.position.copy(island.localToWorld(new T.Vector3(-10, 22, 18))); scene.add(sun);
+sun.target.position.copy(island.getWorldPosition(new T.Vector3())); scene.add(sun.target);
+const camera = new T.PerspectiveCamera(38, W / H, .1, 800); camera.up.copy(up);
+const views = { far: [[30, 30, 46], [0, 4, 0]], near: [[4, 9, 22], [-1, 6, 0]], side: [[0, 8, 52], [0, 9, 0]] };
+const trees=[];whale.traverse(n=>{if(n.userData.kind==='gardenPine')trees.push(n);});const view=q.get('view')||'front';
+let [pos,look]=views[view]||views.near;
+if(view==='front'||view==='profile'){const roots=trees.map(n=>island.worldToLocal(n.getWorldPosition(new T.Vector3()))),center=roots.reduce((a,b)=>a.add(b),new T.Vector3()).multiplyScalar(1/roots.length),H=trees.reduce((s,n)=>s+n.userData.targetHeight,0)/trees.length,yaw=whale.userData.pineLayoutReport.clusters[0].yaw,front=new T.Vector3(view==='profile'?1:0,0,view==='profile'?0:1).applyAxisAngle(new T.Vector3(0,1,0),yaw);look=center.clone().add(new T.Vector3(0,H*.52,0)).toArray();pos=center.clone().addScaledVector(front,H*2.15).add(new T.Vector3(0,H*.63,0)).toArray();}
+
+camera.position.copy(island.localToWorld(new T.Vector3(...pos)));
+camera.lookAt(island.localToWorld(new T.Vector3(...look)));
+renderer.render(scene, camera);
+const pines = []; whale.traverse(n => { if (n.userData.kind === 'gardenPine') pines.push(n); });
+window.__fixture = { ready: true, pines: pines.length, calls: renderer.info.render.calls, tris: renderer.info.render.triangles,
+  covers: (whale.userData.saihojiCoverPoints || []).length, report: whale.userData.pineLayoutReport ? { trees: whale.userData.pineLayoutReport.trees, clusters: whale.userData.pineLayoutReport.clusters } : null };
+</script></body></html>

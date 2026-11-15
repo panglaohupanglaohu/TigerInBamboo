@@ -1,0 +1,16 @@
+{
+  "errors": [
+    "Failed to load resource: net::ERR_CONNECTION_RESET"
+  ],
+  "grids": [
+    {
+      "grid": "quad",
+      "regularSampled": 7,
+      "postToggles": 11,
+      "battleGore": true,
+      "externalStateSync": true
+    }
+  ],
+  "error": "page.waitForFunction: Timeout 60000ms exceeded.\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/environment-menu-browser.mjs:6:90",
+  "passed": false
+}

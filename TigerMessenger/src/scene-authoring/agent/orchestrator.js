@@ -1,3 +1,4 @@
+import {executionContext,assertEngineContext,assertExecutionScope,assertEngineCommit,validateEngineOutput} from '../../pipeline-engine/PipeLineEngine.js';
 /**
  * orchestrator.js — 场景工坊里的 super agent（浏览器内，确定性，不依赖大模型）。
  *
@@ -27,10 +28,11 @@ export function createAgent({ request, onEvent = () => {}, storage = localStorag
   const log = [];
   const emit = (e) => { e.at = Date.now(); log.push(e); if (log.length > 200) log.shift(); onEvent(e); };
   const dog = new Watchdog(emit);
-  const transform = new WorkerSlot(new URL('./transform-worker.js', import.meta.url), '改造 Worker', dog);
+  const transform = new WorkerSlot(new URL('./transform-worker.js?v=engine-r1', import.meta.url), '改造 Worker', dog);
   const verifier = new WorkerSlot(new URL('./verify-worker.js', import.meta.url), '验证 Worker', dog);
   const registry = import(rea('src/capabilities/registry.js'));
-  let lastScene = null, current = null;
+  let lastScene = null, current = null, lastEngine=null, generating=false;
+  const context=()=>executionContext('scene',globalThis.__tmCurrentScene);
 
   async function withRetry(slot, msg, opts) {
     try { return await slot.call(msg, opts); }
@@ -46,41 +48,45 @@ export function createAgent({ request, onEvent = () => {}, storage = localStorag
     async scan({ focusCells = null } = {}) {
       emit({ type: 'phase', phase: 'scan' });
       lastScene = await request('cap.state');
-      const r = await withRetry(transform, { type: 'match', data: lastScene.data, allowed: lastScene.allowed, focusCells }, { idle: 20000, total: 60000 });
-      emit({ type: 'phase', phase: 'scanned', count: r.matches.reduce((a, m) => a + m.count, 0) });
+      const r = await withRetry(transform, { type: 'match', data: lastScene.data, allowed: lastScene.allowed, focusCells,context:context() }, { idle: 20000, total: 60000 });
+      lastEngine=r.engine;emit({ type: 'phase', phase: 'scanned', count: r.matches.reduce((a, m) => a + m.count, 0) });
       return r;
     },
     /** Router：改造方向 + 已启用节点 → 建议计划 */
     async route(goal, matches, enabledIds) { const reg = await registry; return reg.routeGoal(goal, matches, { selected: enabledIds }); },
     /** 改造 + 验证 + 实景预览 */
     async generate({ steps, goal = '', focusCells = null }) {
+      if(generating)throw Error('PipeLineEngine正在生成候选');generating=true;try{
+      const scope=context();if(scope.sceneId!=='morris-lake')throw Error('当前体素执行适配器只支持莫西斯湖；其他场景请用对应物件/材质管线');
       if (!steps.length) throw new Error('计划里没有可执行的能力节点');
-      if (current) { await request('cap.revert').catch(() => {}); current = null; }
+      if (current) await this.discard();
       emit({ type: 'phase', phase: 'transform', steps: steps.map((s) => s.id) });
-      const scene = await request('cap.state');
-      const run = await withRetry(transform, { type: 'run', data: scene.data, allowed: scene.allowed, steps, focusCells }, { idle: 20000, total: 90000 });
+      const scene = await request('cap.state');assertEngineContext(scope,context());
+      const run = await withRetry(transform, { type: 'run', data: scene.data, allowed: scene.allowed, steps, focusCells,context:scope }, { idle: 20000, total: 90000 });
       const touchesBuilt = steps.some((s) => s.id.startsWith('build.'));
       const changed = run.data !== scene.data;
-      emit({ type: 'phase', phase: 'verify' });
+      await validateEngineOutput(run);emit({ type: 'phase', phase: 'verify' });
       const verification = changed ? await withRetry(verifier, { before: scene.data, after: run.data, allowed: scene.allowed, touchesBuilt }, { idle: 20000, total: 60000 })
         : { status: 'pass', summary: '没有改动体素（只加显示层）', checks: [{ id: 'geometry', name: '体素', status: 'pass', detail: '未改动' }], changedCells: [] };
       const layers = [...new Set(run.report.filter((r) => r.layer3d && (r.status === 'layer' || r.status === 'applied')).map((r) => r.layer3d))];
       const focus = [...new Set([...run.report.flatMap((r) => r.focus || []), ...verification.changedCells.slice(0, 200)])];
       emit({ type: 'phase', phase: 'preview' });
-      await request('open').catch(() => {});   // 进入编辑取景（隐藏游玩界面），实景对照才看得清
-      const preview = await request('cap.preview', { data: run.data, layers, focus });
-      current = { id: 'cand-' + Date.now().toString(36), goal, steps, baseline: scene.data, data: run.data, report: run.report, verification, layers, focus, preview };
+      assertExecutionScope(run.engine,context());await request('open').catch(() => {});   // 进入编辑取景（隐藏游玩界面），实景对照才看得清
+      assertExecutionScope(run.engine,context());const preview = await request('cap.preview', { data: run.data, layers, focus });
+      current = { engine:run.engine,run,previewed:true,id: 'cand-' + Date.now().toString(36), goal, steps:run.engine.steps, baseline: scene.data, data: run.data, report: run.report, verification, layers, focus, preview };
       remember({ at: Date.now(), id: current.id, goal, steps: run.report.map((r) => ({ id: r.id, status: r.status, applied: r.applied?.length || 0 })), verify: verification.status, why: verification.checks.filter((c) => c.status === 'fail').map((c) => c.name + '：' + c.detail).join('；'), outcome: 'previewed' });
       emit({ type: 'phase', phase: 'review', status: verification.status });
       return current;
+      }finally{generating=false;}
     },
     current: () => current,
-    async show(which) { return request('cap.show', { which }); },
+    engineInfo:()=>current?.engine||lastEngine,
+    async show(which) {if(current)assertExecutionScope(current.engine,context()); return request('cap.show', { which }); },
     async highlight(cells) { return request('cap.highlight', { cells }); },
-    async discard() { if (!current) return; await request('cap.revert'); remember({ at: Date.now(), id: current.id, steps: current.report.map((r) => ({ id: r.id, status: r.status })), verify: current.verification.status, outcome: 'discarded' }); current = null; emit({ type: 'phase', phase: 'idle' }); },
+    async discard() { if (!current) return;assertExecutionScope(current.engine,context()); await request('cap.revert'); remember({ at: Date.now(), id: current.id, steps: current.report.map((r) => ({ id: r.id, status: r.status })), verify: current.verification.status, outcome: 'discarded' }); current = null; emit({ type: 'phase', phase: 'idle' }); },
     async commit() {
       if (!current) throw new Error('当前没有候选');
-      if (current.verification.status === 'fail') throw new Error('验证未通过的候选不能写入；可继续改或放弃');
+      assertEngineCommit(current,context());await validateEngineOutput(current.run);assertExecutionScope(current.engine,context());
       const r = await request('cap.commit');
       remember({ at: Date.now(), id: current.id, steps: current.report.map((x) => ({ id: x.id, status: x.status })), verify: current.verification.status, outcome: 'committed' });
       const done = current; current = null; emit({ type: 'phase', phase: 'committed' });

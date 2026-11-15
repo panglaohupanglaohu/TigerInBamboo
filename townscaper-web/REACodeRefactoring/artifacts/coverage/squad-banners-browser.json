@@ -1,0 +1,77 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "marks": [
+        "skull",
+        "sword",
+        "trident"
+      ],
+      "white": [
+        342,
+        117,
+        222
+      ],
+      "gpu": [
+        {
+          "mark": "skull",
+          "white": 342,
+          "expected": 342,
+          "mismatch": 0
+        },
+        {
+          "mark": "sword",
+          "white": 117,
+          "expected": 117,
+          "mismatch": 0
+        },
+        {
+          "mark": "trident",
+          "white": 222,
+          "expected": 222,
+          "mismatch": 0
+        }
+      ],
+      "unitsUnchanged": true,
+      "restored": true,
+      "drawCalls": 31
+    },
+    {
+      "kind": "mixed",
+      "marks": [
+        "skull",
+        "sword",
+        "trident"
+      ],
+      "white": [
+        342,
+        117,
+        222
+      ],
+      "gpu": [
+        {
+          "mark": "skull",
+          "white": 342,
+          "expected": 342,
+          "mismatch": 0
+        },
+        {
+          "mark": "sword",
+          "white": 117,
+          "expected": 117,
+          "mismatch": 0
+        },
+        {
+          "mark": "trident",
+          "white": 222,
+          "expected": 222,
+          "mismatch": 0
+        }
+      ],
+      "unitsUnchanged": true,
+      "restored": true,
+      "drawCalls": 31
+    }
+  ],
+  "errors": []
+}

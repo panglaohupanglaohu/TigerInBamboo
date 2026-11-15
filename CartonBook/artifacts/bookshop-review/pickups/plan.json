@@ -1,0 +1,902 @@
+{
+  "id": "bookshop-letter",
+  "title": "书店镇 · 门仍开着",
+  "subtitle": "霸天舰队来袭之日",
+  "scene": "messenger",
+  "gameUrl": "/TigerMessenger/?scene=messenger&autostart=1&dev=1&cartonCapture=1",
+  "timeOfDay": 0.38,
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "notes": "",
+  "story": "潮退时，信使抵达书店镇。海堤托着红砖的 Hard To Find，三家工坊书店围住圆形广场。蝗虫还在修装卸架，蚂蚁捧着杯子，甲壳虫的车灯照着一箱没有封口的书。苍竹的信在门里等他，信封受了潮，边角像一片卷起的叶。\n\n港口忽然响了警报。霸天舰队越过水面，运输艇的影子爬上坡道。第一轮炮火落在货轨边，工人把书箱拖进拱廊。信使想往海堤跑，却看见一个孩子站在广场中央：他丢了一本书，正回头找。\n\n蝗虫先走出了自己的店。蚂蚁放下杯子，把沉重的身体挡在廊口；甲壳虫转动车灯，为钻进蒸汽的人们照路。三家店主没有关门。他们把读书的长桌让给伤员，把备件送到机器人脚边。Hard To Find 的店主递出那封信，又把信使往柱后推了一步。\n\n“边境那封？”信使问。店主摇头：“先看看背面。”纸上是苍竹添的一行小字：若有人无处可去，让他先进门。信使把信收进衣襟，折回广场，牵住那个孩子。廊灯一盏接一盏亮着，像几家书店在彼此回答。\n\n空降兵沿绳索落下，机器人与工人在广场边共同守住通路。吊车停住，货船留在码头，系泊飞艇也没有起飞：镇上所有能容人的地方，都在接人。蒸汽遮住了舰队，也遮住了守门者。信使不再数爆炸，只数从廊口跑过去的脚步。\n\n等到炮声向海面退去，蚂蚁才去捡那只杯子。杯沿缺了一块。孩子从湿书里抽出一页，垫在杯下。信使沿货轨走向飞艇坞，边境还在潮气以外等信。他回头时，几家书店的门都开着。镇没有变得更坚固，只是没有让任何一个人独自留在门外。",
+  "hardConstraint": "all-images-from-game-screenshots",
+  "createdAt": "2026-11-07T08:25:13.118Z",
+  "shots": [
+    {
+      "id": "cover",
+      "title": "潮退时",
+      "note": "ELS 静场 6秒",
+      "camera": {
+        "preset": "cover",
+        "landmark": null,
+        "dist": 28,
+        "orbit": 0.3,
+        "pitch": 0.2,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          105,
+          145
+        ],
+        "aim": [
+          0,
+          0,
+          0
+        ],
+        "holdSeconds": 6,
+        "fov": 55
+      },
+      "caption": "潮退时，镇还在读书。",
+      "dialog": null,
+      "outFile": "shots/cover.png"
+    },
+    {
+      "id": "s01",
+      "title": "坡道尽头",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          22,
+          14,
+          30
+        ],
+        "aim": [
+          0,
+          3,
+          0
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "苍竹的信，在门里等他。",
+      "dialog": null,
+      "outFile": "shots/s01.png"
+    },
+    {
+      "id": "s02",
+      "title": "蝗虫书店",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "locust-bookshop-court",
+        "eye": [
+          0,
+          13,
+          26
+        ],
+        "aim": [
+          0,
+          3,
+          -4
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "蝗虫还在修装卸架。",
+      "dialog": null,
+      "outFile": "shots/s02.png"
+    },
+    {
+      "id": "s03",
+      "title": "蚂蚁书店",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "ant-bookshop-court",
+        "eye": [
+          1,
+          12,
+          25
+        ],
+        "aim": [
+          0,
+          3,
+          -4
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "蚂蚁的杯子还温着。",
+      "dialog": null,
+      "outFile": "shots/s03.png"
+    },
+    {
+      "id": "s04",
+      "title": "甲壳虫书店",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "beetle-bookshop-court",
+        "eye": [
+          2,
+          12,
+          26
+        ],
+        "aim": [
+          0,
+          3,
+          -4
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "书箱还没有封口。",
+      "dialog": null,
+      "outFile": "shots/s04.png"
+    },
+    {
+      "id": "s05",
+      "title": "警报",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          65,
+          110
+        ],
+        "aim": [
+          0,
+          12,
+          20
+        ],
+        "holdSeconds": 4,
+        "battle": "start",
+        "fov": 55
+      },
+      "caption": "影子先落上广场。",
+      "dialog": null,
+      "outFile": "shots/s05.png"
+    },
+    {
+      "id": "s06",
+      "title": "蝗虫迎战",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "locust-bookshop-court",
+        "eye": [
+          15,
+          7,
+          15
+        ],
+        "aim": [
+          6,
+          3,
+          1
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "蝗虫先走出了自己的店。",
+      "dialog": null,
+      "outFile": "shots/s06.png"
+    },
+    {
+      "id": "s07",
+      "title": "守住廊口",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "ant-bookshop-court",
+        "eye": [
+          15,
+          6,
+          14
+        ],
+        "aim": [
+          6,
+          3,
+          1
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "蚂蚁放下杯子，挡在廊口。",
+      "dialog": null,
+      "outFile": "shots/s07.png"
+    },
+    {
+      "id": "s08",
+      "title": "灯光引路",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "beetle-bookshop-court",
+        "eye": [
+          15,
+          5,
+          13
+        ],
+        "aim": [
+          6,
+          2,
+          1
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "甲壳虫用车灯接住迷路的人。",
+      "dialog": null,
+      "outFile": "shots/s08.png"
+    },
+    {
+      "id": "s09",
+      "title": "门没有关",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          0,
+          5,
+          15
+        ],
+        "aim": [
+          0,
+          3,
+          0
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "“先看看信的背面。”",
+      "dialog": null,
+      "outFile": "shots/s09.png"
+    },
+    {
+      "id": "s10",
+      "title": "共同抵抗",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          36,
+          85
+        ],
+        "aim": [
+          0,
+          4,
+          32
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "机器人与工人，一起守住广场。",
+      "dialog": null,
+      "outFile": "shots/s10.png"
+    },
+    {
+      "id": "s11",
+      "title": "港口留下",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-parts-quayside",
+        "eye": [
+          25,
+          18,
+          35
+        ],
+        "aim": [
+          0,
+          5,
+          0
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "吊车停下。货船留下。",
+      "dialog": null,
+      "outFile": "shots/s11.png"
+    },
+    {
+      "id": "s12",
+      "title": "留在镇上的飞艇",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-airship-mooring-mast",
+        "eye": [
+          28,
+          28,
+          35
+        ],
+        "aim": [
+          0,
+          17,
+          -3
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "连飞艇也在等最后一个人。",
+      "dialog": null,
+      "outFile": "shots/s12.png"
+    },
+    {
+      "id": "s13",
+      "title": "蒸汽里的灯",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -65,
+          26,
+          55
+        ],
+        "aim": [
+          0,
+          6,
+          0
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "他不数爆炸，只数脚步。",
+      "dialog": null,
+      "outFile": "shots/s13.png"
+    },
+    {
+      "id": "s14",
+      "title": "杯沿缺了一块",
+      "note": "LS → MS；空间连续，读格约4秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "ant-bookshop-court",
+        "eye": [
+          12,
+          6,
+          12
+        ],
+        "aim": [
+          6,
+          2,
+          1
+        ],
+        "holdSeconds": 4,
+        "battle": "retreat",
+        "fov": 55
+      },
+      "caption": "炮声远去，蚂蚁才去捡杯子。",
+      "dialog": null,
+      "outFile": "shots/s14.png"
+    },
+    {
+      "id": "s15",
+      "title": "开着的门",
+      "note": "ELS 静场 6秒",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          95,
+          145
+        ],
+        "aim": [
+          0,
+          2,
+          0
+        ],
+        "holdSeconds": 6,
+        "fov": 55
+      },
+      "caption": "镇上的门，都还开着。",
+      "dialog": null,
+      "outFile": "shots/s15.png"
+    },
+    {
+      "id": "s16",
+      "title": "招牌：门内有人",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -3,
+          2.5,
+          6
+        ],
+        "aim": [
+          -2,
+          2,
+          0
+        ],
+        "fov": 48
+      },
+      "caption": "若有人无处可去，让他先进门。",
+      "dialog": null,
+      "outFile": "shots/s16.png"
+    },
+    {
+      "id": "s17",
+      "title": "杯子与机械手",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "bookshop-robot-ant-articulated",
+        "eye": [
+          2,
+          2.4,
+          4
+        ],
+        "aim": [
+          0,
+          1.5,
+          0.7
+        ],
+        "fov": 48
+      },
+      "caption": "",
+      "dialog": null,
+      "outFile": "shots/s17.png"
+    },
+    {
+      "id": "s18",
+      "title": "门廊向外看",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          1,
+          1.7,
+          1
+        ],
+        "aim": [
+          0,
+          2,
+          22
+        ],
+        "fov": 60
+      },
+      "caption": "信使转身，回到广场。",
+      "dialog": null,
+      "outFile": "shots/s18.png"
+    },
+    {
+      "id": "s21",
+      "title": "廊灯的回答",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -9,
+          1,
+          14
+        ],
+        "aim": [
+          -9,
+          1,
+          -4
+        ],
+        "fov": 60
+      },
+      "caption": "一盏，接着一盏。",
+      "dialog": null,
+      "outFile": "shots/s21.png"
+    },
+    {
+      "id": "s19",
+      "title": "机器人肩后的天空",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "locust-bookshop-court",
+        "eye": [
+          7,
+          5,
+          -1
+        ],
+        "aim": [
+          0,
+          20,
+          45
+        ],
+        "battle": "start",
+        "fov": 60
+      },
+      "caption": "它抬头时，舰队已经越过屋顶。",
+      "dialog": null,
+      "outFile": "shots/s19.png"
+    },
+    {
+      "id": "s20",
+      "title": "从广场仰望旗舰",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          3,
+          35
+        ],
+        "aim": [
+          0,
+          55,
+          10
+        ],
+        "fov": 60
+      },
+      "caption": "天空变窄了。",
+      "dialog": null,
+      "outFile": "shots/s20.png"
+    },
+    {
+      "id": "s22",
+      "title": "广场空降",
+      "note": "Edena 景别与视线匹配：细节、反打、低角度、空降叙事",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          26,
+          12,
+          63
+        ],
+        "aim": [
+          0,
+          2,
+          35
+        ],
+        "battle": "ground",
+        "fov": 60
+      },
+      "caption": "沿绳索落下的，是另一种脚步。",
+      "dialog": null,
+      "outFile": "shots/s22.png"
+    }
+  ],
+  "pages": [
+    {
+      "id": "cover",
+      "kind": "cover",
+      "template": "cover",
+      "title": "书店镇 · 门仍开着",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "cover",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "opening",
+      "kind": "prose",
+      "template": "prose",
+      "title": "门仍开着",
+      "rhythm": null,
+      "panels": []
+    },
+    {
+      "id": "page-01",
+      "kind": "story",
+      "template": "edena-establish",
+      "title": "潮退时",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s01",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s02",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s03",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s04",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-02",
+      "kind": "story",
+      "template": "edena-vertical",
+      "title": "影子越过海堤",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s05",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s20",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s19",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-03",
+      "kind": "story",
+      "template": "edena-reply",
+      "title": "彼此回答",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s06",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s07",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s08",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-04",
+      "kind": "story",
+      "template": "edena-detail",
+      "title": "信的背面",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s09",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s16",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s18",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s21",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-05",
+      "kind": "story",
+      "template": "edena-battle",
+      "title": "守住通路",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s22",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s10",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s11",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-06",
+      "kind": "story",
+      "template": "edena-quiet",
+      "title": "留给最后一人",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s12",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s13",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s14",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s17",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "last",
+      "kind": "story",
+      "template": "edena-splash",
+      "title": "门仍开着",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s15",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    }
+  ]
+}

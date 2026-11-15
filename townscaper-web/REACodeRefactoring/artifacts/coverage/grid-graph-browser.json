@@ -1,0 +1,110 @@
+{
+  "config": {
+    "seed": 1337,
+    "radius": 14,
+    "mergeRate": 0.85,
+    "root": 0
+  },
+  "stats": {
+    "cells": 707,
+    "quads": 469,
+    "tris": 238,
+    "edges": 1337,
+    "counts": {
+      "quad": 643,
+      "tri": 74,
+      "seam": 536,
+      "rim": 84,
+      "other": 0,
+      "nonmanifold": 0
+    },
+    "manifold": true,
+    "bands": 65,
+    "bandLongest": 40,
+    "bandEdges": 536,
+    "nodes": 707,
+    "rings": 26,
+    "maxDepth": 25,
+    "branches": 4,
+    "edgeKinds": {
+      "same": 249,
+      "adjacent": 1004,
+      "long": 0
+    },
+    "components": 1,
+    "root": 0
+  },
+  "errors": [],
+  "wirePix": {
+    "total": 409600,
+    "ink": 55660,
+    "orange": 9565,
+    "cyan": 1306,
+    "bright": 0
+  },
+  "radialPix": {
+    "total": 409600,
+    "ink": 106665,
+    "orange": 1723,
+    "cyan": 3133,
+    "bright": 21
+  },
+  "rerolled": {
+    "cells": 694,
+    "quads": 482,
+    "tris": 212,
+    "edges": 1324,
+    "counts": {
+      "quad": 698,
+      "tri": 75,
+      "seam": 467,
+      "rim": 84,
+      "other": 0,
+      "nonmanifold": 0
+    },
+    "manifold": true,
+    "bands": 60,
+    "bandLongest": 49,
+    "bandEdges": 467,
+    "nodes": 694,
+    "rings": 27,
+    "maxDepth": 26,
+    "branches": 3,
+    "edgeKinds": {
+      "same": 262,
+      "adjacent": 978,
+      "long": 0
+    },
+    "components": 1,
+    "root": 0
+  },
+  "reRooted": {
+    "cells": 694,
+    "quads": 482,
+    "tris": 212,
+    "edges": 1324,
+    "counts": {
+      "quad": 698,
+      "tri": 75,
+      "seam": 467,
+      "rim": 84,
+      "other": 0,
+      "nonmanifold": 0
+    },
+    "manifold": true,
+    "bands": 60,
+    "bandLongest": 49,
+    "bandEdges": 467,
+    "nodes": 694,
+    "rings": 35,
+    "maxDepth": 34,
+    "branches": 4,
+    "edgeKinds": {
+      "same": 258,
+      "adjacent": 982,
+      "long": 0
+    },
+    "components": 1,
+    "root": 25
+  }
+}

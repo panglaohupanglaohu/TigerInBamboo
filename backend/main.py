@@ -11,6 +11,7 @@ import os
 import re
 import sys
 import time
+import subprocess
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -310,6 +311,16 @@ def workshop_learning_snapshot(request: Request) -> Response:
     if request.headers.get("if-none-match") == etag:
         return Response(status_code=304, headers=headers)
     return JSONResponse(snapshot, headers=headers)
+
+
+@app.get("/api/workshop/code-library")
+def workshop_code_library() -> Response:
+    from .code_library import code_library_snapshot
+    try:
+        return JSONResponse(code_library_snapshot(ROOT), headers={"Cache-Control": "no-store"})
+    except (RuntimeError, ValueError, OSError, TimeoutError, subprocess.TimeoutExpired):
+        return JSONResponse({"error": "CODE_LIBRARY_SCAN_FAILED"}, status_code=503,
+                            headers={"Cache-Control": "no-store"})
 
 
 @app.on_event("shutdown")

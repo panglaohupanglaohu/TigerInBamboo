@@ -90,7 +90,8 @@ export class OutlineLayers {
   update(renderer, camera, sunDir) {
     const size = renderer.getDrawingBufferSize(new THREE.Vector2());
     this.common.uRes.value.copy(size);
-    const px = renderer.getPixelRatio();
+    // 1017355723171344385 "thicker outlines for all you 4k high ballers"：线宽按像素比 × 分辨率（以 1080 高为基准）放大，再乘可调的粗细
+    const px = renderer.getPixelRatio() * Math.max(1, size.y / renderer.getPixelRatio() / 1080) * (this.thickness ?? 1);
     this.inkMat.uniforms.uWidth.value = 1.4 * px;
     this.rimMat.uniforms.uWidth.value = 3.2 * px;
     this.common.uSun.value.copy(sunDir).normalize();

@@ -1,0 +1,10 @@
+import {chromium} from '../../../tools/shot/node_modules/playwright/index.mjs';
+import fs from 'node:fs';
+const browser=await chromium.launch({headless:false,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',args:['--no-sandbox','--ignore-gpu-blocklist','--enable-webgl']});
+const page=await browser.newPage({viewport:{width:1440,height:1000}});
+page.on('pageerror',e=>console.log('ERROR',e.message));
+await page.goto('http://localhost:8931/TigerMessenger/?scene=messenger&autostart=1&dev=1&cartonCapture=1',{waitUntil:'domcontentloaded',timeout:120000});
+for(let i=0;i<70;i++){console.log('boot',i,await page.evaluate(()=>({ready:!!window.__tm?.camera,text:document.body.innerText.slice(-350)})));if(await page.evaluate(()=>!!window.__tm?.camera))break;await page.evaluate(()=>document.querySelector('#start-btn')?.click());await page.waitForTimeout(3000);}await page.waitForFunction(()=>!!window.__tm?.camera,{timeout:120000});
+const data=await page.evaluate(()=>{const t=window.__tm;const rows=[];t.scene.updateMatrixWorld(true);t.scene.traverse(o=>{if(o.name&&/bookshop|书店|robot|jakub|freight|airship|batian/i.test(o.name))rows.push({name:o.name,type:o.type,kind:o.userData.kind,position:o.getWorldPosition(new t.THREE.Vector3()).toArray()});});return {rows,keys:Object.keys(t),landmarks:Object.keys(t.messenger.landmarks)};});
+fs.writeFileSync('CartonBook/artifacts/bookshop-review/runtime-inventory.json',JSON.stringify(data,null,2));
+await browser.close();

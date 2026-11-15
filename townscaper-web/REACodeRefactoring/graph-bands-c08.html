@@ -1,0 +1,52 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><link rel="icon" href="data:,"><title>环带邻接图 · 区域分色 + 中心搜索（r56 C08）</title>
+<style>body{margin:0;background:#13232a;font:13px/1.5 system-ui,"PingFang SC",sans-serif;overflow:hidden}canvas{display:block;width:100vw;height:100vh}#ui{position:fixed;left:12px;top:12px;max-width:390px;background:rgba(255,255,255,.93);color:#1d2f36;border-radius:12px;padding:10px 12px}#ui p{margin:3px 0;font-size:12px;color:#3e5a5e}button{border:1px solid #c9d8d7;background:#fff;border-radius:8px;padding:3px 8px;cursor:pointer;font:inherit}button.on{background:#2f7f8a;color:#fff}#stat{font-size:12px;color:#2f7f8a;white-space:pre-wrap}</style>
+<canvas id="c"></canvas>
+<div id="ui"><a href="index.html">← 首页</a> · <a href="grid-graph.html">BFS 同心环布局页</a>
+<h3 style="margin:4px 0">Late night cryptic graph（1490068909042642944）</h3>
+<p>原尺寸回看 0250/0390 帧：节点是几条同心环带（每条带本身是格子邻接网），带与带只靠东南西北几根单边辐条相连，外圈还有外伸悬挂点；先从中心向外搜索（黄/红前沿边），再按环带上色。这里用共享 grid.js 混合网格的真实格邻接构图（src/core/graph-bands-c08.js）：节点 = 格心，空心圈，桥端点放大；颜色 = 去掉带间辐条后的连通区域；底图是极坐标参考网（同心圆 + 12 条放射线 + 刻度）。</p>
+<button id="play" class="on">播放</button>
+<div id="stat"></div></div>
+<script type="module">
+import { bandedGraph, findBridges, twoEdgeComponents, bfsLayers } from './src/core/graph-bands-c08.js';
+const Q = new URLSearchParams(location.search), cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const G = bandedGraph({ seed: Number(Q.get('seed') || 5) });
+const bridges = findBridges(G.ids, G.nb), portals = new Set(G.spokeEdges.map(([a, b]) => (a < b ? a + ',' + b : b + ',' + a)));
+const regions = twoEdgeComponents(G.ids, G.nb, portals), L = bfsLayers(G.ids, G.nb, G.center);
+const HUES = ['#4fd1c5', '#5a6ee8', '#d24fb8', '#e8b84a', '#8fe36a', '#5ab0ff'];
+const regionColour = (v) => { const k = regions.comp.get(v); const b = G.band.get(v); return k < 4 ? HUES[Math.min(5, b)] : '#6d8cff'; };
+let t = Q.has('t') ? Number(Q.get('t')) : 0, playing = !Q.has('t');
+const edges = []; for (const v of G.ids) for (const w of G.nb(v)) if (v < w) edges.push([v, w]);
+const isBridgeEnd = new Set([...bridges].flatMap((k) => k.split(',').map(Number)));
+function draw() {
+  const dpr = Math.min(2, devicePixelRatio); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = '#13232a'; ctx.fillRect(0, 0, innerWidth, innerHeight);
+  let R = 0; for (const p of G.pos.values()) R = Math.max(R, Math.hypot(...p));
+  const sc = Math.min(innerWidth - 420, innerHeight) / (2 * R + 2), ox = 420 + (innerWidth - 420) / 2, oy = innerHeight / 2;
+  const P = (v) => { const [x, z] = G.pos.get(v); return [ox + x * sc, oy + z * sc]; };
+  // polar reference grid with ticks
+  ctx.strokeStyle = 'rgba(120,170,170,.18)'; ctx.lineWidth = 1;
+  for (let r = 1; r <= Math.ceil(R + 1); r++) { ctx.beginPath(); ctx.arc(ox, oy, r * sc, 0, Math.PI * 2); ctx.stroke(); }
+  for (let k = 0; k < 12; k++) { const a = k * Math.PI / 6; ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(ox + Math.cos(a) * (R + 1.5) * sc, oy + Math.sin(a) * (R + 1.5) * sc); ctx.stroke(); }
+  ctx.strokeStyle = 'rgba(150,200,200,.35)';
+  for (let k = 0; k < 72; k++) { const a = k * Math.PI / 36, r0 = (R + 1.2) * sc, r1 = r0 + (k % 6 ? 4 : 9); ctx.beginPath(); ctx.moveTo(ox + Math.cos(a) * r0, oy + Math.sin(a) * r0); ctx.lineTo(ox + Math.cos(a) * r1, oy + Math.sin(a) * r1); ctx.stroke(); }
+  // phases: t<1 search from the centre (layers revealed), 1..2 colour fades in by region
+  const searchK = Math.floor(Math.min(1, t) * L.layers.length), coloured = Math.max(0, Math.min(1, t - 1.1));
+  const reached = new Map(); reached.set(G.center, 0); L.layers.slice(1, searchK + 1).forEach((lay, i) => lay.forEach(([, w]) => reached.set(w, i + 1)));
+  ctx.lineWidth = 1;
+  for (const [a, b] of edges) {
+    const k = a < b ? a + ',' + b : b + ',' + a, spoke = portals.has(k);
+    let col = coloured > 0 ? regionColour(a) : 'rgba(200,210,210,.55)';
+    if (t < 1.1 && reached.has(a) && reached.has(b)) { const d = Math.max(reached.get(a), reached.get(b)); col = d >= searchK - 1 ? '#ff5a4a' : d >= searchK - 3 ? '#ffe45a' : 'rgba(230,240,240,.8)'; }
+    if (spoke && coloured > 0) col = '#d24fb8';
+    ctx.strokeStyle = col; ctx.globalAlpha = coloured > 0 ? .55 + .45 * coloured : 1; ctx.beginPath(); ctx.moveTo(...P(a)); ctx.lineTo(...P(b)); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+  for (const v of G.ids) { const r = isBridgeEnd.has(v) || G.nb(v).length > 5 ? 4.6 : 2.6; ctx.fillStyle = '#13232a'; ctx.strokeStyle = coloured > 0 ? regionColour(v) : reached.has(v) && t < 1.1 ? '#f3f3e8' : 'rgba(200,210,210,.6)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(...P(v), r, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
+  document.getElementById('stat').textContent = `节点 ${G.ids.length} · 边 ${edges.length} · 带间辐条 ${G.spokeEdges.length}（含外伸悬挂 4）· 桥 ${bridges.size}\n区域（去掉辐条后的连通块）${regions.sizes.length}：${regions.sizes.slice(0, 4).join(' / ')} + 悬挂点 ${regions.sizes.length - 4}\n中心搜索 ${searchK}/${L.layers.length - 1} 层${coloured > 0 ? ' · 按区域上色' : ''}`;
+  window.graphBandsC08 = { nodes: G.ids.length, edges: edges.length, spokes: G.spokeEdges.length, bridges: bridges.size, regions: regions.sizes, layers: L.layers.length - 1, searchK, t };
+}
+document.getElementById('play').onclick = (e) => { playing = !playing; e.target.classList.toggle('on', playing); };
+addEventListener('resize', draw);
+setInterval(() => { if (!playing) return; t += .012; if (t > 2.6) t = 0; draw(); }, 50);
+draw();
+</script></html>

@@ -1,0 +1,130 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>3D WFC 实速解算 · 位运算 / 少用位掩码 · REACode重构版</title><link rel="icon" href="data:,">
+<style>
+body{margin:0;background:#5b5753;color:#eef2ef;font:13px/1.5 system-ui;overflow:hidden}
+header{position:absolute;top:0;left:0;right:0;padding:8px 14px;background:#2e2c2bd8;z-index:2}
+a{color:#9fd8e8}select,input,button{font:inherit;margin:1px 3px}
+#go{position:absolute;left:10px;bottom:10px;z-index:3;padding:4px 12px;font-size:15px;background:#f3f3f1;color:#222;border:1px solid #999;border-radius:3px;cursor:pointer}
+#hud{position:absolute;right:8px;bottom:8px;z-index:2;background:#1f1d1cd0;padding:6px 9px;border-radius:6px;font:11px/1.4 ui-monospace,monospace;white-space:pre;max-width:520px}
+canvas{display:block;width:100vw;height:100vh}
+body.clean header,body.clean #hud{display:none}
+</style>
+<header><b>3D WFC 实速解算</b> · <a href="index.html" target="_top">首页</a> · <a href="voxel-ghost.html">旧版（体素幽灵预览）</a> ·
+794993371261665280「It's getting faster (mostly due to bitwise operations). Actual speed depicted below」·
+797844857821732864「an unrelated optimization where I actually use bitmasks less. Maybe 20~30% faster」<br>
+<label>配置 <select id="cfg"><option value="baseline">基线 · Uint8 域逐个找支持</option><option value="bitwise794" selected>794 · 位集 AND/OR 传播</option><option value="fewerMasks797">797 · 缓存支持并集 + 改写记录回溯</option></select></label>
+<label>选格 <select id="pick"><option value="entropy">最少可能数（794 跳着出）</option><option value="spine">先中轴一列（797 先竖一根柱）</option></select></label>
+<label>尺寸 <select id="size"><option value="6,10,6" selected>6×10×6</option><option value="5,8,5">5×8×5</option><option value="7,12,7">7×12×7</option></select></label>
+<label>种子 <input id="seed" type="number" value="2" min="1" style="width:4em"></label>
+<label>每步 <input id="msper" type="number" value="25" min="0" style="width:4em">ms（0 = 解算墙钟实速）</label>
+<label>底色 <select id="theme"><option value="794">灰（794）</option><option value="797">紫（797）</option></select></label>
+<input id="step" type="range" min="0" max="1" value="0" step="1" style="width:220px"> <span id="info"></span>
+<br><small>每格一个小线框 = 还没坍缩（框越大剩余可能越少）；黄 = 这一步被传播改写的格；实体 = 已定为某个构件（多格拱 / 塔 / 厅由 multitile-wfc 的私有面保证整块出现）。按 Go! 开始；建成后机位推拉并绕塔转。规则与 multitile.html 同一套。</small>
+</header>
+<canvas id="cv"></canvas><button id="go">Go!</button><div id="hud">计时中…</div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { solveBitset, benchEngines, replayState, compileRules, WFC_CONFIGS } from './src/build/wfc-bitset.js';
+const q = new URLSearchParams(location.search), $ = (s) => document.querySelector(s);
+for (const k of ['cfg', 'pick', 'size', 'seed', 'msper', 'theme']) if (q.get(k)) $('#' + k).value = q.get(k);
+if (q.get('clean')) document.body.classList.add('clean');
+const THEMES = { 794: 0x5b5753, 797: 0x4a3943 };
+const rules = compileRules();
+const renderer = new THREE.WebGLRenderer({ canvas: $('#cv'), antialias: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+const scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(32, 1, 0.1, 200);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x6a7470, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 1.9); sun.position.set(6, 12, 4); scene.add(sun);
+let res, built = null, S = 0, playing = false, playStart = 0, doneAt = 0;
+const groups = new THREE.Group(); scene.add(groups);
+const LAYER = [new THREE.Color(0xcfe7d6), new THREE.Color(0xd8d0ee), new THREE.Color(0xf0d4de)];
+function layerColor(y, H) { const t = H > 1 ? y / (H - 1) : 0, k = Math.min(1, Math.floor(t * 2)), f = t * 2 - k; return LAYER[k].clone().lerp(LAYER[Math.min(2, k + 1)], f); }
+
+function solve() {
+  const size = $('#size').value.split(',').map(Number), cfg = WFC_CONFIGS[$('#cfg').value];
+  res = solveBitset({ size, seed: +$('#seed').value, pick: $('#pick').value, record: true, rules, ...cfg });
+  if (!res.ok) { $('#info').textContent = '无解：' + res.reason; return; }
+  scene.background = new THREE.Color(THEMES[$('#theme').value]);
+  groups.clear();
+  const [W, H, D] = size, N = W * H * D;
+  const plate = new THREE.Mesh(new THREE.BoxGeometry(W + 1.2, 0.35, D + 1.2), new THREE.MeshStandardMaterial({ color: 0xc9d6cf, roughness: .9 }));
+  plate.position.set(W / 2, -0.175, D / 2); groups.add(plate);
+  const solidMesh = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ roughness: .85 }), N);
+  solidMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); groups.add(solidMesh);
+  const wirePos = new Float32Array(N * 24 * 3), wireCol = new Float32Array(N * 24 * 3), wg = new THREE.BufferGeometry();
+  wg.setAttribute('position', new THREE.BufferAttribute(wirePos, 3)); wg.setAttribute('color', new THREE.BufferAttribute(wireCol, 3));
+  const wire = new THREE.LineSegments(wg, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .75 })); groups.add(wire);
+  const ptPos = new Float32Array(N * 3), pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(ptPos, 3));
+  const pts = new THREE.Points(pg, new THREE.PointsMaterial({ color: 0xffe100, size: 7, sizeAttenuation: false })); groups.add(pts);
+  built = { W, H, D, N, solidMesh, wire, wg, wirePos, wireCol, pts, pg, ptPos };
+  $('#step').max = res.events.length; S = 0; draw(0); frameCam(0);
+}
+const E = [[0,0,0,1,0,0],[1,0,0,1,0,1],[1,0,1,0,0,1],[0,0,1,0,0,0],[0,1,0,1,1,0],[1,1,0,1,1,1],[1,1,1,0,1,1],[0,1,1,0,1,0],[0,0,0,0,1,0],[1,0,0,1,1,0],[1,0,1,1,1,1],[0,0,1,0,1,1]];
+const M = new THREE.Matrix4(), V = new THREE.Vector3(), Qn = new THREE.Quaternion(), Sc = new THREE.Vector3();
+function partBox(part) {   // [sx,sy,sz, oy] 构件的程序化外形（原美术缺，用盒子：柱细、楼板薄、其余满格）
+  if (!part.solid) return null;
+  if (part.kind === 'pillar') return [.28, 1, .28, 0];
+  if (part.kind === 'slab') return [.96, .22, .96, -.39];
+  if (part.kind === 'stair') return [.96, part.o[1] === 0 ? .5 : 1, .96, part.o[1] === 0 ? -.25 : 0];
+  return [.96, .96, .96, 0];
+}
+function draw(k) {
+  if (!built) return;
+  const st = replayState(res, k), { W, H, N, solidMesh, wirePos, wireCol, ptPos } = built, hot = new Set(st.hot);
+  let ns = 0, nw = 0, np = 0, nWire = 0;
+  for (let i = 0; i < N; i++) {
+    const [x, y, z] = res.xyz(i), cx = x + .5, cy = y + .5, cz = z + .5;
+    if (st.counts[i] === 1 && st.parts[i] >= 0) {
+      const b = partBox(res.parts[st.parts[i]]);
+      if (b) { M.compose(V.set(cx, cy + b[3], cz), Qn, Sc.set(b[0], b[1], b[2])); solidMesh.setMatrixAt(ns, M); solidMesh.setColorAt(ns, layerColor(y, H)); ns++; }
+      continue;
+    }
+    const n0 = Math.max(2, res.initialCounts[i]), f = 1 - (st.counts[i] - 1) / (n0 - 1), h = 0.08 + 0.32 * f;
+    const col = hot.has(i) ? [1, .88, 0] : [.86, .86, .84].map((c) => c * (0.55 + 0.45 * f));
+    for (const e of E) { for (const s of [0, 3]) { wirePos.set([cx + (e[s] * 2 - 1) * h, cy + (e[s + 1] * 2 - 1) * h, cz + (e[s + 2] * 2 - 1) * h], nw * 3); wireCol.set(col, nw * 3); nw++; } }
+    nWire++;
+    if (hot.has(i)) { ptPos.set([cx, cy, cz], np * 3); np++; }
+  }
+  solidMesh.count = ns; solidMesh.instanceMatrix.needsUpdate = true; if (solidMesh.instanceColor) solidMesh.instanceColor.needsUpdate = true;
+  built.wg.setDrawRange(0, nw); built.wg.attributes.position.needsUpdate = true; built.wg.attributes.color.needsUpdate = true;
+  built.pg.setDrawRange(0, np); built.pg.attributes.position.needsUpdate = true;
+  $('#step').value = st.step;
+  $('#info').textContent = `步 ${st.step}/${res.events.length} · 实体 ${ns} · 未定 ${nWire} · 本步改写(黄) ${hot.size}`;
+  window.__wfc = { step: st.step, steps: res.events.length, solid: ns, undecided: nWire, hot: hot.size, done: st.done, cfg: $('#cfg').value, pick: $('#pick').value, stats: res.stats, solveMs: +res.ms.toFixed(2) };
+}
+function frameCam(tDone) {   // 建成后：推近（794）/ 拉远（797）+ 绕塔转
+  const { W, H, D } = built, r0 = Math.max(W * 1.2, D * 1.2, H) * 2.75, dolly = $('#theme').value === '797' ? 1 + .25 * Math.min(1, tDone / 3) : 1 - .22 * Math.min(1, tDone / 3);
+  const az = Math.PI / 4 + 0.25 * tDone, el = 0.5;
+  cam.position.set(W / 2 + r0 * dolly * Math.cos(el) * Math.sin(az), H * .5 + r0 * dolly * Math.sin(el), D / 2 + r0 * dolly * Math.cos(el) * Math.cos(az));
+  cam.lookAt(W / 2, H * .5, D / 2);
+}
+function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); cam.aspect = w / h; cam.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+function go() { solve(); if (!res?.ok) return; playing = true; playStart = performance.now(); doneAt = 0; }
+$('#go').onclick = go;
+for (const k of ['cfg', 'pick', 'size', 'seed', 'theme']) $('#' + k).onchange = () => { playing = false; solve(); };
+$('#step').oninput = (e) => { playing = false; S = +e.target.value; draw(S); };
+function loop(t) {
+  if (playing && res?.ok) {
+    const el = t - playStart, per = +$('#msper').value, ev = res.events;
+    let k = per > 0 ? Math.floor(el / per) : ev.findIndex((e) => e.ms > el); if (k < 0) k = ev.length;
+    if (k !== S) { S = Math.min(ev.length, k); draw(S); }
+    if (S >= ev.length) { playing = false; doneAt = t; }
+  }
+  if (built) frameCam(doneAt ? (t - doneAt) / 1000 : 0);
+  renderer.render(scene, cam); requestAnimationFrame(loop);
+}
+solve();
+if (q.get('t') && res?.ok) { S = Math.round(+q.get('t') * res.events.length); draw(S); }
+if (q.get('autogo')) go();
+requestAnimationFrame(loop);
+// 计时：三档同种子同解，各档毫秒（墙钟）+ 确定性的工作量（位或次数 / 回溯复制字节）
+setTimeout(() => {
+  const size = (q.get('bench') || '8,12,8').split(',').map(Number); benchEngines({ size, seeds: [1], reps: 2 }); const b = benchEngines({ size, seeds: [1, 2, 3, 4, 5, 6], reps: 5 });
+  const work = Object.fromEntries(Object.entries(WFC_CONFIGS).map(([n, c]) => { const r = solveBitset({ size, seed: 3, rules, ...c }); return [n, { maskOps: r.stats.maskOps, copiedKB: +(r.stats.copiedBytes / 1024).toFixed(1), trailKB: +(r.stats.trailBytes / 1024).toFixed(1) }]; }));
+  window.__bench = { ...b, work };
+  $('#hud').textContent = `尺寸 ${size.join('×')} · 种子 1–6 · 中位×5，先热身（本机浏览器墙钟）\n` +
+    Object.entries(b.configs).map(([n, c]) => `${n.padEnd(14)} ${String(c.ms).padStart(7)} ms  ×${c.speedup}  位或 ${work[n].maskOps}  快照复制 ${work[n].copiedKB}KB  改写记录峰值 ${work[n].trailKB}KB`).join('\n') +
+    `\n三档逐格同解：${b.same ? '是' : '否'} · 797 相对 794 提速 ${(b.gain797 * 100).toFixed(1)}%（原文 20~30%，墙钟有抖动）`;
+}, +(q.get('benchDelay') || 300));
+</script></html>

@@ -1,0 +1,47 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "setup": {
+        "cell": 136,
+        "units": 3,
+        "top": 6
+      },
+      "stats": {
+        "spawned": 3,
+        "live": 3,
+        "last": 4,
+        "merged": 0,
+        "damaged": 2,
+        "spritesVisible": 3,
+        "spriteTexts": [
+          "tex"
+        ],
+        "numbersOnDamaged": true
+      },
+      "bad": []
+    },
+    {
+      "grid": "mixed",
+      "setup": {
+        "cell": 6,
+        "units": 3,
+        "top": 4
+      },
+      "stats": {
+        "spawned": 3,
+        "live": 3,
+        "last": 4,
+        "merged": 0,
+        "damaged": 2,
+        "spritesVisible": 3,
+        "spriteTexts": [
+          "tex"
+        ],
+        "numbersOnDamaged": true
+      },
+      "bad": []
+    }
+  ],
+  "problems": []
+}

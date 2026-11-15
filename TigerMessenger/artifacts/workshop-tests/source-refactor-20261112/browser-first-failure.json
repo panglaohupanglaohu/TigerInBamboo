@@ -1,0 +1,57 @@
+{
+  "errors": [],
+  "grids": [],
+  "mip": {
+    "rows": [
+      {
+        "mode": "none",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          14.576815597050832
+        ],
+        "farEnergy": 9318.969818699836
+      },
+      {
+        "mode": "trilinear",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          14.576815597050832
+        ],
+        "farEnergy": 5.788248303812043
+      },
+      {
+        "mode": "aniso",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          14.576815597050832
+        ],
+        "farEnergy": 181.57202458561196
+      }
+    ],
+    "shimmer": {
+      "rows": [
+        {
+          "filter": "linear",
+          "mode": "none",
+          "meanAbsDelta": 3.341550925925926
+        },
+        {
+          "filter": "linear",
+          "mode": "trilinear",
+          "meanAbsDelta": 0.0006076388888888889
+        },
+        {
+          "filter": "linear",
+          "mode": "aniso",
+          "meanAbsDelta": 0.013541666666666667
+        }
+      ],
+      "offsetUnits": "fraction of a texel"
+    }
+  },
+  "passed": false,
+  "error": "page.evaluate: RangeError: Snow timestep must be finite and nonnegative\n    at Atmosphere.update (http://localhost:8931/townscaper-web/REACodeRefactoring/src/life/atmosphere.js:333:47)\n    at View.render (http://localhost:8931/townscaper-web/REACodeRefactoring/src/world/view.js:1300:21)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:302)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/source-refactor-browser.mjs:9:27"
+}

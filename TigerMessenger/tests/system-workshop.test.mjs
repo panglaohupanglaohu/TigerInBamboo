@@ -51,5 +51,5 @@ test('object: touching a manual edit or exceeding the move budget fails', () => 
 test('catalog: three workshops, every node has an execution state', () => {
   const cat = JSON.parse(fs.readFileSync(new URL('../src/scene-authoring/catalog/system-catalog.json', import.meta.url)));
   assert.deepEqual(cat.workshops.map((w) => w.id), ['planet', 'scene', 'object']);
-  for (const w of cat.workshops) for (const d of w.domains) for (const n of d.nodes) assert.ok(['code', 'refactored', 'partial', 'original', 'reference'].includes(n.exec));
+  for (const w of cat.workshops) for (const d of w.domains) for (const n of d.nodes) assert.ok(['code', 'library', 'refactored', 'partial', 'original', 'reference'].includes(n.exec));
 });

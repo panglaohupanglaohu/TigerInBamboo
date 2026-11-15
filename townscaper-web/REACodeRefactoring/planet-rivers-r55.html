@@ -1,0 +1,50 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>球面河流 r55 · 深度优先坍缩 + 广度优先缓坡 + 湖洞联合</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#26333b;color:#e8efe9;font:14px/1.5 system-ui}header{padding:8px 14px}a{color:#9fd3e0}canvas{display:block;width:100vw;height:calc(100vh - 92px)}#stats{font:12px ui-monospace,monospace;white-space:pre-wrap}</style>
+<header><b>球面河流（1769691526924292506）</b> · 与 planet.html 同一颗星球（buildSphere → buildPlanet → planetWorld）· <a href="?mode=pf">原 planetRivers 汇水阈值</a> · <a href="?mode=collapse">深度优先坍缩河道 + 广度优先缓坡 + 湖洞联合</a> · <a href="planet.html">planet.html</a><div id="stats"></div></header>
+<canvas id="c"></canvas>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { buildSphere, buildPlanet } from './src/sphere/planet.js';
+import { planetWorld, planetRivers, planetFusion } from './src/sphere/planet-town.js';
+import { carveRivers, relaxRiverSlopes, linkRiversThroughLakes } from './src/terrain/generate.js';
+import { fillTerrainDepressions, liveLakes } from './src/terrain/drainage.js';
+const Q = new URLSearchParams(location.search), mode = Q.get('mode') === 'collapse' ? 'collapse' : 'pf';
+const planet = buildPlanet(buildSphere({})), pw = planetWorld(planet);
+const steep = () => { let s = 0; for (const c of pw.cells) for (const id of c.edgeNeighbors) if (id > c.id && pw.ground(c) && pw.ground(pw.cells[id]) && Math.abs(pw.ground(c) - pw.ground(pw.cells[id])) > 1) s++; return s; };
+let stats = { mode, cells: pw.cells.length, steepEdgesBefore: steep() };
+if (mode === 'pf') { const r = planetRivers(pw, { threshold: 8 }); stats.riverCells = r.channels; }
+else {
+  const carved = carveRivers(pw, { seed: 5, count: 4, minSeparation: 0.6, maxSteps: 400 });
+  stats.carved = carved.length; stats.paths = pw.riverFlow.paths.map((p) => p.length);
+  stats.relax = relaxRiverSlopes(pw, { seed: 9 });
+  const d = fillTerrainDepressions(pw, { lakes: 'water' });
+  stats.joint = linkRiversThroughLakes(pw); stats.lakes = d.lakes.length;
+}
+stats.steepEdgesAfter = steep();
+const f = planetFusion(pw, planet, { density: 0, seed: 5 });
+// lake cells: recolour the terrain triangles of live lakes (planetFusion colours only river/sand/grass)
+const lakeSet = new Set(liveLakes(pw).flatMap((l) => l.cells));
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true });
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x26333b);
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100); camera.position.set(0, 5, 23); camera.lookAt(0, 0, 0);
+scene.add(new THREE.HemisphereLight(0xf4f1e6, 0x51606a, 1.4)); const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(5, 8, 6); scene.add(sun);
+const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(f.terrain.position, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(f.terrain.color, 3)); g.computeVertexNormals();
+const land = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .95, flatShading: true }));
+const sea = new THREE.Mesh(new THREE.SphereGeometry(Math.hypot(...f.houses.at(pw.cells.find((c) => !pw.ground(c)).ring[0], 0)) * 0.999, 64, 48), new THREE.MeshStandardMaterial({ color: 0x3f8fa8, roughness: .6, transparent: true, opacity: .9 }));
+const grp = new THREE.Group(); grp.add(land, sea); scene.add(grp);
+// river flow arrows (flowTo) as short lines on the surface
+if (mode === 'collapse') {
+  const pos = [], F = pw.riverFlow.flowTo, at = (c, h = pw.ground(c)) => { const ring = c.ring.map((k) => f.houses.at(k, h)); return [0, 1, 2].map((i) => ring.reduce((s, p) => s + p[i], 0) / ring.length * 1.004); };
+  for (const c of pw.cells) if ((pw.river[c.id] || lakeSet.has(c.id)) && F[c.id] >= 0) { const o = pw.cells[F[c.id]]; pos.push(...at(c), ...at(o)); }
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  grp.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0xffffff })));
+  for (const id of lakeSet) { const c = pw.cells[id]; const m = new THREE.Mesh(new THREE.SphereGeometry(0.12, 10, 8), new THREE.MeshBasicMaterial({ color: 0x1f6fd0 })); m.position.set(...at(c, pw.lakes.level[id])); grp.add(m); }
+}
+stats.lakeCells = lakeSet.size;
+grp.rotation.y = +(Q.get('rot') || 0.6); grp.rotation.x = +(Q.get('tilt') || 0.3);
+function resize() { const w = innerWidth, h = innerHeight - 92; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+resize(); addEventListener('resize', resize);
+renderer.setAnimationLoop(() => { if (!Q.get('still')) grp.rotation.y += 0.002; renderer.render(scene, camera); });
+window.__r55planet = stats; document.getElementById('stats').textContent = JSON.stringify(stats);
+</script></html>

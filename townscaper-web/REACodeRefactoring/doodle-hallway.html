@@ -1,0 +1,51 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>走廊墙饰 · 第 56 批 C11</title>
+<style>html,body{margin:0;height:100%;background:#575757;color:#eee;font:14px/1.5 system-ui;overflow:hidden}#ui{position:absolute;left:10px;top:8px;background:rgba(30,30,30,.72);padding:8px 12px;border-radius:8px;max-width:520px}#ui label{margin-right:10px}#stats{font-size:12px;color:#cfe}#unfold{position:absolute;right:8px;bottom:8px;width:44%;border:2px solid #222;display:none;background:#fff}a{color:#9cf}</style></head>
+<body><div id="ui"><b>走廊墙饰</b>：两面墙 + 内转角 + 圆弧 cove 弯进天花 + 拱门 + 楼梯 + 竖纹护墙板。贴图按展开坐标 (s 沿墙, v 沿表面) 一张画完，UV 跨转角 / cove 连续。<br>
+<label><input id="gray" type="checkbox">黑白版（1890018647655272491）</label><label><input id="mirror" type="checkbox" checked>左右镜像</label><label>种子 <input id="seed" type="number" value="7" style="width:50px"></label><label><input id="anim" type="checkbox" checked>相机沿走廊移动</label><label><input id="flat" type="checkbox">看展开贴图</label>
+<div id="stats"></div><a href="doodle.html">墙板生成器</a> · <a href="artifacts/coverage/1897266928961700215-r56.md">彩色版记录</a> · <a href="artifacts/coverage/1890018647655272491-r56.md">黑白版记录</a></div>
+<img id="unfold" alt="展开贴图">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+import { makeHallway } from './src/build/doodle-hallway.js';
+const Q = new URLSearchParams(location.search);
+const $ = (id) => document.getElementById(id);
+if (Q.get('gray') === '1') $('gray').checked = true;
+if (Q.get('mirror') === '0') $('mirror').checked = false;
+if (Q.get('seed')) $('seed').value = Q.get('seed');
+if (Q.get('flat') === '1') $('flat').checked = true;
+if (Q.get('ui') === '0') $('ui').style.display = 'none';
+const fixedT = Q.has('t') ? +Q.get('t') : null; if (fixedT !== null) $('anim').checked = false;
+const renderer = new THREE.WebGLRenderer({ antialias: true }); renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.setSize(innerWidth, innerHeight); renderer.setClearColor(0x575757);
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(58, innerWidth / innerHeight, 0.05, 50);
+let hall = null;
+function build() {
+  if (hall) { scene.remove(hall.group); hall.dispose(); }
+  const t0 = performance.now();
+  hall = makeHallway({ gray: $('gray').checked, mirror: $('mirror').checked, seed: Math.trunc(+$('seed').value || 0) });
+  scene.add(hall.group);
+  const s = hall.paint.stats;
+  $('stats').textContent = `${s.panels} 板 · ${s.strips} 竖带 · ${s.motifs} 纹样（左半）· 墨线覆盖 ${s.inkPct}% · 门位内墨线 ${s.doorInkPx}px · 镜像误差 ${s.symmetryErr} · 贴图 ${s.W}×${s.H} · ${(performance.now() - t0).toFixed(0)} ms`;
+  $('unfold').src = hall.paint.canvas.toDataURL(); $('unfold').style.display = $('flat').checked ? 'block' : 'none';
+  window.hallwayReview = { stats: s, plan: { S: hall.plan.S, V: hall.plan.V, H: hall.plan.H, R: hall.plan.R, D: hall.plan.D, door: hall.plan.door, panels: hall.plan.panels.length }, verts: hall.geometry.attributes.position.count, built: performance.now() - t0 };
+}
+for (const id of ['gray', 'mirror', 'seed']) $(id).onchange = build;
+$('flat').onchange = () => { $('unfold').style.display = $('flat').checked ? 'block' : 'none'; };
+build();
+// 相机路径：片子里是在走廊里慢慢平移 + 转向（彩色转角 → 门 → 楼梯侧墙 → 回到门）
+const keys = [
+  { p: [0.7, 1.9, 3.5], l: [4.0, 2.5, 0.3] },
+  { p: [1.5, 2.0, 3.1], l: [4.2, 3.3, 2.0] },
+  { p: [3.1, 1.9, 3.1], l: [1.4, 2.7, 0.0] },
+  { p: [2.1, 2.5, 2.4], l: [4.0, 4.5, 0.4] },
+  { p: [1.0, 2.2, 3.3], l: [4.2, 2.7, 1.6] },
+];
+function camAt(t) {
+  const n = keys.length, f = ((t / 4) % n + n) % n, i = Math.floor(f), k = f - i, e = k * k * (3 - 2 * k), a = keys[i], b = keys[(i + 1) % n];
+  camera.position.set(...a.p.map((v, j) => v + (b.p[j] - v) * e)); camera.lookAt(...a.l.map((v, j) => v + (b.l[j] - v) * e));
+}
+let t = fixedT ?? 0, last = performance.now();
+addEventListener('resize', () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
+renderer.setAnimationLoop(() => { const now = performance.now(); if ($('anim').checked) t += (now - last) / 1000; last = now; camAt(t); renderer.render(scene, camera); });
+</script></body></html>

@@ -1,0 +1,30 @@
+{
+  "report": {
+    "wires": {
+      "nodes": 7,
+      "edges": 6,
+      "paths": 6,
+      "boxes": 7
+    },
+    "beforeLoad": {
+      "y": -202.9
+    },
+    "exportLen": 1574,
+    "exportNodes": 7,
+    "exportEdges": 6,
+    "exportedLerpValue": -202.9,
+    "importMsg": "已载入 7 节点 / 6 边 · y=-202.90",
+    "afterLoad": {
+      "y": -202.9,
+      "speed": 4
+    },
+    "step": {
+      "y0": -202.9,
+      "y1": -203.3,
+      "delta": 0.4
+    },
+    "badMsg": "载入失败：Invalid node graph json",
+    "problems": []
+  },
+  "errors": []
+}

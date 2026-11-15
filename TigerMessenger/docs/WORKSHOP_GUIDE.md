@@ -123,3 +123,10 @@ pipeline.html 顶部四个标签：**球系统工坊 · 场景工坊 · 物件�
 ### 测试
 
 `node --test tests/system-workshop.test.mjs`（球系统海平面通过 / 淹没锚点失败 / 编译失败；物件松弛与手工改动保留；目录结构）。
+
+## 能力成长与闭环（2026-11-14，lineage-r1）
+先读 WORKSHOP_LOOP_PLAN.md。学习工坊默认页签是「能力成长与闭环」，系统工坊左栏默认是「能力线 · 时间」；二者与 8769 学习管线用同一个计算（REACodeRefactoring/src/core/capability-lineage.js）。直达：`pipeline.html?learningView=lineage&lineageLine=<线ID>#learning`；旧时间线页签用 `?learningView=evolution`。
+改规则只改 capability-lineage.js 一处，随后跑 `node --test tests/capability-lineage.test.mjs`、`node tools/refactor/build-capability-lineage.mjs`（重写 CAPABILITY_LINEAGE.md）和 `node tests/capability-lineage-browser.mjs`。新增 src 模块后先跑 `node tools/refactor/build-system-catalog.mjs` 刷新目录快照。
+新能力要排进能力线：meta 里写来源帖子 ID（场景 `sources`、球系统 `learn`、物件 `related`）或 `modules`；都没有的会落到「未关联能力线」。
+上游学习任务会改 learn/data.js：partial 记录的 note / where 变化后其批注变「待复核」，capability-evolution.test.mjs 会失败，需要按新记录重评那几条（learn/pipeline.js.evolution.completionReviews），不能只改 sourceEvidence 让测试通过。
+代际、到达位置和队列是导航，不是验收；不得据此把 partial 写成完成，或把推断归线的模块说成实现了该能力。

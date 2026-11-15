@@ -1,0 +1,109 @@
+{
+  "report": {
+    "terrain": {
+      "off": {
+        "on": 0,
+        "programs": 49,
+        "calls": 44
+      },
+      "on": {
+        "on": 1,
+        "uniforms": 1,
+        "programs": 49,
+        "linked": 49,
+        "glErrors": []
+      },
+      "shrubs": {
+        "tufts": 4682,
+        "flowers": 2318,
+        "shrubs": 564,
+        "trees": 108,
+        "ms": 4.5
+      }
+    },
+    "multitile": {
+      "full": {
+        "ok": true,
+        "size": [
+          5,
+          7,
+          5
+        ],
+        "trace": 89,
+        "multi": 8,
+        "faces": 117,
+        "upto": 89,
+        "info": "坍缩 89/89 步 · 构件 56（多格 8）· 实心 81 · 回溯 0 · 面 117"
+      },
+      "ao": {
+        "ok": true,
+        "size": [
+          5,
+          7,
+          5
+        ],
+        "trace": 89,
+        "multi": 8,
+        "faces": 117,
+        "upto": 89,
+        "info": "坍缩 89/89 步 · 构件 56（多格 8）· 实心 81 · 回溯 0 · 面 117"
+      },
+      "half": {
+        "ok": true,
+        "size": [
+          5,
+          7,
+          5
+        ],
+        "trace": 89,
+        "multi": 8,
+        "faces": 34,
+        "upto": 35,
+        "info": "坍缩 35/89 步 · 构件 56（多格 8）· 实心 81 · 回溯 0 · 面 34"
+      },
+      "tall": {
+        "ok": true,
+        "size": [
+          4,
+          10,
+          4
+        ],
+        "trace": 89,
+        "multi": 12,
+        "faces": 130,
+        "upto": 89,
+        "info": "坍缩 89/89 步 · 构件 66（多格 12）· 实心 101 · 回溯 0 · 面 130"
+      }
+    },
+    "navmesh": {
+      "live": {
+        "polys": 202,
+        "agents": 300,
+        "left": 0,
+        "goals": 1,
+        "info": "导航面 202 面 · 3 × 100 人 · 出面 0"
+      },
+      "math": {
+        "polys": 202,
+        "d0": 10.01317784296864,
+        "d1": 0.7226895359576995,
+        "left": 0,
+        "polySwitches": 2923,
+        "maxDy": 0.01778987725108827,
+        "yMin": 0.5999999999999983,
+        "yMax": 1.2000000000000053,
+        "maxJump": 1.0791059703423507,
+        "samples": 948,
+        "deadSides": 0,
+        "stepEdges": 8,
+        "goalFaces": 32,
+        "hasFlowAt": true,
+        "p50": 0,
+        "p90": 0.39,
+        "p99": 0.765,
+        "over02": 291
+      }
+    }
+  },
+  "problems": []
+}

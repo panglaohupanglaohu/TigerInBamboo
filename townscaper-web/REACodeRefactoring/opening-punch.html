@@ -1,0 +1,131 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>门窗挖洞 · 模板缓冲对照</title><link rel="icon" href="data:,">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>
+body{margin:0;background:#edf1f4;color:#1e2c33;font:14px/1.7 system-ui}
+header{padding:14px 22px;background:#fff;border-bottom:1px solid #d7dee3}
+h2{margin:0 0 6px;font-size:17px}
+p{margin:4px 0;max-width:1100px;color:#42535c}
+a{color:#1d6f86}
+button{margin:6px 8px 0 0;padding:5px 12px;border:1px solid #b9c6cd;border-radius:5px;background:#f6f9fa;cursor:pointer}
+button.on{background:#1d6f86;color:#fff;border-color:#1d6f86}
+#strip{display:flex;gap:14px;padding:16px 22px;flex-wrap:wrap}
+figure{margin:0}
+figcaption{font-size:12px;color:#42535c;margin-top:4px}
+canvas{display:block;background:#000;image-rendering:pixelated;border:1px solid #c6d1d7}
+#status{font:12px/1.5 ui-monospace,monospace;padding:0 22px 20px;white-space:pre-wrap;color:#2b4048}
+</style>
+<header>
+  <h2>1205422438437273601 · 用模板缓冲给门窗挖洞</h2>
+  <p>原文：「For doors and windows, I use som stencil buffer shenanigans to punch holes in the zbuffer.」左边是本仓现状（门窗贴在墙面外侧的玻璃片），中间是原作做法（洞口写 stencil，墙用 NotEqual 拒绘，室内几何透出），右边是关掉墙的参照，用来确认洞里看到的确实是室内。</p>
+  <button data-mode="decal">贴片（现状）</button><button data-mode="punch" class="on">模板挖洞</button><button data-mode="wallsOff">关墙参照</button>
+  <button id="run">重跑像素对照</button>
+</header>
+<div id="strip"></div>
+<div id="status">加载…</div>
+<script type="module">
+import * as THREE from 'three';
+import { planFacade, createFacadeScene, holePixelStats, passOrder } from './src/render/opening-punch.js';
+
+const $ = (s) => document.querySelector(s);
+const W = 2.4, H = 1.6, N = 512;
+const plan = planFacade({
+  width: W, height: H,
+  openings: [
+    ...[-0.72, 0, 0.72].flatMap((u) => [0.45, 0.1, -0.25].map((v) => ({ u, v, w: 0.2, h: 0.24 }))),
+    { u: 0, v: -0.6, w: 0.3, h: 0.36, door: true },
+    { u: 0.72, v: -0.6, w: 0.3, h: 0.36, door: true },
+  ],
+});
+const pixels = holePixelStats(plan, N);
+const renderer = new THREE.WebGLRenderer({ antialias: false, stencil: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(N, N, false);
+renderer.setClearColor(0x0b1620, 1);
+const facade = createFacadeScene(THREE, plan);
+const target = new THREE.WebGLRenderTarget(N, N, { stencilBuffer: true, depthBuffer: true, samples: 0 });
+
+const shoot = (mode) => {
+  facade.setMode(mode);
+  renderer.setRenderTarget(target);
+  renderer.clear();
+  renderer.render(facade.scene, facade.camera);
+  const buf = new Uint8Array(N * N * 4);
+  renderer.readRenderTargetPixels(target, 0, 0, N, N, buf);
+  renderer.setRenderTarget(null);
+  return buf;
+};
+
+// readRenderTargetPixels 给的是自下而上的行序，判定必须用同一套坐标，否则洞口掩码会整体上下翻
+const insideHole = (x, yBottom) => {
+  const u = (x + 0.5) / pixels.sx - plan.width / 2;
+  const v = (yBottom + 0.5) / pixels.sy - plan.height / 2;
+  return plan.openings.some((o) => Math.abs(u - o.u) <= o.w / 2 && Math.abs(v - o.v) <= o.h / 2);
+};
+const eq = (a, b, i) => a[i] === b[i] && a[i + 1] === b[i + 1] && a[i + 2] === b[i + 2];
+
+function metrics() {
+  const decal = shoot('decal'), punch = shoot('punch'), punch2 = shoot('punch'), off = shoot('wallsOff');
+  let hole = 0, visiblePunch = 0, visibleDecal = 0, driftWall = 0, driftRepeat = 0, punchMass = 0, decalMass = 0;
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+    const i = (y * N + x) * 4;
+    const inHole = insideHole(x, y);
+    if (inHole) {
+      hole++;
+      if (eq(punch, off, i)) visiblePunch++;
+      if (eq(decal, off, i)) visibleDecal++;
+    } else if (!eq(punch, decal, i)) driftWall++;
+    if (!eq(punch, punch2, i)) driftRepeat++;
+    punchMass += (punch[i] + punch[i + 1] + punch[i + 2]) / 3;
+    decalMass += (decal[i] + decal[i + 1] + decal[i + 2]) / 3;
+  }
+  return {
+    mode: passOrder().join('→'),
+    analyticHolePixels: +pixels.holePixels.toFixed(1),
+    measuredHolePixels: hole,
+    holePixelsError: +((hole - pixels.holePixels) / pixels.holePixels * 100).toFixed(2),
+    interiorVisibleSharePunch: +(visiblePunch / hole).toFixed(4),
+    interiorVisibleShareDecal: +(visibleDecal / hole).toFixed(4),
+    wallDriftPixels: driftWall,
+    repeatDriftPixels: driftRepeat,
+    meanLumaPunch: +(punchMass / (N * N)).toFixed(2),
+    meanLumaDecal: +(decalMass / (N * N)).toFixed(2),
+    openings: plan.openings.length,
+    doors: plan.doorCount,
+    coverage: +(plan.coverage * 100).toFixed(2),
+  };
+}
+
+function paint(id, label, buf) {
+  let fig = document.getElementById('fig-' + id);
+  if (!fig) {
+    fig = document.createElement('figure');
+    fig.id = 'fig-' + id;
+    const c = document.createElement('canvas');
+    c.width = c.height = N;
+    const cap = document.createElement('figcaption');
+    fig.append(c, cap);
+    $('#strip').append(fig);
+  }
+  const ctx = fig.querySelector('canvas').getContext('2d');
+  const raw = new Uint8ClampedArray(buf.length);
+  for (let y = 0; y < N; y++) raw.set(buf.subarray(y * N * 4, (y + 1) * N * 4), (N - 1 - y) * N * 4);
+  ctx.putImageData(new ImageData(raw, N, N), 0, 0);
+  fig.querySelector('figcaption').textContent = label;
+}
+
+function redraw(mode) {
+  document.querySelectorAll('header button[data-mode]').forEach((b) => b.classList.toggle('on', b.dataset.mode === mode));
+  paint('decal', '贴片（本仓现状）：洞口被玻璃片盖住，看不到室内', shoot('decal'));
+  paint('punch', '模板挖洞（原作）：洞口区域墙体被拒绘，室内可见', shoot('punch'));
+  paint('off', '参照：关掉墙体与贴片，只有室内', shoot('wallsOff'));
+}
+
+window.openingPunch = { ready: true, plan, pixels, metrics, redraw, passOrder };
+document.querySelectorAll('header button[data-mode]').forEach((b) => (b.onclick = () => redraw(b.dataset.mode)));
+$('#run').onclick = () => { const m = metrics(); $('#status').textContent = JSON.stringify(m, null, 2); window.openingPunch.last = m; redraw('punch'); };
+redraw('punch');
+const m = metrics();
+window.openingPunch.last = m;
+$('#status').textContent = JSON.stringify(m, null, 2);
+</script>
+</html>

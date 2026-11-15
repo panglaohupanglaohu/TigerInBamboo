@@ -358,8 +358,9 @@ export const saihojiGardenScene = {
       if (pine) {
         pine.updateWorldMatrix(true, false);
         pine.getWorldPosition(_leafUp);
-        const h =
-          (Number.isFinite(pine.userData?.height) ? pine.userData.height : 8) *
+        const h = Number.isFinite(pine.userData?.crownWorldHeight)
+          ? pine.userData.crownWorldHeight // 苔庭丛松（2026-11-11）：布局时写入的世界高
+          : (Number.isFinite(pine.userData?.height) ? pine.userData.height : 8) *
           (pine.userData?.pineScale ?? 1) *
           (pine.userData?.pineSize ?? 1) *
           LEVIATHAN_GARDEN_SCALE *

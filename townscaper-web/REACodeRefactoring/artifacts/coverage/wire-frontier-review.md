@@ -30,3 +30,8 @@ src/core/wire-route.js用凸多边形精确裁切求墙面端点，替代0.1步�
 机器报告frontier-candidates-browser.json和wire-route-browser.json。本机Chrome/SwiftShader验收，不宣称全部浏览器/所有地形均通过。src/frontier.js仍部分覆盖；750帧学习完成与局部运行通过，均不表示该视频完整生成算法已覆盖。
 
 补充回归：index/pipeline已加载46/285、剩余239和132模块共享数据；town/terrain/badnorth三个主场景重新加载无pageerror，截图wire-frontier-progress-*.png。下一批1584623053061099520（房屋插入地形）和1582757294672314368（点光源体积）尚未计入学习。
+
+
+## 第 56 批（C08）
+
+- 1582293326815862786：新增 frontier-c08.html 回放共享 expandFrontier：坍缩边候选数、导航边生长与互连。截图 C08-frontier-step40/step999.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

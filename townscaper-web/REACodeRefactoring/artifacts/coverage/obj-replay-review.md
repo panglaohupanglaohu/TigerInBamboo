@@ -25,3 +25,13 @@ obj-replay-browser.cjs：真实双网格下载OBJ到export-{mixed,quad}.obj，�
 本批2段455帧，累计100/285，剩185；模块32增强/64静态/42部分，原版只读。下一批1246074663546916873道具出现/消失动画与1238474550511308800封闭庭院草地，先配文再全帧，避免以相邻主题代替。
 
 收口：obj-replay-pages.json确认首页/pipeline同时100/285、剩185；首页别名按钮实际启动/停止回放，回放期间延迟hash未写临时帧，结束写最终状态。285本地视频与README匹配，管线缺0，diff空白检查通过。
+
+## 第 56 批（C06）
+
+### 1430224300003545091
+- 做了什么：新增独立 OBJ 读取器 src/tools/obj-parse-c06.js（v/vn/f 各写法、负索引、多边形扇形、无 vn 用面法线，不依赖导出端结构）；obj-view.html 在隐藏 iframe 里开真实主场景，用共享 objexport 导出，再用独立解析器读回，DCC 风格灰白材质 + 地面网格显示，并对账面数/包围盒；也可拖入任意 .obj。原片 DCC 里也只有灰白主体（无水/植被/材质），所以主体导出就是片中范围
+- 落点：src/tools/objexport.js · src/tools/obj-parse-c06.js · obj-view.html
+- 测试：tests/obj-view-c06.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-obj-view-town.png（已看）
+- 对照：小镇导出 12185 面全部读回、包围盒误差 0；画面是灰白房子 + 栏杆 + 地基，与 0178–0199 帧第三方软件里的灰模一致
+- 判定：done

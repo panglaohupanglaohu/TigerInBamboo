@@ -1,0 +1,236 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>体素幽灵预览 → 逐格实体化 · REACode重构版</title><link rel="icon" href="data:,"><style>
+body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}
+header{padding:12px 22px 6px}canvas{display:block;margin:0 auto 14px;background:#f7fbf9;border-radius:10px;box-shadow:0 1px 3px rgba(32,52,60,.12)}
+a{color:#26758a}code{background:#e4efec;padding:0 4px;border-radius:4px}
+label{margin-right:16px}output,span.v{font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:18px;flex-wrap:wrap;padding:0 22px 8px;font-size:13px;color:#456}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+#hud{padding:0 22px 6px;font-size:13px;color:#345}
+button{margin-right:8px;padding:3px 10px;border:1px solid #b9cdc6;background:#fff;border-radius:6px;color:#20343c;cursor:pointer}
+button:hover{background:#e9f2ee}
+</style>
+<header><b>体素幽灵预览 → 逐格实体化</b> · <a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> ·
+<a href="artifacts/coverage/794993371261665280-review.md">逐帧证据</a> ·
+<a href="wfc-bitset.html"><b>第 56 批纠正：这两条片子原文讲的是 3D WFC 解算变快（位运算 / 少用位掩码），见 wfc-bitset.html</b></a>
+<p>794993371261665280 / 797844857821732864（2016-11，同一工具的两次录屏）：底板上先浮起<strong>一整片黄点</strong>铺满将要建成的体量，
+再把同一批位置换成<strong>细线立方框</strong>，最后<strong>自下而上逐格变成实体</strong>；建成后绕塔慢转。片子任何时刻都同时存在三态，
+所以不是三段切换，而是每格各有自己的时间线。这里 <code>src/world/voxel-ghost.js</code> 把目标格体素化 → 排装配序 → 按 t 算每格状态；
+已实心的格恒为装配序的<strong>前缀</strong>。</p>
+<label>进度 <input id="t" type="range" min="0" max="1" step="0.005" value="0.13"><output id="tv">0.130</output></label>
+<label>装配序 <select id="mode"><option value="scan">scan · 自下而上</option><option value="radial">radial · 由中轴向外</option><option value="spine">spine · 先中轴竖柱后横铺</option><option value="shuffle">shuffle · 定种子打乱</option></select></label>
+<label><input id="porder" type="checkbox"> 点按装配序出现</label>
+<label><input id="layers" type="checkbox" checked> 逐层材质</label>
+<button id="go">Go!</button><button id="play">播放</button><button id="reset">归零</button>
+<span id="status">加载…</span></header>
+<div id="hud"></div>
+<div class="legend"><span><i class="sw" style="background:#e0a800"></i>点（只在画面里，还没有几何）</span><span><i class="sw" style="background:#9aa8a0"></i>线框（占位，看得见、碰不到）</span><span><i class="sw" style="background:#c8ded0"></i>实体（顶/右/左三面）</span><span><i class="sw" style="background:#f2e7d0"></i>底板</span></div>
+<canvas id="cv" width="1060" height="600"></canvas>
+<canvas id="strip" width="1060" height="210"></canvas>
+<script type="module">
+import { rasterizeBoxes, voxelOrder, previewState, phaseCounts, isoProject, depthOf, cubeFaces, layerMaterials, spineColumn, LAYER_PALETTE } from './src/world/voxel-ghost.js';
+
+const $ = (s) => document.querySelector(s);
+const DPR = Math.min(2, window.devicePixelRatio || 1);
+function prep(cv, w, h) {
+  cv.width = w * DPR; cv.height = h * DPR; cv.style.width = w + 'px'; cv.style.height = h + 'px';
+  const g = cv.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0); return g;
+}
+const cv = $('#cv'), g = prep(cv, 1060, 600);
+const strip = $('#strip'), gs = prep(strip, 1060, 210);
+
+// 目标模型：底板 + 三面墙（正面留门洞）+ 两层楼板 + 顶板 + 塔楼 —— 和片子里的"塔"同构
+const BOXES = [
+  { x: 0, y: 0, z: 0, w: 14, h: 1, d: 14 },                 // 底板
+  { x: 3, y: 1, z: 0, w: 9, h: 10, d: 1 },                  // 后墙
+  { x: 3, y: 1, z: 1, w: 1, h: 10, d: 10 },                 // 左墙
+  { x: 11, y: 1, z: 1, w: 1, h: 10, d: 10 },                // 右墙
+  { x: 3, y: 1, z: 11, w: 3, h: 10, d: 1 },                 // 前墙左垛
+  { x: 9, y: 1, z: 11, w: 3, h: 10, d: 1 },                 // 前墙右垛（中间留门洞）
+  { x: 4, y: 5, z: 1, w: 7, h: 1, d: 10 },                  // 一层楼板
+  { x: 4, y: 8, z: 1, w: 7, h: 1, d: 10 },                  // 二层楼板
+  { x: 2, y: 11, z: 0, w: 11, h: 1, d: 12 },                // 顶板
+  { x: 5, y: 12, z: 4, w: 5, h: 4, d: 5, hollow: true },    // 顶层塔身（空心）
+  { x: 4, y: 16, z: 3, w: 7, h: 1, d: 7 },                  // 塔顶板
+];
+const voxels = rasterizeBoxes(BOXES);
+const orders = {
+  scan: voxelOrder(voxels, { mode: 'scan' }),
+  radial: voxelOrder(voxels, { mode: 'radial' }),
+  spine: voxelOrder(voxels, { mode: 'spine' }),
+  shuffle: voxelOrder(voxels, { mode: 'shuffle', seed: 5 }),
+};
+const LAYERS = layerMaterials(voxels, { bandHeight: 3 });
+const SPINE = spineColumn(voxels);
+
+// 场景缩放/居中：按整模型投影包围盒算一次
+const PROJ = { scale: 11, tilt: 0.5 };
+function bounds(list) {
+  let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
+  for (const v of list) for (const f of Object.values(cubeFaces(v, PROJ))) for (const [px, py] of f) {
+    x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py);
+  }
+  return { x0, x1, y0, y1 };
+}
+const B = bounds(orders.scan);
+const fit = (W, H, pad = 16, zoom = 1) => {
+  const s = Math.min((W - 2 * pad) / (B.x1 - B.x0), (H - 2 * pad) / (B.y1 - B.y0)) * zoom;
+  return { k: s, ox: W / 2 - ((B.x0 + B.x1) / 2) * s, oy: H / 2 - ((B.y0 + B.y1) / 2) * s };
+};
+
+// 片尾（t>0.78）镜头往塔身推近：原片最后 2 秒是在半空绕塔并压近，不是固定机位
+const dollyAt = (t) => 1 + 0.22 * Math.max(0, Math.min(1, (t - 0.78) / 0.22));
+
+const C = {
+  bg: '#f7fbf9',
+  plate: ['#f5ecda', '#e7dcc4', '#d6c9ae'],
+  solid: ['#d7e8dc', '#c2d8c9', '#aec7b7'],
+  ghostLine: 'rgba(140,155,146,.85)',
+  ghostFill: 'rgba(150,165,156,.07)',
+  point: '#e0a800',
+};
+
+// 逐层材质：每个色槽生成三面明暗（顶亮 / 右中 / 左暗），保持和单色时同一套光照口径
+function shade(hex, f) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = Math.min(255, Math.round(((n >> 16) & 255) * f));
+  const g = Math.min(255, Math.round(((n >> 8) & 255) * f));
+  const b = Math.min(255, Math.round((n & 255) * f));
+  return `rgb(${r},${g},${b})`;
+}
+// 第 97 轮：色板**只能有一份**（src/world/voxel-ghost.js 的 LAYER_PALETTE，按原片逐段色相标定）。
+// 这里原来又抄了一份旧的粉/紫/青绿六色，改模块色板页面不会变 —— 抄本已删，改成直接引用。
+const LAYER_FACES = LAYERS.counts.map((_, i) => {
+  const hex = LAYER_PALETTE[i % LAYER_PALETTE.length] || '#d7e8dc';
+  return [shade(hex, 1.06), shade(hex, 0.96), shade(hex, 0.86)];
+});
+
+function drawScene(ctx, W, H, order, t, { frame, zoom = 1 } = {}) {
+  const f = fit(W, H, 16, zoom);
+  const P = (p) => [p[0] * f.k + f.ox, p[1] * f.k + f.oy];
+  ctx.save();
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = C.bg; ctx.fillRect(0, 0, W, H);           // 显式铺底：像素判据不靠 CSS 背景
+  if (frame) { ctx.strokeStyle = '#b9cdc6'; ctx.lineWidth = 1; ctx.strokeRect(.5, .5, W - 1, H - 1); }
+  const st = previewState(order, t, { pointMode: $('#porder').checked ? 'order' : 'scatter' });
+  const useLayers = $('#layers').checked;
+  const all = [...st.solid, ...st.ghost, ...st.points].sort((a, b) => depthOf(a) - depthOf(b));
+  const isSolid = new Set(st.solid.map((v) => v.x + ',' + v.y + ',' + v.z));
+  const isGhost = new Set(st.ghost.map((v) => v.x + ',' + v.y + ',' + v.z));
+  for (const v of all) {
+    const k = v.x + ',' + v.y + ',' + v.z;
+    const faces = cubeFaces(v, PROJ);
+    if (isSolid.has(k)) {
+      const pal = v.y === 0 ? C.plate : (useLayers ? (LAYER_FACES[LAYERS.of.get(k)] || C.solid) : C.solid);
+      ['top', 'right', 'left'].forEach((name, i) => {
+        ctx.beginPath();
+        faces[name].forEach(([px, py], j) => (j ? ctx.lineTo(...P([px, py])) : ctx.moveTo(...P([px, py]))));
+        ctx.closePath();
+        ctx.fillStyle = pal[i]; ctx.fill();
+        ctx.strokeStyle = 'rgba(70,90,80,.10)'; ctx.lineWidth = .6; ctx.stroke();
+      });
+    } else if (isGhost.has(k)) {
+      // 线框：只勾棱，内部给一点点膜，保证"看得见但没实体"
+      for (const name of ['top', 'right', 'left']) {
+        ctx.beginPath();
+        faces[name].forEach(([px, py], j) => (j ? ctx.lineTo(...P([px, py])) : ctx.moveTo(...P([px, py]))));
+        ctx.closePath();
+        ctx.fillStyle = C.ghostFill; ctx.fill();
+        ctx.strokeStyle = C.ghostLine; ctx.lineWidth = .8; ctx.stroke();
+      }
+    } else {
+      const c = isoProject({ x: v.x + .5, y: v.y + .5, z: v.z + .5 }, PROJ);
+      const [sx, sy] = P(c), r = Math.max(1.4, 1.1 * f.k / 11);
+      ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fillStyle = C.point; ctx.fill();
+    }
+  }
+  ctx.restore();
+  return st;
+}
+
+function drawStrip(t) {
+  const W = 1060, H = 210, cols = [{ t: .13, label: '① 点铺满体量' }, { t: .34, label: '② 线框占位 + 开始实体化' }, { t: 1, label: '③ 全部实体' }];
+  const cw = W / 3;
+  gs.clearRect(0, 0, W, H);
+  gs.font = '13px system-ui'; gs.textBaseline = 'top'; gs.textAlign = 'left';
+  cols.forEach((c, i) => {
+    gs.save();
+    gs.beginPath(); gs.rect(i * cw + 6, 24, cw - 12, H - 34); gs.clip();
+    gs.fillStyle = C.bg; gs.fillRect(i * cw + 6, 24, cw - 12, H - 34);
+    gs.translate(i * cw + 6, 24);
+    drawScene(gs, cw - 12, H - 34, orders[$('#mode').value], c.t);
+    gs.restore();
+    gs.fillStyle = '#345'; gs.fillText(c.label, i * cw + 12, 6);
+    gs.strokeStyle = '#b9cdc6'; gs.strokeRect(i * cw + 6.5, 24.5, cw - 13, H - 35);
+    if (i) { gs.beginPath(); gs.moveTo(i * cw, 24); gs.lineTo(i * cw, H - 10); gs.stroke(); }
+  });
+  void t;
+}
+
+function render() {
+  const t = +$('#t').value;
+  $('#tv').textContent = t.toFixed(3);
+  const order = orders[$('#mode').value];
+  const st = drawScene(g, 1060, 600, order, t, { frame: true, zoom: dollyAt(t) });
+  const c = phaseCounts(st);
+  const layerInfo = $('#layers').checked ? ` · 材质 ${LAYERS.bands} 段/${LAYERS.counts.filter((n) => n > 0).length} 色` : ' · 单色';
+  $('#hud').textContent = `t=${t.toFixed(3)} · ${st.phase} · 点 ${c.points} · 线框 ${c.ghost} · 实体 ${c.solid} · 未出现 ${c.hidden} · 合计 ${order.length} 格 · 完成度 ${(c.solid / order.length * 100).toFixed(1)}%${layerInfo}`;
+  drawStrip(t);
+  window.voxelGhost.last = c;
+}
+
+// Go! —— 原片左下角那颗按钮：按一次从头跑完整段装配，跑完停住（不循环、不回落）
+let goStop = 0;
+function goOnce() {
+  playing = false; $('#play').textContent = '播放';
+  cancelAnimationFrame(raf); cancelAnimationFrame(goStop);
+  $('#t').value = 0; render();
+  const t0 = performance.now();
+  const step = (now) => {
+    const u = Math.min(1, (now - t0) / 5200);
+    $('#t').value = u.toFixed(3);
+    render();
+    if (u < 1) goStop = requestAnimationFrame(step);
+  };
+  goStop = requestAnimationFrame(step);
+}
+
+let playing = false, raf = 0, last = 0;
+function tick(now) {
+  if (!playing) return;
+  const dt = last ? Math.min(60, now - last) : 16; last = now;
+  let t = +$('#t').value + dt / 6000;
+  if (t >= 1) { t = 1; playing = false; $('#play').textContent = '播放'; }
+  $('#t').value = t.toFixed(3); render();
+  if (playing) raf = requestAnimationFrame(tick);
+}
+$('#t').addEventListener('input', render);
+$('#mode').addEventListener('change', render);
+$('#porder').addEventListener('change', render);
+$('#layers').addEventListener('change', render);
+$('#go').addEventListener('click', goOnce);
+$('#play').addEventListener('click', () => {
+  playing = !playing; $('#play').textContent = playing ? '暂停' : '播放';
+  if (playing) { if (+$('#t').value >= 1) $('#t').value = 0; last = 0; raf = requestAnimationFrame(tick); } else cancelAnimationFrame(raf);
+});
+$('#reset').addEventListener('click', () => { playing = false; cancelAnimationFrame(goStop); $('#play').textContent = '播放'; $('#t').value = 0; render(); });
+
+window.voxelGhost = {
+  set: (v) => { playing = false; cancelAnimationFrame(goStop); $('#play').textContent = '播放'; $('#t').value = Math.max(0, Math.min(1, v)); render(); },
+  get t() { return +$('#t').value; },
+  setMode: (m) => { $('#mode').value = m; render(); },
+  get order() { return orders[$('#mode').value]; },
+  counts: () => phaseCounts(previewState(orders[$('#mode').value], +$('#t').value, { pointMode: $('#porder').checked ? 'order' : 'scatter' })),
+  setPointOrder: (on) => { $('#porder').checked = !!on; render(); },
+  setLayers: (on) => { $('#layers').checked = !!on; render(); },
+  get layers() { return { on: $('#layers').checked, bands: LAYERS.bands, counts: LAYERS.counts.slice() }; },
+  get spine() { return { x: SPINE.x, z: SPINE.z, cells: SPINE.cells.length, bottom: SPINE.cells[0] || null, top: SPINE.cells[SPINE.cells.length - 1] || null }; },
+  go: goOnce,
+  dolly: (t) => dollyAt(t),
+  state: () => previewState(orders[$('#mode').value], +$('#t').value, { pointMode: $('#porder').checked ? 'order' : 'scatter' }),
+  voxels: voxels.size,
+  last: null,
+};
+$('#status').textContent = `模型 ${voxels.size} 格 · scan/radial/spine/shuffle 四套装配序 · 中轴柱 ${SPINE.cells.length} 格 · 材质 ${LAYERS.bands} 段`;
+render();
+</script>
+</html>

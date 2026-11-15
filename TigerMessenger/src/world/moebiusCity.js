@@ -738,6 +738,21 @@ function createMoebiusHallBirdFlocks(parent, crystals, rnd) {
   const root = new THREE.Group();
   root.name = "moebius-hall-birds";
   parent.add(root);
+  // 2026-11-08 主人要求删除：花厅间飞行的黑色 V 字鸟群（含送别鸟群）不再显示。
+  // 只隐藏整组、保留接口，别处对 birdFlocks 的调用不受影响。
+  root.visible = false;
+  root.userData.removedByOwner = "2026-11-08";
+  // 不再创建任何鸟的模型（省 mesh），只返回同形状的空接口，调用方照常工作。
+  // 想恢复旧鸟群：URL 加 ?moebiusBirds=1
+  if (new URLSearchParams(globalThis.location?.search || "").get("moebiusBirds") !== "1") {
+    return {
+      group: root,
+      flocks: [],
+      update() {},
+      migratePatrolHome() {},
+      rotateCoreHomes() {},
+    };
+  }
 
   // 花厅巡航：深色剪影；送别伴飞：更大更亮，车窗易见
   const wingMat = new THREE.MeshBasicMaterial({

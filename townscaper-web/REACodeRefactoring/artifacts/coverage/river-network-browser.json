@@ -1,0 +1,71 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "seeds": [
+        {
+          "seed": 1,
+          "riverCells": 106,
+          "raised": 0,
+          "changed": 42,
+          "outlets": 38,
+          "edges": 175,
+          "maxArea": 25
+        },
+        {
+          "seed": 7,
+          "riverCells": 313,
+          "raised": 19,
+          "changed": 273,
+          "outlets": 42,
+          "edges": 2055,
+          "maxArea": 140
+        },
+        {
+          "seed": 19,
+          "riverCells": 333,
+          "raised": 6,
+          "changed": 283,
+          "outlets": 55,
+          "edges": 1669,
+          "maxArea": 78
+        }
+      ],
+      "uiRestore": true
+    },
+    {
+      "grid": "mixed",
+      "seeds": [
+        {
+          "seed": 1,
+          "riverCells": 99,
+          "raised": 0,
+          "changed": 35,
+          "outlets": 40,
+          "edges": 104,
+          "maxArea": 19
+        },
+        {
+          "seed": 7,
+          "riverCells": 267,
+          "raised": 18,
+          "changed": 233,
+          "outlets": 40,
+          "edges": 1673,
+          "maxArea": 134
+        },
+        {
+          "seed": 19,
+          "riverCells": 298,
+          "raised": 7,
+          "changed": 256,
+          "outlets": 49,
+          "edges": 1254,
+          "maxArea": 90
+        }
+      ],
+      "uiRestore": true
+    }
+  ],
+  "errors": []
+}

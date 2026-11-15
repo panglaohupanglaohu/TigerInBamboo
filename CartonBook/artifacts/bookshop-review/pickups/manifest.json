@@ -1,0 +1,1907 @@
+{
+  "id": "bookshop-letter",
+  "mode": "live",
+  "realCapture": true,
+  "port": 8931,
+  "via": "direct",
+  "captureClean": true,
+  "cropUsed": false,
+  "captureFlag": "cartonCapture=1",
+  "crop": null,
+  "generatedAt": "2026-11-07T08:27:19.761Z",
+  "shots": [
+    {
+      "shotId": "s16",
+      "file": "s16.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 171990,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -106.85907909825595,
+          -51.62654736786952,
+          126.76795932074009
+        ],
+        "aim": [
+          -109.36864271860236,
+          -45.78357013634998,
+          125.97433944486878
+        ]
+      },
+      "battle": {
+        "saihojiLandingHold": false,
+        "coverBombing": {
+          "allowed": false,
+          "passes": 0,
+          "timedOut": false
+        },
+        "groundAssault": {
+          "tactics": null,
+          "medical": {
+            "rescued": 0,
+            "healed": 0,
+            "returned": 0,
+            "medic": {
+              "id": "ca0ff112-8c57-4c49-920c-01ee4a0ce4f9",
+              "visible": true,
+              "owned": false,
+              "phase": "surface",
+              "position": [
+                1.1022041528051494,
+                24.071642139584892,
+                1.2676010275197402
+              ],
+              "target": null,
+              "visibleMeshes": 10
+            },
+            "patients": 0,
+            "carriers": []
+          },
+          "ready": 0,
+          "active": false,
+          "stage": "idle",
+          "objective": "suppress-town-defenses-and-assault-plaza",
+          "assigned": 0,
+          "controllers": 0,
+          "heldFor": 0,
+          "deployed": 0,
+          "trooperShots": 0,
+          "trooperRobotHits": 0,
+          "residentShots": 0,
+          "residentHits": 0,
+          "residentsDown": 0,
+          "troopersDown": 0,
+          "robotKills": 0,
+          "friendlyBlastHits": 0,
+          "blastResidentHits": 0,
+          "recovered": 0,
+          "aboard": 0,
+          "rappelling": 0,
+          "ground": 0,
+          "liveProjectiles": 0,
+          "renderBatch": null
+        },
+        "bombRelease": null,
+        "bombingRun": null,
+        "phase": "idle",
+        "age": 0,
+        "energy": 100,
+        "shield": false,
+        "wingNodes": 2,
+        "heat": 0,
+        "cycle": 0,
+        "shots": 0,
+        "retreatReason": null,
+        "arrival": null,
+        "flagshipPosition": [
+          -64.46298120242278,
+          -142.43326640365723,
+          -124.72886063810931
+        ],
+        "members": 14,
+        "roles": [
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "guard",
+          "jammer",
+          "guard",
+          "scout",
+          "scout",
+          "scout",
+          "transport",
+          "transport",
+          "transport"
+        ],
+        "wingDamage": 0,
+        "events": [],
+        "blockedHits": 0,
+        "unitShots": 0,
+        "fireLog": [],
+        "flight": {
+          "bankDegrees": 0,
+          "attackSpeed": 9,
+          "turnLimit": 0.11
+        },
+        "bay": {
+          "openness": 0
+        },
+        "arsenal": {
+          "cannon": 0,
+          "rain": 0,
+          "ion": 0,
+          "traction": 0,
+          "robotHits": 0,
+          "robotsShattered": 0,
+          "shieldImpacts": 0,
+          "shieldAudioPlayed": 0,
+          "shieldAudioSkipped": 0,
+          "lastImpact": null,
+          "smokeStyle": "soft-steam-sprite",
+          "activeSoftSmoke": 0,
+          "activeSteamJets": 0,
+          "factoriesStopped": 0,
+          "robotsBlinking": 0,
+          "activeIon": false,
+          "activeEffects": 0,
+          "pendingProjectiles": 0
+        },
+        "beamActive": false,
+        "types": [
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-08-9",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "vanguard-hauler-0",
+          "vanguard-hauler-1",
+          "vanguard-hauler-2"
+        ],
+        "route": [
+          {
+            "id": "bookshop",
+            "label": "书店镇"
+          },
+          {
+            "id": "apostles",
+            "label": "十二门徒"
+          },
+          {
+            "id": "citadel",
+            "label": "高山圣城"
+          },
+          {
+            "id": "old-port",
+            "label": "旧港湾"
+          },
+          {
+            "id": "swamp",
+            "label": "湖沼"
+          },
+          {
+            "id": "moon-lake",
+            "label": "月湖"
+          },
+          {
+            "id": "gate",
+            "label": "叹息之门"
+          }
+        ],
+        "completedTargets": [],
+        "campaignFinished": false,
+        "objectsReused": [
+          "32096c58-c52b-4087-9d62-83a4a7ff44ff",
+          "c0865f56-d5ef-4451-b7a9-8e59559c5af1",
+          "d7650723-7342-4577-b8e8-bd58dc9bfb96",
+          "5c116db6-7747-4117-8a6c-a3cfe8b6117c",
+          "f480f9f1-5388-49fb-ab32-d89efe0289b9",
+          "cedb678d-5679-43f7-95e6-64513e7d364e",
+          "b23fb021-cf42-42b1-8314-9e348772d09a",
+          "23758238-df65-42b4-af25-ebd16866660d",
+          "2ee99a35-6f71-4d80-8bac-44b3f557b29a",
+          "4bdfd57d-8500-4530-af2b-880cfca0b51a",
+          "540cbd3f-1804-43ca-8000-4dc0369bf5e1",
+          "bd42abc4-1386-443f-80d4-df1b2a804ee2",
+          "87077edb-174d-4fbe-a7f3-f79e10a19f94",
+          "353ea83e-46d3-400b-a21c-74e9a4526a09"
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s17",
+      "file": "s17.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1587926,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-robot-ant-articulated",
+        "eye": [
+          -64.367686955047,
+          -105.14663275482738,
+          115.58307184176472
+        ],
+        "aim": [
+          -60.6070677502485,
+          -107.63631185531173,
+          113.536002919351
+        ]
+      },
+      "battle": {
+        "saihojiLandingHold": false,
+        "coverBombing": {
+          "allowed": false,
+          "passes": 0,
+          "timedOut": false
+        },
+        "groundAssault": {
+          "tactics": null,
+          "medical": {
+            "rescued": 0,
+            "healed": 0,
+            "returned": 0,
+            "medic": {
+              "id": "ca0ff112-8c57-4c49-920c-01ee4a0ce4f9",
+              "visible": true,
+              "owned": false,
+              "phase": "dive",
+              "position": [
+                1.4175284180677359,
+                22.5919209185266,
+                0.6704338064969066
+              ],
+              "target": null,
+              "visibleMeshes": 10
+            },
+            "patients": 0,
+            "carriers": []
+          },
+          "ready": 0,
+          "active": false,
+          "stage": "idle",
+          "objective": "suppress-town-defenses-and-assault-plaza",
+          "assigned": 0,
+          "controllers": 0,
+          "heldFor": 0,
+          "deployed": 0,
+          "trooperShots": 0,
+          "trooperRobotHits": 0,
+          "residentShots": 0,
+          "residentHits": 0,
+          "residentsDown": 0,
+          "troopersDown": 0,
+          "robotKills": 0,
+          "friendlyBlastHits": 0,
+          "blastResidentHits": 0,
+          "recovered": 0,
+          "aboard": 0,
+          "rappelling": 0,
+          "ground": 0,
+          "liveProjectiles": 0,
+          "renderBatch": null
+        },
+        "bombRelease": null,
+        "bombingRun": null,
+        "phase": "idle",
+        "age": 0,
+        "energy": 100,
+        "shield": false,
+        "wingNodes": 2,
+        "heat": 0,
+        "cycle": 0,
+        "shots": 0,
+        "retreatReason": null,
+        "arrival": null,
+        "flagshipPosition": [
+          -64.19915406096972,
+          -142.35810717084328,
+          -124.95054197797853
+        ],
+        "members": 14,
+        "roles": [
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "guard",
+          "jammer",
+          "guard",
+          "scout",
+          "scout",
+          "scout",
+          "transport",
+          "transport",
+          "transport"
+        ],
+        "wingDamage": 0,
+        "events": [],
+        "blockedHits": 0,
+        "unitShots": 0,
+        "fireLog": [],
+        "flight": {
+          "bankDegrees": 0,
+          "attackSpeed": 9,
+          "turnLimit": 0.11
+        },
+        "bay": {
+          "openness": 0
+        },
+        "arsenal": {
+          "cannon": 0,
+          "rain": 0,
+          "ion": 0,
+          "traction": 0,
+          "robotHits": 0,
+          "robotsShattered": 0,
+          "shieldImpacts": 0,
+          "shieldAudioPlayed": 0,
+          "shieldAudioSkipped": 0,
+          "lastImpact": null,
+          "smokeStyle": "soft-steam-sprite",
+          "activeSoftSmoke": 0,
+          "activeSteamJets": 0,
+          "factoriesStopped": 0,
+          "robotsBlinking": 0,
+          "activeIon": false,
+          "activeEffects": 0,
+          "pendingProjectiles": 0
+        },
+        "beamActive": false,
+        "types": [
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-08-9",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "vanguard-hauler-0",
+          "vanguard-hauler-1",
+          "vanguard-hauler-2"
+        ],
+        "route": [
+          {
+            "id": "bookshop",
+            "label": "书店镇"
+          },
+          {
+            "id": "apostles",
+            "label": "十二门徒"
+          },
+          {
+            "id": "citadel",
+            "label": "高山圣城"
+          },
+          {
+            "id": "old-port",
+            "label": "旧港湾"
+          },
+          {
+            "id": "swamp",
+            "label": "湖沼"
+          },
+          {
+            "id": "moon-lake",
+            "label": "月湖"
+          },
+          {
+            "id": "gate",
+            "label": "叹息之门"
+          }
+        ],
+        "completedTargets": [],
+        "campaignFinished": false,
+        "objectsReused": [
+          "32096c58-c52b-4087-9d62-83a4a7ff44ff",
+          "c0865f56-d5ef-4451-b7a9-8e59559c5af1",
+          "d7650723-7342-4577-b8e8-bd58dc9bfb96",
+          "5c116db6-7747-4117-8a6c-a3cfe8b6117c",
+          "f480f9f1-5388-49fb-ab32-d89efe0289b9",
+          "cedb678d-5679-43f7-95e6-64513e7d364e",
+          "b23fb021-cf42-42b1-8314-9e348772d09a",
+          "23758238-df65-42b4-af25-ebd16866660d",
+          "2ee99a35-6f71-4d80-8bac-44b3f557b29a",
+          "4bdfd57d-8500-4530-af2b-880cfca0b51a",
+          "540cbd3f-1804-43ca-8000-4dc0369bf5e1",
+          "bd42abc4-1386-443f-80d4-df1b2a804ee2",
+          "87077edb-174d-4fbe-a7f3-f79e10a19f94",
+          "353ea83e-46d3-400b-a21c-74e9a4526a09"
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s18",
+      "file": "s18.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 46960,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -106.83795894950924,
+          -44.96127163638193,
+          127.98523224106627
+        ],
+        "aim": [
+          -95.63326781349852,
+          -63.682278282758126,
+          131.35910711914653
+        ]
+      },
+      "battle": {
+        "saihojiLandingHold": false,
+        "coverBombing": {
+          "allowed": false,
+          "passes": 0,
+          "timedOut": false
+        },
+        "groundAssault": {
+          "tactics": null,
+          "medical": {
+            "rescued": 0,
+            "healed": 0,
+            "returned": 0,
+            "medic": {
+              "id": "ca0ff112-8c57-4c49-920c-01ee4a0ce4f9",
+              "visible": true,
+              "owned": false,
+              "phase": "dive",
+              "position": [
+                1.770282439518014,
+                22.59158411743037,
+                0.1399411613828554
+              ],
+              "target": null,
+              "visibleMeshes": 10
+            },
+            "patients": 0,
+            "carriers": []
+          },
+          "ready": 0,
+          "active": false,
+          "stage": "idle",
+          "objective": "suppress-town-defenses-and-assault-plaza",
+          "assigned": 0,
+          "controllers": 0,
+          "heldFor": 0,
+          "deployed": 0,
+          "trooperShots": 0,
+          "trooperRobotHits": 0,
+          "residentShots": 0,
+          "residentHits": 0,
+          "residentsDown": 0,
+          "troopersDown": 0,
+          "robotKills": 0,
+          "friendlyBlastHits": 0,
+          "blastResidentHits": 0,
+          "recovered": 0,
+          "aboard": 0,
+          "rappelling": 0,
+          "ground": 0,
+          "liveProjectiles": 0,
+          "renderBatch": null
+        },
+        "bombRelease": null,
+        "bombingRun": null,
+        "phase": "idle",
+        "age": 0,
+        "energy": 100,
+        "shield": false,
+        "wingNodes": 2,
+        "heat": 0,
+        "cycle": 0,
+        "shots": 0,
+        "retreatReason": null,
+        "arrival": null,
+        "flagshipPosition": [
+          -63.94705893863658,
+          -142.2890256716785,
+          -125.15832703621021
+        ],
+        "members": 14,
+        "roles": [
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "guard",
+          "jammer",
+          "guard",
+          "scout",
+          "scout",
+          "scout",
+          "transport",
+          "transport",
+          "transport"
+        ],
+        "wingDamage": 0,
+        "events": [],
+        "blockedHits": 0,
+        "unitShots": 0,
+        "fireLog": [],
+        "flight": {
+          "bankDegrees": 0,
+          "attackSpeed": 9,
+          "turnLimit": 0.11
+        },
+        "bay": {
+          "openness": 0
+        },
+        "arsenal": {
+          "cannon": 0,
+          "rain": 0,
+          "ion": 0,
+          "traction": 0,
+          "robotHits": 0,
+          "robotsShattered": 0,
+          "shieldImpacts": 0,
+          "shieldAudioPlayed": 0,
+          "shieldAudioSkipped": 0,
+          "lastImpact": null,
+          "smokeStyle": "soft-steam-sprite",
+          "activeSoftSmoke": 0,
+          "activeSteamJets": 0,
+          "factoriesStopped": 0,
+          "robotsBlinking": 0,
+          "activeIon": false,
+          "activeEffects": 0,
+          "pendingProjectiles": 0
+        },
+        "beamActive": false,
+        "types": [
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-08-9",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "vanguard-hauler-0",
+          "vanguard-hauler-1",
+          "vanguard-hauler-2"
+        ],
+        "route": [
+          {
+            "id": "bookshop",
+            "label": "书店镇"
+          },
+          {
+            "id": "apostles",
+            "label": "十二门徒"
+          },
+          {
+            "id": "citadel",
+            "label": "高山圣城"
+          },
+          {
+            "id": "old-port",
+            "label": "旧港湾"
+          },
+          {
+            "id": "swamp",
+            "label": "湖沼"
+          },
+          {
+            "id": "moon-lake",
+            "label": "月湖"
+          },
+          {
+            "id": "gate",
+            "label": "叹息之门"
+          }
+        ],
+        "completedTargets": [],
+        "campaignFinished": false,
+        "objectsReused": [
+          "32096c58-c52b-4087-9d62-83a4a7ff44ff",
+          "c0865f56-d5ef-4451-b7a9-8e59559c5af1",
+          "d7650723-7342-4577-b8e8-bd58dc9bfb96",
+          "5c116db6-7747-4117-8a6c-a3cfe8b6117c",
+          "f480f9f1-5388-49fb-ab32-d89efe0289b9",
+          "cedb678d-5679-43f7-95e6-64513e7d364e",
+          "b23fb021-cf42-42b1-8314-9e348772d09a",
+          "23758238-df65-42b4-af25-ebd16866660d",
+          "2ee99a35-6f71-4d80-8bac-44b3f557b29a",
+          "4bdfd57d-8500-4530-af2b-880cfca0b51a",
+          "540cbd3f-1804-43ca-8000-4dc0369bf5e1",
+          "bd42abc4-1386-443f-80d4-df1b2a804ee2",
+          "87077edb-174d-4fbe-a7f3-f79e10a19f94",
+          "353ea83e-46d3-400b-a21c-74e9a4526a09"
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s21",
+      "file": "s21.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 336002,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -104.8321178990993,
+          -61.322706174715606,
+          122.9461066692719
+        ],
+        "aim": [
+          -115.10865473427478,
+          -45.80393026364085,
+          119.66428021177492
+        ]
+      },
+      "battle": {
+        "saihojiLandingHold": false,
+        "coverBombing": {
+          "allowed": false,
+          "passes": 0,
+          "timedOut": false
+        },
+        "groundAssault": {
+          "tactics": null,
+          "medical": {
+            "rescued": 0,
+            "healed": 0,
+            "returned": 0,
+            "medic": {
+              "id": "ca0ff112-8c57-4c49-920c-01ee4a0ce4f9",
+              "visible": true,
+              "owned": false,
+              "phase": "dive",
+              "position": [
+                2.187753765242954,
+                22.62854548572907,
+                -0.36947207063583676
+              ],
+              "target": null,
+              "visibleMeshes": 10
+            },
+            "patients": 0,
+            "carriers": []
+          },
+          "ready": 0,
+          "active": false,
+          "stage": "idle",
+          "objective": "suppress-town-defenses-and-assault-plaza",
+          "assigned": 0,
+          "controllers": 0,
+          "heldFor": 0,
+          "deployed": 0,
+          "trooperShots": 0,
+          "trooperRobotHits": 0,
+          "residentShots": 0,
+          "residentHits": 0,
+          "residentsDown": 0,
+          "troopersDown": 0,
+          "robotKills": 0,
+          "friendlyBlastHits": 0,
+          "blastResidentHits": 0,
+          "recovered": 0,
+          "aboard": 0,
+          "rappelling": 0,
+          "ground": 0,
+          "liveProjectiles": 0,
+          "renderBatch": null
+        },
+        "bombRelease": null,
+        "bombingRun": null,
+        "phase": "idle",
+        "age": 0,
+        "energy": 100,
+        "shield": false,
+        "wingNodes": 2,
+        "heat": 0,
+        "cycle": 0,
+        "shots": 0,
+        "retreatReason": null,
+        "arrival": null,
+        "flagshipPosition": [
+          -63.68319270814321,
+          -142.21947097111342,
+          -125.37173941201472
+        ],
+        "members": 14,
+        "roles": [
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "guard",
+          "jammer",
+          "guard",
+          "scout",
+          "scout",
+          "scout",
+          "transport",
+          "transport",
+          "transport"
+        ],
+        "wingDamage": 0,
+        "events": [],
+        "blockedHits": 0,
+        "unitShots": 0,
+        "fireLog": [],
+        "flight": {
+          "bankDegrees": 0,
+          "attackSpeed": 9,
+          "turnLimit": 0.11
+        },
+        "bay": {
+          "openness": 0
+        },
+        "arsenal": {
+          "cannon": 0,
+          "rain": 0,
+          "ion": 0,
+          "traction": 0,
+          "robotHits": 0,
+          "robotsShattered": 0,
+          "shieldImpacts": 0,
+          "shieldAudioPlayed": 0,
+          "shieldAudioSkipped": 0,
+          "lastImpact": null,
+          "smokeStyle": "soft-steam-sprite",
+          "activeSoftSmoke": 0,
+          "activeSteamJets": 0,
+          "factoriesStopped": 0,
+          "robotsBlinking": 0,
+          "activeIon": false,
+          "activeEffects": 0,
+          "pendingProjectiles": 0
+        },
+        "beamActive": false,
+        "types": [
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-08-9",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "vanguard-hauler-0",
+          "vanguard-hauler-1",
+          "vanguard-hauler-2"
+        ],
+        "route": [
+          {
+            "id": "bookshop",
+            "label": "书店镇"
+          },
+          {
+            "id": "apostles",
+            "label": "十二门徒"
+          },
+          {
+            "id": "citadel",
+            "label": "高山圣城"
+          },
+          {
+            "id": "old-port",
+            "label": "旧港湾"
+          },
+          {
+            "id": "swamp",
+            "label": "湖沼"
+          },
+          {
+            "id": "moon-lake",
+            "label": "月湖"
+          },
+          {
+            "id": "gate",
+            "label": "叹息之门"
+          }
+        ],
+        "completedTargets": [],
+        "campaignFinished": false,
+        "objectsReused": [
+          "32096c58-c52b-4087-9d62-83a4a7ff44ff",
+          "c0865f56-d5ef-4451-b7a9-8e59559c5af1",
+          "d7650723-7342-4577-b8e8-bd58dc9bfb96",
+          "5c116db6-7747-4117-8a6c-a3cfe8b6117c",
+          "f480f9f1-5388-49fb-ab32-d89efe0289b9",
+          "cedb678d-5679-43f7-95e6-64513e7d364e",
+          "b23fb021-cf42-42b1-8314-9e348772d09a",
+          "23758238-df65-42b4-af25-ebd16866660d",
+          "2ee99a35-6f71-4d80-8bac-44b3f557b29a",
+          "4bdfd57d-8500-4530-af2b-880cfca0b51a",
+          "540cbd3f-1804-43ca-8000-4dc0369bf5e1",
+          "bd42abc4-1386-443f-80d4-df1b2a804ee2",
+          "87077edb-174d-4fbe-a7f3-f79e10a19f94",
+          "353ea83e-46d3-400b-a21c-74e9a4526a09"
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s19",
+      "file": "s19.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 360093,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "locust-bookshop-court",
+        "eye": [
+          -22.79361060847512,
+          -95.96724381560357,
+          139.74100840435395
+        ],
+        "aim": [
+          -65.01586060260989,
+          -82.04892875930211,
+          160.07723498222032
+        ]
+      },
+      "battle": {
+        "saihojiLandingHold": false,
+        "coverBombing": {
+          "allowed": false,
+          "passes": 0,
+          "timedOut": false
+        },
+        "groundAssault": {
+          "tactics": {
+            "shieldBlocks": 0,
+            "shieldBreaks": 0,
+            "swordSwings": 0,
+            "swordHits": 0,
+            "gunBursts": 0,
+            "friendlyFireHeld": 0,
+            "formationReplacements": 0,
+            "units": []
+          },
+          "medical": {
+            "rescued": 0,
+            "healed": 0,
+            "returned": 0,
+            "medic": {
+              "id": "ca0ff112-8c57-4c49-920c-01ee4a0ce4f9",
+              "visible": true,
+              "owned": false,
+              "phase": "surface",
+              "position": [
+                12.875112683582177,
+                24.130104541105663,
+                1.2191636230781504
+              ],
+              "target": null,
+              "visibleMeshes": 10
+            },
+            "patients": 0,
+            "carriers": []
+          },
+          "ready": 18,
+          "active": true,
+          "stage": "suppression",
+          "objective": "suppress-town-defenses-and-assault-plaza",
+          "assigned": 18,
+          "controllers": 0,
+          "heldFor": 0,
+          "deployed": 0,
+          "trooperShots": 0,
+          "trooperRobotHits": 0,
+          "residentShots": 0,
+          "residentHits": 0,
+          "residentsDown": 0,
+          "troopersDown": 0,
+          "robotKills": 0,
+          "friendlyBlastHits": 0,
+          "blastResidentHits": 0,
+          "recovered": 0,
+          "aboard": 21,
+          "rappelling": 0,
+          "ground": 0,
+          "liveProjectiles": 0,
+          "renderBatch": {
+            "sourceMeshes": 1215,
+            "batches": 45,
+            "instances": 0
+          }
+        },
+        "bombRelease": null,
+        "bombingRun": {
+          "stage": "run",
+          "released": false,
+          "window": {
+            "miss": 42.52175611455271,
+            "alignment": 1
+          }
+        },
+        "phase": "blockade",
+        "age": 1.2009000000953673,
+        "energy": 97.61794000000002,
+        "shield": true,
+        "wingNodes": 2,
+        "heat": 1.08915999994278,
+        "target": "bookshop",
+        "cycle": 1,
+        "shots": 1,
+        "retreatReason": null,
+        "arrival": {
+          "distance": 105.86189954078783,
+          "altitude": 66.99772928782414,
+          "visible": true,
+          "inRange": true
+        },
+        "safeRadius": 186.7345081258473,
+        "flagshipPosition": [
+          -56.87924569899735,
+          -199.28624944682574,
+          92.61593433075609
+        ],
+        "members": 14,
+        "roles": [
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "guard",
+          "jammer",
+          "guard",
+          "scout",
+          "scout",
+          "scout",
+          "transport",
+          "transport",
+          "transport"
+        ],
+        "wingDamage": 0,
+        "events": [
+          {
+            "phase": "assemble",
+            "time": 77.67270000004768,
+            "energy": 100,
+            "shots": 0
+          },
+          {
+            "phase": "transit",
+            "time": 85.67820000004768,
+            "energy": 100,
+            "shots": 0
+          },
+          {
+            "phase": "blockade",
+            "time": 96.042,
+            "energy": 99.12,
+            "shots": 0
+          }
+        ],
+        "blockedHits": 1,
+        "unitShots": 1,
+        "fireLog": [
+          {
+            "time": 96.21579999995232,
+            "type": "ion",
+            "role": "scout",
+            "source": "triple-gate-scout-aircraft",
+            "point": [
+              -24.795722545903686,
+              -94.2518276533901,
+              134.26434146450146
+            ]
+          }
+        ],
+        "flight": {
+          "bankDegrees": -7.206116816884491e-13,
+          "attackSpeed": 9,
+          "turnLimit": 0.11
+        },
+        "bay": {
+          "openness": 0
+        },
+        "arsenal": {
+          "cannon": 0,
+          "rain": 0,
+          "ion": 1,
+          "traction": 0,
+          "robotHits": 1,
+          "robotsShattered": 0,
+          "shieldImpacts": 1,
+          "shieldAudioPlayed": 0,
+          "shieldAudioSkipped": 1,
+          "lastImpact": {
+            "point": [
+              -24.795722545903686,
+              -94.2518276533901,
+              134.26434146450146
+            ],
+            "type": "ion",
+            "age": 1.027100000143051
+          },
+          "smokeStyle": "soft-steam-sprite",
+          "activeSoftSmoke": 3,
+          "activeSteamJets": 4,
+          "factoriesStopped": 2,
+          "robotsBlinking": 1,
+          "activeIon": true,
+          "activeEffects": 45,
+          "pendingProjectiles": 0
+        },
+        "beamActive": true,
+        "pendingWeapon": "ion",
+        "types": [
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-08-9",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "vanguard-hauler-0",
+          "vanguard-hauler-1",
+          "vanguard-hauler-2"
+        ],
+        "route": [
+          {
+            "id": "bookshop",
+            "label": "书店镇"
+          },
+          {
+            "id": "apostles",
+            "label": "十二门徒"
+          },
+          {
+            "id": "citadel",
+            "label": "高山圣城"
+          },
+          {
+            "id": "old-port",
+            "label": "旧港湾"
+          },
+          {
+            "id": "swamp",
+            "label": "湖沼"
+          },
+          {
+            "id": "moon-lake",
+            "label": "月湖"
+          },
+          {
+            "id": "gate",
+            "label": "叹息之门"
+          }
+        ],
+        "completedTargets": [],
+        "campaignFinished": false,
+        "objectsReused": [
+          "32096c58-c52b-4087-9d62-83a4a7ff44ff",
+          "c0865f56-d5ef-4451-b7a9-8e59559c5af1",
+          "d7650723-7342-4577-b8e8-bd58dc9bfb96",
+          "5c116db6-7747-4117-8a6c-a3cfe8b6117c",
+          "f480f9f1-5388-49fb-ab32-d89efe0289b9",
+          "cedb678d-5679-43f7-95e6-64513e7d364e",
+          "b23fb021-cf42-42b1-8314-9e348772d09a",
+          "23758238-df65-42b4-af25-ebd16866660d",
+          "2ee99a35-6f71-4d80-8bac-44b3f557b29a",
+          "4bdfd57d-8500-4530-af2b-880cfca0b51a",
+          "540cbd3f-1804-43ca-8000-4dc0369bf5e1",
+          "bd42abc4-1386-443f-80d4-df1b2a804ee2",
+          "87077edb-174d-4fbe-a7f3-f79e10a19f94",
+          "353ea83e-46d3-400b-a21c-74e9a4526a09"
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s20",
+      "file": "s20.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 86870,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -65.22444935804344,
+          -65.33885636782173,
+          139.87428303474942
+        ],
+        "aim": [
+          -77.16616032444605,
+          -115.64363216530094,
+          165.48336484492472
+        ]
+      },
+      "battle": {
+        "saihojiLandingHold": false,
+        "coverBombing": {
+          "allowed": false,
+          "passes": 0,
+          "timedOut": false
+        },
+        "groundAssault": {
+          "tactics": {
+            "shieldBlocks": 0,
+            "shieldBreaks": 0,
+            "swordSwings": 0,
+            "swordHits": 0,
+            "gunBursts": 0,
+            "friendlyFireHeld": 0,
+            "formationReplacements": 0,
+            "units": []
+          },
+          "medical": {
+            "rescued": 0,
+            "healed": 0,
+            "returned": 0,
+            "medic": {
+              "id": "ca0ff112-8c57-4c49-920c-01ee4a0ce4f9",
+              "visible": true,
+              "owned": false,
+              "phase": "surface",
+              "position": [
+                13.159935966888453,
+                24.132466093677593,
+                1.9251050908939926
+              ],
+              "target": null,
+              "visibleMeshes": 10
+            },
+            "patients": 0,
+            "carriers": []
+          },
+          "ready": 18,
+          "active": true,
+          "stage": "suppression",
+          "objective": "suppress-town-defenses-and-assault-plaza",
+          "assigned": 18,
+          "controllers": 0,
+          "heldFor": 0,
+          "deployed": 0,
+          "trooperShots": 0,
+          "trooperRobotHits": 0,
+          "residentShots": 0,
+          "residentHits": 0,
+          "residentsDown": 0,
+          "troopersDown": 0,
+          "robotKills": 0,
+          "friendlyBlastHits": 0,
+          "blastResidentHits": 0,
+          "recovered": 0,
+          "aboard": 21,
+          "rappelling": 0,
+          "ground": 0,
+          "liveProjectiles": 0,
+          "renderBatch": {
+            "sourceMeshes": 1215,
+            "batches": 45,
+            "instances": 0
+          }
+        },
+        "bombRelease": null,
+        "bombingRun": {
+          "stage": "run",
+          "released": false,
+          "window": {
+            "miss": 35.63216831498526,
+            "alignment": 0.9999999999999999
+          }
+        },
+        "phase": "blockade",
+        "age": 2.372700000047683,
+        "energy": 97.12578400002008,
+        "shield": true,
+        "wingNodes": 2,
+        "heat": 0.6204399999618532,
+        "target": "bookshop",
+        "cycle": 1,
+        "shots": 1,
+        "retreatReason": null,
+        "arrival": {
+          "distance": 99.2242731355444,
+          "altitude": 64.06822928794327,
+          "visible": true,
+          "inRange": true
+        },
+        "safeRadius": 186.7345081258473,
+        "flagshipPosition": [
+          -54.66646485580014,
+          -192.46508236178082,
+          100.8728956056919
+        ],
+        "members": 14,
+        "roles": [
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "guard",
+          "jammer",
+          "guard",
+          "scout",
+          "scout",
+          "scout",
+          "transport",
+          "transport",
+          "transport"
+        ],
+        "wingDamage": 0,
+        "events": [
+          {
+            "phase": "assemble",
+            "time": 77.67270000004768,
+            "energy": 100,
+            "shots": 0
+          },
+          {
+            "phase": "transit",
+            "time": 85.67820000004768,
+            "energy": 100,
+            "shots": 0
+          },
+          {
+            "phase": "blockade",
+            "time": 96.042,
+            "energy": 99.12,
+            "shots": 0
+          }
+        ],
+        "blockedHits": 1,
+        "unitShots": 1,
+        "fireLog": [
+          {
+            "time": 96.21579999995232,
+            "type": "ion",
+            "role": "scout",
+            "source": "triple-gate-scout-aircraft",
+            "point": [
+              -24.795722545903686,
+              -94.2518276533901,
+              134.26434146450146
+            ]
+          }
+        ],
+        "flight": {
+          "bankDegrees": -1.3922784555125323e-13,
+          "attackSpeed": 9,
+          "turnLimit": 0.11
+        },
+        "bay": {
+          "openness": 0
+        },
+        "arsenal": {
+          "cannon": 0,
+          "rain": 0,
+          "ion": 1,
+          "traction": 0,
+          "robotHits": 1,
+          "robotsShattered": 0,
+          "shieldImpacts": 1,
+          "shieldAudioPlayed": 0,
+          "shieldAudioSkipped": 1,
+          "lastImpact": {
+            "point": [
+              -24.795722545903686,
+              -94.2518276533901,
+              134.26434146450146
+            ],
+            "type": "ion",
+            "age": 2.198900000095367
+          },
+          "smokeStyle": "soft-steam-sprite",
+          "activeSoftSmoke": 3,
+          "activeSteamJets": 4,
+          "factoriesStopped": 2,
+          "robotsBlinking": 1,
+          "activeIon": true,
+          "activeEffects": 45,
+          "pendingProjectiles": 0
+        },
+        "beamActive": true,
+        "pendingWeapon": "ion",
+        "types": [
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-08-9",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "vanguard-hauler-0",
+          "vanguard-hauler-1",
+          "vanguard-hauler-2"
+        ],
+        "route": [
+          {
+            "id": "bookshop",
+            "label": "书店镇"
+          },
+          {
+            "id": "apostles",
+            "label": "十二门徒"
+          },
+          {
+            "id": "citadel",
+            "label": "高山圣城"
+          },
+          {
+            "id": "old-port",
+            "label": "旧港湾"
+          },
+          {
+            "id": "swamp",
+            "label": "湖沼"
+          },
+          {
+            "id": "moon-lake",
+            "label": "月湖"
+          },
+          {
+            "id": "gate",
+            "label": "叹息之门"
+          }
+        ],
+        "completedTargets": [],
+        "campaignFinished": false,
+        "objectsReused": [
+          "32096c58-c52b-4087-9d62-83a4a7ff44ff",
+          "c0865f56-d5ef-4451-b7a9-8e59559c5af1",
+          "d7650723-7342-4577-b8e8-bd58dc9bfb96",
+          "5c116db6-7747-4117-8a6c-a3cfe8b6117c",
+          "f480f9f1-5388-49fb-ab32-d89efe0289b9",
+          "cedb678d-5679-43f7-95e6-64513e7d364e",
+          "b23fb021-cf42-42b1-8314-9e348772d09a",
+          "23758238-df65-42b4-af25-ebd16866660d",
+          "2ee99a35-6f71-4d80-8bac-44b3f557b29a",
+          "4bdfd57d-8500-4530-af2b-880cfca0b51a",
+          "540cbd3f-1804-43ca-8000-4dc0369bf5e1",
+          "bd42abc4-1386-443f-80d4-df1b2a804ee2",
+          "87077edb-174d-4fbe-a7f3-f79e10a19f94",
+          "353ea83e-46d3-400b-a21c-74e9a4526a09"
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s22",
+      "file": "s22.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 2002983,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -98.69145788069603,
+          -47.564787054889386,
+          150.12327325836534
+        ],
+        "aim": [
+          -64.87826074498469,
+          -64.7652799314707,
+          139.13187915824332
+        ]
+      },
+      "battle": {
+        "saihojiLandingHold": false,
+        "coverBombing": {
+          "allowed": false,
+          "passes": 0,
+          "timedOut": false
+        },
+        "groundAssault": {
+          "tactics": {
+            "shieldBlocks": 0,
+            "shieldBreaks": 0,
+            "swordSwings": 1,
+            "swordHits": 0,
+            "gunBursts": 0,
+            "friendlyFireHeld": 0,
+            "formationReplacements": 3,
+            "units": [
+              {
+                "id": 6,
+                "role": "shield",
+                "mode": "shield",
+                "energy": 99,
+                "moving": true,
+                "boardAllowed": false,
+                "shield": true
+              },
+              {
+                "id": 7,
+                "role": "shield",
+                "mode": "sword",
+                "energy": 100,
+                "moving": false,
+                "boardAllowed": false,
+                "shield": false
+              },
+              {
+                "id": 8,
+                "role": "gun",
+                "mode": "gun",
+                "energy": 100,
+                "moving": true,
+                "boardAllowed": false,
+                "shield": false
+              },
+              {
+                "id": 9,
+                "role": "gun",
+                "mode": "gun",
+                "energy": 100,
+                "moving": true,
+                "boardAllowed": false,
+                "shield": false
+              },
+              {
+                "id": 20,
+                "role": "shield",
+                "mode": "shield",
+                "energy": 99.6,
+                "moving": true,
+                "boardAllowed": false,
+                "shield": true
+              },
+              {
+                "id": 21,
+                "role": "gun",
+                "mode": "gun",
+                "energy": 100,
+                "moving": true,
+                "boardAllowed": false,
+                "shield": false
+              }
+            ]
+          },
+          "medical": {
+            "rescued": 0,
+            "healed": 0,
+            "returned": 0,
+            "medic": {
+              "id": "ca0ff112-8c57-4c49-920c-01ee4a0ce4f9",
+              "visible": true,
+              "owned": false,
+              "phase": "surface",
+              "position": [
+                2.1108773642350016,
+                24.118129505899805,
+                8.283279100461504
+              ],
+              "target": null,
+              "visibleMeshes": 10
+            },
+            "patients": 0,
+            "carriers": []
+          },
+          "ready": 18,
+          "active": true,
+          "stage": "insertion",
+          "objective": "suppress-town-defenses-and-assault-plaza",
+          "assigned": 18,
+          "controllers": 3,
+          "heldFor": 0,
+          "deployed": 6,
+          "trooperShots": 0,
+          "trooperRobotHits": 0,
+          "residentShots": 0,
+          "residentHits": 25,
+          "residentsDown": 9,
+          "troopersDown": 0,
+          "robotKills": 0,
+          "friendlyBlastHits": 0,
+          "blastResidentHits": 25,
+          "recovered": 0,
+          "aboard": 3,
+          "rappelling": 12,
+          "ground": 6,
+          "liveProjectiles": 0,
+          "renderBatch": {
+            "sourceMeshes": 1215,
+            "batches": 45,
+            "instances": 761
+          }
+        },
+        "bombRelease": {
+          "time": 102.5635,
+          "miss": 9.978487476423002,
+          "flightTime": 2.8366137208869873,
+          "leadDistance": 26.487051006546935,
+          "predicted": [
+            -30.83698312215592,
+            -113.31949359659694,
+            117.38282910095056
+          ],
+          "stripCentre": [
+            -24.197956241066585,
+            -92.34528437222681,
+            135.68204512008205
+          ],
+          "releaseTarget": [
+            -28.601524778889008,
+            -106.30202369620046,
+            124.11544037070901
+          ],
+          "position": [
+            -46.05058821635412,
+            -165.44605243569154,
+            127.17321050563442
+          ]
+        },
+        "bombingRun": null,
+        "phase": "pincer",
+        "age": 11.348300000190726,
+        "energy": 53.523525999979924,
+        "shield": true,
+        "wingNodes": 2,
+        "heat": 33.294479999923745,
+        "target": "bookshop",
+        "cycle": 1,
+        "shots": 9,
+        "retreatReason": null,
+        "arrival": {
+          "distance": 105.1021002084284,
+          "altitude": 40.49999999999997,
+          "visible": true,
+          "inRange": true
+        },
+        "safeRadius": 186.7345081258473,
+        "flagshipPosition": [
+          11.396098028439065,
+          6.88421748583077,
+          200.05745799478203
+        ],
+        "members": 14,
+        "roles": [
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "guard",
+          "jammer",
+          "guard",
+          "scout",
+          "scout",
+          "scout",
+          "transport",
+          "transport",
+          "transport"
+        ],
+        "wingDamage": 0,
+        "events": [
+          {
+            "phase": "assemble",
+            "time": 77.67270000004768,
+            "energy": 100,
+            "shots": 0
+          },
+          {
+            "phase": "transit",
+            "time": 85.67820000004768,
+            "energy": 100,
+            "shots": 0
+          },
+          {
+            "phase": "blockade",
+            "time": 96.042,
+            "energy": 99.12,
+            "shots": 0
+          },
+          {
+            "phase": "pincer",
+            "time": 114.13129999995232,
+            "energy": 67.87,
+            "shots": 7
+          }
+        ],
+        "blockedHits": 12,
+        "unitShots": 3,
+        "fireLog": [
+          {
+            "time": 96.21579999995232,
+            "type": "ion",
+            "role": "scout",
+            "source": "triple-gate-scout-aircraft",
+            "point": [
+              -24.795722545903686,
+              -94.2518276533901,
+              134.26434146450146
+            ]
+          },
+          {
+            "time": 99.63579999995231,
+            "type": "ion",
+            "role": "flagship",
+            "source": "crystal-city-colossus",
+            "point": [
+              -24.795722545903686,
+              -94.2518276533901,
+              134.26434146450146
+            ]
+          },
+          {
+            "time": 99.63579999995231,
+            "type": "ion",
+            "role": "scout",
+            "source": "triple-gate-scout-aircraft",
+            "point": [
+              -24.795722545903686,
+              -94.2518276533901,
+              134.26434146450146
+            ]
+          },
+          {
+            "time": 102.5635,
+            "type": "rain",
+            "role": "flagship",
+            "source": "crystal-city-colossus",
+            "point": [
+              -24.197956241066585,
+              -92.34528437222681,
+              135.68204512008205
+            ]
+          },
+          {
+            "time": 102.78210000014305,
+            "type": "ion",
+            "role": "scout",
+            "source": "triple-gate-scout-aircraft",
+            "point": [
+              -57.59761449047041,
+              -111.638758752778,
+              108.35986578098021
+            ]
+          },
+          {
+            "time": 110.0265,
+            "type": "cannon",
+            "role": "flagship",
+            "source": "crystal-city-colossus",
+            "point": [
+              -57.59761449047041,
+              -111.638758752778,
+              108.35986578098021
+            ]
+          },
+          {
+            "time": 114.13129999995232,
+            "type": "cannon",
+            "role": "flagship",
+            "source": "crystal-city-colossus",
+            "point": [
+              18.671259812251435,
+              -88.06366557411357,
+              140.16087636239325
+            ]
+          },
+          {
+            "time": 118.23760000014305,
+            "type": "cannon",
+            "role": "flagship",
+            "source": "crystal-city-colossus",
+            "point": [
+              -29.40134323263912,
+              -133.36694515781815,
+              95.38194459848293
+            ]
+          },
+          {
+            "time": 122.732,
+            "type": "traction",
+            "role": "flagship",
+            "source": "crystal-city-colossus",
+            "point": [
+              -95.60317579150178,
+              -86.52176696189129,
+              104.39373248778618
+            ]
+          }
+        ],
+        "flight": {
+          "bankDegrees": 7.868671619299187,
+          "attackSpeed": 9,
+          "turnLimit": 0.11
+        },
+        "bay": {
+          "openness": 0
+        },
+        "arsenal": {
+          "cannon": 3,
+          "rain": 1,
+          "ion": 4,
+          "traction": 1,
+          "robotHits": 9,
+          "robotsShattered": 4,
+          "shieldImpacts": 12,
+          "shieldAudioPlayed": 0,
+          "shieldAudioSkipped": 2,
+          "lastImpact": {
+            "point": [
+              -29.40134323263912,
+              -133.36694515781815,
+              95.38194459848293
+            ],
+            "type": "cannon",
+            "age": 6.114000000000001
+          },
+          "smokeStyle": "soft-steam-sprite",
+          "activeSoftSmoke": 18,
+          "activeSteamJets": 0,
+          "factoriesStopped": 0,
+          "robotsBlinking": 0,
+          "activeIon": false,
+          "activeEffects": 72,
+          "pendingProjectiles": 0
+        },
+        "beamActive": true,
+        "types": [
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-08-9",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "vanguard-hauler-0",
+          "vanguard-hauler-1",
+          "vanguard-hauler-2"
+        ],
+        "route": [
+          {
+            "id": "bookshop",
+            "label": "书店镇"
+          },
+          {
+            "id": "apostles",
+            "label": "十二门徒"
+          },
+          {
+            "id": "citadel",
+            "label": "高山圣城"
+          },
+          {
+            "id": "old-port",
+            "label": "旧港湾"
+          },
+          {
+            "id": "swamp",
+            "label": "湖沼"
+          },
+          {
+            "id": "moon-lake",
+            "label": "月湖"
+          },
+          {
+            "id": "gate",
+            "label": "叹息之门"
+          }
+        ],
+        "completedTargets": [],
+        "campaignFinished": false,
+        "objectsReused": [
+          "32096c58-c52b-4087-9d62-83a4a7ff44ff",
+          "c0865f56-d5ef-4451-b7a9-8e59559c5af1",
+          "d7650723-7342-4577-b8e8-bd58dc9bfb96",
+          "5c116db6-7747-4117-8a6c-a3cfe8b6117c",
+          "f480f9f1-5388-49fb-ab32-d89efe0289b9",
+          "cedb678d-5679-43f7-95e6-64513e7d364e",
+          "b23fb021-cf42-42b1-8314-9e348772d09a",
+          "23758238-df65-42b4-af25-ebd16866660d",
+          "2ee99a35-6f71-4d80-8bac-44b3f557b29a",
+          "4bdfd57d-8500-4530-af2b-880cfca0b51a",
+          "540cbd3f-1804-43ca-8000-4dc0369bf5e1",
+          "bd42abc4-1386-443f-80d4-df1b2a804ee2",
+          "87077edb-174d-4fbe-a7f3-f79e10a19f94",
+          "353ea83e-46d3-400b-a21c-74e9a4526a09"
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    }
+  ]
+}

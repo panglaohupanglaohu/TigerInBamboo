@@ -15,3 +15,8 @@ house-project.mjs在两种网格检查持久化往返、ID保持、重新载入�
 
 ## 边界
 这是双格房屋工程格式及验收页接线；不含跨页面撤销历史、通用5格module-volume的身份或任意prefab库。完整网格签名让文件约0.35/0.50MB，尚未压缩；几何/网格生成改变时明确拒绝，不自动迁移。完整轮廓socket、旋转与联合WFC仍待续。没有同步TigerMessenger或宣称游戏已用上新格式。
+
+
+## 第 56 批（C08）
+
+- 1579483114178768898：复核 multicell.html 的方格+三角双格房屋（kinds [4,3]）。截图 C08-multicell-probe.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

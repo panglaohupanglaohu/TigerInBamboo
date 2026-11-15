@@ -20,6 +20,7 @@ import { facet } from "../assets/lowPoly.js";
 import { addOutline, toonMat } from "../assets/toon.js";
 import { bindVanguardOptimization } from "../assets/battleOptimization.js";
 import { sfxLaserSwing, sfxBoltCharge, sfxBoltFire, sfxBoltHit } from "../audio/worldSfx.js";
+import { beginVanguardSwing, stepVanguardSwing, stepVanguardMeleeSpray } from "./vanguardMeleeFeel.js";
 
 /**
  * 苔庭之战伤害口径（用户 2026-09-04 裁定）。
@@ -626,6 +627,7 @@ export function updateVanguardCombat(squadRoot, dt, t, opts = {}) {
     return stats;
   }
   advanceBoltRings(squadRoot, dt, stats, onWound);
+  stepVanguardMeleeSpray(squadRoot, dt);
   const live = soldiers.filter((s) => s?.parent && !s.userData?.dead && !s.userData?.downed);
   if (!live.length) return stats;
   // 主人 2026-09-05：谁在打机队就先打谁——瞄准、面对、近战、开火全锁定优先名单；
@@ -678,37 +680,31 @@ export function updateVanguardCombat(squadRoot, dt, t, opts = {}) {
       }
     }
 
-    // 激光刀：近身挥砍（有 0.38s 的举刀→劈落弧线，不是一帧摆 pose）
-    const armR = tr.userData.parts?.armR;
+    // 激光刀：近身挥砍。2026-11-10 加强（vanguardMeleeFeel，学 Bad North 近战手感 1022573208590057472 等）：
+    //   蓄力→劈出→收势三段、三种刀路轮换、刀落到人那一帧才结算并卡帧、刀光弧、目标被顶开 + 血滴/火花朝背离方向抛出。
     const armL = tr.userData.parts?.armL;
-    const torso = tr.userData.parts?.torso;
     tr.userData._swingT = (tr.userData._swingT || tr.userData._swingPhase || 0) + dt;
-    if (dist <= bladeRange && tr.userData._swingT >= swingPeriod) {
+    const swinging = tr.userData._swingAnim !== undefined && tr.userData._swingAnim < 1;
+    if (!swinging && dist <= bladeRange && tr.userData._swingT >= swingPeriod) {
       tr.userData._swingT = 0;
-      tr.userData._swingAnim = 0; // 启动劈砍动画
+      beginVanguardSwing(tr, best);
       stats.blade++;
       sfxLaserSwing(_vtA);
-      const vs = bladeVsShield(best);
+    }
+    stepVanguardSwing(squadRoot, tr, dt, (target) => {
+      const vs = bladeVsShield(target);
       if (vs.shieldBroken) {
-        best.userData.shieldBroken = true; // 记账：调用方摘盾网格 + 记事件
-        onShieldBroken?.(best, tr);
-      } else if (vanguardStrikeLands(best, "blade")) {
-        stats.wounds++;
-        onWound?.(best, "blade", tr);
+        target.userData.shieldBroken = true; // 记账：调用方摘盾网格 + 记事件
+        onShieldBroken?.(target, tr);
+        return { shield: true };
       }
-    }
-    // 劈砍动画推进（主人 2026-09-05：3 米内格杀要快——0.25s 完成举刀→劈落）
-    const anim = tr.userData._swingAnim;
-    if (anim !== undefined && anim < 1) {
-      tr.userData._swingAnim = Math.min(1, anim + dt / 0.25);
-      const k = tr.userData._swingAnim;
-      const s = k < 0.3 ? -2.35 * (k / 0.3) : THREE.MathUtils.lerp(-2.35, 0.55, (k - 0.3) / 0.7);
-      if (armR) armR.rotation.x = s;
-      if (torso) torso.rotation.y = Math.sin(k * Math.PI) * 0.55;
-    } else {
-      if (armR) armR.rotation.x += (-1.05 - armR.rotation.x) * Math.min(1, dt * 8);
-      if (torso) torso.rotation.y += (0 - torso.rotation.y) * Math.min(1, dt * 6);
-    }
+      if (vanguardStrikeLands(target, "blade")) {
+        stats.wounds++;
+        onWound?.(target, "blade", tr);
+        return { wounded: true };
+      }
+      return { shield: !!vs.blocked };
+    });
 
     // 闪电炮：充电—放电（充电时举枪瞄准，枪口辉光随 charge 变亮）
     const wantFire = dist > bladeRange && dist <= boltRange;

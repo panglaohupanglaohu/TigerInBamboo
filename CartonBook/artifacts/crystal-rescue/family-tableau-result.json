@@ -1,0 +1,164 @@
+[
+  {
+    "shotId": "p53-1",
+    "file": "p53-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "stagedActors": true,
+    "staging": "Existing three runtime actors positioned on the real mother-port landing for a comic tableau; isolated browser only",
+    "actors": [
+      {
+        "name": "player-courier-root",
+        "world": [
+          -55.70267516573358,
+          -130.18449481428812,
+          -39.54993344559956
+        ]
+      },
+      {
+        "name": "fox-ali",
+        "world": [
+          -56.95034446504702,
+          -130.54504215329476,
+          -39.10650823578289
+        ]
+      },
+      {
+        "name": "moebius-cyber-ink-tiger",
+        "world": [
+          -79.19806726430791,
+          4.684140685471334,
+          -129.07501769005373
+        ]
+      }
+    ],
+    "eye": [
+      -61.12395470154595,
+      -132.8661233956208,
+      -33.573243735678666
+    ],
+    "aim": [
+      -56.775726171440226,
+      -130.39449582464104,
+      -39.72336290528403
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p53-2",
+    "file": "p53-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "stagedActors": true,
+    "staging": "Existing three runtime actors positioned on the real mother-port landing for a comic tableau; isolated browser only",
+    "actors": [
+      {
+        "name": "player-courier-root",
+        "world": [
+          -55.70267516573358,
+          -130.18449481428812,
+          -39.54993344559956
+        ]
+      },
+      {
+        "name": "fox-ali",
+        "world": [
+          -56.95034446504702,
+          -130.54504215329476,
+          -39.10650823578289
+        ]
+      },
+      {
+        "name": "moebius-cyber-ink-tiger",
+        "world": [
+          -79.19668402735772,
+          4.679761796570233,
+          -129.07273672130196
+        ]
+      }
+    ],
+    "eye": [
+      -55.56911010411042,
+      -135.13808152848753,
+      -34.05481173798167
+    ],
+    "aim": [
+      -56.775726171440226,
+      -130.39449582464104,
+      -39.72336290528403
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p53-3",
+    "file": "p53-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "stagedActors": true,
+    "staging": "Existing three runtime actors positioned on the real mother-port landing for a comic tableau; isolated browser only",
+    "actors": [
+      {
+        "name": "player-courier-root",
+        "world": [
+          -55.70267516573358,
+          -130.18449481428812,
+          -39.54993344559956
+        ]
+      },
+      {
+        "name": "fox-ali",
+        "world": [
+          -56.95034446504702,
+          -130.54504215329476,
+          -39.10650823578289
+        ]
+      },
+      {
+        "name": "moebius-cyber-ink-tiger",
+        "world": [
+          -79.19002566591321,
+          4.658683538774824,
+          -129.06175703022984
+        ]
+      }
+    ],
+    "eye": [
+      -59.17287027975545,
+      -135.89991897817188,
+      -33.09433461868453
+    ],
+    "aim": [
+      -56.775726171440226,
+      -130.39449582464104,
+      -39.72336290528403
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "reports": [
+    {
+      "drag": 0,
+      "arcs": 23,
+      "tickCount": 188,
+      "maxRange": 5.9094,
+      "maxApex": 2.9547,
+      "analytic45": 5.9094,
+      "speed": 7.61
+    },
+    {
+      "drag": 0.83,
+      "arcs": 23,
+      "tickCount": 125,
+      "maxRange": 3.6675,
+      "maxApex": 2.0922,
+      "analytic45": 5.9094,
+      "speed": 7.61
+    },
+    {
+      "drag": 1.26,
+      "arcs": 23,
+      "tickCount": 108,
+      "maxRange": 3.0691,
+      "maxApex": 1.8279,
+      "analytic45": 5.9094,
+      "speed": 7.61
+    },
+    {
+      "drag": 2,
+      "arcs": 23,
+      "tickCount": 88,
+      "maxRange": 2.3837,
+      "maxApex": 1.5086,
+      "analytic45": 5.9094,
+      "speed": 7.61
+    }
+  ],
+  "fast": {
+    "arcs": 23,
+    "tickCount": 203,
+    "maxRange": 5.6595,
+    "maxApex": 3.3204,
+    "analytic45": 10.2041,
+    "speed": 10,
+    "drag": 0.83
+  },
+  "canvas": {
+    "teal": 6290,
+    "white": 776
+  }
+}

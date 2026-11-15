@@ -18,7 +18,7 @@ try{
   const loaded=M.saihojiGardenScene.load({scene,planetRadius:PLANET_RADIUS,options:{}});
   scene.updateMatrixWorld(true);
   const whale=loaded.group,island=whale.getObjectByName('leviathan-island');
-  const pines=[];whale.traverse(n=>{if(n.name==='giantTreeGroup')pines.push(n);});
+  const pines=[];whale.traverse(n=>{if(n.userData.kind==='gardenPine')pines.push(n);}); // 2026-11-11 起为苔庭丛松（saihojiClusterPine）
   const terrain=[];island.traverse(n=>{if(n.isMesh&&(n.name==='leviathan-crust-plate'||n.name==='leviathan-terrain-topography'||n.name.startsWith('leviathan-moss-bed-')))terrain.push(n);});
   const up=new T.Vector3(0,1,0).transformDirection(island.matrixWorld);
   const ray=new T.Raycaster();
@@ -27,18 +27,19 @@ try{
   function THREEAngle(p){return new T.Vector3(0,1,0).transformDirection(p.matrixWorld).angleTo(up)*180/Math.PI;}
   let minimumDistance=Infinity;for(let i=0;i<trees.length;i++)for(let j=i+1;j<trees.length;j++)minimumDistance=Math.min(minimumDistance,new T.Vector3(...trees[i].position).distanceTo(new T.Vector3(...trees[j].position)));
   const checks=[],check=(name,passed,detail)=>checks.push({name,passed:!!passed,detail});
-  check('25 distinct Blender source seeds in actual scene',trees.length===25&&new Set(trees.map(t=>t.seed)).size===25&&trees.every(t=>t.optimization?.geometryApplied),trees.map(t=>t.seed));
+  check('16 distinct cluster pines (6+5+5) in actual scene',trees.length===16&&new Set(trees.map(t=>t.seed)).size===16&&trees.every(t=>t.optimization?.procedural),trees.map(t=>t.seed));
   check('all pine roots have real island terrain beneath',trees.every(t=>t.support&&Math.abs(t.support.delta)<.15),trees.map(t=>({seed:t.seed,delta:t.support?.delta})));
   check('relocated roots align with island up',trees.every(t=>t.upTiltDegrees<.1),trees.map(t=>({seed:t.seed,tilt:t.upTiltDegrees})));
   const layout=whale.userData.pineLayoutReport||null;
   check('actual scene exposes layout report',!!layout,layout);
   let previousMinimumDistance=Infinity;
   for(let i=0;i<(layout?.entries.length||0);i++)for(let j=i+1;j<layout.entries.length;j++)previousMinimumDistance=Math.min(previousMinimumDistance,island.localToWorld(new T.Vector3(...layout.entries[i].before)).distanceTo(island.localToWorld(new T.Vector3(...layout.entries[j].before))));
-  check('root spacing improves on original placement',minimumDistance>previousMinimumDistance,{before:previousMinimumDistance,after:minimumDistance});
+  // 丛松刻意让两棵树根几乎贴在一起（0.058–0.15 H），不再要求根距大于旧散植布局
+  check('cluster twin trunks stay apart (no overlapping roots)',minimumDistance>.3,{before:previousMinimumDistance,after:minimumDistance});
   const rawCovers=whale.userData.saihojiCoverPoints||[];
   const stepping=[];island.traverse(o=>{if(o.userData.kind==='stoneStep'){const w=o.getWorldPosition(new T.Vector3());stepping.push({zone:o.userData.gardenZone,visible:o.visible,style:o.userData.placementStyle,support:sample(w)});}});
   check('scattered stepping stones remain grounded and leave empty courtyard sparse',stepping.length>=20&&stepping.length<=42&&stepping.every(s=>s.visible&&s.style==='scattered-zen'&&s.support&&Math.abs(s.support.delta)<.15)&&stepping.filter(s=>s.zone==='empty-court').length===2,stepping);
-  const covers=rawCovers.map((c,i)=>{const world=c.anchor.localToWorld(c.localPoint.clone()),support=sample(world),crowns=[];c.pine.traverse(n=>{if(n.isMesh&&['n10','n11','n12'].includes(n.userData.sourceNodeId))crowns.push(n);});ray.set(world.clone().addScaledVector(up,15),up.clone().negate());ray.far=15;const hits=ray.intersectObjects(crowns,false),canopy=hits[0],minimumCrownHeight=hits.length?Math.min(...hits.map(h=>h.point.clone().sub(world).dot(up))):0;return {minimumCrownHeight,index:i,id:c.id,seed:c.pine?.userData.sourceSeed,localPoint:c.localPoint.toArray(),world:world.toArray(),support,canopy:canopy?{mesh:canopy.object.name,height:canopy.point.clone().sub(world).dot(up)}:null};});
+  const covers=rawCovers.map((c,i)=>{const world=c.anchor.localToWorld(c.localPoint.clone()),support=sample(world),crowns=[];c.pine.traverse(n=>{if(n.isMesh&&(n.userData.pineCrown||['n10','n11','n12'].includes(n.userData.sourceNodeId)))crowns.push(n);});ray.set(world.clone().addScaledVector(up,15),up.clone().negate());ray.far=15;const hits=ray.intersectObjects(crowns,false),canopy=hits[0],minimumCrownHeight=hits.length?Math.min(...hits.map(h=>h.point.clone().sub(world).dot(up))):0;return {minimumCrownHeight,index:i,id:c.id,seed:c.pine?.userData.sourceSeed,localPoint:c.localPoint.toArray(),world:world.toArray(),support,canopy:canopy?{mesh:canopy.object.name,height:canopy.point.clone().sub(world).dot(up)}:null};});
   check('50 distinct cover slots on real island terrain',covers.length===50&&new Set(covers.map(c=>c.id)).size===50&&covers.every(c=>c.support&&Math.abs(c.support.delta)<.15),covers.map(c=>({id:c.id,delta:c.support?.delta})));
   check('all slots provide actual helmet clearance above crouched troops',covers.length===50&&covers.every(c=>c.minimumCrownHeight>=1.095),covers.map(c=>({id:c.id,height:c.minimumCrownHeight})));
   check('every cover slot lies below its assigned actual Blender crown',covers.length>0&&covers.every(c=>c.canopy?.height>0),covers.map(c=>({id:c.id,canopy:c.canopy})));

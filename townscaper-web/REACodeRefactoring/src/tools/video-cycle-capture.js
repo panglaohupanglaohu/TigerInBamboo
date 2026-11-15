@@ -1,0 +1,10 @@
+import {rgbaToGray} from '../core/video-cycle-metrics.js';
+const waitEvent=(target,event,action)=>new Promise((resolve,reject)=>{const timer=setTimeout(()=>finish(Error('video '+event+' timeout')),15000);function finish(error){clearTimeout(timer);target.removeEventListener(event,done);target.removeEventListener('error',fail);error?reject(error):resolve();}const done=()=>finish(),fail=()=>finish(Error('video decode failed'));target.addEventListener(event,done,{once:true});target.addEventListener('error',fail,{once:true});try{action();}catch(e){finish(e);}});
+export async function loadVideo(video,src){await waitEvent(video,'loadedmetadata',()=>{video.src=src;video.load();});if(!Number.isFinite(video.duration)||video.duration<=0)throw Error('finite video duration required');return{w:video.videoWidth,h:video.videoHeight,dur:video.duration};}
+export async function sampleVideo(video,canvas,{samples=120,size=96}={}){
+ if(!Number.isInteger(samples)||samples<8||samples>600||!Number.isInteger(size)||size<16||size>256)throw Error('invalid sample bounds');
+ canvas.width=canvas.height=size;const ctx=canvas.getContext('2d',{willReadFrequently:true});const frames=[];video.pause();
+ const end=Math.max(0,video.duration-.001);for(let i=0;i<samples;i++){const t=end*i/(samples-1);if(Math.abs(video.currentTime-t)>1e-6||video.readyState<2)await waitEvent(video,'seeked',()=>{video.currentTime=t===0?.000001:t;});ctx.drawImage(video,0,0,size,size);frames.push({t,g:rgbaToGray(ctx.getImageData(0,0,size,size).data)});}
+ return frames;
+}
+export function measureInWorker(frames,options){return new Promise((resolve,reject)=>{const worker=new Worker(new URL('./video-cycle-worker.js',import.meta.url),{type:'module'}),timer=setTimeout(()=>{worker.terminate();reject(Error('analysis timeout'));},30000);const finish=()=>{clearTimeout(timer);worker.terminate();};worker.onerror=e=>{finish();reject(Error(e.message));};worker.onmessage=({data})=>{finish();data.error?reject(Error(data.error)):resolve(data.result);};worker.postMessage({job:1,frames,options},frames.map(f=>f.g.buffer));});}

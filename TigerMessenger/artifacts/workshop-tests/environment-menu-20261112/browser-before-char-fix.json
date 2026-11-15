@@ -1,0 +1,93 @@
+{
+  "errors": [],
+  "grids": [
+    {
+      "grid": "quad",
+      "regularSampled": 7,
+      "postToggles": 11,
+      "battleGore": true,
+      "externalStateSync": true,
+      "battleChecks": [
+        {
+          "key": "c01",
+          "flags": 18
+        },
+        {
+          "key": "c02",
+          "flags": 12
+        },
+        {
+          "key": "c03",
+          "flags": 8
+        },
+        {
+          "key": "g3",
+          "flags": 7
+        }
+      ],
+      "trajectory": {
+        "segments": 320,
+        "hits": 5,
+        "worldHits": 5
+      },
+      "navigation": [
+        1302,
+        10232,
+        11746
+      ]
+    },
+    {
+      "grid": "mixed",
+      "regularSampled": 7,
+      "postToggles": 11,
+      "battleGore": true,
+      "externalStateSync": true,
+      "battleChecks": [
+        {
+          "key": "c01",
+          "flags": 18
+        },
+        {
+          "key": "c02",
+          "flags": 12
+        },
+        {
+          "key": "c03",
+          "flags": 8
+        },
+        {
+          "key": "g3",
+          "flags": 7
+        }
+      ],
+      "trajectory": {
+        "segments": 279,
+        "hits": 5,
+        "worldHits": 5
+      },
+      "navigation": [
+        905,
+        7082,
+        8270
+      ]
+    }
+  ],
+  "sourceHashes": {
+    "src/world/view.js": "6cbed8b0e8d2238129584ae685521148813669863de5a59b87f4343349629ed7",
+    "src/badnorth/battle.js": "2457aed327bafe7840d5fe025c5ca71614d0f9f6b32a5512d9f342806caa6566",
+    "src/badnorth/battle-c01.js": "e2ecb46af16e2b0d55ddce3cdaaa5d9166ce77c733e022b8406e248966ced987",
+    "src/badnorth/battle-c02.js": "cec49b4a7512fe694966cc90e7d5879b251b587f93c2296de80fbd4643e72874",
+    "src/badnorth/battle-c03.js": "008c34343f2f1a0a06a2729d253fd0be0b1b0d9c9e1d82b5151d6807b63fbd53",
+    "src/badnorth/battle-g3.js": "0c05108cecffd85906b7c5a31588eb57008b42a5d1bd3aa217417d5d6ef8508d",
+    "src/ui/environment-panel.js": "a6bdece451d3436905aa53bf4845c0ccbabb68bb2fb84b6823567c830ca663ac",
+    "src/ui/scene-capability-panel.js": "0c85ab418cc969627ab49c721125a182dac759ee3afe04adbee60b101c8cdd12",
+    "src/ui/shading-panel.js": "01e2fdfeba2afd08d31cc4790d2103085028101b5165614643018e4f304ad811",
+    "src/core/trajectory-trace.js": "795f43eab08967482270177f7df833c76a86ac052a1dff39b156ce3cdf60d11c",
+    "src/world/trajectory-preview.js": "1ba559852c06041fc9dbc8b9f010cef3cfb27cc66222189220a54ecb990ae365",
+    "src/core/nav-diagnostic-geometry.js": "2c43c236a73e523b142679e966676a39ec6b4a8eea209a462dc37545d867aab4",
+    "src/world/nav-diagnostic-overlay.js": "ead2cf2d63b594049237d1a9f1873be55cf61c676fa423746396ff75b6f3e8da",
+    "tests/trajectory-trace.mjs": "ad2922cfd11ef9d7704c6fb7d2613bd5d17a323a7ce8b2e87fc148070b944269",
+    "tests/nav-diagnostic-geometry.mjs": "b363ed31a7644996214f8e4e6092976572faa5c2ac9b634e7e00515492f3c6de"
+  },
+  "passed": true
+}

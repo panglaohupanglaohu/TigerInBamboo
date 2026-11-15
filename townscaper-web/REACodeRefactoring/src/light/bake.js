@@ -19,9 +19,14 @@ import { clamp } from '../core/noise.js';
  * @param {import('../core/world.js').World} world
  * @param {{ L:number, colorOf:(cell, lv:number)=>{r,g,b} }} o
  */
-export function bakeLighting(w, world, { L, colorOf, shape = null, region = null, res: resIn, radius: radiusIn, offset = 0.17, strength = 0.62, bounce = 0.42 }) {
+export function bakeLighting(w, world, { L, colorOf, shape = null, region = null, res: resIn, radius: radiusIn, offset = 0.17, strength = 0.62, bounce = 0.42, aoMode = 'vertex', sunShadow = null, keepField = false }) {
+  // 793557992931266561: flat -> up normal -> vertex voxel AO -> directional AO（SSAO 原作自己去掉了，不做）
+  if (!AO_MODES.includes(aoMode)) throw new RangeError('invalid aoMode');
+  // 1190191289922465793: per-vertex voxel sun shadow，与 AO 共用同一张分层占用（模糊前的 0/1）
+  const sun = sunShadow ? normalizeSunShadow(sunShadow, L) : null;
+  const sunReach = sun ? sun.steps * sun.stepLen + sun.normalBias : 0;
   // region（分块烘焙）：只看这一块顶点范围附近的格子；否则看整个世界
-  const pad0 = 0.8;
+  const pad0 = Math.max(0.8, sunReach + 0.2);
   const cells = region
     ? world.cells.filter((c) => c.maxX >= region.minX - pad0 && c.minX <= region.maxX + pad0 && c.maxZ >= region.minZ - pad0 && c.minZ <= region.maxZ + pad0)
     : world.cells;
@@ -33,18 +38,18 @@ export function bakeLighting(w, world, { L, colorOf, shape = null, region = null
     if (c.minZ < minZ) minZ = c.minZ; if (c.maxZ > maxZ) maxZ = c.maxZ;
     if (h > maxH) maxH = h;
   }
-  if (!Number.isFinite(minX)) return { ms: 0 };
+  if (!Number.isFinite(minX)) return { ms: 0, sunShadowed: 0 };
   if (region) {
     minX = Math.max(minX, region.minX - pad0); maxX = Math.min(maxX, region.maxX + pad0);
     minZ = Math.max(minZ, region.minZ - pad0); maxZ = Math.min(maxZ, region.maxZ + pad0);
-    if (minX > maxX || minZ > maxZ) return { ms: 0 };
+    if (minX > maxX || minZ > maxZ) return { ms: 0, sunShadowed: 0 };
   }
   const t0 = performance.now();
   // 分辨率随范围自适应：小镇 0.08，整座岛放宽到约 0.13，模糊半径按世界单位保持 ≈0.3
   const area = (maxX - minX + 1.6) * (maxZ - minZ + 1.6);
   const res = resIn ?? Math.max(0.08, Math.min(0.14, Math.sqrt(area / 40000)));
   const radius = radiusIn ?? Math.max(2, Math.round(0.32 / res));
-  const pad = region ? 0.2 : 0.8;
+  const pad = Math.max(region ? 0.2 : 0.8, sunReach);
   minX -= pad; minZ -= pad; maxX += pad; maxZ += pad;
   // 分块时对齐到全局像素网格，相邻块的采样点一致、接缝处不跳
   if (region) { minX = Math.floor(minX / res) * res; minZ = Math.floor(minZ / res) * res; }
@@ -110,6 +115,9 @@ export function bakeLighting(w, world, { L, colorOf, shape = null, region = null
     });
   }
 
+  // 模糊前的 0/1 占用：逐顶点太阳射线与调试字段都用这一份（同一张栅格，不另建）
+  const bits = (sun || keepField) ? Uint8Array.from(occ, (v) => (v > 0 ? 1 : 0)) : null;
+
   // 2) 可分离盒式模糊，两遍
   const tmp = new Float32Array(Math.max(W, H));
   const R = radius;
@@ -159,7 +167,28 @@ export function bakeLighting(w, world, { L, colorOf, shape = null, region = null
     return layer(arr, l0, x, z) * (1 - t) + layer(arr, l0 + 1, x, z) * t;
   };
 
+  const solidAt = (x, y, z) => {
+    const lv = Math.floor(y / L) + 1;
+    if (lv < 1 || lv >= layers) return 0;
+    const i = Math.round((x - minX) / res), j = Math.round((z - minZ) / res);
+    if (i < 0 || j < 0 || i >= W || j >= H) return 0;
+    return bits[lv * size + j * W + i];
+  };
+  const sunShadeAt = (x, y, z, nx, ny, nz) => {
+    const ox = x + nx * sun.normalBias, oy = y + ny * sun.normalBias, oz = z + nz * sun.normalBias;
+    for (let k = 1; k <= sun.steps; k++) {
+      const d = sun.stepLen * k;
+      if (solidAt(ox + sun.dir[0] * d, oy + sun.dir[1] * d, oz + sun.dir[2] * d)) { const f = k / sun.steps; return 1 - 0.55 * f * f; }
+    }
+    return 0;
+  };
+  const AX = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+  const dirH = Math.max(res * 2, 0.18);
   const pos = w.pos, col = w.col;
+  const nVert = pos.length / 3;
+  const sunShade = sun ? new Float32Array(nVert) : null;
+  const dirAo = aoMode === 'directional' ? new Float32Array(nVert * 6) : null;
+  let sunShadowed = 0;
   for (let t = 0; t < pos.length; t += 9) {
     const ax = pos[t], ay = pos[t + 1], az = pos[t + 2];
     const ux = pos[t + 3] - ax, uy = pos[t + 4] - ay, uz = pos[t + 5] - az;
@@ -169,8 +198,40 @@ export function bakeLighting(w, world, { L, colorOf, shape = null, region = null
     nx /= nl; ny /= nl; nz /= nl;
     for (let v = 0; v < 3; v++) {
       const o = t + v * 3;
+      if (sun) {
+        const s = sunShadeAt(pos[o], pos[o + 1], pos[o + 2], nx, ny, nz);
+        sunShade[o / 3] = s;
+        if (s > 0.05) sunShadowed++;
+        const k = 1 - sun.strength * s;
+        col[o] *= k; col[o + 1] *= k; col[o + 2] *= k;
+      }
+      if (aoMode === 'flat') continue;
+      if (aoMode === 'up') {
+        // "up normal"：只看法线朝上多少，极软的上下渐变，不看邻居
+        const k = 0.775 + 0.225 * ny;
+        col[o] *= k; col[o + 1] *= k; col[o + 2] *= k;
+        continue;
+      }
       const sx = pos[o] + nx * offset, sy = pos[o + 1] + ny * offset + 0.02, sz = pos[o + 2] + nz * offset;
       const oc = sample(occ, sx, sy, sz);
+      if (aoMode === 'directional') {
+        // 六个标量：沿 ±X/±Y/±Z 各偏一步取模糊占用 —— "被哪一边挡住"，不只是"挡了多少"
+        let dsum = 0;
+        for (let a = 0; a < 6; a++) {
+          const d = sample(occ, sx + AX[a][0] * dirH, sy + AX[a][1] * dirH, sz + AX[a][2] * dirH);
+          dirAo[o / 3 * 6 + a] = d;
+          dsum += d;
+        }
+        if (dsum < 0.002 && oc < 0.002) continue;
+        // 方向色：挡光来自哪个轴，暗部就沾该轴的冷暖（±X 粉/绿，±Z 暖/冷，上方遮挡偏蓝灰）
+        let tr = 0, tg = 0, tb = 0;
+        for (let a = 0; a < 6; a++) { const d = dirAo[o / 3 * 6 + a] / dsum || 0; tr += DIR_TINT[a][0] * d; tg += DIR_TINT[a][1] * d; tb += DIR_TINT[a][2] * d; }
+        const occl = Math.min(1, (oc + dsum / 6) * 0.5 * 1.15);
+        const ao = 1 - strength * occl;
+        const mix = Math.min(1, occl * 1.5);
+        col[o] *= ao * (1 + (tr - 1) * mix); col[o + 1] *= ao * (1 + (tg - 1) * mix); col[o + 2] *= ao * (1 + (tb - 1) * mix);
+        continue;
+      }
       if (oc < 0.002) continue;
       const ao = 1 - strength * Math.min(1, oc * 1.15);
       const k = bounce * oc;
@@ -179,5 +240,21 @@ export function bakeLighting(w, world, { L, colorOf, shape = null, region = null
       col[o + 2] = col[o + 2] * ao + col[o + 2] * (sample(cb, sx, sy, sz) / oc) * k;
     }
   }
-  return { ms: +(performance.now() - t0).toFixed(1) };
+  const out = { ms: +(performance.now() - t0).toFixed(1), sunShadowed };
+  if (keepField) out.field = { minX, minZ, W, H, res, layers, L, bits, occ, cr, cg, cb, sampleOcc: (x, y, z) => sample(occ, x, y, z), solidAt, sunShade, dirAo };
+  return out;
+}
+
+export const AO_MODES = ['flat', 'up', 'vertex', 'directional'];
+// ±X, ±Y, ±Z 遮挡方向的色偏（原片第④档：拱下朝左的面偏粉、朝右偏绿）
+const DIR_TINT = [[1.06, 0.97, 1.0], [0.96, 1.05, 0.98], [0.97, 0.99, 1.05], [1.02, 1.0, 0.97], [1.04, 1.01, 0.95], [0.97, 1.0, 1.04]];
+
+/** 原 engine/voxelshadow.js 的量：10 步，最远约 2.5 格；最深压暗 0.24；越远命中越淡。 */
+export function normalizeSunShadow({ dir, steps = 10, strength = 0.24, normalBias = 0.05, stepLen = null } = {}, L = 0.5) {
+  if (!Array.isArray(dir) || dir.length !== 3 || !dir.every(Number.isFinite)) throw new RangeError('sunShadow.dir');
+  const l = Math.hypot(...dir);
+  if (!(l > 0) || dir[1] <= 0) throw new RangeError('sunShadow.dir must point upward');
+  const len = stepLen ?? Math.max(0.05, L * 0.5);
+  if (!Number.isInteger(steps) || steps < 1 || steps > 64 || !Number.isFinite(strength) || strength < 0 || strength > 1 || !Number.isFinite(normalBias) || normalBias < 0 || !Number.isFinite(len) || len <= 0) throw new RangeError('sunShadow options');
+  return { dir: dir.map((v) => v / l), steps, strength, normalBias, stepLen: len };
 }

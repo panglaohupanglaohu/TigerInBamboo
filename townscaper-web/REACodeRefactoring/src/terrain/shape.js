@@ -98,6 +98,13 @@ export function shapeTerrain(world, opts = {}) {
   // 1670720537662836736: "Black is hard ... only along the appropriate edges".
   // Explicit hard grid-edge endpoints stay at original coordinates on all slices.
   // This is not a classification of original module/material triangle-mesh edges.
+  // 1670725072540106755 "no-, dumb- and hierarchical smoothing": the clip's three panels as one switch.
+  const mode = opts.mode ?? 'hierarchical';
+  if (!['hierarchical', 'dumb', 'none'].includes(mode)) throw new RangeError('mode must be hierarchical, dumb or none');
+  // "blue is material-border": optional third edge class below the cliff lines. 'river' derives it
+  // from World.river on equal-ground top surfaces; an array gives explicit vertex-ID pairs.
+  const materials = opts.materials ?? null;
+  if (materials !== null && materials !== 'river' && !Array.isArray(materials)) throw new TypeError("materials must be null, 'river' or vertex ID pairs");
   const hardEdges = opts.hardEdges ?? [];
   if (!Array.isArray(hardEdges)) throw new TypeError('hardEdges must be vertex ID pairs');
   const explicitHard = new Set();
@@ -118,7 +125,12 @@ export function shapeTerrain(world, opts = {}) {
   for (const c of grid.cells) maxTop = Math.max(maxTop, world.top(c));
   const S = maxTop + 1;                       // 切面 0..maxTop
   const X = new Float32Array(n * S), Z = new Float32Array(n * S);
-  const ORD = new Uint8Array(n * S);
+  const ORD = new Uint8Array(n * S), MAT = new Uint8Array(n * S);
+  const explicitMat = new Map();
+  if (Array.isArray(materials)) for (const pair of materials) {
+    if (!Array.isArray(pair) || pair.length !== 2 || !pair.every(id => Number.isInteger(id) && id >= 0 && id < n) || !nbr[pair[0]].includes(pair[1])) throw new RangeError('materials must reference adjacent vertices');
+    const e = eid[pair[0]][nbr[pair[0]].indexOf(pair[1])]; explicitMat.set(e, true);
+  }
   for (let s = 0; s < S; s++) { X.set(BX, s * n); Z.set(BZ, s * n); }
 
   const api = {
@@ -144,6 +156,13 @@ export function shapeTerrain(world, opts = {}) {
       s=Math.max(0,Math.min(S-1,s));
       return Math.max(ORD[Math.floor(s)*n+vid],ORD[Math.ceil(s)*n+vid]);
     },
+    /** Edge-hierarchy class of a vertex on an integer slice: pinned > cliff-top > cliff-foot > material > free. */
+    rank(vid, s) {
+      if (!Number.isInteger(vid) || vid < 0 || vid >= n || !Number.isInteger(s) || s < 0 || s >= S) throw new RangeError('Invalid rank query');
+      const o = ORD[s*n+vid];
+      return o === 3 ? 'pinned' : o === 2 ? 'cliff-top' : o === 1 ? 'cliff-foot' : MAT[s*n+vid] ? 'material' : 'free';
+    },
+    mode,
     ms: 0,
   };
   if (!api.enabled) { lastResult.set(world, { key, api }); return api; }
@@ -209,7 +228,22 @@ export function shapeTerrain(world, opts = {}) {
       ORD[base + v] = ord[v];
       if (ord[v] === 1 || ord[v] === 2) curve.push(v);
     }
-    if (!curve.length) continue;   // 这个切面没有轮廓（例如整片都是房子）
+    // Material borders (ord 0 only: a cliff line always outranks a material line).
+    const matCurve = [], matEdge = new Uint8Array(E);
+    if (materials !== null) {
+      for (const c of grid.cells) for (let i = 0; i < c.n; i++) {
+        const e = cellEdge[off[c.id] + i];
+        if (explicitMat.has(e)) { if (s >= 1 && solidAt(c, s) && !solidAt(c, s + 1)) matEdge[e] = 1; continue; }
+        if (materials !== 'river') continue;
+        const nid = c.edgeNeighbors[i]; if (nid < 0) continue; const nb = grid.cells[nid];
+        if (s >= 1 && world.ground(c) === s && world.ground(nb) === s && world.top(c) === s && world.top(nb) === s && world.river[c.id] !== world.river[nid]) matEdge[e] = 1;
+      }
+      const mdeg = new Uint8Array(n);
+      for (let e = 0; e < E; e++) if (matEdge[e] && !edgeOrd[e]) { mdeg[edgeA[e]]++; mdeg[edgeB[e]]++; }
+      for (let v = 0; v < n; v++) if (mdeg[v] && ord[v] === 0) { MAT[base + v] = 1; matCurve.push(v); }
+    }
+    if (mode === 'none') continue;   // panel 1: no smoothing at all
+    if (!curve.length && !matCurve.length) continue;   // 这个切面没有轮廓（例如整片都是房子）
 
     // 3. 轮廓点 Taubin：只沿同级边、只被同级或更高级的邻居拉
     // 每个曲线点沿同级边的两个邻居（只算一次）
@@ -224,6 +258,15 @@ export function shapeTerrain(world, opts = {}) {
       }
       if (m !== 2) pair[j * 2] = -1;      // 只处理简单曲线上的点
     });
+    // Panel 2 ("dumb"): every outline vertex is pulled by ALL its neighbours, ignoring edge classes.
+    const dumbStep = (f) => {
+      for (let j = 0; j < curve.length; j++) {
+        const v = curve[j], nb = nbr[v]; let sx = 0, sz = 0;
+        for (const u of nb) { sx += X[base + u]; sz += Z[base + u]; }
+        cx[j] = X[base + v] + f * (sx / nb.length - X[base + v]); cz[j] = Z[base + v] + f * (sz / nb.length - Z[base + v]);
+      }
+      for (let j = 0; j < curve.length; j++) { X[base + curve[j]] = cx[j]; Z[base + curve[j]] = cz[j]; }
+    };
     const cx = new Float32Array(curve.length), cz = new Float32Array(curve.length);
     const curveStep = (f) => {
       for (let j = 0; j < curve.length; j++) {
@@ -235,7 +278,22 @@ export function shapeTerrain(world, opts = {}) {
       }
       for (let j = 0; j < curve.length; j++) { X[base + curve[j]] = cx[j]; Z[base + curve[j]] = cz[j]; }
     };
-    for (let it = 0; it < o.passes; it++) { curveStep(o.lambda); curveStep(o.mu); }
+    if (mode === 'dumb') for (let it = 0; it < o.passes; it++) { dumbStep(o.lambda); dumbStep(o.mu); }
+    else for (let it = 0; it < o.passes; it++) { curveStep(o.lambda); curveStep(o.mu); }
+    // Material line: Taubin along material edges only, pulled by material or harder vertices.
+    if (matCurve.length) {
+      const mp = new Int32Array(matCurve.length * 2).fill(-1);
+      matCurve.forEach((v, j) => { let m = 0; const nb = nbr[v], ed = eid[v];
+        for (let q = 0; q < nb.length; q++) { if (!matEdge[ed[q]] || (ord[nb[q]] === 0 && !MAT[base + nb[q]])) continue; if (m < 2) mp[j * 2 + m] = nb[q]; m++; }
+        if (m !== 2 || pinned[v]) mp[j * 2] = -1; });
+      const mx = new Float32Array(matCurve.length), mz = new Float32Array(matCurve.length);
+      const matStep = (f) => {
+        for (let j = 0; j < matCurve.length; j++) { const v = matCurve[j], u0 = mp[j * 2], u1 = mp[j * 2 + 1]; mx[j] = X[base + v]; mz[j] = Z[base + v]; if (u0 < 0) continue;
+          mx[j] += f * ((X[base + u0] + X[base + u1]) * 0.5 - X[base + v]); mz[j] += f * ((Z[base + u0] + Z[base + u1]) * 0.5 - Z[base + v]); }
+        for (let j = 0; j < matCurve.length; j++) { X[base + matCurve[j]] = mx[j]; Z[base + matCurve[j]] = mz[j]; }
+      };
+      for (let it = 0; it < o.passes; it++) { matStep(o.lambda); matStep(o.mu); }
+    }
 
     // 4. 笼形变形：沿轮廓外法线收分 + 噪声
     for (const v of curve) {
@@ -254,11 +312,11 @@ export function shapeTerrain(world, opts = {}) {
     //    只处理轮廓附近 3 圈以内的内部点 —— 更远的点位移本来就是 0
     stamp++;
     const active = [];
-    let frontier = curve;
+    let frontier = curve.concat(matCurve);
     for (let ring = 0; ring < 3; ring++) {
       const next = [];
       for (const v of frontier) for (const u of nbr[v]) {
-        if (mark[u] === stamp || ord[u] !== 0) continue;
+        if (mark[u] === stamp || ord[u] !== 0 || MAT[base + u]) continue;
         mark[u] = stamp; active.push(u); next.push(u);
       }
       frontier = next;
@@ -277,7 +335,7 @@ export function shapeTerrain(world, opts = {}) {
     }
 
     // 6. 位移上限（只有轮廓点和它附近的点会动）
-    for (const list of [curve, active]) for (const v of list) {
+    for (const list of [curve, matCurve, active]) for (const v of list) {
       const dx = X[base + v] - BX[v], dz = Z[base + v] - BZ[v];
       const d = Math.hypot(dx, dz);
       if (d > o.maxShift) { X[base + v] = BX[v] + dx / d * o.maxShift; Z[base + v] = BZ[v] + dz / d * o.maxShift; }
@@ -295,4 +353,32 @@ export function shapeTerrain(world, opts = {}) {
   api.ms = +(performance.now() - t0).toFixed(1);
   lastResult.set(world, { key, api });
   return api;
+}
+
+/** Clip-comparison numbers (REACode edgesmooth regularity / borderKink / areaDrift) on one slice of a
+ * shapeTerrain result: regularity = mean |corner angle − regular angle| of the slice's solid cells;
+ * kink(rank) = mean turning angle at simple-curve vertices of that rank (0 = dead straight);
+ * areaDrift = relative change of the slice's solid area vs. the raw grid. */
+export function smoothingMetrics(world, api, s) {
+  if (!Number.isInteger(s) || s < 0 || s >= api.slices) throw new RangeError('Invalid slice');
+  const grid = world.grid, P = (v) => api.at(v, s), solid = grid.cells.filter((c) => s === 0 || world.isSolid(c, s));
+  let dev = 0, corners = 0, area = 0, raw = 0;
+  for (const c of solid) {
+    const pts = c.pts.map(P), ideal = 180 - 360 / c.n;
+    for (let i = 0; i < c.n; i++) { const a = pts[(i + c.n - 1) % c.n], b = pts[i], d = pts[(i + 1) % c.n], ux = a[0] - b[0], uz = a[1] - b[1], vx = d[0] - b[0], vz = d[1] - b[1];
+      dev += Math.abs(Math.acos(Math.max(-1, Math.min(1, (ux * vx + uz * vz) / (Math.hypot(ux, uz) * Math.hypot(vx, vz))))) * 180 / Math.PI - ideal); corners++; }
+    for (let i = 0; i < c.n; i++) { const p = pts[i], q = pts[(i + 1) % c.n], r0 = c.pts[i], r1 = c.pts[(i + 1) % c.n]; area += p[0] * q[1] - q[0] * p[1]; raw += r0.x * r1.z - r1.x * r0.z; }
+  }
+  // Outline vertices per rank, connected through same-rank neighbours (two of them = simple curve).
+  const n = grid.verts.length, nb = Array.from({ length: n }, () => new Set());
+  for (const c of grid.cells) for (let i = 0; i < c.n; i++) { const a = c.pts[i].id, b = c.pts[(i + 1) % c.n].id; nb[a].add(b); nb[b].add(a); }
+  const kink = {};
+  for (const rank of ['cliff-top', 'cliff-foot', 'material']) {
+    let sum = 0, k = 0;
+    for (let v = 0; v < n; v++) { if (api.rank(v, s) !== rank) continue; const ns = [...nb[v]].filter((u) => api.rank(u, s) === rank); if (ns.length !== 2) continue;
+      const a = P(grid.verts[ns[0]]), b = P(grid.verts[v]), c = P(grid.verts[ns[1]]), t = Math.acos(Math.max(-1, Math.min(1, ((b[0] - a[0]) * (c[0] - b[0]) + (b[1] - a[1]) * (c[1] - b[1])) / (Math.hypot(b[0] - a[0], b[1] - a[1]) * Math.hypot(c[0] - b[0], c[1] - b[1])))));
+      sum += t * 180 / Math.PI; k++; }
+    kink[rank] = k ? sum / k : null;
+  }
+  return { slice: s, cells: solid.length, regularity: corners ? dev / corners : 0, kink, areaDrift: raw ? Math.abs(area - raw) / Math.abs(raw) : 0 };
 }

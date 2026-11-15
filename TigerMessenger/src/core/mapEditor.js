@@ -1041,10 +1041,8 @@ export function createMapEditor({
       hue: p.factoryOpts?.hue ?? null,
     }));
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    } catch {
-      /* private mode */
-    }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));return true;
+    } catch {return false;}
   }
 
   /**
@@ -1201,6 +1199,7 @@ export function createMapEditor({
   redraw();
 
   return {
+    save: persist,
     setOpen,
     toggle,
     isOpen: () => open,

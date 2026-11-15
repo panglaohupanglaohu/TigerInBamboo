@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';import {createViewCombinationPreview,VIEW_COMBINATIONS} from '../src/ui/view-combinations.js';
+const view={debugState:{waves:false,birds:true,wind:false},setDebug(k,v){this.debugState[k]=v;}},baseline={...view.debugState},preview=createViewCombinationPreview(view);
+preview.preview('coastal-life');assert.equal(view.debugState.waves,true);assert.equal(view.debugState.birds,true);preview.preview('wind-clouds');assert.equal(view.debugState.waves,false);assert.equal(view.debugState.birds,true);assert.equal(view.debugState.wind,true);preview.restore();assert.equal(view.debugState.wind,false);assert.equal(preview.current(),null);
+assert.throws(()=>preview.preview('missing'));assert.equal(view.debugState.birds,baseline.birds);
+let fail=true;const broken={debugState:{waves:false},setDebug(k,v){if(k==='birds'&&v&&fail){fail=false;throw Error('adapter failure');}this.debugState[k]=v;}};assert.throws(()=>createViewCombinationPreview(broken).preview('coastal-life'));assert.equal(broken.debugState.waves,false);
+assert.ok(VIEW_COMBINATIONS.every(r=>Object.keys(r.toggles).length>1));console.log('PASS View display combinations, switching, restore and rollback on failure');

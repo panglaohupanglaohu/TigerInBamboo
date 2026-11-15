@@ -224,9 +224,10 @@ export class Decor {
     for (let k = 0; k < n; k++) {
       const b = this.bugs[k];
       b.sw -= dt;
-      if (b.sw <= 0) {   // 随机换一个附近的落点
-        const near = this.spots.filter((s) => Math.hypot(s.x - b.spot.x, s.z - b.spot.z) < 2.5);
-        b.spot = near[(Math.random() * near.length) | 0] || b.spot;
+      if (b.sw <= 0) {   // 随机换一个附近的落点（要真的换掉当前这个，否则等于没漂）
+        const near = this.spots.filter((s) => s !== b.spot && Math.hypot(s.x - b.spot.x, s.z - b.spot.z) < 2.5);
+        const far = this.spots.filter((s) => s !== b.spot);
+        b.spot = near[(Math.random() * near.length) | 0] || far[(Math.random() * far.length) | 0] || b.spot;
         b.sw = 3 + Math.random() * 6;
       }
       b.ph += dt * 1.6;

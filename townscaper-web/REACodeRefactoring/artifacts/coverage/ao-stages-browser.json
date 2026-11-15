@@ -1,0 +1,69 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "vertices": 35397,
+      "stages": [
+        {
+          "stage": "raw",
+          "diff": 101511,
+          "l1": 3170.049259059131,
+          "calls": 36
+        },
+        {
+          "stage": "ao",
+          "diff": 101511,
+          "l1": 986.9898080844432,
+          "calls": 36
+        },
+        {
+          "stage": "bounce",
+          "diff": 101511,
+          "l1": 4157.039060646668,
+          "calls": 36
+        },
+        {
+          "stage": "original",
+          "diff": 0,
+          "l1": 0,
+          "calls": 36
+        }
+      ],
+      "sourceUnchanged": true,
+      "invalidAtomic": true
+    },
+    {
+      "kind": "mixed",
+      "vertices": 31746,
+      "stages": [
+        {
+          "stage": "raw",
+          "diff": 91338,
+          "l1": 2878.453262350522,
+          "calls": 36
+        },
+        {
+          "stage": "ao",
+          "diff": 91338,
+          "l1": 992.2757566226646,
+          "calls": 36
+        },
+        {
+          "stage": "bounce",
+          "diff": 91338,
+          "l1": 3870.729026428424,
+          "calls": 36
+        },
+        {
+          "stage": "original",
+          "diff": 0,
+          "l1": 0,
+          "calls": 36
+        }
+      ],
+      "sourceUnchanged": true,
+      "invalidAtomic": true
+    }
+  ],
+  "errors": []
+}

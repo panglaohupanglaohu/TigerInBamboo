@@ -55,21 +55,25 @@
 <body>
 <div style="position:fixed;left:16px;bottom:8px;z-index:100;background:#20343c;color:white;padding:7px 12px;border-radius:7px;font:13px system-ui">REACode 重构版 · <a style="color:#ffe6a6" href="pipeline.html#latest-progress">最新进度</a> · <a style="color:#ffe6a6" href="coverage.html">模块映射</a> · <span data-progress-badge>加载进度…</span></div>
 <main>
- <p><a href="../../TigerMessenger/pipeline.html">◈ 打开 Super-agent 场景管线工坊 · 七类能力插槽 / 实景实验</a></p>
-  <p><a href="../../TigerMessenger/index.html?dev=1">场景创作工作台：进入游戏后展开右上角「场景创作」</a> · 莫里斯湖首批；Worker 尚未连接</p>
+ <p><a href="../../TigerMessenger/pipeline.html">打开系统工坊 · 场景管线与能力执行</a></p>
+  <p><a href="../../TigerMessenger/index.html?dev=1">游戏现场编辑：右下角「编辑」→「构建」→「场景选择」</a> · 可用能力由系统工坊中的执行适配与验证结果决定</p>
   <nav><a href="index.html?scene=fusion" target="_top">风与天气 · 首页实景控制</a><a href="index.html" target="_top">← 场景</a><a href="architecture.html">系统全局</a><a href="learn.html">学习笔记</a><a href="GUIDE.md">接手指南</a><a href="PIPELINE.md">管线文档</a><a href="coverage.html">原版→重构映射</a></nav>
   <h1>REACode 重构版 · 管线与学习进度</h1>
-  <p class="sub">重构版：将已登记视频按"管线"排了一遍，并标出每一步在本仓库里的实现位置：共享底座（网格、水、光照）→ 建筑管线（Townscaper）和地形管线（engine）→ 两者在第三个项目里融合，最终上到球面。下面先是判断，再是一条可以照着学、照着做的路线，最后是完整的管线图。▶ 都能播放对应原片。</p>
+  <p class="sub">先看每条能力线学到了哪一代、下一步补什么，再按作者发布时间追踪问题、改进、复用和分支，最后查看本地实现步骤。与 TigerMessenger 学习工坊共用同一演进数据及呈现代码；时间较新不自动代表代码已实现或场景已验收。</p>
 
+  <section id="capability-lineage"></section>
+  <section id="capability-evolution"></section>
   <section id="latest-progress" style="background:#fff;border:1px solid #b9cdce;border-radius:12px;padding:18px;margin:20px 0;scroll-margin-top:18px">读取最新学习与重构记录…</section>
+  <details id="legacy-implementation-map"><summary>按实现步骤查看原学习路线与完整管线图</summary>
   <div class="verdict" id="verdict"></div>
 
-  <h2>学习路线（按这个顺序学和做）</h2>
+  <h2>实现步骤参考（不是作者发布时间顺序）</h2>
   <div class="legend" id="legend"></div>
   <div class="road" id="road"></div>
 
   <h2>完整管线图</h2>
   <div class="lanes" id="lanes"></div>
+  </details>
 </main>
 <dialog id="dlg"><button id="close">关闭</button><video id="vid" controls loop playsinline></video><p id="cap"></p></dialog>
 <script src="learn/data.js"></script>
@@ -89,9 +93,9 @@ const code = (s) => esc(s).replace(/(src\/[\w./]+|engine\/[\w./]+)/g, '<code>$1<
 
 document.getElementById('verdict').innerHTML = `<b>判断：${esc(P.verdict.title)}</b>
   <div class="timeline">
-    <div class="era" style="background:#8a6b4f"><b>Bad North</b><small>2017–2019 · 方格体素岛：地形、房子、士兵、风、雪共用一个体素空间</small></div>
+    <div class="era" style="background:#8a6b4f"><b>Bad North</b><small>早期实验至 Bad North · 方格体素岛：地形、房子、士兵、风、雪共用一个体素空间</small></div>
     <div class="era" style="background:#d9663f"><b>Townscaper</b><small>2019–2021 · 不规则四边形网格，只有建筑；水沿用 Bad North</small></div>
-    <div class="era" style="background:#7b5fb0"><b>第三个项目</b><small>2021–2025 · 不规则网格 + 多格 tile，房子拼进地形，上球面</small></div>
+    <div class="era" style="background:#7b5fb0"><b>后续未命名实验</b><small>2021–2025 来源组 · 不规则网格 + 多格 tile；2024 展示球面版本，正式名称未确认</small></div>
   </div>
   ${P.verdict.points.map(([id, t]) => `<div class="ev">${thumb(id)}<span>${esc(t)}</span></div>`).join('')}`;
 
@@ -114,7 +118,7 @@ document.getElementById('lanes').innerHTML = P.lanes.map((lane) => `
   <div class="lane" style="border-top-color:${lane.color}">
     <h3>${esc(lane.name)}</h3><p class="note">${esc(lane.note)}</p>
     ${lane.groups.map(([g, steps]) => `<div class="g">${esc(g)}</div>` + steps.map((s) => `
-      <div class="st"><span class="d" style="background:${P.statusColor[s.status]}" title="${P.statusName[s.status]}"></span>
+      <div class="st" data-pipeline-clip="${s.id || ''}"><span class="d" style="background:${P.statusColor[s.status]}" title="${P.statusName[s.status]}"></span>
         <span>${esc(s.name)}<small><a href="refactoring-audit.html#clip-${s.id}">${window.REFACTOR_STATUS?.[s.id] || '待核查'}</a></small>${s.where ? `<small>${esc(s.where)}</small>` : ''}${s.toggle ? `<small><a href="index.html?on=${s.toggle === 'time' ? '' : s.toggle}${s.toggle === 'time' ? '&time=night' : ''}" target="_top">在场景里看 →</a></small>` : ''}${s.tour ? `<small><a href="index.html?tour=${s.tour}" target="_top">在场景里看 →</a></small>` : ''}${s.page ? `<small><a href="${s.page.startsWith('scene:') ? 'index.html?scene=' + s.page.slice(6) : s.page}">${s.page.startsWith('scene:') ? '切到场景 →' : '打开 ' + esc(s.page) + ' →'}</a></small>` : ''}</span>
         ${thumb(s.id, 'sm')}</div>`).join('')).join('')}
   </div>`).join('');
@@ -135,6 +139,31 @@ const close = () => { vid.pause(); vid.removeAttribute('src'); vid.load(); dlg.c
 document.getElementById('close').onclick = close;
 dlg.addEventListener('click', (e) => { if (e.target === dlg) close(); });
 dlg.addEventListener('cancel', (e) => { e.preventDefault(); close(); });
+</script>
+<script type="module">
+import {renderCapabilityEvolution} from './src/ui/capability-evolution.js';
+const params=new URLSearchParams(location.search);
+const root=new URL('./',location.href);
+const counterpart=new URL(location.port==='8769'?'http://localhost:8931/TigerMessenger/pipeline.html?learningView=evolution#learning':'../../TigerMessenger/pipeline.html?learningView=evolution#learning',root);
+const evolutionView=renderCapabilityEvolution(document.getElementById('capability-evolution'),{learn:window.LEARN,pipeline:window.PIPELINE,root,query:params.get('evolutionQuery')||'',family:params.get('evolutionFamily'),phase:params.get('evolutionPhase'),priority:params.get('evolutionPriority'),clip:params.get('evolutionClip'),counterpart,onPlay:id=>{const trigger=document.createElement('button');trigger.dataset.play=id;trigger.hidden=true;document.body.append(trigger);trigger.click();trigger.remove();}});
+// 能力成长与闭环：与 TigerMessenger 学习工坊同一个计算模型（src/core/capability-lineage.js）
+{
+ const {renderCapabilityLineage}=await import('./src/ui/capability-lineage.js');
+ const [library,registry]=await Promise.all([fetch('capability-library.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),import('./src/capabilities/registry.js').catch(()=>null)]);
+ const executables=(registry?.describeCapabilities()||[]).map(c=>({...c,tier:'scene'}));
+ renderCapabilityLineage(document.getElementById('capability-lineage'),{evolution:evolutionView.model,modules:library?.modules||[],executables,line:params.get('lineageLine'),
+  experienceNote:'这里只列能力库 registry 中登记的能力代码。球系统 / 物件 / 通用场景的执行适配，以及预览、验证失败、采用的本机记录，在 TigerMessenger 系统工坊与学习工坊查看。',
+  onFocus:id=>{evolutionView.focus(id);document.getElementById('capability-evolution').scrollIntoView({block:'start',behavior:'smooth'});}});
+}
+for(const row of document.querySelectorAll('[data-pipeline-clip]')){
+ const record=evolutionView.model.events.find(e=>e.id===row.dataset.pipelineClip);
+ if(!record?.completion)continue;
+ const c=record.completion,note=document.createElement('details');note.className='evolution-legacy-note';
+ const title=document.createElement('summary');title.textContent='补全优先级：'+c.priority+' · 批注';note.append(title);
+ for(const text of c.current?[c.reason,c.nextAction,'完成门槛：'+c.acceptance]:['来源变化，批注需要复核']){const p=document.createElement('p');p.textContent=text;note.append(p);}
+ row.children[1]?.append(note);
+}
+
 </script>
 <script type="module" src="src/ui/coverage-progress.js"></script>
 </body>

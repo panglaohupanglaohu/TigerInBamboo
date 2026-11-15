@@ -1,0 +1,44 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><link rel="icon" href="data:,"><title>生成管线 · job 线程 + 共享时钟慢放（r56 C08）</title>
+<style>body{margin:0;background:#5f8783;font:13px/1.5 system-ui,"PingFang SC",sans-serif;overflow:hidden}canvas{display:block;width:100vw;height:100vh}#ui{position:fixed;left:12px;top:12px;max-width:390px;background:rgba(255,255,255,.93);color:#1d2f36;border-radius:12px;padding:10px 12px}#ui p{margin:3px 0;font-size:12px;color:#3e5a5e}button{border:1px solid #c9d8d7;background:#fff;border-radius:8px;padding:3px 8px;cursor:pointer;font:inherit}button.on{background:#2f7f8a;color:#fff}#stat{font-size:12px;color:#2f7f8a;white-space:pre-wrap}</style>
+<canvas id="c"></canvas>
+<div id="ui"><a href="index.html">← 首页</a> · <a href="terrain-stages.html">单线程分阶段页</a>
+<h3 style="margin:4px 0">job 里的 Thread.Sleep（1670064751181791233）</h3>
+<p>生成管线在真正的 Worker 线程里跑（src/terrain/pipeline-job-worker-c08.js）。主线程把时间倍率 / 暂停写进 SharedArrayBuffer，job 里的 sleep() 每 16ms 读一次并用 Atomics.wait 阻塞。默认节奏按片子逐帧量出的一轮 22.8 s：清空 → 三角化 7.1 s → 抬起 → 灰模停 4 s → 剪影 → 上色 → 静止，共 4 轮。</p>
+<label>倍率 <input id="scale" type="range" min="0" max="2" step="0.05" value="1"> <span id="sv">1.00</span></label> <button id="pause">暂停</button>
+<div id="stat"></div></div>
+<script type="module">
+import { startJob, stageDurations, CLIP_RHYTHM } from './src/terrain/pipeline-job-c08.js';
+const Q = new URLSearchParams(location.search), cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let S = { stage: 'clear', round: 0, pts: null, tris: [], H: null, i: 0, n: 0 }, msgs = 0;
+const job = startJob({ rounds: Number(Q.get('rounds') || 4), scale: Number(Q.get('scale') ?? 1), onMessage: (m) => { msgs++; if (m.pts) S.pts = m.pts; if (m.tris) S.tris = m.tris; if (m.H) S.H = m.H; if (m.i) { S.i = m.i; S.n = m.n; } if (m.stage === 'clear') { S.pts = null; S.tris = []; S.H = null; } S.stage = m.stage; if (m.round !== undefined) S.round = m.round; } });
+document.getElementById('sv').textContent = job.control.scale.toFixed(2); document.getElementById('scale').value = job.control.scale;
+document.getElementById('scale').oninput = (e) => { job.control.setScale(Number(e.target.value)); document.getElementById('sv').textContent = Number(e.target.value).toFixed(2); };
+let paused = false; document.getElementById('pause').onclick = (e) => { paused = !paused; paused ? job.control.pause() : job.control.resume(); e.target.classList.toggle('on', paused); };
+const COLORS = ['#7fc0c9', '#e9d79a', '#a8c97e', '#8fb36a', '#9a9a8c', '#b3aea2', '#e2e2dc'];
+function draw() {
+  const dpr = Math.min(2, devicePixelRatio); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = '#5f8783'; ctx.fillRect(0, 0, innerWidth, innerHeight);
+  const k = Math.min(innerWidth - 420, innerHeight) / 26, ox = 420 + (innerWidth - 420) / 2, oy = innerHeight / 2 + 40;
+  const lifted = S.H && ['lift', 'clay', 'silhouette', 'color', 'hold'].includes(S.stage);
+  const P = (i, h = 0) => { const [x, z] = S.pts[i]; return [ox + (x - z) * k * .8, oy + (x + z) * k * .42 - h * k * .55]; };
+  if (S.pts && S.tris.length) {
+    if (!lifted) { ctx.strokeStyle = 'rgba(240,250,245,.8)'; ctx.lineWidth = 1; ctx.beginPath(); for (const t of S.tris) { ctx.moveTo(...P(t[0])); ctx.lineTo(...P(t[1])); ctx.lineTo(...P(t[2])); ctx.closePath(); } ctx.stroke(); }
+    else {
+      const tris = S.tris.map((t) => ({ t, h: Math.min(S.H[t[0]], S.H[t[1]], S.H[t[2]]), d: t.reduce((s, i) => s + S.pts[i][0] + S.pts[i][1], 0) })).sort((a, b) => a.d - b.d);
+      for (const { t, h } of tris) {
+        if (h <= 0 && S.stage !== 'lift') continue;
+        const fill = S.stage === 'silhouette' ? '#050505' : S.stage === 'clay' || S.stage === 'lift' ? `rgb(${120 + h * 12},${126 + h * 12},${130 + h * 12})` : COLORS[Math.min(6, h)];
+        // wall skirt from 0 to h (vertical extrusion), then the top
+        if (h > 0) { ctx.fillStyle = S.stage === 'silhouette' ? '#050505' : S.stage === 'color' || S.stage === 'hold' ? '#c8bfae' : '#6f777b'; ctx.beginPath(); for (const [a, b] of [[t[0], t[1]], [t[1], t[2]], [t[2], t[0]]]) { ctx.moveTo(...P(a, 0)); ctx.lineTo(...P(b, 0)); ctx.lineTo(...P(b, h)); ctx.lineTo(...P(a, h)); ctx.closePath(); } ctx.fill(); }
+        ctx.fillStyle = fill; ctx.beginPath(); ctx.moveTo(...P(t[0], h)); ctx.lineTo(...P(t[1], h)); ctx.lineTo(...P(t[2], h)); ctx.closePath(); ctx.fill();
+        if (S.stage === 'lift') { ctx.strokeStyle = 'rgba(240,250,245,.6)'; ctx.stroke(); }
+      }
+    }
+  }
+  const dur = stageDurations(job.timeline);
+  document.getElementById('stat').textContent = `模式 ${job.control.mode}${job.control.mode === 'shared-atomics' ? '（主线程写共享内存，job 内读取）' : '（未开 cross-origin isolation：倍率启动时复制一次，忙等）'}\n第 ${S.round + 1}/4 轮 · 阶段 ${S.stage}${S.stage === 'triangulate' ? ` ${S.i}/${S.n}` : ''} · 三角 ${S.tris.length} · 消息 ${msgs}\n实测时长(ms)：` + Object.entries(dur).map(([k2, v]) => `${k2} ${v.toFixed(0)}/${CLIP_RHYTHM[k2]}`).join(' · ');
+  window.jobC08 = { mode: job.control.mode, scale: job.control.scale, stage: S.stage, round: S.round, i: S.i, tris: S.tris.length, timeline: job.timeline, durations: dur, msgs };
+  requestAnimationFrame(draw);
+}
+draw();
+</script></html>

@@ -21,7 +21,7 @@ export function createBookshopPedestrians({base,colliders,tramSystem,R=160,isAla
  const api={actors,medical,groundAt(p){const q=chart(p);return base.localToWorld(townSurfacePoint(base,q.x,q.z,R));},routeWorld(from,to){return route(chart(from),chart(to)).map(p=>base.localToWorld(townSurfacePoint(base,p.x,p.z,R)));},trainNear(p){return trainPoints.some(q=>q.distanceTo(p)<5);},algorithm:'Cached walkability grid + BFS + seeded destinations + reciprocal yielding + staggered replans',update(dt){
   medical.update(dt);time+=dt;tick+=dt;if(tick<.1)return;dt=Math.min(.2,tick);tick=0;const nowAlarm=!!isAlarm();if(nowAlarm!==alarm){alarm=nowAlarm;actors.forEach(a=>{a.path=[];a.wait=random()*1.5;});}
   trainPoints.length=0;for(const s of tramSystem.freightServices)for(const v of[s.tram,...s.wagons])trainPoints.push(v.getWorldPosition(new THREE.Vector3()));
-  for(const a of actors){if(a.m.userData.bookshopDowned||a.m.userData.bookshopDefending||a.m.userData.bookshopMedical)continue;a.wait-=dt;if(!a.path.length){if(a.wait<=0&&time>=nextPath){choose(a);nextPath=time+.16;}continue;}
+  for(const a of actors){if(a.m.userData.bookshopDowned||a.m.userData.bookshopDefending||a.m.userData.bookshopMedical||a.m.userData.bookshopBoarding)continue;a.wait-=dt;if(!a.path.length){if(a.wait<=0&&time>=nextPath){choose(a);nextPath=time+.16;}continue;}
    const target=a.path[0],dx=target.x-a.x,dz=target.z-a.z,dist=Math.hypot(dx,dz);if(dist<.2){a.path.shift();if(!a.path.length)a.wait=2+random()*7;continue;}
    const step=Math.min(dist,a.speed*dt*(alarm?1.3:1)),x=a.x+dx/dist*step,z=a.z+dz/dist*step;
    const blocked=actors.some(b=>b!==a&&Math.hypot(x-b.x,z-b.z)<.68&&(b.id<a.id||!b.path.length));

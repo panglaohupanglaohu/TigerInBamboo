@@ -1,0 +1,21 @@
+{
+  "W": 1280,
+  "H": 900,
+  "defaultMix": 0.8,
+  "hard": {
+    "jumps": 56532,
+    "strong": 25905
+  },
+  "blend": {
+    "jumps": 55598,
+    "strong": 25840
+  },
+  "smooth": {
+    "jumps": 55529,
+    "strong": 25832
+  },
+  "diffHardSmooth": 57293,
+  "diffBlendHard": 50195,
+  "diffBlendSmooth": 11032,
+  "errors": []
+}

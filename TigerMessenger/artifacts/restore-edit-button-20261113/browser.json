@@ -1,0 +1,35 @@
+{
+  "errors": [],
+  "initial": {
+    "dev": true,
+    "captureMode": false,
+    "group": null,
+    "monitor": false
+  },
+  "build": {
+    "state": {
+      "dev": true,
+      "captureMode": false,
+      "group": "build",
+      "monitor": false
+    },
+    "panels": [
+      "map-editor"
+    ]
+  },
+  "mobile": {
+    "x": 306.09375,
+    "y": 796,
+    "width": 71.90625,
+    "height": 36
+  },
+  "touchActions": [
+    "jump",
+    "interact",
+    "tram",
+    "driver",
+    "fire",
+    "summon"
+  ],
+  "pass": true
+}

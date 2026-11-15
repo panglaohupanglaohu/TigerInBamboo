@@ -1,0 +1,83 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>星球 impostor 树与蓬松云 · REACode 重构版</title>
+<style>html,body{margin:0;height:100%;overflow:hidden;font:13px/1.5 system-ui;color:#203b42}#ui{position:absolute;left:8px;top:8px;background:#f0f6f4e8;padding:8px 10px;border-radius:10px;max-width:420px}label,button{margin:2px 4px}canvas{display:block}#st{display:block;font-size:12px}</style>
+<div id="ui"><a href="index.html">首页</a> · <a href="impostors.html">平面树/云转镜</a> · <b>星球 impostor（C09）</b><br>
+1849427564034498642 八方位树 impostor 立在球面上（局部上方 = 径向）；1852334860137849222 蓬松云与树共用同一 Baker / 图集 / Field。树冠、云形、星球配色为程序化替代。<br>
+<label><input type="checkbox" id="trees" checked>树</label><label><input type="checkbox" id="clouds" checked>云</label><label><input type="checkbox" id="wire">线框</label><label><input type="checkbox" id="spin">转镜</label><output id="st"></output></div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { ImpostorBaker } from './src/life/impostor.js';
+import { useUnlitVertexColors, localUpImpostorField, radialMatrix, fluffyCloudGeometry, treeCrownGeometry, planetImpostorSites } from './src/life/impostor-c09.js';
+import { elevationAt, fbm3 } from './src/sphere/worldmap.js';
+const Q = new URLSearchParams(location.search), num = (k, d) => Q.has(k) ? +Q.get(k) : d;
+const R = 10, SEA = num('sea', .46), bg = Q.get('bg') || '#6c9ea6';
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(innerWidth, innerHeight); renderer.setClearColor(bg); document.body.append(renderer.domElement);
+const scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(num('fov', 40), innerWidth / innerHeight, .1, 400);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8aa0a0, 1.5)); const sun = new THREE.DirectionalLight(0xffffff, 1.3); sun.position.set(-8, 20, 10); scene.add(sun);
+// —— 星球（程序化：3D 噪声海陆，worldmap.js 同一场）
+const elev = (d) => elevationAt(d, { seed: num('seed', 7) });
+const forest = (d) => fbm3(d[0] + 9, d[1], d[2], { octaves: 3, seed: 41, period: 3.1 }) + .08;
+const pg = new THREE.IcosahedronGeometry(R, 56), pp = pg.getAttribute('position'), col = new Float32Array(pp.count * 3);
+const C = { deep: [.36, .58, .64], shallow: [.66, .82, .82], sand: [.85, .80, .68], grass: [.64, .74, .44], wood: [.47, .60, .40], rock: [.80, .66, .58] };
+const lift = (e) => 1 + Math.max(0, e - SEA) * .09;
+for (let i = 0; i < pp.count; i++) {
+  const d = [pp.getX(i) / R, pp.getY(i) / R, pp.getZ(i) / R], e = elev(d), k = lift(e);
+  pp.setXYZ(i, d[0] * R * k, d[1] * R * k, d[2] * R * k);
+  let c; if (e < SEA - .04) c = C.deep; else if (e < SEA) c = C.shallow.map((v, j) => v + (C.deep[j] - v) * (SEA - e) / .04); else if (e < SEA + .012) c = C.sand; else if (e > SEA + .2) c = C.rock; else c = forest(d) > .5 ? C.wood : C.grass;
+  const cc = new THREE.Color().setRGB(c[0], c[1], c[2], THREE.SRGBColorSpace); col.set([cc.r, cc.g, cc.b], i * 3);
+}
+pg.setAttribute('color', new THREE.BufferAttribute(col, 3)); pg.computeVertexNormals();
+const planet = new THREE.Mesh(pg, new THREE.MeshLambertMaterial({ vertexColors: true })); scene.add(planet); planet.visible = Q.get('planet') !== '0';   // planet=0：只看树（转镜稳定性度量）
+const wg = new THREE.IcosahedronGeometry(R, 18), wp = wg.getAttribute('position');
+for (let i = 0; i < wp.count; i++) { const d = [wp.getX(i) / R, wp.getY(i) / R, wp.getZ(i) / R], k = lift(elev(d)) + .003; wp.setXYZ(i, d[0] * R * k, d[1] * R * k, d[2] * R * k); }
+const wire = new THREE.LineSegments(new THREE.WireframeGeometry(wg), new THREE.LineBasicMaterial({ color: 0x1b2326, transparent: true, opacity: .35 }));
+wire.visible = Q.get('wire') === '1'; scene.add(wire);
+// —— 共享 ImpostorBaker：树三种 + 云两种，同一张图集
+const baker = useUnlitVertexColors(new ImpostorBaker(renderer, 2048)), tex = baker.rt.texture;
+const snap = Q.get('snap') === '1';   // 对照：只取最近一张方位图（普通"多张图跳变"做法）
+const mk = (baked, max, o) => { const f = localUpImpostorField(tex, baked, max, o); if (snap) { f.material.vertexShader = f.material.vertexShader.replace('vT = f - vK;', 'vT = 0.0; vK = floor(f + .5); if (vK > 7.5) vK = 0.0;'); } return f; };
+const treeBaked = [0, 1, 2].map((v) => baker.bake(treeCrownGeometry(v + 1), 128, { pitches: [.12, .5, 1.05] }));
+const cloudBaked = [1, 2].map((v) => baker.bake(fluffyCloudGeometry(v * 3 + 1), 192, { vertexColors: true, pitches: [.2, 1.0] }));
+const sites = planetImpostorSites(elev, { seed: 5, sea: SEA, trees: num('trees', 1800), clouds: num('nclouds', 110), forest });
+const treeFields = treeBaked.map((b) => mk(b, sites.trees.length, { sphere: true }));
+const cloudGroup = new THREE.Group(); scene.add(cloudGroup);
+const cloudFields = cloudBaked.map((b) => mk(b, sites.clouds.length + 16, { cloud: true, sphere: true, bakedColor: true }));
+const m = new THREE.Matrix4(), n = [0, 0, 0], nc = [0, 0], tint = new THREE.Color();
+for (const t of sites.trees) {
+  const e = elev(t.dir); tint.setRGB(.40 + .06 * Math.sin(t.yaw * 3), .66 + .05 * Math.cos(t.yaw * 5), .50, THREE.SRGBColorSpace);
+  treeFields[t.variant].set(n[t.variant]++, radialMatrix(t.dir, R * lift(e) - .02, (t.yaw - Math.PI) * .1, .4 * t.s, m), tint, 0);
+}
+// 1852334860137849222 前景云层：镜头正前下方、更高一层（R×1.16）放几朵特大云，遮住半边画面（与远处云带、树梢小云分三层）
+{ const ny = num('yaw', 30) * Math.PI / 180, ne = num('elev', 62) * Math.PI / 180, cp = new THREE.Vector3(Math.sin(ny) * Math.cos(ne), Math.sin(ne), Math.cos(ny) * Math.cos(ne));
+  const fr = (() => { let q = 99; return () => ((q = (Math.imul(q, 1664525) + 1013904223) >>> 0) / 4294967296); })();
+  for (let i = 0; i < num('front', 4); i++) { const rt = new THREE.Vector3(Math.cos(ny), 0, -Math.sin(ny)), d = cp.clone().multiplyScalar(.3 + fr() * .2).add(new THREE.Vector3(0, 1, 0)).addScaledVector(rt, .32 + fr() * .2).add(new THREE.Vector3(fr() - .5, 0, fr() - .5).multiplyScalar(.15)).normalize(); sites.clouds.push({ dir: d.toArray(), yaw: fr() * 6.28, s: 1.5 + fr() * .9, layer: 'front' }); } }
+sites.clouds.forEach((c, i) => {
+  const k = i % 2, h = c.layer === 'front' ? R * 1.12 : c.layer === 'big' ? R * 1.075 : R * 1.06;
+  cloudFields[k].set(nc[k]++, radialMatrix(c.dir, h, c.yaw, c.s, m), tint.setRGB(1, 1, 1), 0);
+});
+treeFields.forEach((f, i) => { f.commit(n[i]); scene.add(f.mesh); }); cloudFields.forEach((f, i) => { f.commit(nc[i]); cloudGroup.add(f.mesh); });
+// —— 镜头：绕星球中心，看向北半球表面
+const cam = { yaw: num('yaw', 30) * Math.PI / 180, elev: num('elev', 62) * Math.PI / 180, dist: num('dist', 25), look: num('look', .82) };
+function place() { const d = cam.dist; camera.position.set(Math.sin(cam.yaw) * Math.cos(cam.elev) * d, Math.sin(cam.elev) * d, Math.cos(cam.yaw) * Math.cos(cam.elev) * d); camera.lookAt(0, R * cam.look, 0); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+const $ = (s) => document.querySelector(s);
+const sync = () => { treeFields.forEach((f) => f.mesh.visible = $('#trees').checked); cloudGroup.visible = $('#clouds').checked; wire.visible = $('#wire').checked; };
+$('#wire').checked = wire.visible; if (Q.get('clouds') === '0') $('#clouds').checked = false; if (Q.get('trees') === '0') $('#trees').checked = false; if (Q.get('spin') === '1') $('#spin').checked = true;
+for (const id of ['trees', 'clouds', 'wire']) $('#' + id).onchange = sync; sync();
+function render() { place(); cloudGroup.rotation.y = num('cloudTurn', 0); renderer.render(scene, camera); }
+/** 转镜稳定性：每步转 deg，读回整屏，统计相邻两帧平均像素差（0–255）。 */
+function sweep(steps = 24, deg = 1.5) {
+  const gl = renderer.getContext(), w = gl.drawingBufferWidth, h = gl.drawingBufferHeight, a = new Uint8Array(w * h * 4), b = new Uint8Array(w * h * 4), diffs = [];
+  const y0 = cam.yaw; render(); gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, a);
+  for (let s = 1; s <= steps; s++) { cam.yaw = y0 + s * deg * Math.PI / 180; render(); gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, b); let sum = 0; for (let i = 0; i < a.length; i += 4) sum += Math.abs(a[i] - b[i]) + Math.abs(a[i + 1] - b[i + 1]) + Math.abs(a[i + 2] - b[i + 2]); diffs.push(sum / (w * h * 3)); a.set(b); }
+  cam.yaw = y0; render(); const sorted = [...diffs].sort((x, y) => x - y), med = sorted[sorted.length >> 1];
+  return { diffs, mean: diffs.reduce((x, y) => x + y, 0) / diffs.length, max: sorted.at(-1), median: med, spike: sorted.at(-1) / Math.max(1e-6, med) };
+}
+let last = performance.now();
+function loop(t) { if ($('#spin').checked) cam.yaw += (t - last) * 2e-4; last = t; render(); requestAnimationFrame(loop); }
+addEventListener('resize', () => renderer.setSize(innerWidth, innerHeight));
+const rep = baker.atlas.report();
+$('#st').textContent = `树 ${sites.trees.length}（3 种 × 3 俯仰 × 8 方位）· 云 ${sites.clouds.length}（2 种蓬松云 × 2 俯仰）· 图集 ${baker.atlas.rects().length} 槽 · 占用 ${(rep.fill * 100).toFixed(1)}%${snap ? ' · 对照：最近方位跳变' : ''}`;
+window.planetImp = { renderer, baker, cam, sites, treeFields, cloudFields, render, sweep, localUp: treeFields.every((f) => f.localUp) };
+if (Q.get('still') === '1') render(); else requestAnimationFrame(loop);
+</script></html>

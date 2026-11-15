@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>地形 r55 · 湖面 / 侵蚀 / 缓坡坍缩 / 连续软坡 / 变形侧壁碰撞</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#edf4f3;color:#20343c;font:14px/1.5 system-ui}header{padding:8px 14px}iframe{border:0;width:100%;height:calc(100vh - 150px)}a{color:#26758a}#stats{font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;max-height:64px;overflow:auto;background:#f8fbfa;padding:4px 8px}label{margin-right:10px}</style>
+<header><b>地形 r55</b> · 主场景 index.html?scene=terrain 里的同一个 World / WorldMesh · <a href="index.html" target="_top">首页</a><br>
+<label><input type="checkbox" id="lakes">湖面（填洼水位）+ 湖洞联合重建</label><label><input type="checkbox" id="erosion">侵蚀</label><label><input type="checkbox" id="relax">河道 BFS 缓坡坍缩</label><label><input type="checkbox" id="soft">连续软坡（softSlopes + softTops）</label><label><input type="checkbox" id="edges">台地边线（最终倒角）</label><label><input type="checkbox" id="collide">变形侧壁碰撞探针</label>
+<div id="stats">加载中…</div></header>
+<iframe id="scene"></iframe>
+<script type="module">
+/* URL: ?grid=quad|mixed&seed=7&lakes=1&erosion=1&relax=1&soft=1&edges=1&collide=1&cam=lake|soft|wall
+ * 默认全关 = 原 generateTerrain 默认参数。所有开关只写 World 字段/生成参数，不改 view.js / worldmesh.js。 */
+import{generateTerrain}from'./src/terrain/generate.js';
+import{terrainCollider}from'./src/terrain/terrain-collide.js';
+import{meshSlopeProfile}from'./src/core/terrace-profile.js';
+const q=new URLSearchParams(location.search),grid=q.get('grid')==='mixed'?'mixed':'quad',seed=+(q.get('seed')||7);
+const keys=['lakes','erosion','relax','soft','edges','collide'];for(const k of keys)document.querySelector('#'+k).checked=q.get(k)==='1';
+const f=document.querySelector('#scene');f.src='index.html?scene=terrain&grid='+grid;
+let probe=null;
+function opts(){const on=k=>document.querySelector('#'+k).checked;return{seed,riverRelax:on('relax'),lakes:on('lakes'),basins:on('lakes')?1:0,erosion:on('erosion')?{passes:2}:null,softSlopes:on('soft')};}
+async function apply(){const r=f.contentWindow.rea,THREE=await f.contentWindow.eval("import('three')");const on=k=>document.querySelector('#'+k).checked;
+ const w=r.world,res=generateTerrain(w,opts());w.softTops=on('soft')&&q.get('tops')!=='0';w.terrainCollide=true;r.view.changed();r.view.worldMesh.invalidate();
+ r.view.setDebug('terraceedges',on('edges'));
+ await new Promise(ok=>setTimeout(ok,1500));
+ const surf=w.terrainSurface,stats={grid,seed,opts:opts(),lakes:w.lakes?.lakes.length??0,lakeCells:w.lakes?.lakes.reduce((a,l)=>a+l.area,0)??0,relax:res.relax,joint:res.joint,erosion:w.drainage?.erosion?{lowered:w.drainage.erosion.lowered,volume:w.drainage.erosion.volume}:null,minimaAfter:w.drainage?.minimaAfter??null};
+ if(surf&&surf.version===w.version){const p=meshSlopeProfile(surf);stats.slope={flat:+p.top.flat.toFixed(1),soft:+p.top.soft.toFixed(1),steep:+p.top.steep.toFixed(1),wallArea:+p.wallArea.toFixed(1)};}
+ const ov=r.view.terraceEdges;if(on('edges')&&ov.final)stats.edges={drawn:ov.final.segments.length,seamless:ov.final.seamless.length};
+ if(probe){r.view.scene.remove(probe);probe=null;}
+ if(on('collide')&&surf){const col=terrainCollider(w),L=r.view.levelHeight;
+  // probes: pick wall quads at mid height, put a radius-0.18 cylinder 0.09 into the drawn rock, push it out
+  const grp=new THREE.Group(),rad=.18;let worst=0,logicalHits=0,n=0,maxShift=0;
+  const pick=surf.walls.filter((wq,i)=>i%Math.max(1,Math.floor(surf.walls.length/60))===0);
+  for(const wq of pick){const y=(wq.q[0][1]+wq.q[3][1])/2;const segs=col.wallSegmentsAt(y).filter(s=>s.k===surf.walls.indexOf(wq));if(!segs.length)continue;const s=segs[0];
+   const mx=(s.p[0]+s.q[0])/2,mz=(s.p[1]+s.q[1])/2,x0=mx-s.n[0]*.09,z0=mz-s.n[1]*.09,res2=col.pushOut(x0,y,z0,rad),d=col.wallDistance(res2.x,y,res2.z,rad);
+   worst=Math.max(worst,rad-d.d);n++;
+   // logical (undeformed) wall: cell edge in the original grid
+   const c=w.cells[wq.cell],a=c.pts[wq.edge],b=c.pts[(wq.edge+1)%c.n],lx=(a.x+b.x)/2,lz=(a.z+b.z)/2;const shift=Math.hypot(lx-mx,lz-mz);maxShift=Math.max(maxShift,shift);if(shift>rad*.5)logicalHits++;
+   const m0=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,.12,16),new THREE.MeshBasicMaterial({color:'#e2483d'}));m0.position.set(x0,y,z0);grp.add(m0);
+   const m1=new THREE.Mesh(new THREE.CylinderGeometry(rad,rad,.12,16),new THREE.MeshBasicMaterial({color:'#38c172'}));m1.position.set(res2.x,y,res2.z);grp.add(m1);}
+  probe=grp;r.view.scene.add(grp);stats.collide={probes:n,maxPenetrationAfter:+worst.toFixed(6),maxLogicalVsDrawnShift:+maxShift.toFixed(3),probesWhereLogicalEdgeOff:logicalHits};}
+ if(q.get('clean')){const st=f.contentDocument.createElement('style');st.textContent='body *{visibility:hidden!important}#view{visibility:visible!important}';f.contentDocument.head.appendChild(st);for(const k of['clouds','birds','boats','butterflies','flags'])try{r.view.setDebug(k,false)}catch(e){}}
+ const cam=q.get('cam');if(cam){const v=r.view;let t=null;if(q.get('pitch'))v.pitch=+q.get('pitch');if(q.get('yaw'))v.yaw=+q.get('yaw');
+  if(cam==='lake'&&w.lakes?.lakes.length){const big=[...w.lakes.lakes].sort((a,b)=>b.area-a.area)[0],cs=big.cells.map(id=>w.cells[id]);t=[cs.reduce((s,c)=>s+c.cx,0)/cs.length,big.level*v.levelHeight,cs.reduce((s,c)=>s+c.cz,0)/cs.length];v.distance=+(q.get('dist')||13);}
+  else if(cam==='soft'){t=[0,1.5,0];v.distance=+(q.get('dist')||22);}
+  else if(cam==='wall'){t=[+(q.get('tx')||0),1.2,+(q.get('tz')||0)];v.distance=+(q.get('dist')||15);}
+  if(t){v.target.set(...t);v.updateCamera();}}
+ window.__r55=stats;document.querySelector('#stats').textContent=JSON.stringify(stats);}
+for(const k of keys)document.querySelector('#'+k).onchange=apply;
+const timer=setInterval(()=>{const r=f.contentWindow.rea;if(r?.view?.worldMesh){clearInterval(timer);apply();}},200);
+</script></html>

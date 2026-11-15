@@ -1,0 +1,160 @@
+{
+  "fingerprint": "sha256:3f9b3af104359c78b8393e97d40b00f7b3411c0fee76304e814277f69e6897bb",
+  "counts": {
+    "partial": 177,
+    "priorityCounts": {
+      "高": 31,
+      "中": 119,
+      "低": 27,
+      "待评估": 0,
+      "待复核": 0
+    },
+    "posts": 285,
+    "pipelineRows": 268,
+    "unanchoredMethods": 5,
+    "pipelineLinkedRows": 263,
+    "pipelinePosts": 249,
+    "withoutPipeline": 36,
+    "reviewedFamilies": 28,
+    "relations": 85,
+    "validRelations": 85,
+    "relatedPosts": 124,
+    "withoutRelation": 161,
+    "dateConflicts": 4,
+    "projectLabelsToReview": 14
+  },
+  "phases": [
+    {
+      "id": "badnorth",
+      "name": "Bad North",
+      "posts": 104,
+      "partial": 51
+    },
+    {
+      "id": "townscaper",
+      "name": "Townscaper",
+      "posts": 75,
+      "partial": 43
+    },
+    {
+      "id": "next",
+      "name": "next · 后续未命名实验",
+      "posts": 79,
+      "partial": 66
+    },
+    {
+      "id": "sphere",
+      "name": "sphere · 球面世界",
+      "posts": 7,
+      "partial": 6
+    },
+    {
+      "id": "early",
+      "name": "早期实验",
+      "posts": 14,
+      "partial": 7
+    },
+    {
+      "id": "other",
+      "name": "其他来源",
+      "posts": 6,
+      "partial": 4
+    }
+  ],
+  "issues": [
+    {
+      "type": "date-conflict",
+      "id": "818857408848130048",
+      "recorded": "2018-06-20",
+      "published": "2017-01-10"
+    },
+    {
+      "type": "date-conflict",
+      "id": "832633189277409280",
+      "recorded": "2018-06-22",
+      "published": "2017-02-17"
+    },
+    {
+      "type": "date-conflict",
+      "id": "827561690896162816",
+      "recorded": "2018-06-15",
+      "published": "2017-02-03"
+    },
+    {
+      "type": "date-conflict",
+      "id": "837027901853810688",
+      "recorded": "2018-06-18",
+      "published": "2017-03-01"
+    },
+    {
+      "type": "project-label",
+      "id": "807135253215199233",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "797844857821732864",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "794993371261665280",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "784848286272327680",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "777501038274281472",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "777596437534240768",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "784847588893814785",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "784847933686575104",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "768886648625061889",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "781027725452648448",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "806856212260278272",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "803190517534248960",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "806904557502464000",
+      "label": "townscaper"
+    },
+    {
+      "type": "project-label",
+      "id": "802496920790777856",
+      "label": "townscaper"
+    }
+  ]
+}

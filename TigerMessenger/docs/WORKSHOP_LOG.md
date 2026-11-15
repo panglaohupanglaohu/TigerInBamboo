@@ -204,3 +204,181 @@ TigerMessenger 新增 capability-runtime.js（cap.* 固定命令）、agent-pane
 - 草稿 / 定稿：存物件改动 + 风格 + 物件名；确认定稿后游戏启动时用它（`tm.scene.versions.v1`）。
 - 水晶城：main.js 场景表补上 `messenger.landmarks.moebius.group`，接入通用插件（58 个物件、1570 种材质）。
 - 物件命名：未命名网格按「颜色 + 形状」自动命名，同款归一类可批量；对象面板可改名，改过名的同名物件被当作一类。
+
+## 2026-11-12 需求驱动学习与系统工坊回接
+
+用户要求系统归类 REACode、明确重构目标并打通学习/系统工坊。本批保留所有已有未提交修改与用户资产；没有改原版或上游学习记录。
+
+实际交付：learning-roadmap.js 统一定义四条需求契约，复用 capability-sets.js 现有组合，不新增第二份步骤清单。学习工坊默认“需求与能力组合”，每条显示步骤接口状态、原模块/重构落点/来源证据/剩余差距、下一动作与验收要求；“源码归类与差距”覆盖当前快照全部170模块，按目标目录职责归组，跨域不丢失。来源帖子关联仅为相关性，路径匹配仅为需求筛选，均不冒称语义依赖。刷新复用现有校验快照/离线缓存。能力库入口可回学习路线，组合加入对应球/场景/物件管线，带入目标与验收文字；仍由用户执行候选，不自动改游戏。
+
+可复跑源码盘点：`python3 TigerMessenger/tools/scene-authoring/audit_learning_sources.py --output <报告路径>`。原版src/engine实际170份JS、170已映射、未映射0、缺失目标0，记录源/目标SHA256、静态import、职责。只说明映射文件存在，不能说明行为等价；vendor/HTML内联不在范围。
+
+验证证据 `artifacts/workshop-tests/learning-roadmap-20261112/`：隔离Chrome+真实snapshot API，4条需求/170模块，物件组合跨页保存三个节点、返回学习入口，errors=[]，roadmap.png实际查看。游戏iframe在此专项测试中隔离，未执行真实世界几何。统一--skip-browser回归 `20261112T004916471601Z` 四组PASS；首次sandbox绑定端口失败保存在`20261111T215607096845Z`，后续提权重测通过。JEV真实jev-1.14.0文本复核结果要求继续导航/组合验收，不代替看图或批准。没有提交/发布。
+
+下一步：把组合级承托/净空、通路、全局预算变成机器可执行的门槛并绑定候选报告；继续补缺少接口的原算法。当前四组是已有能力的需求化入口，不能称170模块全部完成执行适配或动态自动代码重构。新增源模块必须先更新上游coverage映射，再刷新学习；盘点工具可发现漏登。
+
+## 2026-11-12 113条待办逐项核销/分类；补首项实际物件能力
+
+完整审阅coverage-progress.next的113条。合并7条同交付历史记录（灌木83/85、流场83/85、拖抹调色、浮凸双高度、点光DDA、实例身份/socket、拥挤压力）；106组中核销6项旧排期：网格层序原文明示不再排期，软影/走廊、Wake、色体/对比纹理、housekit的旧“未覆盖”基线已有后续coverage/证据，道具生命周期已在r55接World。核销仅针对旧排期，不等于完整原作/当前游戏验收。剩余100组首要动作：待学习8、待实现81、待验证8、待核对3。跨主题混合记录保留全部原文，不因同帖子直接合并；3个截断/旧调度/基线冲突项暂不猜结论。
+
+新增catalog/learning-backlog-review.json（人工审阅账本）、learning-backlog.js（快照对账与分组UI）、tools/scene-authoring/reconcile_learning_backlog.py（受原清单SHA256保护的生成器）。原始next与上游文件保持只读。按标题+clips指纹匹配，新增/改文/改来源不能继承核销；核销依据的模块status/gap/evidence/frameReview变化则重新待核对。账本读取失败保留全部原始记录并待核对。学习进度内替换113长列表为100待办与6核销，保留原文/视频/证据。手机长路径换行，展开待办独占一行。能力库计数从笼统“占位”改为“可执行/待适配”，没有靠改标签提升能力状态。
+
+用户进一步问为何不完成占位：已开始实际补接口。object.path-spacing直接import REACodeRefactoring/src/core/path-samples.js，沿当前同类物件折线等弧长调整，端点/手工锁定锚点保留，范围外/隐藏物件不动，超预算或新增重叠的段保持原状。接已有对象Worker/验证/预览/写入流程。学习库存模块路径可追到该接口。没有用navribbon帖子（其中视频实际是单位等级/尘AO）冒充来源，也没有将整个导航方法标完成；这是物件布局适配，不是新道路或导航保证。完整占位执行适配仍未完成。
+
+证据：artifacts/workshop-tests/backlog-reconciliation-20261112/{browser.json,reconciliation-report.json,final-review.json,backlog-desktop.png,backlog-mobile.png}。7项对账测试、4项新能力测试+7项system-workshop回归均过；隔离Chrome真实API/物件Worker实际返回interior dx=.6，零pageerror。桌面/390px手机实际看图，无横向溢出；首次测试折叠链接的可见性定位错误已修测试，第二次暴露手机长内容溢出已修产品CSS。基础四组回归20261112T010043918623Z全PASS。新测试加入统一单元入口。未做真实游戏预览/写入或全量玩法测试，未触用户存档。
+
+JEV早期实际文字调用在jev.json；新增能力后的额外外发复核被自动审批拒绝（内部实现/验证信息外发），未重试绕行，最终使用本地测试/截图核验。保留全部未提交并行修改，无提交发布。
+
+## 2026-11-12 继续补场景执行接口：感知色板与层次
+
+新增gscene/perceptual-capabilities.js：scene.oklab-contrast、scene.oklab-palette，直接import上游src/core/oklab.js；前者按材质使用权重的L中心调层次，后者确定性OKLab聚类归并色度、保留每种材质L。实测最终8位输出（含色域裁剪）ΔE受每步预算限制。明确是通用场景材质表适配，不冒称完整三角面contrast texture或World八角点色体。
+
+两项接已有改造/验证Worker及gscene.style预览/比较/放弃/写入。新增“感知色板与层次”集合，整组加入通用场景管线；原库方法卡按related提供“加入已适配部分”按钮，保留完整方法待适配状态。scene sidebar保留gscene元数据供相关接口追溯；学习源码视图也能显示关联。
+
+保护加强：generic scene state输出已保存材质locked；全部通用材质能力默认保护人工调色，只有明确bool开关才允许；参数拒绝NaN和字符串开关。验证Worker独立检查人工颜色及累计ΔE预算。修复style.save吞存储异常：先持久化成功再提交内存，失败保留候选、不得误报保存。
+
+验证：6项新增单元（含色域极值/量化预算、重排确定性、锁定/伪造结果拒绝/参数拒绝）通过；与7项系统、7项账本合跑20/20。统一四组基础回归artifacts/workshop-tests/20261112T011147026892Z全PASS，新单元已加入统一入口。真实Chrome在artifacts/workshop-tests/perceptual-adapters-20261112/runtime.html加载真实GenericScene及transform/verify Worker，实际渲染before/candidate，人工m0不变、场景外共材质对象不变且本场景克隆、几何变换及geometry ID不变；比较/放弃/存储拒绝/成功保存/恢复全过。parent实际pipeline页面显示两个新执行条目，来源卡局部执行入口通过。errors=[]。before/candidate实际看图，后者色度更收敛；未称达到任何场景美术目标。
+
+首次测试已通过runtime但测试误用searchbox角色；第二次同名搜索框定位歧义；两份失败报告保留，限定#capability-sidebar后最终PASS。review.html用于复核。未进入正式书店镇/湖沼大场景执行，不能以隔离样例代替正式玩法/性能验收；未修改用户存档或上游源码。遵守前次外发自动审批拒绝，不重试JEV披露，使用本地证据。
+
+下一项：将这组接口在正式已注册通用场景的新测试上下文完成候选与恢复，并继续接余下地形/水/动态能力；完整待适配清单没有因这两个局部接口虚假核销。
+
+### 同批正式入口验证补齐：书店镇25材质／水层遮挡修复
+
+正常pipeline+未替换游戏iframe、新非持久Chrome上下文实际启动后，选择书店镇，整组双击“感知色板与层次”，通过真实父工坊改造/验证Worker预览25种材质，再UI对照两次及放弃；gscene.style.get证明25色逐项恢复、saved前后相同、previewing=false，pageerror=[]。未写入场景存档。正式日志formal.json、formal-before/candidate.png根实际看图；相机固定，但鸟/船/飞行器动态推进，不作像素差异归因或美术目标验收。
+
+首次API链通过但两张正式截图只有平湖水，未当视觉通过；报告已改apiPassed=true/visualAccepted=false/passed=false，保存在formal-first-api-pass-visual-fail.json及first图片。原因：morrisTownscaper.townOverlayActive只用1400距离覆盖了整颗星球的其他工坊镜头，仍绘制莫西斯湖局部场景；updateInLake也会将其判进湖光照。修为明确planetCamera.scene/object外部工坊视图不叠湖层/湖区灯光，普通湖上编辑/玩家及全星球原逻辑保留。新鲜正式重测实景建筑可见，25材质候选/对照/恢复通过。
+
+新增renderedContent截图内容门槛纳入正式脚本，拒绝单一平面覆盖，不能作为美术质量评分。已保存真实截图验证：旧图主色占97.72%被拒，正式before14.08%/182色箱、candidate15.52%/205色箱通过。相关入口/存储/感知能力10项回归通过，diff --check无错。正式修复后源码manifest已更新。此前“未进入正式场景”由本节覆盖；其他场景、长时间性能与完整玩法仍未测。
+
+## 2026-11-12 用户纠正全目录范围：290文件清单与三模块实际重构
+
+用户明确要REACode目录280多个代码文件的完成列表，并继续完成未重构项。全量只读盘点为290代码文件：175 JS、11 MJS、104 HTML（含内联控制器），不是只有170个src/engine模块。新增build_reacode_file_status.py生成catalog/reacode-file-status.json与docs/REACODE_REFACTOR_STATUS.md；每文件唯一原路径/SHA256、类别、状态、候选落点/SHA256、代码范围、证据和剩余差距。HTML的依赖模块落点不等于页面内联已重构。第三方Three.js及历史tmp也列入但不冒称生产能力。学习工坊新增全目录状态页签和搜索/筛选，入口`pipeline.html?learningView=files#learning`。
+
+实际代码交付（原版只读）：
+1. src/mipfilter.js缺失消费者→REACodeRefactoring/src/light/mip-ground.js、mip-ground.html：复用mip-chain，透视铺地、真实二维导数/LOD/各向异性、Canvas绘制、A/B高频与四分之一texel闪烁度量、均值漂移。保留原版测试纹理seed图案（3seed逐像素对照），采用RGB浮点/IEC sRGB/重复寻址，明确与旧RGBA/gamma2.2接口非数值等价。修正旧shimmer报告实际挪1/4 UV周期而非texel的口径。
+2. engine/outline.js→outline-painted-normal.js接已有paint-normal生成器到ScreenOutlinePass主World法线缓冲。保留几何模式和默认关，新增?fx=outlinepaint/outline-painted.html；只给指定源mesh换笔触法线材质，不动体素/位置，其他法线仍几何模式。阈值可调；异常时恢复原材质/可见性/RT，外部纹理所有权清楚，关开关释放自有map。原片精确UV/美术与远景混叠仍有差距。
+3. engine/spritepack.js→core/sprite-atlas.js及sprite-atlas.html：复用共享Atlas的插入/更新/释放/重排/有界增长，失败事务不污染状态；径向算法用共享树碰撞查询替代size²mask，15seed径向位置/占用/跳过数与原版差分一致。内部树及重排坐标不作为序列化契约；三角UV页填充率和主View烘焙仍独立待补。
+
+最终9组源库测试通过（mip-chain、mip-ground、outline-pass、outline-painted、paint-normal、view-post-extras、sprite-atlas、atlas、atlas-crossleaf）；3项全目录索引测试通过。真实Chrome双网格normalRT改动60922/73825像素，World/vertex/material引用不变；map关闭释放一次，正常动画造成其他normal像素推进，不作全屏像素相等断言。mip/图集页面真实交互、290行清单/本轮4项（3模块+1配套页）筛选均通过；GLSL errors=[]。实际查看mip/quad前后，原网格调试线仍在，不宣称原片美术完整复现。
+
+清单“本轮代码验证通过”必须匹配browser.json.passed和逐目标源码哈希；源码改变/缺目标自动退到待复验（重建清单时）。其余迁移、静态确认、页面/工具待核验、动作美术、跨GPU、性能默认策略、形状约束分别列，绝不把163个既有局部迁移或101个页面候选算全量完成。当前上游进度锁先BUSY后IDLE；本批没有覆写并行任务learn/data/coverage/progress等账本，视频数未增加。
+
+证据：artifacts/workshop-tests/source-refactor-20261112/{browser.json,unit.json,file-status.png,mip-ground.png,outline-*-*.png,sprite-atlas.png}；browser回执含源码hash，source-before有描边两文件改前副本。首次测试漏传render(dt)后修；再发现MeshNormal fragment没有common include，导致新增varying/uniform未声明，修为显式声明后真实GLSL通过，失败报告保留。统一入口增加refactor-code组。初次统一回归发现并行学习已将113旧排期改为111，历史测试错误依赖活动数组下标；改用不可变审阅账本重建原113样本，加当前源变动不丢记录测试。最终20261112T043611354424Z五组全PASS；此前失败20261112T043508611086Z保留。runner新增测试组的一次缩进错误也已修复。
+
+完整290文件重构/验收尚未全部完成，特别是页面内联交互、工具契约与剩余形状/动作/跨GPU/默认性能取舍；本批没有假称清零。源码原件和用户资产/存档未改，无提交发布。遵守既有外发审批拒绝，本轮本地复核，无JEV重试。
+
+
+## 2026-11-12 菜单接通、六条学习复核与实际代码补齐
+
+用户最新要求把菜单已有实现接进来，并完成待学习/待实现。此次交付不宣称全部待实现或290文件清零。
+
+实际代码：
+- REACodeRefactoring/src/ui/scene-capability-panel.js：新增48个已有场景开关、11个post开关、45个既有北境扩展开关；统一读取真实对象状态，北境项只在badnorth可用，点光依赖GI，异步开关pending期间不被轮询复位。原17个天气/环境与着色组保留，未改变默认开关。environment-panel增加节点编辑器/mip/图集/笔触实验入口。
+- 新core/trajectory-trace.js + world/trajectory-preview.js：RK4线性/二次阻力、有界逐段碰撞、实际World网格Raycaster截断；主菜单可启闭与调参，更新释放旧GPU几何。二次模型明确为可选，不冒称原作者模型；未替换战斗箭矢和定点射表。
+- 新core/nav-diagnostic-geometry.js + world/nav-diagnostic-overlay.js：共享World可走格角红点、实际背景网格、贴各侧真实高度的三维格型/过渡边；复用classifyWireframe与shape.at，保留原格型、不伪造六边形背景。
+- 新core/node-graph-editor.js + ui/node-graph-editor.js + node-editor.html：实际拖节点/拖端口接线/点线删除/增删节点、分组参数与实时sink预览，图+状态+布局JSON、50步撤销重做。复用原NodeGraph/NODE_REGISTRY，错类型/重复输入/环路/非法状态和过预算输入事务拒绝。原node-graph页新增进入编辑器链接，原只读对照保留。
+- 组合回归发现C01默认houseChar与C03houseFx分别保存同一顶点色，停战后9顶点仍黑。house-char.js新增按颜色attribute/顶点/owner共享原色保管，两控制器分别释放，最后一位退出才恢复最早原色；不改焦黑颜色/默认档。纯逻辑双释放顺序、真实双网格（均有变色分量，最终剩余0，以browser.json实际数值为准）验证恢复。
+
+学习与排期：学习工坊新增独立learning-backlog-deliveries.json补充层，不覆盖并行上游learn/data/coverage/progress账本。六条原待学习均核到已有全帧记录；飞岛“只看第一张表”旧队列核销，节点编辑器本轮实际实现核销；弹道/血材质/格心后续继续实现队列，拆建时序和精确削台口径进入待补来源。每卡列本轮交付、剩余要求、原记录、审阅来源和实际入口。不增加观看帧数、不把来源不明写成实现完成。新层使用原记录指纹+学习记录+逐文件源码/审阅文档/浏览器回执SHA校验，变化退回原待办。并行上游更新导致待实现78→77、待核对9→10，说明新文字没有继承旧审核。最终真实页面快照显示学习0/实现77/验证8/核对10/来源2/核销7，仍有97项活动待办；数量是当时快照，之后以实时页面为准。
+
+验证：最终五组统一回归artifacts/workshop-tests/20261112T131240915856Z全PASS（66个父工坊单元、19组源库文件及快照/桥/Watchdog）。首次普通沙箱禁止临时回环端口，source-bridge失败目录20261112T130500652283Z保留；获得工具自动批准的隔离测试权限后复测通过。C03旧恢复失败与改前3文件保留在environment-menu-20261112/char-first-failure.json、char-before/。
+
+真实隔离Chrome：environment-menu-20261112/browser.json双网格逐项11post+45北境开关、7类普通抽样、实际碰撞弹道/3层导航、外部状态同步、移动边界、焦黑组合恢复均通过；GLSL/pageerrors=[]，回执绑定实际源码。初次第二次页面导航出现本地HTTP连接reset/socket失败，失败回执保留，改每种网格独立context后通过，不改产品超时掩盖。node-editor-20261112/browser.json验证真实鼠标拖节点/连线/删线、数值40到compose、增删、撤销重做、JSON状态布局往返与非法导入保全；editor.png/invalid-import.png已查看。learning-browser.json为真实8931父工坊，无游戏替身；backlog-live-1794488743807另验证动态分类刷新、保留记录和真实object Worker。
+
+全目录清单已重建到当前目标hash，仍290文件、4项此前指定范围代码验收；本轮新增消费者/编辑器不冒称额外原目录文件全量完成。证据总览environment-menu-20261112/review.html。原REACode未写，用户存档未写，无提交发布。沿用已知JEV外发审批限制，仅本地证据复核，没有重试披露。
+
+仍未完成：77待实现及来源不足项没有清零；弹道定点射表/真实战斗箭矢衔接、血材质响应、格心/极坐标后续、其余页面/工具契约与原作动作资产等继续按证据完成，不能仅改标签。完整正式游戏组合及长时性能未在本批验收。
+
+
+## 2026-11-13 编辑视口操控修复与组合引擎实码核对
+
+用户明确优先：进入编辑后能旋转/平移/缩放；然后接已有能力库组合执行引擎。用户比较十二门徒与上游index融合画面，要求解释执行器还是能力适配的差距。
+
+本批：新scene-authoring/viewport-orbit.js共享相机rig；scene/object对焦接入右键环绕、中键屏幕平面平移、滚轮有界缩放。morrisTownscaperMenu.view.updateCamera接管局部镜头时清理前一planetCamera/orbitInput，解决拖动仍送旧/空控制器。generic-scene.focusObject把orbit与apply一同交给游戏，保留投影/上方向。frameScene用共享rig；同场景进入构建可保留已对焦视口，通用编辑回退focus接受preserveCamera。pipeline视口显示操控提示；morrisLake/menu/generic导入更新viewport-r1。没有改十二门徒World/建筑/地理或存档。
+
+实际证据：artifacts/workshop-tests/viewport-engine-20261113/browser.json正常8931→真实游戏iframe→十二门徒→进入编辑，真实鼠标三种手势全部改变camera，当前加载6个岩体的全部World编码与场景存储完全不变，errors=[]；before/after.png已看。前述9座来自旧注释，本次按6座运行对象修正。初次测试误等隐藏小地图canvas；第二次三种手势均通过但启动性能遥测异步写入tm.startup.profile.v1使全Storage断言误报。两份失败保留；最终只排除这一个独立遥测键，其他存储严格相等，并新增全岩体World编码不变检查。input-browser.json用真实menu事件与generic-scene的隔离GPU fixture验证局部→物件→局部切换，所有手势/对象不变；不能将该fixture说成完整游戏。viewport-orbit两个纯单元、感知/入口相关9项及游玩场景检查通过。
+
+引擎源码确认及差距：见CAPABILITY_ENGINE_AUDIT.md。实际runPlan→改造/验证Worker→cap.preview/show/commit已存在，通用三层tier-agent亦存在；当前体素/显示9项、通用材质5项、物件4项。十二门徒已经复用vendor WorldMesh/烘焙/岸浪/植被，但使用旧副本、独立石灰岩主题/主光照和精简植被，无整套View shader挂钩。10个选定核心模块与最新源库均不同（library-drift.json）；该哈希比较不能替代逐项视觉行为对照。体素cap执行接口仍绑定莫西斯湖，并非十二门徒的多World批量执行器；菜单入口不等于Worker能力适配。没有盲目复制整个最新View/覆盖vendor或自动改用户认可布局。
+
+统一回归首次目录20261112T232339483569Z：仅旧交付证据单元失败，因为上游并行修改view.js，旧哈希回执按设计失效。测试错误要求活动源码永久匹配旧成功回执。改为稳定的已验证字节fixture测试正常/篡改路径，另加真实当前文件漂移应撤销旧证明的测试；没有刷新旧成功证明、没有放宽产品校验。当前旧菜单/学习交付补充可能显示证据变化，需针对上游最新版本重验，不冒称它们仍有效。最终统一回归结果见本批后续记录。
+
+当前未完成：十二门徒多World能力执行适配、共享渲染扩展的候选/对照/应用，以及所有77等动态待实现项，不能因本次镜头通过宣称完成。下一阶段以已有引擎补正确sceneId/目标快照/网格身份、候选恢复和执行证据，再逐项共享渲染/显示能力。无源REACode写入、无用户存档修改/提交发布；本地复核，未重试受限JEV外发。
+
+同批最终回归：20261112T232449868791Z五组全部PASS（本地日期2026-11-13），含新的视口单元、证据固定fixture/真实漂移分离及19组源库测试。真实十二门徒camera报告确认当前6个World；没有将历史未重验交付重新标为有效。
+
+## 2026-11-13 实际源码能力目录与源库首页
+
+用户纠正能力库定义并要求重扫/组合/拉齐。已从学习记录主导改为物理代码主导：只读esbuild解析、导出/依赖/SHA、稳定性检查、290原版文件关联和命名接口差异。原学习目录单独保留，9注册入口不再充当全部能力库。359模块、7源码依赖组合；实时API和生成快照同一工具生成，旧v1缓存不覆新schema。导出在注释里的示例不计入、源模块不会被扫描器执行。依赖图不能直接运行；明确适配的OKLab/路径接口单列。
+
+真实源库index新增能力库窗口、源码检索、组合与双工坊/测量/比较页入口；3种当前View组合可试用和恢复，实际融合场景全部标志及完整World编码恢复，errors=[]。新源代码模块及CLI/消费者均写入REACodeRefactoring；原件只读。7初扫问题补齐后仍10无落点：4个旧页面是漏映射（非新迁移），实际补测量2文件和比较页1文件；不靠复制快照或生成联系表凑完成。
+
+联动：真实学习源码组合→已适配部分→书店镇通用场景管线→PipeLineEngine Worker→25种材质修改→对照/放弃逐色恢复，saved不变，errors=[]。修复通用材质组合的目标误写莫西斯湖配方；上下文不具备时保留学习页并显示不能加入。所有已有Worker仍按目标/参数/验证门槛执行，不把源码节点拖入后跳过伪称完成。
+
+视频学习：此次实际查看1991101097818403263既有sheet-00共0–3秒100帧，原片14.4秒另外均匀解码120时间样本测量；不追加全帧学习计数。纯指标算法known1Hz/1s、静态无假周期、非法值和预算测试；真实视频Worker与portable CLI皆通过，完整曲线无周期极小值。固定区域DFT受镜头移动影响，2.42秒不是已证实海浪周期。
+
+失败保留：首次扫描与学习refresh竞态修复；测试在新模块已进入生成快照后误以其存在当扫描完成，改看实际DOM来源状态。正式链路曾重复定位隐藏侧栏摘要，另未进入编辑时纯水图失败；最终正常点击进入编辑后完成全链路，彩色箱208/166、主色占比0.144/0.157，未放宽门槛。首页首次测试误用view.world，实码为view.town；修正后完整编码检查通过。源库新按钮首次换行过窄，CSS已给64px并重验。具体失败与成功均在code-library-rebuild-20261113。
+
+统一五组20261113T143756823974Z全部PASS，包含3个目录单元、PipeLineEngine及22组源库文件；真实索引页、双工坊、视频页与正式游戏证据不混成替身。目录/差异文档REACODE_REFACTORING_LIBRARY_INVENTORY、REACODE_LIBRARY_ALIGNMENT；实际架构PIPELINE_ENGINE_ARCHITECTURE，说明描述签名与源码签名仍未完整绑定。
+
+苔庭松树同批参考优化另存pines-reference-20261113：6树、50槽、2mesh/树、固定三机位calls不变；正面三角26275→51697，未作主游戏长时性能验收。旧第一候选46槽失败保留。代码直接复用源库path-samples，未把松树工厂登记为完整Worker能力。
+
+下一步：10个辅助/历史文件逐个处置与行为差距、十二门徒多World、共享渲染/源字节签名和跨GPU/长时性能。没有声称全部290完成；无提交发布、无用户存档写入。JEV沿用此前外发审批拒绝仅本地复核，未重试披露；缺失threejs入口未谎称使用。保留其他模型修改。
+
+## 2026-11-13 首页场景直接应用能力
+用户认为折叠菜单能力少，并明确要求把适合能力加入index场景。已新增6项默认显示组合，调用已有云影/纹理阴影/局部风旗/折卡灌木/草丛背景反差线/崖高灌木带代码；对照恢复全部自有开关及灌木四参数/颜色，不改World。已有true状态不重复写入，避免重置已有自定义着色；队列防交错、失败回滚可恢复重试。北境不强加此组合，URL enhance=0可看原效果。新增5个C11真实控制入口。
+菜单改成142个开关可搜索并按分组计数，融合91当前可操作/51受限，不把控制数量叫算法数量。第一版橙色带过宽过亮，实际看图后压窄减淡；前版图/回执保留。最终before/enhanced图已看，实际World编码/主体几何SHA/相机全等，样式恢复全等，GLSL/pageerrors=[]。
+index-scene-enhancement-20261113/browser.json及review.html；原菜单回归复制到该新目录并补等组合就绪，未覆盖旧历史证明。quad/mixed 11post+45北境、导航/弹道/焦黑恢复和移动边界PASS。统一20261113T145408433032Z五组PASS（23源库文件，含新组合单元）；未作长时或跨GPU性能结论。目录重扫361模块；旧的10文件/行为差距不因本批显示接入提升完成。原版/用户存档未改，无提交发布，JEV沿用既有外发限制未重试。
+
+## 2026-11-13 恢复主游戏编辑入口
+恢复localhost默认主游戏右下原编辑dock；dev=0/release与公共默认纯游玩规则不变。统一5处uiLayers实例，补captureMode通知避免截图隐藏工具时退出原建造镜头。编辑菜单新增直达原MapEditor入口；关闭构建组停地图拾取，原6个触控动作未动。
+真实主游戏隔离浏览器无dev参数可见编辑并打开真实map-editor，desktop/mobile图已看，errors=[]。触控fixture复用实际模块/样式验证390px不重叠与tap、菜单在界内，不能冒充正式主游戏。首次发现只开构建组时无默认展开的编辑器，故补直达地图；首个触屏定位误假设纠正、失败保留。restore-edit-button-20261113保存回执/截图/源码指纹。
+入口与截图清理3单元及统一五组20261113T152416957729Z PASS。末尾地图关闭拾取监听与capture通知保护经语法/单元检查，正式浏览器记录针对打开入口，不作长时玩法通过声明。未修改用户存档或部署。
+
+## 2026-11-14 原菜单“构建”现场编辑闭环
+用户连续明确“构建→场景选择→鼠标编辑”，在原编辑菜单内弹出场景编辑菜单并保存。已修正前批路径偏差：独立游戏workbench强制隐藏HUD是根因，现恢复原浮动场景HUD。构建自动打开场景选择和对应编辑器，保持原湖/十二门徒体素鼠标逻辑与城堡/水晶原生编辑面板，统一保存调用各自原存储。
+切换关闭其他编辑器并定位；native场景不显示Morris专用控件；编辑只接主renderer.canvas，避免2D面板误触湖体素；关闭构建归还玩家镜头。保存结果布尔化，失败不假报成功，城堡多键非事务限制保留。
+隔离实际主游戏测试通过：五选项、湖真实鼠标修改/保存/reload复原读取、各场景入口/镜头归属/保存、关闭编辑释放镜头、errors=[]。证据build-scene-editor-20261114/review.html。其他场景仅本批入口/保存验证，原有全面编辑矩阵没有重跑。统一五组UTC20261113T233011541067Z PASS，上海日期11月14日。无用户存档改写、无发布；前次JEV限制继续适用，仅本地核对。
+
+## 2026-11-14 作者演进时间线与部分实现批注
+
+用户要求按作者设计发展过程重新对齐8769与8931，并明确先整理源库页面，再同步学习工坊；最新要求在每项部分实现旁标高/中/低优先级与补全批注。
+
+实现：权威记录仍在 REACodeRefactoring；learn/pipeline.js.evolution 新增28主题/85有来源的关系、177条源状态绑定的补全批注、sphere导航归属。src/core/capability-evolution.js 统一构建，src/ui/capability-evolution.js/css 两页面共享。285来源按字符串ID/BigInt解析的发布时间UTC排序，原date保留。4处日期冲突、14个2016早期实验标签单独列出；next 是未确认正式名称的后续实验，2016球面与2024球面不能硬连单一继承。3处局部替代（内线反差图、表面阴影修正、火焰quad缩放），其余扩展/改进/解释/复用/组合/再次探索/分支分别标出，后者不冒称代码继承已证明。
+
+来源覆盖：268管线行，263有帖子锚点，249唯一帖子；另36学习来源未登管线、5方法行没有帖子锚点。285全部进入主题和时间线；124帖子进入85关系，161条包含独立能力/参考/不足以推断传承的记录，不是161待学习。28主题含38条作品展示/发布/来源不足记录，没有按时间强行连边。177条partial高31/中119/低27是工程优先级建议，不是177独立开发任务。高优先级补明确下一步，涉及多格prefab/socket、生成/导航互连、球面多格约束、纹理接口和浪带碰撞。节点编辑器、轨迹碰撞等旧缺口先核后续交付，不重复造待办。
+
+原完整泳道图保留折叠，189个重复来源行旁显示同一补全批注；主页面先显示阶段和时间线。共享组件支持阶段/主题/优先级/日期源码搜索、精确帖子前后跳转、跨页面同筛选和主题状态恢复。原实现流程明确不是作者时间顺序。来源摘要使用textContent，有限本地路径链接。父工坊新增默认“时间线与能力演进”页签，方法接入状态另列。物理扫描与系统目录、源index能力窗口带来源日期/主题；无来源模块不再用generatedAt假作作者发布日期。既有七文件校验快照和离线缓存兼容，演进/批注内容变化纳入资料SHA，作者记录变化使相应关系/优先级失效；这不等于所有模块字节已绑定Worker回执。
+
+测试：5新单元覆盖全量顺序/时间冲突/关系语义/证据漂移/全部partial优先级/扫描与浏览器同指纹，加入统一入口。8769先专项交互通过，再真实8931和实时code-library API比对指纹；桌面/390px无横向溢出，partial177/原泳道189批注数量核对。初次“查看前身”搜索同时命中引用该ID的后继，专项失败保留；修成已知ID精确匹配后通过。截图已实际查看，折叠重复里程碑、隐藏父页重复搜索和空白说明条后复验。证据 artifacts/capability-evolution-20261114；最终目录见该处 review.html。
+
+没有新增视频观看、没有完成上述177项代码，不提升partial/原验收状态，不改变场景配方/用户存档/执行器，不写原REACode。学习记录旧note中被截断或历史已完成的部分仍需对账，不能把优先级评审当全代码重验。10个原版辅助文件无目标和其他原作行为差距仍保留。
+
+JEV本轮使用无项目数据的通用设计规则（不含路径、原文、私有记录或图片），实际调用成功，jev-1.14.0建议review；仅通用文字规则辅助，不能充当项目分类或视觉验收。未重试以前被拒的项目证据外发。输出 jev-generic-decision.json。无提交发布。
+
+最终同批证据：both-1794636671982/browser.json PASS，source/system/live-scan 指纹均为3f9b3af104359c78b8393e97d40b00f7b3411c0fee76304e814277f69e6897bb；跨页保留sphere+高、页签来回保持筛选、errors[]。统一20261114T061119631356Z五组全部PASS。最终截图已查看，源before与初次失败保留，review.html/source-manifest.json供接手核对。
+
+## 2026-11-14 学习工坊 ⇄ 能力库闭环：能力谱系
+
+用户要求：按时间上的思维发展（A → A+）重新梳理能力库，让学习工坊与系统工坊打通，补上组合概念与「系统需要的能力及时补充」，先在 TigerMessenger 写规划，再按架构图优化架构与页面，并把 8769 / 8931 两条学习管线对应起来。
+
+基线核对：时间线（285 来源 / 28 主题 / 85 关系 / 177 partial 批注）已在两页共用，但系统工坊左栏仍按目录正则分区、组合只有 7 组手写 import 闭包、执行经验与不可执行节点不回学习工坊、没有「到了哪一代 / 下一步」。
+
+实现：
+- REACodeRefactoring/src/core/capability-lineage.js：能力线 → 代际（有依据的扩展/改进/替代/适配/再次探索，或进入新阶段开新一代）→ 层级 → 代码到达 → 方向（先向前、后回补，被替代的不排）→ 模块归线（来源记录 + import 推断）→ 原版文件归线 → 组合前置（import 方向 + 跨线关系，装配入口不计）→ 补学队列（公式与理由公开）→ 适配队列 → 闭环统计。
+- src/ui/capability-lineage.js/.css：闭环图、能力成长图、代际阶梯、组合、队列、适配与管线需求、执行经验；8769 pipeline.html 与 8931 学习工坊共用。
+- learning-workshop.js 新默认页签；studio.js 接入可执行能力、四个经验存储、场景配方里不能执行的节点、加入管线。
+- capability-sidebar.js 新默认视图「能力线 · 时间」，保留「工坊分区」；能力集合两视图都显示。
+- tools/refactor/build-capability-lineage.mjs → docs/CAPABILITY_LINEAGE.md；规划 docs/WORKSHOP_LOOP_PLAN.md。
+
+当前数字（CLI，不含本机经验）：27 条能力线 / 104 代；未补缺口 166（高 30）；可执行 40 项，32 项排进 17 条线；源码 275/365 归线（109 推断）；原版 250/290 归线；6 条线代码已有而不能执行（网格、界面装饰、战役、火焰、工具、水的消费者）。页面在系统侧另计入场景现有能力，为 50 项可执行、3 条待封装。队首：建筑 A+6、网格 A+4、导航 A+、模块约束 A+9、导航 A+4。
+
+上游变化：learn/data.js 在 18:32 被学习任务更新，4 条 partial（837027901853810688、912691357440978945、1707490932017279035、1707497006640365880）的记录变化使原批注失效、capability-evolution 单元失败。已按新记录逐条重评并写回 completionReviews（均为中；后三条改为「校准与证据补全」），不是只同步证据字段。CAPABILITY_EVOLUTION.md 与其 artifacts 摘要未重跑，仍是 14:10 的指纹。
+
+顺带：tests/system-workshop.test.mjs 的执行状态白名单缺 11-13 引入的 library，已补（该文件不在统一入口）。
+
+验证：capability-lineage 5 单元通过；TigerMessenger/tests/*.test.mjs 101/101；统一入口非浏览器五组 PASS。capability-lineage-browser.mjs PASS（artifacts/capability-lineage-20261114/run-1794657507482，截图已实际查看：两页闭环图/成长图/阶梯、左栏能力线、390px）。统一入口的 workshops-browser 11/25 失败，见 WORKSHOP_TEST.md，属 11-05 后未同步的旧套件，本轮未修、也未取得改版前基线。
+
+没有做：没有新增视频观看；没有新增或验收任何能力代码，177 partial 不变；经验未统一回写、队列未落盘；球系统 / 物件管线的待完成节点未进需求；Worker 回执未带能力线；未改 PipeLineEngine / 验证 / 采纳；未触用户场景存档；未提交发布。JEV 本轮未调用（改动是确定性计算与界面，无分类筛选批次）。
+
+下一动作：WORKSHOP_LOOP_PLAN.md §6，先经验统一回写，再按适配队列封装网格线。

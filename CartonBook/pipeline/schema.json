@@ -22,6 +22,12 @@
     "subtitle": {
       "type": "string"
     },
+    "series": { "type": "string" },
+    "coverTagline": { "type": "string" },
+    "story": { "type": "string", "description": "序页完整故事，不是提纲" },
+    "layout": { "type": "string", "enum": ["spread", "single"], "default": "spread" },
+    "captureVia": { "type": "string", "enum": ["direct", "pipeline"] },
+    "noFixtures": { "type": "boolean", "default": false },
     "scene": {
       "type": "string",
       "description": "游戏 ?scene= 值，如 messenger / saihoji"
@@ -114,7 +120,20 @@
             "waitMs": {
               "type": "integer",
               "default": 800
-            }
+            },
+            "mode": { "type": "string", "enum": ["panorama", "cinematic", "macro", "tele", "airshipPilot"] },
+            "family": { "type": "string" },
+            "fov": { "type": "number" },
+            "object": { "type": "string", "description": "运行时场景物件 id；局部坐标机位" },
+            "eye": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+            "aim": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+            "aimObject": { "type": "string" },
+            "aimObjectMix": { "type": "number", "minimum": 0, "maximum": 1 },
+            "battle": { "type": ["string", "null"], "enum": ["start", "ground", "retreat", null] },
+            "holdSeconds": { "type": "number" },
+            "stagePlayer": { "type": "array", "items": { "type": "number" }, "minItems": 3, "maxItems": 3 },
+            "holdingLetter": { "type": "boolean" },
+            "releaseLetterAfterCapture": { "type": "boolean" }
           }
         },
         "caption": {
@@ -156,6 +175,7 @@
           "type": "string",
           "enum": [
             "cover",
+            "prose",
             "story"
           ]
         },
@@ -166,6 +186,7 @@
         "title": {
           "type": "string"
         },
+        "rhythm": { "type": ["string", "null"], "enum": ["depart", null] },
         "panels": {
           "type": "array",
           "items": {
@@ -208,6 +229,10 @@
           "enum": [
             "playwright-screenshot",
             "canvas-todataurl",
+            "canvas-todataurl+crop",
+            "playwright-screenshot+crop",
+            "aborted-hud",
+            "clean-placeholder",
             "fixture",
             "external-dir"
           ]
@@ -244,6 +269,12 @@
               "shotId": "cover"
             }
           ]
+        },
+        {
+          "id": "opening",
+          "kind": "prose",
+          "template": "prose",
+          "panels": []
         }
       ]
     }

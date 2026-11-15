@@ -7,7 +7,8 @@
 const $ = (id) => document.getElementById(id);
 const TIERS = ['planet', 'scene', 'object'];
 const TITLE = { planet: '球系统管线', scene: '场景管线', object: '物件管线' };
-const VIEW = { planet: ' 实景 / 整颗星球', scene: ' 实景 / 莫西斯湖', object: ' 实景 / 莫西斯湖 · 点选物件' };
+// 实景栏标题跟当前场景走（scene-picker 写 window.__tmCurrentSceneLabel）；以前写死「莫西斯湖」，十二门徒等场景也显示莫西斯湖
+import { viewerTitle } from '../scene-authoring/playtest-target.js?v=playtest-r1';
 
 export function mountSystemTabs({ learning, mount, request, isConnected, onConnect, onTier, initial = location.hash.slice(1) }) {
   const tabs = { planet: $('planet-workshop-tab'), scene: $('scene-workshop-tab'), object: $('object-workshop-tab') };
@@ -32,7 +33,10 @@ export function mountSystemTabs({ learning, mount, request, isConnected, onConne
     $('scene-pane').hidden = tier !== 'scene';
     for (const id of ['save-recipe', 'export']) $(id).hidden = tier !== 'scene';
     $('planet-cam').hidden = tier !== 'planet';
-    $('viewer-title').textContent = VIEW[tier];
+    // 实景栏按钮跟着管线走：球系统里「进入编辑」= 回到整颗星球，「对照原始参数」= 对照候选与原样
+    if ($('edit')) $('edit').title = tier === 'planet' ? '回到整颗星球的轨道镜头（球系统管线编辑的是整颗星球）' : '进入当前场景的编辑';
+    if ($('before')) $('before').title = tier === 'planet' ? '实景在候选星球 / 海面与原样之间切换' : '对照莫西斯湖原始参数';
+    $('viewer-title').textContent = viewerTitle(tier, window.__tmCurrentSceneLabel);
     for (const [k, b] of Object.entries(tabs)) b.setAttribute('aria-selected', String(k === tier));
     history.replaceState(null, '', '#' + tier);
     document.title = '系统工坊 · ' + TITLE[tier];

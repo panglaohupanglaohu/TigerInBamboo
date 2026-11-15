@@ -1,0 +1,46 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "decoDrawn": {},
+      "decoDropped": 0,
+      "archBudgets": [
+        {
+          "cell": 541,
+          "level": 3,
+          "base": 1,
+          "floor": 0.5,
+          "crown": 0.95,
+          "rise": 0.375,
+          "spring": 0.575,
+          "slab": 0.05
+        }
+      ],
+      "modules": 0,
+      "doors": 4,
+      "decorationGroups": 4,
+      "decoSolved": 168,
+      "decoFailures": 0,
+      "archCount": 1,
+      "archSegments": 14,
+      "worldUnchanged": true,
+      "restored": true
+    },
+    {
+      "kind": "mixed",
+      "decoDrawn": {},
+      "decoDropped": 0,
+      "archBudgets": [],
+      "modules": 0,
+      "doors": 10,
+      "decorationGroups": 10,
+      "decoSolved": 167,
+      "decoFailures": 0,
+      "archCount": 0,
+      "archSegments": 0,
+      "worldUnchanged": true,
+      "restored": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,101 @@
+{
+  "errors": [
+    "THREE.WebGLProgram: Shader Error 0 - VALIDATE_STATUS false\n\nProgram Info Log: Fragment shader is not compiled.\n\nFRAGMENT\n\nERROR: 0:308: 'inverseTransformDirection' : no matching overloaded function found\nWARNING: 0:?: 'normalize' : operation result is undefined for the values passed in\nERROR: 0:308: '=' : dimension mismatch\nERROR: 0:308: '=' : cannot convert from 'const mediump float' to 'highp 3-component vector of float'\nERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\nERROR: 0:309: 'xz' :  field selection requires structure, vector, or interface block on left hand side\nERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\nERROR: 0:309: 'zy' :  field selection requires structure, vector, or interface block on left hand side\nERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\nERROR: 0:309: 'xy' :  field selection requires structure, vector, or interface block on left hand side\nERROR: 0:309: '=' : dimension mismatch\nERROR: 0:309: '=' : cannot convert from 'highp f",
+    "THREE.WebGLProgram: Shader Error 0 - VALIDATE_STATUS false\n\nProgram Info Log: Fragment shader is not compiled.\n\nFRAGMENT\n\nERROR: 0:308: 'inverseTransformDirection' : no matching overloaded function found\nWARNING: 0:?: 'normalize' : operation result is undefined for the values passed in\nERROR: 0:308: '=' : dimension mismatch\nERROR: 0:308: '=' : cannot convert from 'const mediump float' to 'highp 3-component vector of float'\nERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\nERROR: 0:309: 'xz' :  field selection requires structure, vector, or interface block on left hand side\nERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\nERROR: 0:309: 'zy' :  field selection requires structure, vector, or interface block on left hand side\nERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\nERROR: 0:309: 'xy' :  field selection requires structure, vector, or interface block on left hand side\nERROR: 0:309: '=' : dimension mismatch\nERROR: 0:309: '=' : cannot convert from 'highp f"
+  ],
+  "grids": [
+    {
+      "grid": "quad",
+      "width": 1280,
+      "height": 900,
+      "changed": 1147,
+      "sourceMesh": true,
+      "materialRestored": true,
+      "geometrySame": true,
+      "worldSame": true,
+      "stats": {
+        "mapSize": 128,
+        "source": "core/paint-normal.js",
+        "mesh": "31075adf-05b7-4000-88fc-b78ad678c3f4"
+      },
+      "restored": {
+        "mismatched": 3497,
+        "disposed": 1,
+        "sourceCleared": true
+      }
+    },
+    {
+      "grid": "mixed",
+      "width": 1280,
+      "height": 900,
+      "changed": 1141,
+      "sourceMesh": true,
+      "materialRestored": true,
+      "geometrySame": true,
+      "worldSame": true,
+      "stats": {
+        "mapSize": 128,
+        "source": "core/paint-normal.js",
+        "mesh": "3f80cfb6-e3c7-4465-8d17-634e3a9a1ff7"
+      },
+      "restored": {
+        "mismatched": 3617,
+        "disposed": 1,
+        "sourceCleared": true
+      }
+    }
+  ],
+  "mip": {
+    "rows": [
+      {
+        "mode": "none",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          14.576815597050832
+        ],
+        "farEnergy": 9318.969818699836
+      },
+      {
+        "mode": "trilinear",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          14.576815597050832
+        ],
+        "farEnergy": 5.788248303812043
+      },
+      {
+        "mode": "aniso",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          14.576815597050832
+        ],
+        "farEnergy": 181.57202458561196
+      }
+    ],
+    "shimmer": {
+      "rows": [
+        {
+          "filter": "linear",
+          "mode": "none",
+          "meanAbsDelta": 3.341550925925926
+        },
+        {
+          "filter": "linear",
+          "mode": "trilinear",
+          "meanAbsDelta": 0.0006076388888888889
+        },
+        {
+          "filter": "linear",
+          "mode": "aniso",
+          "meanAbsDelta": 0.013541666666666667
+        }
+      ],
+      "offsetUnits": "fraction of a texel"
+    }
+  },
+  "passed": false,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n+ [\n+   'THREE.WebGLProgram: Shader Error 0 - VALIDATE_STATUS false\\n' +\n+     '\\n' +\n+     'Program Info Log: Fragment shader is not compiled.\\n' +\n+     '\\n' +\n+     'FRAGMENT\\n' +\n+     '\\n' +\n+     \"ERROR: 0:308: 'inverseTransformDirection' : no matching overloaded function found\\n\" +\n+     \"WARNING: 0:?: 'normalize' : operation result is undefined for the values passed in\\n\" +\n+     \"ERROR: 0:308: '=' : dimension mismatch\\n\" +\n+     \"ERROR: 0:308: '=' : cannot convert from 'const mediump float' to 'highp 3-component vector of float'\\n\" +\n+     \"ERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\\n\" +\n+     \"ERROR: 0:309: 'xz' :  field selection requires structure, vector, or interface block on left hand side\\n\" +\n+     \"ERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\\n\" +\n+     \"ERROR: 0:309: 'zy' :  field selection requires structure, vector, or interface block on left hand side\\n\" +\n+     \"ERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\\n\" +\n+     \"ERROR: 0:309: 'xy' :  field selection requires structure, vector, or interface block on left hand side\\n\" +\n+     \"ERROR: 0:309: '=' : dimension mismatch\\n\" +\n+     \"ERROR: 0:309: '=' : cannot convert from 'highp f\",\n+   'THREE.WebGLProgram: Shader Error 0 - VALIDATE_STATUS false\\n' +\n+     '\\n' +\n+     'Program Info Log: Fragment shader is not compiled.\\n' +\n+     '\\n' +\n+     'FRAGMENT\\n' +\n+     '\\n' +\n+     \"ERROR: 0:308: 'inverseTransformDirection' : no matching overloaded function found\\n\" +\n+     \"WARNING: 0:?: 'normalize' : operation result is undefined for the values passed in\\n\" +\n+     \"ERROR: 0:308: '=' : dimension mismatch\\n\" +\n+     \"ERROR: 0:308: '=' : cannot convert from 'const mediump float' to 'highp 3-component vector of float'\\n\" +\n+     \"ERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\\n\" +\n+     \"ERROR: 0:309: 'xz' :  field selection requires structure, vector, or interface block on left hand side\\n\" +\n+     \"ERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\\n\" +\n+     \"ERROR: 0:309: 'zy' :  field selection requires structure, vector, or interface block on left hand side\\n\" +\n+     \"ERROR: 0:309: 'vOutlinePaintWorld' : undeclared identifier\\n\" +\n+     \"ERROR: 0:309: 'xy' :  field selection requires structure, vector, or interface block on left hand side\\n\" +\n+     \"ERROR: 0:309: '=' : dimension mismatch\\n\" +\n+     \"ERROR: 0:309: '=' : cannot convert from 'highp f\"\n+ ]\n- []\n\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/source-refactor-browser.mjs:16:9"
+}

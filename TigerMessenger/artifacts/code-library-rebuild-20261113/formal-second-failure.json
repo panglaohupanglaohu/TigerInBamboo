@@ -1,0 +1,285 @@
+{
+  "scope": "Learning physical code combination → real pipeline + game iframe → PipeLineEngine Worker preview/compare/discard; isolated context",
+  "started": "2026-11-13T12:59:54.037Z",
+  "errors": [],
+  "options": [
+    {
+      "id": "morris-lake",
+      "label": "莫西斯湖 · 湖上建筑群（完整插件）"
+    },
+    {
+      "id": "bookshop",
+      "label": "书店镇（通用插件）"
+    },
+    {
+      "id": "apostles",
+      "label": "十二门徒（通用插件 + 构建面板）"
+    },
+    {
+      "id": "moss",
+      "label": "苔庭（通用插件）"
+    },
+    {
+      "id": "citadel",
+      "label": "高山圣城（通用插件 + 构建面板）"
+    },
+    {
+      "id": "old-port",
+      "label": "旧港湾（通用插件）"
+    },
+    {
+      "id": "swamp",
+      "label": "湖沼（通用插件）"
+    },
+    {
+      "id": "moon-lake",
+      "label": "月湖（通用插件）"
+    },
+    {
+      "id": "gate",
+      "label": "叹息之门（通用插件）"
+    },
+    {
+      "id": "crystal",
+      "label": "水晶城（通用插件 + 构建面板）"
+    }
+  ],
+  "before": {
+    "scene": "bookshop",
+    "materials": [
+      {
+        "id": "m0",
+        "name": "黑色材质 0",
+        "base": "#796244",
+        "color": "#796244",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m1",
+        "name": "黑色材质 1",
+        "base": "#59452f",
+        "color": "#59452f",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m2",
+        "name": "绿色材质 2",
+        "base": "#5a8f5a",
+        "color": "#5a8f5a",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m3",
+        "name": "白色材质 3",
+        "base": "#f5f5f0",
+        "color": "#f5f5f0",
+        "uses": 5,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m4",
+        "name": "黑色材质 4",
+        "base": "#211e19",
+        "color": "#211e19",
+        "uses": 21,
+        "locked": false,
+        "shared": true
+      },
+      {
+        "id": "m5",
+        "name": "橙色材质 5",
+        "base": "#b87352",
+        "color": "#b87352",
+        "uses": 3,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m6",
+        "name": "黑色材质 6",
+        "base": "#211e19",
+        "color": "#211e19",
+        "uses": 5,
+        "locked": false,
+        "shared": true
+      },
+      {
+        "id": "m7",
+        "name": "橙色材质 7",
+        "base": "#8a5a42",
+        "color": "#8a5a42",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m8",
+        "name": "黑色材质 8",
+        "base": "#2c3440",
+        "color": "#2c3440",
+        "uses": 10,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m9",
+        "name": "黑色材质 9",
+        "base": "#3a2c22",
+        "color": "#3a2c22",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m10",
+        "name": "黑色材质 10",
+        "base": "#241a14",
+        "color": "#241a14",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m11",
+        "name": "棕色材质 11",
+        "base": "#d4af37",
+        "color": "#d4af37",
+        "uses": 4,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m12",
+        "name": "黑色材质 12",
+        "base": "#111111",
+        "color": "#111111",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m13",
+        "name": "白色材质 13",
+        "base": "#ffffff",
+        "color": "#ffffff",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m14",
+        "name": "黄色材质 14",
+        "base": "#bfb5a0",
+        "color": "#bfb5a0",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m15",
+        "name": "棕色材质 15",
+        "base": "#ad9e81",
+        "color": "#ad9e81",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m16",
+        "name": "白色材质 16",
+        "base": "#f4f7ed",
+        "color": "#f4f7ed",
+        "uses": 1,
+        "locked": false,
+        "shared": true
+      },
+      {
+        "id": "m17",
+        "name": "绿色材质 17",
+        "base": "#43a047",
+        "color": "#43a047",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m18",
+        "name": "蓝色材质 18",
+        "base": "#a9cbef",
+        "color": "#a9cbef",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m19",
+        "name": "黑色材质 19",
+        "base": "#2e7d32",
+        "color": "#2e7d32",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m20",
+        "name": "黄绿色材质 20",
+        "base": "#cbe685",
+        "color": "#cbe685",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m21",
+        "name": "黑色材质 21",
+        "base": "#211e19",
+        "color": "#211e19",
+        "uses": 1,
+        "locked": false,
+        "shared": true
+      },
+      {
+        "id": "m22",
+        "name": "黑色材质 22",
+        "base": "#211e19",
+        "color": "#211e19",
+        "uses": 1,
+        "locked": false,
+        "shared": true
+      },
+      {
+        "id": "m23",
+        "name": "橙色材质 23",
+        "base": "#ffdfae",
+        "color": "#ffdfae",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      },
+      {
+        "id": "m24",
+        "name": "橙色材质 24",
+        "base": "#ffdfae",
+        "color": "#ffdfae",
+        "uses": 1,
+        "locked": false,
+        "shared": false
+      }
+    ],
+    "saved": {},
+    "previewing": false
+  },
+  "visualBefore": {
+    "colorBins": 12,
+    "dominantRatio": 0.9768445839874411
+  },
+  "passed": false,
+  "error": "AssertionError [ERR_ASSERTION]: scene must contain visible geometry, not a flat water overlay\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/code-library-formal.mjs:18:129"
+}

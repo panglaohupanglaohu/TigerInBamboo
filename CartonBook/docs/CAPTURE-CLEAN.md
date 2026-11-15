@@ -86,3 +86,11 @@ CARTONBOOK_VIA_PIPELINE=1 node src/cli.mjs capture --recipe ...
 3. 父页可发 `screenshot` / `captureClean` 命令；或 CLI 读同一 iframe
 
 `book.html` 图片路径保持 `shots/…`（不要写成 `../shots/`）。
+
+## 本轮新增的拍摄安全与视觉门禁
+
+1. HUD 检查直接读取游戏侧 `__tmUiLayers.CAPTURE_HIDE_SELECTORS`；本地备用列表只在该 API 不可用时使用，避免新增交互提示漏检。
+2. live 拍摄先写 `.capture-<pid>-<timestamp>/` 暂存区，全部镜头通过后才替换正式 `shots/`；失败不会覆盖上一版，也不会把 fixtures 写进正式章。
+3. 黑帧采样必须在 `canvas.toDataURL` **之前**主动 `renderer.render`；读取 PNG 后 WebGL 缓冲可能已清空，不能据此误判黑帧。
+4. `quality.ok` 只排除低信息量/全黑画面，不代表主体构图合格。正式书店镇还要求 `manifest.visualReview.status="approved"`，且 `approvedShotIds` 覆盖全部 24 镜，才能导出。
+5. `capture` 对正式章失败会返回非零退出码；不再打印误导性的成功结论。

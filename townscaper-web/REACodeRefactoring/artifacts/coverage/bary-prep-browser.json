@@ -1,0 +1,77 @@
+{
+  "reports": [
+    {
+      "mode": "raw",
+      "report": {
+        "quads": 3946,
+        "flipped": 0,
+        "invalid": 0,
+        "border": 330,
+        "seam": 0,
+        "comparisons": 378
+      },
+      "barycentric": {
+        "prepared": 133,
+        "queries": 52931,
+        "degenerate": 0
+      },
+      "patches": 19,
+      "clusters": 24
+    },
+    {
+      "mode": "patch",
+      "report": {
+        "quads": 3946,
+        "flipped": 0,
+        "invalid": 0,
+        "border": 330,
+        "seam": 0,
+        "comparisons": 378
+      },
+      "barycentric": {
+        "prepared": 133,
+        "queries": 52931,
+        "degenerate": 0
+      },
+      "patches": 19,
+      "clusters": 24
+    },
+    {
+      "mode": "cluster",
+      "report": {
+        "quads": 3946,
+        "flipped": 0,
+        "invalid": 0,
+        "border": 330,
+        "seam": 0.37595922813350574,
+        "comparisons": 378
+      },
+      "barycentric": {
+        "prepared": 133,
+        "queries": 52931,
+        "degenerate": 0
+      },
+      "patches": 19,
+      "clusters": 24
+    },
+    {
+      "mode": "blend",
+      "report": {
+        "quads": 3946,
+        "flipped": 0,
+        "invalid": 0,
+        "border": 330,
+        "seam": 3.66205343881779e-15,
+        "comparisons": 378
+      },
+      "barycentric": {
+        "prepared": 133,
+        "queries": 101795,
+        "degenerate": 0
+      },
+      "patches": 19,
+      "clusters": 24
+    }
+  ],
+  "errors": []
+}

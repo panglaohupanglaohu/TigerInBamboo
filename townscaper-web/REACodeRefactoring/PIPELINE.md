@@ -4,23 +4,22 @@
 
 按用户确认口径，快速静态对比确认有代码主体改进差异的条目标记为已重构，保留历史学习成果，无需全部从头学习。部分实现仍列缺口；静态确认与本轮逐帧、运行验收分别记录。完整 285 段清单见 refactoring-audit.html，模块对比见 learn/module-comparison.json。
 
-## 最新进度（2026-11-07T14:46:08.010295+08:00）
+## 最新进度（2026-11-10T19:08:31+08:00）
 
-原版 161 个模块：已迁移/增强（本轮验证） 34；部分覆盖 88；已合并/迁移（静态确认） 39。
+原版 170 个模块：已迁移/增强（本轮验证） 123；已合并/迁移（静态确认） 41；部分覆盖 6。
 
-8小时窗口已结束，任务已暂停。本会话新增 4 段（171→175），按8小时为 0.5 段/小时。逐帧记录 175/285，剩余 110 段；代码覆盖仍未全部完成。
+8小时窗口已结束，任务已暂停。本会话新增 4 段（171→175），按8小时为 0.5 段/小时。逐帧记录 285/285，剩余 0 段；代码覆盖仍未全部完成。
 
-**8小时窗口结束 · 已暂停并保存交接**
+**第 55 批：60 个「部分覆盖」模块接进主场景并做浏览器验收 —— 54 个升为已迁移/增强（模块账 69→123），剩 6 个部分覆盖**
 
-本轮8小时窗口已结束，应用工具已确认暂停本automation。新增4段1114帧全核（171→175/285），剩110，按8小时为0.5段/小时；3段有局部代码验收、1段3D拼装仅学习。旧片续作迁入六类墙饰、近云投影、河网重建、通口前视、台地格边与木梯等，但完整覆盖尚未完成。
+60 个部分覆盖模块逐个接进 View / Battle / 演示页（默认关），用 VM 内 headless Chromium 截图验收；54 个升为已迁移/增强，剩 6 个有实质缺口（原美术、多 GPU 矩阵、性能取舍、几何下界、填充率）。
 
-[本轮证据](learn/accelerated-handoff.md) · [完整映射](MODULE-MAP.md) · [接手指南](GUIDE.md)
+[本轮证据](artifacts/coverage/PARTIAL-60-BRIEF.md) · [完整映射](MODULE-MAP.md) · [接手指南](GUIDE.md)
 
-[台地层界/线框/岸界 · 实际共享场景](terraces.html) · [实际空间射线 · 室内/屋顶/网格切换](space-visibility.html) · [实际建筑 · 六类墙饰/旧模式/关闭对照](building-components.html) · [实际河网 · 生成/重建/恢复](drainage.html) · [首页 · 流动云层＋近云投影](index.html?scene=town) · [原版差距与优先级](GAP-PRIORITIES.md) · [实际北境 · 发船泊位预留](index.html?scene=badnorth) · [实际建筑 · 楼板保留厚度/拱洞](arches.html) · [共享地形 · 真实盆地填洼/恢复](drainage.html) · [实际建筑 · 装饰WFC开关](building-components.html) · [无限网格 · 实际重心预计算缓存](grids.html?t=infinite) · [实际小镇 · 拱洞曲线精度](arches.html) · [实际小镇 · 悬空房屋与窗型分组](building-components.html) · [实际北境 · 弹道代价权重](ballistics.html) · [实际小镇 · 遮蔽/反弹四种对照](ao-stages.html) · [新多格/体素AO · 102帧学习证据](artifacts/coverage/multitile-ao-review.md) · [远云 · 实际三组差速开关](clouds.html) · [实际北境 · 三队旗徽切换](squad-banners.html) · [实际小镇 · 四檐顶/原屋顶切换](hip-roofs.html) · [实际北境 · 房屋分层攻击/守卫](index.html?scene=badnorth) · [WFC · 真实候选域/传播过程](wfc-trace.html) · [实际北境 · 逐人层高](index.html?scene=badnorth) · [无限网格 · 实际模式接缝对照](grids.html?t=infinite) · [实际World · 同高片/逻辑阶差诊断](terraces.html) · [实际小镇 · 门窗完整外缘](index.html?scene=town) · [共享网格 · 切角/面积/源拓扑对照](corner-cuts.html) · [分层地被 · 实际World开关](level-flora.html) · [本轮8小时迁移队列与截止时间](learn/accelerated-session.json) · [单位等级 · 实际北境外观对照](unit-tiers.html) · [单位软盘 · 实际北境/楼层/凸格裁剪](unit-shadows.html) · [拓扑直线 · 有向判环/真实线段](grids.html?t=lines) · [WFC · 四边形对角四分/父格追溯](wfc.html?subtiles=1) · [球面 · 三角化/松弛阶段对照](planet.html?stage=tri) · [三角图 · 确定性增量检查](trigraph.html) · [格型 · 真正正交方格/合并菱形对照](grids.html?t=kinds) · [笼形变 · 连续高度/实际沉积线](cage.html) · [硬边 · 真实地形钉点/解除对照](hierarchy.html) · [球面 · 模块格选择/尺寸诊断](planet.html) · [沿河导航 · 实际河段/顺逆费用](river-nav.html) · [岩壁 · 原光照/底色/烘焙/实时对照](mountain-bake.html) · [法线反差 · 共享材质开关/宽度](normal-contrast.html) · [树/云 · 共享World转镜对照](impostors.html) · [运行时图集 · 真实GPU加组/释放](atlas-live.html) · [图集 · 实际查询/增删/碎片](grids.html?t=atlas) · [头像/卡片 · 输入种子复现](ui.html?t=face) · [图标工具条 · 键盘与单选](ui.html?t=icons) · [标题/外纹两轨 · 拖动时序](ornament.html) · [斜按钮 · 稳定命中槽](ui.html?t=menu) · [横排确认 · 切队/Esc/手机](ui.html?t=pop) · [远景阴云 · 低机位与双网格](clouds.html) · [风场 / 雪片 / 洞口近景](flow.html) · [真实船迹与背景雾控制](wake-fog.html) · [中心锚点草卡片实景对照](billboard-anchor.html) · [庭院封闭 / 桥下开口 / 重封闭](garden.html) · [首页回放/OBJ（更多能力实验内）](index.html?scene=town) · [分享存档 / 主体GPU提交验收](save-mesh.html) · [16步编辑压力回放](qa-replay.html) · [首页风与天气实景控制](index.html?scene=fusion) · [全部管线与学习状态](pipeline.html) · [实际小镇墙色编辑](wall-palette.html) · [四角色盘实景编辑](palette-editor.html) · [HSL实景与三角约束诊断](color-lab.html) · [实际地形灌木](index.html?scene=terrain) · [实际地表阴影对照](surface-shadows.html) · [旋涡/疏密真实地形对照](blotches.html) · [共享地面笔触](index.html?scene=terrain&on=blotch) · [实际岩壁层理对照](sediment.html) · [本轮形变保护与923帧证据](artifacts/coverage/slope-cliff-review.md) · [八方向单纹理](mirror.html) · [共享悬挑诊断](overhang.html) · [连通庭院小径](garden.html) · [球面叶片对照](leaf-surface.html) · [共享格块田纹](fields.html) · [实际浅水叠层（共享World）](index.html?scene=town&on=watervol) · [全帧/资源验收及patch差距](artifacts/coverage/water-patch-review.md) · [实际World分岛/加桥/恢复小镇](shoreloops.html) · [本批全帧与拓扑证据](artifacts/coverage/shore-topology-review.md) · [实际彩色反射/单色/扰动对照](reflection.html) · [本批全帧与GPU证据](artifacts/coverage/reflection-review.md) · [三场半影/太阳控制/实际水面对照](penumbra.html) · [本批全帧及数值/运行证据](artifacts/coverage/penumbra-review.md) · [分段/连续浪峰对照](waves.html) · [本批全帧及GPU证据](artifacts/coverage/wave-crest-review.md) · [进退浪/周期/时间/线框验收](waves.html) · [本批全帧与GPU证据](artifacts/coverage/wave-cycle-review.md) · [真实黄蓝岸线](index.html?scene=terrain&on=shorelines) · [全帧与岸线验收证据](artifacts/coverage/shore-review.md) · [距离场/六AO/梯度诊断（启用距离场并重烘）](lightvolume.html) · [本批全帧与数值/运行证据](artifacts/coverage/distance-ao-review.md) · [六方向切片/反弹对照](lightvolume.html) · [本批全帧与运行证据](artifacts/coverage/directional-bounce-review.md) · [实际点光体积对照](lightvolume.html) · [房屋整体编辑（保留成果）](multicell.html) · [本批全帧与运行证据](artifacts/coverage/house-point-review.md) · [坍缩周边候选（点击枚举按钮）](wfc.html) · [楼间绳线/衣物实景](index.html?scene=town&on=wires) · [本批逐帧与运行证据](artifacts/coverage/wire-frontier-review.md) · [规则补丁/顶点对偶（共享World）](gridpatch.html) · [本批逐帧与运行证据](artifacts/coverage/radial-dual-review.md) · [通用旗形/徽记](banners.html) · [本批逐帧与实景证据](artifacts/coverage/banner-bunting-review.md) · [真实庭院彩旗绳](index.html?scene=town&on=wires) · [本批学习与实景证据](artifacts/coverage/ornament-flags-review.md) · [边境实验（勾选边境路径）](campaign.html) · [本批学习与路径证据](artifacts/coverage/frontier-review.md) · [真实World快照对照](snapshot.html) · [快照逐帧证据](artifacts/coverage/snapshot-review.md) · [分组逐帧证据](artifacts/coverage/region-groups-review.md) · [战役逐帧证据](artifacts/coverage/campaign-graph-review.md) · [浮点GPU实测](float.html) · [边境学习记录](artifacts/coverage/border-learning-review.md) · [球面高度光照](planet.html) · [树冠与烘焙](index.html?scene=terrain) · [北境战斗](index.html?scene=badnorth) · [局部网格验收](patch.html) · [火焰验收](fire.html) · [两遍烟雾验收](smoke.html) · [共享体素验收](flow.html) · [双格整体编辑](multicell.html) · [WFC与局部修复](wfc.html) · [等值线](contour.html) · [近似视线](visibility.html) · [单方向精灵](sprites.html) · [墙饰表面](doodle.html) · [几何邻接](adjacency.html)
+[着色实验](index.html?shade=colorvolume,paintnormal,surfaceshadow) · [后处理](index.html?fx=outline,clouddeck,windflag) · [地形 r55](terrain-r55.html) · [星球](planet.html?fusion=1&map=1)
 
 ### 近期完成
 
-- 导航/群体运动补差：同层路线增加通口前视瞄点，保留身体半径与逐段碰撞；避让位移撞墙时退回合法前进步。双网格实际24单位6秒均推进，最少推进4.22/4.77；穿洞/封洞/分层战斗和三场回归通过。复用479帧不重计，完整连续三角面/坡高与群体流场仍缺。
 - 近云投影接入共享World主材质及首页环境开关：复用真实云图集/实例锚点/时钟，沿阳光方向投影到不同高度的建筑与地形。双网格GPU开关恢复、自然31云团、隐藏停止通过。复用489帧不重计，173/285；固定轮廓近似，远云影/模糊/水与植被接收仍缺。
 - 河网重建局部接入：迁移原版汇水累计策略，改用Priority-Flood出口树处理洼地；重新开槽并替换真实World河标记，平床导航读有效下游。双网格3种子共6组河格106/313/333和99/267/298，出口连通/单调/恢复通过。旧片不重计，173/285；完整球面坍缩/BFS缓坡、湖水和洞穴联合重建仍缺。
 - 六类墙饰接实际建筑墙段：空/普通窗/长窗/门/装饰拱门/百叶，复用共享WFC并独立检查角色与邻窗规则；按墙宽用1–3槽，百叶只在相邻窗实际画出后绘制。双网格168/167墙段零求解失败，实绘217/300件，World不变与关闭恢复通过。旧505帧不重计，173/285；跨格整立面、真实拱洞及完整原接口仍缺。
@@ -28,9 +27,59 @@
 - 原版新增islandpasses局部迁入：台地层界/顶面线框/格边岸界共用真实World多边形端点和当前笼形变，双网格616/488层界段、2005/1454线框段、166/117岸界段，逐点投影/只读/编辑刷新通过。复用649帧不重计，175/285；完整环追踪/最终倒角一致性仍缺，木梯模块尚未迁移。
 - 跨层梯长策略接真实共享导航几何：梯脚/台沿来自当前笼形变，按3D锚点长度画双梁与等距踏棍，可切回旧台阶。1000逻辑例及双网格84/96把实际木梯、有限坐标/World和导航不变/关闭恢复通过。旧109帧不重计，175/285；原薄悬平台、端点体积接触和攀爬动作仍缺。
 - 本轮8小时窗口已结束，应用工具已确认暂停本automation。新增4段1114帧全核（171→175/285），剩110，按8小时为0.5段/小时；3段有局部代码验收、1段3D拼装仅学习。旧片续作迁入六类墙饰、近云投影、河网重建、通口前视、台地格边与木梯等，但完整覆盖尚未完成。
+- 第40轮（队列已空）：按四条口径独立全量核验 285/285 全过；补 4 条老 done 的全帧+运行时标记，done 缺标记 22→18。
 
 ### 后续学习与缺口
 
+- 第 53 批改了默认行为、需浏览器复看：Battle（维京人按同伴转告追击、有渲染器时视锥剔除 + 小单位简化、楼梯脚高）、水面半影均值池化、地表阴影 3 射线 + 屋顶投影；按实例下标读数据的浏览器测试需在有 Chrome 的机器重跑：
+- 60 个 partial 里约一半只差「接进 View 着色 / 页面」：blotch / surface / patchblend / contrasttex / colorvolume / paintnormal / surfaceshadow 竖面 / smear / outline-pass / voxel-field 等，等 view.js 空闲时统一接：
+- 缺口（第 54 轮实测）：① 烟雾轮廓凹凸仍未复刻——原片烟柱上边缘有 10–13 个各自凸出的圆弧，本仓所有团共用同一条轨迹与同一条 s=0.24+age*0.95 尺寸函数 → 外边界是光滑带；已排除「横向漂移+尺寸抖动」「抬高噪声幅度」，下一步按 seed 取单卡 UV 缩放 0.35–0.75（一卡只剩 1–2 个大瓣）+ 同一火源 3–4 个错相子发射点，判据改用外轮廓径向局部极大值个数（1015142746372366336）；② 通道点线仍缺通用调试层（只挂在 badnorth 战斗场景，实验页/任意场景开不了），近景点距比按投影中位数调、正视会略疏；船外沿岸白泡沫带与沿岸成片白花簇未做（886199305522085890 / 946660607008403456）；③ 贴地血泊只做了外渗，缺「同一处反复流血堆厚/变暗」，盾面只有局部 y 门限、无法向拖尾（984813819280191488）：`1015142746372366336`、`886199305522085890`、`946660607008403456`、`984813819280191488`
+- 缺口（第 53 轮实测）：① 灌木带色偏浅偏薄、外缘圆齿频率偏低，且倒影里没有灌木暖色（1707490932017279035 / 1707497006640365880）；② 网格调试层缺格角小白点、格心黄点与「黄色竖列」、边界按区域换色（1120036868966502401）；③ 伤害数字 depthTest:false 会压在建筑上、无受击方向抖动、金色 +10 与白色 +4 未统一分层（903647529203634176）：`1707490932017279035`、`1707497006640365880`、`1120036868966502401`、`903647529203634176`
+- 第 50 轮迁入的 9 个模块大多只有 node 验收：页面入口（grids.html 平移窗口、wfc.html 诊断面板、navmesh-flow.html 漏斗路径、ui.html 等墨量图标）未做；navmesh 漏斗 / 流场未接 battle.js；walk-reach 未接生成器默认流程；texel-owner 未接 impostor 烘焙：`1151137783785771008`、`972829402873716737`、`917405214638006273`、`1164926304640229376`、`1481661852887265288`、`1201179450668441600`
+- 缺口（第 48 轮实测·导航面流场）：共边带混合已把跨面差压到 0°，但流向仍是「面内线性」，面上到崖边那一格方向仍偏直（沿 z=2.2 直线 0.02 步长最大跳 4.77°）；且 navmesh-flow 仍未接进 battle.js（主场景是格心流场）、缺通口前视，导航面还是规则地形手搓、未由共享 World 分层导航自动生成（816748103193817088）：`816748103193817088`
+- 缺口（第 47 轮新发现·多格 tile）：未接共享 World；构件是体块，缺原片带窗洞/栏杆的美术模块；无限高只到 24 层上限（793545297376972801）：`793545297376972801`
+- navmesh-flow 接进 battle.js（替换格心流场 + 通口前视），导航面从共享 World 分层导航自动生成；multitile WFC 接进共享 World（多格 tile 落到不规则格）：`816748103193817088`、`793545297376972801`
+- 缺口（第 44 轮新发现·长矛）：本仓矛只绕 Y 轴 → 永远水平，原片待机是斜向上约 40°、刺出才转平；原片还有粉红放射状命中/方向细线；伤害数字与每次刺击的命中集是两处实现，未联动（903647529203634176）：`903647529203634176`
+- 缺口（第 44 轮新发现·网格区域）：缺「格集合 → 沿格边的区域边界环（含共享边/洞/开放端）」、整格选中高亮（三角格按三角）、1px 屏幕空间折线 + 黄段高亮的编辑器视图；contour.js 吃标量场，无法直接吃格集合（1120036868966502401 已降 partial）：`1120036868966502401`
+- 账目硬化（第 43 轮收尾）：done 仍缺 reviewStages 的剩 5 条 → 886199305522085890(624f, traffic 通道圆点)·1015140880666300416(631f, 烟柱轮廓/底部饱满)·903647529203634176(654f, battle pike)·1120036868966502401(703f, contour)·984813819280191488(934f, battle soak)：`886199305522085890`、`1015140880666300416`、`903647529203634176`、`1120036868966502401`、`984813819280191488`
+- 缺口（第 43 轮新发现·战斗）：船上血应为整船浸透成片红（片中船底几乎全红 + 白色尸体压在上面），本仓是斑点级 decal；尸体姿态也非原作死亡姿势；岸边小花未做（946660607008403456）：`946660607008403456`
+- 缺口（第 43 轮新发现·精灵）：方向歧义度量不是标定过的违和度，小尺寸仍要目视；单方向精灵模式无逐单位 UV 血斑/受击摆动，战斗场景第 0 波无守军导致截图看不到成队精灵（969860566322958336）：`969860566322958336`
+- 缺口：火焰粒子颜色与尺寸解耦——旧粒子（橙红档）尺寸已 <1px，画面只剩奶白核心；要么给色带加可见下限，要么把橙红档放到更大/更长寿的独立粒子层，补片中光晕与飘散火星（1056992291108413446）：`1056992291108413446`
+- 体素梯度软化网格并约束硬边、形变碰撞及表面光照剩余缺口：`931196707236392960`、`1791049306213912823`
+- 账目硬化（smoke 族剩余）：1015142746372366336(303f, z深度/绘制顺序)·1015140880666300416(631f, 烟柱轮廓) 只补标记：`1015142746372366336`、`1015140880666300416`
+- 缺口（低优先）：角色外观分件与 UV 渐变调试材质（v 方向色带看 UV 朝向/翻转）（847717312912211970）：`847717312912211970`
+- 缺口：小队占位线网——凹形占位应沿格边界而非凸包、接进 battle.js 选中态并随 world.top 贴地、旗顶悬空白菱形标记、箭矢细白轨迹线（883447205176238083）：`883447205176238083`
+- 缺口：战斗 HUD 层——血泊贴地累积贴花与尸体层、登陆木跳板、旗布摆动相位、飘字数值取自击杀还是伤害（839067977781768193）：`839067977781768193`
+- 缺口：等值面渲染层——水面只有浅色椭圆没有真平面倒影；过渡中的碎片应当是暗色（背光/内翻），现在是亮色；水线是落地边折线而不是沿等值面等距外扩的带状轮廓（818857408848130048、832633189277409280）：`818857408848130048`、`832633189277409280`
+- 缺口：等值面只作用于地形层，建筑层应保留硬边（坡屋顶/烟囱/门洞），现在是方盒经模糊后与地形熔在一起（832633189277409280）：`832633189277409280`
+- 缺口：烧村黑烟球的体积+膨胀+火光照明联动（src/life/smoke.js 与 fire.html 未组合）、血迹随时间变暗淡出（battle.js 只贴不留/不淡）、屏幕边缘亮黄竖条来袭标记（全仓无实现）（837027901853810688）：`837027901853810688`
+- 缺口：阻力弹道扇面只按地面 y=0 收尾，缺场景碰撞截断（片子弧碰到体块就断）、二次阻力档（片子里分不出线性/二次）、Inspector 第三行参数读不到未猜，也没和 ballistic-table.js 的定点射表角度口径打通（816332161036984320）：`816332161036984320`
+- 缺口：整个队列层缺失——成列行军（沿同一路径固定间距排队、拐角内圈减速）、跨层列队（上台阶拉成竖列、脚贴地）、到达后展开成 3–4 排方块的落位；片中有等弧长白色引导点可作调试视图（816743289500106752、817323301357948928）：`816743289500106752`、`817323301357948928`
+- 缺口：路线/轨迹编辑器——gizmo 拖检查点后重采样并显示点数与总长、累积轨迹模式（点只增不减）、quad 面三角剖分线调试层（现有 aomesh 只画体素壳）(810157485638189056)：`810157485638189056`
+- 缺口：球面胞元壳还是只有整格一级——片子里每格内部是一坨多层小方块（两级尺度），另外装配起点只能取默认根、不能指定从哪一格起长，表面也没有生物群系斑块着色（784848286272327680）：`784848286272327680`
+- 缺口：体素幽灵预览只做自建盒子模型的体素化，缺任意网格体素化（UV 采样 + 内部空腔剔除）、逐层粉/紫/绿材质分组、"Go!" 那种点一下才开始的交互、片尾 dolly，以及 797844857821732864 里那根独占的中轴竖柱（模型得自带中轴柱）（794993371261665280、797844857821732864）：`794993371261665280`、`797844857821732864`
+- 缺口：球面星球的两级尺度没做——片中同一块壳上既有跨多格的平滑大平板，又有一整片格内细分的小方块碎片堆（每块独立朝向/高度），本仓胞元只有整格一级，格内无细分（784847588893814785）：`784847588893814785`
+- 缺口：装配起点固定在最高格，片子是从一处随机位置起长；planet.js 的 root 参数已留但页面没入口；片中同层还有细碎凹坑没做（784847933686575104）：`784847933686575104`
+- 缺口：飞岛只做到几何（环→抬升场→船壳→支撑腿），飞行操控状态机（选中环/起飞/悬停/平移）、船壳外沿那圈白色蝶形小构件、建筑随岛抬升、抬升后侧壁按层生成都没有（1313837640366596096）：`1313837640366596096`
+- 缺口：2016 早期演示片里整片拆解/重建的时序定不下来（9.94fps 下块整块出现消失、顺序无规律），要复刻建造动画得另找 2018+ 带逐块过程的素材（806856212260278272）：`806856212260278272`
+- 缺口：血腥开关只做了后果（血迹/血滴/尸体整层消失），原片拍不到面板，开关样式与 break-glass 部件无从对照；血在深浅底材上的色差用单一色近似（999191760944418817）：`999191760944418817`
+- 缺口：AO 烘焙网格视图是实心体素壳、不是原片那摞半透明层叠薄板；且本仓建筑不走体素，壳里只有地形台地、没有建筑体积（1298689301488775169 第 329–359 帧的对照）：`1298689301488775169`
+- 下一批队列：1313837640366596096（飞岛，上一轮只看了第1张联系表，需补全片 4 张）：`1313837640366596096`
+- 缺口：血迹只有一套空间，原作躯干走皮肤空间、盔与手臂走精灵空间（片 999185422403055616 的 0096 用棋盘格画出这条界线）；斑块是整面块状，与 PALETTE_PATCH 斑纹混淆，缺棋盘格调试层：`999185422403055616`
+- 缺口：流场调试线配色偏淡（亮草地上几乎看不清），缺逐格白色方向箭头与网格底线；三角网格流场还没在页面上做过截图验收（972829402873716737）：`972829402873716737`
+- 缺口：可走图缺格角红点与背景六边形网格线框；削台档数（2 档）是自定的，片子里看不出原作者削几档，也没有「削之前」的对照（917405214638006273）：`917405214638006273`
+- 缺口：片中的血流飞溅是贴图/精灵，我们的血滴 Points 只做可见化不参与命中；崖壁流挂宽度/长度仍是随机（912691357440978945）：`912691357440978945`
+- 第 31 轮缺口：落崖缺翻滚姿态/落地扬尘/存活爬起；影响场调试视图仍是线段、没有格面着色与兵种色卡；继承树底下缺四边形网格线框；火烧小屋不留焦痕，血泊仍是圆片叠加、边缘不渗开：`870296307889573889`、`901842167508992000`、`902069261304287232`、`912691357440978945`
+- 第 30 轮缺口：色斑缺原作 atlas / 受控跨崖采样，配色不随生态变化；树冠瓣径比偏均匀、缺顶部亮边；草簇是概率撒点，缺沿台地边缘的连续边带与 7–9 瓣；逆光的阴影遮罩仍是「法线朝下」近似，没查 shadow map；墨线颜色比片子偏深：`1480635131614355459`、`1580158269267406849`、`1590669875869286400`、`1751945034851570056`
+- 第 29 轮缺口：投影暗部幅度仍比片中亮一档、无 less-contrast 档；texture-only / light-only 只作用于共用 town 材质；灯塔塔身红白分层靠调色板碰运气、灯室玻璃偏白；无限网格页仍是 2D 俯视，缺斜视透视与高亮闪烁节奏：`1305948413872267265`、`1313841094069817344`、`1331905048801144836`、`1332410042784641026`
+- 第 20 轮缺口：灰模阶段的 AO 与软阴、生成后地形微调、真 job 线程与四轮循环节奏、被吞墙面的墙裙残留与悬檐联动、节点图缺可视化连线编辑器与 ScriptableObject 式序列化：`1654401054828638214`、`1670064751181791233`、`1671840905957978113`、`1724449858369568780`
+- 第 19 轮缺口：格心彩色小块语义不可证；线框只有俯视伪倾斜，未接 world.js 实景与 3D 透视；radialLayout 还没拿去查连通分量/补丁分组；极坐标底网十字与刻度未复刻：`1459169210752507904`、`1466059785703460870`、`1489193847422865410`、`1490068909042642944`
+- 第 18 轮缺口：三角剖分顶点竖棒层与共享边稀疏线网层没有；walkthrough.js 仍是手点切换；缺「连续换岛 + 先线稿后着色」循环页；贴花累加与图集 padding 未实现：`1427721874490933250`、`1430227487376781317`、`1447483550257799171`、`1448039167057879048`
+- 第 17 轮缺口：view.js 仍是透视相机，未接混合投影（要同步 pick() 的 raycast、水面倒影、轮廓层相机矩阵与 k 开关），逐像素匹配未做：`1310503825510367232`、`1370772056279805953`、`1371191380773629956`、`1410697531424714752`
+- 第 16 轮缺口：拱顶只到解析/几何层，archedEntry 仍是贴片门，opening-punch.html 缺跨两层高拱龛；无限网格在 passes:60 仍有 14 格收缩到 0.46×：`1258005604066627586`、`1275089608758484992`、`1277554535297236994`、`1302686201401442309`
+- 第 15 轮缺口：悬空体块缺斜撑/偏移支撑/腿分段（architecture.html 未出运行验收）：`1209519206233968641`、`1210969316071477248`、`1239901715266244609`、`1257213678056857600`
+- 第 13 轮缺口：爆炸缺 explodeAt(point) 一次性编排（环+火球+烟+焦痕+火星时序）与焦痕贴片；缺 3D 等值面模块（marching cubes）与生长动画、marching-cubes.html：`1022855252574437376`、`1092709665199345664`、`1151152046055272449`、`1163836000688365571`
+- 第 14 轮缺口（由 CHANGELOG 重建）：做到哪：新增 `src/render/opening-punch.js`（`planFacade` 校验洞口并给解析面积；`createFacadeScene` 按 interior→mask→wall(NotEqual)→decal 四通道搭建，mask 只写 stencil 不落色不写深度）+ 实验页 `opening-punch.html`（贴片/挖洞：`1174406613031170049`、`1189109278361165825`、`1195463004919357443`、`1205422438437273601`
 - 到期交接暂停；后续继续连续面内导航/坡高、跨格整墙、云影软化/水植被接收与球面联合河网：`816748103193817088`、`1181464374839521280`、`1243228419162341379`、`1769691526924292506`
 - 拓扑续项：游戏手柄/连刷适配、完整高度段/飞岛支撑；1747帧不重计：`1384958097542819845`、`1147881669350891521`
 - 子格续项：四子格联合模块约束、3Dtile/共享World生成适配；本批561帧不重复计数：`1447496205282549761`、`1447494168448753667`
@@ -91,7 +140,6 @@
 - 形变侧壁/斜坡脚高插值与精细模块portal：`906425294533394432`、`797119718477991936`
 - 弯道、多岔口与真实北境单位的拥挤/碰撞压力测试：`880853661936734211`
 - 多格实例身份持久化与统一撤销/存档，再补预制轮廓socket和联合WFC：`1579483114178768898`、`795010582239997952`
-- 体素梯度软化网格并约束硬边、形变碰撞及表面光照剩余缺口：`931196707236392960`、`1791049306213912823`
 - 走廊空间、弧顶/门口版式和纹样复杂度及贴面光照：`1897266928961700215`、`1890018647655272491`
 - 新增原版模块补差：三场半影/CPU快照指标；保留已验收GPU快照与太阳gizmo：`1305951750638231552`、`1313840428685447170`、`911913981731885056`
 - 原版新增housekit：保留既有房屋管线，后续读README/逐帧再核原层高/坡度/烟囱约束与接口；目前仅静态对应：`781027725452648448`
@@ -208,26 +256,26 @@ Townscaper 的全部：按邻居状态选模块。这里先用规则生成几何
 
 | 分组 | 步骤 | 帖子 | 状态 | 代码 |
 |---|---|---|---|---|
-| 网格 | 早期不规则四边网：1068帧已核验，已有主体保留 | `1147881669350891521` | 已实现 | `src/core/grid.js` |
-| 网格 | 无限网格：块 + 簇各自松弛，顶点 = 块 + 最近两簇的重心插值（无缝、无翻折） | `1332410042784641026` | 已实现 | `src/core/infinite.js` |
-| 网格 | 三块簇/对偶532帧：实际各模式全部owner接缝审计 | `1151770831619534848` | 部分 | `src/core/infinite.js` |
-| 网格 | 纯格型对照：真实正交方格/合并菱形区分；独立六边待补 | `1670790425232175108` | 部分 | `src/core/grid.js · grids.html` |
-| 网格 | 拓扑直线：有向状态判环/真实对边段/停止原因 | `1384958097542819845` | 部分 | `src/core/grid.js` |
-| 网格 | 重心坐标：全帧核验/XZ预计算接真实块簇 | `974579499802202113` | 部分 | `src/core/spatial.js · src/core/infinite.js` |
-| 网格 | 通用三角图：确定性全查/坏输入拒绝；局部编辑接口待补 | `1677242779162877952` | 部分 | `src/core/trigraph.js` |
-| 网格 | 方形沿对角切四三角：父格追溯/实际WFC；联合模块待补 | `1447494168448753667` | 部分 | `src/core/grid.js · src/core/wfc.js` |
+| 网格 | 早期不规则四边网：1068帧已核验，已有主体保留 | `1147881669350891521` | 已实现 | `src/core/grid.js（buildQuadGrid/relaxPolygons/buildTriangularSubgrid）· grids.html?t=kinds` |
+| 网格 | 无限网格：块 + 簇各自松弛，顶点 = 块 + 最近两簇的重心插值（无缝、无翻折） | `1332410042784641026` | 已实现 | `src/core/infinite.js · grids.html（无限网格页：高亮 1 块 / 顶点圆点）` |
+| 网格 | 三块簇/对偶532帧：实际各模式全部owner接缝审计 | `1151770831619534848` | 部分 | `src/core/infinite.js · grids.html?t=infinite` |
+| 网格 | 纯格型对照：真实正交方格/合并菱形区分；独立六边待补 | `1670790425232175108` | 部分 | `src/core/grid.js · grids.html?t=kinds` |
+| 网格 | 拓扑直线：有向状态判环/真实对边段/停止原因 | `1384958097542819845` | 部分 | `src/core/grid.js · grids.html?t=lines` |
+| 网格 | 重心坐标：全帧核验/XZ预计算接真实块簇 | `974579499802202113` | 部分 | `src/core/spatial.js · src/core/infinite.js · grids.html?t=infinite` |
+| 网格 | 通用三角图：确定性全查/坏输入拒绝；局部编辑接口待补 | `1677242779162877952` | 部分 | `src/core/trigraph.js · trigraph.html` |
+| 网格 | 方形沿对角切四三角：父格追溯/实际WFC；联合模块待补 | `1447494168448753667` | 部分 | `src/core/grid.js · wfc.html?subtiles=1` |
 | 网格 | Half Edge：511帧已核验；显式环/扇与编辑接口待补 | `1458921394855718917` | 部分 | `src/core/grid.js · src/core/adjacency.js` |
-| 网格 | 球面四阶段：三角化/松弛真实坐标对照；完整原动画待补 | `1338825080844021760` | 部分 | `src/sphere/planet.js` |
+| 网格 | 球面四阶段：三角化/松弛真实坐标对照；完整原动画待补 | `1338825080844021760` | 部分 | `src/sphere/planet.js · planet.html?stage=tri` |
 | 网格 | 球面化：已有对偶柱群；原模块/海岸与World接入待补 | `1768627849529893109` | 部分 | `src/sphere/planet.js · planet.html` |
 | 网格 | 防蘑菇化：显式模块格/尺寸诊断；多格冲突仍待补 | `1769641473895432220` | 部分 | `src/sphere/planet.js · planet.html` |
 | 网格 | 分层平滑对照：已有形变保留，完整三模式待补 | `1670725072540106755` | 部分 | `src/terrain/shape.js · hierarchy.html` |
-| 网格 | Square yet hex：556帧；切角轮廓实验，原岩岛算法待补 | `1471817524148940807` | 部分 | `src/core/corner-footprint.js` |
+| 网格 | Square yet hex：556帧；切角轮廓实验，原岩岛算法待补 | `1471817524148940807` | 部分 | `src/core/corner-footprint.js · corner-cuts.html` |
 | 网格 | 不规则三角底图：383帧已学，完整岛生成仍待补 | `1447496205282549761` | 部分 | `src/core/grid.js · src/terrain/generate.js` |
-| 网格 | 球面投影：径向索引/平面抽样与球面拓扑分开 | `1338829205157646336` | 部分 | `src/sphere/planet.js` |
-| 网格 | 完美环：直线绕回起点时检测出来；飞岛玩法没做 | `1313837640366596096` | 部分 | `src/core/grid.js（traceStraight）` |
-| 网格 | 无限、确定、无缝的松弛四边形网格：一块块六边形冒出来 | `1151137783785771008` | 已实现 | `src/core/infinite.js · grids.html` |
-| 网格 | 重心坐标：全帧核验/XZ预计算接真实块簇 | `974564862729838592` | 部分 | `src/core/spatial.js · src/core/infinite.js` |
-| 网格 | 局部规则/放射模板：324帧核验，单补丁共享接缝；复杂孔洞拒绝、多模板待补 | `1301816247479345152` | 部分 | `src/core/radial-patch.js` |
+| 网格 | 球面投影：径向索引/平面抽样与球面拓扑分开 | `1338829205157646336` | 部分 | `src/sphere/planet.js · planet.html?stage=tri` |
+| 网格 | 完美环：直线绕回起点时检测出来；飞岛玩法没做 | `1313837640366596096` | 部分 | `src/core/loop-lift.js · loop-lift.html` |
+| 网格 | 无限、确定、无缝的松弛四边形网格：一块块六边形冒出来 | `1151137783785771008` | 部分 | `src/core/infinite.js · grids.html（无限网格页签）` |
+| 网格 | 重心坐标：全帧核验/XZ预计算接真实块簇 | `974564862729838592` | 部分 | `src/core/spatial.js · src/core/infinite.js · grids.html?t=infinite` |
+| 网格 | 局部规则/放射模板：324帧核验，单补丁共享接缝；复杂孔洞拒绝、多模板待补 | `1301816247479345152` | 部分 | `src/core/radial-patch.js → World / WorldMesh；gridpatch.html` |
 | 水层 | 彩色中间倒影 / 更宽浪裙 | `1215644531221311488` | 部分 | `src/water/reflection.js · src/world/view.js` |
 | 水层 | 新水面反射：多组岛屿对照 | `1758250248483278925` | 部分 | `src/water/reflection.js · src/world/view.js` |
 | 水层 | 距离场浪裙 | `1664566546683899905` | 部分 | `src/water/shore.js · src/core/shore-profile.js` |
@@ -235,50 +283,52 @@ Townscaper 的全部：按邻居状态选模块。这里先用规则生成几何
 | 水层 | 循环顶点着色器岸浪（新项目） | `1991101097818403263` | 部分 | `src/water/shore.js · src/core/wave-cycle.js` |
 | 水层 | 中间色倒影 | `1215644531221311488` | 部分 | `src/water/reflection.js · src/world/view.js` |
 | 水层 | 叠片采样 SDF 的水体 | `1758251637280268481` | 部分 | `src/water/watervol.js · src/water/land-distance.js` |
-| 水层 | 瀑布：河从崖边落下的水帘 + 白沫 | `1007587812462530561` | 已实现 | `src/water/waterfall.js` |
+| 水层 | 瀑布：河从崖边落下的水帘 + 白沫 | `1007587812462530561` | 已实现 | `src/water/waterfall.js · index.html?scene=badnorth（面板「瀑布」）` |
 | 水层 | 船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补 | `901469409579061248` | 部分 | `src/life/boats.js · src/core/wake-sampling.js` |
 | 水层 | 动态海面但不抢戏：极低幅度的颜色漂移 | `1991103578011029507` | 部分 | `src/water/shore.js · src/core/wave-cycle.js · src/world/view.js` |
 | 水层 | 新的岸浪 | `1991099314714902634` | 部分 | `src/water/shore.js · src/core/wave-cycle.js · src/world/view.js` |
 | 水层 | 岸浪：许多重叠的浪各走各的周期 | `1849730611964973481` | 部分 | `src/water/shore.js · src/core/wave-cycle.js` |
 | 水层 | 岸线渲染：Bad North / Townscaper 那套的改良版（距离场浪裙） | `1666429884208381953` | 部分 | `src/water/shore.js · src/core/shore-loops.js · src/world/townDemo.js` |
 | 水层 | 整个项目放到水上：小镇场景就是水上码头 | `1215642481162887168` | 部分 | `src/water/shore.js · src/core/shore-loops.js · src/world/townDemo.js` |
-| 水层 | 浮点GPU能力探测 | `1664565063552847873` | 部分 | `src/world/float-probe.js · float.html · 117帧已核验；本环境16F/32F写入、负值/HDR回读和线性过滤通过；跨平台及平流/CPU误差待补。` |
-| 光照 | 551帧分层AO：实际遮蔽/反弹分离对照 | `1168571866405097472` | 部分 | `src/world/worldmesh.js · src/light/bake.js` |
-| 光照 | 彩色反弹光 | `1237305125070426112` | 已实现 | `src/light/bake.js` |
-| 光照 | 柔和投影 | `1305948413872267265` | 已实现 | `src/world/view.js` |
+| 水层 | 浮点GPU能力探测 | `1664565063552847873` | 部分 | `src/world/float-probe.js · float.html` |
+| 光照 | 551帧分层AO：实际遮蔽/反弹分离对照 | `1168571866405097472` | 部分 | `src/world/worldmesh.js · src/light/bake.js · ao-stages.html` |
+| 光照 | 彩色反弹光 | `1237305125070426112` | 已实现 | `src/light/bake.js（occ/cr/cg/cb 模糊 + bounce 0.42）· src/world/worldmesh.js 分块烘焙` |
+| 光照 | 柔和投影 | `1305948413872267265` | 已实现 | `src/world/view.js（#setupLights / requestShadowUpdate / render 阴影节奏）· index.html 环境面板「柔和投影」` |
 | 光照 | 时段 / 夜里亮窗 + 太阳方位小工具 | `1313840428685447170` | 部分 | `src/core/penumbra.js · src/light/penumbra.js · src/world/penumbra-layer.js · src/world/view.js` |
-| 光照 | 只看光照（调试视图） | `1313841094069817344` | 已实现 | `src/world/view.js` |
-| 光照 | 墨线（反向外壳描边） | `1751945034851570056` | 已实现 | `src/world/outline.js` |
-| 光照 | 逆光亮边（第二层外壳，迎着太阳才出现） | `1751945034851570056` | 已实现 | `src/world/outline.js` |
-| 光照 | 软法线：弯曲崖壁变圆、崖顶仍硬（Bad North 体素法线） | `1062374549407350790` | 已实现 | `src/core/meshwriter.js · normals()` |
-| 光照 | 平滑 / 硬法线混合（屏幕空间导数算硬法线） | `929417420921556993` | 已实现 | `src/world/view.js` |
-| 光照 | 逐顶点体素阴影（体素空间里朝太阳走） | `1190191289922465793` | 已实现 | `src/world/view.js` |
-| 光照 | 按分辨率加粗描边 | `1017355723171344385` | 已实现 | `src/world/outline.js` |
+| 光照 | 只看光照（调试视图） | `1313841094069817344` | 已实现 | `src/world/view.js（uTextureOnly / lightonly / textureonly）· src/ui/environment-panel.js` |
+| 光照 | 墨线（反向外壳描边） | `1751945034851570056` | 已实现 | `src/world/outline.js · index.html?scene=fusion` |
+| 光照 | 逆光亮边（第二层外壳，迎着太阳才出现） | `1751945034851570056` | 已实现 | `src/world/outline.js · index.html?scene=fusion` |
+| 光照 | 软法线：弯曲崖壁变圆、崖顶仍硬（Bad North 体素法线） | `1062374549407350790` | 已实现 | `src/core/meshwriter.js · src/terrain/terrainmesh.js` |
+| 光照 | 平滑 / 硬法线混合（屏幕空间导数算硬法线） | `929417420921556993` | 已实现 | `src/world/view.js（uNormMix）· normals-blend 实验页` |
+| 光照 | 逐顶点体素阴影（体素空间里朝太阳走） | `1190191289922465793` | 已实现 | `src/world/view.js（computeVoxelShadows / aVox）· index.html 光照面板「体素阴影」` |
+| 光照 | 按分辨率加粗描边 | `1017355723171344385` | 已实现 | `src/world/outline.js（OutlineLayers.update） · index.html?scene=fusion` |
 | 光照 | 轨道拖影：历史留存按dt换算，轮廓拖抹待补 | `1727315611959865407` | 部分 | `src/core/camera-motion.js · src/world/view.js` |
-| 光照 | 六方向体积：213帧核验，法线采样/太阳DDA；SDF/mega反馈待补 | `1580845127207387137` | 部分 | `src/light/lightvolume.js · src/world/view.js` |
+| 光照 | 六方向体积：213帧核验，法线采样/太阳DDA；SDF/mega反馈待补 | `1580845127207387137` | 部分 | `src/light/lightvolume.js · src/world/view.js · lightvolume.html` |
 | 光照 | 地表纹理阴影近似：投射资格与深度比较分开；屋檐/纹理浮凸待补 | `1705195380457996629` | 部分 | `src/light/surface-shadow.js · src/world/view.js · surface-shadows.html` |
 | 光照 | 地表纹理阴影近似：投射资格与深度比较分开；屋檐/纹理浮凸待补 | `1704218784028905984` | 部分 | `src/light/surface-shadow.js · src/world/view.js · surface-shadows.html` |
 | 光照 | 半影：阴影画三遍（正常、稍收、大体素）。重构版用 PCF 软阴影，没有三遍叠 | `1305951750638231552` | 部分 | `src/core/penumbra.js · src/light/penumbra.js · src/world/penumbra-layer.js · src/world/view.js` |
-| 光照 | 平涂 / 着色 / 只看光照 / AO 烘焙网格四种视图：前三种有（面板开关），AO 烘焙网格的可视化没做 | `1298689301488775169` | 部分 | `src/world/view.js（lightonly / ao）` |
-| 光照 | 很基础的光照 + 非真体素的 AO 新做法（画面：灰色城墙模型），即分层 AO 烘焙 | `1168168400155267072` | 已实现 | `src/light/bake.js` |
-| 光照 | 共享World用途：碰撞/支撑/梯度诊断，真实风场按实心位保留洞内空气 | `931196707236392960` | 已实现 | `src/core/world-probes.js · src/life/atmosphere.js` |
-| 光照 | GI峡谷：185帧复核，保留体素反弹；原版形因子/参考接口缺口 | `1580835075629133825` | 部分 | `src/core/voxel-distance.js · src/light/lightvolume.js` |
-| 光照 | 反弹过程：41帧核验，0/1/3/6次与实测变化；完整往返反馈待补 | `1580846877855338497` | 部分 | `src/light/lightvolume.js · src/world/view.js` |
-| 光照 | 两色点光体积：176帧核验，有限DDA/直接项/移动关闭通过 | `1582757294672314368` | 已实现 | `src/light/lightvolume.js · src/world/view.js` |
-| 光照 | 法线/SDF/六AO：425帧复核，中心EDT/保守步进/六AO诊断；笔触法线待补 | `1481661852887265288` | 部分 | `src/core/voxel-distance.js · src/light/lightvolume.js` |
-| 光照 | 球面高度立方体光照：低分辨率6面、顶点单次查询 | `1791049306213912823` | 已实现 | `src/core/cube-height.js · src/light/cube-height.js（273帧；本地高度暗化解释，GPU验证）` |
+| 光照 | 平涂 / 着色 / 只看光照 / AO 烘焙网格四种视图：前三种有（面板开关），AO 烘焙网格的可视化没做 | `1298689301488775169` | 部分 | `src/world/ao-mesh-debug.js + src/world/view.js setDebug('aomesh') · environment-panel 能力面板` |
+| 光照 | 很基础的光照 + 非真体素的 AO 新做法（画面：灰色城墙模型），即分层 AO 烘焙 | `1168168400155267072` | 已实现 | `src/light/bake.js · ao-stages.html` |
+| 光照 | 共享World用途：碰撞/支撑/梯度诊断，真实风场按实心位保留洞内空气 | `931196707236392960` | 已实现 | `src/core/world.js · src/core/world-probes.js · src/life/atmosphere.js · flow.html` |
+| 光照 | GI峡谷：185帧复核，保留体素反弹；原版形因子/参考接口缺口 | `1580835075629133825` | 部分 | `src/core/voxel-distance.js · src/light/lightvolume.js · lightvolume.html` |
+| 光照 | 反弹过程：41帧核验，0/1/3/6次与实测变化；完整往返反馈待补 | `1580846877855338497` | 部分 | `src/light/lightvolume.js · src/world/view.js · lightvolume.html` |
+| 光照 | 两色点光体积：176帧核验，有限DDA/直接项/移动关闭通过 | `1582757294672314368` | 已实现 | `src/core/voxel-ray.js · src/light/lightvolume.js · src/world/view.js · lightvolume.html` |
+| 光照 | 法线/SDF/六AO：425帧复核，中心EDT/保守步进/六AO诊断；笔触法线待补 | `1481661852887265288` | 部分 | `src/core/voxel-distance.js · src/light/lightvolume.js · lightvolume.html` |
+| 光照 | 球面高度立方体光照：低分辨率6面、顶点单次查询 | `1791049306213912823` | 已实现 | `src/core/cube-height.js · src/light/cube-height.js · planet.html` |
 | 多层导航 · 本轮补差 | 洞内多层可站点、净空与门户边（已接入战斗，精细碰撞待补齐） | `797119718477991936` | 部分 | `src/world/layerednav.js · src/world/battle-navigation.js · src/badnorth/battle.js` |
 | 跨帧算法 | 跨帧嵌套协程：显式栈、预算、取消与错误传递 | `863019585162932224` | 已实现 | `src/core/coroutine.js · scheduler.html` |
 | 约束求解 | 确定性socket WFC：真实半边、固定约束与迭代回溯（独立实验） | `1164926304640229376` | 已实现 | `src/core/wfc.js · wfc.html` |
 | 约束修复 | socket局部修复：锁定外部、优先旧值、无解扩区和预算回滚 | `793806535898136576` | 已实现 | `src/core/wfc.js（repairWFC）· wfc.html` |
 | 几何邻接 | 从网格抽边界接口、查询候选与核验半边（完整建筑轮廓另列后续） | `795010582239997952` | 已实现 | `src/core/adjacency.js · adjacency.html · wfc.html` |
-| 等值线连接 | 不规则网格等值线：共享跨边端点、双线性鞍点及闭环审核 | `1120036868966502401` | 已实现 | `src/core/contour.js · src/world/contour-overlay.js` |
+| 等值线连接 | 不规则网格等值线：共享跨边端点、双线性鞍点及闭环审核 | `1120036868966502401` | 部分 | `src/core/region-boundary.js · src/world/contour-overlay.js（selectCell 定宽折线 / #buildGizmo）· index.html?scene=terrain&on=contours` |
 | 近似可见性 | 导航图角度采样视线：逐边门户、楼层分离；光学精度不作保证 | `810878197134950401` | 已实现 | `src/core/nav-visibility.js · src/world/visibility.js · visibility.html` |
-| 近似可见性 | 三维空间开阔度：64帧全核，固定步长实际World局部验收 | `798580832906739712` | 部分 | `src/core/space-visibility.js` |
-| 墙饰表面 | 墙板底色/线稿/护墙板生成与World表面预览；完整走廊待补 | `1897266928961700215` | 部分 | `src/build/doodle-wall.js · src/world/doodle-overlay.js` |
-| 墙饰表面 | 黑白走廊研究：单色表面、稳定布局；弧顶/门口版式待补 | `1890018647655272491` | 部分 | `src/build/doodle-wall.js · src/world/doodle-overlay.js` |
-| 模块出现条件诊断 | 特定条件模块的有限样本诊断：完整计数/下界/未知分开，不冒充WFC概率 | `1670794261669769217` | 部分 | `src/core/module-audit.js` |
-| WFC过程 | 真实候选域过程回看 | `865200072685912064` | 部分 | `src/core/wfc.js` |
+| 近似可见性 | 三维空间开阔度：64帧全核，固定步长实际World局部验收 | `798580832906739712` | 部分 | `src/core/space-visibility.js · src/world/space-visibility.js · space-visibility.html` |
+| 墙饰表面 | 墙板底色/线稿/护墙板生成与World表面预览；完整走廊待补 | `1897266928961700215` | 部分 | `src/core/doodle-layout.js · src/build/doodle-wall.js · src/world/doodle-overlay.js · doodle.html` |
+| 墙饰表面 | 黑白走廊研究：单色表面、稳定布局；弧顶/门口版式待补 | `1890018647655272491` | 部分 | `src/core/doodle-layout.js · src/build/doodle-wall.js · src/world/doodle-overlay.js · doodle.html` |
+| 模块出现条件诊断 | 特定条件模块的有限样本诊断：完整计数/下界/未知分开，不冒充WFC概率 | `1670794261669769217` | 已实现 | `src/terrain/features.js · src/core/module-audit.js` |
+| WFC过程 | 真实候选域过程回看 | `865200072685912064` | 部分 | `src/core/wfc.js · wfc-trace.html` |
+| 逐帧核验补登 | （无原文） | `818857408848130048` | 部分 | `src/core/field-surface.js · field-surface.html` |
+| 逐帧核验补登 | （无原文） | `832633189277409280` | 部分 | `src/core/field-surface.js · field-surface.html` |
 
 ### 建筑管线 · Townscaper
 
@@ -286,38 +336,51 @@ Townscaper 的全部：按邻居状态选模块。这里先用规则生成几何
 
 | 分组 | 步骤 | 帖子 | 状态 | 代码 |
 |---|---|---|---|---|
-| 流程 | 1 体素列与角点采样（等值线连接审核见共享底座） | `1120036868966502401` | 已实现 | `src/core/contour.js · src/world/contour-overlay.js` |
-| 流程 | 2 模块装配（原作 545 块，这里用规则生成）+ 模块签名调试色：同一种邻居占用 = 同一块拼图 = 同一种颜色 | `1279107097108635649` | 已实现 | `src/build/buildings.js（sigColor）` |
-| 流程 | 复杂悬空建筑QA：共享World编辑压力回放（局部验收） | `1344290848180203523` | 部分 | `src/core/qa-replay.js` |
-| 流程 | 3 建筑增删、暖橙屋顶与多色墙（原帖重点含饱和度、庭院草地和彩色反弹） | `1197909675443916803` | 部分 | `src/build/buildings.js · src/light/bake.js（现有实现保留，完整原作视觉待补）` |
-| 流程 | 296帧：钢架编辑全核，完整WFC待补 | `1189902695303458816` | 部分 | `src/build/buildings.js` |
-| 流程 | 4 支撑：拱 | `1189908238566903808` | 已实现 | `src/build/buildings.js` |
+| 流程 | 1 体素列与角点采样（等值线连接审核见共享底座） | `1120036868966502401` | 部分 | `src/core/region-boundary.js · src/world/contour-overlay.js（selectCell 定宽折线 / #buildGizmo）· index.html?scene=terrain&on=contours` |
+| 流程 | 2 模块装配（原作 545 块，这里用规则生成）+ 模块签名调试色：同一种邻居占用 = 同一块拼图 = 同一种颜色 | `1279107097108635649` | 部分 | `src/build/buildings.js（moduleSig/sigColor） · src/ui/environment-panel.js「模块签名配色」` |
+| 流程 | 复杂悬空建筑QA：共享World编辑压力回放（局部验收） | `1344290848180203523` | 部分 | `src/core/qa-replay.js · qa-replay.html` |
+| 流程 | 3 建筑增删、暖橙屋顶与多色墙（原帖重点含饱和度、庭院草地和彩色反弹） | `1197909675443916803` | 部分 | `src/build/buildings.js · src/light/bake.js · wall-palette.html` |
+| 流程 | 296帧：钢架编辑全核，完整WFC待补 | `1189902695303458816` | 部分 | `src/build/buildings.js（保留已有钢架；本批仅学习）` |
+| 流程 | 4 支撑：拱 | `1189908238566903808` | 已实现 | `src/build/buildings.js（underside）· src/core/arch-profile.js · arches.html` |
 | 流程 | 道具/门窗：261帧；实际窗台全外缘预留，完整家具待补 | `1205416648397721601` | 部分 | `src/core/opening-footprint.js · src/build/buildings.js` |
-| 流程 | 6 围合庭院：按实际墙层识别开口，上层桥不再封院 | `1238474550511308800` | 部分 | `src/core/courtyards.js · src/build/buildings.js` |
-| 流程 | 六类局部墙饰接实际建筑；跨格整立面/真实洞口待补 | `1181464374839521280` | 部分 | `src/core/surface-decoration.js · src/build/buildings.js` |
-| 流程 | 8 海鸥：排在屋脊上、只有停着有描边、挪动、倒影、扇翅滑翔绕镇飞 | `1244892370392489989` | 已实现 | `src/life/birds.js` |
-| 流程 | 8b 蝴蝶：绕落点松散盘旋、随机换落点、世界空间噪声 | `1273520600221433857` | 已实现 | `src/life/decor.js` |
-| 流程 | 8c 庭院/楼间彩旗绳：308帧复核，纠正屋顶旗归因；双网格开关/截图通过 | `1212732478458343424` | 已实现 | `src/life/decor.js（refresh / #wire）` |
-| 流程 | 8d 楼间绳线/衣物：精确墙面端点与逐层包络，双网格通过 | `1259838941299183619` | 已实现 | `src/core/wire-route.js · src/life/decor.js` |
-| 流程 | 8e 水花：落水时泡沫环 + 飞沫 | `1258421104756097029` | 已实现 | `src/life/effects.js` |
-| 流程 | 8f 道具出现/消失：已逐帧，独立生命周期待接（现仅柱顶增长/灰尘） | `1246074663546916873` | 部分 | `src/life/effects.js（非完整propanim）` |
-| 流程 | Max保留颜色：新增Max/Add真实GPU对照，重叠不累加增亮 | `1056990611738451968` | 已实现 | `src/life/effects.js（setFireAppearance）` |
-| 流程 | 保留快速收缩，补实际寿命年龄/出生尺寸/到期丢弃；线性对照 | `1056992291108413446` | 已实现 | `src/life/effects.js（fspan / fireShrink）` |
-| 流程 | 8g3 烟雾两遍/硬边渐隐保留，新增相机排序；已有烟源时可看棋盘格 | `1015140880666300416` | 已实现 | `src/life/smoke.js` |
-| 流程 | 8i 战斗痕迹：血、尸体、箭射中后粘在船上随船走（Bad North 战斗；原文 "making blood, corpses and arrows stick to boats"）——画面是长船靠岸、箭雨、滩上尸体和血，不是草和花 | `946660607008403456` | 已实现 | `src/badnorth/battle.js · core/platform-anchor.js（440帧；血斑/尸体完整锚点、箭附着及离场清理，双网格验证）` |
+| 流程 | 6 围合庭院：按实际墙层识别开口，上层桥不再封院 | `1238474550511308800` | 部分 | `src/core/courtyards.js · src/build/buildings.js · garden.html` |
+| 流程 | 六类局部墙饰接实际建筑；跨格整立面/真实洞口待补 | `1181464374839521280` | 部分 | `src/core/building-components.js · src/build/buildings.js · building-components.html` |
+| 流程 | 8 海鸥：排在屋脊上、只有停着有描边、挪动、倒影、扇翅滑翔绕镇飞 | `1244892370392489989` | 已实现 | `src/life/birds.js（sittingGeometry / flyGeometry / outlineMaterial / mirror）· index.html 海鸥开关` |
+| 流程 | 8b 蝴蝶：绕落点松散盘旋、随机换落点、世界空间噪声 | `1273520600221433857` | 已实现 | `src/life/decor.js · src/world/view.js` |
+| 流程 | 8c 庭院/楼间彩旗绳：308帧复核，纠正屋顶旗归因；双网格开关/截图通过 | `1212732478458343424` | 已实现 | `src/life/decor.js（refresh / #wire；wires开关）` |
+| 流程 | 8d 楼间绳线/衣物：精确墙面端点与逐层包络，双网格通过 | `1259838941299183619` | 已实现 | `src/core/wire-route.js → src/life/decor.js` |
+| 流程 | 8e 水花：落水时泡沫环 + 飞沫 | `1258421104756097029` | 部分 | `src/life/effects.js · index.html（建造/拆除触发）` |
+| 流程 | 8f 道具出现/消失：已逐帧，独立生命周期待接（现仅柱顶增长/灰尘） | `1246074663546916873` | 部分 | `src/life/effects.js（局部增长/灰尘反馈，非完整道具生命周期）` |
+| 流程 | Max保留颜色：新增Max/Add真实GPU对照，重叠不累加增亮 | `1056990611738451968` | 已实现 | `src/life/effects.js · fire.html` |
+| 流程 | 保留快速收缩，补实际寿命年龄/出生尺寸/到期丢弃；线性对照 | `1056992291108413446` | 已实现 | `src/life/effects.js · fire.html` |
+| 流程 | 8g3 烟雾两遍/硬边渐隐保留，新增相机排序；已有烟源时可看棋盘格 | `1015140880666300416` | 已实现 | `src/life/smoke.js · src/core/smoke-order.js · smoke.html` |
+| 流程 | 8i 战斗痕迹：血、尸体、箭射中后粘在船上随船走（Bad North 战斗；原文 "making blood, corpses and arrows stick to boats"）——画面是长船靠岸、箭雨、滩上尸体和血，不是草和花 | `946660607008403456` | 部分 | `src/badnorth/battle.js（#longship deckPool / #bleed）· src/core/platform-anchor.js · index.html?scene=badnorth` |
 | 流程 | 8h 建造音效：入水"咕咚"（闷击 + 上扬的气泡音）、陆上磕石头、拆掉"啵"（WebAudio 现场合成；用户需求，非视频） | `` | 已实现 | `src/life/sound.js` |
-| 流程 | 9 本地v5分享串：原子导入 / 坏输入保岛 / 北境身份（完整状态另补） | `1198957499027795969` | 部分 | `src/world/save.js · app.js` |
+| 流程 | 9 本地v5分享串：原子导入 / 坏输入保岛 / 北境身份（完整状态另补） | `1198957499027795969` | 部分 | `src/world/save.js · save-mesh.html` |
 | 流程 | 9b 撤销历史回放：可停止/保岛，截断历史偏移已修复（动作特效另补） | `1260586697538113537` | 部分 | `src/core/snapshot-replay.js · src/world/app.js` |
-| 流程 | 蝴蝶在后院花园上空飞（画面：环形排屋围着的花园） | `1270725616430530566` | 已实现 | `src/life/decor.js` |
-| 流程 | 窗户的风格与密度（每层 1–2 扇白框小窗）、不同颜色的房子相接 | `1176516621223043073` | 已实现 | `src/build/buildings.js` |
-| 流程 | 白天也好看的火：靠 Max 混合，粒子融成一个火焰轮廓不过曝（北境里小屋失守时着火） | `1056999668486471682` | 已实现 | `src/life/effects.js（MaxEquation）` |
-| 流程 | 年龄增加mip偏移；同尺寸卡片GPU实测与mip开关，保留隐式LOD语义 | `1015151731804721152` | 已实现 | `src/life/smoke.js（真实纹理采样）` |
-| 流程 | 随机正反UV沿投影烟流滚动；真实mip棋盘/裸方片与关闭滚动对照 | `1015149712469524480` | 已实现 | `src/life/smoke.js（aFlow / aDir）` |
-| 流程 | 两遍画：黑底/浅色遍可单独验收、阈值仅内收一次、同深度排序与实例属性配对 | `1015142746372366336` | 已实现 | `src/life/smoke.js · src/core/smoke-order.js` |
-| 流程 | 灯塔：海边一格粗高塔 → 灯室 + 旋转光束 | `1331905048801144836` | 已实现 | `src/build/lighthouse.js` |
-| 早期拱洞逐帧与曲线分段 | 123帧：水渠/穿楼拱洞，局部曲线验收 | `806904557502464000` | 部分 | `src/core/arch-profile.js · src/build/buildings.js` |
-| 早期拱洞逐帧与曲线分段 | 292帧：水渠/穿楼拱洞，局部曲线验收 | `802496920790777856` | 部分 | `src/core/arch-profile.js · src/build/buildings.js` |
-| 三维拼装学习待迁移 | 67帧3D模块逐步拼装全核，仅学习 | `787319655648100352` | 部分 | `原3D模块库与动画未迁移` |
+| 流程 | 蝴蝶在后院花园上空飞（画面：环形排屋围着的花园） | `1270725616430530566` | 已实现 | `src/life/decor.js · src/world/view.js（落点来源）` |
+| 流程 | 窗户的风格与密度（每层 1–2 扇白框小窗）、不同颜色的房子相接 | `1176516621223043073` | 已实现 | `src/build/buildings.js（opening/tryPlace） · building-components.html` |
+| 流程 | 白天也好看的火：靠 Max 混合，粒子融成一个火焰轮廓不过曝（北境里小屋失守时着火） | `1056999668486471682` | 已实现 | `src/life/effects.js（fire / MaxEquation / setFireAppearance） · fire.html、index.html?scene=badnorth` |
+| 流程 | 年龄增加mip偏移；同尺寸卡片GPU实测与mip开关，保留隐式LOD语义 | `1015151731804721152` | 已实现 | `src/life/smoke.js · smoke.html` |
+| 流程 | 随机正反UV沿投影烟流滚动；真实mip棋盘/裸方片与关闭滚动对照 | `1015149712469524480` | 已实现 | `src/life/smoke.js · smoke.html` |
+| 流程 | 两遍画：黑底/浅色遍可单独验收、阈值仅内收一次、同深度排序与实例属性配对 | `1015142746372366336` | 部分 | `src/life/smoke.js · src/core/smoke-order.js · smoke.html` |
+| 流程 | 灯塔：海边一格粗高塔 → 灯室 + 旋转光束 | `1331905048801144836` | 已实现 | `src/build/lighthouse.js（refresh 几何：lantern / roof / deck / railpost）· index.html 场景（灯塔开关）` |
+| 早期拱洞逐帧与曲线分段 | 123帧：水渠/穿楼拱洞，局部曲线验收 | `806904557502464000` | 部分 | `src/core/arch-profile.js · src/build/buildings.js · arches.html` |
+| 早期拱洞逐帧与曲线分段 | 292帧：水渠/穿楼拱洞，局部曲线验收 | `802496920790777856` | 部分 | `src/core/arch-profile.js · src/build/buildings.js · arches.html` |
+| 三维拼装学习待迁移 | 67帧3D模块逐步拼装全核，仅学习 | `787319655648100352` | 部分 | `src/core/wfc.js · src/build/buildings.js` |
+| 逐帧核验补登 | （无原文） | `797844857821732864` | 部分 | `src/world/voxel-ghost.js · voxel-ghost.html` |
+| 逐帧核验补登 | （无原文） | `794993371261665280` | 部分 | `src/world/voxel-ghost.js · voxel-ghost.html` |
+| 逐帧核验补登 | （无原文） | `784848286272327680` | 部分 | `src/sphere/planet.js · planet.html` |
+| 逐帧核验补登 | （无原文） | `784847588893814785` | 部分 | `src/sphere/planet.js · planet.html` |
+| 逐帧核验补登 | （无原文） | `784847933686575104` | 部分 | `src/sphere/planet.js · planet.html` |
+| 逐帧核验补登 | Plus you can change the in-game textures now! So… | `1430227487376781317` | 部分 | `src/core/palette.js · src/build/buildings.js（无 surface 图集）` |
+| 逐帧核验补登 | Here's a very quick technical test. Though this … | `1427721874490933250` | 部分 | `src/terrain/blotch-pattern.js（斑块/贴花）` |
+| 逐帧核验补登 | Ok, I tried the mixed perspective. Note how hous… | `1310503825510367232` | 部分 | `src/core/mixed-perspective.js · mixed-perspective.html` |
+| 逐帧核验补登 | A smoothing and inversion bug I came across whil… | `1302686201401442309` | 部分 | `src/core/infinite.js（verify 拉伸度量）· grids.html（网格实验室 无限网格）` |
+| 逐帧核验补登 | It has not escaped some of you that I have yet t… | `1275089608758484992` | 部分 | `src/render/opening-punch.js（rise 拱顶洞口）· src/core/ladder-profile.js（竖梯，已有）· opening-punch.html` |
+| 逐帧核验补登 | Alrighty. First 20 people to reply gets a b e t … | `1257213678056857600` | 部分 | `src/build/buildings.js（legs 段） · architecture.html` |
+| 逐帧核验补登 | For doors and windows, I use som stencil buffer … | `1205422438437273601` | 部分 | `src/render/opening-punch.js · opening-punch.html` |
+| 逐帧核验补登 | Basic marching cubes on my funky grid. Next up i… | `1163836000688365571` | 部分 | `src/core/contour.js（2D marching squares）· contour.html；缺 src/core/ 下 3D 等值面模块` |
 
 ### 地形管线 · terrain
 
@@ -325,31 +388,31 @@ Townscaper 的全部：按邻居状态选模块。这里先用规则生成几何
 
 | 分组 | 步骤 | 帖子 | 状态 | 代码 |
 |---|---|---|---|---|
-| 流程 | 边境：padding三角图→避让节点中点通路→自适应Bezier已验收；两侧细分待补 | `1097458505315946496` | 部分 | `src/core/frontier.js` |
-| 流程 | 软坡＋硬崖：656帧复核，完整连续坡/无局部低洼生成待补；层级XZ形变不能替代 | `1447488323845509121` | 部分 | `src/terrain/generate.js · shape.js（完整软坡/侵蚀保证待补）` |
-| 流程 | 3 河网：填洼/汇水累计重建接共享World；原球面联合坍缩待补 | `1769691526924292506` | 部分 | `src/core/river-network.js · src/terrain/river-network.js` |
+| 流程 | 边境：padding三角图→避让节点中点通路→自适应Bezier已验收；两侧细分待补 | `1097458505315946496` | 部分 | `src/core/frontier.js · campaign.html` |
+| 流程 | 软坡＋硬崖：656帧复核，完整连续坡/无局部低洼生成待补；层级XZ形变不能替代 | `1447488323845509121` | 部分 | `src/terrain/generate.js · shape.js（软坡/侵蚀保证待补）` |
+| 流程 | 3 河网：填洼/汇水累计重建接共享World；原球面联合坍缩待补 | `1769691526924292506` | 部分 | `src/terrain/generate.js` |
 | 流程 | 边层级：共享切面显式硬边；模块/材质边语义待补 | `1670720537662836736` | 部分 | `src/terrain/shape.js · hierarchy.html` |
 | 流程 | 防蘑菇化：显式模块格/尺寸诊断；多格冲突仍待补 | `1769641473895432220` | 部分 | `src/sphere/planet.js · planet.html` |
-| 流程 | 弯层理：可逆Y剪切纹理场、几何保持原位；同位置相位/三角剖分GPU无缝 | `1699146321318314094` | 部分 | `src/core/sediment.js · terrainmesh.js · View` |
+| 流程 | 弯层理：可逆Y剪切纹理场、几何保持原位；同位置相位/三角剖分GPU无缝 | `1699146321318314094` | 部分 | `src/core/sediment.js · src/terrain/terrainmesh.js · src/world/view.js` |
 | 流程 | 树转镜：旋转锚点/正交与透视/周界GPU通过；原octagonal卡片与俯仰仍缺 | `1849427564034498642` | 部分 | `src/life/impostor.js · impostors.html` |
 | 流程 | 蓬松云：共享树云材质/时钟/遮挡回归通过；原云形/层次仍缺 | `1852334860137849222` | 部分 | `src/life/impostor.js · impostors.html` |
 | 流程 | 9 分层避障风场：通洞/封洞与共享风向已验；完整轨迹接口待补 | `926903893866541057` | 部分 | `src/life/atmosphere.js · src/core/world-probes.js` |
 | 流程 | 10 受风雪片：真实层碰撞保留洞口；简单白点/表面混白，软片与AO待补 | `943230624369868800` | 部分 | `src/life/atmosphere.js · src/core/world-probes.js` |
 | 流程 | 11 背景雾：外缘渐隐 / 浓度与相对流速（圆盘近似） | `906207980802252801` | 部分 | `src/life/atmosphere.js · src/core/fog-envelope.js` |
 | 流程 | 悬挑/柱间空洞：分层岩石底面、空隙诊断与切面面积/边长保护已接；3D侧壁交叉仍待补 | `1671808851895627776` | 部分 | `src/core/rock-topology.js · terrain/features.js · terrainmesh.js` |
-| 流程 | 14 天然石拱：两根岩柱之间架一道，拱下至少空一层 | `1670794261669769217` | 已实现 | `src/terrain/features.js` |
+| 流程 | 14 天然石拱：两根岩柱之间架一道，拱下至少空一层 | `1670794261669769217` | 已实现 | `src/terrain/features.js · src/core/module-audit.js` |
 | 流程 | 斜向崖脊/柱群观察：267帧纠偏，蘑菇石扩展保留；薄檐形变面积/边长保护已接 | `1708815475801505819` | 部分 | `src/terrain/features.js · shape.js · src/core/deformation-guard.js` |
 | 流程 | 坍缩边缘候选：434帧核验，真实半边只读枚举；增量导航互连待补 | `1582293326815862786` | 部分 | `src/core/frontier-candidates.js · wfc.html` |
-| 流程 | 近云同图投影/首页开关局部验收；远云影与模糊仍缺 | `1243228419162341379` | 部分 | `src/light/cloud-shadow.js · src/life/impostor.js` |
-| 流程 | 岩壁宽窄层带：世界坐标着色与直/弯对照，旧窄条保留；原作外观/反射仍待补 | `1699038611125985317` | 部分 | `src/core/sediment.js · terrainmesh.js · View` |
-| 纹理学习与成本对照 | 球面Texture test：242帧已学；海陆纹理/岸缘混合待实现 | `1783792917183606829` | 部分 | `planet.html（网格能力保留，非原纹理）` |
+| 流程 | 近云同图投影/首页开关局部验收；远云影与模糊仍缺 | `1243228419162341379` | 部分 | `src/life/vegetation.js · src/life/impostor.js · clouds.html · src/light/cloud-shadow.js` |
+| 流程 | 岩壁宽窄层带：世界坐标着色与直/弯对照，旧窄条保留；原作外观/反射仍待补 | `1699038611125985317` | 部分 | `src/core/sediment.js · src/terrain/terrainmesh.js · src/world/view.js` |
+| 纹理学习与成本对照 | 球面Texture test：242帧已学；海陆纹理/岸缘混合待实现 | `1783792917183606829` | 部分 | `planet.html（现有网格；纹理流程待补）` |
 | 纹理学习与成本对照 | 山体：共享岩壁底色/顶点明度/实时法线局部通过；原纹理待补 | `1786014232594485497` | 部分 | `src/core/mountain-bake.js · mountain-bake.html` |
-| 笼形变与生成复核 | 两组岛生成审核，原模块联合生成待补 | `1579474420749725696` | 部分 | `src/terrain/shape.js · cage.html` |
-| 生成成果复核 | 多岛成果学习与差距审核 | `1669315384619540487` | 部分 | `src/terrain/generate.js` |
-| 台地逻辑诊断 | 185帧台地诊断 | `815236105079398400` | 部分 | `src/core/terrace-profile.js` |
-| 台地逻辑诊断 | 109帧黄色薄平台，仅学习 | `781957658597269506` | 部分 | `src/core/terrace-profile.js` |
-| 台地格边遍局部迁移 | 同World端点＋笼投影：层界/线框/岸界局部通过 | `1669315384619540487` | 部分 | `src/core/terrace-edges.js · src/world/terrace-edges.js` |
-| 跨层梯几何局部迁移 | 实际台地木梯：3D梁长与等距踏棍；薄平台/攀爬待补 | `781957658597269506` | 部分 | `src/core/ladder-profile.js · src/world/navlayer.js` |
+| 笼形变与生成复核 | 两组岛生成审核，原模块联合生成待补 | `1579474420749725696` | 部分 | `src/terrain/generate.js · cage.html` |
+| 生成成果复核 | 多岛成果学习与差距审核 | `1669315384619540487` | 部分 | `src/terrain/generate.js · src/core/terrace-edges.js · terraces.html` |
+| 台地逻辑诊断 | 185帧台地诊断 | `815236105079398400` | 部分 | `src/core/terrace-profile.js · terraces.html` |
+| 台地逻辑诊断 | 109帧黄色薄平台，仅学习 | `781957658597269506` | 部分 | `src/terrain/generate.js · src/core/ladder-profile.js · src/world/navlayer.js · terraces.html` |
+| 台地格边遍局部迁移 | 同World端点＋笼投影：层界/线框/岸界局部通过 | `1669315384619540487` | 部分 | `src/terrain/generate.js · src/core/terrace-edges.js · terraces.html` |
+| 跨层梯几何局部迁移 | 实际台地木梯：3D梁长与等距踏棍；薄平台/攀爬待补 | `781957658597269506` | 部分 | `src/terrain/generate.js · src/core/ladder-profile.js · src/world/navlayer.js · terraces.html` |
 
 ### 北境 · Bad North
 
@@ -360,46 +423,57 @@ Townscaper 的全部：按邻居状态选模块。这里先用规则生成几何
 | 画面（从 REACode 的截图测量搬来） | 没有地平线：远海 = 背景 = 地平线色；四角亮中心暗 | `` | 已实现 | `src/badnorth/theme.js · view.js（uFar）` |
 | 画面（从 REACode 的截图测量搬来） | 叠层岩板 + 偏紫的崖面（夏 / 晨实测，雨 / 黄昏 / 夜 / 秋推断；1–6 切换） | `` | 已实现 | `src/badnorth/theme.js` |
 | 画面（从 REACode 的截图测量搬来） | 岸线颜色跟着环境走（夏鲑鱼粉、晨雾青） | `` | 已实现 | `src/badnorth/theme.js · view.setShoreColor()` |
-| 画面（从 REACode 的截图测量搬来） | 可走关卡：每块台地都能从沙滩走上去 | `917405214638006273` | 已实现 | `src/badnorth/island.js` |
-| 画面（从 REACode 的截图测量搬来） | 冬季宣传全景：306帧已学；第210帧切到船群/士兵/血烟，完整组合待实现验收 | `943230620242796544` | 部分 | `已有雪/战斗主体保留，完整冬景组合待补` |
+| 画面（从 REACode 的截图测量搬来） | 可走关卡：每块台地都能从沙滩走上去 | `917405214638006273` | 已实现 | `src/badnorth/island.js · src/world/navlayer.js · nav-walk.html` |
+| 画面（从 REACode 的截图测量搬来） | 冬季宣传全景：306帧已学；第210帧切到船群/士兵/血烟，完整组合待实现验收 | `943230620242796544` | 部分 | `src/life/atmosphere.js · src/badnorth/battle.js（组合待验）` |
 | 玩法 | 长船登陆、维京人沿导航图走向小屋，门口站够 4 秒着火 | `` | 已实现 | `src/badnorth/battle.js` |
-| 玩法 | 窄道点线：常驻等距圆点标示窄脊和楼梯连接（与选中命令路径分开） | `886199305522085890` | 已实现 | `src/world/traffic.js · src/badnorth/battle.js（passageDots）` |
-| 玩法 | 血、尸体、箭粘在船上随船走 | `946660607008403456` | 已实现 | `src/badnorth/battle.js · core/platform-anchor.js（440帧；血斑/尸体完整锚点、箭附着及离场清理，双网格验证）` |
-| 玩法 | 血浸透当血量指示 | `984813819280191488` | 部分 | `src/badnorth/battle.js · core/combat-profile.js · life/unit-sprites.js（934帧；大小兵、中断/浸血及精灵反馈通过，完整动作/美术待续）` |
-| 玩法 | 近战手感：挨打后退、血滴飞溅；会被打下悬崖 | `1022573208590057472` | 已实现 | `src/badnorth/battle.js（#hit / #fallStep）` |
-| 玩法 | 矛兵：够得更远、先出手 | `903647529203634176` | 部分 | `src/badnorth/battle.js · core/spear-thrust.js（654帧；连续检测/命中集/显示同步通过，完整持矛动作及3D遮挡待续）` |
-| 玩法 | 流场 / 影响场：多源 Dijkstra + 数据继承（兵种），每 0.25 秒一次 | `972829402873716737` | 已实现 | `src/badnorth/flowfield.js（分层多源场）· battle.js` |
-| 玩法 | 678帧弹道：共享查表/实际端点修复，原表达式待补 | `987267068495003648` | 部分 | `src/core/ballistic-table.js · src/badnorth/battle.js` |
-| 玩法 | 血迹跟着身体（物体空间血斑）；可关掉血腥 | `999185422403055616` | 已实现 | `src/badnorth/battle.js` |
+| 玩法 | 窄道点线：常驻等距圆点标示窄脊和楼梯连接（与选中命令路径分开） | `886199305522085890` | 部分 | `src/world/traffic.js（passageMarkers/heightRaster roofs）· src/badnorth/battle.js（refreshPassages 屋顶射线）· index.html?scene=badnorth` |
+| 玩法 | 血、尸体、箭粘在船上随船走 | `946660607008403456` | 部分 | `src/badnorth/battle.js（#longship deckPool / #bleed）· src/core/platform-anchor.js · index.html?scene=badnorth` |
+| 玩法 | 血浸透当血量指示 | `984813819280191488` | 部分 | `src/badnorth/battle.js（installSoak/aSoak/#bleed/poolGrow/mStun）· src/core/combat-state.js · index.html?scene=badnorth` |
+| 玩法 | 近战手感：挨打后退、血滴飞溅；会被打下悬崖 | `1022573208590057472` | 已实现 | `src/badnorth/battle.js（#hit / dropPoints / blood） · index.html?scene=badnorth` |
+| 玩法 | 矛兵：够得更远、先出手 | `903647529203634176` | 部分 | `src/badnorth/damage-numbers.js（新增）· src/badnorth/battle.js（#hit / #damagePopup / #updateDamageNumbers）· index.html?scene=badnorth&grid=quad|mixed` |
+| 玩法 | 流场 / 影响场：多源 Dijkstra + 数据继承（兵种），每 0.25 秒一次 | `972829402873716737` | 已实现 | `src/badnorth/flowfield.js · src/badnorth/battle.js（flowLines）· flow-color.html` |
+| 玩法 | 678帧弹道：共享查表/实际端点修复，原表达式待补 | `987267068495003648` | 部分 | `src/core/ballistic-table.js · src/badnorth/battle.js · ballistics.html` |
+| 玩法 | 血迹跟着身体（物体空间血斑）；可关掉血腥 | `999185422403055616` | 部分 | `src/badnorth/battle.js（aSoak · installSoak 头+身）· head-blood-browser` |
 | 玩法 | 洞穴725帧仅学习：厚岩拱洞/多层战斗 | `906416813810049025` | 部分 | `artifacts/coverage/cloud-depth-review.md` |
-| 玩法 | 窄道会车（简化：互相让开） | `880853661936734211` | 部分 | `src/world/traffic.js · src/badnorth/battle.js（601帧；左行/半径分离/暂停冻结通过，复杂路口及体型路由待续）` |
-| 玩法 | 关掉血腥：面板「血腥」取消勾选后不画血、不留尸体（画面就是同一场战斗的有血 / 无血对比） | `999191760944418817` | 已实现 | `src/badnorth/battle.js（gore）` |
-| 玩法 | 真实军旗共享风/Bezier：暂停零漂移，新增白徽记/透明分叉尾；布料碰撞仍非目标 | `926834721392340992` | 已实现 | `src/badnorth/battle.js` |
-| 玩法 | 战斗动图：台地边上混战、血、落水的人；挨打后退 + 血滴飞溅落地成血点 | `912691357440978945` | 已实现 | `src/badnorth/battle.js（#hit）` |
+| 玩法 | 窄道会车（简化：互相让开） | `880853661936734211` | 部分 | `src/world/traffic.js · src/badnorth/battle.js` |
+| 玩法 | 关掉血腥：面板「血腥」取消勾选后不画血、不留尸体（画面就是同一场战斗的有血 / 无血对比） | `999191760944418817` | 已实现 | `src/badnorth/battle.js（gore · #draw 尸体跳过 · blood.visible）· setDebug('gore')` |
+| 玩法 | 真实军旗共享风/Bezier：暂停零漂移，新增白徽记/透明分叉尾；布料碰撞仍非目标 | `926834721392340992` | 已实现 | `src/badnorth/battle.js（真实dt/Bezier军旗）` |
+| 玩法 | 战斗动图：台地边上混战、血、落水的人；挨打后退 + 血滴飞溅落地成血点 | `912691357440978945` | 部分 | `src/badnorth/battle.js（#bleedWall / #bleedAtFoot）· index.html?scene=badnorth&grid=quad` |
 | 玩法 | "瑞士奶酪"一样的多洞岛（画面：拱门、洞口很多的紫色岩岛）。重构版有悬垂和石拱的造型，但单位不能穿洞 | `906425294533394432` | 部分 | `src/world/layerednav.js · src/world/battle-navigation.js · src/badnorth/battle.js` |
-| 玩法 | 数据继承可视化：每格到父格一段线，颜色 = 从哪支守军继承来的（面板「流场」） | `902069261304287232` | 已实现 | `src/badnorth/flowfield.js（分层多源场）· battle.js` |
-| 玩法 | 流场 / 影响场：除了到最近单位的距离和方向，还带着"那是什么兵种"；维京人看到矛兵正面会绕开去打小屋 | `901842167508992000` | 已实现 | `src/badnorth/flowfield.js（分层多源场）· battle.js` |
-| 玩法 | 单位会被打下悬崖：挨打时身后低 ≥2 层就可能被击飞，抛物线落下，落差大的摔死 | `870296307889573889` | 已实现 | `src/badnorth/battle.js（#hit / #fallStep）` |
-| 玩法 | 真实发船泊位/直线进场走廊预留局部通过；岸礁/动态避让待补 | `974325184525201409` | 部分 | `src/badnorth/landing-plan.js · src/core/obb.js` |
-| 战役 | 真实军旗共享风/Bezier：暂停零漂移，新增白徽记/透明分叉尾；布料碰撞仍非目标 | `926890207298899969` | 已实现 | `src/badnorth/battle.js` |
-| 战役 | 战役五步：散开→剔除→主路/支路/节点；连通补桥与有界无回环主路通过 | `1042732450730913793` | 已实现 | `src/core/campaign-graph.js · src/campaign/campaign.js` |
-| 战役 | 真实共享World几何→64²快照；双线性/导数阈值对照，主战役图标仍保留程序近似 | `911913981731885056` | 已实现 | `src/world/island-snapshot.js` |
-| 战役 | 连接分组：保留整组合并，按权重逐节点调整边界、保持区域连通；第4步可回放历史 | `938422757288792064` | 已实现 | `src/core/region-groups.js · src/campaign/campaign.js` |
-| 战役 | 战役岛屿散开与分区：重合散开、断开分量保留，原作精确权重/调度未知 | `938405900573986816` | 已实现 | `src/core/region-groups.js · src/campaign/campaign.js` |
-| 战役 | 节点候选图与选路：Delaunay为本地近似，原作精确邻接未知；凸包边/连通修复已验收 | `1078792665980915714` | 已实现 | `src/core/campaign-graph.js · src/campaign/campaign.js` |
+| 玩法 | 数据继承可视化：每格到父格一段线，颜色 = 从哪支守军继承来的（面板「流场」） | `902069261304287232` | 部分 | `src/badnorth/battle.js（#drawFlow unit 档）· index.html?scene=badnorth&grid=quad` |
+| 玩法 | 流场 / 影响场：除了到最近单位的距离和方向，还带着"那是什么兵种"；维京人看到矛兵正面会绕开去打小屋 | `901842167508992000` | 部分 | `src/badnorth/flowfield.js · src/badnorth/battle.js（#drawFlow type 档）· index.html?scene=badnorth&grid=quad` |
+| 玩法 | 单位会被打下悬崖：挨打时身后低 ≥2 层就可能被击飞，抛物线落下，落差大的摔死 | `870296307889573889` | 部分 | `src/badnorth/battle.js（#hit / #fallStep / #lowerAhead）· index.html?scene=badnorth&grid=quad` |
+| 玩法 | 真实发船泊位/直线进场走廊预留局部通过；岸礁/动态避让待补 | `974325184525201409` | 部分 | `src/core/obb.js · src/badnorth/landing-plan.js · src/badnorth/battle.js` |
+| 战役 | 真实军旗共享风/Bezier：暂停零漂移，新增白徽记/透明分叉尾；布料碰撞仍非目标 | `926890207298899969` | 已实现 | `src/badnorth/battle.js（#flag / #updateFlag）` |
+| 战役 | 战役五步：散开→剔除→主路/支路/节点；连通补桥与有界无回环主路通过 | `1042732450730913793` | 已实现 | `src/core/campaign-graph.js · src/campaign/campaign.js · campaign.html` |
+| 战役 | 真实共享World几何→64²快照；双线性/导数阈值对照，主战役图标仍保留程序近似 | `911913981731885056` | 已实现 | `src/world/island-snapshot.js · snapshot.html` |
+| 战役 | 连接分组：保留整组合并，按权重逐节点调整边界、保持区域连通；第4步可回放历史 | `938422757288792064` | 已实现 | `src/core/region-groups.js · src/campaign/campaign.js · campaign.html 第4步` |
+| 战役 | 战役岛屿散开与分区：重合散开、断开分量保留，原作精确权重/调度未知 | `938405900573986816` | 已实现 | `src/core/region-groups.js · src/campaign/campaign.js · campaign.html 第4步` |
+| 战役 | 节点候选图与选路：Delaunay为本地近似，原作精确邻接未知；凸包边/连通修复已验收 | `1078792665980915714` | 已实现 | `src/core/campaign-graph.js · src/campaign/campaign.js · campaign.html` |
 | 单方向精灵 | 单方向造型与翻转审核：剑尖/斧刃对照；可选真实北境模式 | `969860566322958336` | 已实现 | `src/core/sprite-ambiguity.js · src/life/unit-sprites.js · src/badnorth/battle.js · sprites.html` |
-| 单位接触软盘 | 动画/战斗与单位接触软盘复核 | `820977247083528192` | 部分 | `src/core/unit-shadow.js · src/badnorth/battle.js` |
-| 单位接触软盘 | 动画/战斗与单位接触软盘复核 | `821321422140309504` | 部分 | `src/core/unit-shadow.js · src/badnorth/battle.js` |
-| 单位等级与早期战斗复核 | 复仇战斗：763帧；仅学习 | `821680056514781186` | 部分 | `src/core/unit-tier.js · src/badnorth/battle.js` |
-| 单位等级与早期战斗复核 | 单位等级：524帧；3D色阶局部通过 | `827215002448846848` | 部分 | `src/core/unit-tier.js · src/badnorth/battle.js` |
-| 单位层高 | 坡地战斗387帧；每人层高缓动 | `828984794407170048` | 部分 | `src/core/unit-ground-height.js` |
-| 分层房屋交互 | 分层房屋攻击/守卫，666帧已核 | `890611046435627008` | 部分 | `src/core/house-door-presence.js` |
+| 单位接触软盘 | 动画/战斗与单位接触软盘复核 | `820977247083528192` | 部分 | `src/core/unit-shadow.js · unit-shadows.html` |
+| 单位接触软盘 | 动画/战斗与单位接触软盘复核 | `821321422140309504` | 部分 | `src/badnorth/battle.js` |
+| 单位等级与早期战斗复核 | 复仇战斗：763帧；仅学习 | `821680056514781186` | 部分 | `src/badnorth/battle.js` |
+| 单位等级与早期战斗复核 | 单位等级：524帧；3D色阶局部通过 | `827215002448846848` | 部分 | `src/core/unit-tier.js · unit-tiers.html` |
+| 单位层高 | 坡地战斗387帧；每人层高缓动 | `828984794407170048` | 部分 | `src/core/unit-ground-height.js · src/badnorth/battle.js` |
+| 分层房屋交互 | 分层房屋攻击/守卫，666帧已核 | `890611046435627008` | 部分 | `src/core/house-door-presence.js · src/badnorth/battle.js` |
 | 尘粒与路径归因核验 | 尘粒AO227帧仅学习，原效果待实现 | `823848950553780226` | 部分 | `artifacts/coverage/path-samples-review.md` |
 | 塔楼形态局部迁移 | 344帧：塔楼四檐顶局部，原群体寻路待补 | `807256278154301441` | 部分 | `src/core/hip-roof.js · src/build/buildings.js` |
 | 三队旗徽局部迁移 | 23帧三队旗徽：原盾纹仍缺 | `827216768783495168` | 部分 | `src/core/banner.js · src/badnorth/battle.js` |
-| 多格高层建筑学习待迁移 | 多格/体素AO102帧，仅学习 | `793545297376972801` | 部分 | `artifacts/coverage/multitile-ao-review.md` |
-| 分层遮蔽学习/局部验收 | 6帧遮蔽核验，原完整算法仍缺 | `793557992931266561` | 部分 | `artifacts/coverage/ao-stages-review.md` |
-| 导航流动逐帧复核 | 真实24单位通口前视/合法推进局部通过；完整连续面/坡高待补 | `816748103193817088` | 部分 | `src/core/portal-aim.js · src/world/battle-navigation.js` |
+| 多格高层建筑学习待迁移 | 多格 tile 三维 WFC + 顶点体素 AO（回放长出来） | `793545297376972801` | 部分 | `src/build/multitile-wfc.js · src/build/multitile-iso.js · multitile.html` |
+| 分层遮蔽学习/局部验收 | 6帧遮蔽核验，原完整算法仍缺 | `793557992931266561` | 部分 | `src/world/worldmesh.js · src/light/bake.js · ao-stages.html` |
+| 导航流动逐帧复核 | 导航面内连续流场 · 百人经坡道换层 | `816748103193817088` | 部分 | `src/world/navmesh-flow.js · navmesh-flow.html` |
+| 逐帧核验补登 | （无原文） | `839067977781768193` | 部分 | `src/badnorth/squad-hud.js · squad-hud.html` |
+| 逐帧核验补登 | （无原文） | `883447205176238083` | 部分 | `src/badnorth/squad-footprint.js · squad-footprint.html` |
+| 逐帧核验补登 | （无原文） | `837027901853810688` | 部分 | `src/life/smoke.js · src/badnorth/battle.js（缺口，未改）` |
+| 逐帧核验补登 | （无原文） | `816743289500106752` | 部分 | `src/badnorth/battle.js · unit-ground-height.js（无队列层）` |
+| 逐帧核验补登 | （无原文） | `816332161036984320` | 部分 | `src/core/trajectory-fan.js · trajectory-fan.html` |
+| 逐帧核验补登 | （无原文） | `810157485638189056` | 部分 | `src/core/route-preview.js · path-samples.js（均无页面入口对应此视图）` |
+| 逐帧核验补登 | k-pow !! | `1092709665199345664` | 部分 | `src/life/effects.js · src/life/smoke.js · src/life/banner.js（缺口：一次性爆炸编排 explodeAt）` |
+| 逐帧核验补登 | （帖子无文字说明） | `1007587828992266240` | 部分 | `src/badnorth/battle.js · src/life/effects.js · src/life/banner.js` |
+| 逐帧核验补登 | The pathfinding in some levels does get a bit co… | `995043346778415104` | 部分 | `src/core/route-preview.js · route-preview.html` |
+| 逐帧核验补登 | （帖子无文字说明） | `995034777756536833` | 部分 | `src/badnorth/battle.js · 无（能力系统未建）` |
+| 逐帧核验补登 | Ok, one more visualization. Distances this time.… | `902103473365417984` | 部分 | `src/core/distance-isolines.js · distances.html` |
 
 ### 画风 · 线条与贴图
 
@@ -411,31 +485,31 @@ Oskar 的画风靠线条和贴图撑起来：与缩放无关的 1 像素线、�
 | 线条 | 三角对比迭代：标量诊断，原作atlas待补 | `1482346496460828674` | 部分 | `src/core/contrast-field.js · color-lab.html（三角诊断）` |
 | 线条 | 程序化法线反差：共享材质/物理像素线局部GPU通过；原atlas待补 | `1482011744843223042` | 部分 | `src/core/normal-contrast.js · normal-contrast.html` |
 | 线条 | 隔像素线：连续UV重映射＋线性采样；放大积分宽度1px，缩小/全atlas接入待补 | `1241096929490149376` | 部分 | `src/core/texel-skip.js · textures.html` |
-| 线条 | fwidth缩放抗锯齿：保留纹理实验，真实快照alpha阈值及受控1像素线GPU验收通过 | `978211952504852480` | 已实现 | `textures.html · src/world/island-snapshot.js` |
-| 地面笔触 | 抽象田地：格块专用顶面坐标、方向分段与导数抗锯齿；原作手绘atlas仍待补 | `1714613599035863191` | 部分 | `src/terrain/field-pattern.js · WorldMesh/View` |
+| 线条 | fwidth缩放抗锯齿：保留纹理实验，真实快照alpha阈值及受控1像素线GPU验收通过 | `978211952504852480` | 已实现 | `src/world/island-snapshot.js · snapshot.html · textures.html` |
+| 地面笔触 | 抽象田地：格块专用顶面坐标、方向分段与导数抗锯齿；原作手绘atlas仍待补 | `1714613599035863191` | 部分 | `src/terrain/field-pattern.js · terrainmesh.js · WorldMesh/View` |
 | 地面笔触 | 旋涡团块：可调角度场与柔边，本地近似 | `1703750394164199473` | 部分 | `src/terrain/blotch-pattern.js · src/world/view.js · blotches.html` |
 | 地面笔触 | 重要边界：显式地表标记隔离屋顶/岩壁，真实层高选噪声 | `1696864977171189980` | 部分 | `src/terrain/blotch-pattern.js · src/world/view.js` |
-| 地面笔触 | 大块颜料斑藏住多边形：量化的三档明暗只画在朝上的草色面 | `1480635131614355459` | 已实现 | `src/world/view.js（地面笔触）` |
-| 地面笔触 | 径向大小排序：原片UV图块已学；旧圆块仅近似，UV流程未验 | `1478114309263839244` | 部分 | `textures.html（旧圆块近似）` |
+| 地面笔触 | 大块颜料斑藏住多边形：量化的三档明暗只画在朝上的草色面 | `1480635131614355459` | 已实现 | `src/terrain/blotch-pattern.js · src/world/view.js · blotches.html` |
+| 地面笔触 | 径向大小排序：原片UV图块已学；旧圆块仅近似，UV流程未验 | `1478114309263839244` | 部分 | `textures.html?t=radial（保留圆块近似；UV流程待补）` |
 | 地面笔触 | 单纹理八方向/中心镜像：D4与可选固定像素尺度折叠，原作纹样/布局仍待补 | `1061221291137605633` | 部分 | `src/core/mirror-uv.js · src/ui/ornament.js` |
 | 调色板与 UI 装饰 | 四角色盘：sRGB实景编辑，其他色彩空间/交互待补 | `1712088611934371876` | 部分 | `src/core/palette-patch.js · src/world/view.js · palette-editor.html` |
 | 调色板与 UI 装饰 | HSL色彩范围：真实顶面接入，其他特征待补 | `1710031224838771027` | 部分 | `src/core/color-volume.js · src/world/view.js · color-lab.html` |
-| 调色板与 UI 装饰 | 更多颜色：15 个色槽（画面左边一列 15 色） | `1237293295887319040` | 已实现 | `src/core/palette.js` |
+| 调色板与 UI 装饰 | 更多颜色：15 个色槽（画面左边一列 15 色） | `1237293295887319040` | 已实现 | `src/core/palette.js · src/world/app.js（buildPalette / #palettestyle）· learn/panel` |
 | 调色板与 UI 装饰 | 墙色过渡：短弧HSL本地扩展，实景滑杆对照 | `1200520827898343425` | 部分 | `src/core/palette.js · wall-palette.html` |
-| 调色板与 UI 装饰 | 同一张装饰贴图的几种不同设置打破重复 | `1061229717582475264` | 已实现 | `textures.html（UI 装饰）` |
-| 调色板与 UI 装饰 | 单张距离场镜像 / 独立border与center / uniform展开播放：GPU三档尺寸通过；本地画稿/动画样例 | `1104771432440049664` | 已实现 | `src/core/ornament-field.js · src/ui/ornament.js` |
-| 调色板与 UI 装饰 | 单张距离场镜像 / 独立border与center / uniform展开播放：GPU三档尺寸通过；本地画稿/动画样例 | `1105131621391495176` | 已实现 | `src/core/ornament-field.js · src/ui/ornament.js` |
+| 调色板与 UI 装饰 | 同一张装饰贴图的几种不同设置打破重复 | `1061229717582475264` | 已实现 | `textures.html（UI 装饰）· src/core/mirror-uv.js` |
+| 调色板与 UI 装饰 | 单张距离场镜像 / 独立border与center / uniform展开播放：GPU三档尺寸通过；本地画稿/动画样例 | `1104771432440049664` | 已实现 | `src/core/ornament-field.js · src/ui/ornament.js · ornament.html` |
+| 调色板与 UI 装饰 | 单张距离场镜像 / 独立border与center / uniform展开播放：GPU三档尺寸通过；本地画稿/动画样例 | `1105131621391495176` | 已实现 | `src/core/ornament-field.js · src/ui/ornament.js · ornament.html` |
 | 调色板与 UI 装饰 | UI flair：标题/外纹本地两轨可拖动、空白端点；原徽章/逐部件时序待补 | `1024679338292256769` | 部分 | `src/core/ui-reveal.js · ornament.html` |
-| 调色板与 UI 装饰 | 拉太长会看出重复 | `1061227418961219585` | 已实现 | `textures.html` |
-| 打包与工具 | 矩形树：实际查询逐步查看；原3D树/跨叶候选待补 | `1765115069837221962` | 部分 | `src/core/atlas.js · grids.html` |
-| 打包与工具 | 矩形删除：过期句柄修复、空兄弟合并；仍会残留碎片 | `1765041830461055127` | 部分 | `src/core/atlas.js · grids.html` |
-| 打包与工具 | 矩形候选/树剪枝：跨叶放置与key释放通过；3D树/完整接口待补 | `1764958522398146667` | 部分 | `src/core/atlas.js · grids.html` |
+| 调色板与 UI 装饰 | 拉太长会看出重复 | `1061227418961219585` | 已实现 | `textures.html（UI 装饰）· src/core/mirror-uv.js` |
+| 打包与工具 | 矩形树：实际查询逐步查看；原3D树/跨叶候选待补 | `1765115069837221962` | 部分 | `src/core/atlas.js · grids.html?t=atlas` |
+| 打包与工具 | 矩形删除：过期句柄修复、空兄弟合并；仍会残留碎片 | `1765041830461055127` | 部分 | `src/core/atlas.js · grids.html?t=atlas` |
+| 打包与工具 | 矩形候选/树剪枝：跨叶放置与key释放通过；3D树/完整接口待补 | `1764958522398146667` | 部分 | `src/core/atlas.js · grids.html?t=atlas` |
 | 打包与工具 | 主体OBJ导出：精确坐标/属性检查/真实下载（植被水面另补） | `1430224300003545091` | 部分 | `src/tools/objexport.js` |
-| 打包与工具 | 合并网格：实测共享主体一次提交（非全场景 / Switch基准） | `1401145625572425728` | 部分 | `src/world/worldmesh.js · src/tools/mesh-audit.js` |
+| 打包与工具 | 合并网格：实测共享主体一次提交（非全场景 / Switch基准） | `1401145625572425728` | 部分 | `src/world/worldmesh.js · src/tools/mesh-audit.js · save-mesh.html` |
 | 界面 UI | 头像生成：显式种子/镜像随机重放/固定槽身份已验；完整spec与剪影指标待补 | `958371606350454784` | 部分 | `src/core/part-random.js · ui.html` |
 | 界面 UI | 游戏头像展示：卡片身份重绘/换列已验；原兜帽/锁甲素材与角色接口待接 | `1010979395719319552` | 部分 | `src/core/part-random.js · ui.html` |
-| 界面 UI | 通用旗形与本地徽记：54帧全原尺寸，六尾形共用到真实军旗 | `958410200146497537` | 已实现 | `src/core/banner.js · src/life/banner.js · src/badnorth/battle.js` |
-| 界面 UI | 确认弹出：纠正横排，延时清理/切队/Esc/手机已验；单Move游戏目标待接 | `1016680972610359298` | 部分 | `ui.html（本地UI演示）` |
+| 界面 UI | 通用旗形与本地徽记：54帧全原尺寸，六尾形共用到真实军旗 | `958410200146497537` | 已实现 | `src/core/banner.js → src/life/banner.js → src/badnorth/battle.js；banners.html` |
+| 界面 UI | 确认弹出：纠正横排，延时清理/切队/Esc/手机已验；单Move游戏目标待接 | `1016680972610359298` | 部分 | `ui.html（本地UI实验，未接游戏指令）` |
 | 界面 UI | 斜按钮：确定性视觉扰动/AABB、稳定命中槽与键盘已验；游戏菜单待接 | `1242824460325052417` | 部分 | `src/core/playful-layout.js · ui.html` |
 | 界面 UI | 图标：单选状态/方向键/禁用跳过/切页保持已验；图稿与游戏指令待接 | `1201179450668441600` | 部分 | `src/ui/icon-toolbar.js · ui.html` |
 | 镜头与墙色续项 | 快速转镜拖抹：历史帧近似修复，原片轮廓算法待补 | `1727324352264474664` | 部分 | `src/core/camera-motion.js · src/world/view.js（历史帧近似）` |
@@ -447,27 +521,27 @@ Oskar 的画风靠线条和贴图撑起来：与缩放无关的 1 像素线、�
 
 | 分组 | 步骤 | 帖子 | 状态 | 代码 |
 |---|---|---|---|---|
-| 落点 | 顶点对偶：31帧核验，重心对偶/边界闭合与共享World脉动；植被统一待补 | `959752525867036672` | 部分 | `src/core/vertex-dual.js · src/world/vertex-dual-overlay.js` |
-| 落点 | 1b 早期高层草地分区（树木为原帖后续计划，完整地块规则待补） | `1178731576982724611` | 部分 | `src/build/buildings.js（地面庭院仅部分对应）` |
-| 地被 | 每层地被：203帧全核，实际World分层色组；完整草型待补 | `959530111187013632` | 部分 | `src/core/level-flora.js · src/life/vegetation.js` |
-| 地被 | 2b 坡上长草，帮助读出可走的地方 | `1063115611289645057` | 已实现 | `src/life/vegetation.js（坡上、崖边更密）` |
-| 地被 | 2c 草丛广告牌：一张朝镜头的卡片，片元里用 5 个圆的并集画"扇贝边"叶丛，叶瓣之间有弧形墨线；一簇簇堆在崖脚（暖橙 / 赭）、崖顶边和坡上，开阔草地只零星几簇 | `1590669875869286400` | 已实现 | `src/life/vegetation.js（tuftGeometry / tuftMaterial）` |
-| 地被 | 草丛反差：181帧复核；原法为顶点shader采站立点/背景射线的纹理差，当前待实现 | `1590674061092212738` | 部分 | `src/life/vegetation.js（仅静态邻崖近似）` |
+| 落点 | 顶点对偶：31帧核验，重心对偶/边界闭合与共享World脉动；植被统一待补 | `959752525867036672` | 部分 | `src/core/vertex-dual.js → src/world/vertex-dual-overlay.js；gridpatch.html` |
+| 落点 | 1b 早期高层草地分区（树木为原帖后续计划，完整地块规则待补） | `1178731576982724611` | 部分 | `src/build/buildings.js（现有仅地面庭院，高层草地分区待补）` |
+| 地被 | 每层地被：203帧全核，实际World分层色组；完整草型待补 | `959530111187013632` | 部分 | `src/core/level-flora.js · src/life/vegetation.js · level-flora.html` |
+| 地被 | 2b 坡上长草，帮助读出可走的地方 | `1063115611289645057` | 已实现 | `src/life/vegetation.js` |
+| 地被 | 2c 草丛广告牌：一张朝镜头的卡片，片元里用 5 个圆的并集画"扇贝边"叶丛，叶瓣之间有弧形墨线；一簇簇堆在崖脚（暖橙 / 赭）、崖顶边和坡上，开阔草地只零星几簇 | `1590669875869286400` | 已实现 | `src/life/vegetation.js · src/core/anchored-billboard.js · index.html?scene=terrain` |
+| 地被 | 草丛反差：181帧复核；原法为顶点shader采站立点/背景射线的纹理差，当前待实现 | `1590674061092212738` | 部分 | `src/life/vegetation.js（静态邻崖近似，原采样法待补）` |
 | 地被 | 草边受控下垂：保留几何近似，原版atlas/rim采样待补 | `1696896119794479541` | 部分 | `src/terrain/terrainmesh.js` |
 | 地被 | 2g 顶面无缝混色（草 / 苔 / 沙之间柔和过渡） | `1781405550061687016` | 部分 | `src/terrain/terrainmesh.js（本地混色保留）· patch纹理接口待迁移` |
-| 地被 | 每层地被：203帧全核，实际World分层色组；完整草型待补 | `959530111187013632` | 部分 | `src/core/level-flora.js · src/life/vegetation.js` |
+| 地被 | 每层地被：203帧全核，实际World分层色组；完整草型待补 | `959530111187013632` | 部分 | `src/core/level-flora.js · src/life/vegetation.js · level-flora.html` |
 | 灌木 | 边缘灌木：形变多边形内收锚点修复，球团近似保留 | `1707490274425884929` | 部分 | `src/core/edge-inset.js · src/life/vegetation.js` |
-| 灌木 | 100%纹理灌木与小阴影：已学257帧，实现待补 | `1707490932017279035` | 部分 | `纯纹理灌木待实现（保留现有球团近似）` |
-| 灌木 | 3b 锚定中心：共享草卡片GPU对照通过，墙根灌木仍待接 | `1191990107785572352` | 部分 | `src/core/anchored-billboard.js · src/life/vegetation.js` |
+| 灌木 | 纯纹理灌木：台地边灌木带 + 小阴影（顶面着色，不加几何） | `1707490932017279035` | 部分 | `src/world/worldmesh.js（ChunkRouter.edgeTri）· src/terrain/terrainmesh.js（centreE）· src/terrain/shrub-texture.js · index.html?scene=terrain&on=shrubtex` |
+| 灌木 | 3b 锚定中心：共享草卡片GPU对照通过，墙根灌木仍待接 | `1191990107785572352` | 部分 | `src/life/vegetation.js · src/core/anchored-billboard.js · billboard-anchor.html` |
 | 灌木 | 3c 球面叶纹 × 视角alpha：真实贴图/连续覆盖，保留旧噪声对照；阴影与远景impostor待补 | `1205420678859632640` | 部分 | `src/core/leaf-atlas.js · src/life/leaf-surface.js · vegetation.js` |
 | 灌木 | 3d 植物32²角落atlas：已接共享树冠/灌木；全场景共图与原作素材待补 | `1241046107125399552` | 部分 | `src/core/leaf-atlas.js · src/life/leaf-surface.js · vegetation.js` |
 | 灌木 | 后院小径：院内邻接图连接主轴端点，孔洞不跨越；细石板/门口规则/中心装饰待补 | `1290997501332525056` | 部分 | `src/core/garden-paths.js · src/build/buildings.js` |
-| 树 | 4 Marching Cubes 团块做树冠 | `1580158269267406849` | 已实现 | `src/life/vegetation.js（几团球融合 + 朝团心的法线）` |
-| 树 | 4b 标记三角形之间的边（团块描边） | `1580162341668237312` | 已实现 | `src/core/canopy.js · life/vegetation.js · life/impostor.js（155帧；闭合曲面/接缝松弛及真实烘焙输入通过）` |
+| 树 | 4 Marching Cubes 团块做树冠 | `1580158269267406849` | 已实现 | `src/core/canopy.js · src/life/vegetation.js · index.html?scene=terrain` |
+| 树 | 4b 标记三角形之间的边（团块描边） | `1580162341668237312` | 已实现 | `src/core/canopy.js · src/life/vegetation.js · src/life/impostor.js` |
 | 树 | 树转镜：旋转锚点/正交与透视/周界GPU通过；原octagonal卡片与俯仰仍缺 | `1849427564034498642` | 部分 | `src/life/impostor.js · impostors.html` |
 | 树 | 运行时精灵：真实GPU烘焙/释放/失败回滚；自动扩容与原素材待补 | `1593215065423245313` | 部分 | `src/life/impostor.js · atlas-live.html` |
 | 树 | 蓬松云：共享树云材质/时钟/遮挡回归通过；原云形/层次仍缺 | `1852334860137849222` | 部分 | `src/life/impostor.js · impostors.html` |
-| 续作学习与缺口 | 多岛纹理生成：已学600帧，原作生成算法待补 | `1707497006640365880` | 部分 | `纹理灌木生成待实现（保留既有球团管线）` |
+| 续作学习与缺口 | 生成地形上自动出现的纯纹理灌木 | `1707497006640365880` | 部分 | `src/world/worldmesh.js（ChunkRouter.edgeTri）· src/terrain/terrainmesh.js · src/terrain/shrub-texture.js · index.html?scene=terrain&on=shrubtex` |
 
 ### 融合 · 第三个项目 → 球面
 
@@ -475,12 +549,21 @@ Oskar 的画风靠线条和贴图撑起来：与缩放无关的 1 像素线、�
 
 | 分组 | 步骤 | 帖子 | 状态 | 代码 |
 |---|---|---|---|---|
-| 流程 | 方形沿对角切四三角：父格追溯/实际WFC；联合模块待补 | `1447494168448753667` | 部分 | `src/core/grid.js · src/core/wfc.js` |
-| 流程 | 2 显式双格房屋：原子放置/整体替换/移除与撤销；身份持久化、预制socket/联合WFC待补 | `1579483114178768898` | 部分 | `src/build/multicell.js · ui/house-project.js（177帧；整体编辑/工程身份持久化通过，通用实例与完整prefab/socket待续）` |
-| 流程 | 笼形变：分数层连续角点/沉积线采样；3D碰撞待补 | `1579478470098243584` | 部分 | `src/terrain/shape.js · cage.html` |
-| 流程 | 房屋插入地形：453帧核验，保留共享双格/整体编辑；任意轮廓重网格待补 | `1584623053061099520` | 部分 | `src/build/multicell.js · src/world/scenes.js` |
+| 流程 | 方形沿对角切四三角：父格追溯/实际WFC；联合模块待补 | `1447494168448753667` | 部分 | `src/core/grid.js · wfc.html?subtiles=1` |
+| 流程 | 2 显式双格房屋：原子放置/整体替换/移除与撤销；身份持久化、预制socket/联合WFC待补 | `1579483114178768898` | 部分 | `src/build/multicell.js · src/world/scenes.js · multicell.html` |
+| 流程 | 笼形变：分数层连续角点/沉积线采样；3D碰撞待补 | `1579478470098243584` | 部分 | `src/terrain/shape.js · src/terrain/terrainmesh.js · cage.html` |
+| 流程 | 房屋插入地形：453帧核验，保留共享双格/整体编辑；任意轮廓重网格待补 | `1584623053061099520` | 部分 | `src/build/multicell.js · src/world/scenes.js · multicell.html` |
 | 流程 | 指定模块patch：几何复核→共享World整体体量放置/撤回；完整prefab待续 | `1751932427272909032` | 部分 | `src/core/module-patch.js · module-search.js · module-fit.js · patch.html · src/build/module-volume.js` |
 | 流程 | 球面化：已有对偶柱群；原模块/海岸与World接入待补 | `1768627849529893109` | 部分 | `src/sphere/planet.js · planet.html` |
 | 流程 | 防蘑菇化：显式模块格/尺寸诊断；多格冲突仍待补 | `1769641473895432220` | 部分 | `src/sphere/planet.js · planet.html` |
-| 流程 | 8 沿河导航：高差优先/平床河口距离，战斗及流场共用费用 | `1795831296952041691` | 部分 | `src/world/navgraph.js` |
+| 流程 | 8 沿河导航：高差优先/平床河口距离，战斗及流场共用费用 | `1795831296952041691` | 部分 | `src/world/navgraph.js · river-nav.html` |
+| 逐帧核验补登 | （帖子无文字说明） | `1798310423554658732` | 部分 | `src/core/field-plots.js · fields.html` |
+| 逐帧核验补登 | Ok, here's a small example. The button toggles a… | `1724449858369568780` | 部分 | `src/core/node-graph-runtime.js · node-graph.html` |
+| 逐帧核验补登 | Hmm.. I thought it was gonna be too wacky but ma… | `1671840905957978113` | 部分 | `src/core/terrain-burial.js · terrain-stages.html` |
+| 逐帧核验补登 | I figured out how to mimic Thread.Sleep() in Bur… | `1670064751181791233` | 部分 | `src/terrain/pipeline-stages.js · terrain-stages.html` |
+| 逐帧核验补登 | An quaint island being procedurally generated | `1654401054828638214` | 部分 | `src/terrain/pipeline-stages.js · terrain-stages.html` |
+| 逐帧核验补登 | Late night cryptic graph tweet | `1490068909042642944` | 部分 | `src/core/graph-layout.js · grid-graph.html（右栏邻接图）` |
+| 逐帧核验补登 | And another | `1459169210752507904` | 部分 | `src/core/grid-wireframe.js · grid-graph.html（左栏线框）` |
+| 逐帧核验补登 | Imma talk about my new island generator at Swede… | `1448039167057879048` | 部分 | `src/core/stroke-reveal.js · stroke-reveal.html · src/ui/walkthrough.js` |
+| 逐帧核验补登 | I regret to inform you that I've relapsed into p… | `1447483550257799171` | 部分 | `src/terrain/generate.js · src/core/contour.js` |
 

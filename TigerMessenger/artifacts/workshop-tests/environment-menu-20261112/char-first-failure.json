@@ -1,0 +1,1 @@
+{"passed":false,"test":"tests/c03-battle.mjs:129","observed":{"remainingBlackVertices":9,"expected":0},"diagnosis":"C01 default houseChar and C03 houseFx stored different original RGB for the same vertices; restoring in sequence replayed an already-charred snapshot.","sourceBefore":"char-before/","recordType":"captured assertion and subsequent local diagnosis"}

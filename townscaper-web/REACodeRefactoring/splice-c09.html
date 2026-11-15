@@ -1,0 +1,65 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>任意轮廓房屋拼进地形 · 半边绕顶点（r56 C09）</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#edf4f3;color:#20343c;font:14px/1.5 system-ui}header{padding:8px 14px}iframe{border:0;width:100%;height:calc(100vh - 128px)}a{color:#26758a}#stats{font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;max-height:48px;overflow:auto;background:#f8fbfa;padding:4px 8px}label,button{margin-right:10px}</style>
+<header><b>房屋拼进地形</b> · 1584623053061099520「splice houses into the terrain … yellow lines are rotating around the verts」· 主场景 index.html?scene=terrain 同一 World / WorldMesh · <a href="index.html" target="_top">首页</a><br>
+<label><input type="radio" name="mode" value="wire" checked>线框（深色三角网 + 白色占地 + 黄色半边绕顶点）</label><label><input type="radio" name="mode" value="solid">实体</label><button id="move">换个位置 / 转角</button><label><input type="checkbox" id="on" checked>插入（关 = 原地形）</label>
+<div id="stats">加载中…</div></header>
+<iframe id="scene"></iframe>
+<script type="module">
+/* URL: ?grid=quad|mixed&seed=7&mode=wire|solid&step=N（冻结黄线在第 N 步，截图用）&pick=K（第 K 个台地候选）&rot=弧度&clean=1
+ * 占地写进 world.spliceFootprintsC09 → terrainmesh 挂钩重网格 + 盖房（src/build/splice-polygon-c09.js）；本页只加线框叠加物。 */
+import{buildHalfEdge,checkHalfEdge}from'./src/core/halfedge.js';
+import{trisAsCells}from'./src/build/splice-polygon-c09.js';
+const q=new URLSearchParams(location.search),grid=q.get('grid')==='mixed'?'mixed':'quad',$=s=>document.querySelector(s);
+if(q.get('mode')==='solid')document.querySelector('input[value=solid]').checked=true;
+const f=$('#scene');f.src='index.html?scene=terrain&grid='+grid;
+let THREE,r,grp=null,walker=null,pick=+(q.get('pick')||0),rot=+(q.get('rot')||.35),saved=null,step=0,acc=0,last=performance.now();
+const SHAPE=[[-0.8,-0.55],[0.8,-0.55],[0.8,0.1],[0.25,0.1],[0.25,0.55],[-0.8,0.55]];   // 带凹口的 L 形占地（片子里白框也有缺口）
+function plateaus(w){const out=[];for(const c of w.cells){const g=w.ground(c);if(g<2||w.isSolid(c,g+1)||w.river[c.id])continue;let ok=true;const ring=new Set([c.id]);
+ for(let k=0;k<2&&ok;k++)for(const id of[...ring])for(const n of w.cells[id].edgeNeighbors){if(n<0){ok=false;break;}const o=w.cells[n];if(w.ground(o)!==g||w.isSolid(o,g+1)||w.river[n]){ok=false;break;}ring.add(n);}
+ if(ok)out.push(c);}return out;}
+function apply(){
+ const w=r.world,v=r.view,shape=v.worldMesh.shape,at=(p,s)=>shape?shape.at(p,s):[p.x,p.z],L=v.levelHeight;
+ const cand=plateaus(w);if(!cand.length){$('#stats').textContent='没有足够大的平台';return;}const c=cand[pick%cand.length],g=w.ground(c);
+ const ctr=[c.pts.reduce((s,p)=>s+at(p,g)[0],0)/c.n,c.pts.reduce((s,p)=>s+at(p,g)[1],0)/c.n];
+ const poly=SHAPE.map(([x,z])=>[ctr[0]+x*Math.cos(rot)-z*Math.sin(rot),ctr[1]+x*Math.sin(rot)+z*Math.cos(rot)]);
+ w.spliceFootprintsC09=$('#on').checked?[{poly,stories:1}]:null;w.touch();v.changed();v.worldMesh.invalidate();
+ setTimeout(()=>overlay(ctr,g,poly),900);
+}
+function overlay(ctr,g,poly){
+ const w=r.world,v=r.view,L=v.levelHeight,y=g*L+.02,info=w.footprintSplicesC09,it=info?.items?.[0];
+ if(grp){v.scene.remove(grp);grp.traverse(o=>o.geometry?.dispose());}grp=new THREE.Group();grp.renderOrder=6;v.scene.add(grp);
+ const line=(pos,color,op=1)=>{const g2=new THREE.BufferGeometry();g2.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));const m=new THREE.LineSegments(g2,new THREE.LineBasicMaterial({color,transparent:true,opacity:op,depthTest:false}));m.frustumCulled=false;grp.add(m);return m;};
+ // 深色三角网：附近同层顶面扇形 + 新三角（拼接后的真实顶面三角）
+ const pos=[],V=it?.res.verts,tris=it?it.res.tris:[];
+ for(const t of tris)for(let e=0;e<3;e++){const a=V[t[e]],b=V[t[(e+1)%3]];pos.push(a[0],y,a[1],b[0],y,b[1]);}
+ line(pos,'#0f2226',.85);
+ // 白色占地 + 房子线框
+ const P=it?it.res.poly:poly,y1=g*L+(it?it.stories:1)*L*.8,wp=[];for(let i=0;i<P.length;i++){const a=P[i],b=P[(i+1)%P.length];wp.push(a[0],y,a[1],b[0],y,b[1],a[0],y1,a[1],b[0],y1,b[1],a[0],y,a[1],a[0],y1,a[1]);}
+ line(wp,'#f2f6f4');
+ // 黄色：半边结构上绕顶点转（新三角 + R 外留下的三角一起建；先洞环再外环）
+ walker=null;if(it){const H=buildHalfEdge(trisAsCells(V,tris)),errs=checkHalfEdge(H),order=[...it.res.hole,...it.res.outer],seq=[];
+  for(const vtx of order)for(const h of H.vertexFan(vtx))seq.push(h);
+  const yl=line(new Array(18).fill(0),'#ffe14d');yl.material.linewidth=2;walker={H,seq,yl,V,y:y+.005};
+  window.__c09splice={grid,cell:pick,ok:!info.errors.length,errors:info.errors,emitted:info.emitted,fresh:it.res.fresh.length,removed:it.res.removed.length,kept:it.res.kept.length,
+   minAngleDeg:+it.res.minAngleDeg.toFixed(2),areaCheck:+(it.res.areaR-it.res.areaNew-it.res.areaPoly).toExponential(2),halfedgeErrors:errs.length,euler:H.euler,boundaryLoops:H.boundaryLoops.length,walkSteps:seq.length};}
+ else window.__c09splice={grid,off:true};
+ $('#stats').textContent=JSON.stringify(window.__c09splice);
+ setMode();if(q.get('step')!=null)drawStep(+q.get('step'));
+ const vv=r.view;vv.target.set(ctr[0],g*L,ctr[1]);vv.distance=+(q.get('dist')||5.5);vv.pitch=+(q.get('pitch')||.9);if(q.get('yaw'))vv.yaw=+q.get('yaw');vv.updateCamera();
+}
+function drawStep(k){if(!walker)return;const{H,seq,yl,V,y}=walker,h=H.he[seq[k%seq.length]],tri=[h.id,h.next,h.prev].map(i=>H.he[i].origin),p=[];
+ for(let e=0;e<3;e++){const a=V[tri[e]],b=V[tri[(e+1)%3]];p.push(a[0],y,a[1],b[0],y,b[1]);}
+ const a=V[h.origin],b=V[h.dest];p.push(a[0],y+.003,a[1],b[0],y+.003,b[1],a[0],y+.006,a[1],b[0],y+.006,b[1],a[0],y+.009,a[1],b[0],y+.009,b[1]);
+ yl.geometry.setAttribute('position',new THREE.Float32BufferAttribute(p,3));}
+function setMode(){const v=r.view,sc=v.scene,wire=document.querySelector('input[name=mode]:checked').value==='wire';
+ if(saved){for(const[o,vis]of saved)o.visible=vis;saved=null;}
+ if(wire){saved=new Map();const keep=new Set([v.ambient,v.hemi,v.sun,v.fill,grp]);for(const o of sc.children){if(keep.has(o))continue;saved.set(o,o.visible);o.visible=false;}sc.background=new THREE.Color('#2e4f55');}
+ else{sc.background=v._c09bg??sc.background;}
+ if(grp)grp.visible=wire;}
+function tick(now){const dt=(now-last)/1000;last=now;acc+=dt;if(walker&&q.get('step')==null&&acc>.12){acc=0;drawStep(step++);}requestAnimationFrame(tick);}
+$('#move').onclick=()=>{pick++;rot+=.7;apply();};$('#on').onchange=apply;for(const el of document.querySelectorAll('input[name=mode]'))el.onchange=setMode;
+const timer=setInterval(async()=>{r=f.contentWindow.rea;if(!r?.view?.worldMesh)return;clearInterval(timer);THREE=await f.contentWindow.eval("import('three')");r.view._c09bg=r.view.scene.background;
+ for(const k of['clouds','birds','boats','butterflies','flags'])try{r.view.setDebug(k,false)}catch(e){}
+ if(q.get('clean')){const st=f.contentDocument.createElement('style');st.textContent='body *{visibility:hidden!important}#view{visibility:visible!important}';f.contentDocument.head.appendChild(st);}
+ apply();requestAnimationFrame(tick);},200);
+</script></html>

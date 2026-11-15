@@ -35,6 +35,7 @@ export class World {
 
   reset() {
     this.solid.fill(0); this.rock.fill(0); this.color.fill(-1); this.river.fill(0);
+    if (this.splicedHouses) this.splicedHouses.clear();   // 嵌入房子（build/splice.js）随地形一起清
     this.touch();
   }
 
@@ -116,11 +117,14 @@ export class World {
   }
 
   /* ---- 快照（撤销栈用） --------------------------------------------------- */
+  // spliced：嵌入房子覆盖层（1584623053061099520，build/splice.js）随撤销栈一起存/恢复；没有时为 null。
   snapshot() {
-    return { solid: this.solid.slice(), rock: this.rock.slice(), color: this.color.slice(), river: this.river.slice() };
+    const spliced = this.splicedHouses?.size ? [...this.splicedHouses].sort((a, b) => a[0] - b[0]).map(([id, h]) => [id, { ...h }]) : null;
+    return { solid: this.solid.slice(), rock: this.rock.slice(), color: this.color.slice(), river: this.river.slice(), spliced };
   }
   restore(s) {
     this.solid.set(s.solid); this.rock.set(s.rock); this.color.set(s.color); this.river.set(s.river);
+    if ('spliced' in s) this.splicedHouses = s.spliced ? new Map(s.spliced.map(([id, h]) => [id, { ...h }])) : null;
     this.touch();
   }
 }

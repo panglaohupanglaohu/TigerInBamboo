@@ -1,0 +1,21 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "beforeVertices": 5376,
+      "hipVertices": 5088,
+      "sourceVoxelsUnchanged": true,
+      "restored": true,
+      "drawCalls": 60
+    },
+    {
+      "kind": "mixed",
+      "beforeVertices": 5748,
+      "hipVertices": 5460,
+      "sourceVoxelsUnchanged": true,
+      "restored": true,
+      "drawCalls": 75
+    }
+  ],
+  "errors": []
+}

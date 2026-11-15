@@ -1,5 +1,5 @@
 import { cloudDepth } from '../core/cloud-depth.js';
-import { levelFloraPalette } from '../core/level-flora.js';
+import { levelFloraSpecies, levelFloraRanks } from '../core/level-flora.js';
 /**
  * vegetation.js — 植被管线：落点 → 地被（草丛）→ 边缘灌木 → 树林 → 风 + 描边。
  *
@@ -39,7 +39,7 @@ import { levelFloraPalette } from '../core/level-flora.js';
  *   墨线：灌木和树冠用反向外壳（和 world/outline.js 的墨线同一种），跟随面板「墨线」开关。
  */
 
-import { anchoredBillboardGLSL } from '../core/anchored-billboard.js';
+import { anchoredBillboardGLSL, foldedCard } from '../core/anchored-billboard.js';
 import * as THREE from 'three';
 import {insetEdgeAnchor} from '../core/edge-inset.js';
 import {makeLeafSurface,LEAF_SURFACE_GLSL} from './leaf-surface.js';
@@ -143,6 +143,40 @@ function blobGeometry(blobs, { detail = 1, puff = 0.65 } = {}) {
   return out;
 }
 
+/** REACode shrubcard.js: wall-base shrub as a camera-facing folded card (centre vertex pushed toward
+ * the camera). Non-indexed so each of the 4 triangles keeps its own fold normal (directional shading). */
+export function wallCardGeometry({ width = .13, height = .1, depth = .28 } = {}) {
+  const c = foldedCard({ width: 1, height: 1, depth }), P = [], N = [], U = [];
+  for (let t = 0; t < 12; t += 3) {
+    const v = [0, 1, 2].map((k) => c.positions.slice(c.index[t + k] * 3, c.index[t + k] * 3 + 3));
+    const a = v[1].map((x, i) => x - v[0][i]), b = v[2].map((x, i) => x - v[0][i]);
+    let n = [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; const l = Math.hypot(...n); n = n.map((x) => x / l * (n[2] < 0 ? -1 : 1));
+    for (const k of [0, 1, 2]) { P.push(v[k][0] * width, (v[k][1] + .5) * height, v[k][2] * width); N.push(...n); U.push(...c.uv.slice(c.index[t + k] * 2, c.index[t + k] * 2 + 2)); }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
+  g.setAttribute('aFold', new THREE.Float32BufferAttribute(N, 3));
+  g.setAttribute('uv', new THREE.Float32BufferAttribute(U, 2));
+  return g;
+}
+function wallCardMaterial(uLight) {
+  return new THREE.ShaderMaterial({
+    side: THREE.DoubleSide, uniforms: { uLight, uSun: { value: new THREE.Vector3(.45, .35, .82).normalize() } },
+    vertexShader: /* glsl */ `attribute vec3 aFold; attribute vec3 aCardColor; varying vec3 vCol; varying vec2 vUv; varying float vShade; uniform vec3 uSun;
+      void main() {
+        vec3 origin = (modelMatrix * instanceMatrix * vec4(0., 0., 0., 1.)).xyz; float s = length((instanceMatrix * vec4(1., 0., 0., 0.)).xyz);
+        vec3 to = cameraPosition - origin; vec2 f = normalize(to.xz + vec2(1e-5, 0.)); vec3 fwd = vec3(f.x, 0., f.y), right = vec3(f.y, 0., -f.x), up = vec3(0., 1., 0.);
+        vec3 p = origin + (right * position.x + up * position.y + fwd * position.z) * s;     // rotation unchanged: always faces camera
+        vec3 n = normalize(right * aFold.x + up * aFold.y + fwd * aFold.z);
+        vShade = .55 + .45 * max(0., dot(n, normalize(uSun))); vCol = aCardColor; vUv = uv;
+        gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.); }`,
+    fragmentShader: /* glsl */ `uniform float uLight; varying vec3 vCol; varying vec2 vUv; varying float vShade;
+      void main() { vec2 d = vUv - .5; float a = atan(d.y, d.x); float r = length(d) / (.42 + .06 * sin(a * 5.) + .04 * sin(a * 9. + 1.3));
+        if (r > 1. || vUv.y < .04) discard; gl_FragColor = vec4(vCol * vShade * uLight, 1.);
+        #include <colorspace_fragment>
+      }`,
+  });
+}
 const SHRUB = () => blobGeometry([[0, 0.032, 0, 0.034], [0.03, 0.024, 0.014, 0.027], [-0.028, 0.022, -0.01, 0.027], [0.008, 0.05, -0.016, 0.024], [-0.01, 0.026, 0.03, 0.024]], { detail: 1, puff: 0.5 });
 function canopyGeometry(blobs) {
   const mesh=buildCanopy(blobs.map(([x,y,z,r])=>({x,y,z,r})),{resolution:16});
@@ -377,6 +411,11 @@ export class Vegetation {
     sg.computeBoundingBox();
     this.shrubs = new THREE.InstancedMesh(sg, swayMaterial(this.uTime, 0.004, this.uLeafy, 70, this.leafSurface, sg.boundingBox.getCenter(new THREE.Vector3())), max.shrubs);
     this.shrubInk = new THREE.InstancedMesh(sg, inkMaterial(this.uTime, 0.004, 0.006), max.shrubs);
+    const wcg = wallCardGeometry();
+    this.wallCardColor = new THREE.InstancedBufferAttribute(new Float32Array(max.shrubs * 3), 3);
+    wcg.setAttribute('aCardColor', this.wallCardColor);
+    this.wallCards = new THREE.InstancedMesh(wcg, wallCardMaterial(this.uLight), max.shrubs);
+    this.wallShrubCards = false;   // opt-in: wall-base shrubs as folded cards instead of blobs (not browser-verified)
 
     this.crowns = CROWNS.map((f) => {
       const g = f();
@@ -387,7 +426,7 @@ export class Vegetation {
     });
     this.trunks = new THREE.InstancedMesh(trunkGeometry(), swayMaterial(this.uTime, 0.0), max.crowns * 3);
 
-    for (const m of [this.tufts, this.flowers, this.shrubs, this.shrubInk, this.trunks, ...this.crowns.flatMap((c) => [c.m, c.ink])]) {
+    for (const m of [this.tufts, this.flowers, this.shrubs, this.shrubInk, this.wallCards, this.trunks, ...this.crowns.flatMap((c) => [c.m, c.ink])]) {
       m.frustumCulled = false;
       m.count = 0;
       this.group.add(m);
@@ -452,7 +491,7 @@ export class Vegetation {
     this.layers[name] = on;
     if (name === 'grass') this.tufts.visible = on;
     if (name === 'flowers') this.flowers.visible = on;
-    if (name === 'shrubs') this.shrubs.visible = on;
+    if (name === 'shrubs') this.shrubs.visible = this.wallCards.visible = on;
     if (name === 'trees') {
       this.trunks.visible = on;
       for (const c of this.crowns) c.m.visible = on && !this.impostorOn;
@@ -481,6 +520,7 @@ export class Vegetation {
     const capKind = (c) => {
       const g = world.ground(c);
       if (!g || world.top(c) !== g || world.river[c.id]) return null;   // 上面有房子 / 河道 / 水
+      if (world.footprintSplicesC09?.cells?.has(c.id)) return null;     // r56 C09：任意轮廓房屋拼进的格（splice-polygon-c09.js），不再种树草
       if (g <= 1) return 'sand';
       let flat = true, drop = 0;
       for (let i = 0; i < c.n; i++) {
@@ -588,13 +628,18 @@ export class Vegetation {
         nT++;
       }
     };
+    this.floraSpecies = [];
+    const floraRanks = levelFloraRanks(cells.map((c) => { const k = capKind(c); return k && k !== 'sand' ? world.ground(c) : 0; }));
     for (const c of cells) {
       const kind = capKind(c);
       if (!kind || kind === 'sand') continue;
       const g = world.ground(c);
       const pts = c.pts.map((p) => at(p, g));
       const y = g * L;
-      const palette = this.levelFlora ? levelFloraPalette(g) : kind === 'dry' ? COLORS.dry : COLORS.grass;
+      // 959530111187013632 / REACode levelflora: one species per cell cluster, species set bound to terrace rank.
+      const species = this.levelFlora ? levelFloraSpecies(floraRanks.get(g) ?? 0, c.id, { seed }) : null;
+      if (species) this.floraSpecies.push({ cell: c.id, level: g, key: species.key });
+      const palette = species ? species.colors : kind === 'dry' ? COLORS.dry : COLORS.grass;
       // 叶丛长在"东西的边上"：崖顶边（身后是崖下 → 外轮廓加粗）、崖脚（贴着更高的邻居）、坡上
       // （1590669875869286400 画面：一簇簇堆在崖脚和崖顶；1063115611289645057：坡上撒小团帮助读出可走的地方）
       for (let i = 0; i < c.n; i++) {
@@ -627,8 +672,16 @@ export class Vegetation {
     }
 
     /* ---- 3. 灌木：崖顶线 + 房子墙根 ---- */
-    let nS = 0;
+    let nS = 0, nW = 0;
     this.shrubEdgeAnchors = [];
+    const addWallCard = (x, y, z) => {
+      if (nW >= this.max.shrubs) return;
+      const s = .85 + rnd() * .5;
+      m.compose(v.set(x, y, z), q.identity(), sc.setScalar(s));
+      this.wallCards.setMatrixAt(nW, m);
+      col.set(pick(COLORS.shrub)); this.wallCardColor.setXYZ(nW, col.r, col.g, col.b);
+      nW++;
+    };
     const addShrub = (x, y, z, warm) => {
       if (nS >= this.max.shrubs) return;
       q.setFromAxisAngle(up, rnd() * Math.PI * 2);
@@ -658,6 +711,7 @@ export class Vegetation {
           const u = (t + 0.5 + (rnd() - 0.5) * 0.5) / k;
           const anchor=insetEdgeAnchor(poly,i,u,inset);
           if(!anchor)continue;
+          if(houseWall&&this.wallShrubCards){addWallCard(anchor.point[0],g*L,anchor.point[1]);continue;}
           const before=nS;
           addShrub(anchor.point[0],g*L,anchor.point[1],warm);
           if(nS>before)this.shrubEdgeAnchors.push({instance:before,cell:c.id,edge:i,poly,point:anchor.point,distance:anchor.distance});
@@ -702,6 +756,7 @@ export class Vegetation {
     this.flowers.count = nF; this.flowerColor.needsUpdate = true; this.flowers.instanceMatrix.needsUpdate = true;
     this.tufts.count = nT; this.tuftColor.needsUpdate = true; this.tufts.instanceMatrix.needsUpdate = true;
     this.shrubs.count = this.shrubInk.count = nS;
+    this.wallCards.count = nW; this.wallCards.instanceMatrix.needsUpdate = true; this.wallCardColor.needsUpdate = true;
     for (const mm of [this.shrubs, this.shrubInk]) mm.instanceMatrix.needsUpdate = true;
     if (this.shrubs.instanceColor) this.shrubs.instanceColor.needsUpdate = true;
     this.impostorFields?.forEach((f, i) => f.commit(nCrown[i]));

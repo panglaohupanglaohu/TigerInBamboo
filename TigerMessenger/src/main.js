@@ -48,6 +48,7 @@ import {createTargetCityPlayerNavigation} from './world/citadel/targetCityPlayer
 import {levelNewCityPlaza} from './world/citadel/levelNewCityPlaza.js';
 import {createRadialHeightIndex} from './world/radialHeightIndex.js';
 import {officialOceanLevelAt as batianOceanLevelAt} from './world/waterV8/officialOcean.js';
+import {choosePlaytestLanding} from './scene-authoring/playtest-target.js?v=playtest-r1';
 import {installGateApproachRailings} from './world/gateApproachRailings.js';
 import {createGatePlayerGround,createGatePlayerWalls} from './world/gateTarget.js';
 import { bindOriginalWorldRomanArmor } from "./world/romanWorldArmor.js";
@@ -60,7 +61,7 @@ import { Timer } from "three/addons/misc/Timer.js";
 import * as THREE from "three";
 import { createStage } from "./core/stage.js";
 import { createPerfProbe } from "./tools/perfProbe.js?v=remote-clearance-20261025";
-import { installUiLayers, setCaptureMode, isCaptureMode } from "./ui/uiLayers.js?v=ui-layers-r2-capture";
+import { installUiLayers, setCaptureMode, isCaptureMode, onUiLayersChange } from "./ui/uiLayers.js?v=ui-layers-r3-local-edit";
 import { createSceneCensus } from "./tools/sceneCensus.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js?v=airship-down15-20261025";
@@ -114,6 +115,14 @@ import { refreshTownV4 } from "./world/citadel/presentationMesh.js";
 import { setupEnvironment, updateLanterns } from "./world/environment.js";
 import { createDayNight } from "./world/dayNight.js";
 import { createBookshopAtmosphere } from "./world/bookshopAtmosphere.js";
+import { createCitadelDuskGrade } from "./world/citadelDuskGrade.js";
+import { createCitadelFarMountains } from "./world/citadelFarMountains.js";
+import { installCitadelRockStrata } from "./world/citadelRockStrata.js";
+import { installWindBanners } from "./world/windBanners.js";
+import { installCitadelWindowGlow } from "./world/citadelWindowGlow.js";
+import { installCitadelPathLanterns } from "./world/citadelPathLanterns.js";
+import { installCitadelInkOutline } from "./world/citadelInkOutline.js";
+import { simplifyCitadelTerrain } from "./world/citadelTerrainSimplify.js";
 import { installBookshopJakubPass } from "./world/bookshopJakubPass.js";
 import { bookshopRaiseAtWorld, BOOKSHOP_TERRACE } from "./world/bookshopTownSite.js";
 import { createTramRide } from "./player/tramRide.js";
@@ -548,6 +557,8 @@ if (messenger?.landmarks?.moebiusSwamp) {
 mapEditor.loadPersisted();
 // 地图打开时：3D 左键点选模型 → 地图同步选中高亮
 mapEditor.bindScenePick({ camera, domElement: renderer.domElement });
+window.addEventListener('tm.editor.open-map',()=>mapEditor.setOpen(true));
+onUiLayersChange(({group,captureMode})=>{if(!captureMode&&group!=='build'&&mapEditor.isOpen())mapEditor.setOpen(false);});
 
 // ---------- 世界空间结构：Planet → Region → Landmark → Zone ----------
 // 声明在 world/worldStructure.js，这里只做「绑定到活的 scene handle」。
@@ -1722,17 +1733,36 @@ function batianTarget(id,label,object){
   return {id,label,dir,safeRadius,surfaceRoot:object};
 }
 scene.userData.batianBattleScope='sequential';scene.userData.batianCommandMode=true;
-const batianTargets=[batianTarget('bookshop','书店镇',entryBookshop),batianTarget('apostles','十二门徒',scene.getObjectByName('g30-far-mountain')),batianTarget('citadel','高山圣城',messenger.landmarks.odysseyCitadel),batianTarget('old-port','旧港湾',messenger.landmarks.oldHarbor?.root||messenger.landmarks.harbor),batianTarget('swamp','湖沼',messenger.landmarks.moebiusSwamp),batianTarget('moss','苔庭',sceneHandles.find(h=>h.id==='saihoji')?.group||scene.getObjectByName('SaihojiSixScenes')),batianTarget('moon-lake','月湖',messenger.moonLake?.group),batianTarget('gate','叹息之门',messenger.landmarks.abandonedGate)].filter(Boolean);
+const batianTargets=[batianTarget('bookshop','书店镇',entryBookshop),batianTarget('apostles','十二门徒',scene.getObjectByName('g30-far-mountain')),batianTarget('moss','苔庭',sceneHandles.find(h=>h.id==='saihoji')?.group||scene.getObjectByName('SaihojiSixScenes')),batianTarget('citadel','高山圣城',messenger.landmarks.odysseyCitadel),batianTarget('old-port','旧港湾',messenger.landmarks.oldHarbor?.root||messenger.landmarks.harbor),batianTarget('swamp','湖沼',messenger.landmarks.moebiusSwamp),batianTarget('moon-lake','月湖',messenger.moonLake?.group),batianTarget('gate','叹息之门',messenger.landmarks.abandonedGate)].filter(Boolean);
 // 系统工坊（pipeline.html）场景选择：只读暴露各场景的方向与根对象，用于镜头定位；不改场景
 globalThis.__tmSceneTargets=()=>{const list=batianTargets.map(t=>({id:t.id,label:t.label,dir:t.dir,root:t.surfaceRoot}));const crystal=messenger?.landmarks?.moebius?.group;if(crystal?.isObject3D&&!list.some(t=>t.id==='crystal'))list.push({id:'crystal',label:'水晶城',dir:crystal.getWorldPosition(new THREE.Vector3()).normalize(),root:crystal});return list;};
+// 系统工坊「游玩检验」：非莫西斯湖场景先把玩家放到该场景附近的陆地上（与玩家物理同一套地面 / 水面采样），再由工坊回到玩家视角。
+// 只移动玩家，不改场景；载具上不移动。见 scene-authoring/playtest-target.js
+globalThis.__tmPlaytestAt=id=>{const t=globalThis.__tmSceneTargets().find(x=>x.id===id);if(!t?.dir)return {placed:false,id,reason:'找不到场景'};if(player.riding)return {placed:false,id,label:t.label,reason:'玩家在载具上'};
+ const v=new THREE.Vector3(),land=choosePlaytestLanding({dir:t.dir,radius:PLANET_RADIUS,groundAt:p=>playerSupportRadius(v.set(p.x,p.y,p.z)),waterAt:p=>PLANET_RADIUS+batianOceanLevelAt(v.set(p.x,p.y,p.z))});
+ if(!land)return {placed:false,id,label:t.label,reason:'场景附近没有可站立的陆地'};
+ player.position.set(land.position.x,land.position.y,land.position.z);player.velocity.set(0,0,0);player.onGround=true;player.groundR=player.position.length();player.checkpoint?.copy(player.position);
+ (player.forward??=new THREE.Vector3()).set(land.forward.x,land.forward.y,land.forward.z);(player.facing??=new THREE.Vector3()).copy(player.forward);playerGroup.position.copy(player.position);
+ return {placed:true,id,label:t.label,distance:Math.round(land.distance)};};
+// 海面统一（系统工坊 · 球系统管线「水」）：全球海面（含高山圣城海湾）用莫西斯湖式水色 / 白沫 / 浪带 / 倒影，作为基础海面默认开启；莫西斯湖不动。?seaStyle=0 看原来的海。
+import('./world/seaStyle/seaStyle.js?v=sea-r3').then(m=>m.installSeaStyle({scene,renderer,camera})).catch(e=>console.warn('海面统一模块加载失败',e));
+// 天气（系统工坊 · 球系统管线「天气」）：晴 / 雨 / 雪、风、天气雾；工坊里雨雪跟着工坊镜头，游玩时照旧跟着玩家。只有定稿或工坊预览时才改参数。
+import('./world/lightStyle/lightStyle.js').then(m=>m.installLightStyle({scene,renderer,sun,ambient,hemi,fill,getVoxelAo:()=>voxelAo})).catch(e=>console.warn('光照样式模块加载失败',e)).then(()=>import('./world/weatherStyle/weatherStyle.js?v=weather-r4')).then(m=>m.installWeatherStyle({scene,camera})).catch(e=>console.warn('天气模块加载失败',e));
 // 2026-10-15 (user): the fleet no longer attacks on its own at spawn; it waits for 集结出击 in the 霸天舰队 panel.
 // Demo tours (?tour=bookshop-battle / fleet-command) and ?batianAuto=1 keep the old automatic campaign.
-const batianAutoCampaign=['bookshop-battle','fleet-command'].includes(entryParams.get('tour'))||entryParams.get('batianAuto')==='1';
+// 2026-11-08 (user)：放开霸天的打击触发 —— 默认就是 campaign：霸天带领舰队按 书店镇 → 十二门徒 → 高山圣城 → 旧港湾 → 湖沼 → 苔庭 → 月湖 → 叹息之门
+// 一个场景打完再打下一个（每轮之间约 8 秒，不同时开战）。不再要求玩家先走到书店镇附近。系统工坊内嵌的游戏不自动开打（免得抢镜头 / 拖帧）；
+// ?batianAuto=0 关掉自动、回到只能面板「集结出击」。
+const batianEmbedded=(()=>{try{return window.top!==window;}catch{return true;}})();
+const batianAutoCampaign=['bookshop-battle','fleet-command'].includes(entryParams.get('tour'))||entryParams.get('batianAuto')==='1'||(entryParams.get('batianAuto')!=='0'&&!batianEmbedded);
+// 自动出征在等什么：舰队与玩家乘坐的编队飞机是同一个编队，乘机中不能出击；下机后 8 秒左右自动出击。
+let batianWaitToasted=false;
+const batianAutoWaitReason=()=>{if(!batianAutoCampaign||!gameStarted)return '';const r=aircraftRide?.isRiding?.()?'乘坐编队飞机中':scoutAircraftRide?.isRiding?.()?'乘坐侦察机中':!['idle','done'].includes(messenger?.vanguardAssault?.phase?.()||'idle')?'先锋突击进行中':'';if(r&&!batianWaitToasted){batianWaitToasted=true;showToast('霸天舰队待命：'+r+'，结束后自动逐个场景出击',3);}if(!r)batianWaitToasted=false;return r?'待命（'+r+'，结束后自动出击）':'';};
 const batianFleet=crystalColossus&&messenger?.landmarks?.aircraftSquad?createBatianFleet({scene,flagship:crystalColossus,squad:messenger.landmarks.aircraftSquad,targets:batianTargets,radius:PLANET_RADIUS,auto:batianAutoCampaign?'campaign':false,audio:{trooperSwing:sfxLaserSwing,trooperCharge:sfxBoltCharge,trooperFire:sfxBoltFire,trooperHit:sfxBoltHit,residentFire:(from,to)=>sfxRobotShot('sentry',from,to),shieldHit:sfxBatianShieldHit,release:sfxBatianBombRelease,fall:sfxBatianBombFall,explosion:(pos,type)=>type==='rain'?sfxBatianBombExplosion(pos):sfxSmallExplosion(pos),charge:sfxEnergyPulse},
   escorts:messenger.landmarks.aircraftSquad.userData.gatePodEscort?.children||[],
   scouts:messenger.landmarks.scoutDefense?.fleetUnits?.().map(u=>u.group)||[],
   transports:messenger.landmarks.vanguardHaulers||[],groundSquad:messenger.landmarks.vanguardSquad,getTown:()=>robotOperations?.pedestrians,groundHooks:{rosterSlot:vanguardRosterSlot,muzzleWorld:vanguardMuzzleWorld},
-  autoReady:()=>batianFleet?.snapshot().cycle>0||['bookshop-battle','fleet-command'].includes(entryParams.get('tour'))||player.position.clone().normalize().angleTo(batianTargets[0]?.dir||player.position)*PLANET_RADIUS<100,
+  autoReady:()=>gameStarted&&batianMossGate()&&(batianAutoCampaign||batianFleet?.snapshot().cycle>0||player.position.clone().normalize().angleTo(batianTargets[0]?.dir||player.position)*PLANET_RADIUS<100),
   canControl:()=>gameStarted&&!aircraftRide.isRiding?.()&&!scoutAircraftRide?.isRiding?.()&&['idle','done'].includes(messenger.vanguardAssault?.phase?.()||'idle') }):null;
 // 2026-10-15 perf: give every Batian target a fast top-surface height (radialHeightIndex). Without it the
 // colossus ground shadow and the bomb-landing prediction raycast every mesh of the target each update
@@ -1898,8 +1928,54 @@ const bookshopCameraOccluders=entryBookshop?.userData.steampunkRobots?.userData.
 const swampCameraOccluders=createSwampCameraOccluders(messenger?.landmarks?.moebiusSwamp);
 const baseCameraOccluders=(position,reach)=>[...(bookshopCameraOccluders?.(position,reach)||[]),...swampCameraOccluders(position,reach)];
 let robotOperations=null;
+let vikingBoarding=null,vikingCargoRide=null,vikingCampaign=null,vikingBoardingLoading=false,vikingMusterWanted=new URLSearchParams(location.search).get('vikingMuster')==='1',vikingAutoMusterArmed=new URLSearchParams(location.search).get('vikingAuto')!=='0';
+globalThis.__tmStartVikingMuster=()=>{vikingMusterWanted=true;return 'muster';};
+// 正式战役：估算距苔庭开战 ≤ 离港提前(10min)+集结预算(6min) 时自动集结（用户 2026-11-10：战前约 10 分钟离港；可跨铁轨）
+let vikingVoyageTimingMod=null,vikingAutoMusterCheckAt=0;
+// 2026-11-10 用户：霸天出征顺序改为 书店镇→十二门徒→苔庭→高山圣城→…（苔庭在圣城前，维京人与霸天同场打圣城）。
+// 霸天下一站是苔庭时，等维京船队到苔庭锚地（hold-moss 或之后）才出征，保证维京人在苔庭开战前已到控制位；兜底 20 分钟。?vikingAuto=0 且未手动集结时不等。
+let batianMossWaitSince=0;
+function batianMossGate(){
+  try{
+    if(!vikingAutoMusterArmed&&!vikingCampaign&&!vikingMusterWanted)return true;
+    const done=batianFleet?.snapshot?.().completedTargets||[];
+    const next=batianTargets.find(t=>!done.includes(t.id));
+    if(next?.id!=='moss'){batianMossWaitSince=0;return true;}
+    const ph=vikingCampaign?.phase;
+    if(ph&&ph!=='muster'&&ph!=='sail-moss')return true;
+    batianMossWaitSince||=performance.now();
+    return performance.now()-batianMossWaitSince>20*60*1000;
+  }catch{return true;}
+}
+globalThis.__tmBatianMossGate=()=>({open:batianMossGate(),waitingSec:batianMossWaitSince?Math.round((performance.now()-batianMossWaitSince)/1000):0});
+async function maybeAutoVikingMuster(nowMs){
+  if(vikingMusterWanted||vikingBoarding||!vikingAutoMusterArmed||!batianFleet)return;
+  if(nowMs && nowMs < vikingAutoMusterCheckAt)return;
+  vikingAutoMusterCheckAt=(nowMs||performance.now())+2000; // 每 2 s 估一次
+  try{
+    vikingVoyageTimingMod ||= await import('./world/vikings/vikingVoyage.js');
+    const { estimateMossBattleEtaSec, VOYAGE_TIMING, scheduleBeforeMoss } = vikingVoyageTimingMod;
+    const eta = estimateMossBattleEtaSec(batianFleet.snapshot(), batianTargets, VOYAGE_TIMING);
+    if(eta==null)return;
+    const need = VOYAGE_TIMING.departBeforeMossSec + VOYAGE_TIMING.musterBudgetSec; // 600+360=960s
+    if(eta <= need){
+      vikingMusterWanted=true;
+      console.info('[vikingMuster] auto-start', scheduleBeforeMoss(eta), { eta, need });
+    }
+  }catch(e){ console.warn('[vikingMuster-auto]', e); }
+}
 const robotGreeting=createRobotGreeting({player,isStarted:()=>gameStarted,toast:showToast,getModels:()=>[...(entryBookshop?.userData.steampunkRobots?.userData.models||[]),...(robotOperations?[...robotOperations.models.values()].filter(m=>{const u=robotOperations.logistics.get(m.userData.robotId);return u&&['ready','deployed','repair'].includes(u.status);}):[])]});
 const bookshopAtmosphere=createBookshopAtmosphere({root:entryBookshop?.userData.steampunkRobots,scene,skyMat});
+// 高山圣城 / 十二门徒一带暮色按目标图（citadel-target-20261024）调成蓝调暮色；?citadelDusk=0 关闭
+// 远山：不建模，贴图剪影环（海湾后的远山层 / 海上孤岛），只在圣城一带；?farMountains=0 关闭
+const citadelFarMountains=createCitadelFarMountains({scene,skyMat,radius:PLANET_RADIUS,getCenters:()=>batianTargets.filter(t=>t.id==='citadel'||t.id==='apostles').map(t=>t.dir)});
+// 岩体水平风化层理 + 灰蓝石灰岩倾向（材质补丁，不加几何）；?citadelStrata=0 关闭
+const citadelRockStrata=installCitadelRockStrata({radius:PLANET_RADIUS,getRoots:()=>batianTargets.filter(t=>t.id==='citadel'||t.id==='apostles').map(t=>t.surfaceRoot)});
+// 风中旗帜（天气 · 风；学习 926890207298899969 贝塞尔风粒子旗面）：圣城可见屋顶上的旗，跟着 P.windSpeed / P.windDir 飘；圣城异步建好后才有屋顶，故隔 5 秒尝试安装。?windBanners=0 关闭
+let citadelWindBanners=null,citadelWindBannerTry=-1e9,citadelPathLanterns=null,citadelInk=null;   // 步道灯（目标图山路 / 桥上一串暖灯点）同样等圣城建好；?citadelLanterns=0 关闭
+// 圣城可见建筑暖窗（入夜 / 圣城暮色时窗玻璃发暖光；原夜窗系统只管已隐藏的旧布局）；?citadelWindows=0 关闭
+const citadelWindowGlow=installCitadelWindowGlow({getCastle:()=>messenger?.landmarks?.odysseyCitadel});
+const citadelDuskGrade=createCitadelDuskGrade({scene,skyMat,radius:PLANET_RADIUS,getCenters:()=>batianTargets.filter(t=>t.id==='citadel'||t.id==='apostles').map(t=>t.dir)});
 // Jakub additive bookshop dressing toward the 2026-10-11 target; ?bookshopJakub=0 disables.
 const bookshopJakubPass=installBookshopJakubPass({scene,root:entryBookshop?.userData.steampunkRobots,R:160,colliders:Array.isArray(assetColliders)?assetColliders:null,platforms,bookshop:entryBookshop,enabled:new URLSearchParams(location.search).get('bookshopJakub')!=='0'});
 // 2026-10-13: horse/statue plaza made radial-level like the fountain (bastion + cut walls + stair); ?plazaLevel=0 disables.
@@ -2087,13 +2163,22 @@ function animate() {
   }
   updateMoebiusBarrier(dt);
   bookshopAtmosphere.update(camera.position,P.timeOfDay);
-  if(!robotOperations&&entryBookshop?.userData.steampunkRobots&&messenger?.landmarks?.tramSystem){robotOperations=createRobotOperations({scene,base:entryBookshop.userData.steampunkRobots,tramSystem:messenger.landmarks.tramSystem,camera,cameraRig,colliders:assetColliders,getFleet:()=>messenger.landmarks.aircraftSquad,getAssault:()=>messenger.vanguardAssault||messenger.combatPack?.vanguardAssault});}
+  citadelDuskGrade.update(camera.position,P.timeOfDay);
+  citadelFarMountains.update(camera.position);
+  citadelRockStrata.update();
+  if(!citadelWindBanners){const now=performance.now();if(now-citadelWindBannerTry>5000){citadelWindBannerTry=now;const wb=installWindBanners({scene,castle:messenger?.landmarks?.odysseyCitadel,radius:PLANET_RADIUS});if(wb.count){citadelWindBanners=wb;const pl=installCitadelPathLanterns({scene,castle:messenger?.landmarks?.odysseyCitadel});if(pl.count)citadelPathLanterns=pl;simplifyCitadelTerrain(messenger?.landmarks?.odysseyCitadel).catch(e=>console.warn("[citadelTerrainLod]",e)).finally(()=>import("./world/citadel/citadelVoxelMountain.js").then(m=>{const r=m.installCitadelVoxelMountain(messenger?.landmarks?.odysseyCitadel);console.info("[citadelVoxel]",r);}).catch(e=>console.warn("[citadelVoxel]",e)));   // 山体减面 14.5 万 → 约 3.3 万（meshoptimizer，误差 ≤12 cm）
+try{const ink=installCitadelInkOutline({scene,castle:messenger?.landmarks?.odysseyCitadel});if(ink.count)citadelInk=ink;}catch(e){console.warn("[citadelInk]",e);}}}}
+  else citadelWindBanners.update(dt,camera);
+  citadelWindowGlow.update(dayNight.getPhase?.() ?? P.timeOfDay, citadelDuskGrade.weight);
+  citadelPathLanterns?.update(dayNight.getPhase?.() ?? P.timeOfDay, citadelDuskGrade.weight, camera);
+  citadelInk?.update(renderer, camera, skyMat?.uniforms?.glowSunDir?.value, dayNight.getPhase?.() ?? P.timeOfDay);
+  if(!robotOperations&&entryBookshop?.userData.steampunkRobots&&messenger?.landmarks?.tramSystem){robotOperations=createRobotOperations({scene,base:entryBookshop.userData.steampunkRobots,tramSystem:messenger.landmarks.tramSystem,camera,cameraRig,colliders:assetColliders,getFleet:()=>messenger.landmarks.aircraftSquad,getAssault:()=>messenger.vanguardAssault||messenger.combatPack?.vanguardAssault});globalThis.__tmRobotOps=robotOperations;}   // 维京远征登船读书店镇行人（world/vikings/bookshopBoarding.js）
   // 季相天气偏置（E5）：按玩家当前所处季相带温和偏置天气（冬雪/春雨/夏秋晴），3 秒滞后防抖
   if (player?.position) {
     const season = seasonAt(player.position);
     seasonWeatherBias.update(dt, season?.name, P);
   }
-  weather.update(dt, player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
+  weather.update(dt, globalThis.__tmWeatherCenter?.() || player.position, { speed: P.windSpeed, dirDeg: P.windDir }, P.weather | 0);
   // 纳沃纳双栖广场：雨天蓄洪 / 晴雪泄回旱季广场（与天气联动）
   {
     const plaza = messenger?.landmarks?.citadelRange?.navonaPlaza;
@@ -2195,13 +2280,19 @@ function animate() {
   // Saihoji defenders and Kun advance on the world's clamped simulation clock.
   // The flagship must share that clock or it finishes a sortie before landing at low FPS.
   batianFleet?.update(batianFleet?.snapshot().target==='moss'?dt:elapsedFrame,t);
-  if(batianFleet){const bs=batianFleet.snapshot();const targetSelect=document.getElementById('batian-target');if(targetSelect&&bs.target&&bs.phase!=='idle')targetSelect.value=bs.target;setBatianBattleBgm(gameStarted&&!['idle','dock'].includes(bs.phase));const el=document.getElementById('batian-fleet-status');if(el){el.textContent=(batianTargets.find(x=>x.id===bs.target)?.label||'等待书店镇出击')+' · '+(bs.arsenal?.pendingProjectiles>0?'霸天连续投弹':bs.beamActive&&bs.fireLog.at(-1)?.role==='flagship'?({cannon:'晶核脉冲',rain:'连续轰炸',ion:'离子干扰',traction:'牵引光场'}[bs.fireLog.at(-1)?.type]||'旗舰攻击'):{idle:'待命',assemble:'集结',transit:'霸天转场',blockade:'编队到场',pincer:'两翼轮番攻击',cannon:'霸天主炮',guard:'护卫掩护',withdraw:bs.coverBombing?.allowed&&bs.coverBombing.passes<2?'收队前掩护轰炸':'收队',return:'返航',dock:'补能'}[bs.phase]||bs.phase)+' · 能源 '+Math.round(bs.energy)+' · '+bs.members+'架 · '+(bs.shield?'护罩开启':'护罩关闭');if(bs.groundAssault?.active)el.textContent+=' · '+({suppression:'压制防空',insertion:'运输艇索降',sweep:'广场交战',evacuation:'地面收队'}[bs.groundAssault.stage]||'地面作战')+' · 本次 '+bs.groundAssault.assigned+' · 可战 '+bs.groundAssault.ready+' · 索降中 '+bs.groundAssault.rappelling+' · 已落地 '+bs.groundAssault.deployed;if(bs.groundAssault?.tactics){const ts=bs.groundAssault.tactics;el.textContent+=' · 光盾拦截 '+ts.shieldBlocks+' · 光剑命中 '+ts.swordHits+' · 枪阵射击 '+ts.gunBursts;}if(bs.groundAssault?.medical?.patients)el.textContent+=' · 送往黑娃救治 '+bs.groundAssault.medical.patients;el.dataset.saihojiFormation=JSON.stringify(scene.getObjectByName("saihoji-phalanx-battle")?.userData.getBattleSnapshot?.()||null);el.dataset.saihojiBattle=JSON.stringify(scene.getObjectByName("leviathanGroup")?.userData.batianBattleTrigger||null);if(bs.target==='moss')el.textContent+=JSON.parse(el.dataset.saihojiBattle)?.allowed?' · 苔庭迎战':' · 苔庭等待霸天攻击';el.dataset.audit=JSON.stringify(bs);el.dataset.beamActive=bs.beamActive?'1':'0';el.dataset.bombActive=bs.arsenal?.pendingProjectiles>0?'1':'0';el.dataset.ionActive=bs.arsenal?.activeIon?'1':'0';el.dataset.bayOpen=bs.bay?.openness>.5?'1':'0';el.dataset.target=bs.target||'';el.dataset.shattered=String(bs.arsenal?.robotsShattered||0);el.dataset.fireRole=bs.fireLog.at(-1)?.role||'';}}
+  if(batianFleet){const bs=batianFleet.snapshot();const targetSelect=document.getElementById('batian-target');if(targetSelect&&bs.target&&bs.phase!=='idle')targetSelect.value=bs.target;setBatianBattleBgm(gameStarted&&!['idle','dock'].includes(bs.phase));const el=document.getElementById('batian-fleet-status');if(el){el.textContent=(batianTargets.find(x=>x.id===bs.target)?.label||'等待书店镇出击')+' · '+(bs.arsenal?.pendingProjectiles>0?'霸天连续投弹':bs.beamActive&&bs.fireLog.at(-1)?.role==='flagship'?({cannon:'晶核脉冲',rain:'连续轰炸',ion:'离子干扰',traction:'牵引光场'}[bs.fireLog.at(-1)?.type]||'旗舰攻击'):{idle:batianAutoWaitReason()||'待命',assemble:'集结',transit:'霸天转场',blockade:'编队到场',pincer:'两翼轮番攻击',cannon:'霸天主炮',guard:'护卫掩护',withdraw:bs.coverBombing?.allowed&&bs.coverBombing.passes<2?'收队前掩护轰炸':'收队',return:'返航',dock:'补能'}[bs.phase]||bs.phase)+' · 能源 '+Math.round(bs.energy)+' · '+bs.members+'架 · '+(bs.shield?'护罩开启':'护罩关闭');if(bs.groundAssault?.active)el.textContent+=' · '+({suppression:'压制防空',insertion:'运输艇索降',sweep:'广场交战',evacuation:'地面收队'}[bs.groundAssault.stage]||'地面作战')+' · 本次 '+bs.groundAssault.assigned+' · 可战 '+bs.groundAssault.ready+' · 索降中 '+bs.groundAssault.rappelling+' · 已落地 '+bs.groundAssault.deployed;if(bs.groundAssault?.tactics){const ts=bs.groundAssault.tactics;el.textContent+=' · 光盾拦截 '+ts.shieldBlocks+' · 光剑命中 '+ts.swordHits+' · 枪阵射击 '+ts.gunBursts;}if(bs.groundAssault?.medical?.patients)el.textContent+=' · 送往黑娃救治 '+bs.groundAssault.medical.patients;el.dataset.saihojiFormation=JSON.stringify(scene.getObjectByName("saihoji-phalanx-battle")?.userData.getBattleSnapshot?.()||null);el.dataset.saihojiBattle=JSON.stringify(scene.getObjectByName("leviathanGroup")?.userData.batianBattleTrigger||null);if(bs.target==='moss')el.textContent+=JSON.parse(el.dataset.saihojiBattle)?.allowed?' · 苔庭迎战':' · 苔庭等待霸天攻击';el.dataset.audit=JSON.stringify(bs);el.dataset.beamActive=bs.beamActive?'1':'0';el.dataset.bombActive=bs.arsenal?.pendingProjectiles>0?'1':'0';el.dataset.ionActive=bs.arsenal?.activeIon?'1':'0';el.dataset.bayOpen=bs.bay?.openness>.5?'1':'0';el.dataset.target=bs.target||'';el.dataset.shattered=String(bs.arsenal?.robotsShattered||0);el.dataset.fireRole=bs.fireLog.at(-1)?.role||'';}}
   frameCpuMark("sceneUpdates");
   citadelGuardian?.update(dt);
   // Trains move in updateScenes. Seat and freight poses must use this frame's
   // transforms before player visuals and the camera are synchronized.
   if (tramRide.isRiding()) tramRide.update(0);
   robotOperations?.update(dt);
+  // 维京远征：?vikingMuster=1 / __tmStartVikingMuster()；正式战役下距苔庭开战 ≤16 分钟自动集结（离港=战前10分钟）
+  maybeAutoVikingMuster(performance.now());
+  if(vikingMusterWanted&&!vikingBoarding&&!vikingBoardingLoading&&robotOperations?.pedestrians){vikingBoardingLoading=true;import('./world/vikings/bookshopBoarding.js').then(m=>{const get=n=>{let hit=null;scene.traverse(o=>{if(!hit&&o.name===n&&o.visible)hit=o;});return hit;};vikingBoarding=m.createBookshopBoarding({scene,pedestrians:robotOperations.pedestrians,duke:get('duke-coastal-steam-freighter'),leebai:get('bookshop-steam-parts-freighter'),dukeGangway:get('duke-gangway'),onDepart:()=>{if(vikingCargoRide)vikingCargoRide.departed=true;}}).start();import('./world/vikings/campaignDirector.js').then(c=>{vikingCampaign=c.createVikingCampaign({scene,camera,boarding:vikingBoarding,targets:()=>globalThis.__tmSceneTargets?.()||[],getFleet:()=>batianFleet,syncBatian:new URLSearchParams(location.search).get('vikingSyncBatian')!=='0'});}).catch(e=>console.warn('[vikingCampaign]',e));return import('./player/cargoRide.js').then(c=>{vikingCargoRide=c.createCargoRide({player,scene,cargo:get('harbor-suspended-cargo'),trolley:get('harbor-cargo-trolley'),leebai:get('bookshop-steam-parts-freighter'),duke:get('duke-coastal-steam-freighter'),dukeGangway:get('duke-gangway'),isMustering:()=>!!vikingBoarding?.active&&!vikingBoarding.departed,toast:showToast});});}).catch(e=>console.warn('[vikingBoarding]',e));}
+  vikingBoarding?.update(dt);
+  vikingCargoRide?.update(dt);
+  vikingCampaign?.update(dt);
   frameCpuMark("robotsAndGuardian");
   robotGreeting.update();
   const kunRollActive=bgmWhale?.userData?.victoryRoll?.active===true;
@@ -2526,7 +2617,11 @@ function fleetSelfCheck() {
 }
 
 // Castle / crystal-city editors join the build menu's 构建对象 dropdown (same 构建 editor group as the lake and the apostles).
-morrisViewer.buildEditors=[citadelEditorPanel&&{id:'editor:citadel',name:'高山圣城 · 古堡搭建',open:()=>citadelEditorPanel.open()},crystalCityEditorPanel&&{id:'editor:crystal',name:'水晶城 · 搭建',open:()=>crystalCityEditorPanel.open()}].filter(Boolean);
+morrisViewer.buildEditors=[
+ citadelEditorPanel&&{id:'editor:citadel',sceneId:'citadel',name:'高山圣城 · 古堡搭建',open:()=>citadelEditorPanel.open(),close:()=>citadelEditorPanel.close(),save:()=>citadelEditorPanel.save()},
+ crystalCityEditorPanel&&{id:'editor:crystal',sceneId:'crystal',name:'水晶城 · 搭建',open:()=>crystalCityEditorPanel.open(),close:()=>crystalCityEditorPanel.close(),save:()=>crystalCityEditorPanel.save()},
+ {id:'editor:map',name:'地图 · 物件放置',open:()=>mapEditor.setOpen(true),close:()=>mapEditor.setOpen(false),save:()=>mapEditor.save()}
+].filter(Boolean);
 window.__tm = {
   get gateApproachRailings() { return gateApproachRailings; },
   bookshopJakubPass,

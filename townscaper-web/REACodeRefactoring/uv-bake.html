@@ -1,0 +1,64 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>UV 图块页 → 贴图烘焙 · REACode 重构版</title>
+<style>:root{color-scheme:light}body{margin:0;background:#eef3f1;color:#203b42;font:14px/1.5 system-ui}header{padding:10px 16px}main{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 16px 16px}canvas{width:100%;height:auto;display:block;background:#2a3238;border-radius:8px}label{margin-right:12px}#status{font-variant-numeric:tabular-nums}a{color:#147b88}small{display:block;color:#5a6e72}</style>
+<header><nav><a href="index.html" target="_top">首页</a> · <a href="atlas-live.html">GPU 图集</a> · <a href="impostors.html">树云转镜</a></nav>
+<b>1478114309263839244 / engine/spritepack.js：地形网格 → 法线分片 → 径向排布 UV 页 → 放进共享 Atlas → 逐像素烘焙（棋盘 × 预烘光照）→ 贴回模型</b>
+<div><label>排布占用 <select id="pack"><option value="raster">三角栅格占用（r55）</option><option value="bbox">逐三角包围盒（r53）</option></select></label><label>网格 <select id="grid"><option value="mixed">混合</option><option value="quad">四边形</option></select></label><label>栅格 <select id="cell"><option>0.2</option><option selected>0.1</option><option>0.07</option></select></label><label><input type="checkbox" id="charts">图块描边</label><label><input type="checkbox" id="spin" checked>转动</label></div>
+<div id="status" role="status">烘焙中…</div>
+<small>左：模型只用无光照材质 + 烘出来的贴图（光照、棋盘全在贴图里）。右：共享 Atlas 整页（灰块 = 预留给其他精灵的槽，UV 页占其中一个分配）。原片烘焙内容未知，棋盘 + 方向光 + 高度色带是本地替代。</small></header>
+<main><canvas id="view" width="720" height="560"></canvas><canvas id="page" width="720" height="720"></canvas></main>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { buildQuadGrid, buildMixedGrid } from './src/core/grid.js';
+import { decorateCells } from './src/core/spatial.js';
+import { World } from './src/core/world.js';
+import { generateTerrain } from './src/terrain/generate.js';
+import { shapeTerrain } from './src/terrain/shape.js';
+import { MeshWriter } from './src/core/meshwriter.js';
+import { buildTerrain } from './src/terrain/terrainmesh.js';
+import { weldSoup, buildCharts, radialChartPack, countChartOverlaps } from './src/core/uv-charts.js';
+import { bakeChartPage } from './src/core/uv-bake.js';
+import { Atlas } from './src/core/atlas.js';
+const $ = (s) => document.querySelector(s), qs = new URLSearchParams(location.search);
+for (const k of ['pack', 'grid', 'cell']) if (qs.has(k)) $('#' + k).value = qs.get(k);
+if (qs.get('charts') === '1') $('#charts').checked = true; if (qs.get('spin') === '0') $('#spin').checked = false;
+const renderer = new THREE.WebGLRenderer({ canvas: $('#view'), antialias: true, preserveDrawingBuffer: true }); renderer.setPixelRatio(1); renderer.setSize(720, 560, false);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#9fc1cb');
+const camera = new THREE.PerspectiveCamera(40, 720 / 560, .1, 200);
+let mesh = null, tex = null, yaw = .7, state = null;
+function build() {
+  const t0 = performance.now(), radius = +(qs.get('radius') ?? 7);
+  const grid = $('#grid').value === 'quad' ? buildQuadGrid({ radius, seed: 3 }) : buildMixedGrid({ radius: radius + 2, seed: 3 });
+  decorateCells(grid); const world = new World(grid); generateTerrain(world, { seed: 5 });
+  const w = new MeshWriter(); buildTerrain(w, world, { L: 0.5, shape: shapeTerrain(world) });
+  const m = weldSoup(w.pos), { charts } = buildCharts(m, { maxAngle: 40 }), cell = +$('#cell').value;
+  const pack = radialChartPack(charts, { cell, gap: 1, footprint: $('#pack').value });
+  // UV 页像素：栅格 1 格 ≈ 3 像素（gap 1 格 ≥ 2 px，gutter 1 px 不串色）
+  const texels = Math.min(2048, Math.max(64, Math.round(pack.bounds.side / cell * 3)));
+  const atlas = new Atlas(1024, 1024); for (let i = 0; i < 10; i++) atlas.place('sprite' + i, 96 + (i % 3) * 32, 96, { rng: () => .5 });
+  const bake = bakeChartPage(m, pack, { atlas, texels, gutter: 1, key: 'terrain-uv' });
+  // three: 非索引几何 + 烘焙页（无光照材质）
+  if (mesh) { scene.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); tex.dispose(); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(bake.positions, 3)); g.setAttribute('uv', new THREE.BufferAttribute(bake.uvs, 2)); g.computeBoundingSphere();
+  tex = new THREE.DataTexture(bake.rgba, bake.width, bake.height, THREE.RGBAFormat); tex.flipY = false; tex.colorSpace = THREE.SRGBColorSpace; tex.magFilter = THREE.LinearFilter; tex.minFilter = THREE.LinearFilter; tex.generateMipmaps = false; tex.needsUpdate = true;
+  mesh = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: tex })); scene.add(mesh);
+  const r = g.boundingSphere.radius; camera.position.set(0, r * 1.25, r * 2.5); camera.lookAt(0, 0, 0);
+  drawPage(bake, m);
+  const overlaps = countChartOverlaps(pack), ms = performance.now() - t0;
+  state = { pack: $('#pack').value, grid: $('#grid').value, cell, triangles: m.triangles.length, charts: charts.length, chartFill: +pack.fill.toFixed(3), texels, texelFill: +bake.texelFill.toFixed(3), gutter: bake.gutterFilled, overlaps, atlas: [bake.width, bake.height], slot: bake.slot && { x: bake.slot.x, y: bake.slot.y, w: bake.slot.w, h: bake.slot.h }, grown: !!bake.grown, ms: Math.round(ms) };
+  $('#status').textContent = `${state.triangles} 三角 → ${state.charts} 图块 · 排布填充率 ${(state.chartFill * 100).toFixed(1)}% · UV 页 ${texels}² 像素覆盖 ${(state.texelFill * 100).toFixed(1)}% · 图块重叠 ${overlaps} · 共享 Atlas ${bake.width}² 槽 (${bake.slot.x},${bake.slot.y}) ${bake.grown ? '· 已 grow' : ''} · ${state.ms} ms`;
+  window.uvBake = { state, bake, pack, mesh, renderer };
+}
+function drawPage(bake, m) {
+  const c = $('#page'), ctx = c.getContext('2d'), img = new ImageData(bake.width, bake.height), A = bake.atlas;
+  img.data.set(bake.rgba); for (let i = 3; i < img.data.length; i += 4) if (!img.data[i]) { img.data[i - 3] = 42; img.data[i - 2] = 50; img.data[i - 1] = 56; img.data[i] = 255; }
+  const off = new OffscreenCanvas(bake.width, bake.height), o = off.getContext('2d'); o.putImageData(img, 0, 0);
+  for (const r of A.rects()) if (!(r.x === bake.slot.x && r.y === bake.slot.y)) { o.fillStyle = 'rgba(200,205,210,.55)'; o.fillRect(r.x + 1, r.y + 1, r.w - 2, r.h - 2); }
+  o.strokeStyle = '#ffd34d'; o.lineWidth = 2; o.strokeRect(bake.slot.x, bake.slot.y, bake.slot.w, bake.slot.h);
+  if ($('#charts').checked) { o.strokeStyle = 'rgba(255,80,60,.8)'; o.lineWidth = .6; const u = bake.uvs; for (let t = 0; t < u.length; t += 6) { o.beginPath(); o.moveTo(u[t] * bake.width, u[t + 1] * bake.height); o.lineTo(u[t + 2] * bake.width, u[t + 3] * bake.height); o.lineTo(u[t + 4] * bake.width, u[t + 5] * bake.height); o.closePath(); o.stroke(); } }
+  ctx.imageSmoothingEnabled = false; ctx.clearRect(0, 0, c.width, c.height); ctx.drawImage(off, 0, 0, c.width, c.height);
+}
+function frame() { if ($('#spin').checked) yaw += .004; if (mesh) { mesh.rotation.y = yaw; renderer.render(scene, camera); } requestAnimationFrame(frame); }
+for (const id of ['pack', 'grid', 'cell']) $('#' + id).onchange = build; $('#charts').onchange = () => window.uvBake && drawPage(window.uvBake.bake);
+build(); requestAnimationFrame(frame);
+</script></html>

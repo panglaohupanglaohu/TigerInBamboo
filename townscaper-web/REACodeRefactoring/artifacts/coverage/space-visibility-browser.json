@@ -1,0 +1,23 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "inside": 0.09737500000000003,
+      "outside": 0.6112499999999992,
+      "rays": 64,
+      "samples": 392,
+      "worldUnchanged": true,
+      "cacheInvalidated": true
+    },
+    {
+      "grid": "mixed",
+      "inside": 0.11862500000000005,
+      "outside": 0.5837499999999991,
+      "rays": 64,
+      "samples": 477,
+      "worldUnchanged": true,
+      "cacheInvalidated": true
+    }
+  ],
+  "errors": []
+}

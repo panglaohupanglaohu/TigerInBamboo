@@ -1,0 +1,19 @@
+{
+  "result": {
+    "nearRed": {
+      "n": 84,
+      "meanRB": 0.2264
+    },
+    "control": {
+      "n": 108,
+      "meanRB": 0.1891
+    },
+    "nearBlue": {
+      "n": 72,
+      "meanRB": 0.1286
+    },
+    "warmJump": 0.0373,
+    "coolJump": -0.0605
+  },
+  "errors": []
+}

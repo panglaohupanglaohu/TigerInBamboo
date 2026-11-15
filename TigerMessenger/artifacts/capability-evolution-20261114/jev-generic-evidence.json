@@ -1,0 +1,24 @@
+{
+  "scope": "Generic software inventory design review only; no project source, paths, private records or images included.",
+  "observations": [
+    "Publication chronology is not proof of implementation readiness.",
+    "A later technique may extend, replace a scoped step, reuse another technique, or remain an alternative.",
+    "Partially implemented mechanisms need explicit remaining work, priority and independent acceptance.",
+    "Evidence changes should invalidate earlier completion annotations."
+  ],
+  "checks": [
+    {
+      "name": "No promotion of runtime readiness based on age alone",
+      "required": true,
+      "passed": true
+    },
+    {
+      "name": "No new implementation acceptance claimed by this design review",
+      "required": true,
+      "passed": true
+    }
+  ],
+  "constraints": [
+    "Review these generic rules only; no visual judgment or approval requested."
+  ]
+}

@@ -1,16 +1,18 @@
-import {mountObjectBrowser} from './object-browser.js?v=sys-r11';
+import {mountObjectBrowser} from './object-browser.js?v=sys-r15';
 import {mountCapabilityLibrary,classifyCapability,LAYERS,layerInsertionIndex} from './capability-library.js?v=cap-r1';
 import {mountSourceService} from './source-service.js';
-import {mountLearningWorkshop} from './learning-workshop.js';
+import {mountLearningWorkshop} from './learning-workshop.js?v=lineage-r1';
 import {scanPipelineText,registerScannedCapabilities} from './capability-scanner.js';
 import {CAPABILITIES,makeRecipe,validateRecipe,registerCodeCapabilities,codeMetaOf} from './pipeline-model.js';
 import {mountAgentPanel} from './agent-panel.js?v=cap-r1';
 import {mountStylePanel} from './style-panel.js?v=style-r1';
 import {experienceFor} from './agent/orchestrator.js?v=cap-r1';
-import {mountSystemTabs} from '../system-workshop/system-tabs.js?v=sys-r11';
-import {renderNodeDetail} from '../system-workshop/catalog-view.js?v=sys-r11';
-import {mountCapabilitySidebar,makeDropZone} from '../system-workshop/capability-sidebar.js?v=sys-r11';
-import {mountScenePicker} from '../system-workshop/scene-picker.js?v=sys-r11';
+import {experienceStore} from './agent/runtime.js?v=sys-r15';
+import {mountSystemTabs} from '../system-workshop/system-tabs.js?v=sys-r16';
+import {renderNodeDetail} from '../system-workshop/catalog-view.js?v=code-r2';
+import {mountCapabilitySidebar,makeDropZone} from '../system-workshop/capability-sidebar.js?v=lineage-r1';
+import {mountScenePicker} from '../system-workshop/scene-picker.js?v=sys-r16';
+import {playtestSceneId,sceneShortName} from './playtest-target.js?v=playtest-r1';
 // 能力代码库：直接加载 REACodeRefactoring/src/capabilities/registry.js（学习工坊新增的能力代码，刷新即可用）
 let codeLibraryError='',agentPanel=null;const initialTier=location.hash.slice(1);
 try{const reg=await import(new URL('../townscaper-web/REACodeRefactoring/src/capabilities/registry.js',location.href).href);registerCodeCapabilities(CAPABILITIES,reg.describeCapabilities());}catch(e){codeLibraryError=e.message;}
@@ -41,11 +43,30 @@ $('search-capabilities').oninput=render;
 $('scan').onclick=async()=>{const button=$('scan');button.disabled=true;$('scan-status').textContent='正在读取库中的声明记录…';try{const url=new URL('../townscaper-web/REACodeRefactoring/learn/pipeline.js',location.href);const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw Error('来源读取失败 HTTP '+response.status);const entries=scanPipelineText(await response.text());registerScannedCapabilities(CAPABILITIES,entries);localStorage.setItem('tm.pipeline.catalog.v1',JSON.stringify(entries));$('scan-status').textContent='发现 '+entries.length+' 条能力记录，已加入分类能力库；新增方法均待执行适配。';render();}catch(e){$('scan-status').textContent='扫描失败：'+e.message;}finally{button.disabled=false;}};
 let goalBefore=recipe.goal;$('goal').onfocus=()=>goalBefore=recipe.goal;$('goal').oninput=()=>recipe.goal=$('goal').value;$('goal').onchange=()=>{if(goalBefore!==recipe.goal){const previous=structuredClone(recipe);previous.goal=goalBefore;undo.push(previous);redo.length=0;$('undo').disabled=false;$('redo').disabled=true;goalBefore=recipe.goal;}};
 $('undo').onclick=()=>{if(undo.length){redo.push(structuredClone(recipe));recipe=undo.pop();render();}};$('redo').onclick=()=>{if(redo.length){undo.push(structuredClone(recipe));recipe=redo.pop();render();}};
-$('preview').onclick=()=>run('apply',recipe);$('generate').onclick=()=>agentPanel?.generate();$('before').onclick=()=>run('baseline');$('edit').onclick=async()=>{if(!await objectBrowser.clear())return;
+$('preview').onclick=()=>run('apply',recipe);$('generate').onclick=()=>agentPanel?.generate();$('before').onclick=()=>{
+ // 球系统管线：对照的是候选星球 / 海面和原样（同工坊里的「对照原样」）；其余页面照旧对照莫西斯湖原始参数
+ if(tabs?.tier==='planet'){const b=[...document.querySelectorAll('#planet-workshop button')].find(x=>/^(对照原样|看候选)$/.test(x.textContent.trim()));if(b){b.click();status(b.textContent.trim()==='看候选'?'实景正在显示原样（对照）；再点一次回到候选。':'实景回到候选。');}else status('球系统管线还没有候选：先在上方管线里执行，再对照。');return;}
+ // 原始参数是莫西斯湖场景管线的参数：其余场景（十二门徒 / 圣城 / 通用插件场景）不把莫西斯湖的参数套到实景上
+ if(playtestSceneId(window.__tmCurrentScene)!=='morris-lake'){status('「对照原始参数」只作用于莫西斯湖的场景管线参数；当前场景「'+sceneShortName(window.__tmCurrentSceneLabel)+'」请用场景管线 / 风格面板里的「对照」。');return;}
+ run('baseline');};
+$('edit').onclick=async()=>{
+ // 球系统管线编辑的是整颗星球：只回到星球轨道镜头，不进入任何场景的编辑
+ if(tabs?.tier==='planet'){request('objects.picking',{enabled:false}).catch(()=>{});tabs.refreshCamera();status('球系统管线编辑的是整颗星球：实景已回到星球轨道镜头（右键拖动旋转、滚轮远近）。在上方管线里拖入能力 → 执行 → 定稿。');return;}
+ if(!await objectBrowser.clear())return;
  // 进入编辑跟随「当前场景」：莫西斯湖用原编辑；有构建面板的场景（高山圣城 / 水晶城 / 十二门徒）先把镜头移过去再开面板；其余场景进入物件点选编辑
- const id=window.__tmCurrentScene||'morris-lake';if(id==='morris-lake')return run('open');
- try{const r=await request('scenes.editor',{id});status('已进入「'+(r?.label||id)+'」的编辑：镜头已对准该场景，构建面板已打开。');}
- catch(e){try{const r=await request('scenes.focus',{id});await request('objects.picking',{enabled:true});status('「'+(r?.label||id)+'」没有构建面板：已进入物件点选编辑，在实景里点物件，用物件管线编辑。');}catch(e2){status('进入编辑失败：'+e2.message);}}};$('play').onclick=async()=>{if(await objectBrowser.clear())run('play');};
+ const id=window.__tmCurrentScene||'morris-lake';if(id==='morris-lake'){
+  const result=await run('open');if(!result?.opened)return;
+  const dock=$('editor-dock');dock.hidden=false;dock.open=true;
+  dock.scrollIntoView({block:'nearest',behavior:'smooth'});
+  status('已进入莫西斯湖建造编辑：右侧已展开色板、建造、拆除、刷色和存档。点击实景操作；右键旋转、中键平移、滚轮缩放；「游玩检验」返回玩家视角。');
+  return result;
+ }
+ try{const r=await request('scenes.editor',{id});status('已进入「'+(r?.label||id)+'」的编辑：镜头已对准该场景，构建面板已打开。右键旋转、中键平移、滚轮缩放。');}
+ catch(e){try{const r=await request('scenes.focus',{id,preserveCamera:true});await request('objects.picking',{enabled:true});status('「'+(r?.label||id)+'」没有构建面板：已进入物件点选编辑，在实景里点物件，用物件管线编辑。');}catch(e2){status('进入编辑失败：'+e2.message);}}};$('play').onclick=async()=>{if(!await objectBrowser.clear())return;
+ // 游玩检验跟随「当前场景」：以前只发 play，游戏把镜头还给停在莫西斯湖的玩家，十二门徒 / 圣城等场景都会跳回莫西斯湖
+ const id=playtestSceneId(window.__tmCurrentScene),name=sceneShortName(document.querySelector('#scene option:checked')?.textContent?.replace(/（[^）]*）$/,''));
+ try{const r=await request('play',{id});const p=r?.placed;status(id==='morris-lake'?'游玩检验：已回到玩家视角（莫西斯湖）。':p?.placed?'游玩检验：玩家已放到「'+(p.label||name)+'」附近（距中心约 '+p.distance+' m），回到玩家视角。':'游玩检验：未能把玩家放到「'+name+'」（'+(p?.reason||'游戏未返回落点')+'），已回到玩家当前位置。');}
+ catch(e){status(e.message);}};
 $('snapshot').onclick=()=>{$('codec').textContent='待检查';try{if(!connected)throw Error('游戏尚未连接，请等待场景加载');const detail={};window.dispatchEvent(new CustomEvent('tm.experiment.save-current',{detail}));if(detail.error||!detail.row)throw Error(detail.error||'草稿保存服务尚未就绪');$('codec').textContent='通过（仅编码）';status('场景草稿 '+detail.row.id.slice(0,8)+' 已保存：当前建筑、实际参数与配方；通行和性能仍需检查。');}catch(error){$('codec').textContent='未保存';status('保存失败：'+error.message);}};
 $('open-versions').onclick=()=>{const panel=$('scene-authoring');if(!panel){status('版本面板尚未就绪，请等待游戏连接。');return;}panel.open=true;panel.scrollIntoView({block:'start',behavior:'smooth'});};
 $('save-recipe').onclick=()=>{try{localStorage.setItem(KEY,JSON.stringify(recipe));status('管线开发配方已保存，场景定稿未改变。');}catch(e){status('保存失败：'+e.message);}};
@@ -54,7 +75,7 @@ const objectBrowser=mountObjectBrowser({request});
 let probing=false,probe=null;const onConnect=[];
 // 一个实景窗口三个工坊共用；球系统候选预览需要带参数重载游戏，重载后重新握手
 function startProbe(){clearInterval(probe);probe=setInterval(async()=>{if(connected||probing)return;probing=true;try{const info=await request('connect');connected=true;clearInterval(probe);objectBrowser.load();$('connection').textContent=info.capabilities?.length?'● 游戏已连接 · 能力 Worker 就绪':'● 游戏已连接 / 能力接口缺失';status(codeLibraryError?'真实场景已连接；能力代码库加载失败：'+codeLibraryError:'真实场景已连接。扫描场景能力后，按改造方向生成候选。');if(info.capabilities?.length)agentPanel.scan();for(const f of onConnect){try{f(info);}catch(e){console.warn(e);}}}catch{}finally{probing=false;}},1500);}
-function gameUrl(extra={}){const url=new URL('index.html',location.href);url.searchParams.set('dev','1');url.searchParams.set('authoringEmbed','1');url.searchParams.set('citadelRuntime','1');for(const [k,v] of Object.entries(extra))url.searchParams.set(k,v);return url.href;}
+function gameUrl(extra={}){const url=new URL('index.html',location.href);url.searchParams.set('dev','1');url.searchParams.set('authoringEmbed','1');url.searchParams.set('authoringRevision','edit-r1');url.searchParams.set('citadelRuntime','1');for(const [k,v] of Object.entries(extra))url.searchParams.set(k,v);return url.href;}
 function reloadGame(extra={}){connected=false;for(const [,p] of pending){clearTimeout(p.timer);p.reject(Error('游戏重新加载'));}pending.clear();$('connection').textContent='○ 游戏重新加载中…';$('game').src=gameUrl(extra);startProbe();}
 $('game').src=gameUrl();startProbe();window.addEventListener('beforeunload',()=>clearInterval(probe));render();
 
@@ -63,6 +84,21 @@ agentPanel=mountAgentPanel({host:document.querySelector('.agent'),request,getRec
  onInsert:cap=>change(()=>{if(!recipe.nodes.some(n=>n.id===cap.id))insertCapability(cap);selected=cap.id;}),onScanned:()=>render(),onExperience:()=>render()});
 agentPanel.generate=()=>document.querySelector('.agent-actions .primary')?.click();
 learning=mountLearningWorkshop({
+ getCapabilities:()=>[...CAPABILITIES.filter(c=>c.code),...objectCaps,...planetCaps,...gsceneCaps],
+ // 学习工坊「能力成长」：系统里真正能执行的能力、它们的执行经验、管线里放了却不能执行的节点
+ getExecutables:()=>[...CAPABILITIES.filter(SCENE_EXEC).map(c=>({id:c.id,name:c.name,tier:'scene',clips:sceneClips(c),modules:(c.provenance?.modules||[]).map(m=>m.path)})),...gsceneCaps.map(c=>({...c,tier:'scene'})),...planetCaps.map(c=>({...c,tier:'planet'})),...objectCaps.map(c=>({...c,tier:'object'}))],
+ getExperience:()=>{const out={},tiers={planet:experienceStore('tm.planet.experience.v1'),object:experienceStore('tm.object.experience.v1'),gscene:experienceStore('tm.gscene.experience.v1')};const rows=Object.fromEntries(Object.entries(tiers).map(([k,s])=>[k,s.read()]));
+  for(const c of CAPABILITIES.filter(SCENE_EXEC)){const e=experienceFor(c.id);if(e.runs||e.committed)out[c.id]=e;}
+  for(const [k,caps]of [['planet',planetCaps],['object',objectCaps],['gscene',gsceneCaps]])for(const c of caps){const e=tiers[k].summary(c.id,rows[k]);if(e.runs||e.committed)out[c.id]=e;}return out;},
+ getDemand:()=>recipe.nodes.map(n=>CAPABILITIES.find(c=>c.id===n.id)).filter(c=>c&&!SCENE_EXEC(c)).map(c=>({id:c.id,name:c.name,clips:sceneClips(c),reason:'场景管线里已有这个节点，但没有执行适配'})),
+ onUseExecutable:async x=>{tabs.set(x.tier);if(x.tier!=='scene'){for(let i=0;i<100&&!views[x.tier];i++)await new Promise(r=>setTimeout(r,50));}dropInto(x.tier,x.id);},
+ onUseCombination:async d=>{
+  tabs.set(d.tier);const generic=d.tier==='scene'&&d.steps.length&&d.steps.every(step=>gsceneCaps.some(cap=>cap.id===step.id));
+  if(generic&&!views.gscene){status('请先选择书店镇等通用场景，再加入材质组合。');return false;}
+  if(d.tier!=='scene'){for(let i=0;i<100&&!views[d.tier];i++)await new Promise(r=>setTimeout(r,50));if(!views[d.tier]){status('工坊尚未加载，请重试。');return false;}}
+  dropSet(d.tier,{set:d.steps,name:d.name});const goal=d.name+'：'+d.contract+'；验收：'+d.accept;
+  if(generic)views.gscene.setGoal(goal);else if(d.tier!=='scene')views[d.tier].setGoal(goal);else change(()=>{recipe.goal=goal;});return true;
+ },
  getUsage:entry=>({code:CAPABILITIES.filter(c=>c.code&&c.sourceVideos?.some(id=>entry.provenance?.records?.some(e=>e.id===id))).map(c=>({id:c.id,name:c.name,present:recipe.nodes.some(n=>n.id===c.id),exp:experienceFor(c.id)})),present:recipe.nodes.some(n=>n.id===entry.id),adapters:CAPABILITIES.filter(c=>!c.scanned&&recipe.nodes.some(n=>n.id===c.id)&&c.provenance?.records.some(r=>entry.provenance.records.some(e=>e.id!=='无帖子ID'&&e.id===r.id)))}),
  onAddCapability:entry=>{registerScannedCapabilities(CAPABILITIES,[entry]);change(()=>{if(!recipe.nodes.some(n=>n.id===entry.id))insertCapability(entry);selected=entry.id;});status('从学习工坊加入：'+entry.name+'。执行适配待接入；未修改场景。');},
  onLocateCapability:id=>{selected=id;render();status('已定位当前场景节点，原配方和参数已保留。');},
@@ -72,24 +108,25 @@ learning=mountLearningWorkshop({
 // 系统工坊：三个工坊（球系统 / 场景 / 物件）共用左栏能力库和一个实景窗口；学习工坊单独
 const openSource=id=>learning.openSource(id);
 const SCENE_EXEC=c=>['editor','live','code'].includes(c.mode);
+const sceneClips=c=>[...new Set([...(c.sourceVideos||[]),...(c.provenance?.records||[]).map(r=>r.id)].map(String).filter(id=>/^\d{16,20}$/.test(id)))];
 let tabs=null,planetCaps=[],objectCaps=[],gsceneCaps=[],currentSceneLabel='';const views={};
 const sidebar=mountCapabilitySidebar($('capability-sidebar'),{sceneLayers:LAYERS,getTier:()=>tabs?.tier||initialTier||'scene',
- sources:{scene:()=>[...CAPABILITIES.filter(SCENE_EXEC).map(c=>({id:c.id,name:c.name,description:c.description,group:classifyCapability(c)[0]})),...gsceneCaps.map(c=>({id:c.id,name:c.name+'（通用场景）',description:c.does,group:c.domain==='atmosphere'?'light':'world'}))],
+ sources:{scene:()=>[...CAPABILITIES.filter(SCENE_EXEC).map(c=>({id:c.id,name:c.name,description:c.description,group:classifyCapability(c)[0],clips:sceneClips(c),modules:(c.provenance?.modules||[]).map(m=>m.path)})),...gsceneCaps.map(c=>({...c,id:c.id,name:c.name+'（通用场景）',description:c.does,group:c.domain==='atmosphere'?'light':'world'}))],
   planet:()=>planetCaps,object:()=>objectCaps},
  onOpen:item=>{if(item.tier==='scene'){if(item.node)renderNodeDetail($('inspector'),item.node,{openSource});else{const n=recipe.nodes.find(x=>x.id===item.id);if(n){selected=n.id;render();}else status(item.name+'：双击或拖进中间的场景管线。');}}else views[item.tier]?.showDetail(item.node||{id:item.id,exec:'code',title:item.name,text:item.desc,date:'',code:[item.id]});},
  onActivate:d=>d.set?dropSet(d.into||d.tier,d):dropInto(d.into||d.tier,d.id),
  // 扫描能力库：新封装的能力代码登记成场景管线可执行节点
  onScan:codeCaps=>{try{registerCodeCapabilities(CAPABILITIES,codeCaps);codeLibraryError='';}catch(e){status('能力代码登记失败：'+e.message);}}});
-function dropSet(tier,d){if(tier!=='scene')return views[tier]?.addSet(d.set,d.name);let n=0;const skip=[];for(const it of d.set){const c=CAPABILITIES.find(x=>x.id===it.id);if(c&&SCENE_EXEC(c)){dropInto('scene',it.id);n++;}else skip.push(it.id);}status('能力集合「'+d.name+'」：加入 '+n+' 个节点'+(skip.length?'；跳过 '+skip.length+' 个':'')+'。');}
+function dropSet(tier,d){if(tier==='scene'&&d.set.length&&d.set.every(it=>gsceneCaps.some(c=>c.id===it.id))){if(!views.gscene)return status('请先选择书店镇等通用插件场景，再加入材质组合。');return views.gscene.addSet(d.set,d.name);}if(tier!=='scene')return views[tier]?.addSet(d.set,d.name);let n=0;const skip=[];for(const it of d.set){const c=CAPABILITIES.find(x=>x.id===it.id);if(c&&SCENE_EXEC(c)){dropInto('scene',it.id);n++;}else skip.push(it.id);}status('能力集合「'+d.name+'」：加入 '+n+' 个节点'+(skip.length?'；跳过 '+skip.length+' 个':'')+'。');}
 function dropInto(tier,id){if(tier==='scene'&&gsceneCaps.some(c=>c.id===id)){if(!views.gscene)return status('先在「当前场景」里选一个通用插件场景（例如书店镇），再把这个能力拖进它的场景管线。');return views.gscene.add(id);}if(tier==='scene'){const c=CAPABILITIES.find(x=>x.id===id);if(!c||!SCENE_EXEC(c))return status('这个能力还不能在场景管线里执行。');change(()=>{if(!recipe.nodes.some(n=>n.id===id))insertCapability(c);else recipe.nodes.find(n=>n.id===id).enabled=true;selected=id;});status('已加入场景管线：'+c.name);}else views[tier]?.add(id);}
 makeDropZone($('pipeline'),{tier:'scene',canAccept:d=>{const c=CAPABILITIES.find(x=>x.id===d.id);return !!c&&SCENE_EXEC(c);},accept:id=>dropInto('scene',id),onReject:m=>status(m),onSet:r=>status('能力集合「'+r.name+'」：加入 '+r.added+' 个可执行节点'+(r.skipped.length?'；'+r.skipped.length+' 个还没做好（'+r.skipped.slice(0,4).join('、')+(r.skipped.length>4?' 等':'')+'），先跑做好的':'')+'。')});
-const {describePlanetCapabilities}=await import('../system-workshop/planet/capabilities.js?v=sys-r11');
-const {describeObjectCapabilities}=await import('../system-workshop/object/capabilities.js?v=sys-r2');
-planetCaps=describePlanetCapabilities();objectCaps=describeObjectCapabilities();gsceneCaps=(await import('../system-workshop/gscene/capabilities.js?v=sys-r11')).describeGsceneCapabilities();sidebar.render();
-mountScenePicker({request,onConnect,status,onChange:s=>{if(!connected)return;setTimeout(()=>{objectBrowser.load();views.object?.scan();if(s.plugin==='generic'){currentSceneLabel=s.label;if(views.gscene)views.gscene.refresh();else import('../system-workshop/gscene-workshop.js?v=sys-r11').then(m=>{views.gscene=m.mountGsceneWorkshop({host:$('gscene-workshop'),sideHost:$('viewer-side'),request,openSource,status,sceneLabel:()=>currentSceneLabel});views.gscene.scan();});}},1200);}});
+const {describePlanetCapabilities}=await import('../system-workshop/planet/capabilities.js?v=sys-r15');
+const {describeObjectCapabilities}=await import('../system-workshop/object/capabilities.js?v=sys-r15');
+planetCaps=describePlanetCapabilities();objectCaps=describeObjectCapabilities();gsceneCaps=(await import('../system-workshop/gscene/capabilities.js?v=sys-r15')).describeGsceneCapabilities();sidebar.render();
+mountScenePicker({request,onConnect,status,onChange:s=>{if(!connected)return;setTimeout(()=>{objectBrowser.load();views.object?.scan();if(s.plugin==='generic'){currentSceneLabel=s.label;if(views.gscene)views.gscene.refresh();else import('../system-workshop/gscene-workshop.js?v=sys-r15').then(m=>{views.gscene=m.mountGsceneWorkshop({host:$('gscene-workshop'),sideHost:$('viewer-side'),request,openSource,status,sceneLabel:()=>currentSceneLabel});views.gscene.scan();});}},1200);}});
 tabs=mountSystemTabs({learning,initial:initialTier,request,isConnected:()=>connected,onConnect,onTier:()=>sidebar.render(),mount:{
- planet:()=>import('../system-workshop/planet-workshop.js?v=sys-r11').then(m=>{views.planet=m.mountPlanetWorkshop({host:$('planet-workshop'),sideHost:$('viewer-side'),request,reloadGame,onConnect,isConnected:()=>connected,lookAt:(lon,lat)=>tabs.lookAt(lon,lat),openSource,status});if(connected)views.planet.scan();else onConnect.push(()=>views.planet.scan());}),
- object:()=>import('../system-workshop/object-workshop.js?v=sys-r11').then(m=>{const w=views.object=m.mountObjectWorkshop({host:$('object-workshop'),sideHost:$('viewer-side'),request,openSource,status});if(connected)w.scan();else onConnect.push(()=>w.scan());}),
+ planet:()=>import('../system-workshop/planet-workshop.js?v=sys-r15').then(m=>{views.planet=m.mountPlanetWorkshop({host:$('planet-workshop'),sideHost:$('viewer-side'),request,reloadGame,onConnect,isConnected:()=>connected,lookAt:(lon,lat)=>tabs.lookAt(lon,lat),openSource,status});if(connected)views.planet.scan();else onConnect.push(()=>views.planet.scan());}),
+ object:()=>import('../system-workshop/object-workshop.js?v=sys-r15').then(m=>{const w=views.object=m.mountObjectWorkshop({host:$('object-workshop'),sideHost:$('viewer-side'),request,openSource,status});if(connected)w.scan();else onConnect.push(()=>w.scan());}),
 }});
 
 // Same-origin workshop version panel shares the live recipe; no second goal field.

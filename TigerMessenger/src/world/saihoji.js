@@ -7,6 +7,7 @@
 import * as THREE from "three";
 import { facet } from "../assets/lowPoly.js";
 import { createOptimizedSaihojiPine } from "../assets/saihojiPineOptimized.js";
+import { createSaihojiClusterPine, saihojiClusterMembers } from "../assets/saihojiClusterPine.js";
 import { toonMat, addOutline, INK_COLOR } from "../assets/toon.js";
 import { mergeStaticGroup } from "./geometryMerge.js";
 import { PLANET_RADIUS } from "./planet.js";
@@ -21,6 +22,9 @@ const HEAVY_INK = 0.022;
 export const SAIHOJI_PINE_SIZE = 2.4;
 /** 苔庭古松间距倍率（主人 2026-09-05：树与树之间 ×2）——作用于布局表 x/z */
 export const SAIHOJI_PINE_SPREAD = 2;
+/** 2026-11-11 起苔庭用丛松（assets/saihojiClusterPine.js）；旧 25 株 Blender 古松停用 */
+const LEGACY_PINES_ENABLED = false;
+const SAIHOJI_CLUSTER_MEMBERS = saihojiClusterMembers();
 const _yUp = new THREE.Vector3(0, 1, 0);
 const _base = new THREE.Vector3();
 const _east = new THREE.Vector3();
@@ -399,6 +403,8 @@ const PINE_LAYOUTS = Object.freeze({
     { x: 4.45, z: -0.85, scale: 0.6, yaw: -1.45, lift: 0.07, seed: 4137, role: "companion" },
   ],
 });
+/** 旧 25 株布局（停用，只供随机数序列保持与 node 测试复算原高度） */
+export const LEGACY_SAIHOJI_PINE_LAYOUTS = PINE_LAYOUTS;
 
 function addZoneMoss(root, zone, count, radius, rnd) {
   let placed = 0;
@@ -610,8 +616,33 @@ export function buildSaihojiPlanet(scene, opts = {}) {
       }
     }
 
-    // 古松：聚散组景 · 高低胖瘦 · 抬根出苔（见 PINE_LAYOUTS）
-    const pines = PINE_LAYOUTS[zone.id] || [];
+    // 2026-11-11 用户参考图：苔庭古松改为丛松；同日 06:49 用户要求数量也按图示 → 只留一丛 6 棵（其他松树去掉），
+    // 高度 = 原 25 株平均 × 2.5。成员按 zone 簿记（摇摆 / 叶片吸食沿用），
+    // 最终根位、缩放与根际苔霜由 saihojiPineLayout.arrangeSaihojiPines 在鲲背
+    // 真实地壳上落位。旧 PINE_LAYOUTS 循环保留为「只消耗随机数」，使后续
+    // 苔斑/石脚的确定性随机序列与改前一致（旧松实例不再创建）。
+    for (const member of SAIHOJI_CLUSTER_MEMBERS.filter((m) => m.zone === zone.id)) {
+      const pine = createSaihojiClusterPine({ seed: member.seed, lean: member.lean, leanAz: member.leanAz, sparse: member.sparse,
+        outward: member.spread, reach: member.reach });
+      // 过渡尺度（球面苔庭 → 鲲背 ×0.43）；最终高度在 arrangeSaihojiPines 精确设定
+      pine.scale.setScalar(member.height / 0.43 / pine.userData.height);
+      placeAtLocal(pine, zone, member.dx * 12, member.dz * 12, radius, 0.05, 0);
+      Object.assign(pine.userData, { pineRole: member.key === "A" ? "sparse-elder" : "cluster", pineCluster: member.cluster,
+        pineClusterKey: member.key, clusterOffset: [member.dx, member.dz], targetHeight: member.height, pineScale: 1, pineSize: 1 });
+      group.add(pine);
+      zones[zone.id].pines.push(pine);
+      placed.push(pine.position.clone());
+      pushCollider(colliders, pine, 0.45);
+    }
+    const legacyRnd = new THREE.Group();
+    for (const spec of PINE_LAYOUTS[zone.id] || []) {
+      const sc = Number.isFinite(spec.scale) ? spec.scale : 1;
+      addStoneMossSkirt(legacyRnd, zone, spec.x * SAIHOJI_PINE_SPREAD, spec.z * SAIHOJI_PINE_SPREAD, radius, rnd, 0.55 * sc * SAIHOJI_PINE_SIZE);
+    }
+    legacyRnd.traverse((n) => n.geometry?.dispose());
+
+    // 旧版（2026-11-11 前）：聚散组景 25 株 Blender 古松，见 PINE_LAYOUTS；保留代码供对照
+    const pines = LEGACY_PINES_ENABLED ? PINE_LAYOUTS[zone.id] || [] : [];
     for (const spec of pines) {
       const sc = Number.isFinite(spec.scale) ? spec.scale : 1;
       const pine = createOptimizedSaihojiPine(spec.seed);

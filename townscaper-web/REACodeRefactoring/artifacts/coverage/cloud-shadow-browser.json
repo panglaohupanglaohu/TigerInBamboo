@@ -1,0 +1,35 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "fixture": true,
+      "changed": 59600,
+      "darker": 59600,
+      "restore": 0,
+      "dx": 1.1999999999999886,
+      "worldUnchanged": true,
+      "sharedAtlas": true,
+      "natural": {
+        "count": 31,
+        "changed": 9074,
+        "sharedAtlas": true
+      }
+    },
+    {
+      "grid": "mixed",
+      "fixture": true,
+      "changed": 35681,
+      "darker": 35681,
+      "restore": 0,
+      "dx": 1.1999999999999886,
+      "worldUnchanged": true,
+      "sharedAtlas": true,
+      "natural": {
+        "count": 31,
+        "changed": 5348,
+        "sharedAtlas": true
+      }
+    }
+  ],
+  "errors": []
+}

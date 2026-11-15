@@ -1,0 +1,253 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>混合透视 · 竖线平行标尺</title><link rel="icon" href="data:,">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>
+body{margin:0;background:#edf1f4;color:#1e2c33;font:14px/1.7 system-ui}
+header{padding:14px 22px;background:#fff;border-bottom:1px solid #d7dee3}
+h2{margin:0 0 6px;font-size:17px}
+p{margin:4px 0;max-width:1120px;color:#42535c}
+a{color:#1d6f86}
+button{margin:8px 8px 0 0;padding:5px 12px;border:1px solid #b9c6cd;border-radius:5px;background:#f6f9fa;cursor:pointer}
+button.on{background:#1d6f86;color:#fff;border-color:#1d6f86}
+label{margin-left:10px;font-size:13px;color:#42535c}
+input[type=range]{vertical-align:middle;width:180px}
+#strip{display:flex;gap:14px;padding:16px 22px;flex-wrap:wrap;align-items:flex-start}
+figure{margin:0}
+figcaption{font-size:12px;color:#42535c;margin-top:4px;max-width:470px}
+canvas{display:block;background:#101e26;image-rendering:pixelated;border:1px solid #c6d1d7}
+#status{font:12px/1.55 ui-monospace,monospace;padding:0 22px 20px;white-space:pre-wrap;color:#2b4048}
+</style>
+<header>
+  <h2>1310503825510367232 · 混合透视（mixed perspective）</h2>
+  <p>原文：「Ok, I tried the mixed perspective. Note how houses further away are smaller, yet the vertical lines stay straight and parallel.」</p>
+  <p>左边是普通透视（本仓 <code>view.js</code> 现状，w 行的 <b>y</b> 系数 = −r<sub>21</sub> ≠ 0，俯视时竖线会收）。右边把 w 行的 y 系数按 k 衰减到 0：竖线两端 w 相同 → 屏幕 x 相同 → 竖线笔直平行；而 w 仍随水平距离增长 → 远处照旧变小（不是退回正交）。<br>
+  四块面板是<b>同尺寸标尺</b>（宽 2.0、高 2.6，底边都在 y=0.1），只按深度排开（z=7 / 2 / −4 / −10）；下面的数字全是从帧缓冲按颜色逐行量出来的，不是算出来的。</p>
+  <button data-k="0">k=0（普通透视）</button><button data-k="0.5">k=0.5</button><button data-k="1" class="on">k=1（竖线平行）</button>
+  <label>连续 k <input id="k" type="range" min="0" max="1" step="0.05" value="1"></label>
+  <button id="run">重跑像素对照</button>
+</header>
+<div id="strip"></div>
+<div id="status">加载…</div>
+<script type="module">
+import * as THREE from 'three';
+import {
+  perspectiveMatrix, viewMatrix, multiply, compareProjection, withVerticalParallel,
+  projectionForRenderer, projectPoint, verticalEdge, quadWidths,
+} from './src/core/mixed-perspective.js';
+
+const $ = (s) => document.querySelector(s);
+const NW = 640, NH = 400;
+// 这是一个量像素的实验室：关掉色彩管理，否则 Material 颜色会被 sRGB→linear 转换，
+// 帧缓冲读回来的值跟标尺颜色的 RGB 对不上，按颜色找面板就全找不到（实测背景 0x101e26 读成了 1,3,5）。
+THREE.ColorManagement.enabled = false;
+const EYE = [0, 12, 20], TARGET = [0, 0.6, 0], FOV = 30, ASPECT = NW / NH;
+
+// 标尺：全部同尺寸，只按深度排开（x/z 都变，避免互相遮挡）
+const PROBES = [
+  { name: 'P1', x: -4.95, z: 7.0, hex: 0xff3b30, rgb: [255, 59, 48] },
+  { name: 'P2', x: -2.50, z: 2.0, hex: 0x34c759, rgb: [52, 199, 89] },
+  { name: 'P3', x: 1.55, z: -4.0, hex: 0x0a84ff, rgb: [10, 132, 255] },
+  { name: 'P4', x: 7.80, z: -10.0, hex: 0xffcc00, rgb: [255, 204, 0] },
+];
+// 四块面板同尺寸（宽 2.0、高 2.6），只有深度不同
+const PW = 2.0, PY0 = 0.1, PY1 = 2.7;
+
+const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(NW, NH, false);
+renderer.setClearColor(0x101e26, 1);
+const target = new THREE.WebGLRenderTarget(NW, NH, { depthBuffer: true, samples: 0 });
+
+// —— 场景：标尺 + 一层水面，用来给深度一个参照 ——
+const scene = new THREE.Scene();
+const water = new THREE.Mesh(
+  new THREE.PlaneGeometry(70, 70),
+  new THREE.MeshBasicMaterial({ color: 0x16303a }),
+);
+water.rotation.x = -Math.PI / 2;
+water.position.y = 0.05;
+water.frustumCulled = false;
+scene.add(water);
+
+for (const p of PROBES) {
+  const m = new THREE.Mesh(
+    new THREE.PlaneGeometry(PW, PY1 - PY0),
+    new THREE.MeshBasicMaterial({ color: p.hex, side: THREE.DoubleSide }),
+  );
+  m.position.set(p.x, (PY0 + PY1) / 2, p.z);
+  m.frustumCulled = false;
+  scene.add(m);
+}
+
+// 相机：位置朝向固定，只换投影矩阵
+const camera = new THREE.PerspectiveCamera(FOV, ASPECT, 0.1, 500);
+camera.position.set(...EYE);
+camera.lookAt(new THREE.Vector3(...TARGET));
+camera.updateMatrixWorld();
+camera.matrixAutoUpdate = false;
+
+const setProjection = (k) => {
+  const view = viewMatrix(EYE, TARGET);
+  const stock = multiply(perspectiveMatrix(FOV, ASPECT, 0.1, 500), view);
+  const mixed = withVerticalParallel(stock, k, TARGET[1]);
+  const P2 = projectionForRenderer(mixed, view);
+  camera.projectionMatrix.fromArray(P2);
+  camera.projectionMatrixInverse.copy(camera.projectionMatrix).invert();
+  camera.updateMatrixWorld();
+  return { view, stock, mixed };
+};
+
+const shoot = () => {
+  renderer.setRenderTarget(target);
+  renderer.clear();
+  renderer.render(scene, camera);
+  const buf = new Uint8Array(NW * NH * 4);
+  renderer.readRenderTargetPixels(target, 0, 0, NW, NH, buf);
+  renderer.setRenderTarget(null);
+  return buf;
+};
+
+// readRenderTargetPixels 是自下而上的行序；这里全部按 GL 行号处理，不再翻来翻去
+const measure = (buf) => PROBES.map((p) => {
+  const rows = [];
+  for (let y = 0; y < NH; y++) {
+    let lo = -1, hi = -1;
+    for (let x = 0; x < NW; x++) {
+      const i = (y * NW + x) * 4;
+      if (buf[i] === p.rgb[0] && buf[i + 1] === p.rgb[1] && buf[i + 2] === p.rgb[2]) {
+        if (lo < 0) lo = x;
+        hi = x;
+      }
+    }
+    if (lo >= 0) rows.push({ y, lo, hi, w: hi - lo + 1 });
+  }
+  if (rows.length < 8) return { name: p.name, visible: false, rows: rows.length };
+  // 端点那一行可能正好压在像素边界上，取内缩一行量宽度，避开半边像素
+  const bottom = rows[1];
+  const top = rows[rows.length - 2];
+  const mid = rows[Math.floor(rows.length / 2)];
+  const taperPct = ((bottom.w - top.w) / bottom.w) * 100;
+  return {
+    name: p.name,
+    visible: true,
+    rows: rows.length,
+    yBottom: rows[0].y,
+    yTop: rows[rows.length - 1].y,
+    widthBottomPx: bottom.w,
+    widthTopPx: top.w,
+    widthMidPx: mid.w,
+    widthSpreadPct: +taperPct.toFixed(2),
+    centerShiftPx: +(((top.lo + top.hi) / 2) - ((bottom.lo + bottom.hi) / 2)).toFixed(2),
+    blankRows: rows.length - (rows[rows.length - 1].y - rows[0].y + 1),
+  };
+});
+
+const analytic = () => {
+  const { stock, mixed } = compareProjection({ eye: EYE, target: TARGET, fov: FOV, aspect: ASPECT, k: 1 });
+  return PROBES.map((p) => {
+    const ws = quadWidths(stock, p.x, PW / 2, PY0, PY1, p.z);
+    const wm = quadWidths(mixed, p.x, PW / 2, PY0, PY1, p.z);
+    return {
+      name: p.name,
+      driftNdcStock: +verticalEdge(stock, p.x, p.z, PY0, PY1).driftNdc.toFixed(4),
+      driftNdcMixed: +verticalEdge(mixed, p.x, p.z, PY0, PY1).driftNdc.toFixed(4),
+      taperStockPct: +ws.taperPct.toFixed(2),
+      taperMixedPct: +wm.taperPct.toFixed(2),
+      // 底边 NDC 宽度 → 像素宽，用来跟帧缓冲里量出来的值对账
+      widthNdcStock: +ws.bottom.toFixed(4),
+      widthNdcMixed: +wm.bottom.toFixed(4),
+      pxPerNdc: NW / 2,
+    };
+  });
+};
+
+function paint(figId, label, buf) {
+  let fig = document.getElementById('fig-' + figId);
+  if (!fig) {
+    fig = document.createElement('figure');
+    fig.id = 'fig-' + figId;
+    const c = document.createElement('canvas');
+    c.width = NW; c.height = NH;
+    const cap = document.createElement('figcaption');
+    fig.append(c, cap);
+    $('#strip').append(fig);
+  }
+  const raw = new Uint8ClampedArray(buf.length);
+  for (let y = 0; y < NH; y++) raw.set(buf.subarray(y * NW * 4, (y + 1) * NW * 4), (NH - 1 - y) * NW * 4);
+  fig.querySelector('canvas').getContext('2d').putImageData(new ImageData(raw, NW, NH), 0, 0);
+  fig.querySelector('figcaption').textContent = label;
+}
+
+const summarize = (list) => {
+  const vis = list.filter((r) => r.visible);
+  return {
+    probes: vis.length,
+    maxAbsSpreadPct: +Math.max(...vis.map((r) => Math.abs(r.widthSpreadPct))).toFixed(2),
+    maxAbsCenterShiftPx: +Math.max(...vis.map((r) => Math.abs(r.centerShiftPx))).toFixed(2),
+    widths: vis.map((r) => r.widthBottomPx),
+    monotonicDepth: vis.every((r, i) => i === 0 || r.widthBottomPx < vis[i - 1].widthBottomPx),
+    totalRows: vis.reduce((s, r) => s + r.rows, 0),
+  };
+};
+
+function render(k) {
+  const proj = setProjection(0);
+  const bufStock = shoot();
+  const projMixed = setProjection(k);
+  const bufMixed = shoot();
+  const bufMixed2 = shoot();
+
+  const s = measure(bufStock), m = measure(bufMixed), m2 = measure(bufMixed2);
+  const driftRepeat = m.reduce((acc, r, i) => acc + (r.visible ? Math.abs(r.widthTopPx - m2[i].widthTopPx) + Math.abs(r.widthBottomPx - m2[i].widthBottomPx) : 0), 0);
+
+  paint('stock', '左边：普通透视 k=0 —— 每个面板上沿与下沿不等宽，竖边向内收', bufStock);
+  paint('mixed', `右边：混合透视 k=${k.toFixed(2)} —— 面板变成矩形，竖边平行；越远越小`, bufMixed);
+
+  const out = {
+    k: +k.toFixed(2),
+    stock: summarize(s),
+    mixed: summarize(m),
+    analytic: analytic(),
+    repeatDriftPx: driftRepeat,
+    perProbeStock: s,
+    perProbeMixed: m,
+  };
+  window.mixedPerspective.last = out;
+  const lines = [
+    `k = ${out.k}`,
+    `普通透视 k=0   ：最大收窄 ${out.stock.maxAbsSpreadPct}%   最大竖边横移 ${out.stock.maxAbsCenterShiftPx}px   宽度 ${out.stock.widths.join(' → ')}`,
+    `混合透视 k=${out.k.toFixed(2)}：最大收窄 ${out.mixed.maxAbsSpreadPct}%   最大竖边横移 ${out.mixed.maxAbsCenterShiftPx}px   宽度 ${out.mixed.widths.join(' → ')}`,
+    `重复渲染漂移 ${out.repeatDriftPx}px   近大远小（两种投影都保留）: ${out.mixed.monotonicDepth}`,
+    '',
+    '标尺  深度z   透视 上/下沿宽   收窄%   横移px |  混合 上/下沿宽   收窄%  横移px | 解析收窄%',
+  ];
+  out.perProbeStock.forEach((r, i) => {
+    const m = out.perProbeMixed[i];
+    const a = out.analytic[i];
+    lines.push(
+      `${r.name}  z=${String(PROBES[i].z).padStart(4)}   ${String(r.widthTopPx).padStart(3)}/${String(r.widthBottomPx).padEnd(3)}   ${String(r.widthSpreadPct).padStart(6)}   ${String(r.centerShiftPx).padStart(6)} |  ${String(m.widthTopPx).padStart(3)}/${String(m.widthBottomPx).padEnd(3)}   ${String(m.widthSpreadPct).padStart(6)}  ${String(m.centerShiftPx).padStart(6)} |  ${a.taperStockPct}`,
+    );
+  });
+  $('#status').textContent = lines.join('\n');
+  return out;
+}
+
+window.mixedPerspective = {
+  ready: true,
+  render,
+  measure,
+  PROBES,
+  last: null,
+  bufferFor: (k) => { setProjection(k); return shoot(); },
+};
+
+const setK = (k) => {
+  document.querySelectorAll('header button[data-k]').forEach((b) => b.classList.toggle('on', Number(b.dataset.k) === k));
+  $('#k').value = String(k);
+  render(k);
+};
+document.querySelectorAll('header button[data-k]').forEach((b) => (b.onclick = () => setK(Number(b.dataset.k))));
+$('#k').oninput = (e) => setK(Number(e.target.value));
+$('#run').onclick = () => render(Number($('#k').value));
+render(1);
+</script>
+</html>

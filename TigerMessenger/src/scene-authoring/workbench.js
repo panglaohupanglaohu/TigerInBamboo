@@ -1,15 +1,15 @@
 import {createExperimentSession} from './experiment-session.js';
 import {mountPipelineBridge} from './pipeline-bridge.js';
 import {createVersionStore,createSceneRegistry} from './store.js';
-import {UI_DEV} from '../ui/uiLayers.js?v=ui-layers-r1';
+import {UI_DEV} from '../ui/uiLayers.js?v=ui-layers-r3-local-edit';
 export function mountSceneWorkbench(plugin){
  const offBridge=mountPipelineBridge(plugin);
  if(!UI_DEV)return {dispose:offBridge};
  const embedded=new URLSearchParams(location.search).has('authoringEmbed')&&window.parent!==window;
  if(!embedded){
   const entry=document.createElement('a');entry.id='scene-studio-entry';entry.textContent='◈ 场景工坊';entry.href=new URL('../../pipeline.html',import.meta.url).href;entry.target='_blank';entry.rel='noopener';entry.style.cssText='position:fixed;right:16px;top:16px;z-index:240;padding:9px 15px;border-radius:7px;background:#192b2c;color:#dbe8df;font:13px system-ui;text-decoration:none';document.body.append(entry);
-  const hide=document.createElement('style');hide.textContent='#morris-townscaper-hud,#lp-dlg{display:none!important}';document.head.append(hide);
-  return {dispose(){offBridge();entry.remove();hide.remove();}};
+  // Standalone play keeps the existing build HUD under the UI layer manager.
+  return {dispose(){offBridge();entry.remove();}};
  }
  const parentDoc=window.parent.document,versionsHost=parentDoc.getElementById('scene-versions'),editorHost=parentDoc.getElementById('editor-controls');
  if(!versionsHost||!editorHost)throw Error('场景工坊菜单容器缺失');

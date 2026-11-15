@@ -1,0 +1,67 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>矩形树：手臂与 3D 展开 · REACode 重构版</title>
+<style>html,body{margin:0;background:#3d3b4a;font:13px/1.5 system-ui;color:#203b42}#ui{position:absolute;left:8px;top:8px;background:#f0f6f4e8;padding:8px 10px;border-radius:10px;max-width:380px}button,label{margin:2px 3px}canvas{display:block;margin:0 auto}#st{display:block;font-size:12px}</style>
+<div id="ui"><a href="index.html">首页</a> · <a href="grids.html?t=atlas">first-fit/候选页</a> · <a href="atlas-live-c09.html">GPU 精灵图集</a> · <b>矩形树（C09）</b><br>
+1765115069837221962：每次加块，青色手臂从树根沿碰撞查询走到叶子，板子越碎手指越多。1764958522398146667：候选位置暴力生成（底-左顺序），碰撞用树剪枝；3D 展开把每层节点叠在板子上方。共享 <code>Atlas</code>，不改其切分规则。<br>
+<button id="mode">切换 2D/3D</button><button id="play">暂停</button><button id="step">加一块</button><label><input type="checkbox" id="rm">开始删除</label><output id="st"></output></div>
+<canvas id="cv"></canvas>
+<script type="module">
+import { Atlas } from './src/core/atlas.js';
+import { treeLayers, armFromTrace, placeBottomLeft, project3D, atlasRng } from './src/core/atlas-c09.js';
+const Q = new URLSearchParams(location.search), num = (k, d) => Q.has(k) ? +Q.get(k) : d;
+const S = 512, cv = document.querySelector('#cv'), g = cv.getContext('2d');
+const st = { atlas: new Atlas(S, S), live: [], colors: new Map(), rng: atlasRng(num('seed', 7)), mode: Q.get('view') === '3d' ? '3d' : 'arm', last: null, removing: Q.get('remove') === '1', fails: 0, yaw: num('yaw', 35) * Math.PI / 180, pitch: num('pitch', 38) * Math.PI / 180, fingerLog: [] };
+function size() { const k = Math.min(innerWidth, innerHeight); cv.width = cv.height = k; }
+size(); addEventListener('resize', () => { size(); draw(); });
+function step() {
+  const A = st.atlas, r = st.rng;
+  if (st.removing && st.live.length && r() < .45) { const i = Math.floor(r() * st.live.length); A.free(st.live[i]); st.live.splice(i, 1); st.last = null; return; }
+  const w = 16 * (1 + Math.floor(r() * r() * 6)), h = 16 * (1 + Math.floor(r() * r() * 6));
+  const res = placeBottomLeft(A, w, h, { rng: r, attempts: 16 });
+  if (res.slot) { st.live.push(res.slot); st.colors.set(res.slot, `hsl(${Math.floor(r() * 360)} 22% ${40 + r() * 12}%)`); st.fingerLog.push({ fingers: res.arm.fingers, freeLeaves: A.report().freeLeaves }); }
+  else { st.fails++; if (st.fails > 6 && !st.removing) st.removing = true; }
+  st.last = { ...res, w, h };
+}
+function draw() {
+  const k = cv.width, A = st.atlas, L = treeLayers(A), last = st.last;
+  if (st.mode === 'arm') {
+    // 2D：板子占画布 80%，y=0 画在底边（板子从下往上填）
+    const m = k * .1, sc = (k - 2 * m) / S, X = (x) => m + x * sc, Y = (y) => k - m - y * sc;
+    g.fillStyle = '#3d3b4a'; g.fillRect(0, 0, k, k);
+    for (const r of st.live) { g.fillStyle = st.colors.get(r) || '#666'; g.globalAlpha = .85; g.fillRect(X(r.x), Y(r.y + r.h), r.w * sc, r.h * sc); }
+    g.globalAlpha = 1; g.strokeStyle = '#121118'; g.lineWidth = 1;
+    for (const n of L.nodes) if (n.leaf) g.strokeRect(X(n.x) + .5, Y(n.y + n.h) + .5, n.w * sc, n.h * sc);
+    if (last) {
+      g.strokeStyle = '#3ee6f0'; g.lineWidth = 1.6; g.beginPath();
+      for (const [x0, y0, x1, y1] of last.arm.segments) { g.moveTo(X(x0), Y(y0)); g.lineTo(X(x1), Y(y1)); }
+      g.stroke();
+      if (last.slot) { g.strokeStyle = '#f2e64a'; g.lineWidth = 2; g.strokeRect(X(last.slot.x), Y(last.slot.y + last.slot.h), last.slot.w * sc, last.slot.h * sc); }
+    }
+  } else {
+    // 3D 展开：根在最上，每层节点框按深度往下叠，最底下是板面彩块
+    g.fillStyle = '#7b8381'; g.fillRect(0, 0, k, k);
+    const gap = num('gap', S * .75 / Math.max(1, L.maxDepth)), opt = { yaw: st.yaw, pitch: st.pitch, cx: S / 2, cy: S / 2, scale: k / S * .6, ox: k / 2, oy: k * .74 };
+    const z = (d) => (L.maxDepth - d + 1) * gap, P = (x, y, zz) => project3D(x, y, zz, opt);
+    const quad = (x, y, w, h, zz) => { const a = [P(x, y, zz), P(x + w, y, zz), P(x + w, y + h, zz), P(x, y + h, zz)]; g.beginPath(); g.moveTo(...a[0]); for (const p of a.slice(1)) g.lineTo(...p); g.closePath(); };
+    for (const r of st.live) { quad(r.x, r.y, r.w, r.h, 0); g.fillStyle = st.colors.get(r) || '#888'; g.globalAlpha = .9; g.fill(); }
+    g.globalAlpha = 1; g.lineWidth = 1; g.strokeStyle = 'rgba(20,24,24,.35)';
+    for (const n of L.nodes) { quad(n.x, n.y, n.w, n.h, z(n.depth)); g.stroke(); }
+    g.strokeStyle = 'rgba(255,255,255,.9)'; g.lineWidth = 1.3; g.beginPath();
+    for (const [p, c] of L.branches) { const a = L.nodes[p], b = L.nodes[c]; g.moveTo(...P(a.x + a.w / 2, a.y + a.h / 2, z(a.depth))); g.lineTo(...P(b.x + b.w / 2, b.y + b.h / 2, z(b.depth))); }
+    g.stroke();
+    if (last?.slot) { quad(last.slot.x, last.slot.y, last.slot.w, last.slot.h, 0); g.strokeStyle = '#f2e64a'; g.lineWidth = 2.2; g.stroke(); }
+  }
+  const R = A.report(), recent = st.fingerLog.slice(-20), avg = recent.length ? recent.reduce((s, l) => s + l.fingers, 0) / recent.length : 0;
+  document.querySelector('#st').textContent = `${st.live.length} 块 · 占用 ${(R.fill * 100).toFixed(1)}% · 空闲叶 ${R.freeLeaves}/${R.leaves} · 树深 ${R.maxDepth} · 本次手指 ${last?.arm.fingers ?? 0}（剪掉 ${last?.arm.pruned ?? 0} 枝，试了 ${last?.tried ?? 0} 个候选）· 近 20 次平均手指 ${avg.toFixed(2)}${st.removing ? ' · 删补中' : ''}`;
+}
+for (let i = 0; i < num('steps', 0); i++) step();
+if (Q.has('removeAt')) { st.removing = true; for (let i = 0; i < num('removeAt', 0); i++) step(); }
+let playing = Q.get('auto') !== '0', timer = null, spin = Q.get('spin') === '1';
+const tick = () => { step(); if (spin && st.mode === '3d') st.yaw += .03; draw(); };
+const setPlay = (on) => { playing = on; clearInterval(timer); timer = on ? setInterval(tick, 160) : null; document.querySelector('#play').textContent = on ? '暂停' : '播放'; };
+document.querySelector('#mode').onclick = () => { st.mode = st.mode === 'arm' ? '3d' : 'arm'; draw(); };
+document.querySelector('#play').onclick = () => setPlay(!playing);
+document.querySelector('#step').onclick = () => { setPlay(false); tick(); };
+document.querySelector('#rm').checked = st.removing; document.querySelector('#rm').onchange = (e) => { st.removing = e.target.checked; };
+window.atlasTree = { st, step, draw, treeLayers: () => treeLayers(st.atlas), armOf: () => st.last && armFromTrace(st.last.trace) };
+draw(); setPlay(playing);
+</script></html>

@@ -1,0 +1,56 @@
+{
+  "wiring": {
+    "headSoak": true,
+    "bodySoak": true,
+    "sharedAttr": true,
+    "headShader": true,
+    "headGate": {
+      "y0": 0.115,
+      "ys": 0.07
+    },
+    "bodyGate": {
+      "y0": 0.05,
+      "ys": 0.12
+    }
+  },
+  "measure": {
+    "headPt": {
+      "x": 720,
+      "y": 597
+    },
+    "bodyPt": {
+      "x": 720,
+      "y": 431
+    },
+    "dry": {
+      "head": {
+        "n": 0,
+        "tot": 361
+      },
+      "body": {
+        "n": 0,
+        "tot": 225
+      }
+    },
+    "soaked": {
+      "head": {
+        "n": 48,
+        "tot": 361
+      },
+      "body": {
+        "n": 179,
+        "tot": 225
+      }
+    },
+    "W": 1440,
+    "H": 1000,
+    "hp": 3,
+    "soakAttr": [
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  "errors": []
+}

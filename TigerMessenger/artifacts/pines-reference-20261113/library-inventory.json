@@ -1,0 +1,6410 @@
+{
+  "scope": "REACodeRefactoring entire directory is the capability library; registry is only a subset of execution adapters",
+  "generatedAt": "2026-11-13T12:39:31.849Z",
+  "counts": {
+    "sourceFiles": 355,
+    "sourceModules": 352,
+    "rootHtml": 138,
+    "testCode": 561,
+    "registeredAdapterEntries": 9
+  },
+  "groups": {
+    "badnorth": {
+      "modules": 19,
+      "exportClues": 85,
+      "gameCopyDifferent": 3,
+      "staticDirectImports": 0
+    },
+    "build": {
+      "modules": 23,
+      "exportClues": 89,
+      "gameCopyDifferent": 1,
+      "staticDirectImports": 0
+    },
+    "campaign": {
+      "modules": 2,
+      "exportClues": 7,
+      "gameCopyDifferent": 0,
+      "staticDirectImports": 0
+    },
+    "capabilities": {
+      "modules": 7,
+      "exportClues": 32,
+      "gameCopyDifferent": 0,
+      "staticDirectImports": 0
+    },
+    "core": {
+      "modules": 148,
+      "exportClues": 690,
+      "gameCopyDifferent": 13,
+      "staticDirectImports": 2
+    },
+    "life": {
+      "modules": 20,
+      "exportClues": 56,
+      "gameCopyDifferent": 6,
+      "staticDirectImports": 0
+    },
+    "light": {
+      "modules": 14,
+      "exportClues": 63,
+      "gameCopyDifferent": 1,
+      "staticDirectImports": 0
+    },
+    "render": {
+      "modules": 2,
+      "exportClues": 10,
+      "gameCopyDifferent": 0,
+      "staticDirectImports": 0
+    },
+    "sphere": {
+      "modules": 10,
+      "exportClues": 60,
+      "gameCopyDifferent": 0,
+      "staticDirectImports": 0
+    },
+    "terrain": {
+      "modules": 29,
+      "exportClues": 142,
+      "gameCopyDifferent": 4,
+      "staticDirectImports": 0
+    },
+    "tools": {
+      "modules": 4,
+      "exportClues": 6,
+      "gameCopyDifferent": 0,
+      "staticDirectImports": 0
+    },
+    "ui": {
+      "modules": 16,
+      "exportClues": 30,
+      "gameCopyDifferent": 1,
+      "staticDirectImports": 0
+    },
+    "water": {
+      "modules": 6,
+      "exportClues": 16,
+      "gameCopyDifferent": 1,
+      "staticDirectImports": 0
+    },
+    "world": {
+      "modules": 52,
+      "exportClues": 160,
+      "gameCopyDifferent": 11,
+      "staticDirectImports": 0
+    }
+  },
+  "registered": [
+    {
+      "id": "terrain.arch",
+      "layer": "terrain",
+      "kind": "地形",
+      "name": "石拱 / 天桥",
+      "kind2": "geometry",
+      "summary": "两根够高的柱体（岩柱或楼）之间隔 1–3 格低处时，在两者较矮那一层架一道拱，下面留空能穿行。岩柱间架岩拱，楼之间架建筑天桥。",
+      "sources": [
+        "1670794261669769217",
+        "1584623053061099520",
+        "1189908238566903808"
+      ],
+      "targets": "相隔 1–3 格、中间更低的两根柱体",
+      "keywords": [
+        "拱",
+        "石拱",
+        "天桥",
+        "桥",
+        "连接",
+        "跨",
+        "arch",
+        "bridge",
+        "岩",
+        "洞"
+      ],
+      "params": {
+        "count": {
+          "label": "最多架几道",
+          "type": "int",
+          "min": 1,
+          "max": 6,
+          "default": 2
+        },
+        "minHeight": {
+          "label": "柱体至少几层",
+          "type": "int",
+          "min": 3,
+          "max": 10,
+          "default": 4
+        }
+      },
+      "executable": true
+    },
+    {
+      "id": "terrain.overhang",
+      "layer": "terrain",
+      "kind": "地形",
+      "name": "崖顶悬垂",
+      "kind2": "geometry",
+      "summary": "高崖顶（≥4 层岩石）往外伸出一格，只写最上面一层，底下留空。",
+      "sources": [
+        "1671808851895627776"
+      ],
+      "targets": "比邻格高 ≥3 层的岩石崖顶",
+      "keywords": [
+        "悬垂",
+        "悬崖",
+        "崖",
+        "伸出",
+        "overhang",
+        "cliff",
+        "岩"
+      ],
+      "params": {
+        "count": {
+          "label": "最多几处",
+          "type": "int",
+          "min": 1,
+          "max": 8,
+          "default": 3
+        }
+      },
+      "executable": true
+    },
+    {
+      "id": "terrain.seastack",
+      "layer": "terrain",
+      "kind": "地形",
+      "name": "海中石柱",
+      "kind2": "geometry",
+      "summary": "离岸 1–2 格的水里竖一根岩柱，顶上压一块更宽的帽（浪蚀台脚 + 蘑菇帽）。",
+      "sources": [
+        "1708815475801505819"
+      ],
+      "targets": "靠岸、四周都是水的水格",
+      "keywords": [
+        "石柱",
+        "海柱",
+        "礁",
+        "海中",
+        "岩柱",
+        "stack"
+      ],
+      "params": {
+        "count": {
+          "label": "几根",
+          "type": "int",
+          "min": 1,
+          "max": 6,
+          "default": 2
+        },
+        "height": {
+          "label": "高度（层）",
+          "type": "int",
+          "min": 3,
+          "max": 9,
+          "default": 5
+        }
+      },
+      "executable": true
+    },
+    {
+      "id": "terrain.tunnel",
+      "layer": "terrain",
+      "kind": "地形",
+      "name": "穿山隧道",
+      "kind2": "geometry",
+      "summary": "两头是同一高度的地面，中间 1–6 格的岩体比它高 ≥2 层：把地面上一层挖空，底下能走、上面留岩顶（\"瑞士奶酪\"岛）。导航图会把洞里的格子当可走。",
+      "sources": [
+        "906425294533394432",
+        "906416813810049025"
+      ],
+      "targets": "两侧同高地面之间、更高的岩体",
+      "keywords": [
+        "隧道",
+        "洞",
+        "穿",
+        "奶酪",
+        "洞窟",
+        "tunnel",
+        "cave",
+        "通行"
+      ],
+      "params": {
+        "count": {
+          "label": "几条",
+          "type": "int",
+          "min": 1,
+          "max": 4,
+          "default": 1
+        }
+      },
+      "executable": true
+    },
+    {
+      "id": "build.lighthouse",
+      "layer": "building",
+      "kind": "建筑",
+      "name": "海边灯塔",
+      "kind2": "geometry",
+      "summary": "把一座海边、四周较矮的单格楼加高成 ≥5 层的细塔；灯塔层（灯室、栏杆、红尖顶、夜间旋转光束）按\"海边、≥5 层、邻格都矮 2 层以上\"的规则自动识别。",
+      "sources": [
+        "1331905048801144836"
+      ],
+      "targets": "临水、一格粗、邻格都不高的建筑",
+      "keywords": [
+        "灯塔",
+        "塔",
+        "海边",
+        "夜",
+        "光束",
+        "lighthouse",
+        "tower"
+      ],
+      "params": {
+        "count": {
+          "label": "几座",
+          "type": "int",
+          "min": 1,
+          "max": 3,
+          "default": 1
+        },
+        "height": {
+          "label": "塔高（层）",
+          "type": "int",
+          "min": 5,
+          "max": 10,
+          "default": 6
+        }
+      },
+      "layer3d": "lighthouse",
+      "executable": true
+    },
+    {
+      "id": "terrain.shrub-texture",
+      "layer": "terrain",
+      "kind": "地形",
+      "name": "纯纹理灌木（台地边）",
+      "kind2": "layer",
+      "layer3d": "shrubtex",
+      "summary": "「100% texture, painted onto a fairly low poly mesh」：台地 / 崖顶边一条鲑橙灌木带，锯齿外缘、有的边断开、内侧一道小阴影；纯着色，不加几何、不改体素。",
+      "sources": [
+        "1707490932017279035",
+        "1707497006640365880",
+        "1707490274425884929"
+      ],
+      "targets": "草 / 干草台地临更低陆地的边",
+      "keywords": [
+        "灌木",
+        "树丛",
+        "边缘",
+        "台地",
+        "崖顶",
+        "纹理",
+        "shrub",
+        "bush"
+      ],
+      "params": {},
+      "executable": true
+    },
+    {
+      "id": "water.volume",
+      "layer": "water",
+      "kind": "水",
+      "name": "体积浅水（SDF 叠层）",
+      "kind2": "layer",
+      "layer3d": "watervol",
+      "summary": "海岸距离场 + 6 张平面叠在水面上，岸边一圈圈会流动的浅滩等深线。不改体素。",
+      "sources": [
+        "1758251637280268481"
+      ],
+      "targets": "整条岸线",
+      "keywords": [
+        "水",
+        "浅水",
+        "岸",
+        "等深线",
+        "水面",
+        "体积",
+        "water",
+        "shore"
+      ],
+      "params": {},
+      "executable": true
+    },
+    {
+      "id": "build.lighthouse-light",
+      "layer": "building",
+      "kind": "建筑",
+      "name": "灯塔灯室与光束",
+      "kind2": "layer",
+      "layer3d": "lighthouse",
+      "summary": "自动识别\"海边、≥5 层、邻格都矮 2 层以上\"的一格粗塔，加灯室、栏杆、红尖顶，夜里光束绕塔转。不改体素。",
+      "sources": [
+        "1331905048801144836"
+      ],
+      "targets": "已有的海边细高塔",
+      "keywords": [
+        "灯塔",
+        "光束",
+        "夜",
+        "lighthouse"
+      ],
+      "params": {},
+      "executable": true
+    },
+    {
+      "id": "effects.smoke",
+      "layer": "effects",
+      "kind": "烟",
+      "name": "特效层 · 烟（烟囱炊烟）",
+      "kind2": "layer",
+      "layer3d": "smoke",
+      "summary": "在建筑生成的烟囱口放烟：两遍画（黑描边 + 浅色），沿流向滚动噪声，越往上越模糊。不改体素。",
+      "sources": [
+        "1015140880666300416",
+        "1015142746372366336",
+        "1015149712469524480",
+        "1015151731804721152"
+      ],
+      "targets": "有屋顶的建筑",
+      "keywords": [
+        "烟",
+        "炊烟",
+        "烟囱",
+        "生活",
+        "smoke"
+      ],
+      "params": {},
+      "executable": true
+    }
+  ],
+  "modules": [
+    {
+      "path": "src/badnorth/battle-c01.js",
+      "sha256": "9f1d872a76d86671062fcc5dbebe9aae2a7c4301ea7fabdd561d70efd928bfb8",
+      "lines": 902,
+      "exportClues": [
+        "C01_FLAGS",
+        "C01_DEFAULT_ON",
+        "SKY_BEAM",
+        "SKY_BEAM_UNIT",
+        "SKY_BEAM_UNIT_STEPS",
+        "beamFadeUnit",
+        "beamFade",
+        "SKY_BEAM_STEPS",
+        "beamFadeStepped",
+        "bloodLook",
+        "blockSlot",
+        "graphEdges",
+        "coastEdges",
+        "BattleC01"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/battle-c02.js",
+      "sha256": "cec49b4a7512fe694966cc90e7d5879b251b587f93c2296de80fbd4643e72874",
+      "lines": 546,
+      "exportClues": [
+        "C02_FLAGS",
+        "splatAlpha",
+        "tumbleMatrix",
+        "BattleC02"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/battle-c03.js",
+      "sha256": "f79ea2a961f38877dbb56be97eef0b651ee5a2ba51b39519d69baec12399e49d",
+      "lines": 483,
+      "exportClues": [
+        "C03_FLAGS",
+        "BattleC03",
+        "isoLinesOnMesh"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/battle-c04.js",
+      "sha256": "a146eb8c3af19037f24018572b925280e8fc226606989bf5baa580614d95eeab",
+      "lines": 135,
+      "exportClues": [
+        "AO_DIRS",
+        "particleAO",
+        "hexSlotOutlines",
+        "BattleC04"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/battle-g3.js",
+      "sha256": "0c05108cecffd85906b7c5a31588eb57008b42a5d1bd3aa217417d5d6ef8508d",
+      "lines": 249,
+      "exportClues": [
+        "G3_FLAGS",
+        "BattleG3"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/battle.js",
+      "sha256": "2457aed327bafe7840d5fe025c5ca71614d0f9f6b32a5512d9f342806caa6566",
+      "lines": 1347,
+      "exportClues": [
+        "Battle"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/badnorth/damage-numbers.js",
+      "sha256": "378ea103be5ca3ddd81b24f89b3c75c425a1c6c093fe9f2673034372991b8f00",
+      "lines": 114,
+      "exportClues": [
+        "DMG_PER_HP",
+        "KILL_VALUE",
+        "damageValue",
+        "addDamageNumber",
+        "stepDamageNumbers",
+        "kickDamageNumber",
+        "stepDamageKick",
+        "DAMAGE_STYLE",
+        "KILL_STYLE",
+        "styleFor"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/flowfield.js",
+      "sha256": "b9397288bfb803cf54c09e899c69bae402856e030cd40a0563e4d80b6c5d8b0d",
+      "lines": 73,
+      "exportClues": [
+        "buildFlowField",
+        "buildLayeredFlowField"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/badnorth/ground-stain.js",
+      "sha256": "3cb914dcb3d6f586d6e864464e0b60fe9d79997a62d36aca1b594f92d8c4bc2b",
+      "lines": 74,
+      "exportClues": [
+        "GROUND_STAIN",
+        "stainProgress",
+        "stainTint",
+        "stainHex"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/house-char.js",
+      "sha256": "482a04c25908a8bc8f9dd3062520e9499c2633697ff29a3fe0dd5d6f9f9f8178",
+      "lines": 98,
+      "exportClues": [
+        "CHAR",
+        "expandOutline",
+        "inOutline",
+        "charShade",
+        "charHouseVerts",
+        "restoreChar"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/info-graph.js",
+      "sha256": "8547f73ce159df11d6d202e1b3b848f5821e338a2d132bac58f6b84f7a4dcf33",
+      "lines": 79,
+      "exportClues": [
+        "InfoGraph"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/island-caves.js",
+      "sha256": "bc3b59b79f76cfbf4f87234eb91040f8f4f8d6685b4abd08ab56b8ea222c1c87",
+      "lines": 64,
+      "exportClues": [
+        "carveBadNorthCaves",
+        "cavesFromUrl"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/island.js",
+      "sha256": "c33a7e53242b0871227febc53f831870e6dc59ae4fb63ba29830a892390ba3d2",
+      "lines": 94,
+      "exportClues": [
+        "generateBadNorth"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/landing-plan.js",
+      "sha256": "bc327649f6660099f0966d82476eda3294617e671fd49544ad768bed597de6ee",
+      "lines": 38,
+      "exportClues": [
+        "LANE_ANGLES",
+        "berthBox",
+        "approachBox",
+        "seawayBox",
+        "seawayBlocked",
+        "planLanding"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/badnorth/squad-footprint.js",
+      "sha256": "65b5d9892eebbf3aa07153d9547f3509c078881b877777539d35b065a976a826",
+      "lines": 81,
+      "exportClues": [
+        "hullRing",
+        "ringArea",
+        "ringPerimeter",
+        "hubOf",
+        "fanTriangles",
+        "cornerTick",
+        "footprint"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/squad-hud.js",
+      "sha256": "424533b4568d171ba7cd488a4c7cf36acc817d63fb137ec9a13e63c07054c533",
+      "lines": 66,
+      "exportClues": [
+        "STRIP",
+        "bannerBar",
+        "addPopup",
+        "stepPopups"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/squad-standard.js",
+      "sha256": "84c53e4c571a5a50d6eb6ba270421e68a8f421a9a69f3630dd25f8b71d3eed2e",
+      "lines": 123,
+      "exportClues": [
+        "ARMY_HUE",
+        "GOLD",
+        "STANDARD",
+        "emblemAtlas",
+        "bakeStandardImage",
+        "bakeShieldImage",
+        "buildStandardMesh",
+        "orientStandard",
+        "ShieldFaces"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/badnorth/theme.js",
+      "sha256": "d0834bf262e728be19143dd1aa25fecf4e0b9b336b2d4d1978c802b0322c6533",
+      "lines": 85,
+      "exportClues": [
+        "BN_PAL",
+        "applyBadNorthTheme",
+        "frostVegetation"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/badnorth/unit-batch-lod.js",
+      "sha256": "e9d6071c72fab34e05139f337a798a94a580867ce7d6e0de4ab2d165ed324989",
+      "lines": 80,
+      "exportClues": [
+        "compactInstances",
+        "UnitBatchLod"
+      ],
+      "directory": "badnorth",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/buildings.js",
+      "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819",
+      "lines": 872,
+      "exportClues": [
+        "buildBuildings"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/build/canal-bridge-r56.js",
+      "sha256": "c47646fbf91a9fd8305391b79048e8cb577e7d65735449b1b761540a302d9b3d",
+      "lines": 129,
+      "exportClues": [
+        "canalBridgeAxis",
+        "canalArchParams",
+        "quayProfile",
+        "canalBridgeFace"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/canal-scene-r56.js",
+      "sha256": "37da0f7ad59789d1bccea0c085b004f4ae7c8a2d9061364b8b1a4ad9dbb3d044",
+      "lines": 56,
+      "exportClues": [
+        "buildCanalTown"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/church-niche-r56.js",
+      "sha256": "db5c3578b336a8dce89bb160bc859757320cb0d18c55ef6c33a8f1467d9de10d",
+      "lines": 104,
+      "exportClues": [
+        "NICHE_INNER",
+        "nicheShape",
+        "churchNiches"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/doodle-hallway.js",
+      "sha256": "c596a0f531539810b484c56122f2c8dd072dd7023a803824ffb5e3cb3dc22c90",
+      "lines": 231,
+      "exportClues": [
+        "paintHallwayTexture",
+        "buildHallwayGeometry",
+        "buildDoor",
+        "buildStairs",
+        "makeHallway"
+      ],
+      "directory": "build",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/doodle-wall.js",
+      "sha256": "797fa25288330ce306a6d618abdad8f8440e1aadadeae4480de0c371b62e3310",
+      "lines": 174,
+      "exportClues": [
+        "INK",
+        "PANEL_TINTS",
+        "PAPER",
+        "drawMotif",
+        "makeDoodleWall"
+      ],
+      "directory": "build",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/garden-plots-c07.js",
+      "sha256": "b73302f8b58faef2f69c27c6600ee1ce783476761f8d445b7d429b3191fb3595",
+      "lines": 134,
+      "exportClues": [
+        "planGardenC07",
+        "insetPolygon",
+        "drawGardenCellC07"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/lighthouse.js",
+      "sha256": "08999b9c1d01a275d40b31589c524f8e77c7c393f03095cc310ad70168ea4ca3",
+      "lines": 148,
+      "exportClues": [
+        "Lighthouses"
+      ],
+      "directory": "build",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/module-catalog-r56.js",
+      "sha256": "bf33cb81ca309f09242c8d5582d316d422eb0bfb3474e3be574819289090e798",
+      "lines": 104,
+      "exportClues": [
+        "signatureOf",
+        "decodeSignature",
+        "usedSignatures",
+        "referenceCells",
+        "allSignatures",
+        "buildPiece",
+        "catalogLayout"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/module-volume.js",
+      "sha256": "a7b63f75f5fa7263b152ea3bf5541fe093c2fa60afaad00db903635e8a4a0e11",
+      "lines": 25,
+      "exportClues": [
+        "placeModuleVolume",
+        "undoModuleVolume"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/multicell.js",
+      "sha256": "ab8f24ed8fa5d8d84afd2fc1a873183001559653be397f9d2a72f9923392c1e9",
+      "lines": 80,
+      "exportClues": [
+        "enumerateHouseTiles",
+        "validateHouseTiles",
+        "editHouseTiles",
+        "commitHouseTiles",
+        "placeHouseTiles"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/multitile-iso.js",
+      "sha256": "97d66fcb4f6230f527f9bd29e67518c44e237100397e8e3ef23dbc1b002f89a4",
+      "lines": 45,
+      "exportClues": [
+        "isoProject",
+        "drawMultitileIso"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/multitile-wfc.js",
+      "sha256": "da80a5ed7ae691f6beb72a4711bddc2b7973f3dabfb4a962bcfeb7e31921e543",
+      "lines": 220,
+      "exportClues": [
+        "MULTITILE_DIRS",
+        "DEFAULT_TILES",
+        "buildParts",
+        "facesCompatible",
+        "solveMultitile",
+        "validateMultitile",
+        "voxelFaceAO"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/multitile-world.js",
+      "sha256": "40851185cfc54953d9b72cef6d9277dfbf6fc48b95970cc109d1625d864403b3",
+      "lines": 48,
+      "exportClues": [
+        "meanCellSpacing",
+        "multitileIntoWorld",
+        "buildMultitileTower"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/scenes-r56.js",
+      "sha256": "7172c6062e3fe24dee533b598260923d01824571c05a71717b0d5b8da8b05d1f",
+      "lines": 44,
+      "exportClues": [
+        "steelScene",
+        "yardScene"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/splice-polygon-c09.js",
+      "sha256": "f7cb71f444126e98255fc053c76272c02ad4f59ef4cd25e4e4f1c4dbed4fda53",
+      "lines": 225,
+      "exportClues": [
+        "ringArea2",
+        "pointInPoly",
+        "spliceFootprint",
+        "trisAsCells",
+        "prepareFootprintSplices",
+        "emitFootprintSplices"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/splice.js",
+      "sha256": "0b33f0a04e40e4274671d49294def66d60a47d9ad40ce05bb4b387f4594f884c",
+      "lines": 78,
+      "exportClues": [
+        "bilinear",
+        "spliceRect",
+        "footprintFor",
+        "splicePolygon",
+        "q01",
+        "spliceHouse",
+        "toggleSplice"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/steel-r56.js",
+      "sha256": "fbf2b7a7744cd07ce8884576202971089d337b7cce5fe0276e3a57aff81e3d22",
+      "lines": 179,
+      "exportClues": [
+        "legLanding",
+        "solveTieLevels",
+        "emitSteelFrame"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/tile-assembly.js",
+      "sha256": "eb390355eb7fd04fbf540d35013cec9c66c6d0b15886e05d6908dbcf83a9b4af",
+      "lines": 142,
+      "exportClues": [
+        "TILESET_FORT",
+        "TILESET_RUIN",
+        "expandTiles",
+        "labelCompatible",
+        "layeredLattice",
+        "assemblySite",
+        "solveAssembly",
+        "commitAssembly",
+        "applyAssemblyPrefix"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/village.js",
+      "sha256": "5818e86497de5bd2195733040aee21418e253d8839fd8f78aae72d37ef5afcb3",
+      "lines": 52,
+      "exportClues": [
+        "scatterVillage"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/wfc-bitset.js",
+      "sha256": "0441186ed7bf0e28a17a386bf0dab5c79f940517653a204af3188c7f28e1b33d",
+      "lines": 272,
+      "exportClues": [
+        "WFC_ENGINES",
+        "popcount32",
+        "compileRules",
+        "solveBitset",
+        "WFC_CONFIGS",
+        "benchEngines",
+        "replayState"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/yard-prop-art-r56.js",
+      "sha256": "f1743a1d9b393f570211ad407cd4ad1668f1b379bb45b6215e94c0eb69b5f384",
+      "lines": 48,
+      "exportClues": [
+        "propKind",
+        "drawYardProp"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/build/yard-r56.js",
+      "sha256": "8f7a2e0faa21461e6629f61e31f6a1ac6441e14a355e2cc2881865eb8b7340ed",
+      "lines": 106,
+      "exportClues": [
+        "planYardWalls",
+        "drawYardWalls",
+        "yardFloraSpecs"
+      ],
+      "directory": "build",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/campaign/campaign.js",
+      "sha256": "e5417aae0f9ead404263eea24116f4581d8638ea9c35bcc175611cf95c810076",
+      "lines": 112,
+      "exportClues": [
+        "generateCampaign",
+        "groupRegions",
+        "islandSnapshot"
+      ],
+      "directory": "campaign",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/campaign/frontier-overlay.js",
+      "sha256": "7028c99ef272e92b1a78dfef5ab7dcfc08a8157ae56680c8f84ad2c406574cfb",
+      "lines": 65,
+      "exportClues": [
+        "BAND_COLORS",
+        "FRONT_COLORS",
+        "campaignFrontierFields",
+        "drawFrontierFields"
+      ],
+      "directory": "campaign",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/capabilities/build.js",
+      "sha256": "e191a7c92b26878b6d0950f1657afa8a61b74bb26ccf846bd5c3aec411eb88f8",
+      "lines": 42,
+      "exportClues": [
+        "lighthouse"
+      ],
+      "directory": "capabilities",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/capabilities/layers-meta.js",
+      "sha256": "04b919d9d7a09c76b61d2f030667bde270d1f863d12ee1eb7df5fda5ec5f094e",
+      "lines": 49,
+      "exportClues": [
+        "LAYER_CAPS"
+      ],
+      "directory": "capabilities",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/capabilities/layers.js",
+      "sha256": "8802f19c76072dba39e6b92871bd92af3b037ae10f95c3b2005a036f4bfcbb24",
+      "lines": 56,
+      "exportClues": [
+        "createLayer",
+        "LAYER_NAMES"
+      ],
+      "directory": "capabilities",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/capabilities/ops.js",
+      "sha256": "9dc630d94d72128044fa55f5d34db11799cf6d1a33cbb31af60a0e9a93bd0055",
+      "lines": 60,
+      "exportClues": [
+        "bit",
+        "isSolid",
+        "isRock",
+        "top",
+        "ground",
+        "floorOf",
+        "topIsBuilt",
+        "isCave",
+        "hasBuilt",
+        "setVoxel",
+        "nbIds",
+        "straightNext",
+        "cloneWorldData",
+        "makeRng",
+        "editable",
+        "pickSpread"
+      ],
+      "directory": "capabilities",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/capabilities/registry.js",
+      "sha256": "d43ef2c8041f1210df718aebe4f540dbd2d0044a5f6421bc759c910b80952873",
+      "lines": 86,
+      "exportClues": [
+        "REGISTRY_VERSION",
+        "CAPABILITIES",
+        "getCapability",
+        "describeCapabilities",
+        "matchAll",
+        "runPlan",
+        "routeGoal"
+      ],
+      "directory": "capabilities",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/capabilities/terrain.js",
+      "sha256": "1dcaca1e0e05c37832b8727ec4943177b5239d933f133e1e7817d18e87229e4a",
+      "lines": 193,
+      "exportClues": [
+        "arch",
+        "overhang",
+        "seastack",
+        "tunnel"
+      ],
+      "directory": "capabilities",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/capabilities/verify.js",
+      "sha256": "8e64f7fa45230eadbf7315e21af88433c07f317cf61ca44480ce296fb9492a32",
+      "lines": 92,
+      "exportClues": [
+        "verifyCandidate"
+      ],
+      "directory": "capabilities",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/adjacency.js",
+      "sha256": "c90f66e56b048b52b5addf1af19ef6598525dcbfdf527c5f7b631fea62b74ff8",
+      "lines": 57,
+      "exportClues": [
+        "meshEdges",
+        "edgeSignature",
+        "buildFitTable",
+        "whichFits",
+        "gridEdgeSlots",
+        "selfCheck"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/anchored-billboard.js",
+      "sha256": "53a868d54fc02f3b9ca05ae9c508ec1213350c3fbb45a979d13a436b5920e7b3",
+      "lines": 50,
+      "exportClues": [
+        "anchoredBillboardGLSL",
+        "billboardPoint",
+        "foldedCard",
+        "foldedHalfNormals",
+        "foldAngle",
+        "foldedSideWidth",
+        "foldedContrast"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/arch-floor-budget.js",
+      "sha256": "2e63255209b7e23524e54d34e4cd80f373a32c88041b6ded62c88de1023cb117",
+      "lines": 79,
+      "exportClues": [
+        "archFloorBudget",
+        "openingPierce",
+        "archAt",
+        "archSoffitAt",
+        "archPassage",
+        "archPassableWidth"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/arch-profile.js",
+      "sha256": "22338e6ac7e38b9441702391372cb542833fa30ad28379d83330f57c6b6830a2",
+      "lines": 57,
+      "exportClues": [
+        "archProfile",
+        "archClearance",
+        "archVoussoirs",
+        "measureArch",
+        "deformedArchError"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/atlas-c09.js",
+      "sha256": "2abb4c21dc00aab8067d0348605e78805a8f474cd3ef22b052e88f34e0b2f9ed",
+      "lines": 108,
+      "exportClues": [
+        "treeLayers",
+        "armFromTrace",
+        "placeBottomLeft",
+        "project3D",
+        "runPackSequence"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/atlas.js",
+      "sha256": "628b497799dd296fbc922a24c9b97d2fab3b9faadfb62788ee8325c7d421faff",
+      "lines": 198,
+      "exportClues": [
+        "Atlas",
+        "shelfPack"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/ballistic-table.js",
+      "sha256": "7cb8188195b76077eed25ac4441c02f66b31906b148ebee8d9ea4c772c76fbb4",
+      "lines": 146,
+      "exportClues": [
+        "PROJECTILE_GRAVITY",
+        "createBallisticTable",
+        "defaultBallisticTable",
+        "BALLISTIC_EXPR_PARAMS",
+        "compileBallisticExpr",
+        "bakeBallisticArc",
+        "createExpressionBallisticTable",
+        "sampleBakedArc",
+        "projectileState"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/banner.js",
+      "sha256": "e7f9917fd525ee1cebe097266d0d362c8e4b99a283580ffb4d46e49696398a4e",
+      "lines": 65,
+      "exportClues": [
+        "BANNER_TAILS",
+        "BANNER_EMBLEMS",
+        "bannerContains",
+        "bakeBanner",
+        "SQUAD_EMBLEMS",
+        "bakeEmblemAtlas",
+        "SQUAD_ROLES",
+        "hslToRgb",
+        "squadRolePalette",
+        "bannerBillboardYaw"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/brush-atlas.js",
+      "sha256": "bd2788bfc9e9648ee79c35ab8c6868d9dcfd9907b10e937f32d4d915494da315",
+      "lines": 67,
+      "exportClues": [
+        "buildScratchAtlas",
+        "scratchStats",
+        "blockCoherence"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/building-components.js",
+      "sha256": "3584f691d22a96fcfa73dd04a858e5661a8792050e34bc9deb1774e82746ef7f",
+      "lines": 22,
+      "exportClues": [
+        "buildingComponents"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/c11-maps.js",
+      "sha256": "3c24abfb8c47883440de29bb2c5ee965c324fdfec14f752188b03243dc3fcfe8",
+      "lines": 123,
+      "exportClues": [
+        "worldSquareBounds",
+        "bakeContrastHeightMap",
+        "sampleMap",
+        "GRASS_RAY",
+        "grassOutlineStrength",
+        "GRASSLINE_VERT_PARS",
+        "bakeShrubDropMap",
+        "shrubDropScale",
+        "wallLedgeBand"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/camera-motion.js",
+      "sha256": "35dbb521b4766f71510afc256d50cce52ec096b4a75553ea3e65ee11ed15b95c",
+      "lines": 41,
+      "exportClues": [
+        "cameraAngularSpeed",
+        "smearHistoryWeight",
+        "smearLengthPx",
+        "orbitVelocity",
+        "smearImage",
+        "sharpnessBand",
+        "ORBIT_SMEAR_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/campaign-graph.js",
+      "sha256": "9f4032c1c3a8f3e41ff6306663dd78963fa1107325796a22f0bc9056052e7129",
+      "lines": 83,
+      "exportClues": [
+        "campaignGraph",
+        "campaignWalk"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/canopy.js",
+      "sha256": "f7aefb671c7077b4b7e41ff72b897159276cb792598a6541b1546b01b8405974",
+      "lines": 60,
+      "exportClues": [
+        "buildCanopy"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/cloud-depth.js",
+      "sha256": "1a145432fb9f66b932c7136829ed70fe3483c965083139878fb24f0789e8e750",
+      "lines": 39,
+      "exportClues": [
+        "CLOUD_DEPTHS",
+        "cloudDepth",
+        "CLOUD_DECK_LAYERS",
+        "makeCloudDeck"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/cloud-motion.js",
+      "sha256": "4376629bb272d67ce5274fed71e43bb2148fb0ab1af2bc5c49d74af5a47d89d4",
+      "lines": 4,
+      "exportClues": [
+        "cloudDrift",
+        "CLOUD_DRIFT_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/color-volume-grid.js",
+      "sha256": "dad039d1d89cce2b46bb6122dd62ac73ae749f49b99b8b013909d24517238df3",
+      "lines": 104,
+      "exportClues": [
+        "VOLUME_FEATURES",
+        "stepValue",
+        "makeVolumeGrid",
+        "cellIndex",
+        "toggleCell",
+        "setVolumeRange",
+        "volumeStrip",
+        "volumeBlocks",
+        "nearestCell",
+        "defaultVolumeGrids",
+        "colorWorldByVolumeGrids"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/color-volume.js",
+      "sha256": "ed9ebddfcbd4bb54ee3550d94a746e568daaa5b870a222bf692bd278ca1773ba",
+      "lines": 62,
+      "exportClues": [
+        "makeColorVolume",
+        "sampleColorVolume",
+        "COLOR_VOLUME_GLSL",
+        "makeCornerVolume",
+        "setVolumeCorner",
+        "sampleCornerVolume",
+        "volumeStrip",
+        "volumeSheet",
+        "cornerVolumeStats",
+        "defaultFeatureVolumes",
+        "classifyWorldFeature",
+        "colorWorldFeatures"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/combat-profile.js",
+      "sha256": "41e38050896e25949cdf09bf6c1076809ecdeae0ab38515d21a2f6ea311bb450",
+      "lines": 20,
+      "exportClues": [
+        "configureCombatUnit",
+        "damageCombatUnit"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/combat-state.js",
+      "sha256": "95ea0e0782e9dd008ff2b9981ec03b35dfbcd300748a1154d48dca59ebba43dd",
+      "lines": 30,
+      "exportClues": [
+        "stunUnit",
+        "stepStun",
+        "resolveFallLanding"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/contour.js",
+      "sha256": "f664f3b41aca3b3288573eeb9790b132f932781c5f467f1c2745d891d1836156",
+      "lines": 42,
+      "exportClues": [
+        "buildCornerField",
+        "marchGrid"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/contrast-field.js",
+      "sha256": "05f819449be2e597e104630864c1de76abdb0a017af19e21037afc69da9cdd3d",
+      "lines": 60,
+      "exportClues": [
+        "solveContrastField",
+        "worldCellFeature",
+        "worldContrastMesh",
+        "featureBaseColors",
+        "initContrastColors",
+        "relaxContrastColors",
+        "measureContrastColors",
+        "solveContrastColors",
+        "cellContrastColors"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/corner-footprint.js",
+      "sha256": "0b29eff71f6eb37ad5f9c28b826c342c48a059fd746e3719722358c88b99bc64",
+      "lines": 56,
+      "exportClues": [
+        "cornerFootprint",
+        "cornerCutPlan",
+        "footprintMetrics",
+        "islandFootprints"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/coroutine.js",
+      "sha256": "7abe00db49ea2d62baee7211f9611ba8a8484352530d4bce7bed5491b017f09b",
+      "lines": 38,
+      "exportClues": [
+        "frame",
+        "Scheduler"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/courtyards.js",
+      "sha256": "722c9d0f0dfce88acd64438d7e8e49a4eca1d4bf490ed926a4d21b4252abeb7f",
+      "lines": 24,
+      "exportClues": [
+        "classifyCourtyards"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/cube-height.js",
+      "sha256": "4ef20ed23ca76693ab81bdf69228446dded1aa8f9ba582107e8a869a6867336d",
+      "lines": 18,
+      "exportClues": [
+        "cubeDirection",
+        "bakeCubeHeight"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/decal-accum.js",
+      "sha256": "805703f01a48b9d5c3e09b2ec61949c28708cdb2edb4aa5ffdd6eaa4042d98e7",
+      "lines": 113,
+      "exportClues": [
+        "mulberry",
+        "DecalAtlas",
+        "BOIL_CHARTS",
+        "DECAL_FRAG_PARS"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/deformation-guard.js",
+      "sha256": "794658423c7e5f565c4e219bbf240585d697de7b0050854d38bf5ee5327ec14b",
+      "lines": 16,
+      "exportClues": [
+        "guardDeformation"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/depression-fill.js",
+      "sha256": "35eb9bfa0ea88d315f67b1283f644674447f2231480fdf7e21033c1b8fdf1766",
+      "lines": 78,
+      "exportClues": [
+        "depressionFill",
+        "localMinima",
+        "drainedCells",
+        "lakeClusters",
+        "erodeHeights"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/distance-isolines.js",
+      "sha256": "dabe07a3b1ba603ffd86ef7158ebc49ffca1ecf216baa63318f83bb5a67aa2f5",
+      "lines": 184,
+      "exportClues": [
+        "distanceField",
+        "isoContours",
+        "evenLevels"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/doodle-hallway-layout.js",
+      "sha256": "c08a204bd70c821f491f23e14069e03b3ffcae9b5a194846330c8c02d8942abc",
+      "lines": 159,
+      "exportClues": [
+        "HALLWAY_DEFAULTS",
+        "floorAt",
+        "wainscotTop",
+        "inDoor",
+        "planHallway",
+        "mirroredMotifs",
+        "surfacePoint"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/doodle-layout.js",
+      "sha256": "d354545fb65031433f260d903f51c3bcefebe79a6bd7c0825d08c8a3966003ea",
+      "lines": 15,
+      "exportClues": [
+        "planDoodlePanels"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/edge-inset.js",
+      "sha256": "51eae500a1323d6373f5852b031e053dd76515047ff08dba2f16ef9850578ea8",
+      "lines": 13,
+      "exportClues": [
+        "pointInsidePolygon",
+        "insetEdgeAnchor"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/field-plots.js",
+      "sha256": "6ef4a1b2987932d867840d90888d1d36abcfda12f3a8a00809518b0fd6c548df",
+      "lines": 193,
+      "exportClues": [
+        "mulberry32",
+        "principalAxis",
+        "partitionPlots",
+        "plotUV",
+        "chevronRow",
+        "plotBorderCells",
+        "sampleField",
+        "borderAngleSpread"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/field-surface-c04.js",
+      "sha256": "51b247616aa1b5df8b978f0d758ac28b2384b87fa8b769f96cea386d679030d4",
+      "lines": 161,
+      "exportClues": [
+        "chunkPhase",
+        "layeredPlan",
+        "housesAt",
+        "transitionDarkness",
+        "waterlineDistance",
+        "waterlineBand",
+        "mirrorMatrixY",
+        "houseTriangles",
+        "LAYERED_SHAPES"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/field-surface.js",
+      "sha256": "e8cd4a0e9ad3565ae2b250623e75e0b31f056693252b9c1b6916ec2d31fb5a5e",
+      "lines": 425,
+      "exportClues": [
+        "ISO",
+        "hash01",
+        "makeField",
+        "fieldIndex",
+        "fieldAt",
+        "sampleField",
+        "rasterizeBoxes",
+        "blurField",
+        "chunkPlan",
+        "shrinkBoxes",
+        "morphField",
+        "fieldNormal",
+        "surfaceNets",
+        "edgeManifold",
+        "meshVolume",
+        "meshBounds",
+        "normalTiltShare"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/float-advect.js",
+      "sha256": "0a40f9ca519e44b60b1e4a2d3eb2ed4eedaad5f2d91387e60078c23be358f8ee",
+      "lines": 76,
+      "exportClues": [
+        "roundHalf",
+        "STORAGE",
+        "seedBlob",
+        "advect",
+        "advectionQuality",
+        "storageRoundTrip"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/fog-envelope.js",
+      "sha256": "a7fafaf6e3b6bd187f0067d062ee8d7647b742bc7de9f6067a9b7fbe9618368d",
+      "lines": 37,
+      "exportClues": [
+        "fogEnvelopeGLSL",
+        "fogEnvelope",
+        "makeFogWisps"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/frontier-candidates.js",
+      "sha256": "5489b2b2ef825c9bb927ea603e9a0202115b1858db57294322f108d6f6a3a3d4",
+      "lines": 56,
+      "exportClues": [
+        "frontierCandidates",
+        "expandFrontier"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/frontier.js",
+      "sha256": "36caa2f1741b9b6053e1bc701f00cc7de222a772618cae64210a117c57971854",
+      "lines": 114,
+      "exportClues": [
+        "frontierClearance",
+        "sampleFrontierBezier",
+        "buildFrontier",
+        "pointInPolygon",
+        "earClip",
+        "frontierFields",
+        "buildFrontiers"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/garden-paths.js",
+      "sha256": "3c65e95fe746f692fb02b80315e532ce88ac5d08e7e88811d7ea79e3942c2c0b",
+      "lines": 30,
+      "exportClues": [
+        "gardenPaths"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/graph-bands-c08.js",
+      "sha256": "724b875650570c9f5054679f118ebf08486bd035424cd2e58b75942b46eee6d4",
+      "lines": 88,
+      "exportClues": [
+        "findBridges",
+        "twoEdgeComponents",
+        "bandedGraph",
+        "bfsLayers"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/graph-layout.js",
+      "sha256": "1c47f3b7394a2e7b8b64352871579116c15d44eeafe439895d91a808640d9e4c",
+      "lines": 205,
+      "exportClues": [
+        "adjacencyComponents",
+        "radialLayout"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/grid-gems-c06.js",
+      "sha256": "42126d0af01c8fedc93aa72e47fd9090af6cf4374c69804390aa35f7a3c4967b",
+      "lines": 28,
+      "exportClues": [
+        "sprinkleGems"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/grid-kinds-c08.js",
+      "sha256": "721f657538027a2eeaafcf78401ba96361ac2e99d86ac17c01f48e121d946af1",
+      "lines": 18,
+      "exportClues": [
+        "PURE_GRIDS",
+        "gridKindSummary"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/grid-wireframe.js",
+      "sha256": "ad44fcf7a0888d9c1d7ad8863d59e03df84f97912914f11571f7988369e88e5a",
+      "lines": 148,
+      "exportClues": [
+        "classifyWireframe",
+        "seamBands"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/grid.js",
+      "sha256": "c9fe9bc4c9f7dcfeaa17cd6f66cc472a877818692236bcb4e4d208fceb50cf0f",
+      "lines": 480,
+      "exportClues": [
+        "buildQuadGrid",
+        "buildMixedGrid",
+        "buildSquareGrid",
+        "buildHexGrid",
+        "gridKindStats",
+        "buildTriangularSubgrid",
+        "oppositeEdge",
+        "quadPatchTopology",
+        "traceStraightReport",
+        "traceStraight"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/halfedge-patch-c08.js",
+      "sha256": "acc82ed74f6a8b0b835715fd8d883ba76df8e016bc6cae4053fe04d2f25168a9",
+      "lines": 97,
+      "exportClues": [
+        "scatterGroups",
+        "fillGaps",
+        "gapLoops",
+        "fullMesh"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/halfedge.js",
+      "sha256": "879f45847886252668c506d6963e4b4bf9a19c7b6f667b12e4547a65f48a04c5",
+      "lines": 70,
+      "exportClues": [
+        "buildHalfEdge",
+        "checkHalfEdge",
+        "splitQuads"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/hip-roof.js",
+      "sha256": "ac377d1217c517cca9578701885eacf1c9e803de78df2e45369f6671646ef5a4",
+      "lines": 78,
+      "exportClues": [
+        "hipRoof",
+        "hipRoofMetric",
+        "gableRoofMetric",
+        "regionRings",
+        "skeletonRoof"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/house-door-presence.js",
+      "sha256": "99ff60811af98db46238fb1b714383c40bae5718bd8721306e3b09f0f71c1d8a",
+      "lines": 11,
+      "exportClues": [
+        "atHouseDoor"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/house-kit.js",
+      "sha256": "92cb7f09e0f77e044c5c7ba5f77fdd10419d6622773e71c1361ea340bd4401e7",
+      "lines": 54,
+      "exportClues": [
+        "PITCHES",
+        "FLOORS",
+        "THATCH",
+        "pitchPool",
+        "roofHeightAt",
+        "seatChimney",
+        "verifyHouseKit"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/infinite-c06.js",
+      "sha256": "ce12c07ad8e6889bafc18d3f25bb59fbaa29a4bbdbee8bc48954fdf449781676",
+      "lines": 92,
+      "exportClues": [
+        "patchLattice",
+        "streamWindow",
+        "patchRim",
+        "windowDual",
+        "areaStats",
+        "restoreArea"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/infinite.js",
+      "sha256": "3c501e4c3ea0aff81a96ed683aa37723b9d112a3b7812803a48c4d3b9e1ca413",
+      "lines": 276,
+      "exportClues": [
+        "buildInfinite",
+        "patchStep",
+        "windowSeam",
+        "verify",
+        "createInfiniteStream",
+        "clusterCost",
+        "quadDual"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/ladder-profile.js",
+      "sha256": "dc47e10ddfb4e49d354921159b54a70e1d83e4f4af22c2b80d61070d7757c652",
+      "lines": 49,
+      "exportClues": [
+        "ladderProfile",
+        "ladderAnchors",
+        "ladderContact",
+        "ladderClimb"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/leaf-atlas.js",
+      "sha256": "2324860db2900db1d5e7a7598fde4a8e2f33c3f925368444289b75e877e9b03d",
+      "lines": 19,
+      "exportClues": [
+        "buildLeafAtlas",
+        "sphereLeafUV"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/level-flora.js",
+      "sha256": "3cd269b4018077d9720a80de013476f95d328864ea694f87da8017bb2773a1ca",
+      "lines": 47,
+      "exportClues": [
+        "levelFloraPalette",
+        "LEVEL_SPECIES",
+        "levelFloraSpecies",
+        "levelFloraRanks",
+        "measureLevelFlora"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/loop-lift.js",
+      "sha256": "273434b612c003b55207bf1bbf5b79c7b5c7dce0c79e4cdbf03a7601d00b4a6f",
+      "lines": 226,
+      "exportClues": [
+        "loopPolygon",
+        "polygonArea",
+        "distanceToPolygon",
+        "pointInPolygon",
+        "loopRegion",
+        "findLoops",
+        "liftField",
+        "hullDepth",
+        "supportLegs",
+        "buildFlyingTown"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/marching-cubes.js",
+      "sha256": "cf5f9f14917b8b9bbc4832ac040a8d1299d313eceda81a3d8de360db4cd98ed3",
+      "lines": 171,
+      "exportClues": [
+        "marchIrregular",
+        "meshVolume",
+        "growthOrder",
+        "quadRegionGrid"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/melee-sweep.js",
+      "sha256": "ca0bad202a1dc780bc566d70b93f3abdc50a104fdaf3dcf1156f411e2ad51548",
+      "lines": 77,
+      "exportClues": [
+        "beginSweep",
+        "angleInSweep",
+        "stepSweep",
+        "shieldBlock"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/meshwriter.js",
+      "sha256": "ce730bb510f0791ae7298ffec7ffffca4d086a42f26cb3aa6ff590c0daac6ea7",
+      "lines": 234,
+      "exportClues": [
+        "UP",
+        "DOWN",
+        "MeshWriter",
+        "edgeOut"
+      ],
+      "directory": "core",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/minheap.js",
+      "sha256": "7c0e8836580541fc7d6db55f1ce219ad70f5e3b83dacc1955a823c32cb7dce09",
+      "lines": 9,
+      "exportClues": [
+        "MinHeap"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/mirror-uv.js",
+      "sha256": "5e8d5a4be3b96bc6996648ba79034afc8b901721bb0bfca035656250b2466718",
+      "lines": 19,
+      "exportClues": [
+        "fold",
+        "orientUV",
+        "mirrorUV",
+        "MIRROR_UV_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/mixed-perspective.js",
+      "sha256": "007745c33eadeeeb031e8517b14a10c4308ede3a13f4549ac2298db5a21503e2",
+      "lines": 184,
+      "exportClues": [
+        "perspectiveMatrix",
+        "viewMatrix",
+        "multiply",
+        "invert",
+        "withVerticalParallel",
+        "projectPoint",
+        "verticalEdge",
+        "quadWidths",
+        "compareProjection",
+        "projectionForRenderer"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/module-audit.js",
+      "sha256": "3a9579f1b2fc37431fb0906e69b099022ba3a94876511b66854411899b1a903c",
+      "lines": 14,
+      "exportClues": [
+        "auditModuleOccurrences"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/module-fit.js",
+      "sha256": "dd9cc7adca271c99c4891c20ee37283a1ed327949928b9e9fd9b96821be7d8a2",
+      "lines": 35,
+      "exportClues": [
+        "fitModuleGeometry"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/module-patch.js",
+      "sha256": "3071b68a69183107a6c79632f7db38a6a8e26795937faa55614dd07c8bcae8a1",
+      "lines": 173,
+      "exportClues": [
+        "generateModulePatch",
+        "PATCH_EXAMPLE",
+        "synthesizeModulePatch",
+        "spliceModulePatch",
+        "halfEdgeClosure"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/module-search.js",
+      "sha256": "80efb73d04436c48ff5514418590a9e74a5cc729412f02228ef183bb5b6783cf",
+      "lines": 39,
+      "exportClues": [
+        "describeModule",
+        "findModulePatches"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/mountain-bake.js",
+      "sha256": "257d79fee5a7d7134833eaaa4682b90e8c4ed2afe115db41c0b57e8141ef95de",
+      "lines": 56,
+      "exportClues": [
+        "MOUNTAIN_LIGHT",
+        "bakeNormalLight",
+        "MOUNTAIN_RASTER_LIGHT",
+        "worldMountainField",
+        "mountainNormalAt",
+        "renderMountainShade",
+        "mountainShadeStats",
+        "compareMountainModes"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/nav-diagnostic-geometry.js",
+      "sha256": "2c43c236a73e523b142679e966676a39ec6b4a8eea209a462dc37545d867aab4",
+      "lines": 13,
+      "exportClues": [
+        "navDiagnosticGeometry"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/nav-visibility.js",
+      "sha256": "ee103f91836c8237f94371d2134ffce1154be3ec4f621d5ff601d07df7d88b34",
+      "lines": 26,
+      "exportClues": [
+        "castNavVisibility"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/node-graph-editor.js",
+      "sha256": "33666574727f859d06ea9dcc57418ac0897cf5bd5b32292f3ae86b031c5790b5",
+      "lines": 27,
+      "exportClues": [
+        "EDITOR_TYPES",
+        "NodeGraphEditor"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/node-graph-runtime.js",
+      "sha256": "b2d1c5200a714065bbc1b2bcf7cfffa608f2f4d7e200bc10d33930b5f2e339ee",
+      "lines": 333,
+      "exportClues": [
+        "NodeGraph",
+        "boolSource",
+        "constant",
+        "variable",
+        "select",
+        "lerpTowards",
+        "compose2",
+        "sink",
+        "multiply",
+        "addConstant",
+        "NODE_REGISTRY",
+        "buildToggleChain"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/noise.js",
+      "sha256": "b79b31dad5e4f0df599cf1ce7886d75f0b10a44d6ad6eb163ac75ac4199d3498",
+      "lines": 68,
+      "exportClues": [
+        "valueNoise",
+        "fbm",
+        "ridged",
+        "makeRng",
+        "hash01",
+        "clamp",
+        "clamp01",
+        "mix",
+        "smoothstep"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/normal-contrast.js",
+      "sha256": "aaf681a836844b759a35663e5a31ba25e726a5b8143730c7b5541485af7989a0",
+      "lines": 32,
+      "exportClues": [
+        "NORMAL_CONTRAST_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/obb.js",
+      "sha256": "9a45bcaa08facd51007da69c93b5ddedfb49fde6336d135194e89ef64b9c715c",
+      "lines": 109,
+      "exportClues": [
+        "obbOverlap",
+        "makeBox",
+        "obbOverlapSampled",
+        "obbPenetration",
+        "obbFootprintXZ",
+        "polygonAreaXZ",
+        "convexDepthXZ",
+        "convexOverlapXZ",
+        "clipAreaXZ"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/okhsl.js",
+      "sha256": "8a015df3528ee3b2165524dedb0c5485628fb93f57d4cd83f03ace069cbe203c",
+      "lines": 108,
+      "exportClues": [
+        "linearSrgbToOklab",
+        "oklabToLinearSrgb",
+        "toe",
+        "toeInv",
+        "computeMaxSaturation",
+        "findCusp",
+        "findGamutIntersection",
+        "getCs",
+        "okhslToSrgb",
+        "srgbToOkhsl",
+        "mixOkhsl"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/oklab.js",
+      "sha256": "539573653a6e363cec66afb1d4c45b146b0fd7a372e289180d94d0f3b3a4f276",
+      "lines": 51,
+      "exportClues": [
+        "srgbToOklab",
+        "oklabToSrgb",
+        "inGamut",
+        "clampOklabToGamut",
+        "hexToSrgb",
+        "hexToOklab",
+        "deltaE"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [
+        "src/system-workshop/gscene/perceptual-capabilities.js",
+        "src/system-workshop/gscene/verify.js"
+      ],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/opening-footprint.js",
+      "sha256": "9ed0b9ed4e45cddcc00cf0f6730e5facd1fdf0ff7c24a6aaa97ae3f1e8ca230b",
+      "lines": 46,
+      "exportClues": [
+        "OPENING_FRAME",
+        "WINDOW_SILL_SCALE",
+        "openingFootprint",
+        "propOverlap",
+        "frameDeviationDeg",
+        "placeProps"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/ornament-field.js",
+      "sha256": "ca7ed48bef5a75a4320728f925d77ffa9e5e195181528e27e2ed42b4c3f8107b",
+      "lines": 98,
+      "exportClues": [
+        "bakeOrnamentField",
+        "squiggleSdf",
+        "bucketSegments",
+        "squiggleSdfBucketed",
+        "probeSquiggleEdge",
+        "SQUIGGLE_EXTENT",
+        "squiggleOrnament",
+        "SQUIGGLE_D0",
+        "bakeSquiggleField",
+        "squiggleShadeSdf",
+        "SQUIGGLE_WOBBLE_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/paint-normal.js",
+      "sha256": "05f3958b92bc8a2cd5eb71c9d6efec2751e9a60e57eb6b293f676ad07bd00072",
+      "lines": 82,
+      "exportClues": [
+        "paintNormal",
+        "decodeTexel",
+        "sampleWorldPlanar",
+        "perturbNormal",
+        "paintMeshNormals",
+        "shadeWithNormals",
+        "shadeWorldTops",
+        "auditPaintNormal"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/palette-graph.js",
+      "sha256": "114c35e8ed4a01d95d1a95bdd17ac0df87ff516befed29a1bf8cc66a9563665b",
+      "lines": 164,
+      "exportClues": [
+        "SPACES",
+        "mixColor",
+        "bilinear",
+        "barycentric",
+        "createPaletteGraph",
+        "addNode",
+        "nodeById",
+        "moveNode",
+        "setNodeColor",
+        "addQuad",
+        "addTriangle",
+        "addGradient",
+        "setSpace",
+        "quadFacetAt",
+        "triFacetAt",
+        "facets",
+        "gradientColors",
+        "swatches",
+        "paletteStrip",
+        "exportGraph",
+        "importGraph",
+        "defaultPaletteGraph",
+        "colorWorldByGraph"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/palette-image.js",
+      "sha256": "d58e5f8866e1bb82686488430778f6eb820c7df8208279a6635972cdf53638dc",
+      "lines": 69,
+      "exportClues": [
+        "paletteRowsFromPixels",
+        "paletteFromImageRows",
+        "encodePaletteImage",
+        "pixelsDigest",
+        "changedSlots"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/palette-patch.js",
+      "sha256": "54379de28eb2498e9f0ed93a45accdfd5aa5f5a519fe9140cb84093bfe4fa6eb",
+      "lines": 8,
+      "exportClues": [
+        "makePalettePatch",
+        "samplePalettePatch",
+        "PALETTE_PATCH_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/palette.js",
+      "sha256": "5a476ab77c80c9515725e2f4f0f34e99494b2139c2af543eef0baa23f7e45652",
+      "lines": 58,
+      "exportClues": [
+        "PALETTES",
+        "BUILD",
+        "TERRAIN",
+        "withPaletteColors",
+        "blendWallPalettes"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/part-random.js",
+      "sha256": "2d013ff50d1aa24b45ad4f80148534188ecbca68fa9115576d4dfd7ef33ac128",
+      "lines": 72,
+      "exportClues": [
+        "withRandomState",
+        "mirroredRandom",
+        "partSeed",
+        "PORTRAIT_SLOTS",
+        "sampleSlots",
+        "portraitSilhouette",
+        "silhouetteDiversity"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/path-samples.js",
+      "sha256": "7d100b148ebdfaae2c70fe420e0296c450185a1ce0d0e02cb81866f3520b3800",
+      "lines": 41,
+      "exportClues": [
+        "samplePath",
+        "smoothRoutedPath",
+        "ribbonCells"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [
+        "src/assets/saihojiClusterPine.js",
+        "src/system-workshop/object/capabilities.js"
+      ],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/penumbra.js",
+      "sha256": "b3081cbcd121940870c8828c17aa5b578f3be0cd52db3a216fc6a323c8440d13",
+      "lines": 60,
+      "exportClues": [
+        "coarsenHeights",
+        "castHeightShadow",
+        "threeShadow",
+        "distToMask",
+        "penumbraStats"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/platform-anchor.js",
+      "sha256": "fb1c37bdd5a4011711e9bfcc61b42749c84054b735d0b3757f445bb449082087",
+      "lines": 14,
+      "exportClues": [
+        "capturePlatformAnchor",
+        "resolvePlatformAnchor"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/playful-layout.js",
+      "sha256": "4fe57883f0b4153c1292637cf30317f62608bfae7731da70919ead6d5dd2f26a",
+      "lines": 45,
+      "exportClues": [
+        "playfulJitter",
+        "layoutList",
+        "hueFor",
+        "colorFor",
+        "GLYPHS"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/portal-aim.js",
+      "sha256": "841aba3344965acb0fd3a6c170819f25ef4a60d0021e9bcd5cf38bbc93013eb5",
+      "lines": 10,
+      "exportClues": [
+        "portalAim"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/prop-anim.js",
+      "sha256": "51ad16f7fb2d13fbb0453ceffb702dc19b805dc2412bc96c6aae2cc98fd11234",
+      "lines": 74,
+      "exportClues": [
+        "springValue",
+        "staggerAt",
+        "scaleAt",
+        "PropLifecycle",
+        "propScaleGLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/qa-monkey.js",
+      "sha256": "426ae7234291a1dbd336f6ceed9370ce17887f5a54eaea31e17e76abdfb79e6d",
+      "lines": 103,
+      "exportClues": [
+        "mulberry32",
+        "monkeyRegion",
+        "monkeyStep",
+        "positionDigest",
+        "runMonkeyQA"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/qa-replay.js",
+      "sha256": "427e98341ae1ddb9866dba2787a0e6b25699439376098d72e1d16b4211108e27",
+      "lines": 49,
+      "exportClues": [
+        "makeQASequence",
+        "applyQAStep",
+        "auditQAGeometry",
+        "runWorldQA"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/quad-lattice.js",
+      "sha256": "81a1096995f49f4420df437e83d740ccfc50f71ffc52f72890888e70cdad31f8",
+      "lines": 517,
+      "exportClues": [
+        "gridToLattice",
+        "buildRegularLattice",
+        "latticeForGrid",
+        "drapeLattice",
+        "latticeTriangles",
+        "clipSegmentsToRect",
+        "clipPointsToRect",
+        "intersectRect",
+        "windowForBounds",
+        "boundsForCells",
+        "mergeBounds",
+        "selectionBounds",
+        "windowEdgeSegments"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/radial-patch.js",
+      "sha256": "ccb1bef1d1de0b38f80d3581e7f94653f61675c58509c7c84dc068b29952f686",
+      "lines": 222,
+      "exportClues": [
+        "insertRadialPatch",
+        "insertRadialPatches",
+        "migrateWorldToPatch",
+        "PATCH_TEMPLATES",
+        "insertTemplatePatch",
+        "fitTemplatePatch"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/rectbin-c08.js",
+      "sha256": "69d6ad443510a411ce8dbde57231425317f15d71b0702c46c68d0e50aa9ac201",
+      "lines": 78,
+      "exportClues": [
+        "RectBin",
+        "churn",
+        "treeNodes"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/region-boundary.js",
+      "sha256": "e8b662eef07ab41493cbd93d6a1ef9470b60a1fdca5945bf9b600767942d533f",
+      "lines": 51,
+      "exportClues": [
+        "regionBoundary",
+        "cellOutline"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/region-groups.js",
+      "sha256": "ba7f04b974194cf8bdf09bc21a8055ac79559a9190533ccc7f3f895f7e30ac01",
+      "lines": 128,
+      "exportClues": [
+        "groupByConnection",
+        "regionGraphFromGrid",
+        "regionCutRatio",
+        "spreadCircles"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/region-ids.js",
+      "sha256": "871ebeddbd0bf1123b3b31a76a2b5b5fe7c07c29cf3f34860005d4b4811355fd",
+      "lines": 118,
+      "exportClues": [
+        "regionComponentIds",
+        "regionIdAt"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/river-network.js",
+      "sha256": "e8d8560eb4ba28b8a8d6464e6e2a509ccd265014682eccd6cd5913d250caf002",
+      "lines": 18,
+      "exportClues": [
+        "planRiverNetwork"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/rock-island-c08.js",
+      "sha256": "3b2da6e82db7524fa31a7eac760d88e099d33a4472e0e5741949b7c21938defc",
+      "lines": 45,
+      "exportClues": [
+        "rockIslandMesh"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/rock-topology.js",
+      "sha256": "8257e24788e9e5c92f1a5fd5ebf1ee281fd13c34f96a359831bf0c992971c764",
+      "lines": 52,
+      "exportClues": [
+        "rockTopology",
+        "measureOverhang"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/route-preview.js",
+      "sha256": "060e0d25a907d3adf8943378fc3bf500dc77b65854060996f3ef7e53b8128cbe",
+      "lines": 177,
+      "exportClues": [
+        "landArcs",
+        "roundCorners",
+        "buildRoutePreview",
+        "buriedSamples"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/sediment-bands-c09.js",
+      "sha256": "0b81b5281e4fee723ef8edbbb612c254d523440eae90d1feff7d68c61d773356",
+      "lines": 59,
+      "exportClues": [
+        "BAND_SLOTS",
+        "BAND_COLORS",
+        "BAND_TONES",
+        "bandHash",
+        "bandType",
+        "bandTone",
+        "bandLine",
+        "sedimentBandAt",
+        "bandRuns",
+        "SEDIMENT_BANDS_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/sediment.js",
+      "sha256": "21a8224d62531cae43f10264e0cd4eb4eaf4e5ba1e72e1c2f2e1102504513753",
+      "lines": 29,
+      "exportClues": [
+        "sedimentOffset",
+        "warpSediment",
+        "unwarpSediment",
+        "sedimentPhase",
+        "SEDIMENT_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/shore-loops.js",
+      "sha256": "e7e917335dac16176e9bc7293c4a6413013be5f00e0c1e3d00ec64c92c2f1d36",
+      "lines": 38,
+      "exportClues": [
+        "traceShoreLoops"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/shore-profile.js",
+      "sha256": "da37ab90e4bee055dea9204a07c37eb334be67f86368d198586da996a6f10c59",
+      "lines": 43,
+      "exportClues": [
+        "sampleShoreline",
+        "marchShore"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/smoke-order.js",
+      "sha256": "38613a5ff9495219422675d11ee2c210d5ad6e7917d5b63f3c067a296bc0dc36",
+      "lines": 42,
+      "exportClues": [
+        "smokeDepthOrder",
+        "FIRE_CARD",
+        "fireCardGLSL",
+        "fireCard",
+        "fireLightLevel"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/snapshot-replay.js",
+      "sha256": "b8b28fa398e66e34575bb249d4c0a7cd2c78aa1eb8638e5f8a4dd89d411720ab",
+      "lines": 17,
+      "exportClues": [
+        "replaySnapshots",
+        "replayDelay"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/space-visibility.js",
+      "sha256": "b806afc6034135ea1107302ff00ae6b75eb1ac89b6581bea66c0104b90b140e0",
+      "lines": 81,
+      "exportClues": [
+        "fibonacciDirections",
+        "sampleWorldVisibility",
+        "castWorldRay",
+        "sampleWorldVisibilityExact",
+        "bakeWorldVisibility"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/spatial.js",
+      "sha256": "1a4258cc7a5a91b5ce22bac3c0413632c0620eedcd08c60a6154d6438f16f012",
+      "lines": 125,
+      "exportClues": [
+        "pointInQuad",
+        "decorateCells",
+        "buildCellIndex",
+        "baryPrep",
+        "baryPrep3",
+        "baryCramer3",
+        "baryPoint",
+        "baryInside",
+        "baryColor"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/spear-thrust.js",
+      "sha256": "18d6154e3018a3d80e1c9408f22ce6198ef80cf3debf1eae66dde882182299f9",
+      "lines": 62,
+      "exportClues": [
+        "beginSpearThrust",
+        "stepSpearThrust"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/sprite-ambiguity.js",
+      "sha256": "3806cc7063524a937e92067bf8e0b14b56735cf0a7cf6f7f6ea34f5bae3a2379",
+      "lines": 16,
+      "exportClues": [
+        "measureAmbiguity",
+        "chooseSpriteFlip"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/sprite-atlas.js",
+      "sha256": "a4771d9ce14cf7b0105f4efe9c7a78c90c16dc9a649912159ec7d93a38514306",
+      "lines": 29,
+      "exportClues": [
+        "SpriteAtlas",
+        "radialPack"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/story-datum.js",
+      "sha256": "9e6c0710ffa446fad6bbddd9c28c837a7d6eee2be6778946f61230d90dcf676a",
+      "lines": 41,
+      "exportClues": [
+        "snapStoreyBands",
+        "measureFacade",
+        "windowRows",
+        "worldStoreyBands"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/straight-skeleton.js",
+      "sha256": "382d1459b48d9d623de1710f46706b49656573d08cf05ab64370680c210c8b05",
+      "lines": 226,
+      "exportClues": [
+        "ringArea",
+        "earClip",
+        "straightSkeleton",
+        "skeletonTriangles",
+        "auditSkeleton",
+        "offsetRing"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/stroke-reveal-c09.js",
+      "sha256": "4f550ee37f1536528afa29fceedd9c5424174586298f71e8121a82f27509b089",
+      "lines": 161,
+      "exportClues": [
+        "polylineLengthN",
+        "trimPolylineN",
+        "createStrokeReveal3D",
+        "chainSegments",
+        "dedupeSegments",
+        "createLayerTimeline",
+        "roundSeed"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/stroke-reveal.js",
+      "sha256": "fb09d6fd3a90c912ed22826803318bf1f19f370bd44222552dfd2cb5f9f24585",
+      "lines": 209,
+      "exportClues": [
+        "polylineLength",
+        "trimPolyline",
+        "createStrokeReveal"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/surface-decoration.js",
+      "sha256": "a0023c484c37034bd79cbb107b14dde57fb00e246e28cc254c38993a993061e4",
+      "lines": 59,
+      "exportClues": [
+        "solveWallDecoration",
+        "solveFacadeDecoration",
+        "validateFacade"
+      ],
+      "directory": "core",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/swarm-maze.js",
+      "sha256": "9ef83bf0d04523c9cef42ca9cc8cf4a130fc1afdcdcb6d3bee5839f609fed6d9",
+      "lines": 85,
+      "exportClues": [
+        "corridorMaze",
+        "insideMaze",
+        "triangulateMaze",
+        "spawnSwarm"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/terrace-edges.js",
+      "sha256": "84b697aed67dd002d48dc43c53afe422435c88f22f216cbda4fbfa468a454870",
+      "lines": 70,
+      "exportClues": [
+        "terraceEdges",
+        "traceTerraceRings",
+        "finalSegments"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/terrace-profile.js",
+      "sha256": "c27c6ad24aca7ec4766929982b7e92286f63a841baee01a7da0dfe3b84eb27dc",
+      "lines": 34,
+      "exportClues": [
+        "terraceProfile",
+        "meshSlopeProfile"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/terrain-burial.js",
+      "sha256": "c56391888575a36763dc920f522dd628eb71401d2711294cfa2c9adea75ba8a1",
+      "lines": 109,
+      "exportClues": [
+        "buryColumn",
+        "raiseGround",
+        "burialReport",
+        "burialDepth",
+        "neighborShade"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/texel-skip.js",
+      "sha256": "78de575670dc414036b9432d84a32bce9392dda14e10827e6e4a9e1715077eb3",
+      "lines": 17,
+      "exportClues": [
+        "skipTexel",
+        "TEXEL_SKIP_GLSL"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/town-skin.js",
+      "sha256": "a03afdfbaddd59cd475cf029b1ca0951beeada20d2cfb03c373875d9bd2f7b66",
+      "lines": 203,
+      "exportClues": [
+        "SKIN_SIZE",
+        "PLANT_RECT",
+        "SKIN_SLOTS",
+        "skinPattern",
+        "writePlantCorner",
+        "buildSkinAtlas",
+        "buildSkinMips",
+        "cellMean",
+        "skinAttributes",
+        "scribble",
+        "SKIN_VERT_PARS",
+        "SKIN_VERT_BODY",
+        "SKIN_FRAG_PARS",
+        "SKIN_FRAG_BODY"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/trajectory-fan.js",
+      "sha256": "c7a15c5b2be2d4e4b998e99a33b1c7f02f443d8f5fe2132013dec3604e5a8d8e",
+      "lines": 240,
+      "exportClues": [
+        "DEFAULT_GRAVITY",
+        "throwArc",
+        "sampleTicks",
+        "trajectoryFan",
+        "defaultAngles",
+        "heightAtX",
+        "solveLaunch",
+        "launchGrid",
+        "analyticRange"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/trajectory-trace.js",
+      "sha256": "795f43eab08967482270177f7df833c76a86ac052a1dff39b156ce3cdf60d11c",
+      "lines": 16,
+      "exportClues": [
+        "segmentBoxHit",
+        "traceArc"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/trigraph-edit-c08.js",
+      "sha256": "0161da330cae105cd468e55dbd76531d73044aea71753301840b518ee937ca9b",
+      "lines": 101,
+      "exportClues": [
+        "addTracked",
+        "removeVertex",
+        "moveVertex",
+        "checkLive"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/trigraph.js",
+      "sha256": "d230ab7d2caa627e24fdd411c65d9b0bf45e8e1e0dae96b8b8eb02edfeaf8a3c",
+      "lines": 165,
+      "exportClues": [
+        "TriGraph"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/ui-reveal.js",
+      "sha256": "49c27378c7f41a76576becece4a7bee6c25fa747767964bd4910cbfc9be3e29e",
+      "lines": 8,
+      "exportClues": [
+        "uiRevealAt"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/unit-ground-height.js",
+      "sha256": "d1f27ab33686a15f8a2847d4a29efdc89a9dae9a329064b4d9ce278e22dbf012",
+      "lines": 13,
+      "exportClues": [
+        "easeUnitGroundHeight",
+        "easeUnitToHeight"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/unit-shadow.js",
+      "sha256": "1cdf5bd99dbf5c2cb6c9e54d2f42b7718f2602cacbb644c8c4930745b9724134",
+      "lines": 68,
+      "exportClues": [
+        "LIGHT_DIR",
+        "unitShadow",
+        "shadowArea",
+        "measure"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/core/unit-tier.js",
+      "sha256": "242b8e28ce24250ab3d2074deb69a65abec84378c60601e8b161e70079935a6a",
+      "lines": 18,
+      "exportClues": [
+        "unitTierAppearance",
+        "setUnitAppearanceTier"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/core/uv-bake.js",
+      "sha256": "ee818272aa28e5055722206aad97fd3b57545c2284820b72c56e306ac0eb14ae",
+      "lines": 95,
+      "exportClues": [
+        "checkerLitShade",
+        "bakeChartPage"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/uv-charts.js",
+      "sha256": "4e101a24d1d2bdd02bee666c4448df68f3433f39d4d205f3b186fa0878bb9e1b",
+      "lines": 225,
+      "exportClues": [
+        "weldSoup",
+        "buildCharts",
+        "radialChartPack",
+        "countChartOverlaps"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/uv-radial-atlas.js",
+      "sha256": "e9caeab3a1e4d1e3bae67b7ac856e6fcd983b4023de0a4cbeb1eac207d42b52d",
+      "lines": 231,
+      "exportClues": [
+        "clipIsland",
+        "topMergeCharts",
+        "chartHoles",
+        "radialSpearman",
+        "rasterizeChartPage",
+        "paintCheckerPage",
+        "meshContrastGraph",
+        "islandFeatureBases",
+        "contrastSimulation",
+        "paintContrastPage",
+        "dilatePage"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/vertex-dual.js",
+      "sha256": "8c32d9679cf28bbd37bb9070c44363a231cd000b6464570c21ec2947507e24a2",
+      "lines": 75,
+      "exportClues": [
+        "vertexDual",
+        "gridVertexDual",
+        "dualFoliageSites"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/vertex-openness.js",
+      "sha256": "6d141187b2c06f222a830f97bfc85cdac78ba16fbc55e3d0a247cd7a2f67b77e",
+      "lines": 45,
+      "exportClues": [
+        "bakeVertexOpenness"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/voxel-distance.js",
+      "sha256": "37666f8f98cad628153d9694d87a3200336a5bd62f51e71e723a8ccd17af9917",
+      "lines": 29,
+      "exportClues": [
+        "voxelDistance"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/voxel-ray.js",
+      "sha256": "f715afbd3f64e3e0b8fc6f6ac42ff903a0e1429acd488ffbba3d94bf85884762",
+      "lines": 13,
+      "exportClues": [
+        "firstVoxelHit"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/wake-sampling.js",
+      "sha256": "fd5482472094691d802213279260287f5d369cd6b9f2387807915db28cb86ac3",
+      "lines": 67,
+      "exportClues": [
+        "advanceWake",
+        "KELVIN",
+        "makeWakeParticles"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/wave-cycle.js",
+      "sha256": "a9a03399574437dd69ab5b25bebdf07f77ffe50a910d5bb7728d99777f79353a",
+      "lines": 41,
+      "exportClues": [
+        "bakeWaveMotion",
+        "waveCycleGLSL",
+        "waveCrest"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/wfc.js",
+      "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e",
+      "lines": 291,
+      "exportClues": [
+        "solveWFC",
+        "findWFCConflicts",
+        "repairWFC",
+        "diagnoseTiles",
+        "jointSubtileCatalog",
+        "dependencyChain",
+        "cornerVariantTiles",
+        "cornerSlots",
+        "solveWithModule",
+        "layerGrid",
+        "layeredJointCatalog",
+        "solveWithPrefab",
+        "liftFootprint"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/wind-flow.js",
+      "sha256": "24d16022500aaa17ebf812119ed49f142c8c2b566be950a0dac017772163155f",
+      "lines": 162,
+      "exportClues": [
+        "traceWind",
+        "sampleCurve",
+        "flagRibbon",
+        "packWindField",
+        "windFieldGLSL",
+        "samplePackedWind",
+        "bakeSoftNormals",
+        "meshCollider",
+        "particleContactAlpha"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/wire-route.js",
+      "sha256": "3a6e0424135d19b940a4783c38e72ef0426fb6cc185987be5ca3cfcb86c68880",
+      "lines": 28,
+      "exportClues": [
+        "segmentCellInterval",
+        "planWire"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/world-probes.js",
+      "sha256": "3a5115198f7295c647a5c03d799d9608b0f3a72a47fe2c17c34dadaff46c2846",
+      "lines": 17,
+      "exportClues": [
+        "makeWorldProbes"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/core/world.js",
+      "sha256": "f33d865e74e5270e6f214eb737e637c916d1dda1a332092b084415accfbd8ea2",
+      "lines": 131,
+      "exportClues": [
+        "MAX_LEVEL",
+        "World"
+      ],
+      "directory": "core",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/life/atmosphere.js",
+      "sha256": "0af4ee512d4031ba48c3e7faa8406b90792a08c583220df952e098a32f550553",
+      "lines": 358,
+      "exportClues": [
+        "Atmosphere"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/life/banner.js",
+      "sha256": "ffd78cebae81a170a0dc61a930858ed247dc1419d1d080bb306ea50500669aca",
+      "lines": 12,
+      "exportClues": [
+        "createBannerTexture"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/life/birds.js",
+      "sha256": "0f2cd63f63139446a0ee14109053ad366affc5f742c1d20fb60c67d3877b24a2",
+      "lines": 504,
+      "exportClues": [
+        "findRoofPerches",
+        "Birds"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/life/boats.js",
+      "sha256": "0d3bb396aa5badb41ee72a21902cc32d7fd9387c2c8e7c6eb44d619dbea56dca",
+      "lines": 145,
+      "exportClues": [
+        "Boats"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/crab-swarm.js",
+      "sha256": "f7556aa2e0123d43653b343be50d038cc027f6303b08d71076ea594b4c86da04",
+      "lines": 95,
+      "exportClues": [
+        "CrabSwarm",
+        "attachCrabSwarm"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/decor.js",
+      "sha256": "a8b4ec46becb715b18df6b17f1df7e026b87b41abaabb34742c7ecc358e28403",
+      "lines": 250,
+      "exportClues": [
+        "Decor"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/life/effects.js",
+      "sha256": "46b6942c9ba31b703abc77bd7bb8cd3c3f99b6c09420f10afc7f1b3c27b957fd",
+      "lines": 296,
+      "exportClues": [
+        "fireNoiseTexture",
+        "popShaderChunk",
+        "Effects"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/life/fire-coupling.js",
+      "sha256": "d0e2e04add7bee0f9e3135cc22e77bebc09c0075871fe057a751facb96e31488",
+      "lines": 137,
+      "exportClues": [
+        "FIRE_COUPLING",
+        "burstPlan",
+        "fireLight",
+        "smokeSizeMul",
+        "igniteCurve",
+        "easeSizeMul",
+        "FIRE_COUPLING_TABLE"
+      ],
+      "directory": "life",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/flora-species.js",
+      "sha256": "0ba03724c2bc138d005d4c040bbebce28d11d730ab6c0aaee652f9b288cd9c94",
+      "lines": 227,
+      "exportClues": [
+        "SPECIES_SHAPES",
+        "SHAPE_PLAN",
+        "speciesGeometry",
+        "dualWallSites",
+        "FloraSpecies"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/impostor-c09.js",
+      "sha256": "e76c6b59c53c1c68fdcd805c77a957f1454da07e18b534141ef1a1b58702e0c8",
+      "lines": 187,
+      "exportClues": [
+        "patchLocalUp",
+        "patchBakedCloudColor",
+        "useUnlitVertexColors",
+        "localUpImpostorField",
+        "radialMatrix",
+        "localUpView",
+        "fluffyCloudGeometry",
+        "treeCrownGeometry",
+        "planetImpostorSites"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/impostor.js",
+      "sha256": "85286187f8e3e6f40a71f241673e67371802402bd9119f3aee70a7a98de8bdab",
+      "lines": 370,
+      "exportClues": [
+        "ImpostorBaker",
+        "ImpostorField",
+        "cloudGeometry",
+        "blobCloudGeometry"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/life/leaf-surface.js",
+      "sha256": "894300a9203411e4c16f9f795e3e9c699bfa21b36af7f43af3e8b73dce0056ac",
+      "lines": 35,
+      "exportClues": [
+        "makeLeafSurface",
+        "LEAF_SURFACE_GLSL"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/smoke-c01.js",
+      "sha256": "e9142c7d0a0d9704099a28358c5e9e37dc2671dac7b16bd53c6d6e9adfb2c08d",
+      "lines": 80,
+      "exportClues": [
+        "lobeFactor",
+        "installSmokeShape"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/smoke.js",
+      "sha256": "ad005fdab79072cae3c2b7a26b41ae6c5b60a4d1522df32865d789e8f71c3727",
+      "lines": 556,
+      "exportClues": [
+        "HAZE_STYLE",
+        "CROWN_STYLE",
+        "Smoke"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/sound.js",
+      "sha256": "8c1bd349d7494cbf5b9d58050885e8b9838f32525b42baef3deda3d11d2e01b5",
+      "lines": 142,
+      "exportClues": [
+        "Sound"
+      ],
+      "directory": "life",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/life/splash-c07.js",
+      "sha256": "a254cb5a503f8b7ef4484ee16ae799fa6b4f05b91d0b39e5e2808b3deb9a5242",
+      "lines": 133,
+      "exportClues": [
+        "CROWN_STRIPS",
+        "crownHeight",
+        "ringState",
+        "CrownSplash"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/sprite-pack-c09.js",
+      "sha256": "5e781f9e9ee5b68a3d7307a422769b09fe1db90efb377eada7605b951da261a4",
+      "lines": 152,
+      "exportClues": [
+        "SpritePackPlan",
+        "LiveSpritePacker",
+        "spriteMeshes"
+      ],
+      "directory": "life",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/life/unit-shadow-batch.js",
+      "sha256": "ee18c59a6d3b30ac65f4b37e8133953d0191ecf4cb0d142850bf0a156b870e1c",
+      "lines": 42,
+      "exportClues": [
+        "UnitShadowBatch"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/life/unit-sprites.js",
+      "sha256": "0151d9508f64e956082e75535426bbfd0be8d2af372d8b94bfe0e5a037897631",
+      "lines": 70,
+      "exportClues": [
+        "renderUnit",
+        "UnitSpriteBatch"
+      ],
+      "directory": "life",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/life/vegetation.js",
+      "sha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4",
+      "lines": 821,
+      "exportClues": [
+        "wallCardGeometry",
+        "Vegetation"
+      ],
+      "directory": "life",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/light/bake.js",
+      "sha256": "b8a1512bab3209c4489821a125ffcdd0ba36a7941d348d422fc913704d7644c2",
+      "lines": 261,
+      "exportClues": [
+        "bakeLighting",
+        "AO_MODES",
+        "normalizeSunShadow"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/light/cloud-shadow.js",
+      "sha256": "56958392639bfa183c0f3e05f1997553464e89ab380b5546055805d522df3b36",
+      "lines": 55,
+      "exportClues": [
+        "CLOUD_SHADOW_GLSL",
+        "CloudShadow"
+      ],
+      "directory": "light",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/cube-height.js",
+      "sha256": "d2e05dc56098b526080a83b9e1f287127ae32e1ce1dec258d517ad712aab9cfc",
+      "lines": 24,
+      "exportClues": [
+        "createCubeHeightLookup"
+      ],
+      "directory": "light",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/lightvolume.js",
+      "sha256": "c1a2b14af4215a2534ca35054ad77c1ded46a5e9ba8a03357527403822938a43",
+      "lines": 141,
+      "exportClues": [
+        "bakeLightVolume"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/megatexture-gi-debug.js",
+      "sha256": "066f2ddababebf4986bcbcd1d3b7f602c06ccaeced76ffb3f74fc7042beaf6f9",
+      "lines": 50,
+      "exportClues": [
+        "sdfImage",
+        "lightVolumeImage",
+        "megaTextureImage"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/megatexture-gi.js",
+      "sha256": "5bf76085921dcaaca1b3dd98263e9b10420d68ff8f5e88ac40813c2d6afb0d94",
+      "lines": 277,
+      "exportClues": [
+        "voxelizeWorld",
+        "buildMegaTexture",
+        "buildSdfUV",
+        "makeTracer",
+        "bakeMegaTextureGI",
+        "referenceTexelBounce",
+        "pearson"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/mip-chain.js",
+      "sha256": "5c15332c0a0df1032c74691acefe33bf6f897613208771225f34510e15948844",
+      "lines": 64,
+      "exportClues": [
+        "srgbToLinear",
+        "linearToSrgb",
+        "buildMips",
+        "sampleBilinear",
+        "sampleTrilinear",
+        "sampleAniso",
+        "levelStats"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/mip-ground.js",
+      "sha256": "0e40c39ec428889798288c2c2d3531ce61b7245d1aeb4657acd4fe16a5dca6d4",
+      "lines": 53,
+      "exportClues": [
+        "makeTestTexture",
+        "renderGround",
+        "laplacianEnergy",
+        "compareFilters",
+        "shimmerReport",
+        "checkMeanPreserved",
+        "paint"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/penumbra.js",
+      "sha256": "39f4c18263f930c5fedd559b7a3e7b18443919360a1efb31826c9f6cb9a3a7b6",
+      "lines": 55,
+      "exportClues": [
+        "bakeWaterPenumbra",
+        "bakeVoxelPenumbra"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/surface-bounce.js",
+      "sha256": "2eb1e06c46c88d86e2eb591a730c57d5bde11cf7390198aa6f1b0bc4b34bd395",
+      "lines": 291,
+      "exportClues": [
+        "rng",
+        "luma",
+        "surfaceFieldFromWorld",
+        "normalAt",
+        "cellAreaAt",
+        "worldAt",
+        "surfacePoint",
+        "visible",
+        "directLight",
+        "samplePattern",
+        "bounce",
+        "bruteForce",
+        "audit",
+        "sampleSurface",
+        "applySurfaceBounce"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/surface-shadow.js",
+      "sha256": "9870cc64dcd7b05c49f6be7c86a113459dac18c5e7c3b12d68d6b39b94a56b46",
+      "lines": 94,
+      "exportClues": [
+        "bakeSurfaceShadow",
+        "surfaceHeightsFromWorld",
+        "bakeFloorShadow",
+        "surfaceShadowStats",
+        "islandSeams",
+        "sweepSurfaceShadow",
+        "SURFACE_SHADOW_GLSL",
+        "GroundSurfaceShadow"
+      ],
+      "directory": "light",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/texel-owner.js",
+      "sha256": "fddc48c7cfc67a88a1c4ce5a6d37ff16e693be61be5f22db984434c8a9340344",
+      "lines": 57,
+      "exportClues": [
+        "TexelOwnerAtlas"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/voxel-ao.js",
+      "sha256": "6ca74600dbb3a20f09c082eb35354a0f8c4bf7d9f47bde12b46850567af30012",
+      "lines": 61,
+      "exportClues": [
+        "FACE_DIRS",
+        "buildVoxelAO"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/light/voxel-field.js",
+      "sha256": "16721215a0877f03a32299ddab58fdd7ca3d081244bcd4ff0eb8374eff6b2a4a",
+      "lines": 73,
+      "exportClues": [
+        "bakeVoxelSoftNormals",
+        "packLayeredField",
+        "LAYERED_FIELD_GLSL",
+        "sampleLayeredTexture"
+      ],
+      "directory": "light",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/render/opening-punch-layer.js",
+      "sha256": "120e7d604a2b4618b8fe67eb489dbf91a1ebefff73c857bc51db932ed4f5fc71",
+      "lines": 106,
+      "exportClues": [
+        "punchGeometry",
+        "punchMaterials",
+        "attachOpeningPunch"
+      ],
+      "directory": "render",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/render/opening-punch.js",
+      "sha256": "138ea72017ffda7739da3c14bf9dae54bfd793dcc18ec1a3d0b87ca8d25ee2cb",
+      "lines": 168,
+      "exportClues": [
+        "PUNCH_REF",
+        "planFacade",
+        "openingArea",
+        "isInsideOpening",
+        "holePixelStats",
+        "passOrder",
+        "createFacadeScene"
+      ],
+      "directory": "render",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/planet-relax-c08.js",
+      "sha256": "8639091096f680fe2db6f225203ee2fb995406516d188b4d447ab66a0600e690",
+      "lines": 81,
+      "exportClues": [
+        "RELAX_STEPS",
+        "relaxFrames",
+        "cellOutlineSegments",
+        "installRelaxAnim"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/planet-smooth-c08.js",
+      "sha256": "3005cb733bb65a40fc8ba7a1ef0128dd09f5c74603c1281a3d338da640da092d",
+      "lines": 98,
+      "exportClues": [
+        "levelBoundaries",
+        "smoothCoastSampler",
+        "coastOutline",
+        "boundaryTurning",
+        "installSmoothCoast"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/planet-town.js",
+      "sha256": "80bd865b972138faeef26f832f64f6ff5513a69d31c2eb00ca916fa0b17581ba",
+      "lines": 243,
+      "exportClues": [
+        "stereoProject",
+        "stereoUnproject",
+        "sphericalDelaunayViolations",
+        "flipToDelaunay",
+        "sphereQuality",
+        "planetWorld",
+        "planetRivers",
+        "deformIntoCell",
+        "houseModule",
+        "storeyHouseModule",
+        "planetHouses",
+        "planetFusion"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/planet-wfc-c06.js",
+      "sha256": "ed2211fddd837fb03473a1232b1fd7992d6cb47a9ae995eef56e81cf611699d7",
+      "lines": 268,
+      "exportClues": [
+        "biomeField",
+        "sphereTriGrid",
+        "TILESETS",
+        "solvePlanetTiles",
+        "tileConflicts",
+        "planetTileGeometry"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/planet.js",
+      "sha256": "b0c0f3829eb773bcd3d775220d682418e3197b4ce977f71f4bb1116b347b10a9",
+      "lines": 451,
+      "exportClues": [
+        "buildSphere",
+        "sphereTopologyReport",
+        "buildPlanet",
+        "cornerPositions",
+        "assemblyOrder",
+        "assemblySlice",
+        "planetMesh",
+        "relaxConflictReport",
+        "moduleSizeReport",
+        "mushroomRatio"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/sphere-stages.js",
+      "sha256": "437bda3bededd0d1487b27f56f58de8e8f6aa86ea1fba512ed31a330efa64485",
+      "lines": 64,
+      "exportClues": [
+        "STAGES",
+        "prepareStages",
+        "sphereStageFrame"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/stereo-insert-c06.js",
+      "sha256": "7a7c0e108cb119482ca7c2959a2af01b0e34e76593468a3b4063bf8a3b3fbb33",
+      "lines": 83,
+      "exportClues": [
+        "projectionOrder",
+        "createInsertionReplay",
+        "liftToSphere",
+        "triangulateSphere",
+        "relaxRetriangulate"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/worldmap-material.js",
+      "sha256": "519734166e2b7d6f4f25469644e219d7761e2fb6ebb99bc6779a85aa116dc275",
+      "lines": 41,
+      "exportClues": [
+        "worldMapTexture",
+        "attachWorldMap"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/worldmap-shore.js",
+      "sha256": "22c87cc2878b184e8078b9c666d83c9097f676356f8d6af5deab6eb94060ef23",
+      "lines": 74,
+      "exportClues": [
+        "shoreDistance",
+        "SHORE_PALETTE",
+        "worldMapShoreColors"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/sphere/worldmap.js",
+      "sha256": "24ef46c9bf8d972432878d778a4b7f2037a652272e251663a87ad91038bf3899",
+      "lines": 127,
+      "exportClues": [
+        "fbm3",
+        "elevationAt",
+        "buildWorldMap",
+        "poleStretch",
+        "planetHeights3D",
+        "planetSurfaceColor",
+        "MAP_PALETTE",
+        "worldMapColors",
+        "worldMapTexel",
+        "WORLDMAP_GLSL"
+      ],
+      "directory": "sphere",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/blotch-atlas.js",
+      "sha256": "a6bd6f90957473b640efee649540d455d847f1bad50858f9c55f67d61ead0a27",
+      "lines": 198,
+      "exportClues": [
+        "blotchHash",
+        "periodicFbm",
+        "createBlotchAtlasData",
+        "sampleBlotchAtlas",
+        "buildBlotchRimField",
+        "blotchMasks",
+        "blotchWobble",
+        "swirlUV",
+        "blotchRimTint",
+        "BLOTCH_RIM_GLSL",
+        "blotchRimUniformValues"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/blotch-pattern.js",
+      "sha256": "6384abdbbabeb6a1aedca2be4d9f7d4db113e20d1845491afc47b347a2112ed6",
+      "lines": 39,
+      "exportClues": [
+        "BLOTCH_GLSL"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/blotch-tongue-c09.js",
+      "sha256": "baffbb08d5e763302623643c551d87c7e23189e859ebefaac6f4552f21c9319a",
+      "lines": 72,
+      "exportClues": [
+        "TONGUE_DEFAULTS",
+        "tongueAmount",
+        "tongueWallMask",
+        "tongueTopMask",
+        "BLOTCH_TONGUE_GLSL"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/cage-c09.js",
+      "sha256": "8e36589f1114366eb0abb948ee0c985b054e56c9823939a187081e1347d3ef08",
+      "lines": 131,
+      "exportClues": [
+        "cageWallPoint",
+        "cageSlice",
+        "insideCage",
+        "cageCollider"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/drainage.js",
+      "sha256": "95cfd8b4bc6fa04b20253f0ec7f1240eb0eca76f418268545fd78f78e68be553",
+      "lines": 53,
+      "exportClues": [
+        "fillTerrainDepressions",
+        "liveLakes"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/edge-square-relax.js",
+      "sha256": "d5fd529a794d843f1adbf5524dc7b7c0017bd235c8bc66ad16ed552cc8ff171e",
+      "lines": 121,
+      "exportClues": [
+        "EDGE_ORDER",
+        "classifyWorldEdges",
+        "squareRelax",
+        "relaxMetrics"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/features.js",
+      "sha256": "03f343be9d035ea83c6341f50efc01f0dab6e385cb8d7e0a561194fa5cbb0d75",
+      "lines": 157,
+      "exportClues": [
+        "addFeatures",
+        "forceChurch"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/terrain/field-pattern.js",
+      "sha256": "03249efba2b4b12e0a25b41a9fdf964a1f5495dc55c50a401b8d150bf317f052",
+      "lines": 49,
+      "exportClues": [
+        "FIELD_GLSL",
+        "fieldPlotId"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/generate.js",
+      "sha256": "c146a3fb010ffb212437c526574d908d996916d9f720aafa611b25d40c8207ee",
+      "lines": 349,
+      "exportClues": [
+        "generateTerrain",
+        "carveRivers",
+        "slopeMask",
+        "relaxRiverSlopes",
+        "linkRiversThroughLakes",
+        "digBasins"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/terrain/island-quality-c09.js",
+      "sha256": "73c4332d25f9aad1f2f4f80053e6f3b020ba3c12ed5154f6d6e51f8d9cec9937",
+      "lines": 110,
+      "exportClues": [
+        "ISLAND_RULES",
+        "islandReport",
+        "landComponents",
+        "pruneIslets",
+        "deriveSeed",
+        "consistentIsland",
+        "islandVerdict"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/island-viz-c09.js",
+      "sha256": "c084f73a2f4de1346ba6b10e0539e34430a79783df97f719ce0f6bfff7930a82",
+      "lines": 239,
+      "exportClues": [
+        "delaunaySteps",
+        "edgesOf",
+        "heightSampler",
+        "vertexAO",
+        "softShadow",
+        "featureSegments",
+        "contourSegments",
+        "orbitProject",
+        "triLevels",
+        "triAdjacency",
+        "faceAO",
+        "faceShadow",
+        "cliffEdges"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/mushroom-c04.js",
+      "sha256": "68e854125988309ddb2c9f725cd4bf79acc47b8406cd6f41cfcdbba5e9949c83",
+      "lines": 54,
+      "exportClues": [
+        "MUSHROOM_CAPS",
+        "buildMushroomStack",
+        "mushroomReport"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/patch-blend.js",
+      "sha256": "104600619903115512bcaaba129d1a3940cf9f4a7ae27f33d53bbd3785547b68",
+      "lines": 164,
+      "exportClues": [
+        "shoreArcs",
+        "buildPatchField",
+        "grassColor",
+        "waterColor",
+        "shoreColor",
+        "makePatches",
+        "renderPatches",
+        "seamStats",
+        "edgeJump",
+        "abModes"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/pipeline-job-c08.js",
+      "sha256": "a75c71a732a35405180ec6a61d926dcd03e79c2abab47489c6ceba3168e63f64",
+      "lines": 79,
+      "exportClues": [
+        "CLIP_RHYTHM",
+        "JOB_STAGES",
+        "CTL",
+        "runJob",
+        "createJobControl",
+        "makeJobSleep",
+        "startJob",
+        "stageDurations"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/pipeline-job-worker-c08.js",
+      "sha256": "a895c027a83eed93626ed6fa18ebfd16417d9bb61bd79ecfd5791fa622c8f70f",
+      "lines": 9,
+      "exportClues": [],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/pipeline-stages.js",
+      "sha256": "47ec7b6fabb0acdafe6840a359e42b11707f15be3721f3beb8407f21cbc57156",
+      "lines": 256,
+      "exportClues": [
+        "STAGES",
+        "createSharedClock",
+        "islandPoints",
+        "delaunay",
+        "meshReport",
+        "liftHeights",
+        "stagePlan",
+        "StageRunner",
+        "revealedPoints",
+        "buildIsland"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/river-collapse-c09.js",
+      "sha256": "5da6b87e811009b27658efabef04d763a4c02db80d858fcb3851f8e36b49249a",
+      "lines": 174,
+      "exportClues": [
+        "collapseRiversFirst",
+        "riverCollapseStats"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/river-network.js",
+      "sha256": "31af65648c6c29b4f3d5b5a8b222a53775411a74a8bc3ba9f20d3c349eadb075",
+      "lines": 18,
+      "exportClues": [
+        "rebuildRiverNetwork"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/rockforms-c09.js",
+      "sha256": "27854c1633a527275fbb7288994eabfc199e0306032181f788d079a471d57959",
+      "lines": 127,
+      "exportClues": [
+        "overhangLevel",
+        "islandBase",
+        "pillar",
+        "capSlab",
+        "leaningRidge",
+        "bridge",
+        "house",
+        "rockScene",
+        "capUndersideArea"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/shape.js",
+      "sha256": "9b3f1847098c047ba073ab974c43651f5a33b59fb83c35406db995d64a4a6478",
+      "lines": 385,
+      "exportClues": [
+        "shapeTerrain",
+        "smoothingMetrics"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/terrain/shrub-band.js",
+      "sha256": "319ede43ba3de1cbf69f55d44377f1aa84d9153b424524919ff648d86ef8b3d8",
+      "lines": 33,
+      "exportClues": [
+        "SHRUB_BAND",
+        "shrubBandMul",
+        "SHRUB_BAND_SPREAD"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/shrub-edges-c09.js",
+      "sha256": "56d546875d995890f091933186ec776a542381ab6ebd69e18b8ee1204d437c11",
+      "lines": 55,
+      "exportClues": [
+        "shrubEdgeFlags",
+        "shrubEdgeStats",
+        "SHRUB_FOOT_STYLE"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/shrub-texture.js",
+      "sha256": "d7f23ee1070c045c20206771f862dd9cfa7b2157f9f58e9d95d3ac53b817d135",
+      "lines": 114,
+      "exportClues": [
+        "SHRUB_GLSL",
+        "SHRUB_DEFAULT_STYLE",
+        "SHRUB_TOOTH",
+        "SHRUB_LAYER_VERT",
+        "SHRUB_LAYER_FRAG"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/soft-tops.js",
+      "sha256": "d50c66e31febf5b7fa1c57bb83c6a0d3aae2f5719d6110212c9d7052b39f9369",
+      "lines": 70,
+      "exportClues": [
+        "softCorners"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/surface-pattern.js",
+      "sha256": "541338a08e5589062e4f03b09a8d3d0ee8f15a3a5e7cf685437707e91eb1b06b",
+      "lines": 169,
+      "exportClues": [
+        "spHash",
+        "spNoise",
+        "spWobble",
+        "spWarp",
+        "spLine2",
+        "spLine1",
+        "spGround",
+        "spCliff",
+        "spBandTone",
+        "spGravel",
+        "spFieldPhase",
+        "spFieldLines",
+        "SURFACE_DEFAULTS",
+        "validateSurfaceOptions",
+        "surfaceShade",
+        "SURFACE_PATTERN_GLSL",
+        "surfacePatternUniformValues",
+        "attachSurfacePattern"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/terrain-collide.js",
+      "sha256": "06097070d42dafbb6c30901d00c3e51966c9a28d20da742b997d2dfe84025292",
+      "lines": 112,
+      "exportClues": [
+        "terrainCollider"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/terrain-strokes-c09.js",
+      "sha256": "5613cbe8d5f010125c921ae8fa65f5e5fb18370ae7cff334c301f337a9e59ce7",
+      "lines": 64,
+      "exportClues": [
+        "surfaceSegments",
+        "cageSegments",
+        "terrainStrokes",
+        "strokeBounds"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/terrain/terrainmesh.js",
+      "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9",
+      "lines": 335,
+      "exportClues": [
+        "buildTerrain"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/terrain/walk-reach.js",
+      "sha256": "838f426207d7776ce341e353a74ad15dc5a18bfa4b4990974b951ac5f05a7e32",
+      "lines": 63,
+      "exportClues": [
+        "walkComponents",
+        "landRoute",
+        "cliffCrossings",
+        "repairReach"
+      ],
+      "directory": "terrain",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/tools/merge-bench-c06.js",
+      "sha256": "c9175071959447e5fa894ec728c00b1a3cfa4899b8a5ad817afe956e1efa7cc2",
+      "lines": 46,
+      "exportClues": [
+        "splitGeometry",
+        "benchMerge"
+      ],
+      "directory": "tools",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/tools/mesh-audit.js",
+      "sha256": "1a7f19629a36153e1ef76857dc2ffa6f476c732410ee61534a8a2319d3349930",
+      "lines": 19,
+      "exportClues": [
+        "measureWorldSurface"
+      ],
+      "directory": "tools",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/tools/obj-parse-c06.js",
+      "sha256": "ed86247c3628ef25271ca3c6a2905608569e13d77f20af2cf8ccb667b62cb43f",
+      "lines": 36,
+      "exportClues": [
+        "parseOBJ"
+      ],
+      "directory": "tools",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/tools/objexport.js",
+      "sha256": "3bbd635fe0244f9d908dc9dea31d7b3b0e7550c6707eda8fcbaf6878b9b768c4",
+      "lines": 34,
+      "exportClues": [
+        "geometryToOBJ",
+        "downloadOBJ"
+      ],
+      "directory": "tools",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/coverage-progress.js",
+      "sha256": "4f21546ccaa082e488115b200860cad9d5d3b732e08cd74ef0235a0c1924e1c3",
+      "lines": 12,
+      "exportClues": [
+        "refreshCoverage"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/environment-panel.js",
+      "sha256": "a6bdece451d3436905aa53bf4845c0ccbabb68bb2fb84b6823567c830ca663ac",
+      "lines": 70,
+      "exportClues": [
+        "mountEnvironmentPanel"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/flow-markers.js",
+      "sha256": "a20a2a0c73210d65232e95509f5fa2ceed2c962ceffe7d18aa2af074a6f4ea14",
+      "lines": 9,
+      "exportClues": [],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/game-portrait-c01.js",
+      "sha256": "78bf958b8588c9cd1c8316bf8beb766b27310655a8b6da797a6f859497dcf033",
+      "lines": 98,
+      "exportClues": [
+        "GAME_SLOTS",
+        "GAME_DRAWERS",
+        "drawGamePortrait"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/game-ui-c06.js",
+      "sha256": "ab4e39e088029f8fb0914c4b407bb3782ee0cd5ebc820a97c9c39c6550247b69",
+      "lines": 212,
+      "exportClues": [
+        "straightLineThrough",
+        "edgeToward",
+        "mountGameUI"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/house-project.js",
+      "sha256": "1c3c0eb0cdd5334620a157e670a4ee47bc69b26eb1d6ab81b4579d9fd766b313",
+      "lines": 60,
+      "exportClues": [
+        "exportHouseProject",
+        "importHouseProject"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/icon-ink.js",
+      "sha256": "7175b1149b398e155e4a6088f1b7a6d8681394b0e40394b687b2780f25bc2f27",
+      "lines": 74,
+      "exportClues": [
+        "DEFAULT_ICONS",
+        "pathLen",
+        "bbox",
+        "inkBalance",
+        "iconSvg",
+        "foldClosure"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/icon-toolbar.js",
+      "sha256": "ed939784822a9afc70eca3ed9f11595b712bc88c814543c00cf2f966ff44096d",
+      "lines": 22,
+      "exportClues": [
+        "mountIconToolbar"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/learnpanel.js",
+      "sha256": "f5ab438e2b3ba985f59412c9579d9ab3d7fcbda4018d73eae1a92f532a913805",
+      "lines": 311,
+      "exportClues": [
+        "mountLearnPanel"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/ui/navigation-review.js",
+      "sha256": "ca91504e0445554d1f28c55c06b5fc673881c1d3bb4606ad04acd7707f0bf96b",
+      "lines": 83,
+      "exportClues": [],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/node-graph-editor.js",
+      "sha256": "ba76feba90939d8ec12da369531757d665c6618fb3aa88b09b4cf3b543891b21",
+      "lines": 22,
+      "exportClues": [],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/ornament.js",
+      "sha256": "f91b77f5fac6aea463bd374831b52cb1c756c99622873d6ca592d054ed79ada5",
+      "lines": 96,
+      "exportClues": [
+        "createOrnament",
+        "createSquiggleOrnament"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/scene-capability-panel.js",
+      "sha256": "0c85ab418cc969627ab49c721125a182dac759ee3afe04adbee60b101c8cdd12",
+      "lines": 58,
+      "exportClues": [
+        "SCENE_CONTROL_GROUPS",
+        "POST_CONTROLS",
+        "BATTLE_CONTROL_GROUPS",
+        "mountSceneCapabilityPanel"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/shading-panel.js",
+      "sha256": "01e2fdfeba2afd08d31cc4790d2103085028101b5165614643018e4f304ad811",
+      "lines": 41,
+      "exportClues": [
+        "mountShadingPanel"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/slot-portrait.js",
+      "sha256": "72896e0f950e1c4b7fcb5cf117adc042db9a08e908aac43fc7c1461060f3f6d8",
+      "lines": 139,
+      "exportClues": [
+        "slotGeometry",
+        "SLOT_DRAWERS",
+        "drawSlotPortrait",
+        "drawSlotSilhouette"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/ui/walkthrough.js",
+      "sha256": "82e68ec317bc39ce8dd5ca7a93016aebcddc6d48c59517b3e5f5177fd8abde95",
+      "lines": 193,
+      "exportClues": [
+        "mountWalkthrough"
+      ],
+      "directory": "ui",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/water/foam-mask.js",
+      "sha256": "99c76b2e8f90cd57b2ab837a66cda77723b80bed9cc0c3f2f04acaef291dce73",
+      "lines": 247,
+      "exportClues": [
+        "rasterLand",
+        "chamferDistance",
+        "landFraction",
+        "buildFoamMask",
+        "sampleGrid",
+        "ObstacleFlow",
+        "auditWavePaths",
+        "clampWavePaths"
+      ],
+      "directory": "water",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/water/land-distance.js",
+      "sha256": "fc40a96221ad30c8252e87a5906fc56d279678d0a16083a21a65d7fd04b60170",
+      "lines": 17,
+      "exportClues": [
+        "waterDistance"
+      ],
+      "directory": "water",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/water/reflection.js",
+      "sha256": "df076315939147a7f45a1ff7fb5c44e66efee72a8d1c0aef4012239adeeaf876",
+      "lines": 34,
+      "exportClues": [
+        "makeReflectionMaterial",
+        "setReflectionStyle"
+      ],
+      "directory": "water",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/water/shore.js",
+      "sha256": "0ab4472edd71e8557d180a291d444440fc4a882639159c7b6e587d62d59e678f",
+      "lines": 343,
+      "exportClues": [
+        "buildShore",
+        "makeSkirtMaterial",
+        "makeWaveMaterial"
+      ],
+      "directory": "water",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/water/waterfall.js",
+      "sha256": "71c7bd4d0b12934a0e248e1de1a16d238a01bc09b0c5eb38ee43dc11ccc994bc",
+      "lines": 119,
+      "exportClues": [
+        "Waterfalls"
+      ],
+      "directory": "water",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/water/watervol.js",
+      "sha256": "567d2096cc612241b7283d6ffebe2ee2540d4ced5093c7586ab1ae1623de17f8",
+      "lines": 81,
+      "exportClues": [
+        "WaterVolume"
+      ],
+      "directory": "water",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/ao-mesh-debug.js",
+      "sha256": "c90f2ce7da229990731784a15c641d8f5a18835de0d9649ebdf49c38aca8ac2d",
+      "lines": 68,
+      "exportClues": [
+        "buildBakeShellGeometry"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/app.js",
+      "sha256": "a8eeed94fb3ca0d8332aaeeb830c722d8d145cc3e6785c41dfaa7107124833ec",
+      "lines": 433,
+      "exportClues": [],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/bary-gizmo.js",
+      "sha256": "c35d1782b91dac84a4d284e92ef3894377a67f06dfafdc75a1686801475a3ec0",
+      "lines": 77,
+      "exportClues": [
+        "pickGizmoCell",
+        "gizmoState",
+        "BaryGizmo"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/battle-navigation.js",
+      "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3",
+      "lines": 227,
+      "exportClues": [
+        "STAIR_STEP_DEPTH",
+        "BattleNavigation"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/build-reel-c09.js",
+      "sha256": "9e64bac4160893fc653f3e1d7e44850c5a04ffd7e54e476be1dfabcff9594f12",
+      "lines": 147,
+      "exportClues": [
+        "REEL_PRESETS",
+        "meshEdgeSegments",
+        "attachBuildReel"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/cloud-deck-layer.js",
+      "sha256": "5b1d2d36f88c87ed24d5c7b34f86239f0e59e9634f1fd0f08b953a09b23bed39",
+      "lines": 197,
+      "exportClues": [
+        "TOWER_PUFFS",
+        "towerPuffs",
+        "towerDensity",
+        "CloudDeckLayer"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/contour-overlay.js",
+      "sha256": "0355ed4f3f0afa52fdfaae246728e05550c9bf1c4ed9b9b4a9ccb504b061b01d",
+      "lines": 434,
+      "exportClues": [
+        "THICK_COLOR_VERT",
+        "THICK_COLOR_FRAG",
+        "makeCornerSquare",
+        "ContourOverlay"
+      ],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/doodle-overlay.js",
+      "sha256": "e3da21b0400ede662998e6f893d4e85fecc77b614b67bb94840255ed44d1e5ab",
+      "lines": 16,
+      "exportClues": [
+        "DoodleOverlay"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/fine-portals.js",
+      "sha256": "9607d28ea213a50bb9d50b73794541c47fc20143104cb8aab43314131b010d58",
+      "lines": 127,
+      "exportClues": [
+        "UNIT_HEIGHT",
+        "LEG_INSET",
+        "undersideAt",
+        "buildFinePortals"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/float-advect-gpu.js",
+      "sha256": "93850efd2e2bf4b4685f44279672954e2d10d9566a8837cc1c2038e304fad960",
+      "lines": 93,
+      "exportClues": [
+        "GPU_VARIANTS",
+        "gpuAdvectionQuality"
+      ],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/float-probe.js",
+      "sha256": "71483f2c9f35d0193efb404e6b537a84c5083fc80a051d5f3aada2f52250c6ea",
+      "lines": 28,
+      "exportClues": [
+        "probeFloatTargets"
+      ],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/flying-town-c06.js",
+      "sha256": "ea6159f2347e142b1eccafff85f627809d0b1761309f1045134cbf3b51184e69",
+      "lines": 58,
+      "exportClues": [
+        "liftColumns",
+        "attachFlyingTown"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/ground-palette-map.js",
+      "sha256": "7f0ca877435798ac8e9e08a08568f48990ac393a675c46f5a10b64963ff5e4a5",
+      "lines": 73,
+      "exportClues": [
+        "rasterCellColors",
+        "attachGroundPaletteMap"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/island-snapshot.js",
+      "sha256": "5354339de52760401172454227bf97dbc1ff5959147a5221128173e4dc58596f",
+      "lines": 89,
+      "exportClues": [
+        "createIslandSnapshot",
+        "snapshotMaterial",
+        "snapshotTexture",
+        "worldSilhouette",
+        "snapshotAlpha",
+        "downsampleMask",
+        "upsampleBilinear",
+        "crispSnapshotCPU",
+        "snapshotMetrics"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/layerednav.js",
+      "sha256": "dde230ab0727f07bc139a6f69e0feea2b850d79de832aa603f68e9afb95786a2",
+      "lines": 85,
+      "exportClues": [
+        "buildLayeredNav"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/nav-diagnostic-overlay.js",
+      "sha256": "ead2cf2d63b594049237d1a9f1873be55cf61c676fa423746396ff75b6f3e8da",
+      "lines": 12,
+      "exportClues": [
+        "mountNavDiagnosticOverlay"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/navgraph.js",
+      "sha256": "ee981274d9be2580b9ec7fa77b7dc887c24f92488b8e5558a4f3d4b6f6b59949",
+      "lines": 202,
+      "exportClues": [
+        "buildNav",
+        "findNavPath",
+        "riverRouteStats",
+        "simplifyNav"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/navlayer.js",
+      "sha256": "9d73e924a445661edec77a32af7143084a7102aaec10aee281000e80bec9661c",
+      "lines": 137,
+      "exportClues": [
+        "NavLayer"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/navmesh-flow.js",
+      "sha256": "a89ea94e28fefe71a1285e87f06e0904c782ec0134f392465bbe0836bda8352f",
+      "lines": 419,
+      "exportClues": [
+        "buildNavMesh",
+        "insidePoly",
+        "locate",
+        "heightAt",
+        "buildVertexField",
+        "faceGradient",
+        "buildFaceDirs",
+        "flowAt",
+        "guardedFlowAt",
+        "stepCrowd",
+        "moveOnMesh",
+        "navMeshFromTerraces",
+        "buildPolyField",
+        "portalsAlong",
+        "funnelPath",
+        "midpointPath",
+        "pathStats",
+        "shortcutPath",
+        "navMeshFromLayeredGraph"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/outline-painted-normal.js",
+      "sha256": "6dde11f4ae9a16f12dac0286ebdbbf92782d0025db215502908b0c198c24ad05",
+      "lines": 23,
+      "exportClues": [
+        "paintedNormalMaterial"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/outline-pass.js",
+      "sha256": "d721a09e25b6ed543ca73c925d3f6bc6b1466f18dbc5db3d11187a14236a9a12",
+      "lines": 292,
+      "exportClues": [
+        "ScreenOutlinePass",
+        "screenEdges"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/outline.js",
+      "sha256": "c044c65a997ccf919a153a30b23342cfab662a02f36c416ea8010296f5108ca2",
+      "lines": 113,
+      "exportClues": [
+        "OutlineLayers"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/palette-png.js",
+      "sha256": "5fe0568e54e4f0da9ab8e6a4b8291304b8e33f1956973ac039b6039618280869",
+      "lines": 62,
+      "exportClues": [
+        "decodePngBytes",
+        "watchPalettePng",
+        "exportPalettePng"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/penumbra-layer.js",
+      "sha256": "aac59fbcc9ee2bae4947cc2cb65c034e63137d159ce2b820228e569b11a350c6",
+      "lines": 9,
+      "exportClues": [
+        "PenumbraLayer"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/penumbra-terrain.js",
+      "sha256": "6c4df78a8e677e7f8c5d4d1ef6f0c6fabef36ea1a67c7829afdf61c821df2f19",
+      "lines": 126,
+      "exportClues": [
+        "PENUMBRA_TERRAIN_GLSL",
+        "packPenumbraReceivers",
+        "samplePacked",
+        "PenumbraTerrain"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/prop-anim-layer.js",
+      "sha256": "2cdc18d36b5bd0b16d5a7a017156ba9e7af062bbe8c3c674eacbd67b0d4ae1b8",
+      "lines": 154,
+      "exportClues": [
+        "collectWorldProps",
+        "propVerts",
+        "PropAnimLayer",
+        "attachPropAnim"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/prop-anim-yard-r56.js",
+      "sha256": "a1953ed9a5022eff2fa5c8fbefae6089ec0ff76cf5b3077d51d5ed3a81c5a461",
+      "lines": 63,
+      "exportClues": [
+        "collectYardProps",
+        "yardPropVerts",
+        "attachYardPropAnim"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/save.js",
+      "sha256": "523d3336f6e30e38948b0de4107e7dfad03d0cdb31baba0cab9f1c33822d1ba7",
+      "lines": 184,
+      "exportClues": [
+        "encodeWorld",
+        "peekGridRadius",
+        "decodeWorld"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/scenes.js",
+      "sha256": "d55c4dd400f232e500ccf8ab64dbd8b137a186ce68256bbae6fc1ec948e12508",
+      "lines": 135,
+      "exportClues": [
+        "SCENES",
+        "buildScene",
+        "generateFusion"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/space-visibility.js",
+      "sha256": "31f7db5ffdb806133d8af0f80d998f81d3c77be626ce96fdcf982462646942dc",
+      "lines": 15,
+      "exportClues": [
+        "SpaceVisibilityOverlay"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/terrace-edges.js",
+      "sha256": "8520d2bc68b776c18e9b851bcda4a5369ef67daf97726a083ec274d2d57fafff",
+      "lines": 17,
+      "exportClues": [
+        "TerraceEdgeOverlay"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/town-skin-layer.js",
+      "sha256": "57b96f96aa704588ec993e737cab69d78800afa7eb6177fc5aef069e23c9d66d",
+      "lines": 157,
+      "exportClues": [
+        "recordVertexBase",
+        "TownSkinLayer"
+      ],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/townDemo.js",
+      "sha256": "bff7742dc1b58a0304194e75caae977483f5182bd36d072230d2946987bcf91a",
+      "lines": 158,
+      "exportClues": [
+        "generateTown"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "identical"
+    },
+    {
+      "path": "src/world/traffic.js",
+      "sha256": "61aa44c6d3830893fc3e1cfe6262263e66f68125a450d76a4776f68d794486d1",
+      "lines": 172,
+      "exportClues": [
+        "narrowCells",
+        "leftLaneTarget",
+        "localSeparation",
+        "passageMarkers",
+        "heightRaster",
+        "rasterAt",
+        "sightFade"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/trajectory-preview.js",
+      "sha256": "1ba559852c06041fc9dbc8b9f010cef3cfb27cc66222189220a54ecb990ae365",
+      "lines": 18,
+      "exportClues": [
+        "mountTrajectoryPreview"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/vertex-dual-overlay.js",
+      "sha256": "19be7c55f54398e366c3846e3ec03041c41275eb30f45f115115697afa66341f",
+      "lines": 16,
+      "exportClues": [
+        "VertexDualOverlay"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c04.js",
+      "sha256": "bb18955b1be1aa6f2b7951a01193f555ed1df884d3e98e4cbafcb03a515dc961",
+      "lines": 169,
+      "exportClues": [
+        "C04_KEYS",
+        "parseC04",
+        "dualCellSegments",
+        "ssaoKernel",
+        "installC04"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c07.js",
+      "sha256": "d79e530c09f59cd6efbfdc1fc62b7ca79862f17c28294239764fd20816c854b1",
+      "lines": 195,
+      "exportClues": [
+        "C07_KEYS",
+        "parseC07",
+        "aoLayerField",
+        "installC07"
+      ],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c10.js",
+      "sha256": "19e54e7f94be120680efb7a7a44acb0d04b4a6a5ada1320b377613b21db7efba",
+      "lines": 161,
+      "exportClues": [
+        "C10_KEYS",
+        "parseC10",
+        "installC10"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c11-grassline.js",
+      "sha256": "d8fdadb0c577ed55fefb6c43c6827be1aef5db71df3ee1208f7c83f95fd543fa",
+      "lines": 58,
+      "exportClues": [
+        "patchTuftShader",
+        "install"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c11-megagi.js",
+      "sha256": "4e9dc2aaf67bf0e0ca9c06bd575429f4dd2cc3bf78965d1dd8a67ef960094c93",
+      "lines": 63,
+      "exportClues": [
+        "install"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c11-mountaintex.js",
+      "sha256": "33e0c4a654737de5fdc7d8c6291109e65321080518728312561a16e2672a56f0",
+      "lines": 51,
+      "exportClues": [
+        "MOUNTAIN_TEX_GLSL",
+        "patchMountainShader",
+        "install"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c11-normalline.js",
+      "sha256": "6ec3dacc4add46f12c1a7ce816e981f599471219ff5383df7f1f25b488f158ac",
+      "lines": 119,
+      "exportClues": [
+        "nearestCopy",
+        "paintedNormalMaterial",
+        "ND_TOKEN",
+        "patchCompositeSource",
+        "renderWithNormalFilter",
+        "install"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c11-shrubband.js",
+      "sha256": "bd50ae68b01fbeba0153ccda4f03b25703460660f49eede93b4feb3394e9b74a",
+      "lines": 108,
+      "exportClues": [
+        "SHRUB_C11_GLSL",
+        "SHRUB_C11_WALL",
+        "patchShrubShader",
+        "install"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-c11.js",
+      "sha256": "17f8064416f4ff0c37380c8fc552028625781741bd078b0d5565d9671ffdf994",
+      "lines": 50,
+      "exportClues": [
+        "C11_MODULES",
+        "C11_KEYS",
+        "parseC11",
+        "installC11"
+      ],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": false,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-mixed-persp.js",
+      "sha256": "a955337454914706729cf7a935c9ad6b9a791e39565b65d6a5761544fdf20183",
+      "lines": 70,
+      "exportClues": [
+        "attachMixedPerspective"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-post-extras.js",
+      "sha256": "e93063f215c66929835f663670b7d52a809654e53c69a205f7b9279cfde47a84",
+      "lines": 297,
+      "exportClues": [
+        "POST_EXTRAS",
+        "ORBIT_SMEAR_CENTER_GLSL",
+        "screenOmegaDt",
+        "parseFx",
+        "installPostExtras"
+      ],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view-shading.js",
+      "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9",
+      "lines": 361,
+      "exportClues": [
+        "SHADING_KEYS",
+        "FEATURE_ORDER",
+        "ShadingExtras",
+        "shadingKeysFromURL"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/view.js",
+      "sha256": "90da059ffd1f8e9be8f4b0813c5c4d3229cbd0140459717bf97af587758a1484",
+      "lines": 1480,
+      "exportClues": [
+        "View"
+      ],
+      "directory": "world",
+      "reuseCandidate": "主线程/场景入口适配",
+      "three": true,
+      "dom": true,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    },
+    {
+      "path": "src/world/visibility.js",
+      "sha256": "2929429695af29dbb8ebfd75ccb5b1e9de2824d2726299122ea5d571855c5832",
+      "lines": 11,
+      "exportClues": [
+        "VisibilityOverlay"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/voxel-ghost.js",
+      "sha256": "985516ac4c74fc738587677ea95979bc0b8aec6135f0637b71f3e9791a889c46",
+      "lines": 257,
+      "exportClues": [
+        "hash01",
+        "rasterizeBoxes",
+        "rasterizeMesh",
+        "LAYER_PALETTE",
+        "layerMaterials",
+        "spineColumn",
+        "voxelOrder",
+        "previewState",
+        "isoProject",
+        "depthOf",
+        "cubeFaces",
+        "phaseCounts"
+      ],
+      "directory": "world",
+      "reuseCandidate": "纯数据/Worker调用候选（需验证）",
+      "three": false,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "absent"
+    },
+    {
+      "path": "src/world/worldmesh.js",
+      "sha256": "40eebb20a7eab5a8d9e77612f700fef72773867d4f4f9b3949ffe20e2122d48c",
+      "lines": 277,
+      "exportClues": [
+        "WorldMesh"
+      ],
+      "directory": "world",
+      "reuseCandidate": "Three几何或渲染上下文适配",
+      "three": true,
+      "dom": false,
+      "staticDirectGameImports": [],
+      "gameCopy": "different"
+    }
+  ],
+  "limits": [
+    "Static export clues may include examples/comments; no claim to parse full JS syntax.",
+    "Static game import clues exclude vendored copies and do not prove execution.",
+    "No modules are marked complete or behaviorally verified by this inventory."
+  ]
+}

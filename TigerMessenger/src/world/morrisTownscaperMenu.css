@@ -199,3 +199,10 @@
 #morris-townscaper {background:var(--panel)!important;color:var(--ink)!important;border-radius:14px!important;backdrop-filter:blur(12px) saturate(1.4);box-shadow:var(--shadow);pointer-events:auto;}
 #morris-townscaper-hud #morris-town-palette {pointer-events:auto;}
 #lp-dlg {z-index:240;}
+
+/* The scene selector stays reachable while a native castle/city editor owns the scene. */
+#morris-townscaper-hud.native-build-target #morris-town-palette,
+#morris-townscaper-hud.native-build-target #morris-town-tools,
+#morris-townscaper-hud.native-build-target #morris-town-topright,
+#morris-townscaper-hud.native-build-target #learnpanel{display:none!important}
+#build-save-scene{margin:5px 0;padding:6px 10px;border:1px solid #9db8b0;border-radius:6px;background:#eef5ec;color:#25483e;cursor:pointer}

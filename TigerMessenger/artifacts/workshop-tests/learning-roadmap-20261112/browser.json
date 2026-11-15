@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "moduleCount": 170,
+  "saved": {
+    "tm.object.pipeline.v2": "{\"goal\":\"物件自然化：布局输入 → 稳定尺寸与朝向 → 间距松弛 → 候选验证；验收：固定种子可重放；手工锁定不变；作用范围外不变；无新增重叠；根部承托实景复核\",\"nodes\":[{\"id\":\"object.scale-variety\",\"enabled\":true,\"params\":{\"amount\":0.15}},{\"id\":\"object.yaw-variety\",\"enabled\":true,\"params\":{\"degrees\":90}},{\"id\":\"object.spacing-relax\",\"enabled\":true,\"params\":{\"maxMove\":0.35}}]}"
+  },
+  "errors": [],
+  "scope": "Isolated parent UI and live snapshot API; no game geometry execution"
+}

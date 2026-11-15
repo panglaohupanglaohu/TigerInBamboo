@@ -1,0 +1,127 @@
+{
+  "report": {
+    "base": {
+      "opt": {
+        "style": "fine",
+        "topBreak": false,
+        "haze": false
+      },
+      "particles": 71,
+      "lobeStyle": "fine",
+      "topBreak": false,
+      "hazeQuads": 0,
+      "hazeVisible": false,
+      "bulges": 8,
+      "colW": 89.31,
+      "meanGap": 36.52,
+      "ratio": 0.41,
+      "topGapRows": 5,
+      "drawn": 23132,
+      "maxGapCards": 0.21,
+      "medGapCards": 0.06,
+      "hazeOnly": null
+    },
+    "big": {
+      "opt": {
+        "style": "big",
+        "topBreak": false,
+        "haze": false
+      },
+      "particles": 20,
+      "lobeStyle": "big",
+      "topBreak": false,
+      "hazeQuads": 0,
+      "hazeVisible": false,
+      "bulges": 7,
+      "colW": 72.69,
+      "meanGap": 26.38,
+      "ratio": 0.36,
+      "topGapRows": 3,
+      "drawn": 18419,
+      "maxGapCards": 0.43,
+      "medGapCards": 0.21,
+      "hazeOnly": null
+    },
+    "detach": {
+      "opt": {
+        "style": "big",
+        "topBreak": true,
+        "haze": false
+      },
+      "particles": 16,
+      "lobeStyle": "big",
+      "topBreak": true,
+      "hazeQuads": 0,
+      "hazeVisible": false,
+      "bulges": 7,
+      "colW": 76.72,
+      "meanGap": 28.66,
+      "ratio": 0.37,
+      "topGapRows": 3,
+      "drawn": 18780,
+      "maxGapCards": 0.43,
+      "medGapCards": 0.26,
+      "hazeOnly": null
+    },
+    "haze": {
+      "opt": {
+        "style": "big",
+        "topBreak": true,
+        "haze": true
+      },
+      "particles": 16,
+      "lobeStyle": "big",
+      "topBreak": true,
+      "hazeQuads": 8,
+      "hazeVisible": true,
+      "bulges": 7,
+      "colW": 76.72,
+      "meanGap": 28.66,
+      "ratio": 0.37,
+      "topGapRows": 3,
+      "drawn": 18782,
+      "maxGapCards": 0.43,
+      "medGapCards": 0.26,
+      "hazeOnly": {
+        "any": 33744,
+        "low": 33744,
+        "hard": 0,
+        "bboxW": 360,
+        "bboxH": 111,
+        "aspect": 3.24
+      }
+    },
+    "noHaze": {
+      "opt": {
+        "style": "big",
+        "topBreak": true,
+        "haze": false
+      },
+      "particles": 16,
+      "lobeStyle": "big",
+      "topBreak": true,
+      "hazeQuads": 8,
+      "hazeVisible": false,
+      "bulges": 7,
+      "colW": 76.72,
+      "meanGap": 28.66,
+      "ratio": 0.37,
+      "topGapRows": 3,
+      "drawn": 18780,
+      "maxGapCards": 0.43,
+      "medGapCards": 0.26,
+      "hazeOnly": null
+    },
+    "emitOn": {
+      "on": true,
+      "born": 242,
+      "maxQuiet": 1.2
+    },
+    "emitOff": {
+      "on": false,
+      "born": 283,
+      "maxQuiet": 0.2
+    }
+  },
+  "errors": []
+}

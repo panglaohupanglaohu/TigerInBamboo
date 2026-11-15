@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "① 默认关：窄带里没有光柱",
+      "pass": true,
+      "detail": "beams=0 px=0"
+    },
+    {
+      "name": "② 下令起一根柱",
+      "pass": true,
+      "detail": "beams=1 w=0.3 h=24"
+    },
+    {
+      "name": "② 画面里真的画出光柱",
+      "pass": true,
+      "detail": "px=18492（关时 0）"
+    },
+    {
+      "name": "② 竖直跨度到画面上缘（不是 0.9 单位小条）",
+      "pass": true,
+      "detail": "y0=0 y1=437 span=437px"
+    },
+    {
+      "name": "② 宽度是细柱不是面",
+      "pass": true,
+      "detail": "宽 45px / 画面 1440px"
+    },
+    {
+      "name": "② 线芯色 ≈ #f0fa90",
+      "pass": true,
+      "detail": "mean=[236,246,146]"
+    },
+    {
+      "name": "③ 柱底落在旗顶",
+      "pass": true,
+      "detail": "柱底 y=437 旗顶投影 y=438"
+    },
+    {
+      "name": "④ 0.22s 后自动回收",
+      "pass": true,
+      "detail": "beams=0 残余 0px"
+    },
+    {
+      "name": "⑤ 关掉后可逆",
+      "pass": true,
+      "detail": "flag=false beams=0"
+    },
+    {
+      "name": "无控制台异常",
+      "pass": true,
+      "detail": "0 条"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import {samplePath} from '../../../../townscaper-web/REACodeRefactoring/src/core/path-samples.js';
 /**
  * 物件工坊的能力代码。作用对象是「物件布局」：每个可编辑物件的位置、朝向、大小（object-edits.js 的增量）。
  *   layout 行：{ id, kind, name, x, z, r（占地半径）, edit:{dx,dy,dz,ry,s,hidden}, locked（你手工改过 → 默认不碰）}
@@ -22,6 +23,28 @@ export function overlaps(layout, edits = {}, factor = 0.8, involving = null) {
 const groups = (layout, p) => { const g = new Map(); for (const r of layout) if (!r.edit.hidden && !r.outOfScope && (p.includeEdited || !r.locked)) { if (!g.has(r.kind)) g.set(r.kind, []); g.get(r.kind).push(r); } return [...g].filter(([, rows]) => rows.length >= (layout.some((r) => r.outOfScope) ? 1 : 3)); };
 
 export const OBJECT_CAPABILITIES = [
+  { meta: { id: 'object.path-spacing', domain: 'placement', name: '沿现有排布等距', does: '复用重构库弧长采样，把同类物件沿现有折线均匀分布。两端和手工锁定物件作锚点；超过位移预算或增加重叠的段保持原样。只调布局，不生成道路或通行保证。',
+      related: [], modules: ['src/core/path-samples.js'],
+      keywords: ['等距', '间隔', '一排', '排布', '路径', 'spacing'],
+      params: { axis: { label: '排序方向°', min: -180, max: 180, step: 15, default: 0 }, maxMove: { label: '最大移动', min: 0.05, max: 1, step: 0.05, default: 0.35 } } },
+    match: L => {const kinds=new Map();for(const r of L)if(!r.edit.hidden&&!r.outOfScope){if(!kinds.has(r.kind))kinds.set(r.kind,[]);kinds.get(r.kind).push(r);}return [...kinds].filter(([,rs])=>rs.length>=3).map(([id,rs])=>({id,count:rs.length,reason:'沿现有物件折线等弧长分布，锁定物件作锚点'}));},
+    run(L,p){
+      const kinds=new Map(),edits={};for(const r of L)if(!r.edit.hidden&&!r.outOfScope){if(!kinds.has(r.kind))kinds.set(r.kind,[]);kinds.get(r.kind).push(r);}
+      const a=p.axis*Math.PI/180,proj=r=>{const [x,z]=posOf(r);return x*Math.cos(a)+z*Math.sin(a);};
+      for(const rows of kinds.values()){
+        if(rows.length<3)continue;rows.sort((a,b)=>proj(a)-proj(b)||a.id.localeCompare(b.id));
+        const anchors=[0,...rows.map((r,i)=>r.locked?i:-1).filter(i=>i>0&&i<rows.length-1),rows.length-1];
+        for(let j=1;j<anchors.length;j++){
+          const lo=anchors[j-1],hi=anchors[j];if(hi-lo<2)continue;
+          const path=rows.slice(lo,hi+1).map(r=>{const [x,z]=posOf(r);return[x,0,z];});
+          const length=path.slice(1).reduce((s,q,i)=>s+Math.hypot(q[0]-path[i][0],q[2]-path[i][2]),0);if(length<1e-8)continue;
+          const samples=samplePath(path,{spacing:length/(hi-lo),maxSamples:rows.length+2}).points,candidate={};let valid=true;
+          for(let k=1;k<hi-lo;k++){const r=rows[lo+k],[x,z]=posOf(r),q=samples[k];if(Math.hypot(q[0]-x,q[2]-z)>p.maxMove+1e-8){valid=false;break;}if(Math.hypot(q[0]-x,q[2]-z)>1e-7)candidate[r.id]={...r.edit,dx:q[0]-r.x,dz:q[2]-r.z};}
+          if(valid&&overlaps(L,{...edits,...candidate}).count<=overlaps(L,edits).count)Object.assign(edits,candidate);
+        }
+      }return{edits};
+    } },
+
   { meta: { id: 'object.scale-variety', domain: 'variant', name: '同类尺寸变化', does: '同一种物件（如一排悬铃树）给出稳定的大小差异，不再一模一样。按物件 ID 取种子，重跑结果不变。',
       keywords: ['大小', '尺寸', '变化', '多样', '一样', '单调', '自然', 'scale'], related: ['1580158269267406849', '847717312912211970'],
       params: { amount: { label: '变化幅度', min: 0.05, max: 0.35, step: 0.05, default: 0.15 }, includeEdited: { label: '包含手工改过的', type: 'bool', default: false } } },
@@ -58,9 +81,10 @@ export const describeObjectCapabilities = () => OBJECT_CAPABILITIES.map((c) => (
 export function paramsFor(cap, given = {}) { const o = {}; for (const [k, d] of Object.entries(cap.meta.params)) o[k] = d.type === 'bool' ? !!(given[k] ?? d.default) : Math.max(d.min, Math.min(d.max, Number(given[k] ?? d.default))); return o; }
 export function matchObjects(layout) { return OBJECT_CAPABILITIES.map((c) => { const t = c.match(layout, paramsFor(c)); return { id: c.meta.id, count: t.reduce((a, x) => a + x.count, 0), targets: t }; }); }
 /** 按顺序执行；后一步看到前一步的结果 */
-export function runObjectPlan(layout, steps) {
+export function runObjectPlan(layout, steps, onStep) {
   let L = layout.map((r) => ({ ...r, edit: { ...r.edit } })); const all = {}, report = [];
   for (const s of steps) {
+    onStep?.(s.id);
     const cap = OBJECT_CAPABILITIES.find((c) => c.meta.id === s.id); if (!cap) { report.push({ id: s.id, status: 'missing' }); continue; }
     const params = paramsFor(cap, s.params), { edits } = cap.run(L, params), ids = Object.keys(edits);
     for (const id of ids) all[id] = edits[id];

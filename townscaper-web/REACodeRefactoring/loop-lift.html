@@ -1,0 +1,138 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>完美环 → 飞岛 · REACode重构版</title><link rel="icon" href="data:,"><style>
+body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}
+header{padding:12px 22px 6px}canvas{display:block;margin:0 auto 18px;background:#f7fbf9;border-radius:10px;box-shadow:0 1px 3px rgba(32,52,60,.12)}
+a{color:#26758a}code{background:#e4efec;padding:0 4px;border-radius:4px}
+label{margin-right:16px}output{font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:18px;flex-wrap:wrap;padding:0 22px 8px;font-size:13px;color:#456}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+</style>
+<header><b>完美环 → 飞岛</b> · <a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <a href="artifacts/coverage/1313837640366596096-review.md">逐帧证据</a>
+<p>1313837640366596096：Townscaper 的飞行城镇更新——<strong>在网格上找到完美环，那一圈就整片离开水面悬空</strong>。片子里是转台：岛底面一圈亮黄船壳、四五根极细的腿直落到水面（腿脚有涟漪），岛不建不拆。
+这里用 <code>src/core/grid.js</code> 的拓扑直线判环（回到起点 = <code>reason:'loop'</code>），再把环内格按"离环越远抬得越高"做成抬升场，腿沿环等弧长布置、竖直落到水面。左：平面（格按抬升高度上色）；右：侧视剖面。</p>
+<label>环 <select id="loop"></select></label>
+<label>抬升 <input id="peak" type="range" min="0.8" max="4" step="0.1" value="2.4"><output id="peakv">2.4</output></label>
+<label>腿距 <input id="spacing" type="range" min="0.6" max="3" step="0.1" value="1.1"><output id="spacingv">1.1</output></label>
+<span id="status">加载…</span></header>
+<div class="legend"><span><i class="sw" style="background:#1f7a8c"></i>完美环（拓扑直线绕回起点）</span><span><i class="sw" style="background:#f2d16b"></i>环内格（颜色 = 抬升高度）</span><span><i class="sw" style="background:#2b3f47"></i>支撑腿</span><span><i class="sw" style="background:#bfe3ee"></i>水面</span></div>
+<canvas id="cv" width="1060" height="560"></canvas>
+<script type="module">
+import { buildQuadGrid, traceStraightReport } from './src/core/grid.js';
+import { findLoops, liftField, hullDepth, supportLegs, distanceToPolygon } from './src/core/loop-lift.js';
+
+const $ = (s) => document.querySelector(s);
+const cv = $('#cv'), g2 = cv.getContext('2d');
+const DPR = Math.min(2, window.devicePixelRatio || 1);
+cv.width = 1060 * DPR; cv.height = 560 * DPR; cv.style.width = '1060px'; cv.style.height = '560px';
+g2.scale(DPR, DPR);
+
+const grid = buildQuadGrid({ radius: 10, hexSize: 0.62, seed: 1337 });
+const loops = findLoops(grid);
+$('#loop').innerHTML = loops.map((l, i) => `<option value="${i}">#${i + 1} · ${l.cells.length} 格 · 面积 ${l.area.toFixed(1)}</option>`).join('');
+$('#status').textContent = `网格 ${grid.cells.length} 格 · 不重复完美环 ${loops.length} 个`;
+
+// 抬升高度 → 颜色：船壳边沿浅黄、圈心橙红（片子里的船壳亮黄、上部砖红）
+const lerp = (a, b, t) => a + (b - a) * t;
+function heightColor(h, peak) {
+  const t = peak > 0 ? Math.max(0, Math.min(1, h / peak)) : 0;
+  const c0 = [242, 209, 107], c1 = [214, 92, 66];
+  return `rgb(${Math.round(lerp(c0[0], c1[0], t))},${Math.round(lerp(c0[1], c1[1], t))},${Math.round(lerp(c0[2], c1[2], t))})`;
+}
+
+function draw() {
+  const L = loops[+$('#loop').value];
+  const peak = +$('#peak').value, spacing = +$('#spacing').value;
+  const field = liftField(L, { peak, rim: 0.02 });
+  const depth = hullDepth(L.area);
+  const legOut = supportLegs(L, { spacing, depth });
+  const W = 1060, H = 560;
+  g2.clearRect(0, 0, W, H);
+  g2.font = '13px system-ui'; g2.textBaseline = 'top';
+
+  // ---------- 左：平面 ----------
+  const PX = 24, PY = 34, PW = 500, PH = 500;
+  const bb = L.bbox, spanX = bb[2] - bb[0], spanZ = bb[3] - bb[1];
+  const s = Math.min(PW / (spanX * 1.25), PH / (spanZ * 1.25));
+  const ox = PX + PW / 2 - ((bb[0] + bb[2]) / 2) * s, oy = PY + PH / 2 - ((bb[1] + bb[3]) / 2) * s;
+  const tx = (x) => ox + x * s, tz = (z) => oy + z * s;
+  g2.fillStyle = '#dfeae6';
+  for (const c of grid.cells) {
+    g2.beginPath();
+    c.pts.forEach((p, i) => (i ? g2.lineTo(tx(p.x), tz(p.z)) : g2.moveTo(tx(p.x), tz(p.z))));
+    g2.closePath(); g2.fill();
+  }
+  const inLoop = new Set(L.cells.map((c) => c.id));
+  for (const c of grid.cells) {
+    if (!inLoop.has(c.id)) continue;
+    g2.fillStyle = heightColor(field.heights.get(c.id), peak);
+    g2.beginPath();
+    c.pts.forEach((p, i) => (i ? g2.lineTo(tx(p.x), tz(p.z)) : g2.moveTo(tx(p.x), tz(p.z))));
+    g2.closePath(); g2.fill();
+  }
+  g2.strokeStyle = '#1f7a8c'; g2.lineWidth = 2.4; g2.beginPath();
+  L.polygon.forEach((p, i) => (i ? g2.lineTo(tx(p[0]), tz(p[1])) : g2.moveTo(tx(p[0]), tz(p[1]))));
+  g2.closePath(); g2.stroke();
+  for (const l of legOut.legs) {
+    g2.fillStyle = '#2b3f47'; g2.beginPath(); g2.arc(tx(l.x), tz(l.z), 3, 0, Math.PI * 2); g2.fill();
+  }
+  g2.fillStyle = '#20343c'; g2.fillText(`平面 · 环 ${L.cells.length} 格 · 面积 ${L.area.toFixed(2)}`, PX, 12);
+
+  // ---------- 右：侧视剖面 ----------
+  const EX = 560, EW = 476, EH = 500, EY = 34;
+  const zs = legOut.legs.map((l) => l.z);
+  const zMin = Math.min(...zs), zMax = Math.max(...zs);
+  const zSpan = Math.max(0.001, zMax - zMin);
+  // 剖面比例尺固定（不随 peak 自适应），否则把峰值调高时画面自己缩小，看不出"抬得更高"
+  const topMax = 4.6, botMin = -1.6;
+  const es = Math.min(EW / (zSpan * 1.15), EH / (topMax - botMin));
+  const ex = EX + EW / 2 - ((zMin + zMax) / 2) * es;
+  const y0 = EY + 40 + topMax * es;          // 水面
+  const exz = (z) => ex + z * es, ey = (y) => y0 - y * es;
+
+  // 水面
+  g2.fillStyle = '#bfe3ee'; g2.fillRect(EX + 6, y0, EW - 12, EH - (y0 - EY) + 30);
+  g2.strokeStyle = '#7fb6c8'; g2.lineWidth = 1; g2.beginPath(); g2.moveTo(EX + 6, y0 + 0.5); g2.lineTo(EX + EW - 6, y0 + 0.5); g2.stroke();
+
+  // 岛体：按 z 切片，每片一条从 -depth 到该格高度的竖条（近似剖面）
+  const slices = L.cells
+    .map((c) => ({ z: c.cz, h: field.heights.get(c.id) }))
+    .sort((a, b) => a.z - b.z);
+  const bw = Math.max(2, es * 0.42);
+  for (const sl of slices) {
+    const h = sl.h;
+    g2.fillStyle = heightColor(h, peak);
+    g2.fillRect(exz(sl.z) - bw / 2, ey(h), bw, ey(-depth) - ey(h));
+    g2.fillStyle = 'rgba(96,146,120,.55)';   // 草皮/建筑那层薄边
+    g2.fillRect(exz(sl.z) - bw / 2, ey(h) - 3, bw, 3);
+  }
+  // 船壳（底面一条亮黄带）
+  g2.strokeStyle = '#c9a227'; g2.lineWidth = 3.5;
+  g2.beginPath(); g2.moveTo(exz(zMin), ey(-depth)); g2.lineTo(exz(zMax), ey(-depth)); g2.stroke();
+
+  // 腿 + 涟漪
+  for (const l of legOut.legs) {
+    g2.strokeStyle = '#2b3f47'; g2.lineWidth = 2;
+    g2.beginPath(); g2.moveTo(exz(l.z), ey(-depth)); g2.lineTo(exz(l.z), ey(0)); g2.stroke();
+    g2.strokeStyle = 'rgba(63,120,140,.55)'; g2.lineWidth = 1;
+    g2.beginPath(); g2.ellipse(exz(l.z), ey(0), 5 + l.splash * es * 3, 2.2, 0, 0, Math.PI * 2); g2.stroke();
+  }
+  g2.fillStyle = '#20343c';
+  g2.fillText(`侧视 · 抬升峰值 ${field.stats.peak.toFixed(2)} · 船壳 ${depth.toFixed(2)} · 腿 ${legOut.legs.length} 条`, EX, 12);
+  g2.fillStyle = '#456';
+  g2.fillText(`最低 ${field.stats.rim.toFixed(2)}（船壳边沿贴水）`, EX, H - 26);
+
+  window.loopLiftReview = {
+    grid: grid.cells.length, loops: loops.length,
+    stats: { cells: L.cells.length, area: +L.area.toFixed(3), peak: +field.stats.peak.toFixed(3), rim: +field.stats.rim.toFixed(3), depth: +depth.toFixed(3), legs: legOut.legs.length },
+    legGaps: legOut.legs.map((l, i) => { const n = legOut.legs[(i + 1) % legOut.legs.length]; return +Math.hypot(n.x - l.x, n.z - l.z).toFixed(3); }),
+    paint: [...inLoop].length,
+  };
+  $('#status').textContent = `环内 ${L.cells.length} 格 · 峰值 ${field.stats.peak.toFixed(2)} · 船壳 ${depth.toFixed(2)} · 腿 ${legOut.legs.length} 条`;
+}
+
+for (const id of ['#loop', '#peak', '#spacing']) $(id).addEventListener('input', () => {
+  if (id === '#peak') $('#peakv').textContent = (+$('#peak').value).toFixed(1);
+  if (id === '#spacing') $('#spacingv').textContent = (+$('#spacing').value).toFixed(1);
+  draw();
+});
+draw();
+</script></html>

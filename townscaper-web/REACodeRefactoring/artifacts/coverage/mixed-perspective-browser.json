@@ -1,0 +1,210 @@
+{
+  "k1": {
+    "k": 1,
+    "stock": {
+      "probes": 4,
+      "maxAbsSpreadPct": 8.05,
+      "maxAbsCenterShiftPx": 16.5,
+      "widths": [
+        87,
+        69,
+        56,
+        47
+      ],
+      "monotonicDepth": true,
+      "totalRows": 301
+    },
+    "mixed": {
+      "probes": 4,
+      "maxAbsSpreadPct": 0,
+      "maxAbsCenterShiftPx": 0,
+      "widths": [
+        88,
+        70,
+        57,
+        47
+      ],
+      "monotonicDepth": true,
+      "totalRows": 283
+    },
+    "analytic": [
+      {
+        "name": "P1",
+        "driftNdcStock": 0.0544,
+        "driftNdcMixed": 0,
+        "taperStockPct": -8.1,
+        "taperMixedPct": 0,
+        "widthNdcStock": 0.2714,
+        "widthNdcMixed": 0.2754,
+        "pxPerNdc": 320
+      },
+      {
+        "name": "P2",
+        "driftNdcStock": 0.0172,
+        "driftNdcMixed": 0,
+        "taperStockPct": -6.36,
+        "taperMixedPct": 0,
+        "widthNdcStock": 0.2167,
+        "widthNdcMixed": 0.2192,
+        "pxPerNdc": 320
+      },
+      {
+        "name": "P3",
+        "driftNdcStock": 0.0068,
+        "driftNdcMixed": 0,
+        "taperStockPct": -5.06,
+        "taperMixedPct": 0,
+        "widthNdcStock": 0.1744,
+        "widthNdcMixed": 0.1761,
+        "pxPerNdc": 320
+      },
+      {
+        "name": "P4",
+        "driftNdcStock": 0.0239,
+        "driftNdcMixed": 0,
+        "taperStockPct": -4.2,
+        "taperMixedPct": 0,
+        "widthNdcStock": 0.146,
+        "widthNdcMixed": 0.1471,
+        "pxPerNdc": 320
+      }
+    ],
+    "repeatDriftPx": 0,
+    "perProbeStock": [
+      {
+        "name": "P1",
+        "visible": true,
+        "rows": 92,
+        "yBottom": 31,
+        "yTop": 122,
+        "widthBottomPx": 87,
+        "widthTopPx": 94,
+        "widthMidPx": 90,
+        "widthSpreadPct": -8.05,
+        "centerShiftPx": -16.5,
+        "blankRows": 0
+      },
+      {
+        "name": "P2",
+        "visible": true,
+        "rows": 80,
+        "yBottom": 151,
+        "yTop": 230,
+        "widthBottomPx": 69,
+        "widthTopPx": 74,
+        "widthMidPx": 71,
+        "widthSpreadPct": -7.25,
+        "centerShiftPx": -5.5,
+        "blankRows": 0
+      },
+      {
+        "name": "P3",
+        "visible": true,
+        "rows": 69,
+        "yBottom": 243,
+        "yTop": 311,
+        "widthBottomPx": 56,
+        "widthTopPx": 59,
+        "widthMidPx": 57,
+        "widthSpreadPct": -5.36,
+        "centerShiftPx": 2.5,
+        "blankRows": 0
+      },
+      {
+        "name": "P4",
+        "visible": true,
+        "rows": 60,
+        "yBottom": 305,
+        "yTop": 364,
+        "widthBottomPx": 47,
+        "widthTopPx": 49,
+        "widthMidPx": 48,
+        "widthSpreadPct": -4.26,
+        "centerShiftPx": 7,
+        "blankRows": 0
+      }
+    ],
+    "perProbeMixed": [
+      {
+        "name": "P1",
+        "visible": true,
+        "rows": 96,
+        "yBottom": 32,
+        "yTop": 127,
+        "widthBottomPx": 88,
+        "widthTopPx": 88,
+        "widthMidPx": 88,
+        "widthSpreadPct": 0,
+        "centerShiftPx": 0,
+        "blankRows": 0
+      },
+      {
+        "name": "P2",
+        "visible": true,
+        "rows": 76,
+        "yBottom": 153,
+        "yTop": 228,
+        "widthBottomPx": 70,
+        "widthTopPx": 70,
+        "widthMidPx": 70,
+        "widthSpreadPct": 0,
+        "centerShiftPx": 0,
+        "blankRows": 0
+      },
+      {
+        "name": "P3",
+        "visible": true,
+        "rows": 61,
+        "yBottom": 246,
+        "yTop": 306,
+        "widthBottomPx": 57,
+        "widthTopPx": 57,
+        "widthMidPx": 57,
+        "widthSpreadPct": 0,
+        "centerShiftPx": 0,
+        "blankRows": 0
+      },
+      {
+        "name": "P4",
+        "visible": true,
+        "rows": 50,
+        "yBottom": 309,
+        "yTop": 358,
+        "widthBottomPx": 47,
+        "widthTopPx": 47,
+        "widthMidPx": 47,
+        "widthSpreadPct": 0,
+        "centerShiftPx": 0,
+        "blankRows": 0
+      }
+    ]
+  },
+  "sweep": [
+    {
+      "k": 0,
+      "spread": 8.05,
+      "shift": 16.5
+    },
+    {
+      "k": 0.25,
+      "spread": 5.68,
+      "shift": 12.5
+    },
+    {
+      "k": 0.5,
+      "spread": 4.6,
+      "shift": 8
+    },
+    {
+      "k": 0.75,
+      "spread": 2.13,
+      "shift": 4.5
+    },
+    {
+      "k": 1,
+      "spread": 0,
+      "shift": 0
+    }
+  ],
+  "errors": []
+}

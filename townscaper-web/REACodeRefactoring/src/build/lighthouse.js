@@ -1,19 +1,22 @@
 /**
  * lighthouse.js — 灯塔（1331905048801144836 "Townscaper now has lighthouses!"）。
- *   画面：海边一根又高又细、只有一格粗的塔，顶上是一圈玻璃灯室（深色窗棂、暖黄的光）、外面一圈栏杆平台、
- *   上面一个尖顶；入夜后灯室发亮，一道光束在海上转圈。
+ *   画面（逐帧核过 347 帧）：海边一根一格粗的塔，塔顶一段红/白楼身之上是
+ *   ① 方形灯室：正面一排 ~5 扇大玻璃，白色竖横棂，玻璃偏蓝绿，夜里暖黄；
+ *   ② 灯室下面是方形挑出的观景台 + 一圈细立杆栏杆，栏杆下沿一道红唇；
+ *   ③ 灯室上面是四坡（方形）橙红屋顶 + 深色顶尖。
  *
  * 规则（我们的推断）：
  *   - 塔顶 ≥ MIN_H 层；
  *   - 塔"很细"：每个邻格都比它矮至少 2 层（一格粗的柱子）；
  *   - 在海边：至少一个邻格是海（top = 0 或没有邻格）。
- *   满足的格子：屋顶上罩灯室（灯室够高，把原来单格的尖屋顶包在里面）+ 平台 + 尖顶 + 旋转光束。
- *   原片说"这个图案需要的代码重写比想象中多"——在我们的结构里它只是一个"看邻居"的模式，单独成一层装饰。
+ *   满足的格子：屋顶上罩灯室（灯室够高，把原来单格的尖屋顶包在里面）+ 平台 + 屋顶 + 旋转光束。
  */
 
 import * as THREE from 'three';
 
 const MIN_H = 5;
+const PANES = 5;          // 灯室正面玻璃扇数（片中数得出 5 扇）
+const POST_STEP = 0.085;  // 栏杆立杆间距（世界单位）
 
 export class Lighthouses {
   constructor({ scene, levelHeight = 0.5, uTime, uNight }) {
@@ -28,11 +31,14 @@ export class Lighthouses {
       fragmentShader: /* glsl */ `
         uniform float uNight; varying vec2 vUv; varying vec3 vN;
         void main() {
-          float bars = step(0.86, fract(vUv.x * 8.0));                      // 8 根竖窗棂
-          float rail = step(vUv.y, 0.12) + step(0.9, vUv.y);                 // 上下两道框
-          vec3 glass = mix(vec3(0.62, 0.74, 0.74), vec3(1.0, 0.86, 0.48), 0.35 + 0.65 * uNight);
-          vec3 c = mix(glass, vec3(0.16, 0.17, 0.18), clamp(bars + rail, 0.0, 1.0));
-          c *= 0.82 + 0.18 * max(vN.y, abs(vN.x));
+          // 5 扇玻璃 + 白色竖横棂（片子里灯室正面就是 5 扇大玻璃，白框不是黑框）
+          float fx = fract(vUv.x * ${PANES}.0);
+          float fy = fract(vUv.y * 2.0);
+          float bars = step(fx, 0.09) + step(0.91, fx) + step(fy, 0.12) + step(0.88, fy);
+          float edge = (vUv.x < 0.05 || vUv.x > 0.95 || vUv.y < 0.08 || vUv.y > 0.92) ? 1.0 : 0.0;
+          vec3 glass = mix(vec3(0.42, 0.62, 0.66), vec3(1.0, 0.87, 0.5), 0.35 + 0.65 * uNight);
+          vec3 c = mix(glass, vec3(0.95, 0.94, 0.90), clamp(bars + edge, 0.0, 1.0));
+          c *= 0.86 + 0.14 * max(vN.y, abs(vN.x));
           gl_FragColor = vec4(c, 1.0);
           #include <colorspace_fragment>
         }`,
@@ -49,7 +55,9 @@ export class Lighthouses {
         }`,
     });
     this.darkMat = new THREE.MeshLambertMaterial({ color: '#2b2e31' });
-    this.capMat = new THREE.MeshLambertMaterial({ color: '#b5463a' });
+    this.capMat = new THREE.MeshLambertMaterial({ color: '#cf6a43' });   // 四坡顶：和屋顶同一种橙红，不是暗红锥
+    this.rimMat = new THREE.MeshLambertMaterial({ color: '#c2543f' });
+    this.frameMat = new THREE.MeshLambertMaterial({ color: '#f0ece1' });
   }
 
   set visible(on) { this.group.visible = on; }
@@ -69,36 +77,65 @@ export class Lighthouses {
         if (ot === 0) sea = true;
       }
       if (!slim || !sea) continue;
-      const r = c.size * 1.05, y0 = t * L;
+      const r = c.size * 0.56, y0 = t * L;      // r = 灯室半宽（方格，比塔身略外挑）
       const g = new THREE.Group();
       g.position.set(c.cx, y0, c.cz);
-      // 平台 + 栏杆
-      const deck = new THREE.Mesh(new THREE.CylinderGeometry(r * 1.45, r * 1.3, 0.04, 16), this.darkMat);
-      deck.position.y = 0.02;
-      const rail = new THREE.Mesh(new THREE.TorusGeometry(r * 1.42, 0.008, 4, 24), this.darkMat);
-      rail.rotation.x = Math.PI / 2; rail.position.y = 0.11;
-      // 灯室（玻璃 + 窗棂）
-      const lantern = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.36, 16, 1, true), this.lanternMat);
-      lantern.position.y = 0.04 + 0.18;
-      const lid = new THREE.Mesh(new THREE.CylinderGeometry(r * 1.08, r * 1.08, 0.03, 16), this.darkMat);
-      lid.position.y = 0.415;
-      // 尖顶 + 顶球
-      const cap = new THREE.Mesh(new THREE.ConeGeometry(r * 1.05, 0.22, 16), this.capMat);
-      cap.position.y = 0.54;
-      const ball = new THREE.Mesh(new THREE.SphereGeometry(0.025, 8, 6), this.darkMat);
-      ball.position.y = 0.66;
+      // 观景台：方形挑檐 + 红唇 + 一圈细立杆栏杆（片子里栏杆是立杆，不是圆环）
+      const deckHalf = c.size * 0.7;
+      const deck = new THREE.Mesh(new THREE.BoxGeometry(deckHalf * 2, 0.035, deckHalf * 2), this.frameMat);
+      deck.name = 'deck'; deck.position.y = 0.018;
+      const rim = new THREE.Mesh(new THREE.BoxGeometry(deckHalf * 2.12, 0.026, deckHalf * 2.12), this.rimMat);
+      rim.name = 'rim'; rim.position.y = -0.008;
+      const posts = [];
+      {
+        const half = deckHalf * 1.02, h = 0.085;
+        const count = Math.max(4, Math.round((half * 2) / POST_STEP));
+        const edge = (axis, fixed, u) => (axis === 'x' ? [u, 0.035 + h / 2, fixed] : [fixed, 0.035 + h / 2, u]);
+        for (let i = 0; i <= count; i++) {
+          const u = -half + (2 * half * i) / count;
+          for (const [axis, fixed] of [['x', half], ['x', -half], ['z', half], ['z', -half]]) {
+            const post = new THREE.Mesh(new THREE.BoxGeometry(0.014, h, 0.014), this.darkMat);
+            post.name = 'railpost';
+            post.position.set(...edge(axis, fixed, u));
+            posts.push(post); g.add(post);
+          }
+        }
+        for (const [w, d, dx, dz] of [[half * 2, 0.016, 0, half], [half * 2, 0.016, 0, -half], [0.016, half * 2, half, 0], [0.016, half * 2, -half, 0]]) {
+          const rail = new THREE.Mesh(new THREE.BoxGeometry(w, 0.014, d), this.darkMat);
+          rail.name = 'railtop'; rail.position.set(dx, 0.035 + h, dz); g.add(rail);
+        }
+      }
+      // 灯室：方形，5 扇玻璃一面
+      const lanternH = 0.34;
+      const lantern = new THREE.Mesh(new THREE.BoxGeometry(r * 2, lanternH, r * 2), this.lanternMat);
+      lantern.name = 'lantern';
+      lantern.position.y = 0.035 + lanternH / 2;
+      // 灯室下的白色檐口 + 上面的白色檐板
+      const skirt = new THREE.Mesh(new THREE.BoxGeometry(r * 2.16, 0.05, r * 2.16), this.frameMat);
+      skirt.name = 'skirt'; skirt.position.y = 0.06;
+      const lid = new THREE.Mesh(new THREE.BoxGeometry(r * 2.2, 0.045, r * 2.2), this.frameMat);
+      lid.name = 'lid'; lid.position.y = 0.035 + lanternH + 0.02;
+      // 四坡屋顶（4 段锥 = 方锥）+ 顶尖
+      const capH = 0.2;
+      const cap = new THREE.Mesh(new THREE.ConeGeometry(r * 1.56, capH, 4), this.capMat);
+      cap.name = 'roof'; cap.rotation.y = Math.PI / 4;
+      cap.position.y = 0.035 + lanternH + 0.042 + capH / 2;
+      const ball = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.014, 0.07, 6), this.darkMat);
+      ball.name = 'finial';
+      ball.position.y = 0.035 + lanternH + 0.042 + capH + 0.035;
       // 光束：两道背对背的扁锥，绕竖轴转
       const beam = new THREE.Group();
-      beam.position.y = 0.22;
+      beam.position.y = 0.035 + lanternH * 0.55;
       for (const s of [1, -1]) {
         const cone = new THREE.Mesh(new THREE.ConeGeometry(0.35, 4.5, 16, 1, true).translate(0, -2.25, 0), this.beamMat);
         cone.rotation.z = s * Math.PI / 2;
         cone.scale.set(1, 1, 0.45);
         beam.add(cone);
       }
-      g.add(deck, rail, lantern, lid, cap, ball, beam);
+      g.add(deck, rim, skirt, lantern, lid, cap, ball, beam);
+      g.traverse((o) => { if (o.isMesh && o.name !== 'beam') o.castShadow = true; });
       this.group.add(g);
-      this.list.push({ cell: c.id, beam, phase: (c.id * 0.618) % 1 * 6.28 });
+      this.list.push({ cell: c.id, beam, posts: posts.length, phase: (c.id * 0.618) % 1 * 6.28 });
     }
     return this.list.length;
   }

@@ -1,0 +1,23 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>重心坐标教学 gizmo · 真实 World · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:0;font:14px system-ui;background:#eef2f2;color:#20343c}header{padding:10px 14px}iframe{width:100%;height:calc(100vh - 150px);border:0}label{margin-right:12px}input[type=range]{width:110px;vertical-align:middle}code{background:#dde7e6;padding:0 4px;border-radius:4px}#st{font:12px ui-monospace,monospace}</style>
+<header><b>重心坐标 gizmo · 974564862729838592 / 974579499802202113</b> · <a href="index.html" target="_top">首页</a> · <a href="grids.html?t=infinite">无限网格里的 XZ 预计算</a> · <a href="artifacts/coverage/r56-C04-bn-world.md">本批报告</a>
+<p style="margin:4px 0">真实共享 World 里一格的导航三角（白边）；白球 = 查询点（RGB 箭头），小白点 = 它在三角面上的投影；红/绿/蓝线与顶点球大小 = 三个权重（暗 = 负权重，点在三角形外）。权重由 <code>baryPrep3</code> 预算的两条对偶向量得到：<b>1 次减法 + 每坐标 1 次点积</b>，每帧与 Cramer 对账。</p>
+<label><input id="auto" type="checkbox" checked>自动绕行</label><label>u <input id="u" type="range" min="-0.6" max="1.4" step="0.01" value="0.3"></label><label>v <input id="v" type="range" min="-0.6" max="1.4" step="0.01" value="0.3"></label><label>离面高 h <input id="h" type="range" min="0" max="0.8" step="0.01" value="0.2"></label><label>张开 <input id="spread" type="range" min="0.3" max="1.8" step="0.01" value="1"></label><button id="mixed">混合网格</button><button id="quad">四边网格</button>
+<div id="st">加载…</div></header><iframe id="scene"></iframe><script type="module">
+const $ = (s) => document.querySelector(s), q = new URLSearchParams(location.search), f = $('#scene');
+const grid = q.get('grid') === 'mixed' ? 'mixed' : 'quad';
+f.src = 'index.html?scene=terrain&grid=' + grid;
+for (const g of ['mixed', 'quad']) $('#' + g).onclick = () => { location.search = '?grid=' + g; };
+if (q.get('u') !== null) { $('#auto').checked = false; for (const k of ['u', 'v', 'h', 'spread']) if (q.get(k) !== null) $('#' + k).value = q.get(k); }
+let gizmo = null;
+async function boot() {
+  const r = f.contentWindow?.rea; if (!r?.view?.worldMesh || !r.world.cells.some((c) => r.world.top(c) > 0)) return setTimeout(boot, 300);
+  const m = await f.contentWindow.Function('return import("./src/world/bary-gizmo.js")')();
+  gizmo = new m.BaryGizmo(r.view, r.world);
+  const v = r.view, c = gizmo.cell; v.target.set(c.cx, r.world.top(c) * v.levelHeight + .2, c.cz); v.distance = +(q.get('dist') ?? 3.2); v.pitch = +(q.get('pitch') ?? .62); v.updateCamera();
+  f.contentWindow.document.querySelectorAll('details').forEach((d) => (d.open = false));
+  if (q.get('clean') !== '0') { v.setDebug('vegetation', false); }   // 植被会挡住 gizmo（白球白线在白模上看不见，所以不开只看光照）
+  const prev = v.onFrame; v.onFrame = (dt) => { prev?.(dt); if ($('#auto').checked) { gizmo.manual = null; gizmo.update(dt); } else gizmo.set({ u: +$('#u').value, v: +$('#v').value, h: +$('#h').value, spread: +$('#spread').value }); const s = gizmo.stats; $('#st').textContent = `格 ${s.cell} · w = [${s.w.join(', ')}] · Σ=${(s.w[0] + s.w[1] + s.w[2]).toFixed(4)} · ${s.inside ? '三角形内' : '三角形外（有负权重）'} · 离面 ${s.height} · 与 Cramer 差 ${s.cramerErr.toExponential(1)} · 运算 ${s.ops.sub} 减 + ${s.ops.dotPerWeight} 点积/坐标`; };
+  window.baryGizmoReview = { rea: r, gizmo };
+}
+f.onload = () => setTimeout(boot, 500);
+</script></html>

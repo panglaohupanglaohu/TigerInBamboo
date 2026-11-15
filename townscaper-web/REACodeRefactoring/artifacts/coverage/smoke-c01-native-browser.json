@@ -1,0 +1,103 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "默认未启用",
+      "pass": true,
+      "detail": "默认 lobeStyle=fine topBreak=false shape=false"
+    },
+    {
+      "name": "① 打开走 native 大瓣",
+      "pass": true,
+      "detail": "lobeStyle=big"
+    },
+    {
+      "name": "① 顶端断开 + 顶团 native",
+      "pass": true,
+      "detail": "topBreak=true crownOn=true"
+    },
+    {
+      "name": "① 薄雾层 native 铺卡",
+      "pass": true,
+      "detail": "hazeOn=true quads=8"
+    },
+    {
+      "name": "① 不再挂 shape 外挂",
+      "pass": true,
+      "detail": "shape=false"
+    },
+    {
+      "name": "③ big 口径片数更少",
+      "pass": true,
+      "detail": "fine 33 片 → big 13 片"
+    },
+    {
+      "name": "② 关掉回到 fine",
+      "pass": true,
+      "detail": "lobeStyle=fine topBreak=false hazeOn=false"
+    },
+    {
+      "name": "② 关掉后无残留外挂",
+      "pass": true,
+      "detail": "shape=false"
+    },
+    {
+      "name": "⑤ 开/关像素不同",
+      "pass": true,
+      "detail": "dark ratio on=0.04 off=0.0422"
+    }
+  ],
+  "before": {
+    "lobeStyle": "fine",
+    "topBreak": false,
+    "crownOn": false,
+    "hazeOn": false,
+    "hasShape": false,
+    "sources": 1,
+    "cards": 20
+  },
+  "rate": {
+    "fine": {
+      "cards": 33,
+      "lobeStyle": "fine",
+      "haze": 8
+    },
+    "big": {
+      "cards": 13,
+      "lobeStyle": "big",
+      "haze": 8
+    }
+  },
+  "on": {
+    "flag": true,
+    "lobeStyle": "big",
+    "topBreak": true,
+    "crownOn": true,
+    "hazeOn": true,
+    "hasShape": false,
+    "cards": 25,
+    "haze": 8,
+    "crown": 0,
+    "styleScale": null
+  },
+  "off": {
+    "lobeStyle": "fine",
+    "topBreak": false,
+    "crownOn": false,
+    "hazeOn": false,
+    "hasShape": false,
+    "haze": 8
+  },
+  "px": {
+    "on": {
+      "dark": 8233,
+      "tot": 205715,
+      "ratio": 0.04
+    },
+    "off": {
+      "dark": 8687,
+      "tot": 205715,
+      "ratio": 0.0422
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "count": 84,
+      "vertices": 34848,
+      "finite": true,
+      "stairs": 84,
+      "worldUnchanged": true,
+      "restored": true
+    },
+    {
+      "grid": "mixed",
+      "count": 96,
+      "vertices": 40356,
+      "finite": true,
+      "stairs": 96,
+      "worldUnchanged": true,
+      "restored": true
+    }
+  ],
+  "errors": []
+}

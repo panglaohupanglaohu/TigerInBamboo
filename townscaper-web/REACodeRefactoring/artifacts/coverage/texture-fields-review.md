@@ -26,3 +26,8 @@
 累计68/285，剩217；原版134模块：23增强、74静态、37部分、0未覆盖。模块有改进并不等于所有能力完成。下一批先读植被atlas角落与球面叶片alpha素材，后续继续球面patch接口，不重复学习已核验视频。
 
 补充回归：tests/texture-fields-pages.cjs验证index/pipeline共享进度均68/285，小镇/北境默认fields=0、地形URL on=fields实际启用；增量修改一格岩石并重建、恢复World后，aField与position数量一致且无非有限值。所有页面无pageerror，报告texture-fields-pages.json。管线缺0段；本地/README视频均285，历史笔记243；git diff --check通过。
+
+
+## 第 56 批（C08）
+
+- 1714613599035863191：field-pattern.js 新增 uFields≥2 的田块拼贴（uFields=1 旧条纹逐字保留），fields.html?plots=1。tests/field-plots-c08.mjs；截图 C08-fields-plots(-close).png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

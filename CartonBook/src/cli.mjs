@@ -10,6 +10,7 @@ import { planChapter } from "./planChapter.mjs";
 import { captureShots } from "./captureShots.mjs";
 import { layoutEdena } from "./layoutEdena.mjs";
 import { exportBook } from "./exportBook.mjs";
+import { exportPdf } from "./exportPdf.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CARTON = path.resolve(__dirname, "..");
@@ -25,6 +26,7 @@ function usage() {
   capture       按计划截屏
   layout        Edena 排版
   export        汇总 book.html
+  pdf           book.html → 完整跨页 book.pdf
   run           plan → capture → layout → export
   layout-only   plan →（fixtures 截屏）→ layout → export
 
@@ -79,9 +81,12 @@ async function main() {
   }
 
   const { recipe, path: recipePath } = loadRecipe(args.recipe);
-  const chapterDir =
-    args["chapter-dir"] ||
-    path.join(CARTON, "chapters", recipe.id || "untitled");
+  const chapterDir = args["chapter-dir"] || (cmd === "layout-only"
+    ? path.join(CARTON, "artifacts", "layout-only", `${recipe.id || "untitled"}-preview`)
+    : path.join(CARTON, "chapters", recipe.id || "untitled"));
+  if (cmd === "layout-only" && path.resolve(chapterDir) === path.resolve(path.join(CARTON, "chapters", recipe.id))) {
+    throw new Error("layout-only 只能写入独立预览目录，禁止覆盖正式章节；请省略或更换 --chapter-dir");
+  }
 
   console.log(`[cartonbook] recipe=${recipePath}`);
   console.log(`[cartonbook] chapterDir=${chapterDir}`);
@@ -107,14 +112,12 @@ async function main() {
   }
 
   if (cmd === "capture") {
-    const { plan } = fs.existsSync(path.join(chapterDir, "plan.json"))
-      ? {
-          plan: JSON.parse(
-            fs.readFileSync(path.join(chapterDir, "plan.json"), "utf8")
-          ),
-        }
-      : runPlan();
+    // recipe 是唯一事实源；每次拍摄重新 plan，避免沿用旧镜头表。
+    const { plan } = runPlan();
     const manifest = await runCapture(plan);
+    if ((plan.noFixtures || ["bookshop-letter", "messenger-tide-letter"].includes(plan.id)) && !manifest.realCapture) {
+      throw new Error(`正式拍摄未全部通过；上一版未改动。暂存清单: ${manifest.stagingManifestPath || "见 capture 日志"}`);
+    }
     console.log(
       `[ok] capture realCapture=${manifest.realCapture} mode=${manifest.mode}`
     );
@@ -139,13 +142,25 @@ async function main() {
     return;
   }
 
+  if (cmd === "pdf") {
+    const plan = JSON.parse(fs.readFileSync(path.join(chapterDir, "plan.json"), "utf8"));
+    const result = await exportPdf(plan, { chapterDir });
+    console.log(`[ok] pdf → ${result.pdfPath} (${result.bytes} bytes)`);
+    return;
+  }
+
   if (cmd === "layout-only") {
-    const { plan, planPath } = runPlan();
-    console.log("[ok] plan →", planPath);
+    const previewRecipe = { ...recipe, id: `${recipe.id}-preview`, noFixtures: false };
+    const { plan, planPath } = planChapter(previewRecipe, { chapterDir });
+    console.log("[ok] preview plan →", planPath);
     const manifest = await runCapture(plan, { useFixtures: true });
     console.log(
       `[ok] fixtures mode=${manifest.mode} realCapture=${manifest.realCapture}`
     );
+    // fixtures 只允许出现在独立预览目录。
+    if (path.resolve(chapterDir).startsWith(path.resolve(path.join(CARTON, "chapters")) + path.sep)) {
+      throw new Error("layout-only 预览不得写入 chapters/ 正式目录");
+    }
     const layoutResult = runLayout(plan);
     console.log(
       "[ok] layout:",
@@ -172,6 +187,7 @@ async function main() {
     if (manifest.captureError) {
       console.warn("[warn] live capture error:", manifest.captureError);
     }
+    if (!manifest.realCapture) throw new Error(`正式章节截屏未全部通过，停止排版发布；暂存清单: ${manifest.stagingManifestPath || "见 capture 日志"}`);
     const layoutResult = runLayout(plan);
     console.log(
       "[ok] layout:",

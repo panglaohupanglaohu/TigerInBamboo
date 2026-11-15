@@ -57,7 +57,10 @@ const RIDGE_COMPOSITIONS={
  'front-left':[[0,0,24,19,2,.15],[-7,-2,16,13,3,.1],[12,-11,10,7,1,.2],[9,11,10,8,2,0],[-14,9,7,6,2,0]],
  'front-right':[[0,0,20,19,2,-.2],[-7,2,13,12,3,-.1],[-12,-7,6.5,6,3,0],[10,-10,9,8,1,.2]],
 };
-export const APOSTLE_MASSES=APPROVED_APOSTLE_MASSES.map(m=>RIDGE_COMPOSITIONS[m.id]?{...m,footprint:m.lobes,lobes:RIDGE_COMPOSITIONS[m.id]}:m);
+// 2026-11-09 用户要求「十二门徒的山体从 12 个减到 6 个」：保留四座大台岩 + 两根湾心石柱；后排塔岩、湾心石柱 3/4 不再生成。
+// ?apostlesAll=1 恢复全部；?apostlesKeep=back-left,bay-1,... 自选。
+const APOSTLE_KEEP=(()=>{const q=new URLSearchParams(globalThis.location?.search||'');if(q.get('apostlesAll')==='1')return null;const k=q.get('apostlesKeep');return new Set(k?k.split(','):['back-left','back-right','front-left','front-right','bay-1','bay-2']);})();
+export const APOSTLE_MASSES=APPROVED_APOSTLE_MASSES.filter(m=>!APOSTLE_KEEP||APOSTLE_KEEP.has(m.id)).map(m=>RIDGE_COMPOSITIONS[m.id]?{...m,footprint:m.lobes,lobes:RIDGE_COMPOSITIONS[m.id]}:m);
 
 function rng(seed){let s=seed>>>0||1;return()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};}
 const hash=(a,b,c=0)=>{let h=Math.imul(a|0,374761393)^Math.imul(b|0,668265263)^Math.imul(c|0,2147483647);h=Math.imul(h^(h>>>13),1274126177);return((h^(h>>>16))>>>0)/4294967296;};

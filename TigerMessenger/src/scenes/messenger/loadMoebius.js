@@ -18,7 +18,7 @@ import {
   crystalCanyonSwampDir,
 } from "../../world/citySeaLake.js";
 import { createCatalogObject } from "../../core/buildingCatalog.js";
-import { placeMoebiusSwampOnSphere } from "../../world/moebiusSwamp.js";
+import { placeMoebiusSwampOnSphere, SWAMP_FLOOR_Y } from "../../world/moebiusSwamp.js";
 import { latLonToDir } from "../../world/sphereMath.js";
 import { createMoebiusAircraftSquad } from "../../assets/moebiusAircraft.js";
 import { createMoebiusAirship, placeMoebiusAirshipAbove } from "../../assets/moebiusAirship.js";
@@ -156,19 +156,29 @@ export function placeMoebiusSwampAndSky({ scene, R, moebius, grandDir, bubblePod
   });
 
   // 湖沼旁的半沉沉船（主人验收 2026-08-29）：断船斜倾半没入水中，
-  // 弹唱老人依靠在船舷边（老人由 messengerIsland 在装载后迁入）。
+  // （弹唱老人已在莫西斯湖，不再靠这条沉船；2026-11-10 用户确认）
   const swampWreck = createFisherBoat();
   swampWreck.name = "swamp-shipwreck";
   swampWreck.scale.setScalar(2);
   swampWreck.rotation.set(0.16, 2.35, 0.42); // 左舷倾斜 + 偏航
-  {
+  // 2026-11-10 用户截图「右侧的沉船是不是应该挪到湖沼的底层去」：原来按湖沼中心 + 世界轴偏移（-0.55 是世界 y，不是当地「下」）
+  // 放在坑外原地表高度，湖沼改成下沉湖后它就悬在坑边的水里。现在挂进湖沼内层（moebius-swamp-zone，与湖底 / 修船坞同一坐标系），
+  // 斜躺在湖底藻地上：比例与湖里两条战船相同（2），放在避开修船坞（角 2.05）与出港战船（约 0.73）的一侧；湖沼以后整体挪动也跟着走。
+  const swampInner = moebiusSwamp?.getObjectByName?.("moebius-swamp-zone");
+  if (swampInner) {
+    const ang = 4.4, r = 7;
+    swampWreck.position.set(Math.cos(ang) * r, SWAMP_FLOOR_Y - 0.15, Math.sin(ang) * r);
+    swampWreck.rotation.set(0.32, 1.1, 0.55);   // 船头微翘、左舷倾倒、半埋湖底
+    swampWreck.userData.swampLakeFloor = true;
+    swampInner.add(swampWreck);
+  } else {
     const base = (moebiusSwamp?.position || grandDir.clone().multiplyScalar(R)).clone();
     const side = new THREE.Vector3(1, 0, 0).applyQuaternion(moebiusSwamp.quaternion).normalize();
     swampWreck.position.copy(base).addScaledVector(side, 7.5).add(new THREE.Vector3(0, -0.55, 2.2));
+    scene.add(swampWreck);
   }
   swampWreck.userData.kind = "swamp-shipwreck";
   swampWreck.userData.presentationOnly = true;
-  scene.add(swampWreck);
 
   return { moebiusSwamp, aircraftSquad, airship, airshipAnchor, escort, swampWreck };
 }

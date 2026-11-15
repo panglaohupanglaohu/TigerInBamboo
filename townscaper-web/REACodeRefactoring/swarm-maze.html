@@ -1,0 +1,53 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>三角图上的流体寻路 · REACode重构版</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#3a4656;color:#eef2ef;font:14px/1.5 system-ui,"PingFang SC"}header{padding:10px 18px;background:#2c3542}a{color:#9fd8e8}button,select{font:inherit;margin:2px 4px}canvas{display:block;margin:8px auto;cursor:grab}small{opacity:.78}</style>
+<header><b>三角图上的流体寻路</b>（<a href="gifs/810157485638189056.mp4">810157485638189056</a> 2016-12-17「Trying out fluid pathfinding on a triangle graph. Making it up as I go along.」）· 第 56 批 C03 · <a href="navmesh-flow.html">导航面连续流场（共享实现）</a><br>
+拖动三色 gizmo 换目标，整团立即改道。<label><input type="checkbox" id="wire"> 三角图线框</label> <label>迷宫种子 <select id="seed"><option>7</option><option>11</option><option>23</option></select></label> <button id="reset">重置</button> <span id="info"></span><br>
+<small>粗走廊（随机格点生成树 + 环边 + 圆头端头，胶囊并集）→ 掩码三角剖分 = 三角图；目标处顶点多源 Dijkstra 距离场，三角面内流向 = −∇d（共边带混合，过边连续），群体 = 流向×速度 + 邻居分离，约束回三角图。core/swarm-maze.js 只做迷宫和三角图，流场/群体复用 world/navmesh-flow.js。</small></header>
+<canvas id="c" width="720" height="720"></canvas>
+<script type="module">
+import { corridorMaze, triangulateMaze, spawnSwarm, insideMaze } from './src/core/swarm-maze.js';
+import { buildVertexField, buildFaceDirs, stepCrowd, locate } from './src/world/navmesh-flow.js';
+const c = document.querySelector('#c'), ctx = c.getContext('2d'), $ = (s) => document.querySelector(s), S = 72;
+let maze, mesh, agents, goal, field, dirs, bg, dragging = false, retargets = 0;
+function build() {
+  maze = corridorMaze({ seed: Number($('#seed').value) }); mesh = triangulateMaze(maze, { step: .12 });
+  bg = ctx.createImageData(c.width, c.height);
+  for (let y = 0; y < c.height; y++) for (let x = 0; x < c.width; x++) {
+    const o = (y * c.width + x) * 4;
+    if (!insideMaze(maze, (x + .5) / S, (y + .5) / S)) { const g = ((x >> 4) + (y >> 4)) & 1 ? 62 : 58; bg.data.set([g - 4, g + 6, g + 22, 255], o); continue; }
+    const n = (Math.sin(x * 1.7 + y * .9) + Math.sin(x * .37 - y * 1.3)) * 4;
+    bg.data.set([168 + n, 112 + n, 82 + n, 255], o);
+  }
+  const A = maze.nodes[0], B = maze.nodes[maze.nodes.length - 1 - 6 >= 0 ? 24 : 1];
+  agents = spawnSwarm(mesh, 180, { x: A.x, z: A.z, r: 1 }, locate);
+  setGoal(B.x, B.z);
+}
+function setGoal(x, z) {
+  const p = locate(mesh, x, z); if (p < 0 || mesh.component[p] !== mesh.mainComponent) return false;
+  goal = { x, z, r: .45 }; field = buildVertexField(mesh, { goal }); dirs = buildFaceDirs(mesh, field); retargets++; return true;
+}
+const pick = (e) => { const r = c.getBoundingClientRect(); return [(e.clientX - r.left) / S, (e.clientY - r.top) / S]; };
+c.onpointerdown = (e) => { const [x, z] = pick(e); if (Math.hypot(x - goal.x, z - goal.z) < .6) dragging = true; else setGoal(x, z); };
+c.onpointermove = (e) => { if (dragging) { const [x, z] = pick(e); setGoal(x, z); } };
+window.onpointerup = () => { dragging = false; };
+$('#reset').onclick = build; $('#seed').onchange = build;
+let left = 0, frames = 0;
+function gizmo(x, y) {
+  ctx.lineWidth = 3;
+  for (const [dx, dy, col] of [[26, 0, '#e8453c'], [0, -26, '#7ad04a'], [-16, 14, '#3b7fe0']]) { ctx.strokeStyle = col; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + dx, y + dy); ctx.stroke(); ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x + dx, y + dy, 3.5, 0, 7); ctx.fill(); }
+  ctx.fillStyle = '#f2f2f2'; ctx.fillRect(x - 3, y - 3, 6, 6);
+}
+function frame() {
+  const st = stepCrowd(mesh, field, agents, 1 / 60, { speed: 1.6, radius: .055, faceDirs: dirs }); left += st.left; frames++;
+  ctx.putImageData(bg, 0, 0);
+  if ($('#wire').checked) { ctx.strokeStyle = 'rgba(255,240,220,.22)'; ctx.lineWidth = 1; ctx.beginPath(); for (const p of mesh.polys) { const [a, b, d] = p.vs.map((v) => mesh.verts[v]); ctx.moveTo(a.x * S, a.z * S); ctx.lineTo(b.x * S, b.z * S); ctx.lineTo(d.x * S, d.z * S); ctx.closePath(); } ctx.stroke(); }
+  ctx.fillStyle = '#4a1418';
+  for (const a of agents) { ctx.beginPath(); ctx.arc(a.x * S, a.z * S, 3, 0, 7); ctx.fill(); }
+  gizmo(goal.x * S, goal.z * S);
+  const mean = agents.reduce((s, a) => s + Math.hypot(a.x - goal.x, a.z - goal.z), 0) / agents.length;
+  $('#info').textContent = `三角 ${mesh.polys.length} · ${agents.length} 点 · 出图 ${left} · 平均直线距目标 ${mean.toFixed(2)} · 换目标 ${retargets} 次`;
+  window.swarmMaze = { tris: mesh.polys.length, agents: agents.length, left, mean, retargets, frames, setGoal: (i) => { const n = maze.nodes[i]; return setGoal(n.x, n.z); }, nodes: maze.nodes.length };
+  requestAnimationFrame(frame);
+}
+build(); frame();
+</script></html>

@@ -16,6 +16,8 @@ export function createCloudImpostorMaterial(THREE, { atlas = null, views = 12, t
       uWeather: { value: 0 },
       uDay: { value: 1 },
       uHeroDayWeight: { value: 1 },
+      // 区域暮色染色（例如高山圣城暮色按目标图：云底淡紫、亮面桃色）；默认 0 = 原样，树冠（vShape）基本不受影响
+      uTmDuskAmt: { value: 0 },
       // The atlas is a horizontal strip of square view blocks.  Sampling the
       // whole strip makes one cloud card read as a compressed white streak.
       uViews: { value: Math.max(1, views) },
@@ -86,6 +88,7 @@ export function createCloudImpostorMaterial(THREE, { atlas = null, views = 12, t
       uniform float uWeather;
       uniform float uDay;
       uniform float uHeroDayWeight;
+      uniform float uTmDuskAmt;
       varying vec2 vUv;
       varying float vDistance;
       varying float vHero;
@@ -96,6 +99,11 @@ export function createCloudImpostorMaterial(THREE, { atlas = null, views = 12, t
         if (alpha < 0.01) discard;
         vec3 color = mix(tex.rgb, vec3(0.42, 0.48, 0.56), uWeather * 0.48);
         color *= mix(0.56, 1.0, uDay);
+        if (uTmDuskAmt > 0.001) {
+          float tmLum = dot(color, vec3(0.333));
+          vec3 tmDusk = mix(vec3(0.6, 0.6, 0.8), vec3(1.0, 0.8, 0.7), smoothstep(0.35, 0.9, tmLum)) * (0.55 + 0.6 * tmLum);
+          color = mix(color, tmDusk, uTmDuskAmt * 1.0);
+        }
         gl_FragColor = vec4(color, alpha);
       }
     `,
@@ -118,6 +126,8 @@ export function createSharedImpostorMaterial(THREE, { atlas = null, cloudViews =
       uWeather: { value: 0 },
       uDay: { value: 1 },
       uHeroDayWeight: { value: 1 },
+      // 区域暮色染色（例如高山圣城暮色按目标图：云底淡紫、亮面桃色）；默认 0 = 原样，树冠（vShape）基本不受影响
+      uTmDuskAmt: { value: 0 },
       uCloudViews: { value: cloudViews },
       uTotalViews: { value: totalViews },
     },
@@ -191,6 +201,7 @@ export function createSharedImpostorMaterial(THREE, { atlas = null, cloudViews =
       uniform float uWeather;
       uniform float uDay;
       uniform float uHeroDayWeight;
+      uniform float uTmDuskAmt;
       varying vec2 vUv;
       varying float vDistance;
       varying float vHero;
@@ -204,6 +215,11 @@ export function createSharedImpostorMaterial(THREE, { atlas = null, cloudViews =
         // baked green so the slope reads as vegetation in any weather.
         vec3 color = mix(tex.rgb, vec3(0.42, 0.48, 0.56), uWeather * 0.48 * mix(1.0, 0.25, vShape));
         color *= mix(0.56, 1.0, uDay);
+        if (uTmDuskAmt > 0.001) {
+          float tmLum = dot(color, vec3(0.333));
+          vec3 tmDusk = mix(vec3(0.6, 0.6, 0.8), vec3(1.0, 0.8, 0.7), smoothstep(0.35, 0.9, tmLum)) * (0.55 + 0.6 * tmLum);
+          color = mix(color, tmDusk, uTmDuskAmt * (1.0 - 0.85 * vShape));
+        }
         gl_FragColor = vec4(color, alpha);
       }
     `,

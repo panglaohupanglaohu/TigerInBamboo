@@ -1,0 +1,11 @@
+<!doctype html><html lang="zh"><meta charset="utf-8"><title>视频循环与频谱测量 · 重构代码库</title>
+<style>body{max-width:900px;margin:2rem auto;background:#17282c;color:#dcebed;font:15px/1.6 system-ui}input{width:70%}canvas{width:288px;image-rendering:auto}video{max-width:450px}pre{white-space:pre-wrap}</style>
+<h1>视频循环与频谱测量</h1><p>迁移自 REACode/tools/measure：均匀抽样帧差、循环候选、水面区域频谱。抽样与全帧观看分别记录；频谱不能证明着色器已复现。</p>
+<input id="source" aria-label="视频地址" value="/REA-agent/gifs/1991101097818403263.mp4"><button id="run">抽样并测量</button><p id="status"></p><video id="v" controls muted playsinline></video><canvas id="c"></canvas><pre id="out"></pre>
+<script type="module">
+import {loadVideo,sampleVideo,measureInWorker} from '../src/tools/video-cycle-capture.js';
+const video=document.querySelector('video'),canvas=document.querySelector('canvas'),status=document.querySelector('#status'),out=document.querySelector('#out');
+window.load=src=>loadVideo(video,src);
+window.run=async()=>{const frames=await sampleVideo(video,canvas);const result=await measureInWorker(frames,{width:96,height:96});out.textContent=JSON.stringify(result,null,2);return result;};
+document.querySelector('#run').onclick=async e=>{e.target.disabled=true;status.textContent='均匀抽样120帧并在Worker分析…';try{await window.load(document.querySelector('#source').value);await window.run();status.textContent='测量完成（120个时间样本；不计全帧观看进度）';}catch(error){status.textContent='失败：'+error.message;}finally{e.target.disabled=false;}};
+</script></html>

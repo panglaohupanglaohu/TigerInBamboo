@@ -73,3 +73,8 @@
 `tests/frontier-browser.cjs`：实际campaign.html 8次换图×3位置共24项、默认关闭/启用/切换/关闭通过；[frontier-browser.json](frontier-browser.json)记录量化，[frontier-graph.png](frontier-graph.png)、[frontier-map.png](frontier-map.png)已目视复核。旧campaign五阶段/16次换图回归通过。二维战役画布不区分World的四边形/混合格；本批没有声称其为游戏两类网格的实景验收。
 
 新学习计数仅加2（258+389=647帧）；边境14帧只续实现不重复加。模块总数仍130，ornament新确认缺口导致部分覆盖32→33；保留已有重构。下一批补单贴图镜像距离场/独立阈值，军旗运行复验与两侧细分随后推进。
+
+
+## 第 56 批（C04）
+
+1097458505315946496：旧注「两侧细分未实现」已过时（第 55 批 G3 frontier-overlay.js + campaign.html?fields=1）。本批重截 shots-r56/1097458505315946496-fields-on.png：3/3 前线、两侧 ear-clip 732 三角、三角网顶点向 Bezier 采样放射，与原尺寸帧 6 同构。判定 done。 详见 [r56-C04-bn-world.md](r56-C04-bn-world.md)。

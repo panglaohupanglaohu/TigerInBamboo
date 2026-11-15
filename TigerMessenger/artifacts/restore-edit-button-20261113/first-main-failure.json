@@ -1,0 +1,20 @@
+{
+  "errors": [],
+  "initial": {
+    "dev": true,
+    "captureMode": false,
+    "group": null,
+    "monitor": false
+  },
+  "build": {
+    "state": {
+      "dev": true,
+      "captureMode": false,
+      "group": "build",
+      "monitor": false
+    },
+    "panels": []
+  },
+  "pass": false,
+  "failure": "Error: build panel unavailable\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/restore-edit-button-browser.mjs:11:267"
+}

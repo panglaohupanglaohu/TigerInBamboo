@@ -34,3 +34,21 @@
 本轮新增2段711帧，累计140/285、剩145。实验阶段显示/拓扑及平面检查口径局部验收，不代表原版球面生成接口全覆盖；未同步游戏副本。
 
 补充验收：sphere-relax-browser.cjs 的全部/单格/无模块控件、实际地形几何和原模块诊断回归通过，三截图已查看；atlas-browser.cjs的三个真实主场景GPU/手机/图集及定时器清理通过，三截图已查看。首页/pipeline实际显示140/285、剩145及新入口，285条视频/README一致、泳道缺0段、diff空白检查通过。
+
+## 第 56 批（C06）
+
+### 1338829205157646336
+- 做了什么：新建 src/sphere/stereo-insert-c06.js：极点取最北点，其余点 stereoProject 后按半径排序，用共享 TriGraph 逐点 Bowyer–Watson 插入（超级三角按最大半径 1.15 倍、画面内可见），可往回拖重放；插完 liftToSphere 抬回球面并把凸包连极点；页面 sphere-insert.html 视图随插入半径对数拉远
+- 落点：src/sphere/stereo-insert-c06.js（共享 core/trigraph.js、planet-town.js 投影）· sphere-insert.html
+- 测试：tests/sphere-insert-c06.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-sphere-insert-0.008.png、artifacts/coverage/shots-r56/C06-sphere-insert-0.12.png、artifacts/coverage/shots-r56/C06-sphere-insert-0.5.png（已看）
+- 对照：5 点时只见中心一小撮点 + 超级三角长边（对 0000–0041），300 点时中心是密三角盘、外圈长三角连到超级顶点（对 0080–0199）；每插一点三角 +2，抬回 1196 面闭合、Euler 2、往返误差 2e-15
+- 判定：done
+
+### 1338825080844021760
+- 做了什么：复核 r55 sphere-stages（planet.html?stageT=）实际画面；本轮补 relaxRetriangulate：每轮按三角形重心松弛后整体重新投影三角化，统计每轮改边数（22→4→2→0…收敛），即原版 relax + 重三角化；投影往返误差进测试
+- 落点：src/sphere/planet.js · src/sphere/sphere-stages.js · src/sphere/stereo-insert-c06.js · planet.html?stageT=
+- 测试：tests/sphere-insert-c06.mjs、tests/sphere-stages.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-planet-stage-0.5.png、artifacts/coverage/shots-r56/C06-planet-stage-1.45.png（已看）
+- 对照：t=0.5 散开点云、t=1.45 下半球已三角化、上半只有点，与 0100–0199 帧一致
+- 判定：done

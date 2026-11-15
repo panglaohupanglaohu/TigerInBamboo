@@ -1,0 +1,31 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>建筑 r56 · 钢架落点/曲柄/系杆 · 后院矮墙拱门 · 后院植物出现/消失</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#dfe9ea;color:#20343c;font:13px/1.5 system-ui}header{padding:6px 12px;position:absolute;top:0;left:0;right:0;background:#eef3f1e0;z-index:2}label{margin-right:10px;white-space:nowrap}canvas{display:block;width:100vw;height:100vh}#report{position:absolute;right:8px;bottom:8px;max-width:420px;max-height:45vh;overflow:auto;background:#fffd;padding:6px 8px;border-radius:6px;font:11px/1.35 ui-monospace,monospace;white-space:pre-wrap;z-index:2}a{color:#26758a}</style>
+<header><b>建筑 r56（C05-D）</b> · <a href="index.html" target="_top">首页</a> · 片子 1257213678056857600 / 1189902695303458816 / 1238474550511308800 / 1246074663546916873 ·
+<span id="boxes"></span><button id="edit">往后院加/拆一栋房</button>
+<small>URL：?scene=steel|yard|town&grid=quad|mixed&flags=steelFrame,yardWalls&propanim=1&focus=a|tower|yard&yaw=&pitch=&dist=&clean=1</small></header>
+<canvas id="view"></canvas><div id="report"></div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import{buildQuadGrid,buildMixedGrid}from'./src/core/grid.js';import{decorateCells,buildCellIndex}from'./src/core/spatial.js';import{World}from'./src/core/world.js';import{PALETTES}from'./src/core/palette.js';
+import{View}from'./src/world/view.js';import{buildScene}from'./src/world/scenes.js';import{MeshWriter}from'./src/core/meshwriter.js';import{buildBuildings}from'./src/build/buildings.js';
+import{steelScene,yardScene}from'./src/build/scenes-r56.js';import{attachYardPropAnim}from'./src/world/prop-anim-yard-r56.js';
+const q=new URLSearchParams(location.search),kind=q.get('grid')==='mixed'?'mixed':'quad',sceneName=q.get('scene')||'steel',L=.5;
+const grid=decorateCells(kind==='mixed'?buildMixedGrid({radius:22,hexSize:.62}):buildQuadGrid({radius:14,hexSize:1})),world=new World(grid);world.palette=PALETTES.town;
+let S=null;if(sceneName==='steel')S=steelScene(world);else if(sceneName==='yard')S=yardScene(world,{depth:+(q.get('depth')||4)});else buildScene(world,sceneName,+(q.get('seed')||7));
+const FLAGS={steelFrame:'钢架：落点/曲柄/系杆',yardWalls:'后院矮墙+拱门'};
+for(const f of(q.get('flags')||'').split(',').filter(Boolean))world[f]=true;
+const view=new View(document.querySelector('#view'),world,grid,buildCellIndex(grid),{levelHeight:L});view.changed();view.frameTown();
+let layer=null;if(q.get('propanim')){layer=attachYardPropAnim(view,world,{spread:+(q.get('spread')||.35)});if(q.get('freeze')){let T=0;layer.clock=()=>T;window.r56setT=t=>{T=t;layer.update(T);};}}
+function stats(){const m=new MeshWriter(),r=buildBuildings(m,world,{L});const st=r.steel;return{kind,scene:sceneName,flags:Object.keys(FLAGS).filter(f=>world[f]),propAnimYard:!!world.propAnimYard,verts:m.pos.length/3,steel:st&&{legs:st.legs.length,cranks:st.cranks,ties:st.ties,joints:st.joints,bays:st.bays,clusters:st.clusters.map(c=>({bays:c.bays,ties:c.ties.join('/'),solutions:c.solutions}))},yards:r.yards,yardWalls:r.yardWalls,anim:layer&&{...layer.stats}};}
+function focus(){const f=q.get('focus');if(!f||!S)return;let ids=f==='a'?[S.a,S.b]:f==='tower'?[...S.tower,S.low,S.mid]:f==='yard'?[S.start]:[];if(!ids.length)return;const cs=ids.map(i=>grid.cells[i]),x=cs.reduce((s,c)=>s+c.cx,0)/cs.length,z=cs.reduce((s,c)=>s+c.cz,0)/cs.length;
+ view.target.set(x,+(q.get('ty')||(f==='yard'?.5:1.8)),z);view.distance=+(q.get('dist')||7);if(q.get('yaw'))view.yaw=+q.get('yaw');if(q.get('pitch'))view.pitch=+q.get('pitch');view.updateCamera();}
+focus();
+if(q.get('clean')){for(const k of['clouds','birds','boats','butterflies','flags'])try{view.setDebug(k,false)}catch(e){}document.querySelector('#report').style.display='none';document.querySelector('header').style.display='none';}
+const box=document.querySelector('#boxes');for(const[k,t]of Object.entries(FLAGS)){const l=document.createElement('label');l.innerHTML=`<input type=checkbox ${world[k]?'checked':''}>${t}`;l.firstChild.onchange=e=>{world[k]=e.target.checked;world.touch();view.worldMesh.invalidate();rep();};box.append(l);}
+// 编辑：往后院中心附近的一格加一栋 2 层房（封闭后院被拆分 → 植物重新分配），再点一次拆掉
+let opened=null;window.r56open=()=>{if(!S||!S.wall)return null;const c=grid.cells[S.wall[+(q.get('openWall')||0)]];if(!opened){world.setSolid(c,3,false);world.setSolid(c,2,false);opened=c;}else{world.setSolid(opened,2,true);world.setSolid(opened,3,true);opened=null;}world.touch();view.worldMesh.invalidate();rep();return c.id;};   // 拆开 / 补上一段院墙：整院变成/不再是后院
+let added=null;window.r56edit=()=>{if(!S||S.start===undefined)return null;const c=grid.cells[S.yard[Math.min(S.yard.length-1,+(q.get('editCell')||3))]];if(!added){world.setSolid(c,2,true);world.setSolid(c,3,true);world.color[c.id]=2;added=c;}else{world.setSolid(added,3,false);world.setSolid(added,2,false);added=null;}world.touch();view.worldMesh.invalidate();rep();return c.id;};
+document.querySelector('#edit').onclick=()=>window.r56edit();
+function rep(){const o=stats();document.querySelector('#report').textContent=JSON.stringify(o,null,1);window.r56=o;}rep();window.r56world={world,view,grid,S,layer,stats};
+let last=performance.now();function frame(t){view.render(Math.max(0,Math.min((t-last)/1000,.05)));last=t;requestAnimationFrame(frame)}requestAnimationFrame(frame);
+</script></html>

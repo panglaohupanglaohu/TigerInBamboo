@@ -5,6 +5,7 @@
  *   其余：通用场景编辑插件（generic-scene.js）——物件自动登记、物件管线、对象目录、存档回放；体素场景管线暂不适用
  * 选择不改任何场景数据。
  */
+import { viewerTitle } from '../scene-authoring/playtest-target.js?v=playtest-r1';
 const $ = (id) => document.getElementById(id);
 const TAG = { workbench: '完整插件', generic: '通用插件', 'morris-target': '通用插件 + 构建面板', 'editor:citadel': '通用插件 + 构建面板', 'editor:crystal': '通用插件 + 构建面板', view: '仅查看' };
 
@@ -21,6 +22,8 @@ export function mountScenePicker({ request, onConnect, status, onChange }) {
   }
   function reflect() {
     const s = current();
+    window.__tmCurrentSceneLabel = s.label;
+    if ($('viewer-title')) $('viewer-title').textContent = viewerTitle(document.body.dataset.tier, s.label);
     document.body.dataset.sceneEdit = s.edit === 'workbench' ? 'workbench' : 'view';
     editorB.hidden = !['morris-target', 'editor:citadel', 'editor:crystal'].includes(s.edit);
     if (hint) hint.textContent = s.edit === 'workbench' ? '完整场景插件 · 同源本机存档' : s.plugin === 'generic' ? '通用场景插件 · 物件可编辑' : '游戏自带构建面板';

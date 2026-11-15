@@ -1,0 +1,22 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>层叠薄平台 + 木梯 · 共享 World · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:0;font:14px system-ui;background:#eef2f2;color:#20343c}header{padding:10px 14px}iframe{width:100%;height:calc(100vh - 140px);border:0}#st{font:12px ui-monospace,monospace}button,label{margin-right:10px}</style>
+<header><b>781957658597269506 · 中心柱上错层叠的薄平台 + 木梯</b> · <a href="terraces.html">台地结构页</a> · <a href="artifacts/coverage/r56-C04-bn-world.md">本批报告</a>
+<p style="margin:4px 0">共享 World 里搭：中心岩柱 + 4 片只有一层厚、下面悬空的岩石平台（错层 2 层、伸向不同方向）+ 顶片房子 + 底座。terrainmesh 画悬挑侧壁与底面；navgraph 在上下片边缘相接处出 rise=2 的连接，<code>woodladders</code> 画成木梯，<code>ladderContact</code> 判上片为薄平台（支撑深度 &lt; rise）。转台式绕转。src/terrain/mushroom-c04.js</p>
+<label><input id="spin" type="checkbox" checked>转台</label><button id="quad">四边网格</button><button id="mixed">混合网格</button><div id="st">加载…</div></header><iframe id="scene"></iframe><script type="module">
+const $ = (s) => document.querySelector(s), q = new URLSearchParams(location.search), f = $('#scene');
+if (q.get('spin') === '0') $('#spin').checked = false;
+f.src = 'index.html?scene=terrain&grid=' + (q.get('grid') === 'mixed' ? 'mixed' : 'quad');
+for (const g of ['quad', 'mixed']) $('#' + g).onclick = () => { location.search = '?grid=' + g; };
+async function boot() {
+  const r = f.contentWindow?.rea; if (!r?.view?.worldMesh || !r.world.cells.some((c) => r.world.top(c) > 0)) return setTimeout(boot, 300);
+  const m = await f.contentWindow.Function('return import("./src/terrain/mushroom-c04.js")')();
+  const w = r.world, v = r.view, built = m.buildMushroomStack(w);
+  v.changed(); v.worldMesh.invalidate(); v.setDebug('woodladders', true);
+  f.contentWindow.document.querySelectorAll('details').forEach((d) => (d.open = false));
+  const c = w.cells[built.center]; v.target.set(c.cx, built.topLevel * v.levelHeight * .62, c.cz); v.distance = +(q.get('dist') ?? 15); v.pitch = +(q.get('pitch') ?? .38); if (q.get('yaw')) v.yaw = +q.get('yaw'); v.updateCamera();
+  const prev = v.onFrame; v.onFrame = (dt) => { prev?.(dt); if ($('#spin').checked) { v.yaw += dt * .35; v.updateCamera(); } };
+  const report = () => { const lad = v.navLayer.ladderDiagnostics ?? []; const st = { caps: m.mushroomReport(w, built), ladders: lad.length, thin: lad.filter((d) => d.contact.thinPlatform).length, columnClear: lad.filter((d) => d.contact.columnClear).length, rises: lad.map((d) => d.contact.supportDepth + '/' + (d.rise ?? '')), houses: built.houses.length };
+    $('#st').textContent = JSON.stringify(st); window.mushroomReview = { rea: r, built, stats: st }; };
+  setInterval(report, 700); report();
+}
+f.onload = () => setTimeout(boot, 500);
+</script></html>

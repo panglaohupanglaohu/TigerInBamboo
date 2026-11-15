@@ -27,28 +27,32 @@ function vertical(below,above){return below==='window2'?above==='none':['door','
 /** Six semantic types, two directed shutter variants to enforce an actual
  * adjacent window. Entry location is supplied by the existing safe-door policy.
  */
-export function solveFacadeDecoration(levels,{width=3,seed=1,entry=null,pins={}}={}){
+// r55: entryAt — entry column inside a long run (default centre); breaks — columns x where a
+// corner lies between x−1 and x: no shutter may pair across it, other horizontal rules hold.
+export function solveFacadeDecoration(levels,{width=3,seed=1,entry=null,pins={},entryAt=null,breaks=[]}={}){
  if(!Number.isInteger(levels)||levels<1||levels>12||!Number.isInteger(width)||width<1||width>12)throw new RangeError('facade bounds');
  if(entry!==null&&!['door','arch'].includes(entry))throw new RangeError('entry type');
  const cells=Array.from({length:width*levels},(_,id)=>{const x=id%width,y=Math.floor(id/width);return{id,n:4,edgeNeighbors:[x+1<width?id+1:-1,y+1<levels?id+width:-1,x?id-1:-1,y?id-width:-1]}}),tiles=facadeTypes.map(id=>({id,edges:Array.from({length:4},(_,dir)=>({id,dir}))})),allowed={},effectivePins={...pins};
- for(const c of cells){const x=c.id%width,y=Math.floor(c.id/width);allowed[c.id]=facadeTypes.filter(t=>!['door','arch'].includes(t)&&!(t==='window2'&&y===levels-1)&&!(t==='shutterL'&&x===0)&&!(t==='shutterR'&&x===width-1));}
- if(entry){const id=Math.floor(width/2);allowed[id]=[entry];effectivePins[id]=entry;}
+ const brk=new Set(breaks);if(entryAt!==null&&!(Number.isInteger(entryAt)&&entryAt>=0&&entryAt<width))throw new RangeError('entry column');
+ for(const c of cells){const x=c.id%width,y=Math.floor(c.id/width);allowed[c.id]=facadeTypes.filter(t=>!['door','arch'].includes(t)&&!(t==='window2'&&y===levels-1)&&!(t==='shutterL'&&(x===0||brk.has(x)))&&!(t==='shutterR'&&(x===width-1||brk.has(x+1))));}
+ if(entry){const id=entryAt??Math.floor(width/2);allowed[id]=[entry];effectivePins[id]=entry;}
  const compatible=(a,b)=>a.dir===0?horizontal(a.id,b.id):a.dir===2?horizontal(b.id,a.id):a.dir===1?vertical(a.id,b.id):vertical(b.id,a.id);
  const r=solveWFC({cells},{tiles,seed,pins:effectivePins,allowed,compatible,maxSteps:50000});
  const styles=r.ok?cells.map(c=>r.tiles[c.id]):[];
- return{...r,width,styles,violations:r.ok?validateFacade(styles,{width,levels,entry}):[]};
+ return{...r,width,styles,breaks:[...brk],entryAt:entry?entryAt??Math.floor(width/2):null,violations:r.ok?validateFacade(styles,{width,levels,entry,entryAt,breaks}):[]};
 }
 // Independent semantic validation, including missing-window shutter rejection.
-export function validateFacade(styles,{width,levels,entry=null}){
- const bad=[];if(styles.length!==width*levels)return['size'];
+export function validateFacade(styles,{width,levels,entry=null,entryAt=null,breaks=[]}){
+ const bad=[],ex=entryAt??Math.floor(width/2),brk=new Set(breaks);if(styles.length!==width*levels)return['size'];
  for(let y=0;y<levels;y++)for(let x=0;x<width;x++){
   const id=y*width+x,t=styles[id],l=x?styles[id-1]:null,r=x+1<width?styles[id+1]:null,up=y+1<levels?styles[id+width]:null;
   if(!facadeTypes.includes(t)){bad.push(id);continue;}
-  if(['door','arch'].includes(t)&&(y!==0||x!==Math.floor(width/2)||t!==entry))bad.push(id);
+  if(['door','arch'].includes(t)&&(y!==0||x!==ex||t!==entry))bad.push(id);
+  if(t==='shutterL'&&brk.has(x)||t==='shutterR'&&brk.has(x+1))bad.push(id);
   if(t==='window2'&&up!=='none')bad.push(id);
   if(t==='shutterL'&&!isWindow(l)||t==='shutterR'&&!isWindow(r))bad.push(id);
   if(r&&isWindow(t)&&t===r)bad.push(id);
   if(['door','arch'].includes(t)&&([l,r].some(s=>['door','arch','window2'].includes(s))||up&&!['none','window','window2'].includes(up)))bad.push(id);
  }
- if(entry&&styles[Math.floor(width/2)]!==entry)bad.push('entry');return[...new Set(bad)];
+ if(entry&&styles[ex]!==entry)bad.push('entry');return[...new Set(bad)];
 }

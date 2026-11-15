@@ -64,7 +64,9 @@ const grids = {
   townscaper: () => buildQuadGrid({ radius: 6, hexSize: 1.4, seed: 7 }),
 };
 const get = (k) => cache[k] || (cache[k] = grids[k]());
-let inf = null, infStats = null;
+let inf = null, infStats = null, infRings = 2;
+// 1332410042784641026 片中的调试视图：点阵（顶点圆点）+ 单块高亮 + 一处红色标记
+let infDots = false, infHighlight = -1;
 
 function setTab(t) {
   tab = t; picked = null;
@@ -74,8 +76,12 @@ function setTab(t) {
   const add = (label, on, fn) => { const b = document.createElement('button'); b.textContent = label; b.classList.toggle('on', on); b.onclick = () => { fn(); setTab(tab); }; s.appendChild(b); };
   if (t === 'kinds') { for (const [k, l] of [['tri', '纯三角'], ['square', '纯方格'], ['rhombi', '合并菱形（含三角）'], ['mixed', '混合']]) add(l, sub === k, () => (sub = k)); add('对偶图', showDual, () => (showDual = !showDual)); }
   if (t === 'infinite') {
-    if (!inf) { const t0 = performance.now(); inf = buildInfinite({ N: 4, L: 1, rings: 2 }); infStats = { ms: performance.now() - t0 }; }
+    // 1151137783785771008：片中区域是一块块往外长的（1 块 → 7 块 → 19 块），先给定环数再比模式
+    for (const k of [0, 1, 2]) add(k === 0 ? '1 块' : `环 ${k}（${1 + 3 * k * (k + 1)} 块）`, infRings === k, () => { if (infRings !== k) { infRings = k; inf = null; } });
+    if (!inf) { const t0 = performance.now(); inf = buildInfinite({ N: 4, L: 1, rings: infRings }); infStats = { ms: performance.now() - t0 }; }
     for (const [k, l] of [['raw', '未松弛'], ['patch', '只按块'], ['cluster', '只按簇'], ['blend', '块 + 两簇插值']]) add(l, infMode === k, () => (infMode = k));
+    add('顶点圆点', infDots, () => (infDots = !infDots));
+    add(infHighlight < 0 ? '高亮 1 块' : '取消高亮', infHighlight >= 0, () => (infHighlight = infHighlight < 0 ? 0 : -1));
   }
   if (t === 'lines' || t === 'bary') sub = t === 'lines' ? 'townscaper' : 'mixed';
   if (t === 'atlas') {
@@ -142,6 +148,15 @@ function draw() {
     V = view(boundsOf(inf.verts.map((v) => [v.x0, v.z0])));
     const pal = ['#cfe2d6', '#e3d7b8', '#d6d3e8', '#e6cfcf', '#cde0e6', '#e0e3c6', '#d9cce0'];
     for (const P of inf.patches) for (const qd of P.quads) poly(qd.map((v) => V.P(...inf.versionAt(v,P.id,infMode))), pal[(P.q * 7 + P.r * 3 + 1000) % pal.length], '#2a3238', 0.9);
+    // 单块高亮：片中那块比周围亮一档，用来盯住"同一块松弛前后 / 边界是否被邻居拉走"
+    if (infHighlight >= 0 && inf.patches[infHighlight]) {
+      for (const qd of inf.patches[infHighlight].quads) poly(qd.map((v) => V.P(...inf.versionAt(v,infHighlight,infMode))), '#f6f2e6', '#fffdf6', 1.4);
+    }
+    // 顶点圆点：片子里整片点阵是画出来的，块内每一格的四角都能点出来
+    if (infDots) {
+      ctx.fillStyle = '#12181c';
+      for (const v of inf.verts) { const [x, y] = V.P(...inf.versionAt(v, v.patches[0] ?? 0, infMode)); ctx.beginPath(); ctx.arc(x, y, 1.35, 0, 6.2832); ctx.fill(); }
+    }
     // 块边界：只属于一块的边且两端都在边界上
     ctx.strokeStyle = '#d6503c'; ctx.lineWidth = 2;
     for (const qd of inf.quads) for (let i = 0; i < 4; i++) {
@@ -153,7 +168,7 @@ function draw() {
     for (const C of inf.clusters) poly(C.patches.map((i) => V.P(...inf.patches[i].center)), null, 'rgba(255,255,255,.6)', 1.2);
     ctx.setLineDash([]);
     const vr = verify(inf, infMode);
-    st.textContent = `${inf.patches.length} 块 · ${inf.clusters.length} 簇 · ${vr.quads} 格 · 翻折 ${vr.flipped} / 非法 ${vr.invalid} · 块边界点 ${vr.border} 个，全部${vr.comparisons}对表示最大差 ${vr.seam.toExponential(1)} · 重心预计算 ${inf.barycentricStats.prepared} / 查询 ${inf.barycentricStats.queries} · ${infStats.ms.toFixed(0)} ms`;
+    st.textContent = `${inf.patches.length} 块 · ${inf.clusters.length} 簇 · ${vr.quads} 格 · 翻折 ${vr.flipped} / 非法 ${vr.invalid} · 拉伸最大 ${vr.maxStretch.toFixed(2)}× 最小 ${vr.minShrink.toFixed(2)}×（相对原始点阵，超 ${vr.stretchLimit}× 的 ${vr.stretched} 格）· 高亮 ${infHighlight < 0 ? '关' : '块 ' + infHighlight} · 点阵 ${infDots ? '开' : '关'} · 块边界点 ${vr.border} 个，全部${vr.comparisons}对表示最大差 ${vr.seam.toExponential(1)} · 重心预计算 ${inf.barycentricStats.prepared} / 查询 ${inf.barycentricStats.queries} · ${infStats.ms.toFixed(0)} ms`;
   } else if (tab === 'lines') {
     const g = get('townscaper');
     const hl = new Map();

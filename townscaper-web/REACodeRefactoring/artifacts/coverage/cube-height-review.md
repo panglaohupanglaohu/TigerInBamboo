@@ -18,3 +18,13 @@ cube-height.mjs验证六面方向、1536样本、8位量化误差、钳位、非
 
 ## 学习目标记录
 用户要求平均每小时约4段新视频，窗口2026-11-04 02:25至2026-11-07 08:25（上海），共78小时。逐帧核验优先，不将解码/静态实现计为学完；当前新增只计本段一次。实际速率与目标分列在共享进度中，不能据目标虚报。
+
+## 复核记录（第 41 轮，2026-11-10 00:14 起）
+
+- 帧数 / fps / 时长：273 帧 / 33.33 / 8.16s
+- 联系表：sheet-00（0000–0099）、sheet-01（0100–0199）、sheet-02（0200–0272）三张全部看过；原尺寸回看 frame-0150
+- 逐帧：白灰低模星球匀速自转，前段（0–130）露沟槽与台地，131–199 转到较平滑的一面，200–272 又回到有塔状凸起与深色谷地的一面；全程无 UI。原尺寸 0150 可见：单方向柔光、沟谷与背光侧压到近黑（不是 shadow map 的硬边），画面中央只有一枚红色鼠标光斑
+- 代码复核：`src/core/cube-height.js` `bakeCubeHeight()` 按 OpenGL 六面顺序烘 6×16² 单通道高度；`src/light/cube-height.js` `attach()` 在 `<begin_vertex>` 后按 `normalize(position)` 做**一次** CubeTexture 采样并与顶点半径比较生成本地暗化因子，`<color_fragment>` 里乘进 diffuse
+- 本轮跑过：`node tests/cube-height.mjs` PASS（六面方向、1536 样本、8 位量化、钳位与非法参数拒绝）；`node tests/cube-height-browser.cjs` PASS（9 个方向 GPU 读回误差 <0.015、`vertexLookups=1`、开关与 relax 重建、errors 空）
+- 新拍对照：`cube-height-close-on.png` / `cube-height-close-off.png`（同机位停自转，距离 17.5，裁右半幅）；另对既有 `cube-height-on/off.png` 做像素统计
+- 差异（写进 note）：开关确实改像素——全页 >6 级差 58350 像素（右半幅 4.7%），近景 40539 像素（8.5%），但**最大差不到 20/255**、均值亮度 148.7→147.2，肉眼几乎分不出；片子里沟谷是接近全黑的遮蔽。本地那条 `(sky-local)/span` 公式把压暗做弱了，原作阴影/GI 仍未复现

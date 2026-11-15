@@ -1,0 +1,6 @@
+{
+  "errors": [],
+  "scope": "normal pipeline + real game, fresh non-persistent context, camera gestures only",
+  "passed": false,
+  "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game').contentFrame().locator('canvas').first() to be visible\u001b[22m\n\u001b[2m    9 × locator resolved to hidden <canvas width=\"190\" height=\"190\" aria-label=\"星球小地图\" id=\"minimap-canvas\"></canvas>\u001b[22m\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/viewport-orbit-browser.mjs:2:547"
+}

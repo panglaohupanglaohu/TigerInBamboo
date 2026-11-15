@@ -250,7 +250,7 @@ function snapOldHarborToSeaCove({ odysseyCitadel, harbor, harborBuilt, harborCol
     boat.updateMatrixWorld(true);
   }
   for (const collider of harborColliders || []) collider.position.applyMatrix4(beforeHarborInverse).applyMatrix4(harbor.matrixWorld);
-  // 弹唱老人的最终落位在 messengerIsland 的沉船编排块（湖沼旁半沉沉船）
+  // 弹唱老人现在在莫西斯湖（2026-11-10 用户确认），与湖沼沉船无关
 }
 
 function placeHarborOnCitadel({ R, camp, harbor, harborBuilt, islandLift = 0 }) {

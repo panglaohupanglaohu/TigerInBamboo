@@ -1,0 +1,93 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>球面巨型河网 c09 · 河道深度优先坍缩 → 其余广度优先缓坡 · 沿河导航树</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#6f8f97;color:#13262c;font:14px/1.5 system-ui}header{padding:8px 14px;background:#e9f0ee}a{color:#26758a}canvas{display:block;width:100vw;height:calc(100vh - 96px)}#stats{font:12px ui-monospace,monospace;white-space:pre-wrap;max-height:40px;overflow:auto}</style>
+<header><b>球面巨型河网（1769691526924292506）+ 沿河更快的导航树（1795831296952041691）</b> · 第 56 批 C09-B ·
+<a href="?">河网</a> · <a href="?nav=auto">导航树（点星球换起点）</a> · <a href="?nav=auto&labels=1">导航树 + 区域编号</a> · <a href="planet-rivers-r55.html?mode=collapse">r55 先地形后挖河对照</a>
+<div id="stats">生成中…</div></header>
+<canvas id="c"></canvas>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+/* URL: ?n=2500&seed=3&rivers=14&share=0.24&cliff=0.04&nav=auto|<cellId>&labels=1&rot=&tilt=&zoom=&still=1
+ * 生成：src/terrain/river-collapse-c09.js collapseRiversFirst（河道 DFS 坍缩 → 其余 BFS 缓坡），写进共享 planetWorld；
+ * 导航：src/world/navgraph.js buildNav（共享边价：河格顺流 0.3、逆流 0.65；metric=星球弦长、slopeStep=1 缓坡直走）。 */
+import * as THREE from 'three';
+import { buildSphere, buildPlanet } from './src/sphere/planet.js';
+import { planetWorld, planetFusion } from './src/sphere/planet-town.js';
+import { collapseRiversFirst, riverCollapseStats } from './src/terrain/river-collapse-c09.js';
+import { buildNav } from './src/world/navgraph.js';
+const Q = new URLSearchParams(location.search), num = (k, d) => (Q.has(k) ? +Q.get(k) : d);
+const planet = buildPlanet(buildSphere({ n: num('n', 4000), seed: num('seed', 3) }), { L: 0.16 }), pw = planetWorld(planet);
+const res = collapseRiversFirst(pw, { seed: num('seed', 3), rivers: num('rivers', 18), run: num('run', 9), riverShare: num('share', 0.24), cliffChance: num('cliff', 0.04) });
+const stats = riverCollapseStats(pw, res);
+const fus = planetFusion(pw, planet, { density: 0, seed: 5 }), at = fus.houses.at;
+// planetFusion(density 0) 只 touch 不改地形：核对高度与河格都没变，才把 riverFlow 版本续上（否则 navgraph 退回河口距离）
+if (pw.cells.every((c) => pw.ground(c) === res.heights[c.id] && pw.river[c.id] === res.river[c.id])) pw.riverFlow.version = pw.version;
+const cells = pw.cells, G = (c) => pw.ground(c), maxH = stats.maxLevel;
+const centre = (c, h = G(c), lift = 1.004) => { const ring = c.ring.map((k) => at(k, h)); return [0, 1, 2].map((i) => ring.reduce((s, p) => s + p[i], 0) / ring.length * lift); };
+// 地表：顶面按高度渐变（低处草绿 → 高处土黄），河格蓝；一层台阶的侧面是暗草色，≥2 层的陡崖是灰白岩壁（原片白色崖）
+const pos = [], col = [], lerp = (a, b, t) => a.map((x, i) => x + (b[i] - x) * t);
+const lowC = [0.47, 0.66, 0.33], highC = [0.84, 0.71, 0.45], riverC = [0.16, 0.36, 0.5], stepC = null, cliffC = [0.9, 0.88, 0.82];
+for (const c of cells) {
+  const h = G(c); if (!h) continue;
+  const ring = c.ring.map((k) => at(k, h)), ctr = ring.reduce((s, p) => s.map((x, i) => x + p[i] / ring.length), [0, 0, 0]);
+  const top = pw.river[c.id] ? riverC : lerp(lowC, highC, Math.min(1, (h - 1) / Math.max(1, maxH - 2)));
+  for (let k = 0; k < ring.length; k++) { pos.push(...ctr, ...ring[k], ...ring[(k + 1) % ring.length]); for (let r = 0; r < 3; r++) col.push(...top); }
+  c.edgeNeighbors.forEach((o, k) => {
+    const oh = o >= 0 ? G(cells[o]) : 0; if (oh >= h) return;
+    const a = c.ring[k], b = c.ring[(k + 1) % c.ring.length], wc = h - oh > 1 || oh === 0 ? cliffC : top.map((x) => x * 0.86);
+    for (let l = oh + 1; l <= h; l++) { const a0 = at(a, l - 1), b0 = at(b, l - 1), a1 = at(a, l), b1 = at(b, l); pos.push(...a0, ...b0, ...b1, ...a0, ...b1, ...a1); for (let r = 0; r < 6; r++) col.push(...wc); }
+  });
+}
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true });
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x6f8f97);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100); camera.position.set(0, 4, 19 / num('zoom', 1)); camera.lookAt(0, 0, 0);
+scene.add(new THREE.HemisphereLight(0xfaf6ea, 0x5d6e74, 1.5)); const sun = new THREE.DirectionalLight(0xffffff, 1.4); sun.position.set(5, 8, 6); scene.add(sun);
+const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); g.computeVertexNormals();
+const land = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .95, flatShading: true }));
+const seaR = Math.hypot(...at(cells.find((c) => !G(c)).ring[0], 0)) * 0.999;
+const sea = new THREE.Mesh(new THREE.SphereGeometry(seaR, 96, 64), new THREE.MeshStandardMaterial({ color: 0x4a8fae, roughness: .5 }));
+const grp = new THREE.Group(); grp.add(land, sea); scene.add(grp);
+// 河的流向（flowTo）细白线
+{ const p = []; for (const c of cells) if (pw.river[c.id] && res.flowTo[c.id] >= 0) p.push(...centre(c, G(c), 1.006), ...centre(cells[res.flowTo[c.id]], undefined, 1.006));
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(p, 3));
+  grp.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0xdff4ff }))); }
+// 导航树
+let navGroup = null, faced = false; const navOut = {};
+const chord = (a, b) => Math.hypot(a.dir[0] - b.dir[0], a.dir[1] - b.dir[1], a.dir[2] - b.dir[2]);
+function drawNav(start) {
+  if (navGroup) grp.remove(navGroup);
+  const nav = buildNav(pw, { start, metric: chord, slopeStep: 1 }); navGroup = new THREE.Group();
+  const T = nav.tree.time; let tmax = 0; for (const t of T) if (Number.isFinite(t)) tmax = Math.max(tmax, t);
+  const p = [], cc = [], ramp = (t) => t < .5 ? lerp([0.35, 1, 0.2], [1, 0.95, 0.15], t * 2) : lerp([1, 0.95, 0.15], [1, 0.35, 0.1], t * 2 - 1);
+  let reached = 0, viaRiver = 0; const horizon = tmax * num('horizon', 0.35);   // 色带只铺到前 35% 的时间，近处的绿→黄→橙才看得出来（原片同样只看到指针附近）
+  for (const c of cells) { const par = nav.tree.parent[c.id]; if (par < 0) continue; reached++; if (pw.river[c.id] && pw.river[par]) viaRiver++;
+    const a = centre(c, undefined, 1.012), b = centre(cells[par], undefined, 1.012); p.push(...a, ...b); cc.push(...ramp(Math.min(1, T[c.id] / horizon)), ...ramp(Math.min(1, T[par] / horizon))); }
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); lg.setAttribute('color', new THREE.Float32BufferAttribute(cc, 3));
+  navGroup.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ vertexColors: true })));
+  const s = new THREE.Mesh(new THREE.SphereGeometry(.03, 12, 8), new THREE.MeshBasicMaterial({ color: 0xff2a2a })); s.position.set(...centre(nav.start, undefined, 1.02)); navGroup.add(s);
+  if (Q.get('labels')) {
+    const big = nav.regions.filter((r) => r.cells.length >= 6).sort((a, b) => b.cells.length - a.cells.length).slice(0, 18);
+    big.forEach((r, i) => { const cv = document.createElement('canvas'); cv.width = 96; cv.height = 48; const x = cv.getContext('2d'); x.font = 'bold 30px monospace'; x.fillStyle = '#d0201c'; x.textAlign = 'center'; x.fillText(`[${r.id}]`, 48, 34);
+      const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(cv), depthTest: true })); const mid = r.cells[(r.cells.length / 2) | 0];
+      sp.position.set(...centre(mid, undefined, 1.03)); sp.scale.set(.5, .25, 1); navGroup.add(sp); });
+    navOut.labels = big.length;
+  }
+  grp.add(navGroup);
+  if (Q.get('face') !== '0') { const d = new THREE.Vector3(...nav.start.dir).normalize(), cam = camera.position.clone().normalize(); grp.quaternion.setFromUnitVectors(d, cam); faced = true; }
+  // 沿河 vs 走路：同一对河格（河口 ↔ 最远的主干上游格）顺/逆流的最短时间
+  Object.assign(navOut, { start: nav.start.id, reached, treeEdgesOnRiver: viaRiver, regions: nav.regions.length, flowSource: nav.flowSource });
+  window.__c09nav = navOut; document.getElementById('stats').textContent = JSON.stringify({ ...stats, nav: navOut });
+}
+if (Q.get('nav')) {
+  const id = Q.get('nav') === 'auto' ? res.paths[0][Math.floor(res.paths[0].length * 0.85)] : +Q.get('nav');
+  drawNav(cells[id]);
+  const ray = new THREE.Raycaster(), m = new THREE.Vector2();
+  renderer.domElement.addEventListener('pointerdown', (e) => { const r = renderer.domElement.getBoundingClientRect(); m.set((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1); ray.setFromCamera(m, camera);
+    const hit = ray.intersectObject(land)[0]; if (!hit) return; const v = grp.worldToLocal(hit.point.clone()).normalize();
+    let best = null, bd = -2; for (const c of cells) { if (!G(c)) continue; const d = v.x * c.dir[0] + v.y * c.dir[1] + v.z * c.dir[2]; if (d > bd) { bd = d; best = c; } } if (best) drawNav(best); });
+}
+if (!faced) { grp.rotation.y = num('rot', 0.6); grp.rotation.x = num('tilt', 0.3); }
+function resize() { const w = innerWidth, h = innerHeight - 96; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+resize(); addEventListener('resize', resize);
+renderer.setAnimationLoop(() => { if (!Q.get('still') && !faced) grp.rotation.y += 0.002; renderer.render(scene, camera); });
+window.__c09planet = stats; if (!Q.get('nav')) document.getElementById('stats').textContent = JSON.stringify(stats);
+</script></html>

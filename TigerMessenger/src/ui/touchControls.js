@@ -101,6 +101,7 @@ export function createTouchControls({
           <button type="button" class="touch-btn touch-btn-f" data-action="tram" aria-label="货运机车 F">F</button>
           <button type="button" class="touch-btn touch-btn-c" data-action="driver" aria-label="司机视野 C">C</button>
           <button type="button" class="touch-btn touch-btn-g" data-action="fire" aria-label="气泡弹 G">G</button>
+          <button type="button" class="touch-btn touch-btn-q" data-action="summon" aria-label="召唤航空艇 Q" title="Q：回到玩家视角并召唤航空艇">Q</button>
         </div>
       </div>
     </div>
@@ -308,6 +309,9 @@ export function createTouchControls({
         fireKey("KeyC", "keydown");
       } else if (action === "fire") {
         fireKey("KeyG", "keydown");
+      } else if (action === "summon") {
+        // Q：回到玩家视角并召唤航空艇（与键盘 Q 同一入口 handleAirshipSummonShortcut）
+        fireKey("KeyQ", "keydown");
       }
     });
     const end = (e) => {
@@ -323,6 +327,8 @@ export function createTouchControls({
         fireKey("KeyC", "keyup");
       } else if (action === "fire") {
         fireKey("KeyG", "keyup");
+      } else if (action === "summon") {
+        fireKey("KeyQ", "keyup");
       }
     };
     btn.addEventListener("pointerup", end);

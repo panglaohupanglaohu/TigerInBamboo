@@ -20,6 +20,8 @@ export const BN_PAL = {
   rain: { name: '雨（推断）', sky: '#c9ccc4', skyTop: '#dcdcd4', sea: ['#c4c7bf', '#a4aba6'], cliff: ['#b9b8b4', '#a8a6a3', '#8e8b8b', '#6e6a6e'], grass: ['#7f8a6c', '#556048'], sand: '#cfc8b8', shore: '#eef0e6', wall: '#ecebe4', roof: '#8e9a7a', reflect: '#6a6a70' },
   dusk: { name: '黄昏（推断）', sky: '#b49a96', skyTop: '#c7a99b', sea: ['#b7a09c', '#8f7f86'], cliff: ['#d4a38d', '#bf8d80', '#9a6c6c', '#6f4f5c'], grass: ['#b0a070', '#7a6b4c'], sand: '#e2c7ae', shore: '#f3c49a', wall: '#f6e2cc', roof: '#b9a77a', reflect: '#5f4c5c' },
   night: { name: '夜（推断）', sky: '#4a5566', skyTop: '#5a6576', sea: ['#4d5868', '#3a4454'], cliff: ['#7d8098', '#6c6e88', '#565771', '#3f3f58'], grass: ['#5d6a62', '#404a46'], sand: '#8d8c94', shore: '#9fc6d6', wall: '#c9cbd8', roof: '#6f7a72', reflect: '#2e3344' },
+  // 第 56 批 C03 · 943230620242796544 冬季宣传片（帧 0250 取色）：台面与屋顶被雪盖成近白，崖面仍是紫灰，海面灰蓝、岸线白。
+  winter: { name: '冬（推断 · 943230620242796544）', sky: '#c4c7cb', skyTop: '#d6d8db', sea: ['#bfc3c8', '#9aa1aa'], cliff: ['#a497a3', '#94879a', '#7c6f84', '#5d5166'], grass: ['#eceef0', '#d3d6db'], sand: '#e6e3e3', shore: '#ffffff', wall: '#f3f1ee', roof: '#eef0f3', reflect: '#675f75' },
   autumn: { name: '秋（推断）', sky: '#b8b2a2', skyTop: '#cbc4b2', sea: ['#b4b0a3', '#949488'], cliff: ['#b3a29c', '#a28f8c', '#8a7676', '#6b5860'], grass: ['#c09a58', '#86683c'], sand: '#dccbb0', shore: '#e9b88f', wall: '#f2eadc', roof: '#b0864e', reflect: '#665a62' },
 };
 
@@ -33,6 +35,7 @@ export function applyBadNorthTheme(view, name) {
     Object.assign(BUILD, saved.BUILD);
     overlay?.remove(); overlay = null;
     view.bnTheme = null;
+    frostVegetation(view, false);
     view.setTimeOfDay(view.timeOfDay === 'bn' ? 'day' : view.timeOfDay);
     view.worldMesh.invalidate();
     return;
@@ -61,5 +64,21 @@ export function applyBadNorthTheme(view, name) {
     document.body.appendChild(overlay);
   }
   overlay.style.background = `radial-gradient(ellipse at 50% 52%, rgba(40,40,55,.12) 0%, rgba(40,40,55,.05) 38%, rgba(255,255,255,0) 62%), linear-gradient(${P.skyTop}00, ${P.skyTop}22)`;
+  frostVegetation(view, name === 'winter');
   view.worldMesh.invalidate();
+}
+
+/** 第 56 批 C03 · 943230620242796544：冬景里树冠 / 灌木也挂白霜。不改植被着色器——给带 emissive 的植被材质加一层冷白自发光
+ * （= 往白色抬），原值存在 userData 里，换回别的季节就还原。草丛等自定义 ShaderMaterial 没有 emissive，保持原样。 */
+export function frostVegetation(view, on, color = '#a7adb5') {
+  const g = view?.vegetation?.group; if (!g) return 0;
+  let n = 0;
+  g.traverse((o) => {
+    for (const m of [o.material].flat()) {
+      if (!m?.emissive) continue;
+      if (on) { m.userData.frostBase ??= m.emissive.getHex(); m.emissive.set(color); n++; }
+      else if (m.userData.frostBase !== undefined) { m.emissive.setHex(m.userData.frostBase); delete m.userData.frostBase; n++; }
+    }
+  });
+  return n;
 }

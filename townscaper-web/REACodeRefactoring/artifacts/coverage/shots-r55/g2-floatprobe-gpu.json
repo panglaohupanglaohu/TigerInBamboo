@@ -1,0 +1,113 @@
+{
+ "webgl2": true,
+ "renderer": "WebKit WebGL",
+ "version": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+ "extensions": {
+  "colorFloat": true,
+  "floatLinear": true
+ },
+ "size": 32,
+ "steps": 60,
+ "dt": 0.02,
+ "spin": 0.35,
+ "referenceMassDrift": -0.003462923116289173,
+ "rows": [
+  {
+   "storage": "f32",
+   "internal": "RGBA32F",
+   "filter": "linear",
+   "ok": true,
+   "ms": 20.5,
+   "vsReference": {
+    "meanAbsError": 3.546278491304172e-08,
+    "maxAbsError": 4.799111300579639e-07,
+    "nonFinite": 0
+   },
+   "vsEmulated": {
+    "meanAbsError": 3.789148195210146e-08,
+    "maxAbsError": 3.5762786865234375e-07,
+    "nonFinite": 0
+   },
+   "emulatedVsReference": {
+    "meanAbsError": 1.230670272130618e-08,
+    "maxAbsError": 1.4843992013346963e-07,
+    "nonFinite": 0
+   },
+   "massDrift": -0.003462865605295728,
+   "emulatedMassDrift": -0.0034629329904938906
+  },
+  {
+   "storage": "f16",
+   "internal": "RGBA16F",
+   "filter": "linear",
+   "ok": true,
+   "ms": 18.2,
+   "vsReference": {
+    "meanAbsError": 0.0008760725159533127,
+    "maxAbsError": 0.012599309652146395,
+    "nonFinite": 0
+   },
+   "vsEmulated": {
+    "meanAbsError": 1.9241124391555786e-06,
+    "maxAbsError": 0.00048828125,
+    "nonFinite": 0
+   },
+   "emulatedVsReference": {
+    "meanAbsError": 0.0008779637922855055,
+    "maxAbsError": 0.012599309652146395,
+    "nonFinite": 0
+   },
+   "massDrift": -0.007810923524374359,
+   "emulatedMassDrift": -0.007825367516603541
+  },
+  {
+   "storage": "u8",
+   "internal": "RGBA8",
+   "filter": "linear",
+   "ok": true,
+   "ms": 13,
+   "vsReference": {
+    "meanAbsError": 0.005287123115871406,
+    "maxAbsError": 0.021439252215525673,
+    "nonFinite": 0
+   },
+   "vsEmulated": {
+    "meanAbsError": 0,
+    "maxAbsError": 0,
+    "nonFinite": 0
+   },
+   "emulatedVsReference": {
+    "meanAbsError": 0.005287123115871406,
+    "maxAbsError": 0.021439252215525673,
+    "nonFinite": 0
+   },
+   "massDrift": -6.407416814038853e-05,
+   "emulatedMassDrift": -6.407416814038853e-05
+  },
+  {
+   "storage": "f32",
+   "internal": "RGBA32F",
+   "filter": "nearest",
+   "ok": true,
+   "ms": 2.7,
+   "vsReference": {
+    "meanAbsError": 0.005216542608195631,
+    "maxAbsError": 0.021278563235572756,
+    "nonFinite": 0
+   },
+   "vsEmulated": {
+    "meanAbsError": 0,
+    "maxAbsError": 0,
+    "nonFinite": 0
+   },
+   "emulatedVsReference": {
+    "meanAbsError": 0.005216542608195631,
+    "maxAbsError": 0.021278563235572756,
+    "nonFinite": 0
+   },
+   "massDrift": 9.048177457521654e-10,
+   "emulatedMassDrift": 9.048177457521654e-10
+  }
+ ],
+ "scope": "current-browser-gpu-only; not a cross-platform matrix"
+}

@@ -201,8 +201,79 @@ function keyDownUp(page, code) {
  * 在页面内设置机位（零侵入，仅 evaluate）。
  * 若 shot.camera.mode / family 为 panorama|cinematic|macro|tele|airshipPilot（或中文别名），走科学镜头族。
  */
-async function applyCamera(page, shot) {
+export async function applyCamera(page, shot) {
   const cam = shot.camera || {};
+  // Object-local framing is deterministic; an absent asset must fail rather than shoot elsewhere.
+  if (cam.object) {
+    if (cam.battle === 'ground') {
+      await page.waitForFunction(() => (window.__tm.batianFleet.snapshot().groundAssault?.deployed || 0) > 0, null, {timeout:180000});
+      console.log('[battle] ground',JSON.stringify(await page.evaluate(()=>window.__tm.batianFleet.snapshot().groundAssault)));
+    } else if (cam.battle) {
+      const action = await page.evaluate((action) => {
+        const fleet = window.__tm.batianFleet;
+        if (!fleet) throw new Error('Existing Batian fleet API unavailable');
+        const ok = action === 'start' ? fleet.start('bookshop') : fleet.retreat();
+        if (!ok && action === 'start') throw new Error('Batian fleet rejected bookshop attack');
+        return {action, ok, snapshot:fleet.snapshot()};
+      }, cam.battle);
+      console.log('[battle]', JSON.stringify(action));
+      if (cam.battle === 'start') {
+        await page.waitForFunction(() => ['blockade','pincer','cannon','guard'].includes(window.__tm.batianFleet.snapshot().phase), null, {timeout:180000});
+      }
+    }
+    await sleep(cam.waitMs ?? 900);
+    return page.evaluate((cam) => {
+      const tm = window.__tm, T = tm.THREE;
+      const obj = tm.scene.getObjectByName(cam.object);
+      if (!obj) throw new Error(`Capture asset missing: ${cam.object}`);
+      tm.setCaptureMode(true);
+      tm.scene.updateMatrixWorld(true);
+      // This isolated capture page owns the rig; prevent the game loop replacing the shot.
+      tm.cameraRig.update = () => {};
+      if (Array.isArray(cam.stagePlayer)) {
+        const playerPos = obj.localToWorld(new T.Vector3(...cam.stagePlayer));
+        const supportR = tm.playerSupportRadius?.(playerPos) || playerPos.length();
+        tm.player.position.copy(playerPos).normalize().multiplyScalar(supportR + 0.12);
+        tm.player.velocity?.set?.(0, 0, 0);
+        tm.player.onGround = true;
+        tm.player.groundR = supportR;
+        const facing = obj.localToWorld(new T.Vector3(...cam.aim)).sub(tm.player.position);
+        const up = tm.player.position.clone().normalize();
+        facing.addScaledVector(up, -facing.dot(up)).normalize();
+        tm.player.forward?.copy?.(facing);
+        tm.player.facing?.copy?.(facing);
+        tm.cameraRig.snapToPlayer?.();
+        tm.cameraRig.update = () => {};
+      }
+      if (cam.holdingLetter != null) {
+        tm.player.holdingLetter = !!cam.holdingLetter;
+        const root = tm.scene.getObjectByName('player-courier-root');
+        root?.traverse?.(node => {
+          if (node.userData?.letter) node.userData.letter.visible = !!cam.holdingLetter;
+          if (node.name === 'letter') node.visible = !!cam.holdingLetter;
+          if (node.isPointLight && node.name === 'player-hold-aura') node.intensity = cam.holdingLetter ? 1.2 : 0;
+        });
+      }
+      const eye = obj.localToWorld(new T.Vector3(...cam.eye));
+      const aim = obj.localToWorld(new T.Vector3(...cam.aim));
+      if (cam.aimObject) {
+        const aimObj = tm.scene.getObjectByName(cam.aimObject);
+        if (!aimObj) throw new Error(`Capture aim asset missing: ${cam.aimObject}`);
+        const dynamicAim = aimObj.getWorldPosition(new T.Vector3());
+        aim.lerp(dynamicAim, Math.max(0, Math.min(1, cam.aimObjectMix ?? 1)));
+      }
+      tm.camera.position.copy(eye);
+      tm.camera.up.copy(obj.getWorldPosition(new T.Vector3()).normalize());
+      tm.camera.fov = cam.fov ?? 55;
+      tm.camera.near = 0.1;
+      tm.camera.updateProjectionMatrix();
+      tm.camera.lookAt(aim);
+      tm.scene.updateMatrixWorld(true);
+      tm.renderer.render(tm.scene, tm.camera);
+      return {captureClean:true, cameraFamily:'object-local', object:cam.object, aimObject:cam.aimObject || null, stagedPlayer:Array.isArray(cam.stagePlayer), holdingLetter:cam.holdingLetter ?? null, eye:eye.toArray(), aim:aim.toArray()};
+    }, cam);
+  }
+
   const family = resolveCameraFamily(cam);
   const famDef = family ? FAMILY_DEFAULTS[family] || {} : {};
 
@@ -656,13 +727,40 @@ export const HUD_BAN_IDS = [
   "rescue-campaign",
   "compass",
   "topleft-stack",
+  "batian-hud",
+  "robot-ops",
+  "tm-ui-dock",
+  "storyboard-panel",
+  "shot-harness-panel",
+  "storyboard-toggle",
+  "robot-ops-toggle",
+  "tram-hint",
+  "airship-hint",
+  "scout-hint",
+  "elder-hint",
+  "fox-hint",
+  "bubble-hint",
+  "boat-hint",
+  "dive-tint",
+  "touch-controls",
+  "startup-progress",
+  "load-error",
+  "journal-panel",
+  "dev-panel",
+  "dev-toggle",
+  "map-editor",
+  "crystal-city-editor",
+  "citadel-editor",
+  "morris-townscaper-hud",
+  "voxel-ao-probe",
+  "dev-wfc-failure",
 ];
 
 /**
  * Assert capture-clean: setCaptureMode(true), isCaptureMode, ban-list not visible.
  * Returns { ok, captureMode, visibleBanned, classClean }.
  */
-async function assertCaptureClean(target) {
+export async function assertCaptureClean(target) {
   return target.evaluate((banIds) => {
     const tm = window.__tm;
     if (typeof tm?.setCaptureMode === "function") tm.setCaptureMode(true);
@@ -678,19 +776,20 @@ async function assertCaptureClean(target) {
       document.documentElement.classList.contains("tm-capture-clean");
 
     const visibleBanned = [];
-    for (const id of banIds) {
-      const el = document.getElementById(id);
-      if (!el) continue;
-      const st = getComputedStyle(el);
-      const r = el.getBoundingClientRect();
-      const hidden =
-        st.visibility === "hidden" ||
-        st.display === "none" ||
-        st.opacity === "0" ||
-        el.hasAttribute("hidden") ||
-        r.width < 1 ||
-        r.height < 1;
-      if (!hidden) visibleBanned.push(id);
+    const selectors = globalThis.__tmUiLayers?.CAPTURE_HIDE_SELECTORS || [...banIds.map(id => `#${id}`), ".toast"];
+    for (const selector of selectors) {
+      for (const el of document.querySelectorAll(selector)) {
+        const st = getComputedStyle(el);
+        const r = el.getBoundingClientRect();
+        const hidden =
+          st.visibility === "hidden" ||
+          st.display === "none" ||
+          st.opacity === "0" ||
+          el.hasAttribute("hidden") ||
+          r.width < 1 ||
+          r.height < 1;
+        if (!hidden && !visibleBanned.includes(selector)) visibleBanned.push(selector);
+      }
     }
     return {
       ok: !!isCap && visibleBanned.length === 0,
@@ -701,7 +800,7 @@ async function assertCaptureClean(target) {
   }, HUD_BAN_IDS);
 }
 
-async function grabPng(target, outPath, crop) {
+export async function grabPng(target, outPath, crop) {
   // 优先 canvas.toDataURL（排除 HTML HUD）；失败则 page.screenshot + clip 到 canvas 区域（策略 2）
   const page = pageOf(target);
   const dataUrl = await target.evaluate((cropRect) => {
@@ -770,6 +869,40 @@ async function grabPng(target, outPath, crop) {
     source: clip ? "playwright-screenshot+crop" : "playwright-screenshot",
     cropUsed,
   };
+}
+
+async function inspectFrame(target) {
+  return target.evaluate(() => {
+    const source = window.__tm?.renderer?.domElement || document.querySelector("canvas");
+    if (!source) return { ok: false, reason: "missing-canvas" };
+    // toDataURL 后 WebGL 缓冲可能清空；必须在 PNG 读取前主动 render 并采样。
+    if (window.__tm?.renderer && window.__tm?.scene && window.__tm?.camera) {
+      window.__tm.renderer.render(window.__tm.scene, window.__tm.camera);
+    }
+    const sample = document.createElement("canvas");
+    sample.width = 96;
+    sample.height = 64;
+    const ctx = sample.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return { ok: false, reason: "missing-2d-context" };
+    ctx.drawImage(source, 0, 0, sample.width, sample.height);
+    const data = ctx.getImageData(0, 0, sample.width, sample.height).data;
+    let sum = 0;
+    let sumSq = 0;
+    let dark = 0;
+    const count = data.length / 4;
+    for (let i = 0; i < data.length; i += 4) {
+      const y = data[i] * 0.2126 + data[i + 1] * 0.7152 + data[i + 2] * 0.0722;
+      sum += y;
+      sumSq += y * y;
+      if (y < 8) dark += 1;
+    }
+    const mean = sum / count;
+    const variance = Math.max(0, sumSq / count - mean * mean);
+    const deviation = Math.sqrt(variance);
+    const darkRatio = dark / count;
+    const blank = mean < 5 || deviation < 2.5 || darkRatio > 0.97;
+    return { ok: !blank, blank, mean: Number(mean.toFixed(2)), deviation: Number(deviation.toFixed(2)), darkRatio: Number(darkRatio.toFixed(4)) };
+  });
 }
 
 function copyFromDir(shotsDir, plan, outShots) {
@@ -882,7 +1015,13 @@ function writeCleanPlaceholders(plan, outShots, meta = {}) {
 
 export async function captureShots(plan, opts) {
   const chapterDir = opts.chapterDir;
-  const outShots = path.join(chapterDir, "shots");
+  const finalShots = path.join(chapterDir, "shots");
+  const useStaging = !opts.shotsDir && !opts.useFixtures;
+  const stagingDir = useStaging
+    ? path.join(chapterDir, `.capture-${process.pid}-${Date.now()}`)
+    : chapterDir;
+  const outShots = path.join(stagingDir, "shots");
+  const manifestPath = path.join(stagingDir, "manifest.json");
   fs.mkdirSync(outShots, { recursive: true });
   const fixturesDir = path.join(CARTON, "chapters/_fixtures");
   const portPref = opts.port || Number(process.env.CARTONBOOK_PORT) || null;
@@ -908,7 +1047,7 @@ export async function captureShots(plan, opts) {
       shots: entries,
     };
     fs.writeFileSync(
-      path.join(chapterDir, "manifest.json"),
+      manifestPath,
       JSON.stringify(manifest, null, 2)
     );
     return manifest;
@@ -925,7 +1064,7 @@ export async function captureShots(plan, opts) {
       shots: entries,
     };
     fs.writeFileSync(
-      path.join(chapterDir, "manifest.json"),
+      manifestPath,
       JSON.stringify(manifest, null, 2)
     );
     return manifest;
@@ -933,15 +1072,7 @@ export async function captureShots(plan, opts) {
 
   const pw = await resolvePlaywright();
   if (!pw?.chromium) {
-    const err =
-      "未找到 Playwright。请确认 ../tools/shot/node_modules/playwright 存在，" +
-      "或 npm i playwright；也可 --shots-dir / layout-only。";
-    // 退化 fixtures
-    if (fs.existsSync(fixturesDir) && fs.readdirSync(fixturesDir).some((f) => f.endsWith(".png"))) {
-      console.warn("[capture] " + err + " → 回退 fixtures");
-      return captureShots(plan, { ...opts, useFixtures: true });
-    }
-    throw new Error(err);
+    throw new Error("未找到 Playwright。正式拍摄明确失败，绝不回退 fixtures；请检查 ../tools/shot/node_modules/playwright，或使用独立 layout-only 预览。");
   }
 
   let server;
@@ -1007,9 +1138,7 @@ export async function captureShots(plan, opts) {
           ]
         : [
             "--no-sandbox",
-            "--use-gl=angle",
-            "--use-angle=swiftshader",
-            "--enable-unsafe-swiftshader",
+            ...(process.env.CARTONBOOK_SOFTWARE === "1" ? ["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader"] : ["--use-gl=angle", "--use-angle=metal"]),
             "--ignore-gpu-blocklist",
             "--enable-webgl",
             "--disable-gpu-sandbox",
@@ -1041,6 +1170,7 @@ export async function captureShots(plan, opts) {
     /** Boot game page/frame until __tm.camera is ready. */
     async function bootTarget(browser) {
       const page = await browser.newPage({ viewport: vp });
+      page.on("console", m => {if(m.type()==="error")console.warn("[browser]",m.text().slice(0,400));});
       page.on("pageerror", (e) => console.warn("[pageerror]", e.message));
       console.log("[capture] goto", urlPath, `(via=${via}, headed=${wantHeaded})`);
       await page.goto(urlPath, { waitUntil: "domcontentloaded", timeout: 120000 });
@@ -1104,6 +1234,7 @@ export async function captureShots(plan, opts) {
 
       // Boot: dismiss intro / click start; allow up to ~5 min for __tm
       for (let i = 0; i < 60; i++) {
+        if (i % 6 === 0) console.log("[boot]", await target.evaluate(() => ({ready:!!window.__tm?.camera, startup:window.__tmStartup || null})));
         const ready = await target
           .evaluate(() => !!window.__tm?.camera)
           .catch(() => false);
@@ -1134,6 +1265,13 @@ export async function captureShots(plan, opts) {
       await target.waitForFunction(() => !!window.__tm?.camera, null, {
         timeout: 300000,
       });
+      const inventory = await target.evaluate(() => {
+        const tm=window.__tm, rows=[];tm.scene.updateMatrixWorld(true);
+        tm.scene.traverse(o=>{if(o.name && /bookshop|书店|robot|jakub|freight|airship|batian/i.test(o.name)) rows.push({name:o.name,type:o.type,position:o.getWorldPosition(new tm.THREE.Vector3()).toArray()});});
+        return {url:location.href,rows};
+      });
+      fs.writeFileSync(path.join(stagingDir, 'runtime-inventory.json'),JSON.stringify(inventory,null,2));
+
       await target
         .waitForFunction(
           () =>
@@ -1150,6 +1288,7 @@ export async function captureShots(plan, opts) {
         if (typeof tm?.setCaptureMode === "function") tm.setCaptureMode(true);
         else if (globalThis.__tmUiLayers?.setCaptureMode)
           globalThis.__tmUiLayers.setCaptureMode(true);
+        if (tm?.P) tm.P.daySpeed = 0;
       });
       await sleep(1500);
       return { page, target };
@@ -1212,11 +1351,22 @@ export async function captureShots(plan, opts) {
               });
               break;
             }
+            const quality = await inspectFrame(target);
             const grab = await grabPng(target, dest, crop);
             const source = grab.source || grab;
             const cropUsed = !!(grab.cropUsed || crop);
             if (cropUsed) cropUsedAny = true;
-            const ok = fs.existsSync(dest) && fs.statSync(dest).size > 1000;
+            const ok = fs.existsSync(dest) && fs.statSync(dest).size > 1000 && quality.ok;
+            if (shot.camera?.releaseLetterAfterCapture) {
+              await target.evaluate(() => {
+                window.__tm.player.holdingLetter = false;
+                const root = window.__tm.scene.getObjectByName('player-courier-root');
+                root?.traverse?.(node => {
+                  if (node.userData?.letter) node.userData.letter.visible = false;
+                  if (node.name === 'letter') node.visible = false;
+                });
+              });
+            }
             const family =
               camMeta?.cameraFamily ||
               resolveCameraFamily(shot.camera || {}) ||
@@ -1227,10 +1377,15 @@ export async function captureShots(plan, opts) {
               source,
               ok,
               cropUsed,
-              bytes: ok ? fs.statSync(dest).size : 0,
+              bytes: fs.existsSync(dest) ? fs.statSync(dest).size : 0,
+              quality,
+              error: ok ? null : `画面质量门禁失败: ${JSON.stringify(quality)}`,
               cameraFamily: family,
-              captureClean: true,
+              captureClean: clean.ok,
               airshipView: camMeta?.airshipView || null,
+              camera: camMeta,
+              battle: await target.evaluate(() => window.__tm.batianFleet?.snapshot() || null),
+              hudCheck: clean,
             });
             console.log(
               `[capture] ${shot.id} ${ok ? "OK" : "FAIL"} (${source})${family ? " [" + family + "]" : ""}`
@@ -1261,7 +1416,7 @@ export async function captureShots(plan, opts) {
               ok: false,
               error: msg,
               cameraFamily: resolveCameraFamily(shot.camera || {}) || null,
-              captureClean: true,
+              captureClean: false,
               airshipView: null,
             });
             break;
@@ -1294,47 +1449,55 @@ export async function captureShots(plan, opts) {
       opts.noFixtures === true ||
       process.env.CARTONBOOK_NO_FIXTURES === "1" ||
       plan.noFixtures === true ||
-      plan.id === "messenger-tide-letter";
+      ["messenger-tide-letter", "bookshop-letter"].includes(plan.id);
     if (noFixtures) {
-      console.warn(
-        "[capture] 无成功真截屏 → 拒绝 HUD fixtures；写入诚实占位（CARTONBOOK_NO_FIXTURES / 正式章）"
-      );
-      const placeholderManifest = writeCleanPlaceholders(plan, outShots, {
+      console.warn("[capture] 无成功真截屏 → 保留上一版正式章；失败产物仅写入暂存区");
+      const failedManifest = {
+        id: plan.id,
+        mode: "incomplete",
+        realCapture: false,
+        captureClean: false,
+        refusedHudFixtures: true,
+        note: "正式章拒绝 fixtures；失败实拍保留在暂存区供核查，不覆盖上一版正式图。",
         captureError,
-        liveAttempts: entries,
+        attemptedLive: true,
         via,
-      });
-      fs.writeFileSync(
-        path.join(chapterDir, "manifest.json"),
-        JSON.stringify(placeholderManifest, null, 2)
-      );
-      return placeholderManifest;
+        generatedAt: new Date().toISOString(),
+        shots: entries,
+        stagingManifestPath: manifestPath,
+      };
+      fs.writeFileSync(manifestPath, JSON.stringify(failedManifest, null, 2));
+      return failedManifest;
     }
-    console.warn("[capture] 无成功真截屏 → 回退 fixtures（仍为本游戏截屏）");
-    const fixtureManifest = await captureShots(plan, {
-      ...opts,
-      useFixtures: true,
-    });
-    fixtureManifest.captureError = captureError;
-    fixtureManifest.attemptedLive = true;
-    fixtureManifest.liveAttempts = entries;
-    fixtureManifest.via = via;
-    fixtureManifest.captureClean = true;
-    fixtureManifest.cropUsed = cropUsedAny;
-    fs.writeFileSync(
-      path.join(chapterDir, "manifest.json"),
-      JSON.stringify(fixtureManifest, null, 2)
-    );
+    console.warn("[capture] 非正式章无成功真截屏 → 明确标记 fixtures");
+    const fixtureEntries = copyFixtures(plan, finalShots, fixturesDir);
+    const fixtureManifest = {
+      id: plan.id,
+      mode: "fixtures",
+      realCapture: false,
+      captureError,
+      attemptedLive: true,
+      liveAttempts: entries,
+      via,
+      captureClean: false,
+      cropUsed: cropUsedAny,
+      generatedAt: new Date().toISOString(),
+      shots: fixtureEntries,
+    };
+    fs.writeFileSync(path.join(chapterDir, "manifest.json"), JSON.stringify(fixtureManifest, null, 2));
     return fixtureManifest;
   }
 
+  const complete = entries.length === plan.shots.length && entries.every(e => e.ok && e.captureClean);
   const manifest = {
     id: plan.id,
-    mode: "live",
-    realCapture: true,
+    mode: complete ? "live" : "incomplete",
+    realCapture: complete,
     port,
     via,
-    captureClean: true,
+    captureClean: entries.length > 0 && entries.every(e => e.captureClean === true),
+    visualReview: { status: "pending", approvedShotIds: [], note: "文件与像素门禁不等于构图验收；须逐张肉眼检查" },
+    captureError,
     cropUsed: cropUsedAny || wantCrop,
     captureFlag: "cartonCapture=1",
     crop: wantCrop
@@ -1347,10 +1510,29 @@ export async function captureShots(plan, opts) {
     generatedAt: new Date().toISOString(),
     shots: entries,
   };
-  fs.writeFileSync(
-    path.join(chapterDir, "manifest.json"),
-    JSON.stringify(manifest, null, 2)
-  );
+
+  if (!complete) {
+    manifest.stagingManifestPath = manifestPath;
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
+    console.warn(`[capture] 镜头未全部通过，正式 shots/ 与 manifest.json 保持不变；暂存: ${manifestPath}`);
+    return manifest;
+  }
+
+  // 全部镜头通过后才替换正式图；任何失败都保留上一版可用章节。
+  const backupShots = path.join(chapterDir, `.shots-backup-${process.pid}-${Date.now()}`);
+  try {
+    if (fs.existsSync(finalShots)) fs.renameSync(finalShots, backupShots);
+    fs.renameSync(outShots, finalShots);
+    const stagedInventory = path.join(stagingDir, "runtime-inventory.json");
+    if (fs.existsSync(stagedInventory)) fs.copyFileSync(stagedInventory, path.join(chapterDir, "runtime-inventory.json"));
+    fs.writeFileSync(path.join(chapterDir, "manifest.json"), JSON.stringify(manifest, null, 2));
+    if (fs.existsSync(backupShots)) fs.rmSync(backupShots, { recursive: true, force: true });
+    fs.rmSync(stagingDir, { recursive: true, force: true });
+  } catch (commitError) {
+    if (fs.existsSync(finalShots) && fs.existsSync(backupShots)) fs.rmSync(finalShots, { recursive: true, force: true });
+    if (fs.existsSync(backupShots)) fs.renameSync(backupShots, finalShots);
+    throw new Error(`正式镜头提交失败，已恢复上一版: ${commitError.message || commitError}`);
+  }
   return manifest;
 }
 

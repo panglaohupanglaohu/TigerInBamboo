@@ -30,3 +30,13 @@
 本批2段753帧，累计112/285、剩173；两段局部UI算法/交互验收通过，src/uikit.js仍部分覆盖。原版只读、没有改TigerMessenger游戏控制。后续1024679338292256769 UI flair及1201179450668441600 Icons先README/全帧，再补对应缺口；本批两片不重复计数。
 
 收口补记：ui-pages.json确认当批index/pipeline共用112/285、剩173及两个UI入口；town/terrain/fusion实际页面载入无pageerror，三张ui-regression截图已目视。285素材/README、管线缺0、帧记录连续及空白检查通过。期间定时触发不增加观看计数。
+
+## 第 56 批（C06）
+
+### 1242824460325052417
+- 做了什么：game-ui-c06.js 倾斜菜单（主场景 ?gameui=1）：用共享 playfulJitter 定倾角/偏移、colorFor 分组色；每个按钮接真实命令：New=清空进撤销栈、Open/Load=decodeWorld 原子载入（失败保岛）、Save=encodeWorld 写剪贴板、Undo/Redo=主场景撤销栈、Grid=view.setDebug("grid")、Quit=收起菜单
+- 落点：src/core/playful-layout.js · src/ui/game-ui-c06.js · index.html?gameui=1
+- 测试：tests/playful-layout.mjs、tests/game-ui-c06.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-gameui-menu.png（已看）
+- 对照：右侧绿/红/黄/粉/蓝倾斜按钮列与 0100–0199 帧布局一致；菜单 Undo 撤掉连刷后存档串完全恢复
+- 判定：done

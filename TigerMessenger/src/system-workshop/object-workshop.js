@@ -3,8 +3,8 @@
  * 改造 Worker 在布局副本上算出每个物件的新增量，验证 Worker 检查，实景预览走 bridge 的 objects.preview；
  * 写入 = 进入物件编辑记录（一步撤销，随场景草稿 / 定稿保存）。
  */
-import { describeObjectCapabilities } from './object/capabilities.js';
-import { mountTierWorkshop } from './tier-workshop.js?v=sys-r11';
+import { describeObjectCapabilities } from './object/capabilities.js?v=sys-r15';
+import { mountTierWorkshop } from './tier-workshop.js?v=engine-r1';
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 const KIND = { 'plane-tree': '悬铃树', cypress: '柏树', hollyhock: '蜀葵花丛' };
 
@@ -33,7 +33,7 @@ export function mountObjectWorkshop({ host, sideHost, request, openSource, statu
     goalHint: '例如：悬铃树太整齐，大小和朝向自然一点，别挤在一起',
     scopeText: scopeLabel,
     agentConfig: {
-      transformUrl: new URL('./object/transform-worker.js', import.meta.url), verifyUrl: new URL('./object/verify-worker.js', import.meta.url),
+      transformUrl: new URL('./object/transform-worker.js?v=engine-r1', import.meta.url), verifyUrl: new URL('./object/verify-worker.js', import.meta.url),
       hooks: {
         input: async () => (await request('objects.layout')).rows.map((r) => ({ ...r, outOfScope: !inScope(r) })),
         scanMsg: (layout) => ({ layout }),

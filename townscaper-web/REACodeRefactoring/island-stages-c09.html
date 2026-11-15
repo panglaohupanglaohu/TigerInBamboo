@@ -1,0 +1,242 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>岛屿生成分阶段 · 计时可视化 · 第 56 批 C09</title>
+<style>
+body{margin:0;background:#f2f5f3;color:#1f2c31;font:14px/1.55 system-ui}
+main{display:grid;grid-template-columns:320px 1fr;gap:16px;padding:14px;align-items:start}
+aside{background:#e6efec;border-radius:12px;padding:14px}
+h1{font-size:17px;margin:0 0 6px}
+canvas{width:100%;height:auto;display:block;border-radius:10px}
+button,select{font:inherit;margin:3px 3px 3px 0;padding:3px 6px}
+#stats{font:12px/1.4 ui-monospace,monospace;background:#fff;border-radius:8px;padding:8px;margin-top:8px;white-space:pre-wrap}
+small{display:block;color:#41565e;margin-top:6px}
+a{color:#16626f}
+</style>
+<main>
+<aside>
+  <nav><a href="index.html" target="_top">首页</a> · <a href="terrain-stages.html">管线分阶段</a> · <a href="stroke-reveal.html">逐笔描出</a> · <a href="island-build-c09.html">3D 构建</a></nav>
+  <h1>岛屿生成 · 分阶段计时</h1>
+  <label>片子 <select id="mode">
+    <option value="quaint">1654401054828638214 quaint island</option>
+    <option value="talk">1448039167057879048 nice timing</option>
+  </select></label>
+  <div><button id="play">播放</button><button id="pause">暂停</button></div>
+  <div id="stats">…</div>
+  <small><b>quaint</b>：三角网逐条长出 → 抬起 → 灰底线稿 → 一帧黑剪影 → 上色（水平角 AO + 软阴影）→ 转镜。<br>
+  <b>talk</b>：每轮一座新岛：超级三角形「帐篷」→ 点阵 → 逐笔线稿 → 线网 → 等高线 → 着色，4 轮自动计时推进。<br>
+  逻辑：<code>src/terrain/island-viz-c09.js</code>、<code>src/core/stroke-reveal-c09.js</code>、<code>src/terrain/pipeline-stages.js</code>。URL：<code>?mode=talk&amp;at=1:strokes:0.5</code> 定格。</small>
+</aside>
+<section><canvas id="c" width="900" height="640"></canvas></section>
+</main>
+<script type="module">
+import { islandPoints, liftHeights, meshReport } from './src/terrain/pipeline-stages.js';
+import { delaunaySteps, edgesOf, contourSegments, orbitProject, triLevels, triAdjacency, faceAO, faceShadow, cliffEdges } from './src/terrain/island-viz-c09.js';
+import { createLayerTimeline, roundSeed, chainSegments } from './src/core/stroke-reveal-c09.js';
+import { createStrokeReveal } from './src/core/stroke-reveal.js';
+
+const q = new URLSearchParams(location.search), $ = (s) => document.querySelector(s);
+const cv = $('#c'), g = cv.getContext('2d', { willReadFrequently: true }), W = cv.width, H = cv.height;
+const L = 0.8, R = 10, SUN = { x: -0.7, y: 0.55, z: -0.45 };
+$('#mode').value = q.get('mode') === 'talk' ? 'talk' : 'quaint';
+
+const MODES = {
+  quaint: { bg: '#5d7b80', rounds: 1, layers: [['tri', 7], ['lift', 3], ['outline', 6], ['flash', 0.3], ['color', 5], ['orbit', 7]],
+    pal: { sand: '#e9cf94', grass: '#b9c46a', moss: '#93a95a', rock: '#d8d3c4', cliff: '#c3b9a6' } },
+  talk: { bg: '#2b2b2b', rounds: 4, layers: [['tent', 1.6], ['lattice', 2.4], ['strokes', 5], ['net', 3], ['contour', 2], ['color', 3.5]],
+    pal: { sand: '#9fb7a6', grass: '#88a99a', moss: '#7d9a99', rock: '#8e9bb8', cliff: '#7a86a6' } },
+};
+let M, TL, isl = null, islRound = -1, time = 0, info = {};
+
+function makeIsland(seed) {
+  // 点按 x 排序后插入：三角网从一侧一条条长过去（1654 帧 0–27 的扇形生长）
+  const pts = islandPoints({ count: 170, radius: R, seed }).sort((a, b) => a.x - b.x || a.z - b.z).map((p, i) => ({ ...p, index: i }));
+  const D = delaunaySteps(pts, { span: 2.2 });
+  const tris = D.final, heights = liftHeights(pts, { seed, radius: R });
+  const levels = triLevels(tris, heights), adj = triAdjacency(tris);
+  const ao = faceAO(pts, tris, levels, { L });
+  const sh = faceShadow(pts, tris, levels, SUN, { L });
+  const cliffs = cliffEdges(tris, levels, adj);
+  const maxH = Math.max(...heights);
+  const iso = []; for (let h = 0.5; h < maxH; h += 1) iso.push(h);
+  const cont = contourSegments(pts, tris, heights, iso);
+  // 线稿：崖顶线（hi）、崖脚线（lo）、崖角竖线
+  const feat = [];
+  for (const c of cliffs) {
+    feat.push([[pts[c.a].x, c.hi * L, pts[c.a].z], [pts[c.b].x, c.hi * L, pts[c.b].z]]);
+    if (c.hi > c.lo) { feat.push([[pts[c.a].x, c.lo * L, pts[c.a].z], [pts[c.b].x, c.lo * L, pts[c.b].z]]); feat.push([[pts[c.a].x, c.lo * L, pts[c.a].z], [pts[c.a].x, c.hi * L, pts[c.a].z]]); }
+  }
+  // 小屋（1654 着色帧里草台上的浅黄小方块）：周围同层的 1–2 层平台三角，按种子挑几块
+  const houses = new Set();
+  tris.forEach((t, k) => { if (houses.size < 6 && levels[k] >= 1 && levels[k] <= 2 && adj[k].every((o) => o >= 0 && levels[o] === levels[k]) && ((k * 2654435761 + seed) >>> 0) % 5 === 0) houses.add(k); });
+  return { seed, pts, D, tris, heights, levels, adj, ao, sh, feat, cliffs, cont, houses, edges: edgesOf(tris), report: meshReport(pts, tris) };
+}
+
+const S = Math.min((W - 80) / (R * 2 * 1.45), (H - 120) / (R * 1.5 + 4.5)), OX = W / 2, OY = H * 0.5;
+const proj = (x, z, y, yaw = 0) => orbitProject(x, z, y, { yaw, S, ox: OX, oy: OY + 1.2 * S, lift: 1 });
+
+function lineSegs(segs, color, width = 1) {
+  g.strokeStyle = color; g.lineWidth = width; g.beginPath();
+  for (const [a, b] of segs) { g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); }
+  g.stroke();
+}
+
+function shade(hex, k) {
+  const n = parseInt(hex.slice(1), 16), f = (v) => Math.max(0, Math.min(255, Math.round(v * k)));
+  return `rgb(${f(n >> 16)},${f((n >> 8) & 255)},${f(n & 255)})`;
+}
+
+function paintFaces(yaw, { silhouette = false } = {}) {
+  const { pts, tris, levels, adj, ao, sh } = isl, pal = M.pal;
+  const P = (i, h) => proj(pts[i].x, pts[i].z, h * L, yaw);
+  if (!silhouette && M === MODES.talk) {
+    g.fillStyle = '#3c5468'; g.beginPath();
+    for (let a = 0; a <= 64; a++) { const t = (a / 64) * Math.PI * 2, [x, y] = proj(Math.cos(t) * R * 1.12, Math.sin(t) * R * 1.12, 0, yaw); a ? g.lineTo(x, y) : g.moveTo(x, y); }
+    g.fill();
+  }
+  // 由远到近：先画这一格的朝向镜头的崖壁，再画它的平台顶
+  const order = tris.map((t, k) => ({ k, d: (P(t[0], 0)[2] + P(t[1], 0)[2] + P(t[2], 0)[2]) / 3 })).sort((a, b) => a.d - b.d);
+  const sl = Math.hypot(SUN.x, SUN.y, SUN.z);
+  let aoSum = 0, shSum = 0, walls = 0;
+  for (const { k } of order) {
+    const t = tris[k], lv = levels[k], a = ao[k], s = sh[k];
+    aoSum += a; shSum += s;
+    for (let e = 0; e < 3; e++) {
+      const o = adj[k][e], lo = o < 0 ? 0 : levels[o];
+      if (lo >= lv) continue;
+      const i0 = t[e], i1 = t[(e + 1) % 3];
+      const q = [P(i0, lv), P(i1, lv), P(i1, lo), P(i0, lo)];
+      // 外法线：垂直于边、背离三角形心；只画转镜后朝镜头（rx+rz 增大方向）的那一面
+      const ex = pts[i1].x - pts[i0].x, ez = pts[i1].z - pts[i0].z, el = Math.hypot(ex, ez) || 1;
+      let nx = ez / el, nz = -ex / el;
+      const cx = (pts[t[0]].x + pts[t[1]].x + pts[t[2]].x) / 3, cz = (pts[t[0]].z + pts[t[1]].z + pts[t[2]].z) / 3;
+      if ((pts[i0].x - cx) * nx + (pts[i0].z - cz) * nz < 0) { nx = -nx; nz = -nz; }
+      const cy = Math.cos(yaw), sy = Math.sin(yaw);
+      if ((nx * cy - nz * sy) + (nx * sy + nz * cy) <= 0) continue;
+      const lam = Math.max(0, (nx * SUN.x + nz * SUN.z) / sl);
+      g.fillStyle = silhouette ? '#000' : shade(pal.cliff, (0.62 + 0.38 * lam) * (0.66 + 0.34 * a) * (0.82 + 0.18 * s) * 1.08);
+      g.beginPath(); g.moveTo(q[0][0], q[0][1]); for (let j = 1; j < 4; j++) g.lineTo(q[j][0], q[j][1]); g.closePath(); g.fill();
+      g.strokeStyle = g.fillStyle; g.lineWidth = 0.7; g.stroke();
+      walls++;
+    }
+    const p = t.map((i) => P(i, lv));
+    const col = lv <= 0 ? pal.sand : lv >= 5 ? pal.rock : lv >= 3 ? pal.moss : pal.grass;
+    const k2 = (0.6 + 0.4 * a) * (0.72 + 0.28 * s) * 1.12;
+    g.fillStyle = silhouette ? '#000' : shade(col, k2);
+    g.beginPath(); g.moveTo(p[0][0], p[0][1]); g.lineTo(p[1][0], p[1][1]); g.lineTo(p[2][0], p[2][1]); g.closePath(); g.fill();
+    g.strokeStyle = g.fillStyle; g.lineWidth = 0.7; g.stroke();
+    if (M === MODES.quaint && isl.houses.has(k)) {
+      // 形心处一座小屋：两面墙 + 屋顶，随转镜一起转
+      const cx = (pts[t[0]].x + pts[t[1]].x + pts[t[2]].x) / 3, cz = (pts[t[0]].z + pts[t[1]].z + pts[t[2]].z) / 3, r = 0.38, hh = 0.55;
+      const cs = [[-r, -r], [r, -r], [r, r], [-r, r]].map(([dx, dz]) => [cx + dx, cz + dz]);
+      const B = cs.map(([x, z]) => proj(x, z, lv * L, yaw)), T = cs.map(([x, z]) => proj(x, z, lv * L + hh, yaw));
+      const sides = [[0, 1], [1, 2], [2, 3], [3, 0]].sort((u, v) => (B[u[0]][2] + B[u[1]][2]) - (B[v[0]][2] + B[v[1]][2]));
+      for (const [i, j] of sides) { g.fillStyle = silhouette ? '#000' : shade('#e8cf7a', 0.78 + 0.1 * i); g.beginPath(); g.moveTo(B[i][0], B[i][1]); g.lineTo(B[j][0], B[j][1]); g.lineTo(T[j][0], T[j][1]); g.lineTo(T[i][0], T[i][1]); g.closePath(); g.fill(); }
+      g.fillStyle = silhouette ? '#000' : '#fbeaa0'; g.beginPath(); T.forEach((q, i) => (i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]))); g.closePath(); g.fill();
+    }
+  }
+  return { houses: isl.houses.size, aoMean: +(aoSum / tris.length).toFixed(3), shadowMean: +(shSum / tris.length).toFixed(3), walls };
+}
+
+const reveals = new Map();
+function revealFor(name, strokes, dur) {
+  const k = isl.seed + ':' + name;
+  if (!reveals.has(k)) reveals.set(k, createStrokeReveal({ strokes, duration: dur, stagger: 0.75, order: 'random', seed: isl.seed, ease: 'smooth' }));
+  return reveals.get(k);
+}
+function drawReveal(rv, t, color, w = 1) {
+  g.strokeStyle = color; g.lineWidth = w; g.lineCap = 'round'; g.beginPath();
+  for (const s of rv.sampleAt(t)) { g.moveTo(s.points[0][0], s.points[0][1]); for (let i = 1; i < s.points.length; i++) g.lineTo(s.points[i][0], s.points[i][1]); }
+  g.stroke();
+  return rv.statsAt(t);
+}
+
+function draw(t) {
+  const st = TL.at(t);
+  if (st.round !== islRound) { isl = makeIsland(M.rounds > 1 ? roundSeed(7, st.round) : 1337); islRound = st.round; }
+  const { pts, D, heights } = isl, n = pts.length;
+  g.fillStyle = M.bg; g.fillRect(0, 0, W, H);
+  info = { round: st.round, seed: isl.seed, layer: st.layer, norm: +st.norm.toFixed(3), time: +st.time.toFixed(3), tris: isl.tris.length };
+  const flatP = (i) => i < n ? proj(pts[i].x, pts[i].z, 0) : proj(D.all[i].x, D.all[i].z, 0);
+  const liftP = (i, k = 1, yaw = 0) => proj(pts[i].x, pts[i].z, heights[i] * L * k, yaw);
+  if (st.layer === 'tri' || st.layer === 'tent') {
+    const k = Math.max(1, Math.min(n, Math.round(st.norm * n)));
+    const tris = D.steps[k];
+    const all = edgesOf(tris);
+    const withSuper = st.layer === 'tent';
+    const shown = all.filter(([a, b]) => withSuper ? true : a < n && b < n);
+    lineSegs(shown.map(([a, b]) => [flatP(a), flatP(b)]), st.layer === 'tri' ? '#c9b83c' : '#9a9a9a', 1);
+    info.inserted = k; info.edges = shown.length; info.superEdges = all.filter(([a, b]) => a >= n || b >= n).length;
+  } else if (st.layer === 'lattice') {
+    lineSegs(isl.edges.map(([a, b]) => [flatP(a), flatP(b)]), '#a0a0a0', 1);
+    info.edges = isl.edges.length; info.superEdges = 0;
+  } else if (st.layer === 'lift') {
+    const k = st.norm * st.norm * (3 - 2 * st.norm);
+    // 抬升：同一张网，高的地方越来越蓝（1654 帧 0042–0118 网格中部发蓝）
+    for (const [a, b] of isl.edges) {
+      const h = (heights[a] + heights[b]) / 2;
+      g.strokeStyle = h > 2 ? `rgba(80,200,210,${0.4 + 0.5 * k})` : '#c9b83c';
+      g.lineWidth = 1; g.beginPath(); const p = liftP(a, k), q2 = liftP(b, k); g.moveTo(p[0], p[1]); g.lineTo(q2[0], q2[1]); g.stroke();
+    }
+    info.liftK = +k.toFixed(3);
+  } else if (st.layer === 'outline') {
+    // 灰底线稿：折痕/崖线（深）+ 等高线（浅），快速逐笔画完后停住
+    const feat = isl.feat.map(([a, b]) => [proj(a[0], a[2], a[1]).slice(0, 2), proj(b[0], b[2], b[1]).slice(0, 2)]);
+    const strokes = chainSegments(feat, { eps: 1e-3, maxPoints: 12 });
+    const rv = revealFor('outline', strokes, 2);
+    const s1 = drawReveal(rv, st.local, 'rgba(40,58,62,.85)', 1.1);
+    const cont = isl.cont.map(([a, b, h]) => [proj(a[0], a[1], h * L).slice(0, 2), proj(b[0], b[1], h * L).slice(0, 2)]);
+    lineSegs(cont, 'rgba(210,225,225,.35)', 1);
+    info.featureSegments = isl.feat.length; info.contourSegments = isl.cont.length; info.drawn = +s1.ratio.toFixed(3);
+  } else if (st.layer === 'flash') {
+    paintFaces(0, { silhouette: true });
+  } else if (st.layer === 'strokes') {
+    const feat = isl.feat.map(([a, b]) => [proj(a[0], a[2], a[1]).slice(0, 2), proj(b[0], b[2], b[1]).slice(0, 2)]);
+    const strokes = chainSegments(feat, { eps: 1e-3, maxPoints: 8 });
+    const s1 = drawReveal(revealFor('strokes', strokes, 4.2), st.local, '#ececec', 1.1);
+    info.strokes = strokes.length; info.drawn = +s1.ratio.toFixed(3); info.started = s1.started;
+  } else if (st.layer === 'net') {
+    // 线网：三角面共享边，逐笔快速铺满（原片 0398–0443 的稀疏 → 稠密线网）
+    const segs = isl.edges.map(([a, b]) => [liftP(a).slice(0, 2), liftP(b).slice(0, 2)]);
+    const strokes = chainSegments(segs, { eps: 1e-3, maxPoints: 5 });
+    const s1 = drawReveal(revealFor('net', strokes, 2.6), st.local, 'rgba(235,235,235,.8)', 0.9);
+    info.netStrokes = strokes.length; info.drawn = +s1.ratio.toFixed(3);
+  } else if (st.layer === 'contour') {
+    const cont = isl.cont.map(([a, b, h]) => [proj(a[0], a[1], h * L).slice(0, 2), proj(b[0], b[1], h * L).slice(0, 2)]);
+    const strokes = chainSegments(cont, { eps: 1e-3, maxPoints: 40 });
+    const s1 = drawReveal(revealFor('contour', strokes, 1.6), st.local, '#f0f0f0', 1);
+    info.contourStrokes = strokes.length; info.drawn = +s1.ratio.toFixed(3);
+  } else {
+    const yaw = st.layer === 'orbit' ? st.local * 0.22 : 0;
+    Object.assign(info, paintFaces(yaw), { yaw: +yaw.toFixed(3) });
+  }
+  $('#stats').textContent = JSON.stringify(info, null, 1);
+  return info;
+}
+
+function setMode(m) {
+  M = MODES[m]; TL = createLayerTimeline(M.layers.map(([name, duration]) => ({ name, duration })), { rounds: M.rounds });
+  islRound = -1; reveals.clear(); time = 0;
+}
+let raf = 0, playing = false, last = 0;
+function loop(ts) { if (!playing) return; const dt = last ? Math.min(0.1, (ts - last) / 1000) : 0; last = ts; time += dt; draw(time); raf = requestAnimationFrame(loop); }
+function play() { playing = true; last = 0; cancelAnimationFrame(raf); raf = requestAnimationFrame(loop); }
+function pause() { playing = false; cancelAnimationFrame(raf); }
+$('#play').onclick = play; $('#pause').onclick = pause;
+$('#mode').onchange = () => { pause(); setMode($('#mode').value); draw(0); };
+
+function inkPixels() {
+  const d = g.getImageData(0, 0, W, H).data, bg = parseInt(M.bg.slice(1), 16), br = bg >> 16, bgc = (bg >> 8) & 255, bb = bg & 255;
+  let k = 0; for (let i = 0; i < d.length; i += 4) if (Math.abs(d[i] - br) + Math.abs(d[i + 1] - bgc) + Math.abs(d[i + 2] - bb) > 40) k++;
+  return k;
+}
+window.islandStages = {
+  seek(t) { pause(); time = t; return draw(t); },
+  at(round, layer, norm = 1) { pause(); time = TL.timeOf(round, layer, Math.min(0.999, norm)); return draw(time); },
+  play, pause, inkPixels,
+  get info() { return info; }, get timeline() { return { roundLength: TL.roundLength, total: TL.total, layers: TL.layers.map((l) => l.name) }; },
+  island: () => ({ seed: isl.seed, aoMin: +Math.min(...isl.ao).toFixed(3), aoMax: +Math.max(...isl.ao).toFixed(3), shadowMin: +Math.min(...isl.sh).toFixed(3), shadowed: isl.sh.filter((v) => v < 0.98).length, faces: isl.tris.length, cliffs: isl.cliffs.length, maxLevel: Math.max(...isl.levels), n: isl.pts.length }),
+};
+setMode($('#mode').value);
+const at = q.get('at');
+if (at) { const [r, l, nm] = at.split(':'); window.islandStages.at(+r, l, +(nm ?? 1)); } else draw(0);
+if (q.get('play') === '1') play();
+</script>
+</html>

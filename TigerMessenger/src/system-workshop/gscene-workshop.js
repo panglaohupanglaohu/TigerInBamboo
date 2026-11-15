@@ -3,8 +3,8 @@
  * （风格统一 / 整体色调 / 套用风格包），同一套 super agent：改造 Worker → 验证 Worker → 实景预览 → 写入。
  * 旁边是这个场景的「风格（逐个材质）」和「草稿 / 定稿」面板（参考 GenAIWorkPipeline：交付前人工确认，定稿 = 游戏启动用的版本）。
  */
-import { describeGsceneCapabilities } from './gscene/capabilities.js?v=sys-r11';
-import { mountTierWorkshop } from './tier-workshop.js?v=sys-r11';
+import { describeGsceneCapabilities } from './gscene/capabilities.js?v=sys-r15';
+import { mountTierWorkshop } from './tier-workshop.js?v=engine-r1';
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 
 export function mountGsceneWorkshop({ host, sideHost, request, openSource, status, sceneLabel }) {
@@ -59,12 +59,12 @@ export function mountGsceneWorkshop({ host, sideHost, request, openSource, statu
     scopeText: () => sceneLabel() + ' · 全部材质',
     agentConfig: {
       experienceKey: 'gscene',
-      transformUrl: new URL('./gscene/transform-worker.js?v=sys-r11', import.meta.url), verifyUrl: new URL('./gscene/verify-worker.js?v=sys-r11', import.meta.url),
+      transformUrl: new URL('./gscene/transform-worker.js?v=engine-r1', import.meta.url), verifyUrl: new URL('./gscene/verify-worker.js?v=sys-r15', import.meta.url),
       hooks: {
         input: async () => (await request('gscene.style.get')).materials,
         scanMsg: (materials) => ({ materials }),
         runMsg: (materials, steps) => ({ materials, steps }),
-        verifyMsg: (materials, scan, run) => ({ materials, colors: run.colors }),
+        verifyMsg: (materials, scan, run) => ({ materials, colors: run.colors, steps: run.report }),
         preview: async (c) => request('gscene.style.preview', { colors: c.run.colors }),
         compare: (c, on) => request('gscene.style.compare', { on }),
         revert: () => request('gscene.style.revert'),

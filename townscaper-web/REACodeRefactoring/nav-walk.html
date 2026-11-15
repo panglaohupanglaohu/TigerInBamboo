@@ -1,0 +1,40 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>可走图 · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:12px 22px}iframe{width:100%;height:78vh;border:0}a{color:#26758a}label{margin-right:16px}code{background:#e4efec;padding:0 4px;border-radius:4px}output{font-variant-numeric:tabular-nums}</style>
+<header><b>导航图调试 · 可走图与最短路树</b> · <a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <a href="artifacts/coverage/917405214638006273-review.md">逐帧证据</a>
+<p>917405214638006273：「每块台地都要能从沙滩走上去」的启发式。片子里那层调试线是<strong>每格一个点、黄线连到可走邻格</strong>（统一黄、跨台阶的那根自然立起来），不是按距离上色的最短路树——这里两种画法都在，可以左右对照。</p>
+<label><input id="walk" type="checkbox">可走图（片子里的那层）</label><label><input id="tree" type="checkbox" checked>最短路树（青→橙，白点＝区域节点）</label><label>网格<select id="grid"><option value="quad">四边形</option><option value="mixed">三角＋四边</option></select></label><span id="status">加载…</span>
+<p><small>削台账来自 <code>src/badnorth/island.js</code> 的第 3 步：因够不着而被削低一道崖的格数、跑了几轮；<code>起始层</code> 1 = 从沙滩起，2 = 这岛没有沙滩只能从最低那圈岸格起。</small></p></header>
+<iframe id="scene" title="共享World可走图"></iframe>
+<script type="module">
+const $ = (s) => document.querySelector(s);
+let api = null;
+function apply() {
+  if (!api) return;
+  const v = api.view;
+  v.setDebug('navwalk', $('#walk').checked);
+  v.setDebug('nav', $('#tree').checked);
+  const st = v.navLayer.walkStats, fix = api.world.bnNavFix || {};
+  $('#status').textContent = $('#walk').checked
+    ? `可走格 ${st?.cells ?? '-'} · 节点 ${st?.nodes ?? '-'} · 边 ${st?.edges ?? '-'}（跨台阶 ${st?.stepEdges ?? '-'}） · 削台 ${fix.lowered ?? '-'} 格 / ${fix.passes ?? '-'} 轮 · 起始层 ${fix.start ?? '-'} · 削完仍够不着 ${fix.unreachableAfter ?? '-'}`
+    : `最短路树：${v.navLayer.nav?.regions.length ?? '-'} 个区域节点 · 削台 ${fix.lowered ?? '-'} 格 / ${fix.passes ?? '-'} 轮`;
+  window.navWalkReview = { api, stats: st, fix };
+}
+function load() {
+  api = null; window.navWalkReview = null;
+  $('#scene').src = 'index.html?scene=badnorth&grid=' + $('#grid').value;
+}
+$('#scene').onload = () => {
+  const ready = () => {
+    const r = $('#scene').contentWindow.rea;
+    if (!r?.view?.navLayer?.nav) { setTimeout(ready, 100); return; }
+    api = r; apply();
+  };
+  ready();
+};
+for (const id of ['walk', 'tree']) $('#' + id).onchange = () => {
+  // 两种画法共用同一批线/点，互斥（勾一个就把另一个放下），否则后勾的那个会把前一个覆盖掉
+  if ($('#walk').checked) $('#tree').checked = false; else $('#tree').checked = true;
+  apply();
+};
+$('#grid').onchange = load;
+load();
+</script></html>

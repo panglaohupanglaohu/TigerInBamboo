@@ -1,0 +1,2334 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-11-12",
+  "scope": "人工审阅113条历史排期；核销仅指所列旧排期，不表示完整原作或游戏验收。",
+  "sourceUpdatedAt": "2026-11-12T08:34:00+08:00",
+  "items": [
+    {
+      "id": "backlog-c993811167f56877",
+      "title": "天光柱地面目标与宽度标定",
+      "stages": [
+        "learning",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "b7bd7322cee4b4bc98aa02464f7aebcfe15650738bd560a7d649563d50465e11",
+          "originalIndex": 0,
+          "title": "缺口（第 87 轮改写·天光柱续）：`skyBeam` 已做**旗顶版**（世界宽 0.30 / 24 单位高 / 0.22s / #f0fa90 / 跟 flag / 灭队即收，8 条逻辑 + 9 条浏览器判据全过）。剩两件：① 912 那种「落到**地面单位**」的柱还没自动选目标 —— 接口 `c01.beamAt(point)` 已留，要做「按当前选中/受击单位取目标 + 落地点亮帽随命中反馈」；② 宽度只有两个标定点（837 29px/460=6.3%、912 16px/400=4.0%），世界宽度只能锁 0.30–0.50，需要第三个不同焦距的帧（优先找固定机位片）才能定死。判据用 `tests/sky-beam.mjs` + `sky-beam-browser.cjs`，别放宽 span/柱底那两条。",
+          "clips": [
+            "912691357440978945",
+            "837027901853810688"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-8440cd7d3ba55f90",
+      "title": "烟球膨胀与火光耦合",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "4ff2e9a8b50dd92b554f6bc6f6677c3582d3025c97c859a320db3c11a3568531",
+          "originalIndex": 1,
+          "title": "缺口（第 87 轮保留·烟球火光联动，数值已复核未动码）：`837027901853810688` 量化仍在（烟像素 0078→0084 5066→11777=2.3×；火光 0084 峰 1987→0090 1155→0096 450；0408–0456 地面小苗二次抬头 1029/986/905）。`src/life/smoke.js` 只有尺寸/寿命，**没有「体积增长曲线 × 火光强度」耦合**，也没有地面粉红化/血迹淡出。改的时候用这五个数当判据。",
+          "clips": [
+            "837027901853810688"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-cb0fa21bb255b0aa",
+      "title": "网格层序回归纪律",
+      "stages": [],
+      "state": "closed",
+      "records": [
+        {
+          "fingerprint": "cbf9aad5d9ccb49eee9a8b527cf2521447feda62c75638df68bba22df34c2682",
+          "originalIndex": 2,
+          "title": "收尾（第 87 轮复验过·网格层序）：`gridStats.order/lineDepthWrite/lineDepthTest` 状态 + `三角开+等距关`、`区域开+吃遮挡关` 两档回归本轮重跑仍全过（powers `[]`、29077 vs 29079）。不再排期；**唯一纪律**：后续若动 `depthWrite`，必须重跑 `grid-rim-ring-browser` + `grid-surface-browser`（环压线判据容差 1 环/2px，不许放宽）。",
+          "clips": [
+            "1120036868966502401"
+          ]
+        }
+      ],
+      "reason": "原文明确复验全过、不再排期；只保留修改深度状态后重跑的回归纪律。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-8ff9a037bf055453",
+      "title": "灌木带宽与深层档位",
+      "stages": [
+        "learning",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "425ae01b9d6b8699d48c6071d82abe76ffd2ecd3e1f811a7b21ee3d3136a7171",
+          "originalIndex": 3,
+          "title": "缺口（第 85 轮改写·灌木）：「dp≥4 整面覆盖」是过冲已确认，但 r84 定的 `ce≈1.15` 改法被本轮**解析证伪**——带子覆盖比 ≈ `width/ce`（width 上限 0.73），1/2/3/4 层 = 0.50/0.67/0.85/**0.43**，最深档反而最窄（档位反转）。正解：顶面扇形多写一个 per-triangle `aBand`（归一化带宽），让 aEdge 回归真正的「0 崖边→1 格心」，着色器改用 `aBand` 判出界，这样档位单调且深档能留裸芯。连带要改 `meshwriter.triC` 的 attribute 通道、`shrub-texture.js`、`tests/shrub-texture.mjs` 与 `shrub-wide-band`/`shrub-band`/`shrub-cliff-drape` 三条回归 → 必须单独一轮。",
+          "clips": [
+            "1707490932017279035",
+            "1707497006640365880"
+          ]
+        },
+        {
+          "fingerprint": "461aa707b3536a67c64886f55a9bab1e8d2ac08ce43f7866319d10c3df2fb522",
+          "originalIndex": 5,
+          "title": "缺口（第 83 轮收敛·灌木）：整面覆盖档（`e<-0.5`，348 个顶点全刷橙）判定为**过冲**——原片窄台地是「两侧边带自然相接」而中央仍有裸土芯。下一步：改成「两侧带各 ≥ 半格宽才合并」，或把整面档默认关；另需一次干净的「格边单位长度」量测（`terrain-collide.js` CELL=1.0、注释写 0.9、r82 又说 0.5，三说均无实测）后统一注释与判据；跨级带断口位置仍未逐帧比对。",
+          "clips": [
+            "1707490932017279035",
+            "1707497006640365880"
+          ]
+        }
+      ],
+      "reason": "同一灌木深层覆盖问题按较新第85轮结论收敛；旧第83轮建议保留追溯，不再并行执行已被证伪的宽度修法。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-d0bb692d3d32470d",
+      "title": "战斗连续流场接入",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "72e123fe8ff8497da8b6887549c50d76a5e5c0ae76d4b33e5d0421d91511ff62",
+          "originalIndex": 4,
+          "title": "缺口（第 85 轮收敛·流场）：LOD 第 11 次不可测 → 永久不适用（不再排期看片）。唯一剩余硬缺口不变：`battle.js:190` 未传 `continuousFlow`，改默认会动移动行为，需 30/60/120Hz + 分层回归成套跑 → **必须单独一轮**。",
+          "clips": [
+            "902069261304287232",
+            "901842167508992000"
+          ]
+        },
+        {
+          "fingerprint": "eac955aaa778a954f9b60d3d80b8ade634079079aa9fe65b09246d77c6e2c0dc",
+          "originalIndex": 6,
+          "title": "缺口（第 83 轮结论·流场）：LOD 第 9 次测不出 → 永久维持「不适用」（两条片子都是固定等轴 + 整岛入画 + 无图例，r75 已在 badnorth 实景页给出透视解释）。唯一剩余硬缺口：`battle.js:190` 未传 `continuousFlow`，改默认会动移动行为，需 30/60/120Hz + 分层回归成套跑 → **必须单独一轮**。",
+          "clips": [
+            "902069261304287232",
+            "901842167508992000"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-d249b13b9419ff8e",
+      "title": "火血尘与落水特效组合",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "b43a7f044469d3eb41412f6b2dfb7820d293e5c7c82e2a143abff2c481237db9",
+          "originalIndex": 7,
+          "title": "缺口（A 类大簇·火/血/尘，烟柱已剔除）：烟球体积+火光联动、尘粒 AO、落水冠状水帘——都可做但没做（837027901853810688 / 1258421104756097029 / 823848950553780226）。烟柱 1015142746372366336 已于第 83 轮永久降级（顶团不可标定），不再排期。",
+          "clips": [
+            "837027901853810688",
+            "1258421104756097029",
+            "823848950553780226"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-6d59f952704ccf5e",
+      "title": "体素幽灵色板与环绕镜头",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "02515f21bc3248eacff3e6d389a68119e8ab152f8599c37120084d67568b47ec",
+          "originalIndex": 8,
+          "title": "缺口（第 61 轮收敛·体素幽灵）：任意网格体素化（奇偶射线+交点去重，含空腔）、逐层材质分组、Go! 一次性触发、中轴竖柱序、片尾 dolly 均已落地；仍缺原片具体色板与层高（本仓 6 色循环近似）、片尾真三维环绕（本仓等轴测推近 1.22×）、窗格/天线等美术细节（794993371261665280 / 797844857821732864）",
+          "clips": [
+            "794993371261665280",
+            "797844857821732864"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-2be26345bfe38a03",
+      "title": "节点图可视编辑器",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "6c62c9ab04e51aa18c451e2ad08a40a04f865ae64ec26dd1f402c9b4a543abb8",
+          "originalIndex": 9,
+          "title": "缺口（第 61 轮收敛·节点图）：serialize/fromJSON/NODE_REGISTRY + 只读连线图已落地（往返后位置不跳、90 帧轨迹一致）；仍缺可拖拽的真节点编辑器（拖节点/拖线/增删）与 ScriptableObject 资产面板的字段分组（1724449858369568780）",
+          "clips": [
+            "1724449858369568780"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-bd05bf8ed9f1d801",
+      "title": "伤害数字受击抖动与速度",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "2539ca2e5e190ab1b1997815931a0bb86a3ab39ebca1e0297726ac26f4304987",
+          "originalIndex": 10,
+          "title": "缺口（第 60 轮实测·伤害数字）：+10 已并入同池（kind=kill），仍缺 ① 受击方向抖动（现只是同帧横向错位 sx）；② +10 的上浮速度与 +4 共用常量，原片略快（903647529203634176）",
+          "clips": [
+            "903647529203634176"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-94ad044ffcc06def",
+      "title": "九模块页面与运行接入",
+      "stages": [
+        "validation",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "50bfabf99ea47e118eb12dccffb9ba4e5b543fdef6acc67dda3c6faa482e30ef",
+          "originalIndex": 11,
+          "title": "第 50 轮迁入的 9 个模块大多只有 node 验收：页面入口（grids.html 平移窗口、wfc.html 诊断面板、navmesh-flow.html 漏斗路径、ui.html 等墨量图标）未做；navmesh 漏斗 / 流场未接 battle.js；walk-reach 未接生成器默认流程；texel-owner 未接 impostor 烘焙",
+          "clips": [
+            "1151137783785771008",
+            "972829402873716737",
+            "917405214638006273",
+            "1164926304640229376",
+            "1481661852887265288",
+            "1201179450668441600"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-a025d56dbfeb04ad",
+      "title": "导航面连续流向与共享World",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "dc7b907618b32faac3f0068ff688a98de884cd51e2a57d77c45b5d6ee2479a1b",
+          "originalIndex": 12,
+          "title": "缺口（第 48 轮实测·导航面流场）：共边带混合已把跨面差压到 0°，但流向仍是「面内线性」，面上到崖边那一格方向仍偏直（沿 z=2.2 直线 0.02 步长最大跳 4.77°）；且 navmesh-flow 仍未接进 battle.js（主场景是格心流场）、缺通口前视，导航面还是规则地形手搓、未由共享 World 分层导航自动生成（816748103193817088）",
+          "clips": [
+            "816748103193817088"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-b3210896d196ade8",
+      "title": "多格tile共享World与美术",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "464312a120211551a3ad3fd491c1d6aa77a38d4b34a0b4ca7603c2241c90107f",
+          "originalIndex": 13,
+          "title": "缺口（第 47 轮新发现·多格 tile）：未接共享 World；构件是体块，缺原片带窗洞/栏杆的美术模块；无限高只到 24 层上限（793545297376972801）",
+          "clips": [
+            "793545297376972801"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-3213131af017a181",
+      "title": "导航与多格tile联合接入",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "43dfbb14f795129ce3c2e959f99dd17a1debb69f356ad21dd56447a41d88e2a4",
+          "originalIndex": 14,
+          "title": "navmesh-flow 接进 battle.js（替换格心流场 + 通口前视），导航面从共享 World 分层导航自动生成；multitile WFC 接进共享 World（多格 tile 落到不规则格）",
+          "clips": [
+            "816748103193817088",
+            "793545297376972801"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-beb6552b4878cb06",
+      "title": "长矛姿态与命中反馈",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "d36e59f04f06ad8e31d82e9426b8c88a77f7eb07434d8ea6cc7f4a2d0b8dd73c",
+          "originalIndex": 15,
+          "title": "缺口（第 44 轮新发现·长矛）：本仓矛只绕 Y 轴 → 永远水平，原片待机是斜向上约 40°、刺出才转平；原片还有粉红放射状命中/方向细线；伤害数字与每次刺击的命中集是两处实现，未联动（903647529203634176）",
+          "clips": [
+            "903647529203634176"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-fedfe0d1f54e10e1",
+      "title": "精灵方向与受击状态",
+      "stages": [
+        "validation",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "a36cd2a217233fae490e70bac4d2580869e99328736d4425665a623ec1051594",
+          "originalIndex": 16,
+          "title": "缺口（第 43 轮新发现·精灵）：方向歧义度量不是标定过的违和度，小尺寸仍要目视；单方向精灵模式无逐单位 UV 血斑/受击摆动，战斗场景第 0 波无守军导致截图看不到成队精灵（969860566322958336）",
+          "clips": [
+            "969860566322958336"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-c2875404634f4826",
+      "title": "火焰色带与火星",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "a0788b94d46378f49eda41aa61fbcce024c8ae143ec4bfe7137fb1fac3530c6e",
+          "originalIndex": 17,
+          "title": "缺口：火焰粒子颜色与尺寸解耦——旧粒子（橙红档）尺寸已 <1px，画面只剩奶白核心；要么给色带加可见下限，要么把橙红档放到更大/更长寿的独立粒子层，补片中光晕与飘散火星（1056992291108413446）",
+          "clips": [
+            "1056992291108413446"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-a76d71d503559e15",
+      "title": "体素软化硬边与碰撞",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "3687e8a87fe9fb4d6ed76a962429176949592e4f227684edad8cb519ad87e12e",
+          "originalIndex": 18,
+          "title": "体素梯度软化网格并约束硬边、形变碰撞及表面光照剩余缺口",
+          "clips": [
+            "931196707236392960",
+            "1791049306213912823"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-7ef13410dadb86d6",
+      "title": "角色分件与UV诊断",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "973ba25d0b56238d286dc0291524f6db288cdd2098cbb5411a84875627195516",
+          "originalIndex": 19,
+          "title": "缺口（低优先）：角色外观分件与 UV 渐变调试材质（v 方向色带看 UV 朝向/翻转）（847717312912211970）",
+          "clips": [
+            "847717312912211970"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-7178793d8d612091",
+      "title": "小队占位与选中提示",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "71699fb07c45e83c37ddd8801690fe6136f27176027b60b45bfe4a09540f5289",
+          "originalIndex": 20,
+          "title": "缺口：小队占位线网——凹形占位应沿格边界而非凸包、接进 battle.js 选中态并随 world.top 贴地、旗顶悬空白菱形标记、箭矢细白轨迹线（883447205176238083）",
+          "clips": [
+            "883447205176238083"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-fb3b563d4f416ca0",
+      "title": "战斗HUD与贴地尸血层",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "e5a3d6cc5e1778c1a426367d519af48bfb8c62fd7dfd73acd9081105f1dcfd54",
+          "originalIndex": 21,
+          "title": "缺口：战斗 HUD 层——血泊贴地累积贴花与尸体层、登陆木跳板、旗布摆动相位、飘字数值取自击杀还是伤害（839067977781768193）",
+          "clips": [
+            "839067977781768193"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-9eca0348c3239138",
+      "title": "等值面倒影与水线",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "f3066e52b0ab421527b5abcd765011f98bf28c6d36bd6967af7d8f439031fbd1",
+          "originalIndex": 22,
+          "title": "缺口：等值面渲染层——水面只有浅色椭圆没有真平面倒影；过渡中的碎片应当是暗色（背光/内翻），现在是亮色；水线是落地边折线而不是沿等值面等距外扩的带状轮廓（818857408848130048、832633189277409280）",
+          "clips": [
+            "818857408848130048",
+            "832633189277409280"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-a14151ff7246065f",
+      "title": "等值面建筑硬边",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "4508a119a0da187c510d22d1927fca063238a9c14fe2b1a62f360b3a2a069729",
+          "originalIndex": 23,
+          "title": "缺口：等值面只作用于地形层，建筑层应保留硬边（坡屋顶/烟囱/门洞），现在是方盒经模糊后与地形熔在一起（832633189277409280）",
+          "clips": [
+            "832633189277409280"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-9ce0295a78b2ea25",
+      "title": "黑烟火光血迹与来袭提示",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "b56326ac4cc28a2c2d5f7895f6bf64c42a2e7475c0db6322e50f7d3ec80262b6",
+          "originalIndex": 24,
+          "title": "缺口：烧村黑烟球的体积+膨胀+火光照明联动（src/life/smoke.js 与 fire.html 未组合）、血迹随时间变暗淡出（battle.js 只贴不留/不淡）、屏幕边缘亮黄竖条来袭标记（全仓无实现）（837027901853810688）",
+          "clips": [
+            "837027901853810688"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-ba1cf5ff9f020927",
+      "title": "弹道场景碰撞与参数口径",
+      "stages": [
+        "learning",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "95ca0dac7b6093954c74b04d3157d4cbcf62a9448d7053d4626e5585d4e2630e",
+          "originalIndex": 25,
+          "title": "缺口：阻力弹道扇面只按地面 y=0 收尾，缺场景碰撞截断（片子弧碰到体块就断）、二次阻力档（片子里分不出线性/二次）、Inspector 第三行参数读不到未猜，也没和 ballistic-table.js 的定点射表角度口径打通（816332161036984320）",
+          "clips": [
+            "816332161036984320"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-04f202d5ee16e22a",
+      "title": "行军队列与跨层落位",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "345b6243c1245aed8d3ed3fd0c6ae66e7acc61915c1d260530e9b0c73adbbd4d",
+          "originalIndex": 26,
+          "title": "缺口：整个队列层缺失——成列行军（沿同一路径固定间距排队、拐角内圈减速）、跨层列队（上台阶拉成竖列、脚贴地）、到达后展开成 3–4 排方块的落位；片中有等弧长白色引导点可作调试视图（816743289500106752、817323301357948928）",
+          "clips": [
+            "816743289500106752",
+            "817323301357948928"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-3a21cfc56414f803",
+      "title": "路线检查点编辑器",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "064c15df00f0b413b6894eef05a4a2f7a1736ef89ace46a1023ec2372ab0a556",
+          "originalIndex": 27,
+          "title": "缺口：路线/轨迹编辑器——gizmo 拖检查点后重采样并显示点数与总长、累积轨迹模式（点只增不减）、quad 面三角剖分线调试层（现有 aomesh 只画体素壳）(810157485638189056)",
+          "clips": [
+            "810157485638189056"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-d249a9bba3fc05a4",
+      "title": "球面胞元细分与装配",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "470a3373cbb580420b84a992abb6bbbaa6689c5a603bfe5b01d409f22f19ce53",
+          "originalIndex": 28,
+          "title": "缺口：球面胞元壳还是只有整格一级——片子里每格内部是一坨多层小方块（两级尺度），另外装配起点只能取默认根、不能指定从哪一格起长，表面也没有生物群系斑块着色（784848286272327680）",
+          "clips": [
+            "784848286272327680"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-f85ddba25d223767",
+      "title": "球面两级碎片尺度",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "2f8194ff4cb5de212738d12c27a9f11ff0232c31119de31fe3b4425b0a664b05",
+          "originalIndex": 29,
+          "title": "缺口：球面星球的两级尺度没做——片中同一块壳上既有跨多格的平滑大平板，又有一整片格内细分的小方块碎片堆（每块独立朝向/高度），本仓胞元只有整格一级，格内无细分（784847588893814785）",
+          "clips": [
+            "784847588893814785"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-c4d0a165d92d47e2",
+      "title": "球面装配起点入口",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "618426cb88a53b318e4fbb0793291dc162e70b813db8542889ab753524090fdf",
+          "originalIndex": 30,
+          "title": "缺口：装配起点固定在最高格，片子是从一处随机位置起长；planet.js 的 root 参数已留但页面没入口；片中同层还有细碎凹坑没做（784847933686575104）",
+          "clips": [
+            "784847933686575104"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-bac90dddfe7b3fd5",
+      "title": "飞岛操控与附属几何",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "4c971cce0ce24db9342849d19fdc7b9db12bce1cdd4dc7c7b240f9388716791f",
+          "originalIndex": 31,
+          "title": "缺口：飞岛只做到几何（环→抬升场→船壳→支撑腿），飞行操控状态机（选中环/起飞/悬停/平移）、船壳外沿那圈白色蝶形小构件、建筑随岛抬升、抬升后侧壁按层生成都没有（1313837640366596096）",
+          "clips": [
+            "1313837640366596096"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-ac3c59934822e883",
+      "title": "拆建动画时序素材",
+      "stages": [
+        "learning",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "cb939d03b0b0c1ef87345f88353709299cbdbb8cd2770a4b81ae02d4c39f3a13",
+          "originalIndex": 32,
+          "title": "缺口：2016 早期演示片里整片拆解/重建的时序定不下来（9.94fps 下块整块出现消失、顺序无规律），要复刻建造动画得另找 2018+ 带逐块过程的素材（806856212260278272）",
+          "clips": [
+            "806856212260278272"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-1385ab1fb3973c5e",
+      "title": "血腥开关样式与底材色差",
+      "stages": [
+        "learning",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "89c74f62a21a39c8c8692a4e893501a092711a1e632e84c80aa2553b1ca33c91",
+          "originalIndex": 33,
+          "title": "缺口：血腥开关只做了后果（血迹/血滴/尸体整层消失），原片拍不到面板，开关样式与 break-glass 部件无从对照；血在深浅底材上的色差用单一色近似（999191760944418817）",
+          "clips": [
+            "999191760944418817"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-13995236589b6609",
+      "title": "AO烘焙半透明层与建筑体积",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "d7c5944e3eb391f22854747971e1bca38dbe8caaa4e3803371ed924600cc2c8e",
+          "originalIndex": 34,
+          "title": "缺口：AO 烘焙网格视图是实心体素壳、不是原片那摞半透明层叠薄板；且本仓建筑不走体素，壳里只有地形台地、没有建筑体积（1298689301488775169 第 329–359 帧的对照）",
+          "clips": [
+            "1298689301488775169"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-8a932cb2b38b2e8f",
+      "title": "飞岛补全片学习",
+      "stages": [
+        "learning"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "7a56554ed04ddf657c7f87d3fc00424781763cbf1a3703173feab759e6ae4235",
+          "originalIndex": 35,
+          "title": "下一批队列：1313837640366596096（飞岛，上一轮只看了第1张联系表，需补全片 4 张）",
+          "clips": [
+            "1313837640366596096"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-32bd14710eedd90b",
+      "title": "血迹双空间与调试层",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "357cccd4eb823a07acf62bcafa3c257ca21b6e224d49ba299cb6e5f801e09fe8",
+          "originalIndex": 36,
+          "title": "缺口：血迹只有一套空间，原作躯干走皮肤空间、盔与手臂走精灵空间（片 999185422403055616 的 0096 用棋盘格画出这条界线）；斑块是整面块状，与 PALETTE_PATCH 斑纹混淆，缺棋盘格调试层",
+          "clips": [
+            "999185422403055616"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-50fd766bb5cbaf6e",
+      "title": "流场调试可读性与截图",
+      "stages": [
+        "validation",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "199a25a26773b3c748b6a64040b472afff7058f579e02166150cceabd459f3de",
+          "originalIndex": 37,
+          "title": "缺口：流场调试线配色偏淡（亮草地上几乎看不清），缺逐格白色方向箭头与网格底线；三角网格流场还没在页面上做过截图验收（972829402873716737）",
+          "clips": [
+            "972829402873716737"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-ac06a661b9ca6c28",
+      "title": "可走图调试与削台标定",
+      "stages": [
+        "learning",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "4f3cce8ce5cc602568b4970acd417448cd5bb0b4c6697f22ffcf6ee95066707a",
+          "originalIndex": 38,
+          "title": "缺口：可走图缺格角红点与背景六边形网格线框；削台档数（2 档）是自定的，片子里看不出原作者削几档，也没有「削之前」的对照（917405214638006273）",
+          "clips": [
+            "917405214638006273"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-33ca20cf2df788e2",
+      "title": "血流精灵与流挂标定",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "77d7c7838572495921c3181c46ab39f06a3d407cb808461fd3395d7acb3f7873",
+          "originalIndex": 39,
+          "title": "缺口：片中的血流飞溅是贴图/精灵，我们的血滴 Points 只做可见化不参与命中；崖壁流挂宽度/长度仍是随机（912691357440978945）",
+          "clips": [
+            "912691357440978945"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-d8880e313819bb71",
+      "title": "生态色斑树冠草带与逆光",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "391ce500296bf52d0f731992c34888d10621ef471b4fbf67252732ec1980f0d9",
+          "originalIndex": 40,
+          "title": "第 30 轮缺口：色斑缺原作 atlas / 受控跨崖采样，配色不随生态变化；树冠瓣径比偏均匀、缺顶部亮边；草簇是概率撒点，缺沿台地边缘的连续边带与 7–9 瓣；逆光的阴影遮罩仍是「法线朝下」近似，没查 shadow map；墨线颜色比片子偏深",
+          "clips": [
+            "1480635131614355459",
+            "1580158269267406849",
+            "1590669875869286400",
+            "1751945034851570056"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-ef51d01c17b640ae",
+      "title": "光照对比与灯塔网格视觉",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "67843057ad686c0cdd7d997a577461e6ee584cab1fcd962305f261f5bd6485ef",
+          "originalIndex": 41,
+          "title": "第 29 轮缺口：投影暗部幅度仍比片中亮一档、无 less-contrast 档；texture-only / light-only 只作用于共用 town 材质；灯塔塔身红白分层靠调色板碰运气、灯室玻璃偏白；无限网格页仍是 2D 俯视，缺斜视透视与高亮闪烁节奏",
+          "clips": [
+            "1305948413872267265",
+            "1313841094069817344",
+            "1331905048801144836",
+            "1332410042784641026"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-5710edf791ab7ca0",
+      "title": "生成Job时序与节点资产",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "aad543733d0cd5ef5631a20e38302fa771a76294467459fea0d3b6c39886a997",
+          "originalIndex": 42,
+          "title": "第 20 轮缺口：灰模阶段的 AO 与软阴、生成后地形微调、真 job 线程与四轮循环节奏、被吞墙面的墙裙残留与悬檐联动、节点图缺可视化连线编辑器与 ScriptableObject 式序列化",
+          "clips": [
+            "1654401054828638214",
+            "1670064751181791233",
+            "1671840905957978113",
+            "1724449858369568780"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-190dcc9c41ea2b22",
+      "title": "格心语义与三维网格",
+      "stages": [
+        "learning",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "1873fb278c47e8504c29075f039e0cff65691c3daa0bc936c9657b4d789977e0",
+          "originalIndex": 43,
+          "title": "第 19 轮缺口：格心彩色小块语义不可证；线框只有俯视伪倾斜，未接 world.js 实景与 3D 透视；radialLayout 还没拿去查连通分量/补丁分组；极坐标底网十字与刻度未复刻",
+          "clips": [
+            "1459169210752507904",
+            "1466059785703460870",
+            "1489193847422865410",
+            "1490068909042642944"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-575dcd940f04a220",
+      "title": "岛屿循环与贴花图集",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "0de0a7be05e83613601886f3bd071c5a6ad93762a46a2b22b4506e85d75f3f0a",
+          "originalIndex": 44,
+          "title": "第 18 轮缺口：三角剖分顶点竖棒层与共享边稀疏线网层没有；walkthrough.js 仍是手点切换；缺「连续换岛 + 先线稿后着色」循环页；贴花累加与图集 padding 未实现",
+          "clips": [
+            "1427721874490933250",
+            "1430227487376781317",
+            "1447483550257799171",
+            "1448039167057879048"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-0eefeef540d99d3a",
+      "title": "主视图混合投影",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "d6b393af6f4d809698e7534062f3dfb4509eeb2114879c262d3706110f7d6fe9",
+          "originalIndex": 45,
+          "title": "第 17 轮缺口：view.js 仍是透视相机，未接混合投影（要同步 pick() 的 raycast、水面倒影、轮廓层相机矩阵与 k 开关），逐像素匹配未做",
+          "clips": [
+            "1310503825510367232",
+            "1370772056279805953",
+            "1371191380773629956",
+            "1410697531424714752"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-93d23ae4e680077e",
+      "title": "高拱洞与无限格稳定性",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "c4dc3650ef5f0b8a062b4347928e4c85704550d5a890a371c5f54b3c559ec37b",
+          "originalIndex": 46,
+          "title": "第 16 轮缺口：拱顶只到解析/几何层，archedEntry 仍是贴片门，opening-punch.html 缺跨两层高拱龛；无限网格在 passes:60 仍有 14 格收缩到 0.46×",
+          "clips": [
+            "1258005604066627586",
+            "1275089608758484992",
+            "1277554535297236994",
+            "1302686201401442309"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-322eda180374b14c",
+      "title": "悬空建筑结构支撑",
+      "stages": [
+        "validation",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "1aa848c55930c20b404a9230af20bc6c2666b79790fb6b9fdd7238617bb1c720",
+          "originalIndex": 47,
+          "title": "第 15 轮缺口：悬空体块缺斜撑/偏移支撑/腿分段（architecture.html 未出运行验收）",
+          "clips": [
+            "1209519206233968641",
+            "1210969316071477248",
+            "1239901715266244609",
+            "1257213678056857600"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-2c7a9e32d2a89905",
+      "title": "爆炸编排与等值面生长",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "a98134a74c42526f56c9782c26ec903bcc660ce68690a2e99c3de31d3b121476",
+          "originalIndex": 48,
+          "title": "第 13 轮缺口：爆炸缺 explodeAt(point) 一次性编排（环+火球+烟+焦痕+火星时序）与焦痕贴片；缺 3D 等值面模块（marching cubes）与生长动画、marching-cubes.html",
+          "clips": [
+            "1022855252574437376",
+            "1092709665199345664",
+            "1151152046055272449",
+            "1163836000688365571"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-e5f6deafb508b2c1",
+      "title": "挖洞历史记录截断核对",
+      "stages": [
+        "review"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "c477d9b6678618e5d29573ecf3b03625dab361d4147d9cdaa457115cea974d48",
+          "originalIndex": 49,
+          "title": "第 14 轮缺口（由 CHANGELOG 重建）：做到哪：新增 `src/render/opening-punch.js`（`planFacade` 校验洞口并给解析面积；`createFacadeScene` 按 interior→mask→wall(NotEqual)→decal 四通道搭建，mask 只写 stencil 不落色不写深度）+ 实验页 `opening-punch.html`（贴片/挖洞",
+          "clips": [
+            "1174406613031170049",
+            "1189109278361165825",
+            "1195463004919357443",
+            "1205422438437273601"
+          ]
+        }
+      ],
+      "reason": "原记录截断、旧调度或覆盖基线已变化；先核实完整来源再拆解，不按待学习或完成计数。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-04750a4839dc403b",
+      "title": "到期交接旧排期核对",
+      "stages": [
+        "review"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "8a0a2609ee69d5ef6a7a6b2b21bf0e527c325f914c02e970b82686a35db70bdb",
+          "originalIndex": 50,
+          "title": "到期交接暂停；后续继续连续面内导航/坡高、跨格整墙、云影软化/水植被接收与球面联合河网",
+          "clips": [
+            "816748103193817088",
+            "1181464374839521280",
+            "1243228419162341379",
+            "1769691526924292506"
+          ]
+        }
+      ],
+      "reason": "原记录截断、旧调度或覆盖基线已变化；先核实完整来源再拆解，不按待学习或完成计数。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-cb5ae06444541d3c",
+      "title": "拓扑交互与飞岛支撑",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "ce1795941ea07332ce3c44bcac97410a0b1e818164542a988d1f0599e4498dda",
+          "originalIndex": 51,
+          "title": "拓扑续项：游戏手柄/连刷适配、完整高度段/飞岛支撑；1747帧不重计",
+          "clips": [
+            "1384958097542819845",
+            "1147881669350891521"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-2076f0282221eba5",
+      "title": "四子格联合WFC",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "1faed409767a3162e0e35acc6edd86aa6caf89694529badefc0962adfb853536",
+          "originalIndex": 52,
+          "title": "子格续项：四子格联合模块约束、3Dtile/共享World生成适配；本批561帧不重复计数",
+          "clips": [
+            "1447496205282549761",
+            "1447494168448753667"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-8986a6c1b3e480b4",
+      "title": "软影与导航走廊旧覆盖登记",
+      "stages": [],
+      "state": "closed",
+      "records": [
+        {
+          "fingerprint": "54a5eda6d798276bf7748654bff5addabfa3b182cf81d200068c286843886016",
+          "originalIndex": 53,
+          "title": "新增原版模块：单位软影blobshadow与弧长走廊navribbon；当前未覆盖，须先逐帧再实现",
+          "clips": [
+            "820977247083528192",
+            "821321422140309504",
+            "821680056514781186",
+            "827215002448846848",
+            "823848950553780226"
+          ]
+        }
+      ],
+      "reason": "核销“尚未覆盖”的旧基线；coverage已登记两个模块frameReview与迁移证据。尘粒AO不属于navribbon完成范围，仍由火血尘项保留。",
+      "evidence": [
+        {
+          "module": "src/blobshadow.js",
+          "path": "artifacts/coverage/r55-G3-nav-battle.md",
+          "status": "已迁移/增强（本轮验证）",
+          "gap": "（第 55 批，浏览器验收）5 射线拟合平面贴形变斜坡（shadowFit 默认关），12° 斜面误差 .006。"
+        },
+        {
+          "module": "src/navribbon.js",
+          "path": "artifacts/coverage/r53-G5-battle-nav.md",
+          "status": "已迁移/增强（本轮验证）",
+          "gap": "（第 53 批）命令路径 Catmull-Rom（不出可站区）、弧长等距、贴地含楼梯、净距带状格；尘粒 AO 是另一片。"
+        }
+      ]
+    },
+    {
+      "id": "backlog-3f0700185429ae72",
+      "title": "球面投影与动态重三角化",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "ba33ff78aa397ee7cf2f2a7bee3bf06a39d44e25302c97f62e7460d4dc7f49d1",
+          "originalIndex": 54,
+          "title": "球面续项：投影往返与极点鲁棒性/动态重三角化；保留既有模块拟合，711帧不重计",
+          "clips": [
+            "1338829205157646336",
+            "1338825080844021760"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-5797de8c34a177fc",
+      "title": "显式半边与局部编辑",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "b9c57350bcb00943c2f372ecd1a5fa53642936e16bed22ccf148cc055283e434",
+          "originalIndex": 55,
+          "title": "拓扑续项：统一显式半边环/扇与原版局部编辑接口，不重复计算790帧",
+          "clips": [
+            "1677242779162877952",
+            "1458921394855718917"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-d1e6e6f9395800b2",
+      "title": "纯六边World与模块组合",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "e6e7619153c0516147bf33e34d54ee980fc99e1cc0737d0893f30c366ae79925",
+          "originalIndex": 56,
+          "title": "格型/生成续项：独立纯六边World和模块预制/连续坡面/原美术组合；1259帧已学不重计",
+          "clips": [
+            "1670790425232175108",
+            "1669315384619540487"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-83772f53a2e76bb1",
+      "title": "笼形变碰撞与联合生成",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "8d079b08edd1a85b3fc11dbb06907b6d8f38dcd61c86cfa98572211924f1b631",
+          "originalIndex": 57,
+          "title": "笼形变/生成续项：扭曲壁面内部/形变后碰撞、完整坡面和模块联合生成；726帧已学不重计",
+          "clips": [
+            "1579478470098243584",
+            "1579474420749725696"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-f5d6c6d44d0f2a96",
+      "title": "拱券塔基旧覆盖登记核对",
+      "stages": [
+        "review"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "db4a7e421f698f0777d5dcf19a38548366d8d4d2eccd1caf944eccb153f03123",
+          "originalIndex": 58,
+          "title": "原版新增模块后续：拱券楔石/净空与任意塔基全局楼层线；当前仅静态部分映射，先配文/逐帧再优化",
+          "clips": [
+            "806904557502464000",
+            "802496920790777856",
+            "803190517534248960",
+            "806856212260278272"
+          ]
+        }
+      ],
+      "reason": "原记录截断、旧调度或覆盖基线已变化；先核实完整来源再拆解，不按待学习或完成计数。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-6e0365701fd296a8",
+      "title": "层级平滑语义与自交",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "d3257cb5b1644585af989c6a9ed8fcf75c295a1a71a575a75f16d5b89be8d366",
+          "originalIndex": 59,
+          "title": "层级平滑续项：原模块/材质三角边语义与完整三模式、3D保形/侧壁自交；266帧已学不重计",
+          "clips": [
+            "1670725072540106755",
+            "1670720537662836736"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-3ff7146f9322cff1",
+      "title": "球面模块冲突与World融合",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "426bc64356f472b95dab3781b382c12eb01405c120c80e17ff71f38ffb88cbeb",
+          "originalIndex": 60,
+          "title": "球面续项：模块目标形状/多格冲突和侧壁穿插、原海陆/河网及World融合；708帧已学不重计",
+          "clips": [
+            "1768627849529893109",
+            "1769641473895432220"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-96f0986e89a3c1b4",
+      "title": "河网约束与球面导航",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "646099acb1fce7655d225bed75daaaaca22621045009a43a5b9e94ebda631909",
+          "originalIndex": 61,
+          "title": "河网续项：完整约束坍缩/BFS缓坡、开凿历史与复杂汇流/球面导航；792帧已学不重计",
+          "clips": [
+            "1769691526924292506",
+            "1795831296952041691"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-d46bce6377bbbd0d",
+      "title": "海陆纹理与山体图集",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "19f3d825b86bd3bddf45217509bbfee6d5a2e6c1fec87ee7760cd7d77d328603",
+          "originalIndex": 62,
+          "title": "球面海陆纹理/岸缘混合仍待实现，242帧已学；山体原atlas/混合成本/完整接口待补，234帧已学不重计",
+          "clips": [
+            "1783792917183606829",
+            "1786014232594485497"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-653fcda90d16ecf4",
+      "title": "径向UV与法线笔触",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "ecf98e8f8445ff320e290d75346469038bb3ba55b5c7c3bbd892a0975c25a2fa",
+          "originalIndex": 63,
+          "title": "径向排序UV流程待实现/验收，346帧已学；法线反差原笔触atlas/接缝待补，384帧已学不重复计数",
+          "clips": [
+            "1478114309263839244",
+            "1482011744843223042"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-b310257198057291",
+      "title": "树云卡片与俯仰层次",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "3f7d566bb55a7ef109f70e14c5679eca36adc99027c8fdbab200e1f831e71991",
+          "originalIndex": 64,
+          "title": "树云续项：原球面octagonal卡片/多俯仰、蓬松云形和前景层次；569帧已学不重复计数，方向修复已验",
+          "clips": [
+            "1849427564034498642",
+            "1852334860137849222"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-29af50893af48a00",
+      "title": "图集扩容与三维树接口",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "4cf32ef087644cbc70bb9f494659e707327049cfeef7f23a63ab93ff258de338",
+          "originalIndex": 65,
+          "title": "图集续项：自动扩容/重排、原3D树/完整兼容接口与原素材；460帧已学不重复计数",
+          "clips": [
+            "1764958522398146667",
+            "1593215065423245313"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-91c1692ffb9a5983",
+      "title": "矩形树兼容接口",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "2a855dc66b76bdb4e6e2bbfc09f0c0af4c1a5c9c774ff6fff07a24f06fe81c10",
+          "originalIndex": 66,
+          "title": "矩形树续项：原3D树展开和完整兼容接口；805帧已学；整数跨叶候选/key已在本轮补齐",
+          "clips": [
+            "1765115069837221962",
+            "1765041830461055127"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-41af4a81126135f0",
+      "title": "头像资产与角色身份",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "e9a001e95a5d24d18b2c9ec325843703bec20dc8b00516809126c75715b87c29",
+          "originalIndex": 67,
+          "title": "头像续项：可序列化SLOTS/spec、原素材/兜帽锁甲、剪影IoU与游戏角色身份；188帧已学不重复计数",
+          "clips": [
+            "958371606350454784",
+            "1010979395719319552"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-0f856a515be1d9d6",
+      "title": "UI纹饰与游戏命令",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "5c3b529606358c2bc01b00434bf24adddd71f65927d5db0dcd4289b3c12deaec",
+          "originalIndex": 68,
+          "title": "UI图标/纹饰续项：原画稿/中心徽章、逐部件显隐/材质色变和真实游戏工具命令；406帧已学不重复计数",
+          "clips": [
+            "1024679338292256769",
+            "1201179450668441600"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-b6a2aeda2fabea83",
+      "title": "UI移动目标与布局语义",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "4eb40e3113d6946373e49980e0caee8c805477a36e2f0f545fe9e588b1eb8be7",
+          "originalIndex": 69,
+          "title": "UI续项：单Move目标确认/地面标记、游戏Move/Swap语义与原布局/图标接口；753帧已学不重复计数",
+          "clips": [
+            "1242824460325052417",
+            "1016680972610359298"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-12881d106e9dc7dc",
+      "title": "云冬景与船群组合",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "78da2edbfff4e904626234199551b386d97db89df7fd6a96ea2c58ac5319b0ca",
+          "originalIndex": 70,
+          "title": "云/冬景续项：高耸云体/灰蓝层次、统一风采样与完整冬季美术/船群战斗组合；795帧已学不重复计数",
+          "clips": [
+            "1243228419162341379",
+            "943230620242796544"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-0998371e320e720a",
+      "title": "风雪局部场与表面扫掠",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "ded12fa7d520c5f4d22b6c6b235c1f9dccfff4c8b42ef1d92b807a74b246e765",
+          "originalIndex": 71,
+          "title": "风雪续项：原作风轨迹接口/局部场shader采样、雪片软形与接触AO、形变表面扫掠；834帧已学不重复计数",
+          "clips": [
+            "926903893866541057",
+            "943230624369868800"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-7ff7b216ba357e18",
+      "title": "船迹泡沫与贴水雾",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "a2c96ae6cd7e9566f9eb691b147112764c05cab25cc28666f7f3a4c2315de035",
+          "originalIndex": 72,
+          "title": "船迹/雾续项：间断泡沫/舷侧喷溅与靠岸船；风场平流软片及遮挡，464帧已学不重复计数",
+          "clips": [
+            "901469409579061248",
+            "906207980802252801"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-53be7c32a1d8d220",
+      "title": "草坪石边带与墙根灌木",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "dfaa649e6b52f52f4944ce0617a5e930061644c51511ca9cb25cdf6ab3802e9f",
+          "originalIndex": 73,
+          "title": "草地与灌木续项：任意高度建筑台地草坪/石边带、墙根灌木卡片和纹理；固定中心仅草卡片局部实验，649帧不重复计数",
+          "clips": [
+            "1178731576982724611",
+            "1191990107785572352"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-6ae2c8d41081b015",
+      "title": "道具稳定身份与生命周期",
+      "stages": [],
+      "state": "closed",
+      "records": [
+        {
+          "fingerprint": "0b094c4d1ceefd93303b9f20d1272b3fde5fde5041b397b23469771998a8ae91",
+          "originalIndex": 74,
+          "title": "道具动画优先补差：稳定道具键、保留消失几何、出现/移除错峰及跨重建身份；306帧已学，不重复计数",
+          "clips": [
+            "1246074663546916873"
+          ]
+        }
+      ],
+      "reason": "后续r55证据已列稳定slot身份、保留消失几何、错峰及跨World重建接入；按历史证据核销本项，不代表本轮重新执行验收。",
+      "evidence": [
+        {
+          "module": "src/propanim.js",
+          "path": "artifacts/coverage/r55-G4-terrain-build.md",
+          "status": "已迁移/增强（本轮验证）",
+          "gap": "（第 55 批，浏览器验收）合并道具网格逐顶点 slot 属性 + shader 弹簧，只上传变化槽位；?propanim=1。"
+        }
+      ]
+    },
+    {
+      "id": "backlog-9ddf31aefc06f0e8",
+      "title": "船迹旧覆盖登记",
+      "stages": [],
+      "state": "closed",
+      "records": [
+        {
+          "fingerprint": "eb1b8e870e8c44cb4d98dc2fa431585352f1703690b279433be95b3dce6947f7",
+          "originalIndex": 75,
+          "title": "新原版模块wake.js：先精确配文/全帧核验船迹，再补粒子/舷侧喷溅、角度与轨迹接口；目前仅静态映射部分覆盖",
+          "clips": [
+            "901469409579061248"
+          ]
+        }
+      ],
+      "reason": "核销“仅静态映射/先学习”的旧基线；后续证据已记录Wake/Ship迁移、舷侧泡沫及Kelvin测量。靠岸行为仍在船迹组合项。",
+      "evidence": [
+        {
+          "module": "src/wake.js",
+          "path": "artifacts/coverage/r53-G4-life-sphere-ui.md",
+          "status": "已迁移/增强（本轮验证）",
+          "gap": "（第 53 批）Wake/Ship 粒子：舷侧泡沫、淡雾、船头水花、Kelvin 角 19.39°，接进 Boats。"
+        }
+      ]
+    },
+    {
+      "id": "backlog-1e657c99ead96e61",
+      "title": "导出DCC与录像动作",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "6dc21f018494a5eaa39cc5cd43e9d60914d18d18694d7e9d8d0f4d621d9c40f0",
+          "originalIndex": 76,
+          "title": "导出/录像续项：第三方DCC导入、实例植被/水/材质，回放逐动作动画/水花/音效及镜头轨迹；已学455帧不重复计数",
+          "clips": [
+            "1430224300003545091",
+            "1260586697538113537"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-48ee384ed3166f97",
+      "title": "存档环境与合批上传",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "ea5bcfd2304d0e8652bce45549f4236ac8c81407710346627262b9649c3b567e",
+          "originalIndex": 77,
+          "title": "存档/合并续项：palette与天气/玩法持久化、跨平台拓扑身份；原作动态合批/合并基准与局部上传，已学670帧不重复计数",
+          "clips": [
+            "1198957499027795969",
+            "1401145625572425728"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-eeaf60e742ef0091",
+      "title": "QA复杂几何与反弹校准",
+      "stages": [
+        "validation",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "e3b3d90c4c8a26ed2c3c1284e377d00da562d5ba4ccc329ad3f2b375ed8159cd",
+          "originalIndex": 78,
+          "title": "QA与彩色反弹续项：复杂悬空孔洞/模块连接/自交与原作视觉、校准和完整彩色反弹参数；已学1270帧不重复计数",
+          "clips": [
+            "1344290848180203523",
+            "1197909675443916803"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-b49d63552b351f76",
+      "title": "轮廓速度拖抹与调色导出",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "5af06b684b7b1931ac2cebc0cd62c56bbc37a87f9a33119badd6b7a0435df8ea",
+          "originalIndex": 79,
+          "title": "已学537帧续项：轮廓方向速度场与拖抹，PNG/多行palette、配色持久化；短弧过渡为本地扩展，非原作公式证明",
+          "clips": [
+            "1727315611959865407",
+            "1200520827898343425"
+          ]
+        },
+        {
+          "fingerprint": "4f376365efc2853fda5465459a1824617dc10e6b75126fd42e909037bf280f07",
+          "originalIndex": 80,
+          "title": "已学827帧续项：原片轮廓方向拖抹/速度场、PNG palette热重载和贴图色槽；保留历史帧及独立色槽成果",
+          "clips": [
+            "1727324352264474664",
+            "1371460793032716290"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-79680d7c3523ef76",
+      "title": "HSL彩色约束与图集",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "baeeecf2301ee193809e4d94ab9d5faa2cd8a1b070a86d5f74b34834c7f2793c",
+          "originalIndex": 81,
+          "title": "已学色彩/对比续项：五特征HSL离散预览、彩色约束与atlas输出/接缝；标量诊断违例和原版完整接口待补",
+          "clips": [
+            "1710031224838771027",
+            "1482346496460828674"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-32e536edf2e52e9d",
+      "title": "色体与对比纹理旧覆盖登记",
+      "stages": [],
+      "state": "closed",
+      "records": [
+        {
+          "fingerprint": "68ed40e3466debb0fcd0fc54253a4d057c838338b07cb4835a1652439e2141d7",
+          "originalIndex": 82,
+          "title": "原版新增待覆盖模块：src/colorvolume.js、src/contrasttex.js，先核接口与精确ID配文再学习，不凭同名页面冒充覆盖",
+          "clips": [
+            "1710031224838771027",
+            "1482346496460828674"
+          ]
+        }
+      ],
+      "reason": "核销“新增待覆盖/先学习”的旧基线；两模块已有逐帧登记与View接入证据。自由拖角点/导出仍由调色续项保留。",
+      "evidence": [
+        {
+          "module": "src/colorvolume.js",
+          "path": "artifacts/coverage/r55-G1-shading.md",
+          "status": "已迁移/增强（本轮验证）",
+          "gap": "（第 55 批，浏览器验收）每格五特征栅格 + GPU 八角点 OKLab 三线性插值接进 View（?shade=colorvolume，默认关），面板角点取色器实时改；浏览器开关对照已看。"
+        },
+        {
+          "module": "src/contrasttex.js",
+          "path": "artifacts/coverage/r55-G1-shading.md",
+          "status": "已迁移/增强（本轮验证）",
+          "gap": "（第 55 批，浏览器验收）World 三角扇 OKLab 松弛（ΔE 13.75→0.10）画进 512² 世界图，顶面取色 + 对比边细线接进 View；浏览器对照已看。"
+        }
+      ]
+    },
+    {
+      "id": "backlog-b0ba079bf4af7ed9",
+      "title": "浮凸双高度与建筑接缝",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "96d101fdb623f8d8888d980efa156a0b1e138f5aaa87f431a68729eb88b21774",
+          "originalIndex": 83,
+          "title": "已学635帧续项：纹理浮凸的投射高度与深度高度分别储存，接屋檐/墙面、形变表面与UV缝验收；现有2.5D地表近似不能替代",
+          "clips": [
+            "1704218784028905984",
+            "1705195380457996629"
+          ]
+        },
+        {
+          "fingerprint": "1b8b13434cfc8237d4ae2e6c2cfdfd723f473b4ada276176e1e30d86bde61960",
+          "originalIndex": 112,
+          "title": "已学 599 帧续项（保留自第 70 轮合并）：纹理浮凸的投射高度与深度高度分别储存、接屋檐/墙面与低模接缝验收仍待补；灌木带宽部分已并入第 70 轮条目",
+          "clips": [
+            "1707490274425884929"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-b826d47d36904ace",
+      "title": "草边图集与跨崖采样",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "65cafc954e443e0afa810b1f2dd0ebf1a585fe0b2929aff46e601ea4d21cfb84",
+          "originalIndex": 84,
+          "title": "已学草边/笔触续项：共享atlas/rim距离场、连续受控跨崖采样、完整参数与反射一致性；1052帧不重复计数",
+          "clips": [
+            "1696896119794479541",
+            "1696864977171189980"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-a537e7f166138296",
+      "title": "软坡排水与World适配",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "42502768d5dd53d3f46dad0128c249f34dda3db4e6c37b5df5b165a8f368a8fa",
+          "originalIndex": 85,
+          "title": "软坡续作：连续坡面/排水无局部低洼的可检验生成算法与World适配；已学656帧不重复记数",
+          "clips": [
+            "1447488323845509121"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-940406311fcb283f",
+      "title": "悬挑侧壁自交与碰撞",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "b3ba01778b942de039a12220a0b61e12a86c308e5c175db3a30b5368a5a0d6da",
+          "originalIndex": 86,
+          "title": "悬挑续作：切面面积/边长保护已补；剩余跨切面3D侧壁交叉、碰撞和原作视觉，303帧不重复计数",
+          "clips": [
+            "1671808851895627776"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-1472e20c35c6e493",
+      "title": "草丛背景对比采样",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "c70a7bc018ccc1a19b03606b66f1205e221f58056cab20f73b0e09ed93fb8588",
+          "originalIndex": 87,
+          "title": "已学习草丛续作：顶点采站立点contrast texture与背景射线差值，视角变化稳定性；不重复计数",
+          "clips": [
+            "1590674061092212738"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-286cdd2d82a4a3bc",
+      "title": "球面patch投射与UV",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "9486d52928443c7b72d590c8f84c571b7db43f570489e8e716971fbfe6a8c515",
+          "originalIndex": 88,
+          "title": "已学习patch续作：球面投射/岸带手工UV、atlas采样及接缝AB指标，保留原顶面混色；不重复记视频数",
+          "clips": [
+            "1781405550061687016"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-86db0413cfcf03b8",
+      "title": "SDF表面距离与笔触",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "4f795dd38f773dcf11dd2a006d2e5090fbd10b9589b740a91b7426cbbe5719f4",
+          "originalIndex": 89,
+          "title": "SDF/法线续项：形变表面距离、程序笔触/切线贴图、命中UV和mega-texture反馈；不把诊断梯度当原作笔触",
+          "clips": [
+            "1481661852887265288",
+            "1580845127207387137"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-0c239cdfda6b97b1",
+      "title": "反弹形因子参考接口",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "37f44361ef2e43b1eafb6a3934cd423e9ef99036241ae4beb730a678686a8d31",
+          "originalIndex": 90,
+          "title": "反弹模块映射补差：原版2.5D形因子gather与暴力参考接口，保留已有3D体素反弹并明确不同模型",
+          "clips": [
+            "1580835075629133825"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-29ac79845df4aa3a",
+      "title": "GI表面与体积反馈",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "befa9846cd32e3297ced5b3d5fe850d96845c90188878710f23b863a92deb5d0",
+          "originalIndex": 91,
+          "title": "GI续项：SDF距离+命中UV、mega-texture表面与体积双向反馈；方向入射可选，内部传播仍平均RGB",
+          "clips": [
+            "1580845127207387137",
+            "1580846877855338497"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-26e12482eb684923",
+      "title": "点光漏光形变与增量",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "cf763eb4ad5803e9ffd42b80b3e3e8d7b3923d5e191b85b908088f01a06bc35a",
+          "originalIndex": 92,
+          "title": "低分辨率漏光/形变遮挡与实时增量更新；太阳DDA已补，旧计划不再把它列未实现",
+          "clips": [
+            "1582757294672314368"
+          ]
+        },
+        {
+          "fingerprint": "848aba35d6e29102c1a465e559a5517164142e1295f3d6a3ce5a8eb3b0a1d282",
+          "originalIndex": 93,
+          "title": "点光续项：太阳有限DDA、低分辨率漏光、形变遮挡与增量更新；当前CPU重烘105–111ms为本机样本，不是实时保证",
+          "clips": [
+            "1582757294672314368"
+          ]
+        }
+      ],
+      "reason": "合并同一漏光/形变遮挡/增量问题；较新原文明确太阳DDA已补，旧记录的太阳DDA不再单独排期。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-425fabd1e6dab7c3",
+      "title": "房屋轮廓切入与编辑",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "3d2d18afc0260366019e866b125ff7978bc0d5e05703077c45109d05724bad71",
+          "originalIndex": 94,
+          "title": "房屋续项：任意轮廓切入、地形周边重网格及统一实例编辑；不重做已有双格/工程身份成果",
+          "clips": [
+            "1584623053061099520"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-f428dc869c571052",
+      "title": "增量tile候选与导航",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "de1ba8d644a138b3d15175441ca323313836f5e5c2491f25f021c37b5602e346",
+          "originalIndex": 95,
+          "title": "158229续项：动态候选缓存、真正增量tile选择与简化导航扩展/互连；当前仅固定边缘候选探针",
+          "clips": [
+            "1582293326815862786"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-76be4f20a77dcca4",
+      "title": "衣绳多高度与避让",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "21297bddf5dfa7530242f7d89d6f81ba7a3de881e0d6b9945b8a70923f472abe",
+          "originalIndex": 96,
+          "title": "125983续项：同楼对多高度衣绳、形变墙面/屋顶精确避让与完整衣物造型；当前共享体素保守包络",
+          "clips": [
+            "1259838941299183619"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-de5fe653c3e752b6",
+      "title": "中心格与塔顶视觉",
+      "stages": [
+        "validation",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "27abe8da43137310015c4c3dd7ab94012b2e03628d140c87e5fc90f6222458e6",
+          "originalIndex": 97,
+          "title": "视觉缺口：中央放射格过细，塔顶比例偏高；改中心四边格模板并审核屋顶适配，不把运行通过当作原片视觉通过",
+          "clips": [
+            "1301816247479345152"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-43071c9885308631",
+      "title": "规则补丁与过渡重网格",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "d5053356151b34adcb304dd755d25cf15de2c0595d3a726b0baa886688069200",
+          "originalIndex": 98,
+          "title": "规则补丁续项：更接近原作的四边格/八向放射模板库、复杂孔洞、多补丁和过渡重网格；先保留拒绝机制，不降低几何门槛",
+          "clips": [
+            "1301816247479345152"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-022d7bc423a7b653",
+      "title": "对偶采样与贴附导航",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "1d640b87cd2d169f77a9048986e8b3c83b2d275e13a46b58d6ba680e5c5fec89",
+          "originalIndex": 99,
+          "title": "顶点对偶续项：统一植被区域采样、完整可走导航输入及悬崖/形变贴附，当前候选点仅诊断",
+          "clips": [
+            "959752525867036672"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-4cab5f742388ba0d",
+      "title": "边境Bezier与缝合",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "92b5d19e846853b6b8e8fc5c0233451601e4fb1188ed78f3a3828f991fd5d0f4",
+          "originalIndex": 100,
+          "title": "边境四步剩余：Bezier与原三角图联合细分两侧场，多个前线相交/缝合、纹样和地名；旧14帧不重复学",
+          "clips": [
+            "1097458505315946496"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-1b1056359ff8511f",
+      "title": "多格身份与socket联合WFC",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "5be09766dd7e91a97e9303fdeaa1731c899c385b2bec0fe66c29109a62d1f630",
+          "originalIndex": 101,
+          "title": "多格后续：通用模块身份及统一撤销栈，完整轮廓socket/旋转和联合WFC",
+          "clips": [
+            "1579483114178768898",
+            "795010582239997952",
+            "1751932427272909032"
+          ]
+        },
+        {
+          "fingerprint": "62857850c393c21d942df3b8312a99ac5a2ba77ca2b6dce37175930c7f1c4885",
+          "originalIndex": 107,
+          "title": "多格实例身份持久化与统一撤销/存档，再补预制轮廓socket和联合WFC",
+          "clips": [
+            "1579483114178768898",
+            "795010582239997952"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-ef149c0236f99bd3",
+      "title": "拥挤窄道与弯岔压力",
+      "stages": [
+        "validation",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "d811de50447296899026415501b991afb6d676cb90bdf1f1e0872be9ef4934ed",
+          "originalIndex": 102,
+          "title": "后续拥挤：体型窄道重路由、弯道/多岔口与完全重叠；其余建筑/地形模块继续按映射推进",
+          "clips": [
+            "880853661936734211",
+            "984813819280191488"
+          ]
+        },
+        {
+          "fingerprint": "22d699b5a5496ecf68fd3bc2aa824c4c188c5ac4d38b0cd441b55681dc24d43c",
+          "originalIndex": 106,
+          "title": "弯道、多岔口与真实北境单位的拥挤/碰撞压力测试",
+          "clips": [
+            "880853661936734211"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-a6b50bedb8615724",
+      "title": "局部网格prefab与接缝",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "0b0f421b8a7536d8062011cc77d89ad031fa946b9db6378fdf0d0dffbb8c8a6d",
+          "originalIndex": 103,
+          "title": "局部网格续项：完整prefab/socket、形变碰撞、周边补网/接缝与联合WFC",
+          "clips": [
+            "1751932427272909032",
+            "1670794261669769217",
+            "1579483114178768898"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-83ff3fbcc374cb73",
+      "title": "火焰轮廓与动态火光",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "e98abe439f1cfd6a1b83216474dfba4f14f7f9c7959857bc29ed516ac12e0e58",
+          "originalIndex": 104,
+          "title": "火焰剩余视觉差距：Points与quad/noise轮廓、动态火光；不重复已完成全帧学习",
+          "clips": [
+            "1056990611738451968",
+            "1056992291108413446"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-5c5d6bfd54ab589c",
+      "title": "斜坡脚高与精细portal",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "657c2fb1fe4df45195697036b406575b9c27654b15b6b107cc36e06768df264a",
+          "originalIndex": 105,
+          "title": "形变侧壁/斜坡脚高插值与精细模块portal",
+          "clips": [
+            "906425294533394432",
+            "797119718477991936"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-7944582094356a76",
+      "title": "走廊拱顶与贴面光照",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "731b765ba32e752685e5ea52d8070ec36c6fac0b15784082f9a2a39fe792b1cf",
+          "originalIndex": 108,
+          "title": "走廊空间、弧顶/门口版式和纹样复杂度及贴面光照",
+          "clips": [
+            "1897266928961700215",
+            "1890018647655272491"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-0b92c2fbdbdd3333",
+      "title": "半影与快照指标",
+      "stages": [
+        "validation",
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "504618f5f63b7705e2730073e96aabb17e46ba8c6abaf6b37b4bf59381fe2830",
+          "originalIndex": 109,
+          "title": "新增原版模块补差：三场半影/CPU快照指标；保留已验收GPU快照与太阳gizmo",
+          "clips": [
+            "1305951750638231552",
+            "1313840428685447170",
+            "911913981731885056"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    },
+    {
+      "id": "backlog-46cfbdfa853f2248",
+      "title": "房屋kit旧覆盖登记",
+      "stages": [],
+      "state": "closed",
+      "records": [
+        {
+          "fingerprint": "860b6b461b081d9de4faa3ba9f713739c2434b1075144b79e1e9d6a92fad16dd",
+          "originalIndex": 110,
+          "title": "原版新增housekit：保留既有房屋管线，后续读README/逐帧再核原层高/坡度/烟囱约束与接口；目前仅静态对应",
+          "clips": [
+            "781027725452648448"
+          ]
+        }
+      ],
+      "reason": "核销“仅静态对应/先学习”的旧基线；后续房屋kit证据包含坡度池、烟囱就座与村落接口，原始美术素材未迁入。",
+      "evidence": [
+        {
+          "module": "src/housekit.js",
+          "path": "artifacts/coverage/r55-G4-terrain-build.md",
+          "status": "已迁移/增强（本轮验证）",
+          "gap": "（第 55 批，浏览器验收）8 档坡度池 + 程序化分层茅草 + scatterVillage 撒村写 World。"
+        }
+      ]
+    },
+    {
+      "id": "backlog-9d5a3e576bce2033",
+      "title": "调色角点与导出",
+      "stages": [
+        "implementation"
+      ],
+      "state": "open",
+      "records": [
+        {
+          "fingerprint": "a5581c0fd20f0d4672c73775d00ad91c1e8a94e38ef42e2513da4aceb2cfddf5",
+          "originalIndex": 111,
+          "title": "已学调色/生成续项（保留自第 70 轮合并）：OkHsl/OkLab、自由拖角点与取样色带/导出仍待补；灌木部分已并入「第 70 轮收敛·灌木落差档」条目",
+          "clips": [
+            "1712088611934371876"
+          ]
+        }
+      ],
+      "reason": "逐项按剩余交付内容归类；原文已学不等于剩余代码已实现。",
+      "evidence": []
+    }
+  ]
+}

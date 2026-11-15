@@ -1,0 +1,49 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>开洞 / 拱桥 / 高拱龛 r56 · C05·C</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#eef3f1;color:#20343c;font:13px/1.5 system-ui}header{padding:8px 14px;position:absolute;top:0;left:0;right:0;background:#eef3f1e8;z-index:2}label{margin-right:10px;white-space:nowrap}canvas{display:block;width:100vw;height:100vh}#report{position:absolute;right:8px;bottom:8px;max-width:440px;max-height:45vh;overflow:auto;background:#fffd;padding:6px 8px;border-radius:6px;font:11px/1.35 ui-monospace,monospace;white-space:pre-wrap;z-index:2}a{color:#26758a}</style>
+<header><b>开洞 / 拱桥 / 高拱龛 r56</b> · <a href="index.html" target="_top">首页</a> · 片子 806904557502464000 / 802496920790777856（运河拱桥 + 楔石）· 1275089608758484992（教堂高拱龛）· 1205422438437273601（门窗模板挖洞）· 1205416648397721601 / 1181464374839521280（道具 / 立面 WFC，沿用既有开关）<br>
+<span id="boxes"></span>
+<small>全部开关默认关；URL：?scene=canal|town|fusion&grid=quad|mixed&flags=a,b&punch=1&focus=bridge|church|arch|cell:ID&dist=&yaw=&pitch=&clean=1</small></header>
+<canvas id="view"></canvas><div id="report"></div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import{buildQuadGrid,buildMixedGrid}from'./src/core/grid.js';import{decorateCells,buildCellIndex}from'./src/core/spatial.js';import{World}from'./src/core/world.js';import{PALETTES}from'./src/core/palette.js';
+import{View}from'./src/world/view.js';import{buildScene}from'./src/world/scenes.js';import{buildCanalTown}from'./src/build/canal-scene-r56.js';import{attachOpeningPunch}from'./src/render/opening-punch-layer.js';import*as THREE from'three';
+const q=new URLSearchParams(location.search),kind=q.get('grid')==='mixed'?'mixed':'quad',sceneName=q.get('scene')||'canal',L=.5;
+const grid=decorateCells(kind==='mixed'?buildMixedGrid({radius:22,hexSize:.62}):buildQuadGrid({radius:14,hexSize:1})),world=new World(grid);world.palette=PALETTES.town;
+const scene=sceneName==='canal'?buildCanalTown(world,{seed:+(q.get('seed')||3)}):(buildScene(world,sceneName,+(q.get('seed')||7)),null);
+const FLAGS={canalBridges:'运河拱桥',churchDoors:'教堂高拱龛',archVoussoirs:'楔石/键石',surfaceWFC:'立面WFC',surfaceFacade:'整立面',surfaceFacadeRuns:'跨格长立面',archCutout:'拱门挖洞',yardProps:'后院道具',yardPropArt:'道具美术(桌/箱/盆)'};
+for(const f of(q.get('flags')||'').split(',').filter(Boolean))world[f]=true;
+const view=new View(document.querySelector('#view'),world,grid,buildCellIndex(grid),{levelHeight:L});view.changed();view.frameTown();
+if(q.get('clean')){for(const k of['clouds','birds','boats','butterflies','flags','smoke'])try{view.setDebug(k,false)}catch(e){}}
+for(const k of(q.get('debug')||'').split(',').filter(Boolean))try{view.setDebug(k,true)}catch(e){}
+let punch=null;if(q.get('punch'))punch=attachOpeningPunch(view);
+function build(){view.render(0);return view.worldMesh.build;}
+function stats(){const b=build();return{scene:sceneName,kind,flags:Object.keys(FLAGS).filter(f=>world[f]),canal:scene,bridges:b.canalBridges.length,bridgeFaces:b.canalBridges.map(x=>({cell:x.cell,face:x.face,span:+x.span.toFixed(3),rise:+x.rise.toFixed(3),wedges:x.wedges,vault:x.vault})),church:b.churchDoors.map(x=>({cell:x.cell,edge:x.edge,width:+x.width.toFixed(3),bottom:+x.bottom.toFixed(3),top:+x.top.toFixed(3)})),openings:b.openings.length,openingDoors:b.openings.filter(o=>o.door).length,arches:b.archBudgets.length,wedges:b.archWedges,yardProps:b.yardProps.reduce((s,y)=>s+y.count,0),decoDrawn:b.decoDrawn,punch:punch?.stats()};}
+function focus(f=q.get('focus'),K=+(q.get('k')||0),O={}){if(!f)return;const g=(n,d)=>O[n]??(q.get(n)!==null?+q.get(n):d);const b=build();let c=null,tx,ty,tz,yaw=null;
+ const faceYaw=(cell,ei)=>{const A=cell.pts[ei],B=cell.pts[(ei+1)%cell.n],ex=B.x-A.x,ez=B.z-A.z,l=Math.hypot(ex,ez),nx=ez/l,nz=-ex/l,mx=(A.x+B.x)/2,mz=(A.z+B.z)/2,sg=Math.sign(nx*(mx-cell.cx)+nz*(mz-cell.cz))||1;return[Math.atan2(nx*sg,nz*sg),mx,mz];};
+ if(f==='bridge'&&b.canalBridges.length){const x=b.canalBridges[K%b.canalBridges.length];c=grid.cells[x.cell];const[yw,mx,mz]=faceYaw(c,x.face);yaw=yw;tx=c.cx;tz=c.cz;ty=.25;}
+ else if(f==='church'&&b.churchDoors.length){const x=b.churchDoors[K%b.churchDoors.length];c=grid.cells[x.cell];const[yw,mx,mz]=faceYaw(c,x.edge);yaw=yw;tx=mx;tz=mz;ty=(x.bottom+x.top)/2;}
+ else if(f==='arch'&&b.archBudgets.length){const a=b.archBudgets[0];c=grid.cells[a.cell];const[yw]=faceYaw(c,(a.axis+1)%4);yaw=yw;tx=c.cx;tz=c.cz;ty=(a.floor+a.base)/2;}
+ else if(f==='window'&&b.openings.length){const o=b.openings.filter(o=>!o.door)[K];tx=o.ax+(o.bx-o.ax)*o.t;tz=o.az+(o.bz-o.az)*o.t;ty=(o.y0+o.y1)/2;yaw=Math.atan2(o.nx,o.nz);}
+ else if(f.startsWith('cell:')){c=grid.cells[+f.slice(5)];tx=c.cx;tz=c.cz;ty=1;}
+ else if(f.includes(',')){[tx,tz,ty]=f.split(',').map(Number);ty??=1;}
+ if(tx===undefined)return;ty=g('ty',ty);view.target.set(tx,ty,tz);if(yaw!==null)view.yaw=yaw+g('yawOff',0);if(O.yaw!==undefined||q.get('yaw'))view.yaw=g('yaw',0);view.pitch=g('pitch',.35);view.distance=g('dist',4);view.updateCamera();window.r56focus={tx,ty,tz,yaw:view.yaw};}
+focus();window.r56aim=(f,k=0,o={})=>{focus(f,k,o);view.render(0);return window.r56focus;};
+/** 模板挖洞读回：同一镜头 punch 关 / 开各渲一帧，逐像素比较；变了的像素必须落在投影后的洞口矩形里。 */
+window.r56punchProbe=()=>{if(!punch)return null;const r=view.renderer,gl=r.getContext(),W=gl.drawingBufferWidth,H=gl.drawingBufferHeight;
+ const grab=(on)=>{punch.enabled=on;view.render(0);view.render(0);const px=new Uint8Array(W*H*4);gl.readPixels(0,0,W,H,gl.RGBA,gl.UNSIGNED_BYTE,px);return px;};
+ const off=grab(false),on=grab(true);punch.enabled=true;
+ const pos=punch.group.children[0].geometry.attributes.position.array,cam=view.camera,v=new THREE.Vector3(),tris=[];
+ for(let i=0;i<pos.length;i+=9){const t=[];for(let k=0;k<3;k++){v.set(pos[i+3*k],pos[i+3*k+1],pos[i+3*k+2]).project(cam);t.push([(v.x+1)/2*W,(v.y+1)/2*H,v.z]);}if(t.every(p=>p[2]<1))tris.push(t);}
+ const inTri=(x,y,t,pad)=>{const s=(a,b)=>(b[0]-a[0])*(y-a[1])-(b[1]-a[1])*(x-a[0]);const d=[s(t[0],t[1]),s(t[1],t[2]),s(t[2],t[0])];const area=Math.abs(s(t[0],t[1])===0?1:1);if(d.every(k=>k>=-pad*60)||d.every(k=>k<=pad*60))return true;return false;};
+ // 洞口包围盒（屏幕像素，外扩 2px 计抗锯齿）
+ const boxes=[];for(let i=0;i<tris.length;i+=2){const ps=[...tris[i],...(tris[i+1]??[])];boxes.push([Math.min(...ps.map(p=>p[0]))-2,Math.min(...ps.map(p=>p[1]))-2,Math.max(...ps.map(p=>p[0]))+2,Math.max(...ps.map(p=>p[1]))+2]);}
+ let changed=0,inside=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4;if(Math.abs(off[i]-on[i])+Math.abs(off[i+1]-on[i+1])+Math.abs(off[i+2]-on[i+2])>6){changed++;if(boxes.some(b=>x>=b[0]&&x<=b[2]&&y>=b[1]&&y<=b[3]))inside++;}}
+ return{W,H,maskTris:tris.length,changed,inside,outside:changed-inside,insideShare:changed?+(inside/changed).toFixed(4):null,punch:punch.stats()};};
+const box=document.querySelector('#boxes');for(const[k,t]of Object.entries(FLAGS)){const l=document.createElement('label');l.innerHTML=`<input type=checkbox ${world[k]?'checked':''}>${t}`;l.firstChild.onchange=e=>{world[k]=e.target.checked;world.touch();view.worldMesh.invalidate();rep();};box.append(l);}
+{const l=document.createElement('label');l.innerHTML=`<input type=checkbox ${punch?'checked':''}>门窗模板挖洞`;l.firstChild.onchange=e=>{if(!punch)punch=attachOpeningPunch(view);punch.enabled=e.target.checked;rep();};box.append(l);}
+function rep(){const o=stats();window.r56=o;document.querySelector('#report').textContent=JSON.stringify(o,null,1);}
+rep();if(q.get('clean')){document.querySelector('#report').style.display='none';document.querySelector('header').style.display='none';}
+window.r56world={world,view,grid,stats};
+let last=performance.now();function frame(t){view.render(Math.max(0,Math.min((t-last)/1000,.05)));last=t;requestAnimationFrame(frame)}requestAnimationFrame(frame);
+</script></html>

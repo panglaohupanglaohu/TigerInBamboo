@@ -1,0 +1,45 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "separate": {
+        "groups": 2,
+        "a": 8969,
+        "c": 8995,
+        "readonly": true,
+        "vertices": 2166,
+        "drawCalls": 36
+      },
+      "joined": {
+        "groups": 1,
+        "a": 8969,
+        "c": 8969,
+        "readonly": true,
+        "vertices": 1944,
+        "drawCalls": 66
+      },
+      "restored": true
+    },
+    {
+      "kind": "mixed",
+      "separate": {
+        "groups": 2,
+        "a": 5265,
+        "c": 3172,
+        "readonly": true,
+        "vertices": 2418,
+        "drawCalls": 36
+      },
+      "joined": {
+        "groups": 1,
+        "a": 3172,
+        "c": 3172,
+        "readonly": true,
+        "vertices": 2520,
+        "drawCalls": 66
+      },
+      "restored": true
+    }
+  ],
+  "errors": []
+}

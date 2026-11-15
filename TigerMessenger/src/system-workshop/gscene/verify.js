@@ -1,10 +1,17 @@
+import {hexToOklab,deltaE} from '../../../../townscaper-web/REACodeRefactoring/src/core/oklab.js';
 /** 通用场景管线 · 验证：数值、改动量、明度预算、对比度（明暗层次）保留、颜色不过度坍缩。 */
-import { helpers } from './capabilities.js?v=sys-r11';
+import { helpers } from './capabilities.js?v=sys-r15';
 const { hex2rgb, rgb2hsl } = helpers;
-export function verifyGscene(M, colors) {
+export function verifyGscene(M, colors, {steps=[]}={}) {
   const checks = [], add = (id, name, status, detail) => checks.push({ id, name, status, detail });
   const bad = Object.entries(colors).filter(([id, c]) => !M.some((m) => m.id === id) || !/^#[0-9a-f]{6}$/i.test(c));
   add('values', '数值', bad.length ? 'fail' : 'pass', bad.length ? `${bad.length} 个颜色无效` : `${Object.keys(colors).length} 种材质改色`);
+  const manual=Object.keys(colors).filter(id=>M.some(m=>m.id===id&&m.locked&&m.color.toLowerCase()!==String(colors[id]).toLowerCase()));
+  const allowEdited=steps.some(s=>s.params?.includeEdited===true);
+  add('manual','人工调色保留',manual.length&&!allowEdited?'fail':'pass',manual.length?`${manual.length} 种已保存材质${allowEdited?'获明确允许改动':'被改变'}`:'已保存材质未改变');
+  if(bad.length)return{status:'fail',checks,summary:'无效材质或颜色，停止验证'};
+  if(steps.length&&steps.every(s=>Number.isFinite(s.params?.maxDelta))){const budget=steps.reduce((sum,s)=>sum+s.params.maxDelta,0),excess=Object.entries(colors).filter(([id,c])=>deltaE(hexToOklab(M.find(m=>m.id===id).color),hexToOklab(c))>budget+1e-5);add('delta','感知色差预算',excess.length?'fail':'pass',`总预算 ${budget}，超限 ${excess.length} 种材质`);}
+  if(!M.length)return{status:'pass',checks,summary:'当前无可编辑材质'};
   const after = M.map((m) => ({ ...m, color: colors[m.id] || m.color }));
   const L = (x) => rgb2hsl(hex2rgb(x.color))[2];
   const w = (x) => Math.max(1, x.uses), W = M.reduce((a, x) => a + w(x), 0);

@@ -1135,3 +1135,30 @@ export function getMorrisBirdAudioStatus(){
  const rows=[];for(let i=morrisBirdVoices.length-1;i>=0;i--){const a=morrisBirdVoices[i];if(a.ctx.currentTime>a.end+.15){a.out.disconnect(a.analyser);a.analyser.disconnect();morrisBirdVoices.splice(i,1);continue;}const d=new Float32Array(256);a.analyser.getFloatTimeDomainData(d);rows.push({kind:a.kind,state:a.ctx.state,gain:a.out.gain.value,rms:Math.sqrt(d.reduce((n,x)=>n+x*x,0)/d.length)});}
  return{range:WORLD_SOURCE_RANGE,weatherGain:bus?.cats.weather.gain.value??null,weatherBaseGain:.15,weatherOriginalBaseGain:.6,muted:isMuted(),active:rows,source:'existing world SFX budget and live post-gain analyser',synthesis:'original, not field recording'};
 }
+
+/**
+ * 汽船鸣笛（2026-11-09 用户要求「船离开时，需要鸣笛」）：维京远征两船离港各拉一声长笛（启航信号 = 一长声）。
+ * 三音和弦汽笛（锯齿 + 方波，低通），起音带一点「汽压上来」的音高上滑，叠呼呼的蒸汽气声；持续 dur 秒后放汽收尾。
+ * pitch 调船的个性（李白号低沉、Duke 号略高），能传很远（maxDist 420 m）。
+ */
+export function sfxShipWhistle(pos, { pitch = 1, dur = 3.4, id = "ship-whistle" } = {}) {
+  const v = voice({ id, cat: "event", prio: 70, maxInst: 2, cd: 1.5, maxDist: 420, ref: 40, gain: 0.85, dur: dur + 0.8 }, pos);
+  if (!v) return;
+  const { t0, ctx } = v;
+  const hold = (peak, start, attack, len, release) => {
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, start);
+    g.gain.linearRampToValueAtTime(peak, start + attack);
+    g.gain.setValueAtTime(peak, start + attack + len);
+    g.gain.exponentialRampToValueAtTime(0.0001, start + attack + len + release);
+    return g;
+  };
+  for (const [ratio, type, amp] of [[1, "sawtooth", 0.22], [1.26, "square", 0.12], [1.5, "sawtooth", 0.16]]) {
+    const f = 196 * pitch * ratio;
+    const o = ctx.createOscillator(); o.type = type;
+    o.frequency.setValueAtTime(f * 0.86, t0); o.frequency.exponentialRampToValueAtTime(f, t0 + 0.35);   // 汽压上来时音高上滑
+    o.start(t0); o.stop(t0 + dur + 0.7);
+    chain(v, o, filt(v, "lowpass", 1400 * pitch, 1.2), hold(amp, t0, 0.25, dur - 0.25, 0.5));
+  }
+  chain(v, noise(v, "white", t0, dur + 0.5), filt(v, "bandpass", 1800 * pitch, 1.4), hold(0.08, t0, 0.15, dur - 0.1, 0.45));   // 蒸汽气声
+}

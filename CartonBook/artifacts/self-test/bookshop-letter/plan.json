@@ -1,0 +1,987 @@
+{
+  "id": "bookshop-letter",
+  "title": "书店镇 · 四盏灯，一封信",
+  "subtitle": "霸天舰队索书之日",
+  "series": "信使纪事 / 01",
+  "coverTagline": "书不登船。信先过海。",
+  "layout": "spread",
+  "captureVia": "direct",
+  "noFixtures": true,
+  "scene": "messenger",
+  "gameUrl": "/TigerMessenger/?scene=messenger&autostart=1&dev=1&cartonCapture=1",
+  "timeOfDay": 0.38,
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "notes": "Edena 双页封面与独立叶布局；索书令→取联藏约→三店联署→机器人守路→DUKE 交付。正式画面仅 8931 canvas，禁止 HUD 与 fixtures。",
+  "story": "潮退时，信使抵达书店镇。Hard To Find 的露台下，三家工坊书店刚开门：蝗虫在校准装卸架，蚂蚁端着第一杯茶，甲壳虫用车灯检查一箱尚未编目的书。门里留着一封从潮气边境寄来的《联藏约》。四家书店若共同签下，书目便互相保存，任何一家都不能替其余三家决定藏书的去向。\n\n蚂蚁书店的钟响过两次，霸天舰队越过海堤。旗舰只给出一个条件：第三次钟响前，把四店藏书送上升降索，镇子就能免于炮击。蝗虫主张先藏维修图册，蚂蚁宁愿烧掉总目录，甲壳虫想把书目拆散抄进零件标签。Hard To Find 的店主没有争论哪本书最值得活。他把《联藏约》交给信使：“先让每家都签。谁也不能单独拿全镇做交易。”\n\n信使把信收进衣襟，从门廊折回广场。蝗虫签下第一枚印，重型机器人随即离开装配架，守住坡道；蚂蚁签下第二枚印，把茶杯留在窗台，锅炉的蒸汽漫过廊口；甲壳虫签下第三枚印，车灯一束束亮起，为信使和居民标出通往海边的路。Hard To Find 最后落印。四盏门灯没有同时变亮，而是一盏回答另一盏。\n\n第三次钟响时，运输艇已经压在广场上方。空降兵沿绳索落下，信使没有停在三店门前。他贴着拱廊往港口跑，机器人和工人守住的不是一排书架，而是他脚下那条路，以及路上还没来得及进门的人。炮火被蒸汽遮住时，甲壳虫的车灯仍在前面；绳索落到身后时，蝗虫的脚步正好挡在中间。\n\nDUKE 的船长只肯再等一分钟。他看见信使空着双手，问：“书呢？”信使把签了四枚印的信递过去：“书不登船。把这个带到潮气边境。下一座镇若也收到索书令，就知道可以怎样回答。”NORTHWARD 的吊车停在头顶，系留飞艇仍压着缆绳。离岸的只有一封信，不是任何一家书店的藏书。\n\n炮声向海面退去以后，蚂蚁才回到窗台。杯沿缺了一小块，茶已经凉了。甲壳虫把散开的标签重新夹回书箱，蝗虫将装卸架推回原位。没有人宣布胜利；四店只是按约定交换了第一批书目，好让任何一册都有不止一个安放之处。\n\n信使沿坡道走回 Hard To Find。门还开着，海在廊灯下面，潮气边境在更远的云墙之外。他完成了一次很短的投递：从一家书店到三家书店，再到一艘船。镇上失去的东西写在伤亡簿里，没有被写进舰队的收货单。",
+  "hardConstraint": "all-images-from-game-screenshots",
+  "createdAt": "2026-11-07T14:11:38.426Z",
+  "shots": [
+    {
+      "id": "cover",
+      "title": "霸天飞入书店镇",
+      "note": "ELS；完整旗舰与护航机飞入小镇上空，一张连续实景横跨两个封面页",
+      "camera": {
+        "preset": "cover",
+        "landmark": null,
+        "dist": 28,
+        "orbit": 0.3,
+        "pitch": 0.2,
+        "waitMs": 700,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          85,
+          140
+        ],
+        "aim": [
+          0,
+          15,
+          15
+        ],
+        "holdSeconds": 5,
+        "battle": "start",
+        "fov": 55
+      },
+      "caption": "",
+      "dialog": null,
+      "outFile": "shots/cover.png"
+    },
+    {
+      "id": "s01",
+      "title": "信使抵达",
+      "note": "LS；坡道引导线，人物小于建筑",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          22,
+          14,
+          30
+        ],
+        "aim": [
+          0,
+          3,
+          0
+        ],
+        "holdSeconds": 4,
+        "stagePlayer": [
+          0,
+          0.2,
+          9
+        ],
+        "holdingLetter": false,
+        "fov": 55
+      },
+      "caption": "潮退时，四店刚开门。",
+      "dialog": null,
+      "outFile": "shots/s01.png"
+    },
+    {
+      "id": "s02",
+      "title": "蝗虫书店",
+      "note": "LS；书店与重型装配",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "locust-bookshop-court",
+        "eye": [
+          0,
+          13,
+          26
+        ],
+        "aim": [
+          0,
+          3,
+          -4
+        ],
+        "holdSeconds": 3,
+        "fov": 55
+      },
+      "caption": "蝗虫还想先藏维修图册。",
+      "dialog": null,
+      "outFile": "shots/s02.png"
+    },
+    {
+      "id": "s03",
+      "title": "蚂蚁书店",
+      "note": "LS；钟楼、锅炉与日常茶杯",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "ant-bookshop-court",
+        "eye": [
+          1,
+          12,
+          25
+        ],
+        "aim": [
+          0,
+          3,
+          -4
+        ],
+        "holdSeconds": 3,
+        "fov": 55
+      },
+      "caption": "蚂蚁宁愿烧掉总目录。",
+      "dialog": null,
+      "outFile": "shots/s03.png"
+    },
+    {
+      "id": "s04",
+      "title": "甲壳虫书店",
+      "note": "LS；穹顶、书箱与扫描机器人",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "beetle-bookshop-court",
+        "eye": [
+          2,
+          12,
+          26
+        ],
+        "aim": [
+          0,
+          3,
+          -4
+        ],
+        "holdSeconds": 3,
+        "fov": 55
+      },
+      "caption": "甲壳虫想把书目抄进零件标签。",
+      "dialog": null,
+      "outFile": "shots/s04.png"
+    },
+    {
+      "id": "s05",
+      "title": "舰队越堤",
+      "note": "ELS；真实 start('bookshop')，舰队与镇区同屏",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          65,
+          110
+        ],
+        "aim": [
+          0,
+          12,
+          20
+        ],
+        "holdSeconds": 5,
+        "battle": "start",
+        "fov": 55
+      },
+      "caption": "第二次钟响后，影子先落进广场。",
+      "dialog": {
+        "speaker": "霸天旗舰",
+        "text": "第三次钟响前，交出全部藏书。"
+      },
+      "outFile": "shots/s05.png"
+    },
+    {
+      "id": "s20",
+      "title": "索书令压顶",
+      "note": "低机位；广场下缘与真实旗舰同屏，禁止空天空",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          8,
+          70
+        ],
+        "aim": [
+          0,
+          5,
+          15
+        ],
+        "aimObject": "crystal-city-colossus",
+        "aimObjectMix": 0.68,
+        "holdSeconds": 4,
+        "fov": 64
+      },
+      "caption": "镇子可以免炮，条件是书架清空。",
+      "dialog": null,
+      "outFile": "shots/s20.png"
+    },
+    {
+      "id": "s19",
+      "title": "机器人抬头",
+      "note": "肩部反打；近处机器人结构框住真实旗舰",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "bookshop-robot-locust-articulated",
+        "eye": [
+          3,
+          3,
+          5
+        ],
+        "aim": [
+          0,
+          3,
+          0
+        ],
+        "aimObject": "crystal-city-colossus",
+        "aimObjectMix": 0.65,
+        "holdSeconds": 3,
+        "fov": 65
+      },
+      "caption": "蝗虫先看见了舰队，随后才看见升降索。",
+      "dialog": null,
+      "outFile": "shots/s19.png"
+    },
+    {
+      "id": "s16",
+      "title": "联藏约起点",
+      "note": "CU；招牌细节插入",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -3,
+          2.5,
+          6
+        ],
+        "aim": [
+          -2,
+          2,
+          0
+        ],
+        "holdSeconds": 3,
+        "fov": 48
+      },
+      "caption": "Hard To Find 没有选出“最值得活”的书。",
+      "dialog": null,
+      "outFile": "shots/s16.png"
+    },
+    {
+      "id": "s09",
+      "title": "取出联藏约",
+      "note": "MLS；信使在门前实际显示持信道具",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          9,
+          6,
+          16
+        ],
+        "aim": [
+          0,
+          2.5,
+          2
+        ],
+        "holdSeconds": 4,
+        "stagePlayer": [
+          0,
+          0.2,
+          7
+        ],
+        "holdingLetter": true,
+        "fov": 55
+      },
+      "caption": "任何一家，都不能替其余三家交出藏书。",
+      "dialog": {
+        "speaker": "店主",
+        "text": "先让每家都签。"
+      },
+      "outFile": "shots/s09.png"
+    },
+    {
+      "id": "s18",
+      "title": "折回广场",
+      "note": "LS；门廊向外看，近处结构框住远处广场",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          0,
+          2.4,
+          7
+        ],
+        "aim": [
+          0,
+          2,
+          30
+        ],
+        "holdSeconds": 4,
+        "stagePlayer": [
+          0,
+          0.2,
+          10
+        ],
+        "holdingLetter": true,
+        "fov": 65
+      },
+      "caption": "他带着信，转身回到钟声里。",
+      "dialog": null,
+      "outFile": "shots/s18.png"
+    },
+    {
+      "id": "s06",
+      "title": "第一枚印",
+      "note": "LS；联署后果由机器人动作承担",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "locust-bookshop-court",
+        "eye": [
+          15,
+          7,
+          15
+        ],
+        "aim": [
+          6,
+          3,
+          1
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "蝗虫签下。机器人离架，守住坡道。",
+      "dialog": null,
+      "outFile": "shots/s06.png"
+    },
+    {
+      "id": "s07",
+      "title": "第二枚印",
+      "note": "LS；锅炉与廊口",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "ant-bookshop-court",
+        "eye": [
+          15,
+          6,
+          14
+        ],
+        "aim": [
+          6,
+          3,
+          1
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "蚂蚁签下。蒸汽漫过廊口。",
+      "dialog": null,
+      "outFile": "shots/s07.png"
+    },
+    {
+      "id": "s17",
+      "title": "放下茶杯",
+      "note": "ECU；全章唯一生活物件特写",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "bookshop-robot-ant-articulated",
+        "eye": [
+          2,
+          2.4,
+          4
+        ],
+        "aim": [
+          0,
+          1.5,
+          0.7
+        ],
+        "holdSeconds": 3,
+        "fov": 48
+      },
+      "caption": "杯子留在窗台，茶还热着。",
+      "dialog": null,
+      "outFile": "shots/s17.png"
+    },
+    {
+      "id": "s08",
+      "title": "第三枚印",
+      "note": "LS；车灯是送信路线，不是装饰",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "beetle-bookshop-court",
+        "eye": [
+          15,
+          5,
+          13
+        ],
+        "aim": [
+          6,
+          2,
+          1
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "甲壳虫签下。车灯指向海边。",
+      "dialog": null,
+      "outFile": "shots/s08.png"
+    },
+    {
+      "id": "s21",
+      "title": "四灯回答",
+      "note": "LS；廊灯连续透视与静默",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -9,
+          1,
+          14
+        ],
+        "aim": [
+          -9,
+          1,
+          -4
+        ],
+        "holdSeconds": 4,
+        "fov": 60
+      },
+      "caption": "Hard To Find 最后落印。一盏灯回答另一盏。",
+      "dialog": null,
+      "outFile": "shots/s21.png"
+    },
+    {
+      "id": "s22",
+      "title": "空降截路",
+      "note": "LS；等待真实 groundAssault 部署",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          26,
+          12,
+          63
+        ],
+        "aim": [
+          0,
+          2,
+          35
+        ],
+        "holdSeconds": 4,
+        "battle": "ground",
+        "fov": 60
+      },
+      "caption": "第三次钟响，另一种脚步沿绳索落下。",
+      "dialog": null,
+      "outFile": "shots/s22.png"
+    },
+    {
+      "id": "s10",
+      "title": "共同守路",
+      "note": "ELS；机器人、居民与通路同屏",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          36,
+          85
+        ],
+        "aim": [
+          0,
+          4,
+          32
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "他们守住送信的路，也守住还没进门的人。",
+      "dialog": null,
+      "outFile": "shots/s10.png"
+    },
+    {
+      "id": "s13",
+      "title": "蒸汽掩护",
+      "note": "LS；近处结构框住远景镇区",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -65,
+          26,
+          55
+        ],
+        "aim": [
+          0,
+          6,
+          0
+        ],
+        "holdSeconds": 4,
+        "fov": 55
+      },
+      "caption": "炮火被蒸汽遮住，车灯仍在前面。",
+      "dialog": null,
+      "outFile": "shots/s13.png"
+    },
+    {
+      "id": "s11",
+      "title": "抵达港口",
+      "note": "LS；货船、吊机与小人尺度",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-parts-quayside",
+        "eye": [
+          25,
+          18,
+          35
+        ],
+        "aim": [
+          0,
+          5,
+          0
+        ],
+        "holdSeconds": 4,
+        "stagePlayer": [
+          4,
+          0.2,
+          8
+        ],
+        "holdingLetter": true,
+        "fov": 55
+      },
+      "caption": "NORTHWARD 的吊车停在头顶。",
+      "dialog": null,
+      "outFile": "shots/s11.png"
+    },
+    {
+      "id": "s12",
+      "title": "备用航路",
+      "note": "LS；系留塔与潮气方向",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-airship-mooring-mast",
+        "eye": [
+          28,
+          28,
+          35
+        ],
+        "aim": [
+          0,
+          17,
+          -3
+        ],
+        "holdSeconds": 3,
+        "fov": 55
+      },
+      "caption": "系留飞艇仍压着缆绳，没有人把书装箱。",
+      "dialog": null,
+      "outFile": "shots/s12.png"
+    },
+    {
+      "id": "s23",
+      "title": "书不登船",
+      "note": "MLS；DUKE 左舷、登船跳板与港灯同屏，联藏约已交付",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 700,
+        "object": "duke-coastal-steam-freighter",
+        "eye": [
+          -45,
+          20,
+          55
+        ],
+        "aim": [
+          0,
+          7,
+          0
+        ],
+        "holdSeconds": 5,
+        "holdingLetter": false,
+        "fov": 55
+      },
+      "caption": "“书不登船。把这个带到潮气边境。”",
+      "dialog": {
+        "speaker": "DUKE 船长",
+        "text": "书呢？"
+      },
+      "outFile": "shots/s23.png"
+    },
+    {
+      "id": "s14",
+      "title": "茶凉了",
+      "note": "MLS；真实撤退后回到同一主体",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "ant-bookshop-court",
+        "eye": [
+          12,
+          6,
+          12
+        ],
+        "aim": [
+          6,
+          2,
+          1
+        ],
+        "holdSeconds": 4,
+        "battle": "retreat",
+        "fov": 55
+      },
+      "caption": "炮声退去，杯沿缺了一小块。",
+      "dialog": null,
+      "outFile": "shots/s14.png"
+    },
+    {
+      "id": "s15",
+      "title": "书仍在镇里",
+      "note": "ELS；回到封面尺度，安静收束",
+      "camera": {
+        "preset": "medium",
+        "landmark": null,
+        "dist": 12,
+        "orbit": 0.1,
+        "pitch": 0.05,
+        "waitMs": 600,
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          0,
+          95,
+          145
+        ],
+        "aim": [
+          0,
+          2,
+          0
+        ],
+        "holdSeconds": 6,
+        "fov": 55
+      },
+      "caption": "离岸的是一封信，不是任何一家书店的藏书。",
+      "dialog": null,
+      "outFile": "shots/s15.png"
+    }
+  ],
+  "pages": [
+    {
+      "id": "cover",
+      "kind": "cover",
+      "template": "cover",
+      "title": "四盏灯，一封信",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "cover",
+          "role": null,
+          "showCaption": false,
+          "showDialog": false
+        }
+      ]
+    },
+    {
+      "id": "opening",
+      "kind": "prose",
+      "template": "prose",
+      "title": "四盏灯，一封信",
+      "rhythm": null,
+      "panels": []
+    },
+    {
+      "id": "page-01",
+      "kind": "story",
+      "template": "edena-establish",
+      "title": "镇还在读书",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s01",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s02",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s03",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s04",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-02",
+      "kind": "story",
+      "template": "edena-vertical",
+      "title": "第三次钟响前",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s20",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s05",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s19",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-03",
+      "kind": "story",
+      "template": "edena-reply",
+      "title": "信从门里出发",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s16",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s09",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s18",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-04",
+      "kind": "story",
+      "template": "edena-detail",
+      "title": "四店共同选择",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s06",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s07",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s17",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s08",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-05",
+      "kind": "story",
+      "template": "edena-assault",
+      "title": "灯火通路",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s21",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s22",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s10",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s13",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "page-06",
+      "kind": "story",
+      "template": "edena-harbor",
+      "title": "书不登船",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s11",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s12",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s23",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    },
+    {
+      "id": "last",
+      "kind": "story",
+      "template": "edena-coda",
+      "title": "茶凉了",
+      "rhythm": null,
+      "panels": [
+        {
+          "shotId": "s14",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        },
+        {
+          "shotId": "s15",
+          "role": null,
+          "showCaption": true,
+          "showDialog": true
+        }
+      ]
+    }
+  ]
+}

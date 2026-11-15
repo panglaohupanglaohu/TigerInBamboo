@@ -1,0 +1,49 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>3D 分层四子格联合约束 · REACode重构版</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:12px 22px 4px}a{color:#26758a}canvas{display:block;margin:4px 16px;background:#f7fbf9;border-radius:10px}
+#info{padding:0 22px;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace}code{background:#e4efec;padding:0 4px;border-radius:4px}</style>
+<header><a href="index.html" target="_top">首页</a> · <a href="grids.html">格型对照</a> · <a href="wfc.html">共享WFC</a> ·
+<a href="?joint=1">联合约束 开</a> · <a href="?joint=0">联合约束 关（对照）</a> · <a href="?joint=1&seed=9">换种子</a>
+<p style="margin:4px 0;max-width:1180px">1670790425232175108 / 1447496205282549761 / 1447494168448753667：基础是不规则三角网，方格沿两条对角线切成 4 个三角子格，混合三角 + 方格 tile 跑 WFC；787319655648100352「Now in 3D」。
+这里把子格网格用 <code>layerGrid</code> 叠成 3 层，<code>layeredJointCatalog</code> 让同一父方格 4 个子格在<b>每一层</b>经辐条插槽选同一个模块，层间用 up/down 半边相连（实心不压空气）；
+两层高的塔模块（赭红）用 <code>tall:</code> 插槽把 4 子格 × 2 层 = 8 个子格绑成一个模块。左：逐层平面（细线 = 子格，粗线 = 父格）；右：等轴体块。关掉联合约束时，辐条变通配，子格各选各的，红色 = 同一父格子格不一致。</p></header>
+<canvas id="c" width="1260" height="640"></canvas><div id="info"></div>
+<script type="module">
+import{buildMixedGrid,buildTriangularSubgrid}from'./src/core/grid.js';import{solveWFC,findWFCConflicts,layeredJointCatalog}from'./src/core/wfc.js';
+import{VCOMPAT,joint3dTiles}from'./tests/fixtures/g5-joint3d.mjs';
+const q=new URLSearchParams(location.search),JOINT=q.get('joint')!=='0',seed=Number(q.get('seed')??3),H=3;
+const src=buildMixedGrid({radius:4,seed:5}),sub=buildTriangularSubgrid(src),{quadTiles,triTiles}=joint3dTiles(),parentTile=new Map([...quadTiles,...triTiles].map(t=>[t.id,t]));
+const J=layeredJointCatalog(sub,H,{quadTiles,triTiles,compatible:VCOMPAT});
+let tiles=J.tiles;
+if(!JOINT)tiles=J.tiles.map(t=>({...t,edges:t.edges.map(e=>typeof e==='string'&&e.startsWith('spoke:')?'spoke:*':e)}));   // spokes become wildcards: no joint constraint
+const t0=performance.now(),r=solveWFC(J.lattice,{tiles,allowed:J.allowed,compatible:J.compatible,seed,weighted:true}),ms=performance.now()-t0,byId=new Map(tiles.map(t=>[t.id,t]));
+const conflicts=r.ok?findWFCConflicts(J.lattice,r.tiles,tiles,{compatible:J.compatible}).length:-1;
+// per (group, level): set of parent tiles chosen by its children
+const groupOf=new Map();for(const g of sub.subdivision.groups)for(const id of g.children)groupOf.set(id,g);
+const choice=(id,k)=>byId.get(r.tiles[id*H+k-1]);
+const mismatch=new Set();let towers=0,decoded=null,decodeError=null;
+for(const g of sub.subdivision.groups)for(let k=1;k<=H;k++){const s=new Set(g.children.map(id=>choice(id,k).src+'@'+choice(id,k).part));if(s.size>1)mismatch.add(g.sourceCell+':'+k);}
+try{decoded=J.decode(r.tiles);towers=decoded.modules.filter(m=>m.levels===2).length;}catch(e){decodeError=e.message;}
+const ctx=document.querySelector('#c').getContext('2d');
+const xs=sub.verts.map(p=>p.x),zs=sub.verts.map(p=>p.z),cx0=(Math.min(...xs)+Math.max(...xs))/2,cz0=(Math.min(...zs)+Math.max(...zs))/2,span=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...zs)-Math.min(...zs));
+const colorOf=(t,k)=>{if(!t.edges)return'#ccc';const P=parentTile.get(t.src);if(P.tall)return t.part?'#b8573c':'#c86a4a';if(!P.solid)return null;const h=[...t.src].reduce((a,c)=>a*31+c.charCodeAt(0),7)%40;return`hsl(${30+h} 38% ${74-k*7}%)`;};
+// left: plan per level
+const PS=180/span;
+for(let k=1;k<=H;k++){const ox=110,oy=105+(k-1)*205;ctx.fillStyle='#20343c';ctx.font='12px system-ui';ctx.fillText('第 '+k+' 层',ox-95,oy-80);
+  for(const c of sub.cells){const t=choice(c.id,k),col=colorOf(t,k),mm=mismatch.has(groupOf.get(c.id).sourceCell+':'+k);ctx.beginPath();c.pts.forEach((p,i)=>{const x=ox+(p.x-cx0)*PS,y=oy+(p.z-cz0)*PS;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();
+    ctx.fillStyle=mm?'#e04b3c':col??'#e7efec';ctx.fill();ctx.strokeStyle='rgba(32,52,60,.25)';ctx.lineWidth=.6;ctx.stroke();}
+  for(const c of src.cells){ctx.beginPath();c.pts.forEach((p,i)=>{const x=ox+(p.x-cx0)*PS,y=oy+(p.z-cz0)*PS;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.strokeStyle='#20343c';ctx.lineWidth=1.3;ctx.stroke();}}
+// right: isometric blocks
+const S=470/span,LH=34,OX=780,OY=330,iso=(x,z,y)=>[OX+(x-cx0-(z-cz0))*S*.866,OY+((x-cx0)+(z-cz0))*S*.5-y*LH];
+const items=[];for(const c of sub.cells)for(let k=1;k<=H;k++){const t=choice(c.id,k),col=colorOf(t,k),mm=mismatch.has(groupOf.get(c.id).sourceCell+':'+k);if(col||mm)items.push({c,k,col:mm?'#e04b3c':col,depth:c.cx+c.cz});}
+items.sort((a,b)=>a.depth-b.depth||a.k-b.k);
+// ground
+for(const c of src.cells){ctx.beginPath();c.pts.forEach((p,i)=>{const[x,y]=iso(p.x,p.z,0);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle='#bcd7b4';ctx.fill();ctx.strokeStyle='#9cbf95';ctx.stroke();}
+const shade=(hex,f)=>{ctx.fillStyle=hex;ctx.globalAlpha=1;return hex;};
+for(const it of items){const {c,k,col}=it;
+  for(let i=0;i<c.n;i++){const p=c.pts[i],p2=c.pts[(i+1)%c.n];const nx=p2.z-p.z,nz=-(p2.x-p.x);if(nx+nz<=0&&!(nx+nz>0))continue;
+    const a=iso(p.x,p.z,k-1),b=iso(p2.x,p2.z,k-1),b2=iso(p2.x,p2.z,k),a2=iso(p.x,p.z,k);ctx.beginPath();ctx.moveTo(...a);ctx.lineTo(...b);ctx.lineTo(...b2);ctx.lineTo(...a2);ctx.closePath();ctx.fillStyle=col;ctx.fill();ctx.fillStyle='rgba(20,30,40,.28)';ctx.fill();ctx.strokeStyle='rgba(32,52,60,.35)';ctx.lineWidth=.5;ctx.stroke();}
+  ctx.beginPath();c.pts.forEach((p,i)=>{const[x,y]=iso(p.x,p.z,k);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.closePath();ctx.fillStyle=col;ctx.fill();ctx.strokeStyle='rgba(32,52,60,.3)';ctx.lineWidth=.5;ctx.stroke();}
+ctx.fillStyle='#20343c';ctx.font='13px system-ui';ctx.fillText(JOINT?'联合约束 开：同一父格 4 子格每层同一模块；赭红 = 跨两层的塔模块':'联合约束 关（辐条通配）：红 = 同父格子格不一致',560,24);
+const stats={joint:JOINT,ok:r.ok,reason:r.reason,lattice:J.lattice.cells.length,parents:src.cells.length,subcells:sub.cells.length,levels:H,catalog:tiles.length,conflicts,mismatchedGroupLevels:mismatch.size,towers,decodeError,ms:+ms.toFixed(1),backtracks:r.backtracks};
+window.__joint3d=stats;document.querySelector('#info').textContent=JSON.stringify(stats);
+</script></html>

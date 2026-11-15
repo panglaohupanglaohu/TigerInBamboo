@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" href="data:," />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>球极投影平面逐点 Delaunay 插入 · REACode 重构版（第 56 批 C06）</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #5a5a5a; font: 13px/1.5 system-ui, "PingFang SC", sans-serif; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  #ui { position: fixed; left: 14px; top: 14px; width: 350px; background: rgba(255,255,255,.93); color: #1d2f36; border-radius: 12px; padding: 10px 12px; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+  #ui h1 { font-size: 15px; margin: 0 0 4px; } #ui p { margin: 3px 0; font-size: 12px; color: #4d6369; }
+  #ui .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 6px 0; }
+  #ui button { font: inherit; font-size: 12px; border: 1px solid #c9d8d7; border-radius: 7px; background: #fff; padding: 3px 8px; cursor: pointer; }
+  #stat { font-size: 11.5px; color: #2f7f8a; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <h1>球极投影平面 · 逐点 Delaunay</h1>
+  <p>1338829205157646336：球面点投影到平面（极点 = 最北点），<b>按半径由内向外</b>逐个插入（Bowyer–Watson，共享 <code>core/trigraph.js</code>），超级三角可见，视图随插入半径拉远。插完抬回球面、凸包连极点 = 闭合球网。1338825080844021760：松弛时每轮重新三角化，连接逐轮稳定。</p>
+  <div class="row">插入 <input id="k" type="range" min="0" max="1" step="0.001" value="1" style="width:200px"> <button id="play">▶ 播放</button></div>
+  <div id="stat"></div>
+</div>
+<script type="module">
+import { buildSphere, sphereTopologyReport } from './src/sphere/planet.js';
+import { createInsertionReplay, liftToSphere, relaxRetriangulate } from './src/sphere/stereo-insert-c06.js';
+const q = new URLSearchParams(location.search);
+const cv = document.getElementById('c'), ctx = cv.getContext('2d'), kEl = document.getElementById('k'), statEl = document.getElementById('stat');
+const sphere = buildSphere({ n: Number(q.get('n')) || 600, seed: 3, spacing: 30, relax: 0 });
+const replay = createInsertionReplay(sphere.pts);
+const lift = liftToSphere(sphere.pts, replay), topo = sphereTopologyReport(sphere.pts, lift.tris);
+const rr = relaxRetriangulate(sphere.steps.random.slice(0, 300), { iters: 10 });
+let t = Number(q.get('t') ?? 1), playing = !!q.get('play'), zoom = 1;
+function draw() {
+  const f = replay.frame(t * replay.items.length);
+  const W = cv.width, H = cv.height;
+  // 视图：把已插入点的最大半径放进画面（原片随插入逐渐拉远）；开头整个超级三角入画
+  const a = Math.min(1, f.k / 40), want = Math.exp(Math.log(replay.bound * 3.2) * (1 - a) + Math.log(Math.max(f.lastR * 2.6, .3)) * a);
+  zoom = want;
+  const s = Math.min(W, H) / (2 * zoom), P = ([x, y]) => [W / 2 + x * s, H / 2 - y * s];
+  ctx.fillStyle = '#5a5a5a'; ctx.fillRect(0, 0, W, H);
+  ctx.beginPath();
+  for (const [a, b, c] of f.tris) { ctx.moveTo(...P(a)); ctx.lineTo(...P(b)); ctx.lineTo(...P(c)); ctx.closePath(); }
+  ctx.strokeStyle = 'rgba(235,235,235,.8)'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.fillStyle = 'rgba(255,255,255,.9)';
+  for (let i = 0; i < replay.items.length; i++) { const o = replay.items[i], p = P([o.u, -o.v]); if (p[0] < -5 || p[1] < -5 || p[0] > W + 5 || p[1] > H + 5) continue; ctx.globalAlpha = i < f.k ? .95 : .35; ctx.fillRect(p[0] - 1.2, p[1] - 1.2, 2.4, 2.4); }
+  ctx.globalAlpha = 1;
+  kEl.value = t;
+  statEl.textContent = `已插入 ${f.k}/${f.total} 点（极点 #${f.pole} 不投影）· 当前半径 ${f.lastR.toFixed(3)} / 最大 ${f.maxR.toFixed(2)}\n平面三角 ${f.realTris} + 连超级三角 ${f.superTris} · 超级三角 bound ${f.bound.toFixed(1)}\n抬回球面：${lift.tris.length} 面、闭合 ${topo.closed}、Euler ${topo.euler} · 投影往返误差 ${lift.roundTrip.toExponential(1)}\n松弛 + 每轮重三角化（300 点）：每轮改边 ${rr.changed.join(' → ')}`;
+  window.sphereInsert = { k: f.k, total: f.total, realTris: f.realTris, superTris: f.superTris, liftFaces: lift.tris.length, closed: topo.closed, euler: topo.euler, roundTrip: lift.roundTrip, retri: rr.changed, setT: (x) => { t = x; playing = false; draw(); return window.sphereInsert; } };
+}
+function resize() { cv.width = innerWidth; cv.height = innerHeight; draw(); }
+addEventListener('resize', resize);
+kEl.oninput = () => { t = +kEl.value; playing = false; draw(); };
+document.getElementById('play').onclick = () => { t = 0; playing = true; };
+resize();
+let last = performance.now();
+requestAnimationFrame(function frame(now) { const dt = Math.min(.05, (now - last) / 1000); last = now; if (playing) { t = Math.min(1, t + dt / 12); draw(); if (t >= 1) playing = false; } requestAnimationFrame(frame); });
+</script>
+</body>
+</html>

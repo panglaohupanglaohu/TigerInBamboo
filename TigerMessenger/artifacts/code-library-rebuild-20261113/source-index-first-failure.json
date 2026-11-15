@@ -1,0 +1,5 @@
+{
+  "errors": [],
+  "pass": false,
+  "failure": "page.evaluate: TypeError: Cannot read properties of undefined (reading 'grid')\n    at encodeWorld (http://localhost:8769/src/world/save.js:24:31)\n    at eval (eval at evaluate (:311:30), <anonymous>:1:13)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/source-index-library-browser.mjs:7:27"
+}

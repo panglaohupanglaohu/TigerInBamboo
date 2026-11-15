@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" href="data:," />
+<title>矩形树增删 · RectBin（r56 C08）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #6f7b7b; font: 13px/1.5 system-ui, "PingFang SC", sans-serif; overflow: hidden; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  #ui { position: fixed; left: 12px; top: 12px; max-width: 360px; background: rgba(255,255,255,.92); border-radius: 12px; padding: 10px 12px; color: #1d2f36; }
+  #ui h1 { font-size: 15px; margin: 0 0 4px; } #ui p { margin: 3px 0; font-size: 12px; color: #4d6369; }
+  button { border: 1px solid #c9d8d7; background: #fff; border-radius: 8px; padding: 3px 8px; cursor: pointer; font: inherit; }
+  button.on { background: #2f7f8a; color: #fff; }
+  #stat { font-size: 12px; color: #2f7f8a; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <nav><a href="index.html">← 首页</a> · <a href="grids.html?t=atlas">网格实验室·图集</a></nav>
+  <h1>矩形树 · 持续增删（1765041830461055127）</h1>
+  <p>共享 core/atlas.js 上的 REACode RectBin 兼容接口（src/core/rectbin-c08.js）：随机放块（板角/贴边/随机候选，可跨多个空闲叶），随机删块（叶子标空、兄弟向上合并）。底层是彩色矩形，上面几层是按深度抬高的树节点线框（「3D 树」斜视）。</p>
+  <div><button id="play" class="on">播放</button> <button id="tree" class="on">树层</button> <button id="reset">重置</button></div>
+  <div id="stat"></div>
+</div>
+<script type="module">
+import { RectBin, churn, treeNodes } from './src/core/rectbin-c08.js';
+const Q = new URLSearchParams(location.search);
+const W = 64, H = 64, cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let bin, curve = [], step = 0, playing = !Q.has('steps'), showTree = Q.get('tree') !== '0', seed = Number(Q.get('seed') || 3);
+function reset() { bin = new RectBin(W, H); curve = []; step = 0; }
+function advance(n) { const c = churn(bin, { steps: n, seed: seed + step, pRemove: step < 200 ? .25 : .5 }); step += n; for (const r of c) curve.push({ ...r, step: step - n + r.step }); }
+reset();
+if (Q.has('steps')) advance(Math.max(1, Math.min(5000, Number(Q.get('steps')) || 1)));
+const hue = (k) => { let h = 0; for (const ch of k) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return `hsl(${h % 360},55%,62%)`; };
+function draw() {
+  const dpr = Math.min(2, devicePixelRatio); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = '#6f7b7b'; ctx.fillRect(0, 0, innerWidth, innerHeight);
+  const S = Math.min((innerWidth - 480) / (W * 1.35), (innerHeight - 60) / (H * .55 + 22 * 1.1)), ox = 420 + 20, oy = innerHeight - 40;
+  // oblique projection: x right, y into the screen (up-right), z (tree depth) straight up
+  const P = (x, y, z) => [ox + x * S + y * S * .35, oy - y * S * .55 - z * S * 1.1];
+  const quad = (r, z) => { const a = P(r.x, r.y, z), b = P(r.x + r.w, r.y, z), c = P(r.x + r.w, r.y + r.h, z), d = P(r.x, r.y + r.h, z); ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.lineTo(...c); ctx.lineTo(...d); ctx.closePath(); };
+  quad({ x: 0, y: 0, w: W, h: H }, 0); ctx.fillStyle = '#5d6969'; ctx.fill();
+  for (const [k, r] of bin.placed) { quad(r, 0); ctx.fillStyle = hue(k); ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,.25)'; ctx.lineWidth = .6; ctx.stroke(); }
+  if (showTree) {
+    const nodes = treeNodes(bin), maxD = Math.max(1, ...nodes.map((n) => n.depth)), zOf = (d) => (maxD - d) / maxD * 18 + 1.5;
+    ctx.lineWidth = .7;
+    for (const n of nodes) {
+      const z = zOf(n.depth), c = P(n.x + n.w / 2, n.y + n.h / 2, z);
+      if (n.parent >= 0) { const p = nodes[n.parent], pc = P(p.x + p.w / 2, p.y + p.h / 2, zOf(p.depth)); ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.beginPath(); ctx.moveTo(...pc); ctx.lineTo(...c); ctx.stroke(); }
+      if (n.leaf && !n.used) { quad(n, 0.05); ctx.strokeStyle = 'rgba(120,255,240,.55)'; ctx.stroke(); }
+    }
+  }
+  const r = bin.report();
+  document.getElementById('stat').innerHTML = `步 ${step} · 存活 ${r.placed} 块 · 占用 <b>${(r.fill * 100).toFixed(1)}%</b> · 叶 ${r.leaves}（空闲 ${r.freeLeaves}）· 最大空闲占比 <b>${(r.largestShare * 100).toFixed(0)}%</b> · 树深 ${r.maxDepth}<br>累计 放 ${r.places} / 删 ${r.removals} / 切分 ${r.splits} / 合并 ${r.merges} / 放不下 ${curve.length ? curve.at(-1).fails : 0}`;
+  // fill / fragmentation sparkline
+  const gx = 20, gy = innerHeight - 120, gw = 360, gh = 90; ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fillRect(gx, gy, gw, gh);
+  const line = (key, col) => { ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.beginPath(); curve.forEach((c, i) => { const x = gx + i / Math.max(1, curve.length - 1) * gw, y = gy + gh - c[key] * gh; i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); }); ctx.stroke(); };
+  line('fill', '#c0392b'); line('largestShare', '#2f7f8a'); ctx.fillStyle = '#1d2f36'; ctx.fillText('红=占用率  青=最大空闲块占比（越低越碎）', gx + 6, gy + 12);
+  window.rectbinDemo = { report: r, curve, step };
+}
+document.getElementById('play').onclick = (e) => { playing = !playing; e.target.classList.toggle('on', playing); };
+document.getElementById('tree').onclick = (e) => { showTree = !showTree; e.target.classList.toggle('on', showTree); draw(); };
+document.getElementById('reset').onclick = () => { reset(); draw(); };
+addEventListener('resize', draw);
+setInterval(() => { if (playing) { advance(4); draw(); } }, 60);
+draw();
+</script>
+</body>
+</html>

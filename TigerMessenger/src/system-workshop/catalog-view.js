@@ -1,3 +1,5 @@
+import {parseLearningDeclaration} from '../scene-authoring/learning-declaration.js';
+import {buildCodeCatalog} from './code-library-catalog.js';
 /**
  * catalog-view.js — 系统目录在各层管线里的显示：每个分区一条泳道。
  *   ⚙ 能力代码（可执行，改造 Worker 跑）→ 重构版已实现 → 重构版部分 → 原版占位（只有 REACode 实现）→ 参考
@@ -5,6 +7,7 @@
  */
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 export const EXEC = {
+  library: ['◆', '已有代码', 'REACodeRefactoring 的实际源码模块；上下文与执行适配单独核验'],
   code: ['⚙', '能力代码', '可执行：super agent 直接在副本上跑'],
   refactored: ['●', '重构版', 'REACodeRefactoring 已实现，待封装成能力代码'],
   partial: ['◐', '重构部分', 'REACodeRefactoring 部分实现'],
@@ -13,11 +16,11 @@ export const EXEC = {
 };
 let cache = null;
 // 扫描结果存在本机（比随包的目录新时优先用），刷新页面后仍是最新一次扫描
-const SCAN_KEY = 'tm.system-catalog.scan.v1';
+const SCAN_KEY = 'tm.system-catalog.scan.v2';
 const readScan = () => { try { return JSON.parse(localStorage.getItem(SCAN_KEY) || 'null'); } catch { return null; } };
 export function loadCatalog() {
   cache ||= fetch(new URL('../scene-authoring/catalog/system-catalog.json', import.meta.url), { cache: 'no-store' }).then((r) => { if (!r.ok) throw Error('系统目录读取失败 HTTP ' + r.status); return r.json(); })
-    .then((base) => { const sc = readScan(); return sc?.generatedAt > base.generatedAt ? sc : base; });
+    .then((base) => { const sc = readScan(); return sc?.schemaVersion === 2 && sc?.evolution?.schemaVersion === 1 && sc?.generatedAt > base.generatedAt ? sc : base; });
   return cache;
 }
 const listeners = new Set();
@@ -27,7 +30,7 @@ const WEB = new URL('../../../townscaper-web/', import.meta.url);
 async function loadLearn(rel) {
   const r = await fetch(new URL(rel, WEB), { cache: 'no-store' });
   if (!r.ok) throw Error(rel + ' 读取失败 HTTP ' + r.status);
-  const w = {}; new Function('window', await r.text())(w); return w;
+  const name=rel.endsWith('refactoring-status.js')?'REFACTOR_STATUS':'LEARN'; return {[name]:parseLearningDeclaration(await r.text(),name)};
 }
 /**
  * 扫描能力库：直接读学习工坊的数据（REACode 原版 + REACodeRefactoring 重构版 learn 数据、重构审计、能力代码注册表），
@@ -38,20 +41,34 @@ export async function scanCatalog() {
   const before = await loadCatalog().catch(() => null);
   // 原版 REACode 冻结不改：读不到原目录时用随包快照（tools/refactor/build-system-catalog.mjs 生成）
   const origLearn = () => loadLearn('REACode/learn/data.js').catch(() => fetch(new URL('../scene-authoring/catalog/reacode-learn.json', import.meta.url), { cache: 'no-store' }).then((r) => { if (!r.ok) throw Error('原版学习记录读取失败（REACode 目录与快照都不可用）'); return r.json(); }));
-  const [{ buildCatalog }, o, rw] = await Promise.all([import('./catalog-build.js?v=' + Date.now()), origLearn(), loadLearn('REACodeRefactoring/learn/data.js')]);
+  const [{ buildCatalog }, o, rw] = await Promise.all([import('./catalog-build.js?v=' + Date.now()), origLearn().catch(()=>null), loadLearn('REACodeRefactoring/learn/data.js').catch(()=>null)]);
   let refStatus = {}; try { refStatus = (await loadLearn('REACodeRefactoring/learn/refactoring-status.js')).REFACTOR_STATUS || {}; } catch {}
   // 注册表加时间戳重新加载：新加的能力文件会被读到；已加载过的能力文件改了内容要刷新页面才生效
   const reg = await import(new URL('REACodeRefactoring/src/capabilities/registry.js?scan=' + Date.now(), WEB).href);
   const codeCaps = reg.describeCapabilities();
-  const catalog = buildCatalog({ orig: o.LEARN, ref: rw.LEARN, refStatus, codeCaps });
+  const learningCatalog = o?.LEARN&&rw?.LEARN?buildCatalog({ orig: o.LEARN, ref: rw.LEARN, refStatus, codeCaps }):null;
+  const {manifest,scanMode}=await loadCodeManifest({live:true});
+  const [objectAdapter,materialAdapter]=await Promise.all([import('./object/capabilities.js'),import('./gscene/capabilities.js')]);
+  const executionAdapters=[...objectAdapter.describeObjectCapabilities(),...materialAdapter.describeGsceneCapabilities()];
+  const catalog = buildCodeCatalog(manifest,{learningCatalog,codeCaps,executionAdapters}); catalog.scanMode=scanMode;
   const ids = (c) => { const m = new Map(); for (const w of c?.workshops || []) for (const d of w.domains) for (const n of d.nodes) if (!m.has(n.id) || n.exec === 'code') m.set(n.id, n.exec); return m; };
   const a = ids(before), b = ids(catalog), rank = ['reference', 'original', 'partial', 'refactored', 'code'];
-  const diff = { added: [], upgraded: [], total: b.size, code: codeCaps.length, codeBefore: before?.sources?.codeCapabilities ?? null };
+  const diff = { sourceModules:catalog.modules.length, scanMode:catalog.scanMode, added: [], upgraded: [], total: b.size, code: codeCaps.length, codeBefore: before?.sources?.codeCapabilities ?? null };
   for (const [id, ex] of b) { if (!a.has(id)) diff.added.push(id); else if (rank.indexOf(ex) > rank.indexOf(a.get(id))) diff.upgraded.push({ id, from: a.get(id), to: ex }); }
   try { localStorage.setItem(SCAN_KEY, JSON.stringify(catalog)); } catch { /* 存不下就只在本次页面里生效 */ }
   cache = Promise.resolve(catalog);
   for (const fn of listeners) try { fn(catalog); } catch (e) { console.warn(e); }
   return { catalog, codeCaps, diff };
+}
+export async function loadCodeManifest({live=false}={}) {
+  if(live){
+    const response=await fetch(new URL('../../../api/workshop/code-library',import.meta.url),{cache:'no-store'});
+    if(response.ok){const manifest=await response.json();if(manifest.schemaVersion!==2)throw Error('代码扫描返回无效版本');return {manifest,scanMode:'live-filesystem'};}
+    if(![404,405].includes(response.status))throw Error('源码扫描失败 HTTP '+response.status+'；保留上次目录');
+  }
+  const response=await fetch(new URL('../scene-authoring/catalog/refactored-code-library.json',import.meta.url),{cache:'no-store'});
+  if(!response.ok)throw Error('源码清单读取失败 HTTP '+response.status);
+  return {manifest:await response.json(),scanMode:'generated-snapshot'};
 }
 const fileLink = (where, base) => {
   const m = (where || '').match(/(?:^|[\s/（(、])((?:src|engine|tools|learn)\/[\w./-]+\.(?:js|mjs|glsl|html))/);
@@ -59,8 +76,8 @@ const fileLink = (where, base) => {
 };
 export function renderNodeDetail(host, node, { openSource } = {}) {
   host.replaceChildren();
-  const [icon, label, hint] = EXEC[node.exec];
-  host.append(el('small', node.id + ' · ' + node.date), el('h3', node.title), el('span', icon + ' ' + label, 'tag exec-' + node.exec), el('p', hint, 'muted'), el('p', node.text));
+  const [icon, label, hint] = EXEC[node.exec] || EXEC.reference;
+  host.append(el('small', node.id + ' · 来源最近发布：' + (node.date||'未建立来源时间')), el('h3', node.title), el('span', icon + ' ' + label, 'tag exec-' + node.exec), el('p', hint, 'muted'), el('p', node.text));
   const row = (title, o, base) => {
     if (!o) return; const d = el('div', undefined, 'catalog-where'); d.append(el('b', title + ' · ' + o.label));
     if (o.where) d.append(el('code', o.where.slice(0, 260)));
@@ -71,7 +88,9 @@ export function renderNodeDetail(host, node, { openSource } = {}) {
   row('重构版 REACodeRefactoring', node.refactored, new URL('../../../townscaper-web/REACodeRefactoring/', import.meta.url).href);
   row('重构前 REACode（占位来源）', node.original, new URL('../../../townscaper-web/REACode/', import.meta.url).href);
   if (node.code?.length) host.append(el('p', '能力代码：' + node.code.join('、')));
-  if (openSource) { const b = el('button', '在学习工坊查看这条视频 →'); b.onclick = () => openSource(node.id); host.append(b); }
+  if(node.module?.evolution){const e=node.module.evolution;host.append(el('p',`作者来源：${e.firstPostAt||'待关联'} → ${e.lastPostAt||'待关联'} · ${e.clips.length} 条记录；扫描日期不是能力诞生日期。`));if(openSource&&e.clips.length){const b=el('button','查看此源码的能力演进 →');b.onclick=()=>openSource(node.module.path,'evolution');host.append(b);}}
+  if(node.module){host.append(el('code','SHA256 '+node.module.sha256),el('p','导出接口：'+(node.module.exports.join('、')||'入口/副作用模块')),el('p','直接依赖：'+(node.module.dependencies.map(d=>d.path).join('、')||'无本库模块依赖')));}
+  if (openSource && !node.module) { const b = el('button', '在学习工坊查看这条视频 →'); b.onclick = () => openSource(node.id); host.append(b); }
 }
 /**
  * @param caps   本层可执行能力（meta，含 domain / params）
@@ -85,7 +104,7 @@ export function renderLanes(host, workshop, { caps = [], nodes = [], onToggle, o
     head.append(el('b', String(i + 1).padStart(2, '0') + ' / ' + d.name));
     const counts = el('span', undefined, 'lane-counts');
     if (mine.length) counts.append(el('i', '⚙ ' + mine.length, 'exec-code'));
-    for (const k of ['refactored', 'partial', 'original']) if (d.counts[k]) { const s = el('i', EXEC[k][0] + ' ' + d.counts[k], 'exec-' + k); s.title = EXEC[k][1]; counts.append(s); }
+    for (const k of ['library', 'refactored', 'partial', 'original']) if (d.counts[k]) { const s = el('i', EXEC[k][0] + ' ' + d.counts[k], 'exec-' + k); s.title = EXEC[k][1]; counts.append(s); }
     head.append(counts); lane.append(head);
     const body = el('div', undefined, 'lane-body');
     for (const cap of mine) {

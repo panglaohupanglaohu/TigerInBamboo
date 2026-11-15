@@ -1,0 +1,219 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>格子线框与极坐标邻接图 · REACode重构版</title>
+<style>
+body{margin:0;background:#f2f5f3;color:#1f2c31;font:14px/1.6 system-ui}
+main{display:grid;grid-template-columns:330px 1fr;gap:18px;padding:18px;align-items:start}
+aside{background:#e6efec;border-radius:14px;padding:16px}
+h1{font-size:18px;margin:0 0 8px}
+h2{font-size:14px;margin:0 0 6px;color:#2c4650}
+.panels{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+figure{margin:0}
+canvas{width:100%;height:auto;display:block;border-radius:10px;background:#12161a}
+button,input{font:inherit;margin:4px 4px 4px 0;padding:4px 6px}
+#stats{font-variant-numeric:tabular-nums;background:#fff;border-radius:8px;padding:8px 10px;margin-top:10px;white-space:pre-line;font-size:13px}
+small{display:block;color:#41565e;margin-top:8px}
+a{color:#16626f}
+figcaption{font-size:12px;color:#41565e;margin-top:4px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:middle}
+@media(max-width:960px){main{display:block}.panels{grid-template-columns:1fr}}
+</style>
+<main>
+<aside>
+  <nav><a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <a href="learn.html" target="_top">逐帧库</a></nav>
+  <h1>格子线框 · 极坐标邻接图</h1>
+  <p>1459169210752507904「And another」：岛上线的框是<b>橙色四边格 + 青色三角带 + 深绿岛缘</b>，三角带是四边格朝向翻转处留下的过渡带，会横穿整片格子；每 40–60 帧整片清空重铺（换种子）。</p>
+  <p>1490068909042642944「Late night cryptic graph tweet」：同一套格子图上，节点被排成<b>一圈圈同心环</b>，边把同环/跨环的节点连起来，颜色按根分支分段成连续圆弧。</p>
+  <label>种子 <input id="seed" type="number" value="1337" min="1" max="99999"></label>
+  <label>半径 <input id="radius" type="number" value="14" min="6" max="26" style="width:70px"></label>
+  <label>合并率 <input id="merge" type="number" value="0.85" min="0.1" max="1" step="0.05" style="width:70px"></label>
+  <div><button id="reroll">换一座岛</button><button id="rootNext">换根节点</button></div>
+  <div><span class="sw" style="background:#e8843a"></span>四边格边 <span class="sw" style="background:#35c9c2"></span>三角边 <span class="sw" style="background:#8df2a8"></span>三角带轮廓 <span class="sw" style="background:#2f8f6a"></span>岛缘</div>
+  <div id="stats" role="status">…</div>
+  <small>面型分类与三角带串接在 <code>src/core/grid-wireframe.js</code>；BFS 同心环 + 分支分段在 <code>src/core/graph-layout.js</code>。格子来自 <code>src/core/grid.js</code> 的 buildMixedGrid。</small>
+</aside>
+<section class="panels">
+  <figure><h2>线框（按面型着色）</h2><canvas id="wire" width="640" height="640"></canvas><figcaption id="wireCap">…</figcaption></figure>
+  <figure><h2>邻接图（极坐标同心环）</h2><canvas id="radial" width="640" height="640"></canvas><figcaption id="radialCap">…</figcaption></figure>
+</section>
+</main>
+<script type="module">
+import { buildMixedGrid } from './src/core/grid.js';
+import { classifyWireframe, seamBands } from './src/core/grid-wireframe.js';
+import { radialLayout } from './src/core/graph-layout.js';
+
+const BG = '#12161a';
+const PALETTE = ['#7fb3ff', '#c58bff', '#7de3a4', '#ffd166', '#ff9f6e', '#6ee7f0', '#f78fb3', '#b9d86a'];
+const state = {};
+let rootIndex = 0;
+
+const $ = (id) => document.getElementById(id);
+
+function ctx2d(canvas) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const w = canvas.width, h = canvas.height;
+  const c = canvas.getContext('2d');
+  c.setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.clearRect(0, 0, w, h);
+  c.fillStyle = BG;
+  c.fillRect(0, 0, w / dpr, h / dpr);
+  return c;
+}
+
+function fitFactory(canvas, half) {
+  const dpr = Math.min(2, window.devicePixelRatio || 1);
+  const w = canvas.width / dpr, h = canvas.height / dpr;
+  const s = Math.min(w, h) / (2 * half);
+  return { w, h, s, cx: w / 2, cy: h / 2 };
+}
+
+function drawWire() {
+  const canvas = $('wire');
+  const c = ctx2d(canvas);
+  const { cells, verts, wire } = state;
+  const f = fitFactory(canvas, Math.max(...verts.map((v) => Math.hypot(v.x, v.z))) * 1.02);
+  // 近俯视 + 轻微倾斜，跟片子里的调试视图一致
+  const tilt = 0.8, rot = -0.32, cr = Math.cos(rot), sr = Math.sin(rot);
+  const project = (v) => {
+    const x = v.x * cr - v.z * sr, z = v.x * sr + v.z * cr;
+    return [f.cx + x * f.s, f.cy + z * f.s * tilt];
+  };
+  const V = new Map(verts.map((v) => [v.id, v]));
+  const stroke = (edges, color, width) => {
+    c.strokeStyle = color; c.lineWidth = width; c.beginPath();
+    for (const e of edges) {
+      const p = project(V.get(e.a)), q = project(V.get(e.b));
+      c.moveTo(p[0], p[1]); c.lineTo(q[0], q[1]);
+    }
+    c.stroke();
+  };
+  const by = (k) => wire.edges.filter((e) => e.kind === k);
+  stroke(by('quad'), 'rgba(232,132,58,0.85)', 1.1);
+  stroke(by('tri'), 'rgba(53,201,194,0.8)', 1.0);
+  stroke(by('rim'), '#2f8f6a', 1.8);
+  stroke(by('seam'), '#8df2a8', 1.7);
+  // 面心小点：四边格橙、三角青（片子里格子中间那层点）
+  for (const cell of cells) {
+    const p = project({ x: cell.cx, z: cell.cz });
+    c.fillStyle = cell.n === 4 ? 'rgba(255,150,80,0.55)' : 'rgba(120,240,230,0.6)';
+    c.beginPath(); c.arc(p[0], p[1], cell.n === 4 ? 1.1 : 1.5, 0, 6.283); c.fill();
+  }
+  $('wireCap').textContent = `${cells.length} 格（${wire.faces.quads} 四边 / ${wire.faces.tris} 三角）· 三角带 ${state.bands.length} 条，最长 ${state.bands[0] ? state.bands[0].length : 0} 条边`;
+}
+
+function drawRadial() {
+  const canvas = $('radial');
+  const c = ctx2d(canvas);
+  const { layout } = state;
+  const f = fitFactory(canvas, layout.radius * 1.08 + 0.5);
+  const P = (n) => [f.cx + n.x * f.s, f.cy + n.y * f.s];
+  // 极坐标参考网：同心环 + 放射线（片子里先浮出来的那层暗线）
+  c.strokeStyle = 'rgba(120,180,210,0.13)'; c.lineWidth = 1;
+  for (const ring of layout.rings) {
+    if (ring.depth === 0) continue;
+    c.beginPath(); c.arc(f.cx, f.cy, ring.radius * f.s, 0, 6.283); c.stroke();
+  }
+  c.beginPath();
+  for (let i = 0; i < 12; i++) {
+    const a = (i / 12) * Math.PI * 2;
+    c.moveTo(f.cx, f.cy);
+    c.lineTo(f.cx + Math.cos(a) * layout.radius * f.s, f.cy + Math.sin(a) * layout.radius * f.s);
+  }
+  c.strokeStyle = 'rgba(120,180,210,0.08)';
+  c.stroke();
+  const colorOf = (branch) => {
+    if (branch < 0) return '#e6f0f5';
+    const b = layout.branches.find((x) => x.child === branch);
+    return PALETTE[(b ? b.color : 0) % PALETTE.length];
+  };
+  const nodeById = new Map(layout.nodes.map((n) => [n.id, n]));
+  // 边：跨环的稍亮，同环的稍暗
+  for (const e of layout.edges) {
+    const p = P(nodeById.get(e.a)), q = P(nodeById.get(e.b));
+    const col = colorOf(layout.branchOf.get(e.a));
+    c.strokeStyle = e.kind === 'same' ? 'rgba(150,190,210,0.22)' : col + '88';
+    c.lineWidth = e.kind === 'same' ? 0.7 : 0.9;
+    c.beginPath(); c.moveTo(p[0], p[1]); c.lineTo(q[0], q[1]); c.stroke();
+  }
+  // 节点：空心小圈（片子里就是空心圈）
+  for (const n of layout.nodes) {
+    const p = P(n);
+    const r = 1.9 + Math.min(4, layout.degree.get(n.id) || 0) * 0.32;
+    c.beginPath(); c.arc(p[0], p[1], r, 0, 6.283);
+    c.fillStyle = BG; c.fill();
+    c.strokeStyle = colorOf(n.branch); c.lineWidth = 1.15; c.stroke();
+  }
+  // 根节点标记
+  const rootNode = nodeById.get(layout.root);
+  if (rootNode) {
+    const p = P(rootNode);
+    c.strokeStyle = '#ffffff'; c.lineWidth = 1.4;
+    c.beginPath(); c.arc(p[0], p[1], 5, 0, 6.283); c.stroke();
+  }
+  $('radialCap').textContent = `${layout.nodes.length} 节点 / ${layout.edges.length} 边 · ${layout.rings.length} 环（最深 ${layout.maxDepth}）· ${layout.branches.length} 个根分支分段`;
+}
+
+function build(seed, radius, mergeRate) {
+  const grid = buildMixedGrid({ radius, hexSize: 0.62, seed, mergeRate, relaxPasses: 70 });
+  const wire = classifyWireframe(grid);
+  const bands = seamBands(wire, { grid });
+  const ids = grid.cells.map((c) => c.id);
+  const neighbors = grid.cells.map((c) => [...new Set(c.edgeNeighbors.filter((x) => x >= 0))].sort((a, b) => a - b));
+  const root = ids[Math.abs(rootIndex) % ids.length];
+  const layout = radialLayout({ ids, neighbors, root, ringGap: 1, minArc: 0.02 });
+  Object.assign(state, { grid, wire, bands, layout, seed, radius, mergeRate, root, cells: grid.cells, verts: grid.verts, neighbors });
+  drawWire();
+  drawRadial();
+  const bandSum = bands.reduce((s, b) => s + b.length, 0);
+  $('stats').textContent =
+    `种子 ${seed} · 半径 ${radius} · 合并率 ${mergeRate}\n` +
+    `格子 ${grid.cellCount}（四边 ${wire.faces.quads} / 三角 ${wire.faces.tris}）\n` +
+    `边 ${wire.edges.length}：四边 ${wire.counts.quad} · 三角 ${wire.counts.tri} · 带轮廓 ${wire.counts.seam} · 岛缘 ${wire.counts.rim}\n` +
+    `流形 ${wire.manifold ? '是' : '否（有 >2 面共边）'} · 三角带 ${bands.length} 条 / 共 ${bandSum} 边\n` +
+    `邻接图：${layout.nodes.length} 节点 · ${layout.rings.length} 环 · 最深 ${layout.maxDepth}\n` +
+    `分支 ${layout.branches.length} 段 · 同环边 ${layout.edgeKinds.same} · 跨环边 ${layout.edgeKinds.adjacent} · 跳环边 ${layout.edgeKinds.long}\n` +
+    `连通分量 ${layout.components.sizes.length}（最大 ${layout.components.sizes[0]}）`;
+}
+
+function apply(keepRoot = false) {
+  if (!keepRoot) rootIndex = 0;
+  build(Number($('seed').value) || 1, Number($('radius').value) || 14, Number($('merge').value) || 0.85);
+}
+
+$('reroll').onclick = () => {
+  $('seed').value = String((Number($('seed').value) || 1) + 1 + Math.floor(Math.random() * 997));
+  apply();
+};
+$('rootNext').onclick = () => { rootIndex += 1; apply(true); };
+for (const id of ['seed', 'radius', 'merge']) $(id).onchange = () => apply(false);
+
+apply();
+
+window.gridGraph = {
+  ready: true,
+  config: () => ({ seed: state.seed, radius: state.radius, mergeRate: state.mergeRate, root: state.root }),
+  stats: () => ({
+    cells: state.grid.cellCount,
+    quads: state.wire.faces.quads,
+    tris: state.wire.faces.tris,
+    edges: state.wire.edges.length,
+    counts: { ...state.wire.counts },
+    manifold: state.wire.manifold,
+    bands: state.bands.length,
+    bandLongest: state.bands[0] ? state.bands[0].length : 0,
+    bandEdges: state.bands.reduce((s, b) => s + b.length, 0),
+    nodes: state.layout.nodes.length,
+    rings: state.layout.rings.length,
+    maxDepth: state.layout.maxDepth,
+    branches: state.layout.branches.length,
+    edgeKinds: { ...state.layout.edgeKinds },
+    components: state.layout.components.sizes.length,
+    root: state.layout.root,
+  }),
+  reroll: (seed) => { if (seed != null) $('seed').value = String(seed); apply(false); return window.gridGraph.stats(); },
+  setRoot: (id) => {
+    const i = state.grid.cells.findIndex((c) => c.id === id);
+    if (i >= 0) { rootIndex = i; apply(true); }
+    return window.gridGraph.stats();
+  },
+};
+</script>
+</html>

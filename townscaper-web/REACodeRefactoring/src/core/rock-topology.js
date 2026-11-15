@@ -24,3 +24,28 @@ export function rockTopology(world,{maxVoxels=200000}={}){
   }
   return {rockVoxels:rock.size,groundConnected:seen.size,unsupported:rock.size-seen.size,undersides,exposedFaces,cavityColumns,spans};
 }
+
+/** REACode/overhangterrain measure() on the shared World (1671808851895627776 overhangs):
+ * overhangAboveWater = rock voxels above level 1 with empty below and solid above (eaves/cave roofs);
+ * soffits = downward rock faces above water; caves = covered air voxels (rock somewhere above in the
+ * same column) flood-filled from the open-air side, reporting how many cells deep the air reaches.
+ * Logical columns only: no cage-deformed side-wall intersection or collision is measured here.
+ */
+export function measureOverhang(world){
+  const cells=world.cells,byId=new Map(cells.map(c=>[c.id,c]));
+  let overhangAboveWater=0,soffits=0,rockVoxels=0;const covered=new Set(),key=(id,lv)=>id*(MAX_LEVEL+1)+lv;
+  for(const c of cells){const topRock=world.ground(c);
+    for(let lv=1;lv<=MAX_LEVEL;lv++){
+      if(world.isRock(c,lv)){rockVoxels++;if(lv>1&&!world.isSolid(c,lv-1)){soffits++;if(world.isSolid(c,lv+1))overhangAboveWater++;}}
+      else if(!world.isSolid(c,lv)&&lv<topRock)covered.add(key(c.id,lv));
+    }}
+  // Entrances: covered air touching uncovered air sideways (or the open sea edge).
+  const depth=new Map(),queue=[];
+  for(const k of covered){const id=Math.floor(k/(MAX_LEVEL+1)),lv=k%(MAX_LEVEL+1),c=byId.get(id);
+    for(const nb of c.edgeNeighbors){const o=nb>=0?byId.get(nb):null;if(!o||(!world.isSolid(o,lv)&&!covered.has(key(o.id,lv)))){depth.set(k,1);queue.push(k);break;}}}
+  for(let i=0;i<queue.length;i++){const k=queue[i],id=Math.floor(k/(MAX_LEVEL+1)),lv=k%(MAX_LEVEL+1),c=byId.get(id),d=depth.get(k);
+    const next=[...c.edgeNeighbors.filter(x=>x>=0).map(x=>key(x,lv)),key(id,lv-1),key(id,lv+1)];
+    for(const n of next)if(covered.has(n)&&!depth.has(n)){depth.set(n,d+1);queue.push(n);}}
+  let caveDepth=0;for(const d of depth.values())caveDepth=Math.max(caveDepth,d);
+  return{version:world.version,rockVoxels,overhangAboveWater,soffits,coveredAir:covered.size,reachableCoveredAir:depth.size,sealedAir:covered.size-depth.size,caveDepth};
+}

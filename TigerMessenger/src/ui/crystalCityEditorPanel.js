@@ -389,12 +389,8 @@ export function createCrystalCityEditorPanel({ onApply, toast = () => {} }) {
     applyNow();
     toast("已汇聚到较高山峦环带", 2);
   });
-  panel.querySelector("#xc-save").addEventListener("click", () => {
-    saveCrystalLayoutToStorage(layout);
-    setDirty(false);
-    updateStats();
-    toast("水晶城布局已保存", 1.8);
-  });
+  function saveLayout(){try{saveCrystalLayoutToStorage(layout);setDirty(false);updateStats();toast("水晶城布局已保存",1.8);return true;}catch(error){toast("保存失败："+error.message,2.5);return false;}}
+  panel.querySelector("#xc-save").addEventListener("click",saveLayout);
   panel.querySelector("#xc-undo").addEventListener("click", () => {
     if (!undoStack.length) return;
     redoStack.push(JSON.stringify(layout));
@@ -435,10 +431,7 @@ export function createCrystalCityEditorPanel({ onApply, toast = () => {} }) {
     if (!open) return;
     if ((e.ctrlKey || e.metaKey) && e.key === "s") {
       e.preventDefault();
-      saveCrystalLayoutToStorage(layout);
-      setDirty(false);
-      updateStats();
-      toast("水晶城布局已保存", 1.5);
+      saveLayout();
     }
   });
 
@@ -457,6 +450,7 @@ export function createCrystalCityEditorPanel({ onApply, toast = () => {} }) {
   updateStats();
 
   return {
+    save: saveLayout,
     open: openPanel,
     close,
     toggle() {

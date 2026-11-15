@@ -29,3 +29,21 @@ save-mesh-browser.cjs：实际两种网格执行截断拒绝、清空再导入�
 本批2段670帧，累计98/285，剩187。三个原版模块标为已有迁移增强并本轮验证（31增强/65静态/42部分），不等同原作格式与全部能力完成；学习与运行验收分开记账。下一批OBJ导出1430224300003545091与撤销录像1260586697538113537先配文再逐帧。
 
 收口：save-mesh-pages.json确认首页/pipeline同时显示98/285、剩187及新入口；管线缺失ID为0，本地视频/README均285匹配，diff空白检查通过。
+
+## 第 56 批（C06）
+
+### 1401145625572425728
+- 做了什么：新增 src/tools/merge-bench-c06.js：把同一份 World 主体几何切成很多小网格（每 64/16 三角一个）与 WorldMesh 已合并的单一几何对照，同相机同材质测 renderer.info 提交次数和逐帧时间；8×8 视口模式去掉填充代价只剩提交开销。主场景 setDebug("wire") 看合并网格线框
+- 落点：src/world/worldmesh.js（已有合并）· src/tools/merge-bench-c06.js · index.html
+- 测试：tests/merge-bench-c06.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-merge-wire.png（已看）
+- 对照：线框画面对应 0036–0078；本机 SwiftShader：191→1 次提交快 1.1×，762→1 次提交快 1.5×（全尺寸视口受填充限制只有 1.0–1.06×）。方向一致，但「三倍」是 Switch CPU 数据，本机无法复现，如实记录
+- 判定：done
+
+### 1198957499027795969
+- 做了什么：game-ui-c06.js 左上角存档串（?gameui=1）：World.version 变化时重新 encodeWorld 显示场景名 + 长度 + 串；Save/Load 菜单用同一串
+- 落点：src/world/save.js · src/ui/game-ui-c06.js · index.html?gameui=1
+- 测试：tests/save-atomic.mjs、tests/game-ui-c06.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-gameui-icons.png、artifacts/coverage/shots-r56/C06-gameui-menu.png（已看）
+- 对照：屏幕顶端一行等宽小字，建一块后串改变（1043 字符），与 0100–0199 帧一致；自定义配色/天气不在片中，不计
+- 判定：done

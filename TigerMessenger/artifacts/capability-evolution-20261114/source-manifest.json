@@ -1,0 +1,59 @@
+{
+  "files": [
+    {
+      "path": "townscaper-web/REACodeRefactoring/learn/pipeline.js",
+      "sha256": "498bc9786bdee4be1b8c85863b422fc1bbb24dbcf35d919e82113db82b672121"
+    },
+    {
+      "path": "townscaper-web/REACodeRefactoring/learn/data.js",
+      "sha256": "6c92306bfe7314038301b5e240951bf736682b537b5cb97e3932da42f8b46828"
+    },
+    {
+      "path": "townscaper-web/REACodeRefactoring/pipeline.html",
+      "sha256": "aef00e84332179d0fa395b7de6206d3fd496ebcc96cc6058e6aea1bca5cbc774"
+    },
+    {
+      "path": "townscaper-web/REACodeRefactoring/src/core/capability-evolution.js",
+      "sha256": "0e73f77bb7291eaf10bc67c853100bfdf6d9a23b049595a24f270ee174a54144"
+    },
+    {
+      "path": "townscaper-web/REACodeRefactoring/src/ui/capability-evolution.js",
+      "sha256": "66cec00c3b518fd931e9eeb9ca9f8acca3a1dc320cc5efc330cbb9d85c9bf81a"
+    },
+    {
+      "path": "townscaper-web/REACodeRefactoring/src/ui/capability-evolution.css",
+      "sha256": "8549885ca732164db8a6bd44ed3eb39994a614191832cdfec94fe9f91d9c904d"
+    },
+    {
+      "path": "townscaper-web/REACodeRefactoring/src/ui/code-library-panel.js",
+      "sha256": "22e90de5688efcd24eb2ff2ee433a27569f6ed1ba059b3d27b020cbea549657e"
+    },
+    {
+      "path": "TigerMessenger/src/scene-authoring/learning-workshop.js",
+      "sha256": "56add9aa2997ae792e7c5be7bcf958799fffe09dc454d300c7fec3f6f3feb0ba"
+    },
+    {
+      "path": "TigerMessenger/src/scene-authoring/code-library-view.js",
+      "sha256": "cf7717f66364048641dc8f9ec97bb47998a9693c35beedded5c5487f38413125"
+    },
+    {
+      "path": "TigerMessenger/src/system-workshop/code-library-catalog.js",
+      "sha256": "decf85f8c2ca9c5fc745a6af89c04fbf8302775abad3ff974139e7f7fab18077"
+    },
+    {
+      "path": "TigerMessenger/src/system-workshop/catalog-view.js",
+      "sha256": "915ec3a4e2fec7b844249535447ee854999e148a6e2e697975715264b1137907"
+    },
+    {
+      "path": "TigerMessenger/tools/refactor/scan-code-library.mjs",
+      "sha256": "4e7e3ce92bfc12786e00405e02d557dfca17806aa27f0779922362d9526900d8"
+    },
+    {
+      "path": "TigerMessenger/tools/refactor/build-system-catalog.mjs",
+      "sha256": "bd1ee51c32c9b1e3899854d7630ed77e08817216db73e55b013f2f22c7909456"
+    }
+  ],
+  "browser": "both-1794636671982/browser.json",
+  "evolutionFingerprint": "sha256:3f9b3af104359c78b8393e97d40b00f7b3411c0fee76304e814277f69e6897bb",
+  "uniform": "../workshop-tests/20261114T061119631356Z/summary.json"
+}

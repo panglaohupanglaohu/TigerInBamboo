@@ -1,0 +1,1 @@
+{"objective":"书店镇真实游戏截图漫画","observations":["旧样章为fixtures；新故事已围绕霸天舰队攻击四家书店展开","正在实拍；尚未看图，不宣称画面通过"],"checks":[{"name":"8931 HTTP","required":true,"passed":true},{"name":"所有分镜真实无HUD截图和人工看图","required":true,"passed":null}],"constraints":["禁止生成图","失败不能回退fixtures后称正式完成"]}

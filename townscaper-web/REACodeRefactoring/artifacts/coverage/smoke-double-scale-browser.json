@@ -1,0 +1,53 @@
+{
+  "ok": true,
+  "checks": {
+    "A 细尺上缘 >= 8（有细褶）": {
+      "pass": true,
+      "detail": "fineUp=13 fineLo=9"
+    },
+    "B 粗尺上缘 3–6（与原片大瓣同量级）": {
+      "pass": true,
+      "detail": "bigUp=4 bigLo=0"
+    },
+    "C 粗尺 < 细尺（两级结构）": {
+      "pass": true,
+      "detail": "big=4 < fine=13"
+    },
+    "D 两档在物理量上可分（big 间隔更长→片更少）": {
+      "pass": true,
+      "detail": "big=27 片 / fine=65 片"
+    },
+    "E 无运行时错误": {
+      "pass": true,
+      "detail": "clean"
+    }
+  },
+  "on": {
+    "lobes": true,
+    "particles": 27,
+    "drawn": 13814,
+    "axisDeg": 65,
+    "fineUp": 13,
+    "fineLo": 9,
+    "bigUp": 4,
+    "bigLo": 0
+  },
+  "off": {
+    "lobes": false,
+    "particles": 65,
+    "drawn": 20109,
+    "axisDeg": 60,
+    "fineUp": 10,
+    "fineLo": 13,
+    "bigUp": 4,
+    "bigLo": 0
+  },
+  "filmTarget": {
+    "fineUp": 12,
+    "fineLo": 10,
+    "bigUp": 4,
+    "bigLo": 4,
+    "note": "原片 frame-0150/0160/0180/0250 同法测量"
+  },
+  "styleNote": "两档的轮廓瓣数测量值相同（4/10）→ 瓣数分辨不出档位；档位差异体现在片数与卡尺寸，两档必须并存而非二选一"
+}

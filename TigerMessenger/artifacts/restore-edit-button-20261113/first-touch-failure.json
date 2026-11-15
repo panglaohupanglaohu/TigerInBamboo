@@ -1,0 +1,18 @@
+{
+  "scope": "Actual touch-controls + uiLayers and actual index CSS, isolated layout fixture; full game tested separately",
+  "errors": [],
+  "edit": {
+    "x": 206.09375,
+    "y": 796,
+    "width": 71.90625,
+    "height": 36
+  },
+  "remote": {
+    "x": 155.21875,
+    "y": 783,
+    "width": 79.5625,
+    "height": 43
+  },
+  "pass": false,
+  "failure": "Error: touch buttons overlap/out of bounds\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/restore-edit-button-20261113/touch-layout.mjs:2:480"
+}

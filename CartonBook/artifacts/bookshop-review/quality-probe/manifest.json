@@ -1,0 +1,249 @@
+{
+  "id": "bookshop-letter",
+  "mode": "live",
+  "realCapture": true,
+  "port": 8931,
+  "via": "direct",
+  "captureClean": true,
+  "visualReview": {
+    "status": "pending",
+    "approvedShotIds": [],
+    "note": "文件与像素门禁不等于构图验收；须逐张肉眼检查"
+  },
+  "captureError": null,
+  "cropUsed": false,
+  "captureFlag": "cartonCapture=1",
+  "crop": null,
+  "generatedAt": "2026-11-07T09:25:13.720Z",
+  "shots": [
+    {
+      "shotId": "cover",
+      "file": "cover.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1406657,
+      "quality": {
+        "ok": true,
+        "blank": false,
+        "mean": 159.62,
+        "deviation": 49.34,
+        "darkRatio": 0
+      },
+      "error": null,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-steampunk-robots",
+        "aimObject": null,
+        "stagedPlayer": false,
+        "holdingLetter": null,
+        "eye": [
+          -127.20011430570779,
+          -33.73692800383937,
+          272.78152541819736
+        ],
+        "aim": [
+          -55.701747841153534,
+          -92.28844860888331,
+          119.45278372983215
+        ]
+      },
+      "battle": {
+        "saihojiLandingHold": false,
+        "coverBombing": {
+          "allowed": false,
+          "passes": 0,
+          "timedOut": false
+        },
+        "groundAssault": {
+          "tactics": null,
+          "medical": {
+            "rescued": 0,
+            "healed": 0,
+            "returned": 0,
+            "medic": {
+              "id": "1c06d918-4dbc-4979-b060-f145a67412f2",
+              "visible": true,
+              "owned": false,
+              "phase": "surface",
+              "position": [
+                1.0454505417225635,
+                24.129018263713537,
+                1.3935962037842473
+              ],
+              "target": null,
+              "visibleMeshes": 10
+            },
+            "patients": 0,
+            "carriers": []
+          },
+          "ready": 0,
+          "active": false,
+          "stage": "idle",
+          "objective": "suppress-town-defenses-and-assault-plaza",
+          "assigned": 0,
+          "controllers": 0,
+          "heldFor": 0,
+          "deployed": 0,
+          "trooperShots": 0,
+          "trooperRobotHits": 0,
+          "residentShots": 0,
+          "residentHits": 0,
+          "residentsDown": 0,
+          "troopersDown": 0,
+          "robotKills": 0,
+          "friendlyBlastHits": 0,
+          "blastResidentHits": 0,
+          "recovered": 0,
+          "aboard": 0,
+          "rappelling": 0,
+          "ground": 0,
+          "liveProjectiles": 0,
+          "renderBatch": null
+        },
+        "bombRelease": null,
+        "bombingRun": null,
+        "phase": "idle",
+        "age": 0,
+        "energy": 100,
+        "shield": false,
+        "wingNodes": 2,
+        "heat": 0,
+        "cycle": 0,
+        "shots": 0,
+        "retreatReason": null,
+        "arrival": null,
+        "flagshipPosition": [
+          -64.51650737358936,
+          -142.44888302496136,
+          -124.68334291818806
+        ],
+        "members": 14,
+        "roles": [
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "attack",
+          "guard",
+          "jammer",
+          "guard",
+          "scout",
+          "scout",
+          "scout",
+          "transport",
+          "transport",
+          "transport"
+        ],
+        "wingDamage": 0,
+        "events": [],
+        "blockedHits": 0,
+        "unitShots": 0,
+        "fireLog": [],
+        "flight": {
+          "bankDegrees": 0,
+          "attackSpeed": 9,
+          "turnLimit": 0.11
+        },
+        "bay": {
+          "openness": 0
+        },
+        "arsenal": {
+          "cannon": 0,
+          "rain": 0,
+          "ion": 0,
+          "traction": 0,
+          "robotHits": 0,
+          "robotsShattered": 0,
+          "shieldImpacts": 0,
+          "shieldAudioPlayed": 0,
+          "shieldAudioSkipped": 0,
+          "lastImpact": null,
+          "smokeStyle": "soft-steam-sprite",
+          "activeSoftSmoke": 0,
+          "activeSteamJets": 0,
+          "factoriesStopped": 0,
+          "robotsBlinking": 0,
+          "activeIon": false,
+          "activeEffects": 0,
+          "pendingProjectiles": 0
+        },
+        "beamActive": false,
+        "types": [
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "moebius-aircraft",
+          "gate-pod-escort-pod-55-2",
+          "gate-pod-escort-pod-41-7",
+          "gate-pod-escort-pod-08-9",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "triple-gate-scout-aircraft",
+          "vanguard-hauler-0",
+          "vanguard-hauler-1",
+          "vanguard-hauler-2"
+        ],
+        "route": [
+          {
+            "id": "bookshop",
+            "label": "书店镇"
+          },
+          {
+            "id": "apostles",
+            "label": "十二门徒"
+          },
+          {
+            "id": "citadel",
+            "label": "高山圣城"
+          },
+          {
+            "id": "old-port",
+            "label": "旧港湾"
+          },
+          {
+            "id": "swamp",
+            "label": "湖沼"
+          },
+          {
+            "id": "moon-lake",
+            "label": "月湖"
+          },
+          {
+            "id": "gate",
+            "label": "叹息之门"
+          }
+        ],
+        "completedTargets": [],
+        "campaignFinished": false,
+        "objectsReused": [
+          "4c826785-37bf-4377-8456-fcb67588011c",
+          "3dd71d6b-69e4-480d-8279-f6420985676a",
+          "e805c7d3-274e-4bac-b92b-71db15985753",
+          "2b7eea1f-6925-4b89-bceb-483fc856d37e",
+          "9b6cf051-594b-481a-8f85-b9b6ebd8fbc0",
+          "5f2418e1-60d6-4526-adb1-1215b192499e",
+          "4f3062fb-ae9f-4e66-a0b8-ec9218723d72",
+          "460f8f4a-4991-40a0-b427-98f81397527d",
+          "7d453679-37b4-4b22-bd4f-fc6ba37c7565",
+          "767c81d5-9275-4e2d-83e0-43ba79ec9f43",
+          "eb68fe0a-5b48-40a3-8ef1-370c63f3a49a",
+          "6db9b7b3-6dc5-4679-8ff7-b20c494a5eda",
+          "4194c245-06e2-49dd-9949-df30d5855757",
+          "646cb611-cc14-4ccd-8ca9-ec8d907b4969"
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    }
+  ]
+}

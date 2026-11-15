@@ -3,261 +3,114 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>书店镇 · 一封要送出的信 · CartonBook</title>
+<title>书店镇 · 四盏灯，一封信 · CartonBook</title>
 <link rel="stylesheet" href="../../layouts/edena.css" />
 <style>
   .book-section[hidden] { display: none !important; }
   @media print {
+    @page { size: 1380px 920px; margin: 0; }
+    html, body { width: 1380px; margin: 0 !important; padding: 0 !important; background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .book-shell, .book-shell:has(.cover-spread), #book { width: 1380px; max-width: none; margin: 0; padding: 0; }
     .book-section[hidden] { display: block !important; }
-    .book-section { page-break-after: always; }
+    .book-section, .book-section.spread-cover, .book-section.spread-inner {
+      width: 1380px; height: 920px; min-height: 920px; max-width: none;
+      margin: 0; overflow: hidden; box-shadow: none;
+      break-after: page; page-break-after: always;
+    }
+    .book-section.spread-inner { display: grid !important; grid-template-columns: 1fr 1fr; gap: 0; }
+    .book-section.spread-cover { display: block !important; }
+    .book-section:last-child { break-after: auto; page-break-after: auto; }
+    .spread-inner .book-page { width: 690px; height: 920px; min-height: 920px; margin: 0; break-after: auto; page-break-after: auto; }
+    .book-page.cover-spread { width: 1380px; height: 920px; min-height: 0; aspect-ratio: auto; break-after: auto; page-break-after: auto; }
+    .book-nav, .hard-constraint { display: none !important; }
   }
-
-  .book-page.storyboard {
-    width: min(820px, 100%);
-    padding: 36px 40px 28px;
-  }
-  .book-page.storyboard .sb-header {
-    border-bottom: 1.2px solid var(--rule);
-    padding-bottom: 14px;
-    margin-bottom: 22px;
-  }
-  .book-page.storyboard .sb-kicker {
-    margin: 0 0 6px;
-    font-family: var(--font-ui);
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    color: #8a7f70;
-  }
-  .book-page.storyboard .sb-title {
-    margin: 0 0 8px;
-    font-size: clamp(1.25rem, 2.6vw, 1.65rem);
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    line-height: 1.35;
-  }
-  .book-page.storyboard .sb-lede {
-    margin: 0;
-    font-size: 0.92rem;
-    line-height: 1.65;
-    color: var(--ink-soft);
-    max-width: 40em;
-  }
-  .book-page.storyboard .sb-section {
-    margin: 0 0 1.55rem;
-  }
-  .book-page.storyboard .sb-section h2 {
-    margin: 0 0 0.55rem;
-    font-size: 1.02rem;
-    letter-spacing: 0.08em;
-    font-weight: 700;
-    border-left: 3px solid var(--ink);
-    padding-left: 10px;
-    line-height: 1.4;
-  }
-  .book-page.storyboard .sb-section p {
-    margin: 0 0 0.7rem;
-    font-size: 0.95rem;
-    line-height: 1.75;
-    color: var(--ink);
-    max-width: 42em;
-  }
-  .book-page.storyboard .sb-note {
-    font-size: 0.82rem !important;
-    color: var(--ink-soft) !important;
-    font-style: italic;
-  }
-  .book-page.storyboard .sb-beats {
-    margin: 0.2rem 0 0;
-    padding-left: 1.25rem;
-    max-width: 42em;
-  }
-  .book-page.storyboard .sb-beats li {
-    margin: 0 0 0.65rem;
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
-  .book-page.storyboard .sb-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-    line-height: 1.5;
-    margin-top: 0.4rem;
-  }
-  .book-page.storyboard .sb-table th,
-  .book-page.storyboard .sb-table td {
-    border: 1px solid rgba(26, 24, 20, 0.22);
-    padding: 7px 9px;
-    text-align: left;
-    vertical-align: top;
-  }
-  .book-page.storyboard .sb-table th {
-    background: rgba(26, 24, 20, 0.06);
-    font-family: var(--font-ui);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    font-weight: 600;
-  }
-  .book-page.storyboard .sb-shots td:first-child {
-    font-family: var(--font-ui);
-    font-weight: 600;
-    white-space: nowrap;
-  }
-  @media (max-width: 640px) {
-    .book-page.storyboard { padding: 20px 16px; }
-    .book-page.storyboard .sb-table { font-size: 0.74rem; }
-  }
-
 </style>
 </head>
 <body>
 <div class="book-shell">
-  <p class="hard-constraint">CartonBook · 所有画面来自 TigerMessenger 游戏截屏 · 禁止文生图</p>
+  <p class="hard-constraint">书店镇 · 四盏灯，一封信</p>
   <nav class="book-nav" id="nav">
-<button type="button" data-go="0" class="is-active">封面</button>
-<button type="button" data-go="1" class="">故事板</button>
-<button type="button" data-go="2" class="">page-02</button>
-<button type="button" data-go="3" class="">page-03</button>
-    <button type="button" data-go="prev">上一页</button>
-    <button type="button" data-go="next">下一页</button>
+<button type="button" data-go="0" class="is-active">跨页封面</button>
+<button type="button" data-go="1" class="">1—2</button>
+<button type="button" data-go="2" class="">3—4</button>
+<button type="button" data-go="3" class="">5—6</button>
+<button type="button" data-go="4" class="">7—8</button>
+<button type="button" data-go="prev">上一跨页</button><button type="button" data-go="next">下一跨页</button>
+<a class="download-pdf" id="download-pdf" href="book.pdf" download="书店镇 · 四盏灯，一封信.pdf">下载 PDF</a>
   </nav>
   <div id="book">
-<section class="book-section" data-page="0" >
-<article class="book-page cover">
-  <div class="cover-hero">
-    <div class="cover-frame">
-      <img src="shots/cover.png" alt="书店镇 · 一封要送出的信" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：cover.png'}))" />
-    </div>
-    <div class="cover-title-band">
-      <div class="band-left">
-        <h1>书店镇 · 一封要送出的信</h1>
-        <p class="subtitle">取信启程</p>
-      </div>
-      <div class="band-right">CartonBook · Edena</div>
-    </div>
-  </div>
-  <footer class="page-footer">
-    <span>画面来源：TigerMessenger 游戏截屏（禁止文生图）</span>
-    <span>bookshop-letter</span>
-  </footer>
-</article>
-</section>
-<section class="book-section" data-page="1" hidden>
-<article class="book-page storyboard">
-  <header class="sb-header">
-    <p class="sb-kicker">CartonBook · bookshop-letter · 审阅稿</p>
-    <h1 class="sb-title">故事板 · 一封要送出的信</h1>
-    <p class="sb-lede">黄昏的 Hard To Find。信比预想的轻，路却通向潮气边境。本页为拟拍文案，<strong>未做 live 截屏</strong>；光时以 TOD ≈ 0.75 黄昏为准。</p>
-  </header>
-
-  <section class="sb-section" id="sb-when">
-    <h2>一、时间 · 地点 · 人物</h2>
-    <p><strong>时间</strong>　南海蒸汽工业基地的黄昏。廊灯刚亮，海面还留着一痕暖金；蒸汽从拱廊缝里慢慢浮起。世界不急着黑下去，只是把声音收小。</p>
-    <p><strong>地点</strong>　临海游客书店 <em>Hard To Find</em>——球形小镇抬高的海堤露台（BOOKSHOP_TERRACE ≈ 5.5），砖红立面、维多利亚八角凸窗、三角门廊，门前土坡 berm 把人抬到招牌高度。拱廊下是火车与行人的日常；港与飞艇码头在远处等着，但取信之前，镜头不给它们开场。</p>
-    <p><strong>人物</strong>　<strong>信使</strong>接过苍竹的信，目标书店，身影常小于立面；<strong>店主</strong>只闻其声（overlay 一句）——「边境那封。潮气重。」；行人、工人、机器人与 Jakub 廊道的暖灯，作为背景生命，不抢戏。</p>
-  </section>
-
-  <section class="sb-section" id="sb-twist">
-    <h2>二、故事曲折</h2>
-    <p>信使沿入口坡道登上抬高的拱廊露台，在球形镇的尺度里把 Hard To Find 找出来——先是远景里一角砖红，再是门廊与黑底金边招牌落到眼前。信封交到手里时比预想的轻，却写着要送往潮气重的边境；店主那句关于潮气与边境的提醒，把取信从一点温柔的浪漫，轻轻拧向责任。世界一度缩到门口与招牌的尺度；直到信收入怀中，港湾与飞艇才被允许重新打开——镇子先把人收进来，再把路还给他。</p>
-  </section>
-
-  <section class="sb-section" id="sb-props">
-    <h2>三、细节与物件 × 情景</h2>
-    <p class="sb-note">各个物件搭配不同故事情景：英雄资产只在它该说话的节拍出现。</p>
-    <table class="sb-table">
-      <thead><tr><th>物件 / 资产</th><th>服务的节拍 · 情景</th></tr></thead>
-      <tbody>
-        <tr><td>海堤露台 terrace</td><td>建立「抬高的书店镇」——人在球形镇边缘，风从海上来</td></tr>
-        <tr><td>土坡 berm</td><td>尺度参照：人沿坡升高，立面从远到近，纪念碑感慢慢成形</td></tr>
-        <tr><td>广场 / 入口坡道</td><td>抵达动线；宽景里人仍小，路比人先说话</td></tr>
-        <tr><td>Jakub 廊道 / 暖灯</td><td>取信前的静场走廊；灯色托住黄昏</td></tr>
-        <tr><td>蒸汽 · 大气 · 暖光</td><td>工业海边的呼吸；dusk 把砖红与金边招牌焐热</td></tr>
-        <tr><td>HARD TO FIND 招牌</td><td><strong>全章唯一 macro</strong>：证明店名；木纹与旧铜钉</td></tr>
-        <tr><td>低机位立面</td><td><strong>全章唯一</strong>仰拍：门廊与八角窗如纪念碑</td></tr>
-        <tr><td>行人 / 工人 / 机器人</td><td>背景生命，证明镇子还在过日子</td></tr>
-        <tr><td>港湾 · 飞艇 · 货运</td><td><strong>仅取信之后</strong>才入画：世界从门口重新张开</td></tr>
-        <tr><td>信封（轻）</td><td>转折物证——轻，却要去潮气边境</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="sb-section" id="sb-emotion">
-    <h2>四、动人场景</h2>
-    <ol class="sb-beats">
-      <li><strong>低机位纪念碑立面</strong>　仰看三角门廊与八角凸窗，信使只占画面一角。镇子比人高，却在黄昏里显得温柔。</li>
-      <li><strong>唯一特写：HARD TO FIND 招牌</strong>　黑底金边，字迹清楚；木纹里嵌着旧铜钉。世界暂时只剩这块牌子——名字被认出来的瞬间。</li>
-      <li><strong>背影离开，镇子矮下去</strong>　信使转身走下露台；球形镇与拱廊在身后缩小。风里隐约有纸页的声响。</li>
-      <li><strong>（可选）飞艇驾驶员视角</strong>　取信完成之后，港与飞艇才入镜——从门口尺度一下子回到航线尺度，开放而不收束。</li>
-    </ol>
-  </section>
-
-  <section class="sb-section" id="sb-ending">
-    <h2>五、结局</h2>
-    <p>信使怀揣那封「潮气」的信，离开 Hard To Find，朝港湾与飞艇码头走去。信尚未投递——结局敞开。镇子沉到身后的暮色里；风把纸页翻动的声音送远。下一程，才是边境的湿气。</p>
-  </section>
-
-  <section class="sb-section" id="sb-shots">
-    <h2>六、拟拍镜头表（多角度）</h2>
-    <p class="sb-note">计划稿 · plan-only，待 live 8931 dusk 捕获后再替换画面。HUD 零容忍。相机族：panorama / cinematic / macro / tele / airshipPilot。光时 TOD = 0.75。</p>
-    <table class="sb-table sb-shots">
-      <thead><tr><th>镜号</th><th>节拍</th><th>相机族</th><th>英雄物件</th><th>备注</th></tr></thead>
-      <tbody>
-        <tr><td>C0</td><td>封面 · 地平线</td><td>panorama</td><td>terrace · 远景立面</td><td>人高约 5–15%；无对白</td></tr>
-        <tr><td>A1</td><td>抵达 · 宽镇景</td><td>panorama / cinematic</td><td>plaza · path · berm</td><td>坡道尽头，书店镇铺开</td></tr>
-        <tr><td>A2</td><td>抵达 · 眼高仍小</td><td>cinematic</td><td>廊柱 · 暖灯 · 蒸汽</td><td>人物仍小于立面</td></tr>
-        <tr><td>A3</td><td>抵达 · 低机位</td><td>cinematic（仰）</td><td>门廊 · 八角窗 · berm</td><td>全章唯一低机位</td></tr>
-        <tr><td>B1</td><td>取信 · 静场</td><td>cinematic / tele</td><td>Jakub 廊道 · 暖灯</td><td>无气泡</td></tr>
-        <tr><td>B2</td><td>取信 · 交互</td><td>cinematic</td><td>门口 · 店主声</td><td>「边境那封。潮气重。」</td></tr>
-        <tr><td>B3</td><td>取信 · 招牌</td><td>macro</td><td>HARD TO FIND</td><td>全章唯一近景；其后拉开</td></tr>
-        <tr><td>B4</td><td>取信 · 再拉开</td><td>cinematic / panorama</td><td>信封 · 露台</td><td>信封比预想的轻</td></tr>
-        <tr><td>D1</td><td>启程 · 背影</td><td>cinematic</td><td>信使背影 · 门廊</td><td>日落前到岔口</td></tr>
-        <tr><td>D2</td><td>启程 · 路径</td><td>panorama</td><td>path → 港</td><td>此后才允许港/货运</td></tr>
-        <tr><td>D3</td><td>启程 · 镇矮</td><td>panorama</td><td>球形镇 · 微小身影</td><td>风把纸声送远</td></tr>
-        <tr><td>D4</td><td>（可选）航线</td><td>airshipPilot</td><td>飞艇 · 码头 · 海</td><td>取信后；旅程尺度</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <footer class="page-footer">
-    <span>故事板审阅 · 无新截屏 · TOD 0.75 dusk</span>
-    <span>故事板</span>
-  </footer>
-</article>
-</section>
-<section class="book-section" data-page="2" hidden>
+<section class="book-section spread-cover" data-page="0" ><article class="book-page cover cover-spread" aria-label="跨页封面，左右两页">
+ <div class="cover-continuous"><img src="shots/cover.png" alt="书店镇 · 四盏灯，一封信跨页全景"></div>
+ <div class="cover-leaf left-leaf"><span class="cover-series">信使纪事 / 01</span><p class="cover-line">书不登船。信先过海。</p></div>
+ <div class="cover-leaf right-leaf"><div class="cover-book-title"><span>霸天舰队索书之日</span><h1>四盏灯，<br>一封信</h1><p>书店镇</p></div></div>
+ <div class="book-fold" aria-hidden="true"></div>
+</article></section>
+<section class="book-section spread-inner" data-page="1" hidden><article class="book-page prose"><div class="chapter-story"><small>书店镇 / 序</small><h2>四盏灯，一封信</h2><p>潮退时，信使抵达书店镇。Hard To Find 的露台下，三家工坊书店刚开门：蝗虫在校准装卸架，蚂蚁端着第一杯茶，甲壳虫用车灯检查一箱尚未编目的书。门里留着一封从潮气边境寄来的《联藏约》。四家书店若共同签下，书目便互相保存，任何一家都不能替其余三家决定藏书的去向。</p><p>蚂蚁书店的钟响过两次，霸天舰队越过海堤。旗舰只给出一个条件：第三次钟响前，把四店藏书送上升降索，镇子就能免于炮击。蝗虫主张先藏维修图册，蚂蚁宁愿烧掉总目录，甲壳虫想把书目拆散抄进零件标签。Hard To Find 的店主没有争论哪本书最值得活。他把《联藏约》交给信使：“先让每家都签。谁也不能单独拿全镇做交易。”</p><p>信使把信收进衣襟，从门廊折回广场。蝗虫签下第一枚印，重型机器人随即离开装配架，守住坡道；蚂蚁签下第二枚印，把茶杯留在窗台，锅炉的蒸汽漫过廊口；甲壳虫签下第三枚印，车灯一束束亮起，为信使和居民标出通往海边的路。Hard To Find 最后落印。四盏门灯没有同时变亮，而是一盏回答另一盏。</p><p>第三次钟响时，运输艇已经压在广场上方。空降兵沿绳索落下，信使没有停在三店门前。他贴着拱廊往港口跑，机器人和工人守住的不是一排书架，而是他脚下那条路，以及路上还没来得及进门的人。炮火被蒸汽遮住时，甲壳虫的车灯仍在前面；绳索落到身后时，蝗虫的脚步正好挡在中间。</p><p>DUKE 的船长只肯再等一分钟。他看见信使空着双手，问：“书呢？”信使把签了四枚印的信递过去：“书不登船。把这个带到潮气边境。下一座镇若也收到索书令，就知道可以怎样回答。”NORTHWARD 的吊车停在头顶，系留飞艇仍压着缆绳。离岸的只有一封信，不是任何一家书店的藏书。</p><p>炮声向海面退去以后，蚂蚁才回到窗台。杯沿缺了一小块，茶已经凉了。甲壳虫把散开的标签重新夹回书箱，蝗虫将装卸架推回原位。没有人宣布胜利；四店只是按约定交换了第一批书目，好让任何一册都有不止一个安放之处。</p><p>信使沿坡道走回 Hard To Find。门还开着，海在廊灯下面，潮气边境在更远的云墙之外。他完成了一次很短的投递：从一家书店到三家书店，再到一艘船。镇上失去的东西写在伤亡簿里，没有被写进舰队的收货单。</p></div><footer class="page-footer"><span>序 · 完整故事</span><span>霸天舰队索书之日</span></footer></article>
 <article class="book-page story">
-  <div class="panel-grid tpl-edena-close-insert">
-<figure class="panel role-env">
+  <div class="panel-grid tpl-edena-establish">
+<figure class="panel">
   <div class="panel-frame">
-    <div class="strip-title-bar"><span class="strip-title">取信</span><span class="strip-byline">Edena · 2/3</span></div>
-    <img src="shots/s04.png" alt="环境静场" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s04.png'}))" />
+    <div class="strip-title-bar"><span class="strip-title">镇还在读书</span><span class="strip-byline">Edena · 1/7</span></div>
+    <img src="shots/s01.png" alt="信使抵达" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s01.png'}))" />
     
   </div>
-  <div class="caption-bar">廊道认得每一个来取信的人。</div>
+  <div class="caption-bar">潮退时，四店刚开门。</div>
 </figure>
-<figure class="panel role-interact">
+<figure class="panel">
   <div class="panel-frame">
     
-    <img src="shots/s05.png" alt="交互中景" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s05.png'}))" />
-    <div class="dialog-balloon"><span class="speaker">店主</span>边境那封。潮气重。</div>
+    <img src="shots/s02.png" alt="蝗虫书店" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s02.png'}))" />
+    
   </div>
-  
+  <div class="caption-bar">蝗虫还想先藏维修图册。</div>
 </figure>
-<figure class="panel role-insert">
+<figure class="panel">
   <div class="panel-frame">
     
-    <img src="shots/s06.png" alt="近景插入：门/招牌" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s06.png'}))" />
+    <img src="shots/s03.png" alt="蚂蚁书店" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s03.png'}))" />
     
   </div>
-  <div class="caption-bar">木纹里嵌着旧铜钉。</div>
+  <div class="caption-bar">蚂蚁宁愿烧掉总目录。</div>
 </figure>
-<figure class="panel role-pull">
+<figure class="panel">
   <div class="panel-frame">
     
-    <img src="shots/s07.png" alt="再拉开：信在路上" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s07.png'}))" />
+    <img src="shots/s04.png" alt="甲壳虫书店" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s04.png'}))" />
     
   </div>
-  <div class="caption-bar">信封比预想的轻。</div>
+  <div class="caption-bar">甲壳虫想把书目抄进零件标签。</div>
+</figure>
+  </div>
+  <footer class="page-footer">
+    <span>竖条横幅 · 大留白 · 少字</span>
+    <span>page-01</span>
+  </footer>
+</article></section>
+<section class="book-section spread-inner" data-page="2" hidden><article class="book-page story">
+  <div class="panel-grid tpl-edena-vertical">
+<figure class="panel">
+  <div class="panel-frame">
+    <div class="strip-title-bar"><span class="strip-title">第三次钟响前</span><span class="strip-byline">Edena · 2/7</span></div>
+    <img src="shots/s20.png" alt="索书令压顶" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s20.png'}))" />
+    
+  </div>
+  <div class="caption-bar">镇子可以免炮，条件是书架清空。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s05.png" alt="舰队越堤" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s05.png'}))" />
+    <div class="dialog-balloon"><span class="speaker">霸天旗舰</span>第三次钟响前，交出全部藏书。</div>
+  </div>
+  <div class="caption-bar">第二次钟响后，影子先落进广场。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s19.png" alt="机器人抬头" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s19.png'}))" />
+    
+  </div>
+  <div class="caption-bar">蝗虫先看见了舰队，随后才看见升降索。</div>
 </figure>
   </div>
   <footer class="page-footer">
@@ -265,41 +118,174 @@
     <span>page-02</span>
   </footer>
 </article>
-</section>
-<section class="book-section" data-page="3" hidden>
 <article class="book-page story">
-  <div class="panel-grid tpl-edena-banner-pair journey-depart">
-<figure class="panel role-turn">
+  <div class="panel-grid tpl-edena-reply">
+<figure class="panel">
   <div class="panel-frame">
-    <div class="strip-title-bar"><span class="strip-title">启程</span><span class="strip-byline">Edena · 3/3</span></div>
-    <img src="shots/s08.png" alt="转身中景" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s08.png'}))" />
-    <div class="dialog-balloon"><span class="speaker">信使</span>日落前到岔口。</div>
+    <div class="strip-title-bar"><span class="strip-title">信从门里出发</span><span class="strip-byline">Edena · 3/7</span></div>
+    <img src="shots/s16.png" alt="联藏约起点" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s16.png'}))" />
+    
   </div>
-  
+  <div class="caption-bar">Hard To Find 没有选出“最值得活”的书。</div>
 </figure>
-<figure class="panel role-path">
+<figure class="panel">
   <div class="panel-frame">
     
-    <img src="shots/s09.png" alt="路径宽景" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s09.png'}))" />
-    
+    <img src="shots/s09.png" alt="取出联藏约" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s09.png'}))" />
+    <div class="dialog-balloon"><span class="speaker">店主</span>先让每家都签。</div>
   </div>
-  <div class="caption-bar">路弯向港与塔。</div>
+  <div class="caption-bar">任何一家，都不能替其余三家交出藏书。</div>
 </figure>
-<figure class="panel role-farewell">
+<figure class="panel">
   <div class="panel-frame">
     
-    <img src="shots/s10.png" alt="风景里的微小身影" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s10.png'}))" />
+    <img src="shots/s18.png" alt="折回广场" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s18.png'}))" />
     
   </div>
-  <div class="caption-bar">镇矮下去。风把纸声送远。</div>
+  <div class="caption-bar">他带着信，转身回到钟声里。</div>
 </figure>
   </div>
   <footer class="page-footer">
     <span>竖条横幅 · 大留白 · 少字</span>
     <span>page-03</span>
   </footer>
+</article></section>
+<section class="book-section spread-inner" data-page="3" hidden><article class="book-page story">
+  <div class="panel-grid tpl-edena-detail">
+<figure class="panel">
+  <div class="panel-frame">
+    <div class="strip-title-bar"><span class="strip-title">四店共同选择</span><span class="strip-byline">Edena · 4/7</span></div>
+    <img src="shots/s06.png" alt="第一枚印" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s06.png'}))" />
+    
+  </div>
+  <div class="caption-bar">蝗虫签下。机器人离架，守住坡道。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s07.png" alt="第二枚印" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s07.png'}))" />
+    
+  </div>
+  <div class="caption-bar">蚂蚁签下。蒸汽漫过廊口。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s17.png" alt="放下茶杯" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s17.png'}))" />
+    
+  </div>
+  <div class="caption-bar">杯子留在窗台，茶还热着。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s08.png" alt="第三枚印" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s08.png'}))" />
+    
+  </div>
+  <div class="caption-bar">甲壳虫签下。车灯指向海边。</div>
+</figure>
+  </div>
+  <footer class="page-footer">
+    <span>竖条横幅 · 大留白 · 少字</span>
+    <span>page-04</span>
+  </footer>
 </article>
-</section>
+<article class="book-page story">
+  <div class="panel-grid tpl-edena-assault">
+<figure class="panel">
+  <div class="panel-frame">
+    <div class="strip-title-bar"><span class="strip-title">灯火通路</span><span class="strip-byline">Edena · 5/7</span></div>
+    <img src="shots/s21.png" alt="四灯回答" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s21.png'}))" />
+    
+  </div>
+  <div class="caption-bar">Hard To Find 最后落印。一盏灯回答另一盏。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s22.png" alt="空降截路" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s22.png'}))" />
+    
+  </div>
+  <div class="caption-bar">第三次钟响，另一种脚步沿绳索落下。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s10.png" alt="共同守路" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s10.png'}))" />
+    
+  </div>
+  <div class="caption-bar">他们守住送信的路，也守住还没进门的人。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s13.png" alt="蒸汽掩护" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s13.png'}))" />
+    
+  </div>
+  <div class="caption-bar">炮火被蒸汽遮住，车灯仍在前面。</div>
+</figure>
+  </div>
+  <footer class="page-footer">
+    <span>竖条横幅 · 大留白 · 少字</span>
+    <span>page-05</span>
+  </footer>
+</article></section>
+<section class="book-section spread-inner" data-page="4" hidden><article class="book-page story">
+  <div class="panel-grid tpl-edena-harbor">
+<figure class="panel">
+  <div class="panel-frame">
+    <div class="strip-title-bar"><span class="strip-title">书不登船</span><span class="strip-byline">Edena · 6/7</span></div>
+    <img src="shots/s11.png" alt="抵达港口" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s11.png'}))" />
+    
+  </div>
+  <div class="caption-bar">NORTHWARD 的吊车停在头顶。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s12.png" alt="备用航路" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s12.png'}))" />
+    
+  </div>
+  <div class="caption-bar">系留飞艇仍压着缆绳，没有人把书装箱。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s23.png" alt="书不登船" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s23.png'}))" />
+    <div class="dialog-balloon"><span class="speaker">DUKE 船长</span>书呢？</div>
+  </div>
+  <div class="caption-bar">“书不登船。把这个带到潮气边境。”</div>
+</figure>
+  </div>
+  <footer class="page-footer">
+    <span>竖条横幅 · 大留白 · 少字</span>
+    <span>page-06</span>
+  </footer>
+</article>
+<article class="book-page story">
+  <div class="panel-grid tpl-edena-coda">
+<figure class="panel">
+  <div class="panel-frame">
+    <div class="strip-title-bar"><span class="strip-title">茶凉了</span><span class="strip-byline">Edena · 7/7</span></div>
+    <img src="shots/s14.png" alt="茶凉了" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s14.png'}))" />
+    
+  </div>
+  <div class="caption-bar">炮声退去，杯沿缺了一小块。</div>
+</figure>
+<figure class="panel">
+  <div class="panel-frame">
+    
+    <img src="shots/s15.png" alt="书仍在镇里" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'panel-missing',textContent:'缺少截屏：s15.png'}))" />
+    
+  </div>
+  <div class="caption-bar">离岸的是一封信，不是任何一家书店的藏书。</div>
+</figure>
+  </div>
+  <footer class="page-footer">
+    <span>竖条横幅 · 大留白 · 少字</span>
+    <span>last</span>
+  </footer>
+</article></section>
   </div>
 </div>
 <script>

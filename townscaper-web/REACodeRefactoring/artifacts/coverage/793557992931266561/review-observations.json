@@ -1,0 +1,48 @@
+{
+  "id": "793557992931266561",
+  "method": "先读README；全部解码帧逐格检查联系表，关键原尺寸回看；静态阶段与运行算法区分。",
+  "frames": [
+    {
+      "frame": 0,
+      "seconds": 0.0,
+      "reviewed": true,
+      "nativeRevisit": true,
+      "observation": "同一建筑白色剪影，几乎无内部明暗"
+    },
+    {
+      "frame": 1,
+      "seconds": 1.0,
+      "reviewed": true,
+      "nativeRevisit": true,
+      "observation": "向上法线/局部明暗出现，楼板和凸部可辨"
+    },
+    {
+      "frame": 2,
+      "seconds": 2.0,
+      "reviewed": true,
+      "nativeRevisit": true,
+      "observation": "拱洞/墙脚/夹层遮蔽明显加深"
+    },
+    {
+      "frame": 3,
+      "seconds": 3.0,
+      "reviewed": true,
+      "nativeRevisit": true,
+      "observation": "凹处细部遮蔽再次变化，对应原文SSAO阶段但不能从单帧还原算法"
+    },
+    {
+      "frame": 4,
+      "seconds": 4.0,
+      "reviewed": true,
+      "nativeRevisit": true,
+      "observation": "方向性色彩照明出现，粉暖/青冷面区分，末帧保持"
+    },
+    {
+      "frame": 5,
+      "seconds": 4.999,
+      "reviewed": true,
+      "nativeRevisit": true,
+      "observation": "方向性色彩照明出现，粉暖/青冷面区分，末帧保持"
+    }
+  ]
+}

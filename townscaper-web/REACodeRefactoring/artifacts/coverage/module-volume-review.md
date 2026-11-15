@@ -9,3 +9,8 @@ build/module-volume.js先做整体刚体几何匹配，再审核全部目标列�
 tests/module-volume.mjs验证5格整体/两层、单次版本、支撑/占用/河道/版本/几何拒绝零写入、错误World凭据、目标列变更拒绝、其他列修改保留和单次撤回。真实patch页预留空地后5格放置，经同一个WorldMesh显示；撤回恢复快照，非均匀拉伸拒绝且无部分写入。报告module-volume-browser.json，截图module-volume-placed.png/module-volume-rejected.png，errors[]。已有patch搜索和三主场景回归通过，报告module-patch-browser.json。
 
 只认证当前共享World体素体量与离散支撑/占用，不代表复杂预制模型碰撞、形变表面支撑、socket、完整外观或WFC约束。周边补网/接缝、联合WFC及实例身份持久化待续。没有同步游戏vendor副本。
+
+
+## 第 56 批（C08）
+
+- 1751932427272909032：复核 prefab.html（合成小块 → 缝进 → 两层 prefab，0 冲突），note 中缺口已由 r55 补齐。截图 C08-prefab-probe.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

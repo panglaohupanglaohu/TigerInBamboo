@@ -34,9 +34,8 @@ const STORE='tm-ui-layers-v1';
 const q=new URLSearchParams(globalThis.location?.search||'');
 const host=globalThis.location?.hostname||'';
 const localHost=['localhost','127.0.0.1','::1','[::1]',''].includes(host)||host.endsWith('.local');
-// Main game URLs default to play UI; the workshop iframe opts in with dev=1.
-const mainGameEntry=/\/TigerMessenger\/(?:index\.html)?$/.test(globalThis.location?.pathname||'');
-export const UI_DEV=q.get('dev')==='1'||(localHost&&!mainGameEntry&&q.get('release')!=='1'&&q.get('dev')!=='0');
+// Local game pages retain the original editing dock; explicit play/release URLs still hide it.
+export const UI_DEV=q.get('dev')==='1'||(localHost&&q.get('release')!=='1'&&q.get('dev')!=='0');
 
 const state={group:null,monitor:false};
 try{const s=JSON.parse(localStorage.getItem(STORE)||'{}');if(EDIT_GROUPS.some(g=>g.id===s.group))state.group=s.group;state.monitor=!!s.monitor;}catch{}
@@ -50,7 +49,7 @@ function save(){try{localStorage.setItem(STORE,JSON.stringify(state));}catch{}}
 function apply(){const root=document.documentElement;
  root.classList.toggle('tm-release',!UI_DEV);root.classList.toggle('tm-monitor-on',UI_DEV&&state.monitor);
  if(UI_DEV&&state.group)root.dataset.editGroup=state.group;else delete root.dataset.editGroup;
- dock?.sync();for(const fn of listeners){try{fn({...state});}catch(e){console.warn('[uiLayers]',e);}}}
+ dock?.sync();for(const fn of listeners){try{fn({...state,captureMode});}catch(e){console.warn('[uiLayers]',e);}}}
 
 function classify(el){
  for(const g of EDIT_GROUPS)if(g.selectors.some(s=>el.matches(s))){el.dataset.uiLayer='edit';el.dataset.uiGroup=g.id;return;}
@@ -85,6 +84,10 @@ html:has(#citadel-editor[style*="display: block"]) #learnpanel,html:has(#crystal
 #tm-ui-dock .item.on{background:#12232e;color:#fff}
 #tm-ui-dock .item small{display:block;opacity:.7;font-size:11px}
 #tm-ui-dock .foot{margin-top:6px;padding:6px 8px 2px;border-top:1px solid rgba(18,35,46,.1);font-size:11px;opacity:.75}
+/* Keep both edit and remote-toggle buttons reachable on touch screens. */
+@media (pointer:coarse),(hover:none){
+ #tm-ui-dock .menu{position:fixed;right:12px;bottom:52px;max-width:calc(100vw - 40px);box-sizing:border-box}
+}
 /* capture-clean: dedicated screenshot UI — hide every overlay; world canvas stays */
 html.tm-capture-clean ${CAPTURE_HIDE_SELECTORS.join(',html.tm-capture-clean ')}{visibility:hidden!important;opacity:0!important;display:none!important;pointer-events:none!important}
 html.tm-capture-clean #tm-ui-dock,html.tm-capture-clean #intro,html.tm-capture-clean #startup-progress,html.tm-capture-clean #load-error{display:none!important}

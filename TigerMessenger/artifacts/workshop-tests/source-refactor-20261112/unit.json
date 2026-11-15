@@ -1,0 +1,47 @@
+[
+  {
+    "test": "mip-chain",
+    "exitCode": 0,
+    "output": "PASS 自定义 mip：线性空间平均、远处收敛 / sharp 保中景、Kaiser、三线性、各向异性 {\"box\":{\"mean1\":0.214,\"amp1\":0,\"amp4\":0,\"last\":0.214},\"linear\":{\"mean1\":0.5,\"amp1\":0,\"amp4\":0,\"last\":0.5},\"kaiser\":{\"mean1\":0.5,\"amp1\":0.048,\"amp4\":0.001,\"last\":0.5},\"sharp\":{\"mean1\":0.5,\"amp1\":0,\"amp4\":0,\"last\":0.5},\"stripesAmp2\":{\"linear\":0.967,\"sharp\":1,\"kaiser\":0.695},\"isoRange\":0,\"anisoRange\":0.8}\n"
+  },
+  {
+    "test": "mip-ground",
+    "exitCode": 0,
+    "output": "PASS migrated ground consumer: LOD active, reduced far energy/shimmer, repeat addressing, immutable source, bounded inputs [{\"filter\":\"linear\",\"mode\":\"none\",\"meanAbsDelta\":5.061217948717949},{\"filter\":\"linear\",\"mode\":\"trilinear\",\"meanAbsDelta\":0.0011217948717948717},{\"filter\":\"linear\",\"mode\":\"aniso\",\"meanAbsDelta\":0.023397435897435898}]\n"
+  },
+  {
+    "test": "outline-pass",
+    "exitCode": 0,
+    "output": "PASS CPU 参考：剪影/折痕/平面无线、depthMix=0 只留法线反差、外圈淡出、线宽×DPR；GPU 类 uniform 换算（未做浏览器渲染） {\"width1\":6,\"width2\":12}\n"
+  },
+  {
+    "test": "outline-painted",
+    "exitCode": 0,
+    "output": "PASS mapped normal source and threshold toggles, exception-safe material/visibility/render-target restoration, texture ownership\n"
+  },
+  {
+    "test": "paint-normal",
+    "exitCode": 0,
+    "output": "PASS chunky painted normals: chunk-flat, tiling, mesh perturb w/o moving vertices, World top variation {\"sameInChunk\":0.937,\"worldTopStd\":0.105,\"audit\":[[9,0.101,17.9],[16,0.106,18.1],[25,0.134,18.5],[36,0.136,18.8]]}\n"
+  },
+  {
+    "test": "view-post-extras",
+    "exitCode": 0,
+    "output": "PASS view-post-extras: URL/开关默认关, 渲染接管(outline 3 遍/smear 合成/直通), GLSL 拖影 = CPU smearImage, 软法线写回与还原, 风旗链式着色器\n"
+  },
+  {
+    "test": "sprite-atlas",
+    "exitCode": 0,
+    "output": "PASS SpriteAtlas bounded grow/update/free/padding/rollback; 15 differential radial layouts match original\n"
+  },
+  {
+    "test": "atlas",
+    "exitCode": 0,
+    "output": "PASS 24000 dynamic operations, stale/foreign handles, area conservation, disjoint stable slots, explicit fragmentation and 6000-depth traversal\n"
+  },
+  {
+    "test": "atlas-crossleaf",
+    "exitCode": 0,
+    "output": "PASS cross-leaf band reuse, stable survivors, key ownership, exact area and 9000 candidate operations\n"
+  }
+]

@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {styleMat} from '../style/materials.js';
 import {morrisWaterGeometry} from './morrisPreservedRegions.js';
-import {installMorrisTownscaper} from './morrisTownscaper.js?v=apostles-r4';
+import {installMorrisTownscaper} from './morrisTownscaper.js?v=viewport-r1';
 import {installMorrisCastlePatrol} from './morrisCastlePatrolRoute.js?v=reacode-refactor-r1';
 // A homothetic shoreline gives exactly 4/5 of the island's projected area.
 export function createMorrisLakeTerrain(R,edge){

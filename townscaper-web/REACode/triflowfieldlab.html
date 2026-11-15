@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>三角流场 · 每格一条指向出口边中点的向量，路径靠 portal + 漏斗拉直</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 74%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:150ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:10px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:15px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>三角流场：每格只记一件事 —— 从哪条边出去；路径是 portal 序列 + 漏斗拉出来的</h1>
+  <p>原片（f02/f05）里青、粉两簇线从各自那堆单位出发、<b>平滑弯曲</b>地流向自己的旗子，没有一条是沿方格轴向的直角折线。
+     机制：同一片陆地三角化后，以目标三角形为源做一次 Dijkstra，每格只记「出口边」，方向 = 指向该边中点；
+     右图是同一片陆地上的方格流场对照（橙 = 8 邻接、蓝虚线 = 4 邻接）。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { buildMesh, buildField, triAt, streamlines, portals, funnel, squareField, traceSquarePath, measure, CFG } from './src/triflowfield.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#a9791a', GOOD = '#146c4a', BAD = '#b4402f';
+const CYAN = '#128a8f', PINK = '#bb3f6b', ORANGE = '#c0741c', BLUE = '#3a5d9e';
+
+const M = measure();
+const MESH = buildMesh();
+const F = buildField(MESH, M.goalTri);
+const SL = streamlines(MESH, F, 130, 3);
+const SM = funnel(portals(MESH, F, M.startTri));
+const RAW = (() => { const p = []; let t = M.startTri, g = 0;
+  p.push([MESH.T[t].centroid[0], MESH.T[t].centroid[1]]);
+  while (t !== M.goalTri && g++ < 4000) { const kk = F.exitEdge[t]; if (!kk) break;
+    const e = MESH.edges.get(kk); p.push([e.mid[0], e.mid[1]]); t = F.exitTo[t]; if (t < 0) break; }
+  p.push([MESH.T[M.goalTri].centroid[0], MESH.T[M.goalTri].centroid[1]]); return p; })();
+
+const SQ8 = squareField(M.gc, true), SQ4 = squareField(M.gc, false);
+const P8 = traceSquarePath(SQ8, M.sc), P4 = traceSquarePath(SQ4, M.sc);
+
+// ---- 版面 ----
+const PAD = 14;
+const PA = { x: 20, y: 122, w: 612, h: 452 };
+const PB = { x: 648, y: 122, w: 612, h: 452 };
+const TC = { x: 20, y: 584, w: 612, h: 150 };
+const NC = { x: 648, y: 584, w: 612, h: 150 };
+const WX = CFG.C * CFG.CELL, WY = CFG.R * CFG.CELL;
+// 面板内要留出「标题 + 副标题」48px 与底部小注 28px，图形只能落在中间那块，
+// 否则高度场很低的三角形填色接近白、只有线框可见，会爬到标题字上（第一版就撞了）。
+const TOPIN = 48, BOTIN = 28;
+const fit = (p) => Math.min((p.w - 2 * PAD) / WX, (p.h - TOPIN - BOTIN) / WY);
+const SA = fit(PA), SB = fit(PB);
+const cam = (p, s) => ({ p, s, ox: p.x + (p.w - WX * s) / 2, oy: p.y + TOPIN + (p.h - TOPIN - BOTIN - WY * s) / 2 });
+const CA = cam(PA, SA), CB = cam(PB, SB);
+const X = (c, x) => c.ox + x * c.s;
+const Y = (c, y) => c.oy + y * c.s;
+
+// ---- 小工具 ----
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.textBaseline = 'alphabetic'; ctx.fillText(s, x, y);
+};
+const panel = (p, title, sub) => {
+  ctx.save();
+  ctx.fillStyle = 'rgba(255,255,255,.97)';
+  ctx.strokeStyle = '#dbe4e0'; ctx.lineWidth = 1;
+  const r = 10;
+  ctx.beginPath(); ctx.moveTo(p.x + r, p.y);
+  ctx.arcTo(p.x + p.w, p.y, p.x + p.w, p.y + p.h, r);
+  ctx.arcTo(p.x + p.w, p.y + p.h, p.x, p.y + p.h, r);
+  ctx.arcTo(p.x, p.y + p.h, p.x, p.y, r);
+  ctx.arcTo(p.x, p.y, p.x + p.w, p.y, r);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  txt(title, p.x + 14, p.y + 20, INK, '650 12.5px -apple-system,system-ui,sans-serif');
+  if (sub) txt(sub, p.x + 14, p.y + 37, MUTED, '11.5px -apple-system,system-ui,sans-serif');
+  ctx.restore();
+};
+const poly = (c, pts, color, w, dash = null) => {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(X(c, q[0]), Y(c, q[1])) : ctx.moveTo(X(c, q[0]), Y(c, q[1])));
+  ctx.stroke(); ctx.restore();
+};
+
+// ---- 背景 ----
+ctx.fillStyle = '#eef3f1'; ctx.fillRect(0, 0, 1280, 800);
+
+// ================= 左：三角网格 + 流线 + 漏斗路径 =================
+panel(PA, '三角网格上的流场（344 个三角形，一次 Dijkstra，全体单位共享）', '青/粉 = 从两侧出发的流线（逐边中点）；黑 = 漏斗拉直后的行军路径');
+for (const t of MESH.T) {
+  const [a, b, c] = t.v.map((k) => MESH.V[k]);
+  const h = (a.h + b.h + c.h) / 3;
+  const k = Math.max(0, Math.min(1, (h + 0.35) / 1.05));
+  ctx.fillStyle = `hsl(${150 - k * 40} ${18 + k * 26}% ${78 - k * 26}%)`;
+  ctx.beginPath();
+  ctx.moveTo(X(CA, a.x), Y(CA, a.y)); ctx.lineTo(X(CA, b.x), Y(CA, b.y)); ctx.lineTo(X(CA, c.x), Y(CA, c.y));
+  ctx.closePath(); ctx.fill();
+}
+// 细网格线
+ctx.save(); ctx.strokeStyle = 'rgba(31,43,40,.18)'; ctx.lineWidth = 0.7;
+for (const e of MESH.edges.values()) {
+  const a = MESH.V[e.a], b = MESH.V[e.b];
+  ctx.beginPath(); ctx.moveTo(X(CA, a.x), Y(CA, a.y)); ctx.lineTo(X(CA, b.x), Y(CA, b.y)); ctx.stroke();
+}
+ctx.restore();
+// 流线
+for (const line of SL) {
+  const c0 = line[0];
+  const col = c0[0] < WX * 0.5 ? CYAN : PINK;
+  ctx.save(); ctx.globalAlpha = 0.5; poly(CA, line, col, 1.1); ctx.restore();
+}
+poly(CA, RAW, 'rgba(31,43,40,.30)', 1.2, [4, 3]);
+poly(CA, SM, INK, 2.4);
+// 起点 / 目标
+const sPt = [MESH.T[M.startTri].centroid[0], MESH.T[M.startTri].centroid[1]];
+const gPt = [MESH.T[M.goalTri].centroid[0], MESH.T[M.goalTri].centroid[1]];
+const dot = (c, q, col, r = 4.5) => { ctx.fillStyle = col; ctx.beginPath();
+  ctx.arc(X(c, q[0]), Y(c, q[1]), r, 0, 7); ctx.fill(); };
+dot(CA, sPt, INK, 4);
+// 旗子
+ctx.save();
+const fx = X(CA, gPt[0]), fy = Y(CA, gPt[1]);
+ctx.strokeStyle = INK; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(fx, fy); ctx.lineTo(fx, fy - 26); ctx.stroke();
+ctx.fillStyle = PINK; ctx.beginPath(); ctx.moveTo(fx, fy - 26); ctx.lineTo(fx + 20, fy - 20); ctx.lineTo(fx, fy - 14); ctx.closePath(); ctx.fill();
+ctx.restore();
+txt('起点', X(CA, sPt[0]) - 2, Y(CA, sPt[1]) - 8, INK, '600 10.5px -apple-system,sans-serif', 'center');
+ctx.save();
+ctx.fillStyle = 'rgba(255,255,255,.85)'; ctx.fillRect(fx + 30, fy - 40, 96, 16);
+ctx.restore();
+txt('旗 = 目标三角形', fx + 34, fy - 28, MUTED, '11px -apple-system,sans-serif');
+// 方向箭头（抽样 40 个）
+ctx.save(); ctx.strokeStyle = 'rgba(12,86,60,.95)'; ctx.lineWidth = 1.4;
+let shown = 0;
+for (let i = 0; i < MESH.T.length; i += 9) {
+  const dx = F.dir[i * 2], dy = F.dir[i * 2 + 1];
+  if (!dx && !dy) continue;
+  const c = MESH.T[i].centroid, L = 13;
+  const x0 = X(CA, c[0]), y0 = Y(CA, c[1]);
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x0 + dx * L, y0 + dy * L); ctx.stroke();
+  shown++;
+}
+ctx.restore();
+txt('绿短线 = 该格记的方向（指向出口边中点）', PA.x + 15, PA.y + PA.h - 9, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 右：方格流场对照 =================
+panel(PB, '同一片陆地的方格流场（橙 = 8 邻接，蓝虚线 = 4 邻接）', '方格的方向只能取 8 个轴向；4 邻接更只剩 4 个，路径只能沿格线折');
+for (let n = 0; n < SQ8.N; n++) {
+  if (SQ8.dist[n] === Infinity) continue;
+  const ci = Math.floor(n / CFG.R), cj = n % CFG.R;
+  const h = (CFG.CELL * 0.5 + ci * CFG.CELL) / WX;
+  ctx.fillStyle = `hsl(150 ${14}% ${80 - h * 12}%)`;
+  ctx.fillRect(X(CB, ci * CFG.CELL) + 0.5, Y(CB, cj * CFG.CELL) + 0.5, CFG.CELL * CB.s - 1, CFG.CELL * CB.s - 1);
+}
+ctx.save(); ctx.strokeStyle = 'rgba(31,43,40,.12)'; ctx.lineWidth = 0.7;
+for (let n = 0; n < SQ8.N; n++) {
+  if (SQ8.dist[n] === Infinity) continue;
+  const ci = Math.floor(n / CFG.R), cj = n % CFG.R;
+  ctx.strokeRect(X(CB, ci * CFG.CELL), Y(CB, cj * CFG.CELL), CFG.CELL * CB.s, CFG.CELL * CB.s);
+}
+ctx.restore();
+// 方格方向箭头
+ctx.save(); ctx.strokeStyle = 'rgba(38,70,130,.85)'; ctx.lineWidth = 1.2;
+for (let n = 0; n < SQ8.N; n++) {
+  if (SQ8.dist[n] === Infinity) continue;
+  const ci = Math.floor(n / CFG.R), cj = n % CFG.R;
+  let bn = -1, bd = SQ8.dist[n];
+  for (const [di, dj] of SQ8.NB) {
+    const ni = ci + di, nj = cj + dj;
+    if (ni < 0 || nj < 0 || ni >= CFG.C || nj >= CFG.R) continue;
+    const m = ni * CFG.R + nj;
+    if (SQ8.dist[m] < bd) { bd = SQ8.dist[m]; bn = m; }
+  }
+  if (bn < 0) continue;
+  const cx = X(CB, (ci + 0.5) * CFG.CELL), cy = Y(CB, (cj + 0.5) * CFG.CELL);
+  const dx = (Math.floor(bn / CFG.R) - ci), dy = (bn % CFG.R - cj);
+  const L = Math.hypot(dx, dy) || 1;
+  ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + dx / L * 11, cy + dy / L * 11); ctx.stroke();
+}
+ctx.restore();
+poly(CB, P4, BLUE, 1.8, [5, 3]);
+poly(CB, P8, ORANGE, 2.2);
+const gSq = [(Math.floor(M.gc / CFG.R) + 0.5) * CFG.CELL, (M.gc % CFG.R + 0.5) * CFG.CELL];
+dot(CB, gSq, ORANGE, 4.5);
+dot(CB, [(Math.floor(M.sc / CFG.R) + 0.5) * CFG.CELL, (M.sc % CFG.R + 0.5) * CFG.CELL], INK, 4);
+txt('4 邻接：408 = 1.265× 直线', PB.x + 15, PB.y + PB.h - 9, BLUE, '11px -apple-system,sans-serif');
+txt('8 邻接：348 = 1.080× · 漏斗版 333 = 1.046×', PB.x + 250, PB.y + PB.h - 9, ORANGE, '11px -apple-system,sans-serif');
+
+// ================= 左下：三档对照表 =================
+panel(TC, '三档对照（同一片陆地、同一对起终点，1 格 = 34 单位）', '');
+const rows = [
+  ['三角 + 漏斗', M.smLen.toFixed(1), M.smRatio.toFixed(3), M.smBends, GOOD],
+  ['三角 · 逐边中点（不拉直）', M.pathLen.toFixed(1), M.ratio.toFixed(3), M.bends, MUTED],
+  ['方格 8 邻接', M.sqLen.toFixed(1), M.sqRatio.toFixed(3), M.sqBends, ORANGE],
+  ['方格 4 邻接', M.sq4Len.toFixed(1), M.sq4Ratio.toFixed(3), M.sq4Bends, BLUE],
+];
+let ry = TC.y + 58;
+const cx = [TC.x + 16, TC.x + 262, TC.x + 356, TC.x + 452];
+txt('读法', cx[0], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+txt('长度', cx[1], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+txt('长度/直线', cx[2], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+txt('拐弯 >5°', cx[3], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+for (const [name, len, ratio, bends, col] of rows) {
+  txt(name, cx[0], ry, col, '600 12px -apple-system,sans-serif');
+  txt(len, cx[1], ry, INK, '600 12px ui-monospace,monospace');
+  txt(ratio, cx[2], ry, INK, '600 12px ui-monospace,monospace');
+  txt(String(bends), cx[3], ry, INK, '600 12px ui-monospace,monospace');
+  ry += 23;
+}
+txt(`场上方向取值：三角 ${M.dirs} 种（${M.nz} 个非零格）· 方格 ${M.sqDirs} 种 —— 方格方向只能是 45° 的整数倍`,
+  TC.x + 16, TC.y + TC.h - 10, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 右下：结论 =================
+panel(NC, '这一条真正钉住的是什么', '');
+const lines = [
+  [`网格自检：${M.tri} 三角形 / ${M.edge} 条边，其中 ${M.shared} 条被两个三角形共用、${M.boundaryEdges} 条岸线边各只属于 1 个。`, INK],
+  [`可达 ${M.reached}/${M.tri}（不可达 ${M.unreachable}）：一次 Dijkstra，全体单位共用，重算 6ms。`, INK],
+  [`逐格箭头不等于路径：箭头相对"直指目标"平均偏 ${M.eTri.toFixed(1)}°，所以必须有 portal 序列 + 漏斗。`, BAD],
+  [`漏斗把 ${M.pathLen.toFixed(0)}（${M.ratio.toFixed(3)}×，${M.bends} 次拐弯）压到 ${M.smLen.toFixed(0)}（${M.smRatio.toFixed(3)}×，${M.smBends} 次拐弯）。`, GOOD],
+];
+let ny = NC.y + 58;
+for (const [s, col] of lines) {
+  txt('·', NC.x + 15, ny, GOLD, '700 12px -apple-system,sans-serif');
+  txt(s, NC.x + 26, ny, col, '11.5px -apple-system,sans-serif');
+  ny += 25;
+}
+
+// ================= 底条 =================
+document.getElementById('stats').innerHTML = [
+  `三角形 <b>${M.tri}</b>`, `边 <b>${M.edge}</b>`, `坡度惩罚 SLOW=<b>${CFG.SLOW}</b>`,
+  `顶点抖动 ±<b>${(CFG.JIT * 100).toFixed(0)}%</b> 格宽`,
+  `漏斗后 <b class="ok">${M.smRatio.toFixed(3)}×</b> 直线`,
+  `方格4邻 <b class="no">${M.sq4Ratio.toFixed(3)}×</b>`,
+  `方向 <b>${M.dirs}</b> vs <b>${M.sqDirs}</b>`,
+].join('<span style="opacity:.28">|</span>');
+
+window.__lab = { m: M, streamlines: SL.length };
+</script>
+</body>
+</html>

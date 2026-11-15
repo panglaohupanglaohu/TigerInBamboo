@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "raw": 113,
+  "merged": 7,
+  "closed": 6,
+  "active": 100,
+  "counts": {
+    "learning": 8,
+    "implementation": 81,
+    "validation": 8,
+    "review": 3
+  },
+  "errors": [],
+  "workerResult": {
+    "edits": {
+      "1": {
+        "dx": 0.6,
+        "dy": 0,
+        "dz": 0,
+        "ry": 0,
+        "s": 1,
+        "hidden": false
+      }
+    },
+    "report": [
+      {
+        "id": "object.path-spacing",
+        "status": "applied",
+        "params": {
+          "axis": 0,
+          "maxMove": 1
+        },
+        "count": 1,
+        "focus": [
+          "1"
+        ]
+      }
+    ]
+  },
+  "scope": "live API, isolated parent UI and real object Worker; no game preview or save"
+}

@@ -1,0 +1,118 @@
+{
+  "errors": [],
+  "grids": [
+    {
+      "grid": "quad",
+      "width": 1280,
+      "height": 900,
+      "changed": 60922,
+      "sourceMesh": true,
+      "materialRestored": true,
+      "geometrySame": true,
+      "worldSame": true,
+      "stats": {
+        "mapSize": 128,
+        "source": "core/paint-normal.js",
+        "mesh": "f29297ad-8f4e-4434-9922-7efc5d2bdd7f"
+      },
+      "restored": {
+        "mismatched": 3467,
+        "disposed": 1,
+        "sourceCleared": true
+      }
+    },
+    {
+      "grid": "mixed",
+      "width": 1280,
+      "height": 900,
+      "changed": 73825,
+      "sourceMesh": true,
+      "materialRestored": true,
+      "geometrySame": true,
+      "worldSame": true,
+      "stats": {
+        "mapSize": 128,
+        "source": "core/paint-normal.js",
+        "mesh": "6c68aad8-f615-4fe6-b081-ae641cb5947b"
+      },
+      "restored": {
+        "mismatched": 3617,
+        "disposed": 1,
+        "sourceCleared": true
+      }
+    }
+  ],
+  "sourceHashes": {
+    "src/light/mip-chain.js": "5c15332c0a0df1032c74691acefe33bf6f897613208771225f34510e15948844",
+    "src/light/mip-ground.js": "0e40c39ec428889798288c2c2d3531ce61b7245d1aeb4657acd4fe16a5dca6d4",
+    "mip-ground.html": "b3dbb3ab2904e8ae13b9942511f37bffef57e9e72c9b0a1a61067c65080f30b3",
+    "src/world/outline-pass.js": "d721a09e25b6ed543ca73c925d3f6bc6b1466f18dbc5db3d11187a14236a9a12",
+    "src/world/outline-painted-normal.js": "6dde11f4ae9a16f12dac0286ebdbbf92782d0025db215502908b0c198c24ad05",
+    "src/world/view-post-extras.js": "e93063f215c66929835f663670b7d52a809654e53c69a205f7b9279cfde47a84",
+    "outline-painted.html": "9a318465773a9642c28a750b160b67884b854d8a3ded72bf8b7758acc9e4e331",
+    "src/core/atlas.js": "628b497799dd296fbc922a24c9b97d2fab3b9faadfb62788ee8325c7d421faff",
+    "src/core/sprite-atlas.js": "a4771d9ce14cf7b0105f4efe9c7a78c90c16dc9a649912159ec7d93a38514306",
+    "sprite-atlas.html": "129315cca5a5a8b8592aee19b0816aee1cf6def342f2e39c9502970df4c95323"
+  },
+  "mip": {
+    "rows": [
+      {
+        "mode": "none",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          7
+        ],
+        "farEnergy": 9321.73793906241
+      },
+      {
+        "mode": "trilinear",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          7
+        ],
+        "farEnergy": 5.867662843922469
+      },
+      {
+        "mode": "aniso",
+        "levels": 8,
+        "lod": [
+          1.1337513888888446,
+          7
+        ],
+        "farEnergy": 182.75421284995537
+      }
+    ],
+    "shimmer": {
+      "rows": [
+        {
+          "filter": "linear",
+          "mode": "none",
+          "meanAbsDelta": 3.3611689814814816
+        },
+        {
+          "filter": "linear",
+          "mode": "trilinear",
+          "meanAbsDelta": 0.0004918981481481481
+        },
+        {
+          "filter": "linear",
+          "mode": "aniso",
+          "meanAbsDelta": 0.014525462962962962
+        }
+      ],
+      "offsetUnits": "fraction of a texel"
+    }
+  },
+  "sprite": {
+    "insert": 16,
+    "free": 15,
+    "radial": true
+  },
+  "fileList": {
+    "total": 290,
+    "currentDeliveries": 4
+  },
+  "passed": true
+}

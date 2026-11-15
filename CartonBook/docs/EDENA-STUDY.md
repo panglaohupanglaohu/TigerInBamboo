@@ -48,3 +48,16 @@
 | 6 | 景深：前景空地、中景人、远景建筑 | camera `pitch`/`dist` 注释要求；取景靠远距+略俯/眼平 |
 
 参考：Reactor Edena 文、CAF Sur l'étoile p.20 地平线、仓内 `moebius-style-research-20261007`（游戏向，非 BD 分页）。
+
+
+## 2026-11-07 实际看图补充与长篇册页应用
+
+本轮实际查看 DOP 公开图像（不是通读原书）：page5 城市/金字塔与前景建筑框景；page6 对角坡面、背向行人与留白；page7 巨型空间与微小人群；page8 同主体相邻上下格的结构变化；page11 天地留白与行进载具；page16 并列竖格中的空间递近；page20 动作姿态；page24 眼高人物与壁画的尺度。文件留在 artifacts/bookshop-review/edena-study/，仅作研究，不写入漫画或PDF。
+
+公开原图入口：https://doorofperception.com/2017/11/moebius-the-world-of-edena/
+作者机构：https://www.moebius.fr/pages/univers/le-monde-dedena
+出版社书目：https://www.penguinrandomhouse.com/books/546650/moebius-library-the-world-of-edena-by-moebius/
+
+观察与本项目设计决定分开：两页连续封面是本次用户要求，不声称所有 Edena 封面都为跨页。54页长篇分别采用横带、纵向对照、上双下宽、细节插入、重心偏置、静场收束；每页明确事件，镜头由场所建立走向人物/物件，再回到环境。故事版台词为原创与游戏家书改编，不复制 Edena 台词。
+
+仅有原页分析不等于成品达标。真实截图、无HUD、角色身份、页面渲染和PDF页数需要独立验收。图像不够讲清事件时，应重新构图与补拍，不能以增加空页或重复图片凑页数。

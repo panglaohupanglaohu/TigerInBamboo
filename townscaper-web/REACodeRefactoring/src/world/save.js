@@ -4,6 +4,12 @@
  *
  * v5：[3b 版本][2b 场景][6b 网格半径]，然后是游程记录：
  *   [1b 非空] [12b 实心掩码][12b 岩石掩码][5b 颜色+1][1b 河道]  [5b 游程-1][1b 继续]…
+ * 可选尾段（navgraph 1795831296952041691）：World.riverFlow 有效时追加 [1b=1]，然后按格序
+ *   每个河格 [3b 下游邻边槽，7=无]。旧码的补零尾巴首位是 0 → 读作「无流向」，旧存档照读。
+ * 可选尾段 2（r55，splice 1584623053061099520）：World.splicedHouses 非空时追加
+ *   [流向段之后 1b=1；若没有流向段则先写 1b=0 再写 1b=1]，然后 [W 位 个数]，每栋按格序
+ *   [W 位 格号][6b inset×100][2b 层数-1][6b sink×100]，W = ceil(log2(格数+1))。
+ *   旧存档的补零尾巴不会出现「0 后跟 1」或「流向段后 1」，所以旧码照读、读出来没有嵌入房子。
  */
 
 import { MAX_LEVEL } from '../core/world.js';
@@ -44,6 +50,28 @@ export function encodeWorld(world, scene) {
     }
     i += run;
   }
+  const flow = world.riverFlow?.version === world.version ? world.riverFlow.flowTo : null;
+  const spliced = world.splicedHouses?.size ? [...world.splicedHouses].sort((a, b) => a[0] - b[0]) : null;
+  if (flow) {
+    push(1, 1);
+    for (let i = 0; i < n; i++) {
+      if (!world.river[i]) continue;
+      const slot = flow[i] < 0 ? -1 : world.cells[i].edgeNeighbors.indexOf(flow[i]);
+      if (flow[i] >= 0 && (slot < 0 || slot > 6)) throw new Error('河流流向不是相邻格');
+      push(slot < 0 ? 7 : slot, 3);
+    }
+  }
+  if (spliced) {
+    if (!flow) push(0, 1);
+    push(1, 1);
+    const W = idWidth(n);
+    push(spliced.length, W);
+    for (const [id, h] of spliced) {
+      const inset = Math.round(h.inset * 100), sink = Math.round(h.sink * 100);
+      if (!(id >= 0 && id < n) || inset < 1 || inset > 49 || sink < 0 || sink > 49 || !(h.stories >= 1 && h.stories <= 4)) throw new Error('嵌入房子参数越界');
+      push(id, W); push(inset, 6); push(h.stories - 1, 2); push(sink, 6);
+    }
+  }
   let out = '';
   for (let i = 0; i < bits.length; i += 6) {
     let v = 0;
@@ -71,7 +99,7 @@ export function decodeWorld(str, world) {
   if (typeof str !== 'string') throw new Error('存档必须是字符串');
   str = str.trim();
   const n = world.solid.length;
-  if (str.length > Math.ceil((11 + n * 37) / 6)) throw new Error('存档过长');
+  if (str.length > Math.ceil((14 + n * 43 + (n + 1) * (idWidth(n) + 14)) / 6)) throw new Error('存档过长');
   const bits = [];
   for (const ch of str) {
     const v = INDEX.get(ch);
@@ -101,8 +129,55 @@ export function decodeWorld(str, world) {
     }
     for (let k = 0; k < run; k++, i++) { next.solid[i] = s; next.rock[i] = r; next.color[i] = c; next.river[i] = rv; }
   }
+  let flowTo = null;
+  if (p < bits.length && bits[p] === 1) {
+    p++;
+    flowTo = new Int32Array(n).fill(-1);
+    for (let i = 0; i < n; i++) {
+      if (!next.river[i]) continue;
+      const slot = read(3);
+      if (slot === 7) continue;
+      const to = world.cells[i].edgeNeighbors[slot];
+      if (to === undefined || to < 0) throw new Error('河流流向槽位无效');
+      flowTo[i] = to;
+    }
+  }
+  let spliced = null;
+  if (flowTo ? bits[p] === 1 : bits[p] === 0 && bits[p + 1] === 1) {
+    p += flowTo ? 1 : 2;
+    const W = idWidth(n), count = read(W);
+    if (count < 1 || count > n) throw new Error('嵌入房子个数无效');
+    spliced = [];
+    for (let k = 0, prev = -1; k < count; k++) {
+      const id = read(W), inset = read(6), stories = read(2) + 1, sink = read(6);
+      if (id <= prev || id >= n || inset < 1 || inset > 49 || sink > 49) throw new Error('嵌入房子记录无效');
+      const g = 32 - Math.clz32(next.rock[id]);
+      if (!next.rock[id] || next.river[id] || (next.solid[id] >> g) & 1) throw new Error('嵌入房子不在裸露岩顶上');
+      spliced.push([id, { inset: inset / 100, stories, sink: sink / 100 }]);
+      prev = id;
+    }
+  }
   // Encoder adds at most five zero padding bits; reject appended payloads.
   if (bits.length - p > 5 || bits.slice(p).some(Boolean)) throw new Error('存档有多余数据');
-  world.restore(next);
+  world.restore({ ...next, spliced });
+  if (flowTo) world.riverFlow = { ...riverFlowChains(world, flowTo), flowTo, version: world.version, restored: true };
   return scene;
+}
+
+function idWidth(n) { return Math.max(1, Math.ceil(Math.log2(n + 1))); }
+
+/** 读档后从 flowTo 重建链（头 = 无上游的河格），河口取链尾相邻的海格；汇流重叠段只出现在先开凿的链里。 */
+function riverFlowChains(world, flowTo) {
+  const n = flowTo.length, indeg = new Uint8Array(n), paths = [], mouths = [];
+  for (let i = 0; i < n; i++) if (flowTo[i] >= 0) indeg[flowTo[i]] = 1;
+  for (let i = 0; i < n; i++) {
+    if (indeg[i] || flowTo[i] < 0) continue;
+    const path = [i], seen = new Set(path);
+    for (let c = flowTo[i]; c >= 0 && !seen.has(c); c = flowTo[c]) { path.push(c); seen.add(c); }
+    paths.push(path);
+    const end = world.cells[path[path.length - 1]];
+    const mouth = end.edgeNeighbors.find((id) => id >= 0 && world.ground(world.cells[id]) === 0);
+    if (mouth !== undefined && !mouths.includes(mouth)) mouths.push(mouth);
+  }
+  return { paths, mouths };
 }

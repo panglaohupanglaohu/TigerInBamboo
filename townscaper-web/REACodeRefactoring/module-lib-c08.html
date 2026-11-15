@@ -1,0 +1,50 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><link rel="icon" href="data:,"><title>三角 + 方格 tile 模块库（方格 = 4 个对角子三角）· r56 C08</title>
+<style>body{margin:0;background:#262a2b;color:#dfe;font:13px/1.5 system-ui,"PingFang SC",sans-serif}#ui{margin:12px;max-width:980px;background:rgba(255,255,255,.93);color:#1d2f36;border-radius:12px;padding:10px 12px}#ui p{margin:3px 0;font-size:12px;color:#3e5a5e}canvas{display:block;margin:0 12px}#stat{font-size:12px;color:#2f7f8a}</style>
+<div id="ui"><a href="index.html">← 首页</a> · <a href="joint3d.html">联合约束 3D 求解</a> · <a href="wfc.html?subtiles=1">WFC 子格</a>
+<h3 style="margin:4px 0">模块库：三角 tile 与「切成 4 个三角」的方格 tile（1447494168448753667）</h3>
+<p>每个模块直接取自共享 core/wfc.js 的 <code>jointSubtileCatalog</code>：方格 tile 被拆成 4 个子三角 tile（每个子三角一条外边 = 原方格那条边的插槽，两条内边 = 只和同一方格的相邻子三角匹配的「辐条」插槽），三角 tile 原样。外边颜色 = 插槽高度（蓝 0 / 绿 1 / 黄 2），细白线 = 辐条，形体按插槽高度做成平 / 坡 / 曲面（程序化替代原 3D 美术）。</p>
+<div id="stat"></div></div>
+<canvas id="c" width="1240" height="980"></canvas>
+<script type="module">
+import { buildSquareGrid, buildMixedGrid, buildTriangularSubgrid } from './src/core/grid.js';
+import { jointSubtileCatalog } from './src/core/wfc.js';
+const L = 3, edgesOf = (n, code) => { const e = []; let x = code; for (let i = 0; i < n; i++) { e.push(x % L); x = Math.floor(x / L); } return e; };
+const quadTiles = Array.from({ length: L ** 4 }, (_, c) => ({ id: 'q' + c, edges: edgesOf(4, c) }));
+const triTiles = Array.from({ length: L ** 3 }, (_, c) => ({ id: 't' + c, edges: edgesOf(3, c) }));
+const sub = buildTriangularSubgrid(buildMixedGrid({ radius: 6, seed: 5 }));
+const cat = jointSubtileCatalog(sub, { quadTiles, triTiles });
+// group catalog subtiles back into quad modules: quad id -> slot e -> one representative subtile
+const mods = new Map();
+for (const t of cat.tiles) { const m = /^quad:(q\d+)#(\d):/.exec(t.id); if (!m) continue; const q = mods.get(m[1]) || mods.set(m[1], new Map()).get(m[1]); if (!q.has(+m[2])) q.set(+m[2], t); }
+const tris = cat.tiles.filter((t) => t.id.startsWith('tri:'));
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+ctx.fillStyle = '#262a2b'; ctx.fillRect(0, 0, cv.width, cv.height);
+const COL = ['#4a8fe0', '#5ccf8a', '#e8cf4a'];
+const iso = (ox, oy, s) => (x, z, h) => [ox + (x - z) * s * .9, oy + (x + z) * s * .5 - h * s * .55];
+const shade = (a, b, c) => { const u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], v = [c[0] - a[0], c[1] - a[1], c[2] - a[2]], n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]], l = Math.hypot(...n) || 1, d = Math.abs((n[0] * -.4 + n[1] * .8 + n[2] * -.45) / l); return `rgb(${60 + 110 * d},${95 + 110 * d},${92 + 95 * d})`; };
+function face(P, pts) { const q = pts.map(([x, h, z]) => P(x, z, h)); ctx.beginPath(); q.forEach((p, i) => (i ? ctx.lineTo(...p) : ctx.moveTo(...p))); ctx.closePath(); ctx.fillStyle = shade(...pts); ctx.fill(); }
+let spokes = 0, drawn = 0;
+const quadIds = [...mods.keys()].filter((id) => mods.get(id).size === 4);
+quadIds.forEach((id, i) => {
+  const col = i % 12, row = Math.floor(i / 12), P = iso(70 + col * 100, 40 + row * 82, 40), slots = mods.get(id);
+  const C = [.5, 0, .5], corner = [[0, 0], [1, 0], [1, 1], [0, 1]], hs = [0, 1, 2, 3].map((e) => slots.get(e).edges.find((x) => typeof x === 'number'));
+  const ch = hs.reduce((a, b) => a + b, 0) / 4 * .45; C[1] = ch;
+  for (let e = 0; e < 4; e++) {
+    const t = slots.get(e), [ax, az] = corner[e], [bx, bz] = corner[(e + 1) % 4], h = hs[e] * .45;
+    // curved/slope surface: outer edge at its socket height, centre at the mean, split by a mid point for a gentle bend
+    const A = [ax, h, az], B = [bx, h, bz], M = [(ax + bx) / 2 * .8 + .1, (h + ch) / 2 + .08 * (hs[e] - 1), (az + bz) / 2 * .8 + .1];
+    face(P, [A, B, M]); face(P, [A, M, C]); face(P, [M, B, C]);
+    ctx.strokeStyle = COL[hs[e]]; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(...P(ax, az, h)); ctx.lineTo(...P(bx, bz, h)); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.65)'; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(...P(ax, az, h)); ctx.lineTo(...P(.5, .5, ch)); ctx.stroke();
+    spokes += t.edges.filter((x) => typeof x === 'string' && x.startsWith('spoke:')).length;
+  }
+  drawn++;
+});
+tris.slice(0, 27).forEach((t, i) => {
+  const col = i % 12, row = 7 + Math.floor(i / 12), P = iso(70 + col * 100, 60 + row * 82, 40);
+  const V = [[0, 0], [1, 0], [.5, .87]], hs = t.edges, ch = hs.reduce((a, b) => a + b, 0) / 3 * .45, C = [.5, ch, .29];
+  for (let e = 0; e < 3; e++) { const [ax, az] = V[e], [bx, bz] = V[(e + 1) % 3], h = hs[e] * .45; face(P, [[ax, h, az], [bx, h, bz], C]); ctx.strokeStyle = COL[hs[e]]; ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(...P(ax, az, h)); ctx.lineTo(...P(bx, bz, h)); ctx.stroke(); }
+});
+document.getElementById('stat').textContent = `目录 ${cat.tiles.length} 个子 tile（三角 ${tris.length}）· 方格模块 ${drawn} 个 = ${drawn * 4} 个子三角，辐条插槽 ${spokes} 条（每个子三角 2 条，只能与同一方格的相邻子三角匹配）· 三角模块 ${Math.min(27, tris.length)} 个`;
+window.moduleLibC08 = { catalog: cat.tiles.length, quads: drawn, tris: tris.length, spokes };
+</script></html>

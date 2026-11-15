@@ -1,0 +1,94 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>等值面地形 + 硬边房子 · 倒影 / 暗碎块 / 带状水线 · REACode重构版</title><link rel="icon" href="data:,">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<style>body{margin:0;background:#b9c6c8;color:#22333a;font:14px/1.6 system-ui}header{padding:10px 18px 4px;background:#eef1f2}a{color:#26758a}code{background:#e2eaea;padding:0 4px;border-radius:4px}label{margin-right:14px}button{margin-right:6px}#hud{font-size:12px;color:#345;padding:2px 18px;background:#eef1f2}#view{display:block;width:100vw;height:calc(100vh - 150px)}</style>
+<header><b>第 56 批 C04 · 818857408848130048 / 832633189277409280</b> · <a href="field-surface.html">旧版二维画家序页</a> · <a href="artifacts/coverage/r56-C04-bn-world.md">本批报告</a>
+<p style="margin:4px 0">地形 = 占位场 → 模糊 → 等值面（圆角黏土）；房子 = 独立硬边几何（人字屋顶 / 烟囱 / 门洞），与地形同一区块时间窗缩没、抬升、重长。水面真平面倒影（镜像几何），换形态的碎块变暗并投影，水线是水面层外距离场的等距白带。共用 <code>src/core/field-surface.js</code> + <code>field-surface-c04.js</code>。</p>
+<label>进度 <input id="t" type="range" min="0" max="1" step="0.004" value="0"><output id="tv">0.000</output></label>
+<label><input id="refl" type="checkbox" checked>倒影</label><label><input id="dark" type="checkbox" checked>过渡碎块变暗</label><label><input id="band" type="checkbox" checked>带状水线</label><label><input id="hard" type="checkbox" checked>房子硬边分层</label>
+<button id="play">播放</button></header><div id="hud"></div><canvas id="view"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { makeField, blurField, morphField, surfaceNets } from './src/core/field-surface.js';
+import { layeredPlan, housesAt, transitionDarkness, waterlineDistance, waterlineBand, mirrorMatrixY, houseTriangles, LAYERED_SHAPES, chunkPhase } from './src/core/field-surface-c04.js';
+const $ = (s) => document.querySelector(s), q = new URLSearchParams(location.search);
+for (const k of ['refl', 'dark', 'band', 'hard']) if (q.get(k) === '0') $('#' + k).checked = false;
+const DIMS = [34, 22, 34], CHUNK = 3, LIFT = 5, WATER = 1.6;
+const plans = { ab: layeredPlan(LAYERED_SHAPES.A, LAYERED_SHAPES.B, { chunk: CHUNK, seed: 3, dur: .45, gap: .5 }) };
+// 旧（非分层）对照：房子当作地形盒进场，一起被模糊熔掉
+const asBoxes = (s) => [...s.terrain, ...s.houses.map((h) => ({ x: h.x, y: h.y, z: h.z, w: h.w, h: 2, d: h.d }))];
+const flatPlan = layeredPlan({ terrain: asBoxes(LAYERED_SHAPES.A) }, { terrain: asBoxes(LAYERED_SHAPES.B) }, { chunk: CHUNK, seed: 3, dur: .45, gap: .5 });
+const field = makeField(DIMS);
+const canvas = $('#view'), renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#b7c4c6');
+const camera = new THREE.PerspectiveCamera(30, 1, .5, 400);
+const C = new THREE.Vector3(17, 4, 17); camera.position.set(C.x + 34, C.y + 30, C.z + 34); camera.lookAt(C);
+scene.add(new THREE.HemisphereLight(0xf4f8fa, 0x8c9a9c, 1.6));
+const sun = new THREE.DirectionalLight(0xffffff, 2.1); sun.position.set(C.x - 14, 40, C.z + 22); sun.target.position.copy(C); sun.castShadow = true;
+Object.assign(sun.shadow.camera, { left: -26, right: 26, top: 26, bottom: -26, near: 1, far: 90 }); sun.shadow.mapSize.set(2048, 2048); sun.shadow.bias = -.0006; sun.shadow.normalBias = .04;
+scene.add(sun, sun.target);
+// 世界 = 场取样点坐标；水面 y = WATER
+const world = new THREE.Group(); scene.add(world);
+const clay = new THREE.MeshStandardMaterial({ color: 0xeef1f2, roughness: .95, vertexColors: true });
+const houseMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .8, vertexColors: true, side: THREE.DoubleSide });
+const terrain = new THREE.Mesh(new THREE.BufferGeometry(), clay); terrain.castShadow = terrain.receiveShadow = true; world.add(terrain);
+const houses = new THREE.Group(); world.add(houses);
+// 倒影：同一几何关于水面镜像，画在半透明水面下
+const mirror = new THREE.Group(); mirror.matrixAutoUpdate = false; mirror.matrix.fromArray(mirrorMatrixY(WATER)); scene.add(mirror);
+const reflClay = clay.clone(); reflClay.side = THREE.BackSide; const reflHouse = houseMat.clone();
+const reflTerrain = new THREE.Mesh(terrain.geometry, reflClay); const reflHouses = new THREE.Group(); mirror.add(reflTerrain, reflHouses);
+const water = new THREE.Mesh(new THREE.PlaneGeometry(120, 120), new THREE.MeshStandardMaterial({ color: 0xa9b8bb, roughness: .35, transparent: true, opacity: .78 }));
+water.rotation.x = -Math.PI / 2; water.position.set(C.x, WATER, C.z); water.receiveShadow = true; scene.add(water);
+const bandTex = new THREE.DataTexture(new Uint8Array(4), 1, 1); bandTex.magFilter = bandTex.minFilter = THREE.LinearFilter; const bandMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: bandTex, transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+bandMesh.rotation.x = Math.PI / 2; /* 局部 +y → 世界 +z：纹理第 k 行 = 场 z 方向第 k 个取样 */ bandMesh.position.y = WATER + .02; scene.add(bandMesh);
+const houseGeo = new Map();
+function houseGeometry(h) {
+  const key = h.w + 'x' + h.d; if (houseGeo.has(key)) return houseGeo.get(key);
+  const { tris, dark } = houseTriangles({ w: h.w, d: h.d }), pos = [], col = [];
+  tris.forEach((p, i) => { pos.push(...p); const k = dark[Math.floor(i / 3)] ? .18 : 1; col.push(k, k, k); });
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); g.computeVertexNormals();
+  houseGeo.set(key, g); return g;
+}
+let state = { t: 0, stats: {} };
+function rebuild() {
+  const t = state.t, hard = $('#hard').checked, plan = hard ? plans.ab : flatPlan, t0 = performance.now();
+  const st = morphField(field, plan, t, { lift: LIFT });
+  blurField(field, { passes: 2, radius: 1 });
+  const m = surfaceNets(field), n = m.verts, idx = [];
+  for (let f = 0; f < m.quads.length; f += 4) idx.push(m.quads[f], m.quads[f + 1], m.quads[f + 2], m.quads[f], m.quads[f + 2], m.quads[f + 3]);
+  const dk = $('#dark').checked ? transitionDarkness(plan, t, m.positions, { chunk: CHUNK, lift: LIFT }) : new Float32Array(n);
+  const col = new Float32Array(n * 3); let darkVerts = 0;
+  for (let v = 0; v < n; v++) { const k = 1 - .86 * dk[v]; col[v * 3] = col[v * 3 + 1] = col[v * 3 + 2] = k; if (dk[v] > .3) darkVerts++; }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(m.positions, 3)); g.setAttribute('normal', new THREE.BufferAttribute(m.normals, 3)); g.setAttribute('color', new THREE.BufferAttribute(col, 3)); g.setIndex(idx);
+  terrain.geometry.dispose(); terrain.geometry = g; reflTerrain.geometry = g;
+  houses.clear(); reflHouses.clear(); let hs = [];
+  if (hard) {
+    hs = housesAt(plan, t, { lift: LIFT });
+    for (const h of hs) {
+      const mesh = new THREE.Mesh(houseGeometry(h), houseMat.clone()); mesh.castShadow = mesh.receiveShadow = true;
+      if (h.moving && $('#dark').checked) mesh.material.color.setScalar(1 - .7 * (1 - h.s));
+      mesh.scale.setScalar(Math.max(.05, h.s)); mesh.position.set(h.x + 1 + h.w / 2 * (1 - h.s), h.y + .5 + h.up, h.z + 1 + h.d / 2 * (1 - h.s));
+      houses.add(mesh); const r = mesh.clone(); r.material = reflHouse; reflHouses.add(r);
+    }
+  }
+  // 带状水线：水面层外距离场
+  let cov = 0;
+  if ($('#band').checked) {
+    const di = waterlineDistance(field, WATER, { res: 4, span: 3 }), b = waterlineBand(di); cov = b.covered;
+    bandTex.image = { data: b.rgba, width: di.w, height: di.h }; bandTex.needsUpdate = true;
+    bandMesh.scale.set((di.w - 1) / di.res, (di.h - 1) / di.res, 1); bandMesh.position.x = (di.w - 1) / di.res / 2; bandMesh.position.z = (di.h - 1) / di.res / 2;
+  }
+  bandMesh.visible = $('#band').checked; mirror.visible = $('#refl').checked; water.material.opacity = $('#refl').checked ? .72 : 1;
+  state.stats = { t: +t.toFixed(3), hard, verts: n, faces: m.faces, houses: hs.length, movingHouses: hs.filter((h) => h.moving).length, darkVerts, airborne: st.airborne, solid: st.solid, bandPixels: cov, ms: Math.round(performance.now() - t0) };
+  $('#hud').textContent = JSON.stringify(state.stats); $('#tv').textContent = t.toFixed(3);
+}
+function resize() { const w = canvas.clientWidth, h = canvas.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+function frame() { renderer.render(scene, camera); }
+function apply(t) { state.t = Math.max(0, Math.min(1, t)); $('#t').value = String(state.t); rebuild(); frame(); }
+$('#t').oninput = (e) => apply(+e.target.value); for (const k of ['refl', 'dark', 'band', 'hard']) $('#' + k).onchange = () => apply(state.t);
+let timer = null; $('#play').onclick = () => { if (timer) { clearInterval(timer); timer = null; return; } timer = setInterval(() => apply(state.t >= 1 ? 0 : state.t + .01), 80); };
+addEventListener('resize', () => { resize(); frame(); }); resize();
+window.fs3d = { set: (t) => { apply(t); return state.stats; }, stats: () => state.stats, renderer, scene, camera, chunkPhase, plans, ready: true };
+apply(+(q.get('t') ?? 0));
+</script></html>

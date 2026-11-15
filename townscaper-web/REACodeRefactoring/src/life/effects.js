@@ -17,6 +17,27 @@
  */
 
 import * as THREE from 'three';
+import { fireCardGLSL, fireLightLevel } from '../core/smoke-order.js';
+
+/** One tiling value-noise texture with mips (REACode smokefx noiseTexture): one sample per card fragment. */
+let fireNoise = null;
+export function fireNoiseTexture() {
+  if (fireNoise) return fireNoise;
+  const S = 64, data = new Uint8Array(S * S * 4);
+  // Lattice hash wraps at the octave period, so the texture tiles under RepeatWrapping.
+  const H = (i, j, P) => { let q = Math.imul((((i % P) + P) % P) * 73856093 ^ (((j % P) + P) % P) * 19349663 ^ P * 83492791, 2654435761); q ^= q >>> 15; return (q >>> 0) / 4294967296; };
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    let v = 0;
+    for (const [P, a] of [[8, .55], [16, .45]]) {
+      const u = x / S * P, w = y / S * P, i = Math.floor(u), j = Math.floor(w), fx = u - i, fy = w - j, sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+      v += a * ((H(i, j, P) * (1 - sx) + H(i + 1, j, P) * sx) * (1 - sy) + (H(i, j + 1, P) * (1 - sx) + H(i + 1, j + 1, P) * sx) * sy);
+    }
+    data.set([v * 255, v * 255, v * 255, 255], (y * S + x) * 4);
+  }
+  fireNoise = new THREE.DataTexture(data, S, S, THREE.RGBAFormat);
+  fireNoise.wrapS = fireNoise.wrapT = THREE.RepeatWrapping; fireNoise.magFilter = THREE.LinearFilter; fireNoise.minFilter = THREE.LinearMipmapLinearFilter; fireNoise.generateMipmaps = true; fireNoise.needsUpdate = true;
+  return fireNoise;
+}
 
 const MAX_POPS = 8;
 
@@ -110,29 +131,46 @@ export class Effects {
     fg.setAttribute('position', new THREE.BufferAttribute(this.fp, 3));
     fg.setAttribute('aSize', new THREE.BufferAttribute(this.fsize, 1));
     fg.setAttribute('aAge', new THREE.BufferAttribute(this.fage, 1));
+    // 1015149712469524480: per-card UV roll, forward or backward along the flow.
+    this.froll = Float32Array.from({ length: this.fireN }, (_, i) => (((i * 0.754877666) % 1) - .5) * 2.2 || .3);
+    fg.setAttribute('aRoll', new THREE.BufferAttribute(this.froll, 1));
     this.fire = new THREE.Points(fg, new THREE.ShaderMaterial({
       transparent: true, depthWrite: false,
+      uniforms: { uTime, uFireNoise: { value: fireNoiseTexture() }, uMipBias: { value: 2.4 } },
       blending: THREE.CustomBlending, blendEquation: THREE.MaxEquation, blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor,
       vertexShader: /* glsl */ `
         attribute float aSize;
         attribute float aAge;
+        attribute float aRoll;
         varying float vAge;
+        varying float vRoll;
         void main() {
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = aSize * 380.0 / -mv.z;
           vAge = aAge;
+          vRoll = aRoll;
           gl_Position = projectionMatrix * mv;
         }`,
       fragmentShader: /* glsl */ `
+        uniform float uTime;
+        uniform sampler2D uFireNoise;
+        uniform float uMipBias;
         varying float vAge;
+        varying float vRoll;
+        ${fireCardGLSL}
         void main() {
           // Point size zero may clamp to one pixel: expired particles must discard.
           if (vAge >= 1.0) discard;
-          float r = length(gl_PointCoord - 0.5) * 2.0;
-          float m = 1.0 - smoothstep(0.55, 1.0, r);                       // 软圆
+          // REACode smokefx makeFlame: one noise sample per card, rolled along the flow, mip grows with age.
+          vec2 pc = vec2(gl_PointCoord.x, 1.0 - gl_PointCoord.y);
+          vec2 nuv = vec2(pc.x + vRoll * .37, pc.y * 1.35 + vRoll + mod(uTime * .24, 1.0) * sign(vRoll));
+          float n = texture2D(uFireNoise, nuv, vAge * uMipBias).r;
+          vec2 fc = fireCard(pc, vAge, n);
+          float m = fc.x;
           if (m <= 0.0) discard;
           vec3 hot = vec3(1.0, 0.93, 0.6), mid = vec3(1.0, 0.55, 0.18), cool = vec3(0.85, 0.2, 0.12);
           vec3 c = vAge < 0.5 ? mix(hot, mid, vAge * 2.0) : mix(mid, cool, (vAge - 0.5) * 2.0);
+          c = mix(c, vec3(1.0, 0.96, 0.75), fc.y * 0.35);                 // cutoff pulled in → brighter rim
           // Max 混合：颜色乘遮罩，重叠处取最大值 → 融成一个轮廓，不会加成一片白
           gl_FragColor = vec4(c * m, m);
           #include <colorspace_fragment>
@@ -143,6 +181,10 @@ export class Effects {
     this.fire.renderOrder = 7;
     this.group.add(this.fire);
     this.fireSources = [];
+    // Dynamic firelight: intensity follows live flame mass; hidden (no shader light) without fire.
+    this.fireLight = new THREE.PointLight(0xff9a48, 0, 3.5, 2);
+    this.fireLight.visible = false;
+    this.group.add(this.fireLight);
   }
 
   set showFire(on) { this.fire.visible = on; }
@@ -154,7 +196,7 @@ export class Effects {
     this.fireShrink = shrink;
     this.fire.material.blendEquation = blend === 'max' ? THREE.MaxEquation : THREE.AddEquation;
   }
-  clearFire() { this.flife.fill(0); this.fspan.fill(0); this.fsize.fill(0); this.fage.fill(0); this.fire.geometry.setDrawRange(0, 0); }
+  clearFire() { this.flife.fill(0); this.fspan.fill(0); this.fsize.fill(0); this.fage.fill(0); this.fire.geometry.setDrawRange(0, 0); if (this.fireLight) { this.fireLight.intensity = 0; this.fireLight.visible = false; } }
   dispose() { this.group.removeFromParent(); for (const o of [this.rings, this.points, this.fire]) { o.geometry.dispose(); o.material.dispose(); } this.clearFire(); this.fireSources = []; }
 
 
@@ -243,5 +285,11 @@ export class Effects {
     this.fire.geometry.setDrawRange(0, this.fireN);
     const ga = this.fire.geometry.attributes;
     ga.position.needsUpdate = ga.aSize.needsUpdate = ga.aAge.needsUpdate = true;
+    let sx = 0, sy = 0, sz = 0;
+    for (const s of this.fireSources) { sx += s.x; sy += s.y; sz += s.z; }
+    const n = this.fireSources.length;
+    this.fireLight.position.set(sx / n, sy / n + .3, sz / n);
+    this.fireLight.intensity = fireLightLevel(this.fsize, this.fage, this.uTime?.value ?? 0);
+    this.fireLight.visible = this.fireLight.intensity > 0;
   }
 }

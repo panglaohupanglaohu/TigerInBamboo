@@ -1,0 +1,149 @@
+{
+ "report": {
+  "off": {
+   "cellsDrawn": 0,
+   "gridEdges": 0,
+   "outlineEdges": 0,
+   "gridVisible": false,
+   "facesVisible": false,
+   "linesVisible": false,
+   "legend": null,
+   "count": null,
+   "alpha": null
+  },
+  "unit": {
+   "cellsDrawn": 395,
+   "gridEdges": 1580,
+   "outlineEdges": 510,
+   "gridVisible": true,
+   "facesVisible": true,
+   "linesVisible": true,
+   "legend": {
+    "visible": true,
+    "rows": 4,
+    "text": "流场配色 · 按队伍队伍 1 · 8 人队伍 2 · 8 人队伍 3 · 8 人"
+   },
+   "count": {
+    "units": 24,
+    "squads": 3,
+    "type": 3,
+    "byType": false,
+    "cells": 395,
+    "gridEdges": 1580,
+    "outlineEdges": 510,
+    "skippedWater": 0,
+    "wisps": {
+     "cells": 384,
+     "wisps": 164,
+     "maxPerCell": 2
+    },
+    "dim": {
+     "cells": 2516,
+     "tris": 790
+    }
+   },
+   "alpha": {
+    "itemSize": 4,
+    "verts": 1188,
+    "zeroAlpha": 164,
+    "minLitAlpha": 0.429,
+    "maxAlpha": 0.968,
+    "stats": {
+     "verts": 1188,
+     "zeroAlpha": 164,
+     "lit": 1024
+    }
+   }
+  },
+  "type": {
+   "cellsDrawn": 395,
+   "gridEdges": 1580,
+   "outlineEdges": 510,
+   "gridVisible": true,
+   "facesVisible": true,
+   "linesVisible": true,
+   "legend": {
+    "visible": true,
+    "rows": 4,
+    "text": "流场配色 · 按兵种步兵 · 8矛兵 · 8弓手 · 8"
+   },
+   "count": {
+    "units": 24,
+    "squads": 3,
+    "type": 3,
+    "byType": true,
+    "cells": 395,
+    "gridEdges": 1580,
+    "outlineEdges": 510,
+    "skippedWater": 0,
+    "wisps": {
+     "cells": 384,
+     "wisps": 164,
+     "maxPerCell": 2
+    },
+    "dim": {
+     "cells": 2516,
+     "tris": 790
+    }
+   },
+   "alpha": {
+    "itemSize": 4,
+    "verts": 1188,
+    "zeroAlpha": 164,
+    "minLitAlpha": 0.429,
+    "maxAlpha": 0.968,
+    "stats": {
+     "verts": 1188,
+     "zeroAlpha": 164,
+     "lit": 1024
+    }
+   }
+  },
+  "afterOff": {
+   "cellsDrawn": 395,
+   "gridEdges": 1580,
+   "outlineEdges": 510,
+   "gridVisible": false,
+   "facesVisible": false,
+   "linesVisible": false,
+   "legend": {
+    "visible": false,
+    "rows": 4,
+    "text": "流场配色 · 按兵种步兵 · 8矛兵 · 8弓手 · 8"
+   },
+   "count": {
+    "units": 24,
+    "squads": 3,
+    "type": 3,
+    "byType": true,
+    "cells": 395,
+    "gridEdges": 1580,
+    "outlineEdges": 510,
+    "skippedWater": 0,
+    "wisps": {
+     "cells": 384,
+     "wisps": 164,
+     "maxPerCell": 2
+    },
+    "dim": {
+     "cells": 2516,
+     "tris": 790
+    }
+   },
+   "alpha": {
+    "itemSize": 4,
+    "verts": 1188,
+    "zeroAlpha": 164,
+    "minLitAlpha": 0.429,
+    "maxAlpha": 0.968,
+    "stats": {
+     "verts": 1188,
+     "zeroAlpha": 164,
+     "lit": 1024
+    }
+   }
+  }
+ },
+ "errors": [],
+ "problems": []
+}

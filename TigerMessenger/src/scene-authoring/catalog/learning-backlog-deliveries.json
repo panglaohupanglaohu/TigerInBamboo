@@ -1,0 +1,383 @@
+{
+  "version": 1,
+  "receipt": "TigerMessenger/artifacts/workshop-tests/environment-menu-20261112/browser.json",
+  "proofHashes": {
+    "townscaper-web/REACodeRefactoring/src/badnorth/house-char.js": "482a04c25908a8bc8f9dd3062520e9499c2633697ff29a3fe0dd5d6f9f9f8178",
+    "townscaper-web/REACodeRefactoring/tests/house-char.mjs": "32f3385a6765969a5e953361ee9adbcb809325b41f25d887df73c59639f26c29",
+    "townscaper-web/REACodeRefactoring/src/world/view.js": "6cbed8b0e8d2238129584ae685521148813669863de5a59b87f4343349629ed7",
+    "townscaper-web/REACodeRefactoring/src/badnorth/battle.js": "2457aed327bafe7840d5fe025c5ca71614d0f9f6b32a5512d9f342806caa6566",
+    "townscaper-web/REACodeRefactoring/src/badnorth/battle-c01.js": "9f1d872a76d86671062fcc5dbebe9aae2a7c4301ea7fabdd561d70efd928bfb8",
+    "townscaper-web/REACodeRefactoring/src/badnorth/battle-c02.js": "cec49b4a7512fe694966cc90e7d5879b251b587f93c2296de80fbd4643e72874",
+    "townscaper-web/REACodeRefactoring/src/badnorth/battle-c03.js": "f79ea2a961f38877dbb56be97eef0b651ee5a2ba51b39519d69baec12399e49d",
+    "townscaper-web/REACodeRefactoring/src/badnorth/battle-g3.js": "0c05108cecffd85906b7c5a31588eb57008b42a5d1bd3aa217417d5d6ef8508d",
+    "townscaper-web/REACodeRefactoring/src/ui/environment-panel.js": "a6bdece451d3436905aa53bf4845c0ccbabb68bb2fb84b6823567c830ca663ac",
+    "townscaper-web/REACodeRefactoring/src/ui/scene-capability-panel.js": "0c85ab418cc969627ab49c721125a182dac759ee3afe04adbee60b101c8cdd12",
+    "townscaper-web/REACodeRefactoring/src/ui/shading-panel.js": "01e2fdfeba2afd08d31cc4790d2103085028101b5165614643018e4f304ad811",
+    "townscaper-web/REACodeRefactoring/src/core/trajectory-trace.js": "795f43eab08967482270177f7df833c76a86ac052a1dff39b156ce3cdf60d11c",
+    "townscaper-web/REACodeRefactoring/src/world/trajectory-preview.js": "1ba559852c06041fc9dbc8b9f010cef3cfb27cc66222189220a54ecb990ae365",
+    "townscaper-web/REACodeRefactoring/src/core/nav-diagnostic-geometry.js": "2c43c236a73e523b142679e966676a39ec6b4a8eea209a462dc37545d867aab4",
+    "townscaper-web/REACodeRefactoring/src/world/nav-diagnostic-overlay.js": "ead2cf2d63b594049237d1a9f1873be55cf61c676fa423746396ff75b6f3e8da",
+    "townscaper-web/REACodeRefactoring/tests/trajectory-trace.mjs": "ad2922cfd11ef9d7704c6fb7d2613bd5d17a323a7ce8b2e87fc148070b944269",
+    "townscaper-web/REACodeRefactoring/tests/nav-diagnostic-geometry.mjs": "b363ed31a7644996214f8e4e6092976572faa5c2ac9b634e7e00515492f3c6de",
+    "TigerMessenger/artifacts/workshop-tests/environment-menu-20261112/browser.json": "9c4d912ca5e1e776d8c6218a31b99e7e54116b831365db5f75412c87ccf6d6d3",
+    "townscaper-web/REACodeRefactoring/src/core/node-graph-runtime.js": "b2d1c5200a714065bbc1b2bcf7cfffa608f2f4d7e200bc10d33930b5f2e339ee",
+    "townscaper-web/REACodeRefactoring/src/core/node-graph-editor.js": "33666574727f859d06ea9dcc57418ac0897cf5bd5b32292f3ae86b031c5790b5",
+    "townscaper-web/REACodeRefactoring/src/ui/node-graph-editor.js": "ba76feba90939d8ec12da369531757d665c6618fb3aa88b09b4cf3b543891b21",
+    "townscaper-web/REACodeRefactoring/node-editor.html": "d9c755ec47f600267bba518f18138a59141e98169ab6424d955dc3dec8e57750",
+    "townscaper-web/REACodeRefactoring/node-graph.html": "365adf5c93d6094c35f09304d9121ae5a9c55c2fd0b046e4ce4d35a9ca6511f2",
+    "townscaper-web/REACodeRefactoring/tests/node-graph-editor.mjs": "313407c361c64b25526f1b2fc98ba308f44e445de476b0e78e7a7fdd7510310a",
+    "TigerMessenger/artifacts/workshop-tests/node-editor-20261112/browser.json": "136248e14eb5e03901c13c75b5591f97c5d3a461357da51729f34f441577253a",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/816332161036984320-review.md": "c5a770fb142cf374d6b7a2d1f7b78ac23b39ecb2d00f4f2533853ea09f1901ee",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/806856212260278272-review.md": "0784511fa818633cc7368f595db241fdd7086c1ba52ebc87d2471501e734b2a2",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/999191760944418817-review.md": "a3720204131a063856b9fad3640d8aae8b68ff44ae63387656f558872861558a",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/1313837640366596096-review.md": "036f9c13f18c0cec2d52967c72d3062b4b8ebcac6b5a5ac029c9d896d5e658d0",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/917405214638006273-review.md": "eebc6e3073da50d59e11dd6c1e4e3e411bdd5e78b0da91c69f208b47c02d99e0",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/1459169210752507904-review.md": "86edbd72d0df6237ae5accdd7ed9c212521702bd739e1bc35062341b910b6f5b",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/1466059785703460870-review.md": "057ba7f8016d163f132bab5563dec9ed1d2e980835f733cc2e57c6013d5de5be",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/1489193847422865410-review.md": "f4e992b25d96e46259da0a52bbb9215328d0cf518e42d3c5a47e25613c5bd63c",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/1490068909042642944-review.md": "30c02489e3bc034508528fb578da4cf859d914118323ec1040dd5e80e1c3f4d0",
+    "townscaper-web/REACodeRefactoring/artifacts/coverage/1724449858369568780-review-r61.md": "e0ce0beac73c90010273a0fa55519162e65d9f4c6c36bfb81673591d5e0a78e3"
+  },
+  "items": [
+    {
+      "entry": "index.html?scene=fusion",
+      "id": "backlog-ba1cf5ff9f020927",
+      "fingerprints": [
+        "95ca0dac7b6093954c74b04d3157d4cbcf62a9448d7053d4626e5585d4e2630e"
+      ],
+      "stage": "implementation",
+      "closed": false,
+      "studies": [
+        {
+          "id": "816332161036984320",
+          "decodedFrames": 177,
+          "reviewEvidence": "artifacts/coverage/816332161036984320-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              176
+            ],
+            "nativeRevisits": [
+              0,
+              80,
+              176
+            ],
+            "implementationVerified": true,
+            "runtimeAccepted": true,
+            "acceptanceScope": "阻力弹道扇面/等弧长方向划线"
+          }
+        }
+      ],
+      "done": [
+        "核对已有177帧全片审阅；本轮未增加观看帧数。",
+        "新增逐段场景网格碰撞截断、线性/二次阻力模型；主场景菜单可直接预览，未改地形。"
+      ],
+      "remaining": [
+        "与定点射表的运行轨迹还需统一；碰撞预览尚未改写战斗箭矢。",
+        "Inspector第三参数与原作者阻力模型无法仅凭原片确定，保留来源疑问。"
+      ]
+    },
+    {
+      "entry": null,
+      "id": "backlog-ac3c59934822e883",
+      "fingerprints": [
+        "cb939d03b0b0c1ef87345f88353709299cbdbb8cd2770a4b81ae02d4c39f3a13"
+      ],
+      "stage": "source",
+      "closed": false,
+      "studies": [
+        {
+          "id": "806856212260278272",
+          "decodedFrames": 332,
+          "reviewEvidence": "artifacts/coverage/806856212260278272-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              331
+            ],
+            "nativeRevisits": [
+              20,
+              36,
+              106,
+              264
+            ],
+            "implementationVerified": false,
+            "runtimeAccepted": false,
+            "acceptanceScope": "不涉及实现"
+          }
+        }
+      ],
+      "done": [
+        "核对已有332帧/4张联系表及原尺寸审阅；该片已学完。"
+      ],
+      "remaining": [
+        "当前片段整块消失，无法还原块间时序；需有逐块过程的来源才能精确复刻。",
+        "不以自行编造的时序冒称原片实现。"
+      ]
+    },
+    {
+      "entry": "index.html?scene=badnorth",
+      "id": "backlog-1385ab1fb3973c5e",
+      "fingerprints": [
+        "89c74f62a21a39c8c8692a4e893501a092711a1e632e84c80aa2553b1ca33c91"
+      ],
+      "stage": "implementation",
+      "closed": false,
+      "studies": [
+        {
+          "id": "999191760944418817",
+          "decodedFrames": 111,
+          "reviewEvidence": "artifacts/coverage/999191760944418817-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              110
+            ],
+            "nativeRevisits": [
+              0,
+              10,
+              26,
+              45,
+              90,
+              110
+            ],
+            "implementationVerified": true,
+            "runtimeAccepted": true,
+            "acceptanceScope": "血腥开关：血迹/血滴/尸体"
+          }
+        }
+      ],
+      "done": [
+        "核对已有111帧全片审阅。",
+        "主菜单接真实gore开关，切换血迹/血滴/尸体层；北境之外禁用。"
+      ],
+      "remaining": [
+        "血迹对深浅底材的色差仍待实现与实测。",
+        "原片未出现控制面板，不能声称复刻其开关样式。"
+      ]
+    },
+    {
+      "entry": "index.html?flying=1",
+      "id": "backlog-8a932cb2b38b2e8f",
+      "fingerprints": [
+        "7a56554ed04ddf657c7f87d3fc00424781763cbf1a3703173feab759e6ae4235"
+      ],
+      "stage": "validation",
+      "closed": true,
+      "studies": [
+        {
+          "id": "1313837640366596096",
+          "decodedFrames": 315,
+          "reviewEvidence": "artifacts/coverage/1313837640366596096-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              314
+            ],
+            "nativeRevisits": [
+              0,
+              300
+            ],
+            "implementationVerified": true,
+            "runtimeAccepted": true,
+            "acceptanceScope": "环→抬升场→船壳→支撑腿几何"
+          }
+        }
+      ],
+      "done": [
+        "已有315帧/4张联系表全片审阅与第56批整列抬升、支腿、涟漪、白色构件实现证据。",
+        "核销“只看第1张联系表”旧排期；不重复计算学习帧数。"
+      ],
+      "remaining": []
+    },
+    {
+      "entry": "index.html?scene=badnorth",
+      "id": "backlog-ac06a661b9ca6c28",
+      "fingerprints": [
+        "4f3cce8ce5cc602568b4970acd417448cd5bb0b4c6697f22ffcf6ee95066707a"
+      ],
+      "stage": "source",
+      "closed": false,
+      "studies": [
+        {
+          "id": "917405214638006273",
+          "decodedFrames": 834,
+          "reviewEvidence": "artifacts/coverage/917405214638006273-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              833
+            ],
+            "nativeRevisits": [
+              0,
+              100
+            ],
+            "implementationVerified": true,
+            "runtimeAccepted": true,
+            "acceptanceScope": "可走性启发式 + 可走图调试层"
+          }
+        }
+      ],
+      "done": [
+        "核对已有834帧全片审阅。",
+        "补可走格角红点、实际背景格网，使用共享World和形变后的格角；主场景可开关。"
+      ],
+      "remaining": [
+        "原片未显示削台前状态，也不能测出原作者削低档数；当前两档只是明确标注的本地策略。",
+        "精确原作参数仍需新来源，不伪造六边格覆盖当前四边/混合格。"
+      ]
+    },
+    {
+      "entry": "index.html?scene=fusion&grid=mixed",
+      "id": "backlog-190dcc9c41ea2b22",
+      "fingerprints": [
+        "1873fb278c47e8504c29075f039e0cff65691c3daa0bc936c9657b4d789977e0"
+      ],
+      "stage": "implementation",
+      "closed": false,
+      "studies": [
+        {
+          "id": "1459169210752507904",
+          "decodedFrames": 609,
+          "reviewEvidence": "artifacts/coverage/1459169210752507904-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              608
+            ],
+            "nativeRevisits": [
+              340,
+              500,
+              608
+            ],
+            "implementationVerified": true,
+            "runtimeAccepted": true,
+            "acceptanceScope": "面型分类与三角过渡带"
+          }
+        },
+        {
+          "id": "1466059785703460870",
+          "decodedFrames": 328,
+          "reviewEvidence": "artifacts/coverage/1466059785703460870-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              327
+            ],
+            "nativeRevisits": [
+              0,
+              110,
+              327
+            ],
+            "implementationVerified": false,
+            "runtimeAccepted": false,
+            "acceptanceScope": "不涉及实现"
+          }
+        },
+        {
+          "id": "1489193847422865410",
+          "decodedFrames": 316,
+          "reviewEvidence": "artifacts/coverage/1489193847422865410-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              315
+            ],
+            "nativeRevisits": [
+              0,
+              107,
+              240
+            ],
+            "implementationVerified": false,
+            "runtimeAccepted": false,
+            "acceptanceScope": "不涉及实现"
+          }
+        },
+        {
+          "id": "1490068909042642944",
+          "decodedFrames": 427,
+          "reviewEvidence": "artifacts/coverage/1490068909042642944-review.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              426
+            ],
+            "nativeRevisits": [
+              390,
+              417,
+              426
+            ],
+            "implementationVerified": true,
+            "runtimeAccepted": true,
+            "acceptanceScope": "邻接图极坐标布局"
+          }
+        }
+      ],
+      "done": [
+        "核对四条来源已有全片审阅。",
+        "将共享格型分类接入当前World三维地形，保留崖壁两侧高度、三角/四边/过渡边配色。"
+      ],
+      "remaining": [
+        "radialLayout分量/补丁分组与极坐标十字刻度仍未完成。",
+        "格心彩色小块语义无确证，不据此编造机制。"
+      ]
+    },
+    {
+      "entry": "node-editor.html",
+      "id": "backlog-2be26345bfe38a03",
+      "fingerprints": [
+        "6c62c9ab04e51aa18c451e2ad08a40a04f865ae64ec26dd1f402c9b4a543abb8"
+      ],
+      "stage": "validation",
+      "closed": true,
+      "studies": [
+        {
+          "id": "1724449858369568780",
+          "decodedFrames": 134,
+          "reviewEvidence": "artifacts/coverage/1724449858369568780-review-r61.md",
+          "reviewStages": {
+            "textRead": true,
+            "allFramesReviewed": true,
+            "frameRange": [
+              0,
+              133
+            ],
+            "nativeRevisits": [
+              1,
+              20,
+              50,
+              90,
+              133
+            ],
+            "implementationVerified": true,
+            "runtimeAccepted": true,
+            "acceptanceScope": "节点图序列化往返 + 只读连线图"
+          }
+        }
+      ],
+      "done": [
+        "本轮新增真实节点编辑器：拖动、按端口连线与删线、增删节点、分组参数、实时求值预览。",
+        "图与布局/运行状态保存载入、撤销重做；拒绝环路、错类型和重复输入，失败不污染原图。"
+      ],
+      "remaining": []
+    }
+  ]
+}

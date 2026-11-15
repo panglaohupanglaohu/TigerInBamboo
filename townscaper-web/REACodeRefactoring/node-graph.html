@@ -1,0 +1,198 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>节点式数据绑定 · REACode重构版</title>
+<style>
+body{margin:0;background:#f2f5f3;color:#1f2c31;font:14px/1.6 system-ui}
+main{display:grid;grid-template-columns:1fr 380px;gap:18px;padding:18px;align-items:start}
+h1{font-size:18px;margin:0 0 6px}
+h2{font-size:13px;margin:0 0 6px;color:#2c4650}
+aside{background:#e6efec;border-radius:14px;padding:16px}
+#scene{position:relative;height:520px;background:#7fb3b9;border-radius:14px;overflow:hidden}
+#toggle{position:absolute;left:24px;top:24px;padding:8px 26px;font:inherit;border-radius:6px;border:1px solid #cbd3d3;background:#fff;color:#2a3b40;cursor:pointer}
+#toggle.off{opacity:.75}
+.mover{position:absolute;left:24px;width:180px;height:44px;background:#fff;border-radius:3px;box-shadow:0 1px 3px rgba(0,0,0,.18);
+  display:flex;align-items:center;justify-content:center;font-size:15px;color:#2a3b40}
+#handle{position:absolute;left:214px;top:352px;width:7px;height:7px;background:#fff;border:1px solid #7a8b90}
+.insp{background:#2b2f33;color:#d9e0e0;border-radius:10px;padding:0;font:12px/1.5 ui-monospace,Menlo,monospace;overflow:hidden}
+.insp header{background:#3a3f44;padding:6px 10px;color:#eef2f2;font-weight:600}
+.node{border-top:1px solid #3f454a;padding:7px 10px}
+.node .name{color:#cfe3a8}
+.row{display:flex;justify-content:space-between;gap:10px;color:#a9b7bb}
+.row b{color:#f0f4f4;font-weight:600;font-variant-numeric:tabular-nums}
+.row.changed b{color:#ffd479}
+button,input{font:inherit;margin:4px 4px 4px 0;padding:4px 6px}
+small{display:block;color:#41565e;margin-top:8px}
+a{color:#16626f}
+@media(max-width:900px){main{display:block}aside{margin-top:14px}}
+</style>
+<main>
+<section>
+  <h1>节点式数据绑定：bool 资产 → 节点链 → UI 位置</h1>
+  <p style="margin:0 0 10px;color:#3c5158">1724449858369568780 的 Inspector 里那条链：按钮翻一个 ScriptableObject 的 bool，<code>FloatSelectNode</code> 在 −226.9 / −33.8 之间选，<code>FloatLerpTowardsNode</code>（Speed 20）慢慢逼近，<code>Vector2ComposeNode</code> 拼成 (x,−5 + y)，<code>Vector2EventNode</code> 的 UnityEvent 写回 <code>rect.anchoredPosition</code>。</p>
+  <div id="scene">
+    <button id="toggle" class="off">Toggle</button>
+    <div class="mover" id="mover">Moving!</div>
+    <div id="handle"></div>
+  </div>
+</section>
+<aside>
+  <h2>连线图（每帧重画，可存可载）</h2><p><a href="node-editor.html">打开可拖拽节点编辑器 →</a></p>
+  <svg id="wires" width="340" height="252" style="background:#2b2f33;border-radius:10px;display:block"></svg>
+  <div><button id="exp">导出 JSON</button><button id="imp">载入 JSON</button><span id="io" style="font-size:12px;color:#3c5158"></span></div>
+  <textarea id="json" style="width:100%;height:84px;font:11px/1.4 ui-monospace,Menlo,monospace;margin-top:4px;border-radius:6px;border:1px solid #c7d5d0;padding:6px" placeholder="导出后这里会出现节点图 JSON；改完点载入"></textarea>
+  <h2 style="margin-top:12px">Inspector（与截图同一条链）</h2>
+  <div class="insp" id="insp">
+    <header>Moving</header>
+    <div id="nodes"></div>
+  </div>
+  <div><button id="settle">立刻到位</button><button id="back">回下面</button></div>
+  <div id="stats" style="background:#fff;border-radius:8px;padding:8px 10px;margin-top:10px;font-size:13px;font-variant-numeric:tabular-nums">…</div>
+  <small>运行时在 <code>src/core/node-graph-runtime.js</code>：端口求值按拓扑序、lerp 每帧最多走 speed·dt 且不冲过目标、sink 只在值变化时回调。</small>
+</aside>
+</main>
+<script type="module">
+import { buildToggleChain, NodeGraph } from './src/core/node-graph-runtime.js';
+
+const chain = buildToggleChain();
+const mover = document.getElementById('mover');
+const scene = document.getElementById('scene');
+const btn = document.getElementById('toggle');
+// Unity 的 anchoredPosition 坐标系：y 越小越靠上，这里映射成屏幕像素
+const BASE_Y = 330;
+const OFFSET = -226.9; // 截图里的初始值（正好落在屏幕下方）
+
+function sync() {
+  const p = chain.position;
+  const screenY = BASE_Y - (p.y - OFFSET);
+  mover.style.top = screenY + 'px';
+  btn.classList.toggle('off', !chain.graph.state('button').value);
+}
+function inspector() {
+  const g = chain.graph;
+  const s = g.snapshot();
+  const st = g.state('lerp');
+  return {
+    select: s.select.out, lerp: s.lerp.out, compose: s.compose.out,
+    condition: g.state('button').value, settled: st.settled, ticks: g.tickCount,
+    calls: g.state('sink').calls,
+  };
+}
+function paintInspector() {
+  const v = inspector();
+  const row = (k, val, hi) => `<div class="row ${hi ? 'changed' : ''}"><span>${k}</span><b>${val}</b></div>`;
+  document.getElementById('nodes').innerHTML = [
+    `<div class="node"><div class="name">FloatSelectNode</div>`,
+    row('On False', '-226.9'), row('On True', '-33.8'),
+    row('Condition', v.condition ? '✓' : '☐', v.condition),
+    row('Output', v.select.toFixed(2)), `</div>`,
+    `<div class="node"><div class="name">FloatLerpTowardsNode</div>`,
+    row('Target', v.select.toFixed(2)), row('Speed', '20'),
+    row('Output', v.lerp.toFixed(5), !v.settled), `</div>`,
+    `<div class="node"><div class="name">Vector2ComposeNode</div>`,
+    row('In 0', '-5'), row('In 1', v.lerp.toFixed(2)),
+    row('Output', `(${v.compose.x}, ${v.compose.y.toFixed(2)})`), `</div>`,
+    `<div class="node"><div class="name">Vector2EventNode</div>`,
+    row('Event', 'RectTransform.anchoredPosition'),
+    row('sink 回调次数', String(v.calls)), `</div>`,
+  ].join('');
+  document.getElementById('stats').textContent =
+    `ticks ${v.ticks} · 位置 y ${chain.position.y.toFixed(2)} · ${v.settled ? '已到位' : '还在动'}`;
+}
+
+// ---- 连线图：固定布局，每帧重画，节点框里带实时值（不是静态示意图） ----
+const LAYOUT = {
+  button: { x: 6, y: 8, w: 96, h: 46, label: 'bool 资产' },
+  falseValue: { x: 6, y: 66, w: 96, h: 34, label: 'On False' },
+  trueValue: { x: 6, y: 108, w: 96, h: 34, label: 'On True' },
+  select: { x: 120, y: 58, w: 94, h: 50, label: 'Select' },
+  lerp: { x: 232, y: 6, w: 102, h: 50, label: 'LerpTowards' },
+  compose: { x: 232, y: 92, w: 102, h: 50, label: 'Compose2' },
+  sink: { x: 120, y: 190, w: 94, h: 46, label: 'UnityEvent' },
+};
+const EDGES = [
+  ['button', 'select'], ['falseValue', 'select'], ['trueValue', 'select'],
+  ['select', 'lerp'], ['lerp', 'compose'], ['compose', 'sink'],
+];
+function fmt(v) {
+  if (v && typeof v === 'object') return `(${v.x}, ${Number(v.y).toFixed(1)})`;
+  if (typeof v === 'number') return Number.isInteger(v) ? String(v) : v.toFixed(1);
+  if (typeof v === 'boolean') return v ? '✓' : '☐';
+  return String(v);
+}
+function drawWires() {
+  const svg = document.getElementById('wires');
+  const snap = chain.graph.snapshot();
+  const parts = [];
+  for (const [from, to] of EDGES) {
+    const a = LAYOUT[from], b = LAYOUT[to];
+    const x1 = a.x + a.w, y1 = a.y + a.h / 2, x2 = b.x, y2 = b.y + b.h / 2;
+    const mx = (x1 + x2) / 2;
+    const d = Math.abs(y1 - y2) < 2 ? `M${x1} ${y1} L${x2} ${y2}` : `M${x1} ${y1} C${mx} ${y1} ${mx} ${y2} ${x2} ${y2}`;
+    parts.push(`<path d="${d}" fill="none" stroke="#5d6f74" stroke-width="1.4"/>`);
+    parts.push(`<text x="${(x1 + x2) / 2}" y="${(y1 + y2) / 2 - 3}" fill="#8fa3a8" font-size="9" text-anchor="middle">${fmt(snap[from] ? snap[from].out : undefined)}</text>`);
+  }
+  for (const [id, n] of Object.entries(LAYOUT)) {
+    const has = chain.graph.nodes.has(id);
+    parts.push(`<rect x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="5" fill="#3a4147" stroke="${has ? '#6f8a7a' : '#8a4a4a'}"/>`);
+    parts.push(`<text x="${n.x + 7}" y="${n.y + 15}" fill="#cfe3a8" font-size="10">${n.label}</text>`);
+    // sink 没有输出端口，显示它被触发的次数（UnityEvent 的"发了几次"）
+    const live = id === 'sink'
+      ? (has ? `${chain.graph.state('sink').calls} 次` : '—')
+      : (has ? fmt(snap[id] ? snap[id].out : undefined) : '—');
+    parts.push(`<text x="${n.x + 7}" y="${n.y + n.h - 8}" fill="#eef2f2" font-size="11" font-family="ui-monospace,Menlo,monospace">${live}</text>`);
+  }
+  svg.innerHTML = parts.join('');
+}
+
+document.getElementById('exp').onclick = () => {
+  const j = chain.graph.serialize();
+  document.getElementById('json').value = JSON.stringify(j, null, 1);
+  document.getElementById('io').textContent = `已导出 ${j.nodes.length} 节点 / ${j.edges.length} 边`;
+};
+document.getElementById('imp').onclick = () => {
+  const el = document.getElementById('json'), io = document.getElementById('io');
+  try {
+    const j = JSON.parse(el.value);
+    chain.load(j);
+    sync(); paintInspector(); drawWires();
+    io.textContent = `已载入 ${j.nodes.length} 节点 / ${j.edges.length} 边 · y=${chain.position.y.toFixed(2)}`;
+  } catch (e) {
+    io.textContent = '载入失败：' + e.message;
+  }
+};
+
+let last = 0;
+function loop(ts) {
+  const dt = last ? Math.min(0.05, (ts - last) / 1000) : 1 / 60;
+  last = ts;
+  chain.graph.tick(dt);
+  sync();
+  paintInspector();
+  drawWires();
+  requestAnimationFrame(loop);
+}
+
+btn.onclick = () => { chain.toggle(); sync(); paintInspector(); };
+document.getElementById('settle').onclick = () => { chain.set(true); chain.graph.tick(100); sync(); paintInspector(); };
+document.getElementById('back').onclick = () => { chain.set(false); chain.graph.tick(100); sync(); paintInspector(); };
+
+sync();
+paintInspector();
+drawWires();
+requestAnimationFrame(loop);
+
+window.nodeGraph = {
+  ready: true,
+  toggle: () => { const on = chain.toggle(); sync(); paintInspector(); return on; },
+  set: (on) => { chain.set(on); sync(); paintInspector(); return on; },
+  tick: (dt) => { chain.graph.tick(dt); sync(); paintInspector(); drawWires(); return chain.position; },
+  settle: () => { chain.set(true); chain.graph.tick(100); sync(); paintInspector(); return chain.position; },
+  inspector,
+  position: () => ({ ...chain.position }),
+  boxY: () => mover.getBoundingClientRect().top - scene.getBoundingClientRect().top,
+  serialize: () => chain.graph.serialize(),
+  load: (json) => { const g = chain.load(json); sync(); paintInspector(); drawWires(); return { nodes: g.nodes.size, edges: g.edges.length, y: chain.position.y }; },
+  wireStats: () => ({ nodes: chain.graph.nodes.size, edges: chain.graph.edges.length, paths: document.querySelectorAll('#wires path').length, boxes: document.querySelectorAll('#wires rect').length }),
+  exportJson: () => { document.getElementById('exp').click(); return document.getElementById('json').value; },
+  importJson: (text) => { document.getElementById('json').value = text; document.getElementById('imp').click(); return document.getElementById('io').textContent; },
+};
+</script>
+</html>

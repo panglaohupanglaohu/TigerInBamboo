@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><link rel="icon" href="data:,"><title>岩岛 · Square, yet hex（r56 C08）</title>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<style>body{margin:0;background:#3c5a5e;font:13px/1.5 system-ui,"PingFang SC",sans-serif;overflow:hidden}canvas{display:block;width:100vw;height:100vh}#ui{position:fixed;left:12px;top:12px;max-width:380px;background:rgba(255,255,255,.93);color:#1d2f36;border-radius:12px;padding:10px 12px}#ui p{margin:3px 0;font-size:12px;color:#3e5a5e}button{border:1px solid #c9d8d7;background:#fff;border-radius:8px;padding:3px 8px;cursor:pointer;font:inherit}button.on{background:#2f7f8a;color:#fff}#stat{font-size:12px;color:#2f7f8a;white-space:pre-wrap}</style>
+<canvas id="c"></canvas>
+<div id="ui"><a href="index.html">← 首页</a> · <a href="corner-cuts.html">2D 切角轮廓</a>
+<h3 style="margin:4px 0">岩岛：Square, yet hex（1471817524148940807）</h3>
+<p>共享四边形 World（grid.js + generateTerrain）→ 共享 corner-footprint.js 的二分着色切角方案，逐层只切该层区域边界上的着色顶点：顶面仍是方格（深色格线），崖边一折一折呈六边形感；墙逐层按该层轮廓挤出。World/导航不变，只读几何。</p>
+<button id="cut" class="on">切角</button> <button id="grid">四边形 / 正方格</button> <button id="seed">换种子</button> <button id="spin" class="on">旋转</button>
+<div id="stat"></div></div>
+<script type="module">
+import * as THREE from 'three';
+import { buildQuadGrid, buildSquareGrid } from './src/core/grid.js';
+import { World } from './src/core/world.js';
+import { generateTerrain } from './src/terrain/generate.js';
+import { rockIslandMesh } from './src/core/rock-island-c08.js';
+const Q = new URLSearchParams(location.search);
+let kind = Q.get('grid') || 'quad', seed = Number(Q.get('seed') || 4), cutOn = Q.get('cut') !== '0', spin = !Q.has('still');
+const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true }); renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x3c5a5e);
+const camera = new THREE.PerspectiveCamera(30, 1, .1, 200); camera.position.set(0, 11, 14); camera.lookAt(0, 0, 0);
+const group = new THREE.Group(); scene.add(group);
+const sea = new THREE.Mesh(new THREE.CircleGeometry(40, 64), new THREE.MeshBasicMaterial({ color: 0x35565a })); sea.rotation.x = -Math.PI / 2; sea.position.y = -.02; scene.add(sea);
+let info = null;
+function build() {
+  group.clear();
+  const g = kind === 'square' ? buildSquareGrid({ radius: 12, cellSize: .8 }) : buildQuadGrid({ radius: 8, hexSize: 1, seed: 1337 }), w = new World(g);
+  generateTerrain(w, { seed, maxLevels: 3 });
+  const m = rockIslandMesh(w, { cut: cutOn ? .5 : 0, L: .3 });
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(m.position, 3)); geo.setAttribute('color', new THREE.Float32BufferAttribute(m.color, 3));
+  group.add(new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide })));
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(m.lines, 3));
+  group.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0x2d3d3a, transparent: true, opacity: .55 })));
+  const land = g.cells.filter((c) => w.ground(c) > 0).length;
+  info = { kind, seed, cells: g.cells.length, land, cutCorners: m.cutCorners, walls: m.walls, levels: m.levels, tris: m.position.length / 9, cut: cutOn };
+  document.getElementById('stat').textContent = `${kind === 'square' ? '正方格' : 'Townscaper 四边形'} · ${g.cells.length} 格 · 陆地 ${land} · ${m.levels} 层\n切角 ${m.cutCorners} 个（只在各层区域边界）· 墙段 ${m.walls} · 三角 ${info.tris}`;
+  window.rockIslandC08 = info;
+}
+build();
+document.getElementById('cut').onclick = (e) => { cutOn = !cutOn; e.target.classList.toggle('on', cutOn); build(); };
+document.getElementById('grid').onclick = () => { kind = kind === 'square' ? 'quad' : 'square'; build(); };
+document.getElementById('seed').onclick = () => { seed++; build(); };
+document.getElementById('spin').onclick = (e) => { spin = !spin; e.target.classList.toggle('on', spin); };
+function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+group.rotation.y = Number(Q.get('rot') || .6);
+renderer.setAnimationLoop(() => { if (spin) group.rotation.y += .003; renderer.render(scene, camera); });
+</script></html>

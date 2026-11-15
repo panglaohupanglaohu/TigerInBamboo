@@ -29,3 +29,9 @@ tests/deformation-browser.cjs既有薄檐保护实际GPU回归：混合面积比
 本批2段266帧，累计132/285，剩153；硬边局部代码验收1段，完整三模式/模块及材质语义仍待实现1段。原版只读，未同步游戏副本。
 
 收口：双网格近景硬边与三主场景GPU回归通过，index/pipeline显示132/285、剩153且有hierarchy入口（hierarchy-pages.json）；266条观察与PTS连续匹配，285素材/README匹配，管线缺0，空白检查通过。扫描发现原版并行新增archvoid/storydatum，静态对照已有拱底与全局层高立面后列部分覆盖：楔石/净空量测、任意塔基标高接口仍缺，四段2016素材未学，不增加视频计数。总映射144模块33增强/50静态/61部分。下一批1579478470098243584与1579474420749725696尚未核验，不计入累计。
+
+
+## 第 56 批（C08）
+
+- 1670725072540106755：复核 edge-smooth.html 三栏（无/普通/分层），note 过时。截图 C08-probe-edge-smooth_html.png、C08-edge-smooth-materials.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。
+- 1670720537662836736：edge-smooth.html 新增 ?materials=1 地表材质分区，蓝色 material 边进入共享 classifyWorldEdges/squareRelax。tests/edge-material-c08.mjs；截图 C08-edge-smooth-materials.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

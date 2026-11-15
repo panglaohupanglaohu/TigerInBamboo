@@ -14,6 +14,14 @@ const PRESET_DEFAULTS = {
   high: { dist: 20, orbit: 0.2, pitch: 0.55 },
 };
 
+const FAMILY_DEFAULTS = {
+  panorama: { dist: 34, orbit: 0.2, pitch: 0.42, fov: 72, preset: "cover" },
+  cinematic: { dist: 16, orbit: 0.55, pitch: 0.04, fov: 58, preset: "medium" },
+  macro: { dist: 4.5, orbit: 0.08, pitch: 0.12, fov: 46, preset: "close" },
+  tele: { dist: 22, orbit: 0.85, pitch: 0.12, fov: 40, preset: "wide" },
+  airshipPilot: { fov: 82, preset: "wide" },
+};
+
 /**
  * @param {object} recipe
  * @param {{ chapterDir: string }} opts
@@ -30,20 +38,26 @@ export function planChapter(recipe, opts) {
   const shotMap = new Map();
   const shots = recipe.storyboard.map((raw, i) => {
     const id = raw.id || `shot-${i + 1}`;
-    const preset = raw.camera?.preset || (i === 0 ? "cover" : "medium");
+    if (shotMap.has(id)) throw new Error(`storyboard 存在重复 shot id: ${id}`);
+    const family = raw.camera?.mode || raw.camera?.family || null;
+    const familyDefaults = FAMILY_DEFAULTS[family] || {};
+    const preset = raw.camera?.preset || familyDefaults.preset || (i === 0 ? "cover" : "medium");
     const defaults = PRESET_DEFAULTS[preset] || PRESET_DEFAULTS.medium;
     const camera = {
       preset,
       landmark: raw.camera?.landmark ?? null,
-      dist: raw.camera?.dist ?? defaults.dist,
-      orbit: raw.camera?.orbit ?? defaults.orbit,
-      pitch: raw.camera?.pitch ?? defaults.pitch,
+      dist: raw.camera?.dist ?? familyDefaults.dist ?? defaults.dist,
+      orbit: raw.camera?.orbit ?? familyDefaults.orbit ?? defaults.orbit,
+      pitch: raw.camera?.pitch ?? familyDefaults.pitch ?? defaults.pitch,
       waitMs: raw.camera?.waitMs ?? 800,
     };
-    // 保留科学镜头族字段（captureShots 读 mode/family/fov）
+    // 保留科学镜头族、实景主体和取信摆拍字段。
+    for (const key of ["object", "eye", "aim", "aimObject", "aimObjectMix", "holdSeconds", "battle", "stagePlayer", "holdingLetter", "releaseLetterAfterCapture"]) {
+      if (raw.camera?.[key] != null) camera[key] = raw.camera[key];
+    }
     if (raw.camera?.mode) camera.mode = raw.camera.mode;
     if (raw.camera?.family) camera.family = raw.camera.family;
-    if (raw.camera?.fov != null) camera.fov = raw.camera.fov;
+    if (raw.camera?.fov != null || familyDefaults.fov != null) camera.fov = raw.camera?.fov ?? familyDefaults.fov;
     const shot = {
       id,
       title: raw.title || id,
@@ -83,11 +97,17 @@ export function planChapter(recipe, opts) {
     id: recipe.id,
     title: recipe.title || recipe.id,
     subtitle: recipe.subtitle || "",
+    series: recipe.series || "信使纪事",
+    coverTagline: recipe.coverTagline || "",
+    layout: recipe.layout === "single" ? "single" : "spread",
+    captureVia: recipe.captureVia || "direct",
+    noFixtures: recipe.noFixtures === true,
     scene: recipe.scene || "messenger",
     gameUrl: recipe.gameUrl || null,
     timeOfDay: recipe.timeOfDay ?? null,
     viewport: recipe.viewport || { width: 1280, height: 800 },
     notes: recipe.notes || "",
+    story: recipe.story || "",
     hardConstraint: "all-images-from-game-screenshots",
     createdAt: new Date().toISOString(),
     shots,

@@ -1,0 +1,42 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>线框构建 → 着色 → 转镜 → 换岛 · 第 56 批 C09</title>
+<style>body{margin:0;background:#edf4f3;color:#20343c;font:14px/1.5 system-ui}header{padding:8px 14px}iframe{border:0;width:100%;height:calc(100vh - 128px)}a{color:#26758a}#stats{font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;background:#f8fbfa;padding:4px 8px}label{margin-right:10px}button{margin-right:6px}</style>
+<header><b>线框构建 → 着色 → 转镜 → 换岛</b>（主场景同一个 World / WorldMesh）· <a href="index.html" target="_top">首页</a> · <a href="stroke-reveal.html">逐笔描出</a> · <a href="cage.html">连续笼</a><br>
+<label>片子 <select id="mode"><option value="cage">1579478470098243584 格笼形变线框</option><option value="two">1579474420749725696 两座岛线框/着色/转镜</option><option value="reel">1447483550257799171 连续换岛 showreel</option></select></label>
+<label>网格 <select id="grid"><option value="mixed">三角+方格</option><option value="quad">四边形</option></select></label>
+<button id="play">播放</button><button id="pause">暂停</button>
+<div id="stats">加载中…</div></header>
+<iframe id="scene" title="主场景"></iframe>
+<script type="module">
+/* URL: ?mode=cage|two|reel&grid=mixed|quad&at=<round>:<phase>:<norm>（定格）&play=1
+ * 逻辑在 src/world/build-reel-c09.js（线来自 terrainmesh 的 terrainSurface / shape.at 格笼，排期 src/core/stroke-reveal-c09.js）。 */
+const q = new URLSearchParams(location.search), $ = (s) => document.querySelector(s);
+$('#mode').value = q.get('mode') || 'reel';
+$('#grid').value = q.get('grid') || ($('#mode').value === 'reel' ? 'quad' : 'mixed');
+let reel = null, timer = 0;
+function status() { if (reel) $('#stats').textContent = JSON.stringify(reel.info); }
+function load() {
+  window.buildReel = null; clearInterval(timer);
+  const f = $('#scene');
+  f.onload = () => {
+    const wait = setInterval(async () => {
+      const r = f.contentWindow.rea;
+      if (!r?.view?.worldMesh) return;
+      clearInterval(wait);
+      const st = f.contentDocument.createElement('style');
+      st.textContent = 'body *{visibility:hidden!important}#view,#view *{visibility:visible!important}';
+      f.contentDocument.head.appendChild(st);
+      const m = await f.contentWindow.eval("import('./src/world/build-reel-c09.js')");
+      reel = m.attachBuildReel(r.view, r.world, $('#mode').value);
+      const at = q.get('at');
+      if (at) { const [rd, ph, nm] = at.split(':'); reel.seek(reel.timeOf(+rd, ph, +(nm ?? 1))); }
+      if (q.get('play') === '1') reel.play();
+      window.buildReel = reel;
+      status(); timer = setInterval(status, 250);
+    }, 150);
+  };
+  f.src = 'index.html?scene=terrain&grid=' + $('#grid').value;
+}
+$('#mode').onchange = load; $('#grid').onchange = load;
+$('#play').onclick = () => reel?.play(); $('#pause').onclick = () => reel?.pause();
+load();
+</script></html>

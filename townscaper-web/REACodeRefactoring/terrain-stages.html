@@ -1,0 +1,309 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>生成管线分阶段慢放 · REACode重构版</title>
+<style>
+body{margin:0;background:#f2f5f3;color:#1f2c31;font:14px/1.6 system-ui}
+main{display:grid;grid-template-columns:340px 1fr;gap:18px;padding:18px;align-items:start}
+aside{background:#e6efec;border-radius:14px;padding:16px}
+h1{font-size:18px;margin:0 0 8px}
+h2{font-size:13px;margin:0 0 6px;color:#2c4650;text-transform:none}
+canvas{width:100%;height:auto;display:block;border-radius:10px;background:#fbf7ea}
+button,input,select{font:inherit;margin:4px 4px 4px 0;padding:4px 6px}
+#stats{font-variant-numeric:tabular-nums;background:#fff;border-radius:8px;padding:8px 10px;margin-top:10px;white-space:pre-line;font-size:13px}
+small{display:block;color:#41565e;margin-top:8px}
+a{color:#16626f}
+.thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.thumbs figure{margin:0;background:#26343a;border-radius:10px;padding:6px}
+.thumbs canvas{background:#26343a}
+.thumbs figcaption{color:#dfe9e6;font-size:12px;margin-top:4px;text-align:center}
+.bury{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;align-items:start}
+#bury{background:#26343a}
+@media(max-width:980px){main{display:block}.thumbs{grid-template-columns:repeat(2,1fr)}.bury{grid-template-columns:1fr}}
+</style>
+<main>
+<aside>
+  <nav><a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <a href="learn.html" target="_top">逐帧库</a></nav>
+  <h1>管线分阶段慢放 · 地表掩埋</h1>
+  <p>1654401054828638214「An quaint island being procedurally generated」：平铺的三角网先一格一格长出来，然后整片被<b>抬起来</b>成 3D，接着只剩灰模，最后才上色。</p>
+  <p>1670064751181791233 讲的是怎么慢下来看：作者把时间塞进 static NativeArray，job 里读，于是<b>每个 tick 只推进固定一段</b>生成时间。这里的 <code>budget</code> 就是那个固定量 —— 真实过 1000ms，管线也只走 budget 毫秒。</p>
+  <p>1671840905957978113 的转台里，台地顶面和房子齐平、只剩屋顶露在外面：<b>抬地面时，不超过新地面的建筑层被换成岩石</b>，上面的层留着。</p>
+  <label>种子 <input id="seed" type="number" value="1337" min="1" max="99999"></label>
+  <label>每 tick 预算(ms) <input id="budget" type="number" value="16" min="1" max="200" style="width:70px"></label>
+  <label>慢放倍率 <select id="slow"><option value="1">×1</option><option value="4" selected>×4</option><option value="12">×12</option></select></label>
+  <div><button id="play">播放</button><button id="reset">重来</button><button id="reroll">换一座岛</button></div>
+  <div id="stats" role="status">…</div>
+  <small>三角化 <code>src/terrain/pipeline-stages.js</code>（Bowyer–Watson）· 掩埋 <code>src/core/terrain-burial.js</code>（World 体素实算）</small>
+</aside>
+<section>
+  <h2>当前阶段（主画布）</h2>
+  <canvas id="stage" width="820" height="560"></canvas>
+  <div class="thumbs">
+    <figure><canvas id="thumb-triangulate" width="240" height="200"></canvas><figcaption>1 三角化</figcaption></figure>
+    <figure><canvas id="thumb-lift" width="240" height="200"></canvas><figcaption>2 抬起来</figcaption></figure>
+    <figure><canvas id="thumb-clay" width="240" height="200"></canvas><figcaption>3 灰模</figcaption></figure>
+    <figure><canvas id="thumb-color" width="240" height="200"></canvas><figcaption>4 上色</figcaption></figure>
+  </div>
+  <div class="bury">
+    <div>
+      <h2>地表抬升吞建筑（World 体素）</h2>
+      <canvas id="bury" width="460" height="380"></canvas>
+    </div>
+    <div id="buryStats" style="background:#fff;border-radius:8px;padding:10px;font-variant-numeric:tabular-nums;font-size:13px">…</div>
+  </div>
+</section>
+</main>
+<script type="module">
+import { buildIsland, stagePlan, StageRunner, STAGES } from './src/terrain/pipeline-stages.js';
+import { World } from './src/core/world.js';
+import { buildSquareGrid } from './src/core/grid.js';
+import { raiseGround, burialReport } from './src/core/terrain-burial.js';
+import { TERRAIN } from './src/core/palette.js';
+
+const $ = (s) => document.querySelector(s);
+const LEVEL_H = 0.52;
+let island = null, runner = null, playing = false, raf = 0, last = 0;
+
+function make(seed) {
+  island = buildIsland({ count: 150, radius: 10, seed });
+  runner = new StageRunner({ plan: stagePlan(), budget: Number($('#budget').value) || 16 });
+}
+
+/* ---------- 等距投影 ---------- */
+function project(x, z, y, S, ox, oy) {
+  return [ox + (x - z) * S, oy + (x + z) * S * 0.5 - y * LEVEL_H * S * 1.9];
+}
+
+function facesOf(stage) {
+  // 每个阶段画什么、怎么上色
+  const t = TERRAIN;
+  if (stage === 'lift') return { fill: '#e9e4d3', edge: '#b3ab99', shade: true, walls: true };
+  if (stage === 'clay') return { fill: '#b9b4a8', edge: '#8f8a80', shade: true, walls: true };
+  if (stage === 'color') return { fill: null, edge: 'rgba(60,70,60,.25)', shade: true, walls: true, biome: true };
+  return { fill: '#dcd7c6', edge: '#a9a294', shade: false, walls: false };
+}
+
+function biome(h, slope) {
+  if (h <= 0) return TERRAIN.sand;
+  if (slope > 3) return TERRAIN.rock;
+  if (h <= 1) return TERRAIN.sand;
+  if (h <= 3) return TERRAIN.grass;
+  if (h <= 4) return TERRAIN.moss;
+  return TERRAIN.rockPale;
+}
+
+function paint(canvas, stage, prog = 1) {
+  const g = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.clearRect(0, 0, W, H);
+  g.fillStyle = '#fbf7ea';
+  g.fillRect(0, 0, W, H);
+  // 等距投影下整座岛的包围盒：横向 40·S、纵向 10·S（远处）+ 6 层高 ≈ 5.9·S
+  const S = Math.min((W - 44) / 40, (H - 44) / 26);
+  const ox = W / 2, oy = H - 10 * S - 26;
+  const { points, tris, heights, order } = island;
+  const revealed = stage === 'seed' ? Math.max(1, Math.round(prog * 3))
+    : stage === 'triangulate' ? Math.max(1, Math.round(prog * points.length)) : points.length;
+  const visible = new Set(order.slice(0, revealed));
+  // 深度排序（远的先画）
+  const sorted = tris.slice().sort((a, b) => {
+    const ca = (points[a[0]].x + points[a[0]].z + points[a[2]].x + points[a[2]].z + points[a[1]].x + points[a[1]].z) / 3;
+    const cb = (points[b[0]].x + points[b[0]].z + points[b[2]].x + points[b[2]].z + points[b[1]].x + points[b[1]].z) / 3;
+    return ca - cb;
+  });
+  const conf = facesOf(stage);
+  const lifted = stage === 'lift' || stage === 'clay' || stage === 'color';
+  const hy = (i) => (lifted ? heights[i] : 0);
+
+  if (stage === 'triangulate' || stage === 'seed') {
+    // 平铺网：只在顶点都露出来之后才画这条边
+    g.lineWidth = 1.1;
+    for (const t of sorted) {
+      if (!t.every((i) => visible.has(i))) continue;
+      const [a, b, c] = t;
+      const pts = [a, b, c].map((i) => project(points[i].x, points[i].z, 0, S, ox, oy));
+      g.strokeStyle = visible.has(a) && visible.has(b) && visible.has(c) ? '#c9b83c' : '#e6dfae';
+      g.beginPath();
+      g.moveTo(pts[0][0], pts[0][1]); g.lineTo(pts[1][0], pts[1][1]); g.lineTo(pts[2][0], pts[2][1]); g.closePath();
+      g.stroke();
+    }
+    g.fillStyle = '#35c9c2';
+    for (const i of visible) {
+      const [x, y] = project(points[i].x, points[i].z, 0, S, ox, oy);
+      g.beginPath(); g.arc(x, y, 1.7, 0, Math.PI * 2); g.fill();
+    }
+  } else {
+    for (const t of sorted) {
+      if (!t.every((i) => visible.has(i))) continue;
+      const [a, b, c] = t;
+      const ys = [hy(a), hy(b), hy(c)];
+      const slope = Math.max(...ys) - Math.min(...ys);
+      const p = [a, b, c].map((i) => project(points[i].x, points[i].z, hy(i), S, ox, oy));
+      // 崖壁：这一条三角形的最低点往下到 0
+      if (conf?.walls && Math.min(...ys) > 0) {
+        for (let e = 0; e < 3; e++) {
+          const i0 = [a, b, c][e], i1 = [a, b, c][(e + 1) % 3];
+          const q0 = project(points[i0].x, points[i0].z, hy(i0), S, ox, oy);
+          const q1 = project(points[i1].x, points[i1].z, hy(i1), S, ox, oy);
+          const r0 = project(points[i0].x, points[i0].z, 0, S, ox, oy);
+          const r1 = project(points[i1].x, points[i1].z, 0, S, ox, oy);
+          g.fillStyle = conf.biome ? TERRAIN.rock : '#a9a49a';
+          g.beginPath(); g.moveTo(q0[0], q0[1]); g.lineTo(q1[0], q1[1]); g.lineTo(r1[0], r1[1]); g.lineTo(r0[0], r0[1]); g.closePath(); g.fill();
+        }
+      }
+      g.fillStyle = conf.biome ? biome(Math.min(...ys), slope) : conf.fill;
+      g.beginPath(); g.moveTo(p[0][0], p[0][1]); g.lineTo(p[1][0], p[1][1]); g.lineTo(p[2][0], p[2][1]); g.closePath(); g.fill();
+      if (conf.shade) {
+        g.fillStyle = `rgba(20,30,30,${0.04 + slope * 0.03})`;
+        g.fill();
+      }
+      g.strokeStyle = conf.edge; g.lineWidth = 0.6; g.stroke();
+    }
+  }
+  return { S, ox, oy };
+}
+
+/* ---------- 地表掩埋：真 World ---------- */
+let buryWorld = null;
+function buildBury() {
+  const grid = buildSquareGrid({ radius: 3, cellSize: 1 });
+  const world = new World(grid);
+  const center = grid.cells.reduce((a, c) => (c.cx * c.cx + c.cz * c.cz < a.cx * a.cx + a.cz * a.cz ? c : a));
+  const houses = [];
+  for (const c of grid.cells) {
+    if (Math.hypot(c.cx - center.cx, c.cz - center.cz) > 2.2) continue;
+    if (houses.length >= 5) break;
+    if ((c.cx + c.cz) % 3 !== 0) continue;
+    houses.push(c);
+  }
+  for (const c of houses) for (let lv = 1; lv <= 5; lv++) world.setSolid(c, lv, true);
+  // 一片台地：中心 3 格抬到 4，外圈抬到 2 —— 屋顶只露一截
+  const raised = [];
+  for (const c of grid.cells) {
+    const d = Math.hypot(c.cx - center.cx, c.cz - center.cz);
+    if (d < 1.6) raised.push({ cell: c, height: 4 });
+    else if (d < 2.6) raised.push({ cell: c, height: 2 });
+  }
+  raiseGround(world, raised);
+  buryWorld = { world, grid, houses, report: burialReport(world) };
+  return buryWorld;
+}
+
+function paintBury() {
+  const canvas = $('#bury');
+  const g = canvas.getContext('2d');
+  const { world, grid } = buryWorld;
+  const W = canvas.width, H = canvas.height;
+  g.setTransform(1, 0, 0, 1, 0, 0);
+  g.fillStyle = '#26343a'; g.fillRect(0, 0, W, H);
+  const S = 26, ox = W / 2, oy = H * 0.66;
+  const P = (x, z, y) => project(x, z, y, S, ox, oy);
+  const corners = (cx, cz) => [[cx - 0.5, cz - 0.5], [cx + 0.5, cz - 0.5], [cx + 0.5, cz + 0.5], [cx - 0.5, cz + 0.5]];
+  // 一个体素盒：顶面 + 两个朝向观众的侧面
+  const box = (cx, cz, y0, y1, side, top) => {
+    const q = corners(cx, cz);
+    const t = q.map(([x, z]) => P(x, z, y1));
+    const b = q.map(([x, z]) => P(x, z, y0));
+    g.fillStyle = side;
+    for (const [i, j] of [[1, 2], [2, 3]]) {
+      g.beginPath(); g.moveTo(t[i][0], t[i][1]); g.lineTo(t[j][0], t[j][1]);
+      g.lineTo(b[j][0], b[j][1]); g.lineTo(b[i][0], b[i][1]); g.closePath(); g.fill();
+    }
+    g.fillStyle = top;
+    g.beginPath(); g.moveTo(t[0][0], t[0][1]);
+    for (let i = 1; i < 4; i++) g.lineTo(t[i][0], t[i][1]);
+    g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(0,0,0,.25)'; g.lineWidth = 0.6; g.stroke();
+  };
+  const cells = grid.cells.slice().sort((a, b) => (a.cx + a.cz) - (b.cx + b.cz));
+  // 第一遍：抬起来的地面（岩石）
+  for (const c of cells) {
+    const ground = world.ground(c);
+    if (ground > 0) box(c.cx, c.cz, 0, ground, '#b9b1a2', ground >= 4 ? '#e3dccb' : '#d3cabb');
+  }
+  // 第二遍：还露出地面的建筑（地面以下的部分已经被吞了）
+  let roofs = 0;
+  for (const c of cells) {
+    if (!world.topIsBuilt(c)) continue;
+    const ground = world.ground(c);
+    box(c.cx, c.cz, ground, world.top(c), '#e8c46a', '#f0d06a');
+    roofs++;
+  }
+  return { roofs };
+}
+
+/* ---------- 主循环 ---------- */
+function render() {
+  const st = runner.state;
+  const prog = st.stage === 'done' ? 1 : st.stageProgress;
+  const stageForPaint = st.stage === 'done' || st.stage === 'bury' ? 'color' : st.stage;
+  paint($('#stage'), stageForPaint, st.stage === 'triangulate' || st.stage === 'seed' ? prog : 1);
+  const s = runner.state;
+  $('#stats').textContent = [
+    `阶段 ${s.stage} (${Math.min(STAGES.length, s.index + 1)}/${STAGES.length}) · 段内 ${(s.stageProgress * 100).toFixed(0)}%`,
+    `管线时间 ${(s.elapsed / 1000).toFixed(2)}s / ${(s.total / 1000).toFixed(2)}s · ticks ${runner.ticks} · budget ${runner.budget}ms`,
+    `已完成 ${s.completed.join(' → ') || '—'}`,
+    `三角 ${island.report.tris} · 边 ${island.report.edges}（边界 ${island.report.boundaryEdges}）· 面积 ${island.report.area.toFixed(1)}`,
+  ].join('\n');
+  return s;
+}
+
+function frame(ts) {
+  if (!playing) return;
+  const dt = last ? Math.min(200, ts - last) : 16;
+  last = ts;
+  const slow = Number($('#slow').value) || 1;
+  runner.advance(dt * slow);
+  render();
+  if (runner.state.done) { playing = false; }
+  else raf = requestAnimationFrame(frame);
+}
+
+function reset(seed) {
+  make(seed ?? (Number($('#seed').value) || 1337));
+  for (const st of ['triangulate', 'lift', 'clay', 'color']) {
+    const r = new StageRunner({ plan: stagePlan() });
+    r.seekTo(st, 1);
+    paint($('#thumb-' + st), st, 1);
+  }
+  const b = buildBury();
+  paintBury();
+  const rep = b.report;
+  $('#buryStats').innerHTML = `<b>地表抬升后的体检</b><br>`
+    + `只露屋顶（地面切进建筑柱）<b>${rep.peeking}</b> 座<br>`
+    + `整栋压在台地下 ${rep.blanketed} 座<br>`
+    + `被吞掉的楼层合计 ${rep.swallowedLevels} 层<br>`
+    + `最高地面 level ${rep.ceiling}<br>`
+    + `<small>屋顶保留、地面以下的层换成岩石：<code>buryColumn()</code>。用 World.fill 整列覆盖会把屋顶一起抹掉。</small>`;
+  render();
+}
+
+$('#play').onclick = () => {
+  if (runner.state.done) reset();
+  playing = true; last = 0;
+  cancelAnimationFrame(raf); raf = requestAnimationFrame(frame);
+};
+$('#reset').onclick = () => { playing = false; cancelAnimationFrame(raf); reset(); };
+$('#reroll').onclick = () => {
+  playing = false; cancelAnimationFrame(raf);
+  $('#seed').value = String(1000 + Math.floor(Math.random() * 9000));
+  reset();
+};
+$('#budget').onchange = () => { runner.budget = Number($('#budget').value) || 16; render(); };
+
+window.terrainStages = {
+  ready: true,
+  state: () => ({ ...runner.state, ticks: runner.ticks, budget: runner.budget }),
+  seek: (stage) => { playing = false; cancelAnimationFrame(raf); runner.seekTo(stage, 1); render(); return runner.state; },
+  tick: (dt) => { runner.advance(dt); render(); return runner.state; },
+  stats: () => ({ ...island.report, points: island.points.length, seed: Number($('#seed').value) }),
+  burial: () => ({
+    peeking: buryWorld.report.peeking,
+    blanketed: buryWorld.report.blanketed,
+    swallowedLevels: buryWorld.report.swallowedLevels,
+    ceiling: buryWorld.report.ceiling,
+  }),
+  reroll: (seed) => { playing = false; cancelAnimationFrame(raf); $('#seed').value = String(seed); reset(); return island.report; },
+};
+
+reset(1337);
+</script>
+</html>

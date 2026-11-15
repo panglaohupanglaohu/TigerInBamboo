@@ -1,0 +1,526 @@
+{
+  "id": "bookshop-letter",
+  "mode": "live",
+  "realCapture": true,
+  "port": 8931,
+  "via": "direct",
+  "captureClean": true,
+  "cropUsed": false,
+  "captureFlag": "cartonCapture=1",
+  "crop": null,
+  "generatedAt": "2026-11-07T08:23:57.663Z",
+  "shots": [
+    {
+      "shotId": "cover",
+      "file": "cover.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1426845,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -127.20011430570779,
+          -33.73692800383937,
+          272.78152541819736
+        ],
+        "aim": [
+          -55.701747841153534,
+          -92.28844860888331,
+          119.45278372983215
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s01",
+      "file": "s01.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 805691,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -86.01993189572241,
+          -62.08101171161485,
+          157.2038303310545
+        ],
+        "aim": [
+          -108.85021359935895,
+          -44.986304724417224,
+          128.12098778850967
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s02",
+      "file": "s02.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1817719,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "locust-bookshop-court",
+        "eye": [
+          -46.4753964566958,
+          -85.14567945596127,
+          152.5498633043493
+        ],
+        "aim": [
+          -17.332179750951685,
+          -90.59096228738012,
+          141.5488717614068
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s03",
+      "file": "s03.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1919313,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "ant-bookshop-court",
+        "eye": [
+          -64.81056631634861,
+          -96.99916351989464,
+          136.6205064044008
+        ],
+        "aim": [
+          -53.03108752778682,
+          -113.12566740265811,
+          113.72553420548697
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s04",
+      "file": "s04.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1822633,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "beetle-bookshop-court",
+        "eye": [
+          -87.68795388636545,
+          -83.07695333495751,
+          133.18202794598056
+        ],
+        "aim": [
+          -97.29181624981479,
+          -90.59096228738012,
+          104.26308091869697
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s05",
+      "file": "s05.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1936888,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -104.86843410564398,
+          -39.464192099912225,
+          224.8910826825542
+        ],
+        "aim": [
+          -64.70408872798066,
+          -82.78832495931604,
+          138.7583660624191
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s06",
+      "file": "s06.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1973651,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "locust-bookshop-court",
+        "eye": [
+          -40.689727505626166,
+          -97.46678472722812,
+          138.52430093833382
+        ],
+        "aim": [
+          -24.05805048281988,
+          -93.4260945024789,
+          138.7695394277144
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s07",
+      "file": "s07.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 2014367,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "ant-bookshop-court",
+        "eye": [
+          -72.54568182999677,
+          -101.4303754130004,
+          120.08169299022511
+        ],
+        "aim": [
+          -59.84628654769781,
+          -109.3337929854162,
+          114.14356616942104
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s08",
+      "file": "s08.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 2019583,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "beetle-bookshop-court",
+        "eye": [
+          -98.87524254669201,
+          -74.01344458067456,
+          119.77690275105734
+        ],
+        "aim": [
+          -97.86738748507851,
+          -83.65320100075203,
+          107.94223653961076
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s09",
+      "file": "s09.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 238273,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "hard-to-find-bookshop",
+        "eye": [
+          -101.59990110022683,
+          -58.461456427369356,
+          132.4018469601427
+        ],
+        "aim": [
+          -108.85021359935895,
+          -44.986304724417224,
+          128.12098778850967
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s10",
+      "file": "s10.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 2389618,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -88.76886741428751,
+          -43.309276552956675,
+          190.36545049573508
+        ],
+        "aim": [
+          -64.84342634158388,
+          -68.36988893703976,
+          139.05717653907845
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s11",
+      "file": "s11.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 833832,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-parts-quayside",
+        "eye": [
+          22.980569482434966,
+          -57.37988206876257,
+          173.30508521113245
+        ],
+        "aim": [
+          44.436863898542896,
+          -77.8935369462564,
+          139.57353627699115
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s12",
+      "file": "s12.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1267239,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-airship-mooring-mast",
+        "eye": [
+          -47.61349066287574,
+          -138.09875571820533,
+          135.1587924479192
+        ],
+        "aim": [
+          -4.0460184478721875,
+          -142.66321214127916,
+          114.42136005244762
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s13",
+      "file": "s13.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1809183,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -19.124858831134603,
+          -62.148073518115964,
+          194.81649502204897
+        ],
+        "aim": [
+          -57.778879519506056,
+          -95.7299072269896,
+          123.90720698886878
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s14",
+      "file": "s14.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1821488,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "ant-bookshop-court",
+        "eye": [
+          -69.27581754981037,
+          -102.94712517989718,
+          120.1680511616959
+        ],
+        "aim": [
+          -59.52578347270705,
+          -108.68197434794511,
+          113.45624510705876
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    },
+    {
+      "shotId": "s15",
+      "file": "s15.png",
+      "source": "canvas-todataurl",
+      "ok": true,
+      "cropUsed": false,
+      "bytes": 1523511,
+      "cameraFamily": "object-local",
+      "captureClean": true,
+      "airshipView": null,
+      "camera": {
+        "captureClean": true,
+        "cameraFamily": "object-local",
+        "object": "bookshop-steampunk-robots",
+        "eye": [
+          -123.73822817512026,
+          -28.001163640328897,
+          265.3574866531363
+        ],
+        "aim": [
+          -56.39412506727104,
+          -93.43560148158541,
+          120.93759148284435
+        ]
+      },
+      "hudCheck": {
+        "ok": true,
+        "captureMode": true,
+        "classClean": true,
+        "visibleBanned": []
+      }
+    }
+  ]
+}

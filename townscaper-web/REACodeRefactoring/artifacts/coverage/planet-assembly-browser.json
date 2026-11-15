@@ -1,0 +1,44 @@
+{
+  "total": 618,
+  "reports": [
+    {
+      "asm": 0.12,
+      "total": 618,
+      "cells": 74,
+      "verts": 5907,
+      "faces": 1969,
+      "only": 74
+    },
+    {
+      "asm": 0.4,
+      "total": 618,
+      "cells": 247,
+      "verts": 19797,
+      "faces": 6599,
+      "only": 247
+    },
+    {
+      "asm": 0.7,
+      "total": 618,
+      "cells": 433,
+      "verts": 29508,
+      "faces": 9836,
+      "only": 433
+    },
+    {
+      "asm": 1,
+      "total": 618,
+      "cells": 618,
+      "verts": 24765,
+      "faces": 8255,
+      "only": null
+    }
+  ],
+  "mats": {
+    "clay": true,
+    "shell": true,
+    "vertexColors": false,
+    "children": 1
+  },
+  "errors": []
+}

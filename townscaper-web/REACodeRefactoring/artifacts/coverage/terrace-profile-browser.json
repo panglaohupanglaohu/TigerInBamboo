@@ -1,0 +1,27 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "landCells": 736,
+      "patches": 90,
+      "topArea": 151.03907248350544,
+      "stepArea": 256.22580969674686,
+      "untouched": true,
+      "editDetected": true,
+      "restored": true,
+      "drawCalls": 43
+    },
+    {
+      "kind": "mixed",
+      "landCells": 592,
+      "patches": 106,
+      "topArea": 144.90187371821952,
+      "stepArea": 262.4135366880746,
+      "untouched": true,
+      "editDetected": true,
+      "restored": true,
+      "drawCalls": 43
+    }
+  ],
+  "errors": []
+}

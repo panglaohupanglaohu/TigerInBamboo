@@ -11,7 +11,8 @@ import {CLOUD_DRIFT_GLSL} from '../core/cloud-motion.js';
  *   1593215065423245313 运行时从网格烘出精灵、放进动态图集 → 用 core/atlas.js 分配图集里的格子。
  *
  * 本地近似：八张水平视图不是由“octagonal”一词唯一确定的原算法。
- * 尚未复现原球面树卡几何/完整俯仰采样与原云材质。
+ * 第 55 批：bake({pitches}) 多俯仰行 + ImpostorField({sphere}) 球面卡片（视角 alpha × 球面叶隙）+ blobCloudGeometry 原云材质；
+ * 默认仍是单仰角柱面卡（View 默认画面不变），由 view-post-extras.js 的 impostorpitch 开关切换。
  * 做法：
  *   烘焙：每种网格从水平方向 8 个方位（每 45°，仰角固定）各拍一张，放进图集里分配到的格子；
  *         白色材质 + 固定光照 → 图里存的是"明暗"，实例颜色在着色器里再乘上去（一套图给所有颜色的树用）。
@@ -22,6 +23,7 @@ import {CLOUD_DRIFT_GLSL} from '../core/cloud-motion.js';
 
 import * as THREE from 'three';
 import { Atlas } from '../core/atlas.js';
+import { foldedCard } from '../core/anchored-billboard.js';
 
 const VIEWS = 8;
 const CELL = 128;
@@ -53,24 +55,29 @@ export class ImpostorBaker {
    */
   // 1593215065423245313: "add and remove sprite allotments at runtime".
   // Reserve the complete 8-view set before rendering; no partial slot leaks.
-  bake(geometry, CELL = 128) {
+  bake(geometry, CELL = 128, { pitches = [ELEV], vertexColors = false } = {}) {
     if(!Number.isSafeInteger(CELL)||CELL<=0)throw new RangeError('positive integer bake size required');
+    // 第 55 批：多俯仰视图（REACode engine/impostor.js 只有一个仰角 0.32；1849427564034498642 的
+    // 球面树林从高俯角看时单行八方位会"躺平"）。pitches = 仰角列表（弧度，升序），帧按 [俯仰行][方位] 排。
+    if(!Array.isArray(pitches)||!pitches.length||pitches.length>4||!pitches.every((p,i)=>Number.isFinite(p)&&p>-.2&&p<1.5&&(i===0||p>pitches[i-1])))throw new RangeError('pitches must be 1-4 ascending elevations');
+    const P=pitches.length;
     geometry.computeBoundingBox();
     const bb=geometry.boundingBox,c=bb.getCenter(new THREE.Vector3()),ext=bb.getSize(new THREE.Vector3());
     const half=Math.max(ext.x,ext.y,ext.z)*.62;
     if(!Number.isFinite(half)||half<=0)throw new RangeError('nonempty finite geometry required');
     const slots=[];
-    try {for(let k=0;k<VIEWS;k++){const slot=this.atlas.allocate(CELL+16,CELL+16);if(!slot)throw new Error('impostor 图集满了');slots.push(slot);}}
+    try {for(let k=0;k<VIEWS*P;k++){const slot=this.atlas.allocate(CELL+16,CELL+16);if(!slot)throw new Error('impostor 图集满了');slots.push(slot);}}
     catch(error){for(const slot of slots)this.atlas.free(slot);throw error;}
-    const mesh=new THREE.Mesh(geometry,this.mat),cam=new THREE.OrthographicCamera(-half,half,half,-half,.01,half*8),frames=[];
+    if(vertexColors&&!this.matVC)this.matVC=new THREE.MeshLambertMaterial({color:0xffffff,vertexColors:true});
+    const mesh=new THREE.Mesh(geometry,vertexColors?this.matVC:this.mat),cam=new THREE.OrthographicCamera(-half,half,half,-half,.01,half*8),frames=[];
     this.scene.add(mesh);
     try {
       this.#withTarget(()=>{
         const r=this.renderer;
         if(!this.cleared){this.rt.scissorTest=false;r.setRenderTarget(this.rt);r.setClearColor(0,0);r.clear(true,true,true);this.cleared=true;}
-        for(let k=0;k<VIEWS;k++) {
-          const slot=slots[k],x=slot.x+8,y=slot.y+8,a=k/VIEWS*Math.PI*2;
-          cam.position.set(c.x+Math.sin(a)*Math.cos(ELEV)*half*4,c.y+Math.sin(ELEV)*half*4,c.z+Math.cos(a)*Math.cos(ELEV)*half*4);cam.lookAt(c);
+        for(let k=0;k<VIEWS*P;k++) {
+          const slot=slots[k],x=slot.x+8,y=slot.y+8,a=(k%VIEWS)/VIEWS*Math.PI*2,el=pitches[Math.floor(k/VIEWS)];
+          cam.position.set(c.x+Math.sin(a)*Math.cos(el)*half*4,c.y+Math.sin(el)*half*4,c.z+Math.cos(a)*Math.cos(el)*half*4);cam.lookAt(c);
           // Clear the whole allotment, including reused padding. Then draw inside.
           this.rt.viewport.set(slot.x,slot.y,slot.w,slot.h);this.rt.scissor.copy(this.rt.viewport);this.rt.scissorTest=true;
           r.setRenderTarget(this.rt);r.setClearColor(0,0);r.clear(true,true,true);
@@ -84,7 +91,7 @@ export class ImpostorBaker {
       try{this.#clearSlots(slots)}catch{};
       throw error;
     } finally {this.scene.remove(mesh);}
-    const baked={frames,size:half*2,center:c.clone()};this.#allocations.set(baked,slots);return baked;
+    const baked={frames,size:half*2,center:c.clone(),pitches:pitches.slice()};this.#allocations.set(baked,slots);return baked;
   }
   #withTarget(fn) {
     const r=this.renderer,target=r.getRenderTarget(),face=r.getActiveCubeFace(),mip=r.getActiveMipmapLevel(),color=r.getClearColor(new THREE.Color()),alpha=r.getClearAlpha();
@@ -110,8 +117,14 @@ export class ImpostorBaker {
  * 实例矩阵：平移 = 网格原点所在位置，Y 旋转 = 朝向，缩放 = 大小。
  */
 export class ImpostorField {
-  constructor(texture, baked, max, { cloud = false, horizon = false, uTime = { value: 0 }, uLight = { value: 1 } } = {}) {
-    const g = new THREE.PlaneGeometry(1, 1);
+  constructor(texture, baked, max, { cloud = false, horizon = false, uTime = { value: 0 }, uLight = { value: 1 }, sphere = false } = {}) {
+    const P = baked.pitches?.length || 1;
+    // REACode engine/impostor.js `bend`: a centre vertex pushed toward the camera (shared with
+    // shrubcard / 1191990107785572352). position.z marks it; trees bend 0.06, clouds stay flat.
+    const card = foldedCard({ width: 1, height: 1, depth: 1 });
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(card.positions, 3));
+    g.setIndex(card.index);
     this.color = new THREE.InstancedBufferAttribute(new Float32Array(max * 3).fill(1), 3);
     this.yaw = new THREE.InstancedBufferAttribute(new Float32Array(max), 1);
     g.setAttribute('aColor', this.color);
@@ -119,7 +132,8 @@ export class ImpostorField {
     this.depth = new THREE.InstancedBufferAttribute(new Float32Array(max).fill(1), 1);
     g.setAttribute('aCloudDepth', this.depth);
     const fr = [];
-    for (let i = 0; i < VIEWS; i++) fr.push(new THREE.Vector4(...baked.frames.slice(i * 4, i * 4 + 4)));
+    for (let i = 0; i < VIEWS * P; i++) fr.push(new THREE.Vector4(...baked.frames.slice(i * 4, i * 4 + 4)));
+    const pitchU = [...(baked.pitches || [ELEV])]; while (pitchU.length < 4) pitchU.push(pitchU[pitchU.length - 1] + 1);
     this.material = new THREE.ShaderMaterial({
       transparent: cloud,
       depthWrite: !cloud,
@@ -129,21 +143,28 @@ export class ImpostorField {
         uCenter: { value: baked.center }, uTime, uLight,
         uOrbit: { value: new THREE.Vector3(0, 0, .002) },
         uDepthMotion: { value: 0 },
+        uBend: { value: cloud ? 0 : .06 },
+        uPitch: { value: new THREE.Vector4(...pitchU) },
       },
-      defines: { CLOUD: cloud ? 1 : 0, HORIZON: horizon ? 1 : 0, VIEWS },
+      defines: { CLOUD: cloud ? 1 : 0, HORIZON: horizon ? 1 : 0, VIEWS, PITCHES: P, NFRAMES: VIEWS * P, SPHERE: sphere ? 1 : 0 },
       vertexShader: /* glsl */ `
         ${CLOUD_DRIFT_GLSL}
         attribute vec3 aColor;
         attribute float aYaw;
         attribute float aCloudDepth;
         uniform float uDepthMotion;
+        uniform float uBend;
         uniform float uSize;
         uniform vec3 uCenter;
         uniform float uTime;
         uniform vec3 uOrbit;
-        uniform vec4 uFrames[VIEWS];
+        uniform vec4 uFrames[NFRAMES];
+        uniform vec4 uPitch;
         varying vec4 vF0;
         varying vec4 vF1;
+        varying vec4 vF2;
+        varying vec4 vF3;
+        varying float vTp;
         varying vec2 vUv;
         varying vec3 vCol;
         varying float vK;
@@ -180,7 +201,14 @@ export class ImpostorField {
           vec3 hdir = vec3(hd.x, 0.0, hd.y) / length(hd);
           vec3 right = vec3(hdir.z, 0.0, -hdir.x);
           vec3 up = vec3(0.0, 1.0, 0.0);
-          vec3 p = center + (right * position.x + up * position.y) * uSize * s;
+          #if SPHERE
+            // 球面卡片：卡片整张朝向镜头（不只绕 Y），从高处往下看时不再是一张竖板
+            vec3 vdir = normalize(length(toCam) > 1e-6 ? toCam : back);
+            up = normalize(cross(vdir, right));
+            vec3 p = center + (right * position.x + up * position.y + vdir * position.z * uBend) * uSize * s;
+          #else
+            vec3 p = center + (right * position.x + up * position.y + hdir * position.z * uBend) * uSize * s;
+          #endif
           // 镜头相对这棵树的方位角 → 第几张图（相邻两张按 t 混合）
           float parentYaw = atan(modelMatrix[2].x, modelMatrix[2].z);
           float az = atan(hdir.x, hdir.z) - aYaw - parentYaw;
@@ -190,8 +218,19 @@ export class ImpostorField {
           // 在顶点着色器里选好两张图（整块四边形都一样），片元里就能无条件采样
           // —— 在条件分支里采样会让 mip 级别的导数失效，云会一片片地闪（之前的"雪花点"就是这个）
           int k0 = int(vK), k1 = int(mod(vK + 1.0, float(VIEWS)));
-          vF0 = uFrames[0]; vF1 = uFrames[0];
-          for (int i = 0; i < VIEWS; i++) { if (i == k0) vF0 = uFrames[i]; if (i == k1) vF1 = uFrames[i]; }
+          // 多俯仰：镜头仰角落在哪两行之间（行内同样两张方位图），四张双线性混合
+          float el = atan(toCam.y, max(1e-5, length(toCam.xz)));
+          int row = 0; vTp = 0.0;
+          #if PITCHES > 1
+            for (int r = 0; r < PITCHES - 1; r++) { if (el >= uPitch[r]) row = r; }
+            vTp = clamp((el - uPitch[row]) / max(1e-4, uPitch[row + 1] - uPitch[row]), 0.0, 1.0);
+          #endif
+          int r0 = row * VIEWS, r1 = min(row + 1, PITCHES - 1) * VIEWS;
+          vF0 = uFrames[0]; vF1 = uFrames[0]; vF2 = uFrames[0]; vF3 = uFrames[0];
+          for (int i = 0; i < NFRAMES; i++) {
+            if (i == r0 + k0) vF0 = uFrames[i]; if (i == r0 + k1) vF1 = uFrames[i];
+            if (i == r1 + k0) vF2 = uFrames[i]; if (i == r1 + k1) vF3 = uFrames[i];
+          }
           vUv = position.xy + 0.5;
           vCol = aColor;
           gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.0);
@@ -206,14 +245,31 @@ export class ImpostorField {
         uniform float uLight;
         varying vec4 vF0;
         varying vec4 vF1;
+        varying vec4 vF2;
+        varying vec4 vF3;
+        varying float vTp;
         varying vec2 vUv;
         varying vec3 vCol;
         varying float vK;
         varying float vT;
+        float leafHash(vec2 p) { return fract(sin(dot(floor(p), vec2(127.1, 311.7))) * 43758.5453); }
         void main() {
           vec4 a = texture2D(uTex, vF0.xy + vUv * vF0.zw);
           vec4 b = texture2D(uTex, vF1.xy + vUv * vF1.zw);
           vec4 c = mix(a, b, vT);
+          #if PITCHES > 1
+            vec4 a2 = texture2D(uTex, vF2.xy + vUv * vF2.zw);
+            vec4 b2 = texture2D(uTex, vF3.xy + vUv * vF3.zw);
+            c = mix(c, mix(a2, b2, vT), vTp);
+          #endif
+          #if SPHERE && !CLOUD
+            // 1205420678859632640 "alpha is view angle modulated by leaf texture mapped to a sphere"（REACode engine/impostor.js）：
+            // 卡片当成球的正面，z = 视线夹角余弦；同一球坐标（经度, 半径）采样叶隙噪声 → 方角削圆、边上出叶隙
+            vec2 cp = vUv - .5; float rr = length(cp) * 2.; float zz = sqrt(max(0., 1. - rr * rr));
+            float lon = atan(cp.y, cp.x) / 6.2831853 + .5;
+            float leaf = mix(leafHash(vec2(lon * 18., rr * 6.)), leafHash(vec2(lon * 18. + 7., rr * 6. + 3.)), .5);
+            c.a *= mix(1., smoothstep(.02, .42, zz), .6) * mix(1., smoothstep(.12, .5, leaf + (1. - rr) * .55), .85);
+          #endif
           #if CLOUD
             float alpha = smoothstep(0.05, 0.55, c.a) * 0.9;
             if (alpha < 0.02) discard;
@@ -279,5 +335,35 @@ export function cloudGeometry() {
   const out = new THREE.BufferGeometry();
   out.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   out.setAttribute('normal', new THREE.BufferAttribute(nor, 3));
+  return out;
+}
+
+/**
+ * 第 55 批：REACode engine/impostor.js 的原云材质 —— makeBlobCloud（5 个压扁二十面体一字排开）+ bakeLitColors
+ * （固定世界光 (0.45,0.82,0.35) 的 Lambert × 底部压暗 0.22 × 顶部提亮 0.16，暖白 #f2f0ea），光照烘进顶点色，
+ * 所以云在镜头转动时亮度不跳。尺寸归一到与 cloudGeometry() 同量级（宽 ~2.4）。烘焙时用 bake(..., {vertexColors:true})。
+ */
+export function blobCloudGeometry(seed = 1, { size = 1.1, tint = '#f2f0ea' } = {}) {
+  let s = seed * 7919 + 104729;
+  const rnd = () => ((s = (s * 7919 + 104729) % 233280) / 233280);
+  const L = new THREE.Vector3(0.45, 0.82, 0.35).normalize(), base = new THREE.Color(tint), height = size * .7;
+  const pos = [], nor = [], col = [];
+  for (let i = 0; i < 5; i++) {
+    const r = size * (0.30 + rnd() * 0.16);
+    const g = new THREE.IcosahedronGeometry(r, 1).toNonIndexed();
+    g.scale(1.25, 0.72, 1.15);
+    g.translate((i / 4 - 0.5) * size * 1.15, (rnd() - 0.5) * size * 0.16 + size * .4, (rnd() - 0.5) * size * 0.35);
+    g.computeVertexNormals();
+    const p = g.getAttribute('position'), n = g.getAttribute('normal');
+    for (let k = 0; k < p.count; k++) {
+      const lam = Math.max(0, n.getX(k) * L.x + n.getY(k) * L.y + n.getZ(k) * L.z), y = Math.min(1, Math.max(0, p.getY(k) / Math.max(height, 1e-3)));
+      const sh = (0.52 + 0.48 * lam) * (1 - 0.22 * (1 - y)) * (1 + 0.16 * y);
+      pos.push(p.getX(k), p.getY(k), p.getZ(k)); nor.push(n.getX(k), n.getY(k), n.getZ(k)); col.push(base.r * sh, base.g * sh, base.b * sh);
+    }
+  }
+  const out = new THREE.BufferGeometry();
+  out.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  out.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+  out.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
   return out;
 }

@@ -12,6 +12,7 @@
   架构说明见 ARCHITECTURE.md，接手规矩见 GUIDE.md。
 -->
 <link rel="stylesheet" href="src/ui/hud.css" />
+<link rel="stylesheet" href="src/ui/code-library-panel.css" />
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
 </head>
 <body>
@@ -36,6 +37,7 @@
     <button id="clear" title="清空 (C)">✕</button>
     <button id="share" title="复制分享链接">⧉</button>
     <button id="exportobj" title="导出 .OBJ（1430224300003545091）">⇩</button>
+    <button id="code-library-open" title="实际源码、能力组合与工坊入口">能力库</button>
     <button id="help" title="帮助 (H)">?</button>
   </div>
   <details id="environment-panel" class="panel" open><summary>风与天气 · 已接入能力</summary></details>
@@ -67,5 +69,6 @@ if (window.self !== window.top) {
 <script src="learn/architecture.js"></script>
 <script type="module" src="src/world/app.js"></script>
 <script type="module" src="src/ui/coverage-progress.js"></script>
+<script type="module" src="src/ui/code-library-panel.js"></script>
 </body>
 </html>

@@ -650,6 +650,10 @@
       border-color: rgba(100, 230, 210, 0.6);
       color: #8effd8;
     }
+    .touch-btn-q {
+      border-color: rgba(255, 196, 92, 0.6);
+      color: #ffd27a;
+    }
     .touch-btns {
       flex-wrap: wrap;
       max-width: 140px;
@@ -1825,8 +1829,9 @@
           );
           // Public Pages uses a compact release; localhost keeps source iteration.
           const localHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-          const release = !localHost || new URLSearchParams(location.search).has("bundle");
-          const entry = release ? "./runtime/game-0ada7d5f2a02.js" : "./src/main.js?v=apostles-r4b";
+          const authoring = new URLSearchParams(location.search).get("authoringEmbed") === "1";
+          const release = !authoring && (!localHost || new URLSearchParams(location.search).has("bundle"));
+          const entry = release ? "./runtime/game-0ada7d5f2a02.js" : "./src/main.js?v=authoring-entry-r1";
           console.info("[TigerMessenger] entry:", entry);
           await import(entry);
         }

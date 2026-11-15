@@ -1,0 +1,73 @@
+{
+  "setup": {
+    "cells": 2516,
+    "dotStats": {
+      "corners": 3262,
+      "cells": 2516,
+      "colors": {
+        "#ffd21a": 1684,
+        "#e0473c": 360,
+        "#5fbf4a": 221,
+        "#3f6fd8": 97,
+        "#c05fe0": 154
+      },
+      "on": true
+    },
+    "dominant": "#ffd21a",
+    "dominantShare": 0.669,
+    "nonYellowColors": 4,
+    "cornerRatio": 1.3,
+    "attenuation": {
+      "corners": false,
+      "dots": false
+    },
+    "sizes": {
+      "corners": 7,
+      "dots": 5
+    },
+    "order": {
+      "corners": 13,
+      "dots": 13
+    },
+    "visible": {
+      "corners": true,
+      "dots": true
+    },
+    "cornerMark": {
+      "hasMap": true,
+      "mapSize": [
+        16,
+        16
+      ],
+      "size": 7,
+      "toneMapped": false,
+      "alphaTest": 0.35,
+      "coreLum": {
+        "core": 33,
+        "rim": 246
+      }
+    },
+    "cellCount": 2516
+  },
+  "distance": {
+    "far": {
+      "corner": 7,
+      "cell": 5
+    },
+    "near": {
+      "corner": 7,
+      "cell": 5
+    }
+  },
+  "off": {
+    "corners": false,
+    "dots": false,
+    "stats": false
+  },
+  "back": {
+    "corners": true,
+    "dots": true,
+    "stats": true
+  },
+  "problems": []
+}

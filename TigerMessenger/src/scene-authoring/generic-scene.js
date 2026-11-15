@@ -1,3 +1,4 @@
+import {createViewportOrbit} from './viewport-orbit.js';
 /**
  * generic-scene.js — 通用场景编辑插件：任何在游戏里登记过根对象的场景（书店镇、湖沼、苔庭…）都能接入系统工坊。
  *
@@ -146,10 +147,10 @@ export function createGenericScene({ id, label, root, camera, canvas, setCameraA
   const paint = (all) => { for (const m of matById.values()) { const hex = all[m.id] || m.base; if (hex !== m.base) own(m); m.material.color.set(hex); } };
   paint(styleSaved);
   const styleApi = {
-    state: () => ({ scene: id, materials: [...matById.values()].map((m) => ({ id: m.id, name: m.name, base: m.base, color: (stylePreview || styleSaved)[m.id] || m.base, uses: m.uses, shared: !!m.shared })), saved: { ...styleSaved }, previewing: !!stylePreview }),
+    state: () => ({ scene: id, materials: [...matById.values()].map((m) => ({ id: m.id, name: m.name, base: m.base, color: (stylePreview || styleSaved)[m.id] || m.base, uses: m.uses, locked: Object.hasOwn(styleSaved,m.id), shared: !!m.shared })), saved: { ...styleSaved }, previewing: !!stylePreview }),
     preview(over = {}) { const next = { ...styleSaved }; for (const [k, v] of Object.entries(over)) { if (!matById.has(k) || !/^#[0-9a-f]{6}$/i.test(v)) continue; if (v.toLowerCase() === matById.get(k).base) delete next[k]; else next[k] = v.toLowerCase(); } stylePreview = next; paint(next); return { previewing: Object.keys(over).length }; },
     compare(on) { if (!stylePreview) return { comparing: false }; paint(on ? styleSaved : stylePreview); return { comparing: !!on }; },
-    save() { if (!stylePreview) throw Error('没有正在预览的风格改动'); styleSaved = stylePreview; stylePreview = null; try { storage?.setItem(STYLE_KEY, JSON.stringify(styleSaved)); } catch {} paint(styleSaved); return { saved: Object.keys(styleSaved).length }; },
+    save() { if (!stylePreview) throw Error('没有正在预览的风格改动'); if(!storage)throw Error('风格存储不可用'); storage.setItem(STYLE_KEY, JSON.stringify(stylePreview)); styleSaved = stylePreview; stylePreview = null; paint(styleSaved); return { saved: Object.keys(styleSaved).length }; },
     revert() { stylePreview = null; paint(styleSaved); return { reverted: true }; },
     reset() { stylePreview = null; styleSaved = {}; try { storage?.removeItem(STYLE_KEY); } catch {} paint(styleSaved); return { reset: true }; },
     snapshot: () => ({ ...styleSaved }),
@@ -175,10 +176,11 @@ export function createGenericScene({ id, label, root, camera, canvas, setCameraA
     const o = row.object; o.updateWorldMatrix(true, true);
     const box = new T.Box3().setFromObject(o); if (box.isEmpty()) throw Error('该物件没有可定位的几何');
     const c = box.getCenter(new T.Vector3()), up = c.clone().normalize(), side = new T.Vector3(0, 1, 0).cross(up);
+    if(up.lengthSq()<1e-8)up.set(0,1,0);
     if (side.lengthSq() < 1e-4) side.set(1, 0, 0); side.normalize();
     const d = Math.max(6, Math.min(120, box.getSize(new T.Vector3()).length() * 1.8));
     const apply = () => { camera.position.copy(c).addScaledVector(up, d * 0.55).addScaledVector(side, d * 0.85); camera.up.copy(up); camera.lookAt(c); camera.fov = 40; camera.updateProjectionMatrix(); camera.updateMatrixWorld(true); };
-    setCameraApply(apply); apply();
+    apply();const orbit=createViewportOrbit({camera,target:c});setCameraApply(orbit.apply,orbit);orbit.apply();
     const local = new T.Box3().setFromObject(o).applyMatrix4(new T.Matrix4().copy(o.matrixWorld).invert());
     marker = new T.Box3Helper(local, 0x87e6cb); marker.name = 'workshop-object-selection'; marker.material.depthTest = false; marker.renderOrder = 1000; o.add(marker);
   }

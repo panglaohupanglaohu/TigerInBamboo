@@ -1,0 +1,59 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>导航面内连续流场 · 百人群体 · REACode重构版</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#2f3133;color:#eef2ef;font:14px/1.5 system-ui}header{padding:10px 18px;background:#26282a}a{color:#9fd8e8}button,select{font:inherit;margin:2px 4px}canvas{display:block;margin:6px auto;cursor:crosshair}small{opacity:.75}</style>
+<header><b>导航面内连续流场 · 百人群体</b>（<a href="gifs/816748103193817088.mp4">816748103193817088</a>「I'm flowing right on the nav mesh, so it depends」· 同日 <a href="gifs/816743289500106752.mp4">816743289500106752</a>「3 groups of 100 soldiers…」）
+· <a href="pipeline.html">管线</a> · <a href="navigation.html">格心导航对照</a><br>
+<label>小队 <select id="group"><option value="0">蓝队</option><option value="1">橙队</option><option value="2">绿队</option></select></label>
+点地面给该队下目标（白圈）。<button id="reset">重置</button> <label><input type="checkbox" id="blend" checked> 共边带混合（过面连续）</label> <span id="info"></span><br>
+<small>距离场在导航面顶点上（面内两两顶点连边），任意点流向 = 所在面顶点距离平面梯度的反方向，面内 / 过边连续；群体 = 流向 × 速度 + 邻居分离，约束回导航面，高度取面上插值 → 坡道上下连续。灰度 = 高度（三层台地 + 两条坡道）。</small></header>
+<canvas id="c" width="720" height="480"></canvas>
+<script type="module">
+import { navMeshFromTerraces, buildVertexField, buildFaceDirs, flowAt, stepCrowd, locate, heightAt } from './src/world/navmesh-flow.js';
+const nx = 18, nz = 12, S = 40;
+const levelAt = (i, j) => { if (i <= 6) return 1; if (i === 7) return j === 5 || j === 6 ? 1 : null; if (j >= 8 && i >= 12) return j === 8 ? (i === 14 || i === 15 ? 2 : null) : 3; return 2; };
+const rampAt = (i, j) => (i === 7 && (j === 5 || j === 6) ? 'x+' : j === 8 && (i === 14 || i === 15) ? 'z+' : false);
+const mesh = navMeshFromTerraces({ nx, nz, size: 1, L: 0.6, levelAt, rampAt });
+const c = document.querySelector('#c'), ctx = c.getContext('2d'), $ = (s) => document.querySelector(s);
+const COLORS = ['#5aaee6', '#f0aa50', '#7fd08a'];
+const bg = ctx.createImageData ? ctx.createImageData(nx * S, nz * S) : null;
+if (bg) for (let y = 0; y < nz * S; y++) for (let x = 0; x < nx * S; x++) { const p = locate(mesh, (x + .5) / S, (y + .5) / S), o = (y * nx * S + x) * 4; if (p < 0) { bg.data.set([36, 38, 40, 255], o); continue; } const g = 90 + heightAt(mesh, p, (x + .5) / S, (y + .5) / S) * 60; bg.data.set([g, g, g * 1.05, 255], o); }
+const blendOn = () => $('#blend').checked;
+let groups;
+function reset() {
+  groups = [{ x: .5, z: 1 }, { x: .5, z: 7.5 }, { x: 9, z: 1 }].map((s, g) => ({ goal: null, field: null, agents: Array.from({ length: 100 }, (_, k) => { const x = s.x + (k % 10) * .32 + .1, z = s.z + Math.floor(k / 10) * .32 + .1, poly = locate(mesh, x, z); return { x, z, poly, y: heightAt(mesh, poly, x, z) }; }) }));
+}
+c.onclick = (e) => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / S, z = (e.clientY - r.top) / S; if (locate(mesh, x, z) < 0) return; const g = groups[Number($('#group').value)]; g.goal = { x, z, r: 1.1 }; g.field = buildVertexField(mesh, { goal: g.goal }); g.dirs = buildFaceDirs(mesh, g.field); };
+$('#reset').onclick = reset;
+function frame() {
+  if (bg) ctx.putImageData(bg, 0, 0);
+  let left = 0;
+  groups.forEach((g, gi) => {
+    if (g.field) left += stepCrowd(mesh, g.field, g.agents, 1 / 60, { speed: 1.4, faceDirs: blendOn() ? g.dirs : null }).left;
+    ctx.fillStyle = COLORS[gi]; for (const a of g.agents) { ctx.beginPath(); ctx.arc(a.x * S, a.z * S, 3.2, 0, 7); ctx.fill(); }
+    if (g.goal) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(g.goal.x * S, g.goal.z * S, g.goal.r * S, 0, 7); ctx.stroke(); }
+  });
+  const g0 = groups[0];
+  $('#info').textContent = `导航面 ${mesh.polys.length} 面 · 3 × 100 人 · 出面 ${left} · 共边带 ${blendOn() ? '开' : '关'}${g0.field ? ` · 蓝队平均距离 ${(g0.agents.reduce((s, a) => s + Math.hypot(a.x - g0.goal.x, a.z - g0.goal.z), 0) / g0.agents.length).toFixed(2)}` : ''}`;
+  window.navmeshFlowReview = { polys: mesh.polys.length, verts: mesh.verts.length, agents: groups.reduce((n, g) => n + g.agents.length, 0), left, goals: groups.filter((g) => g.goal).length, blend: blendOn() };
+  window.navmeshFlowEdgeGap = (on = true) => {
+    const g0 = groups[0]; if (!g0.field) return null;
+    const ang = (a, b) => Math.acos(Math.max(-1, Math.min(1, a[0] * b[0] + a[1] * b[1]))) * 180 / Math.PI;
+    const gaps = [];
+    for (const p of mesh.polys) for (let i = 0; i < p.vs.length; i++) {
+      const q = p.nb[i]; if (q < 0 || q <= p.id) continue;
+      const a = mesh.verts[p.vs[i]], b = mesh.verts[p.vs[(i + 1) % p.vs.length]];
+      const mx = (a.x + b.x) / 2, mz = (a.z + b.z) / 2;
+      const f1 = flowAt(mesh, g0.field, p.id, mx, mz, on ? g0.dirs : null), f2 = flowAt(mesh, g0.field, q, mx, mz, on ? g0.dirs : null);
+      if ((f1[0] === 0 && f1[1] === 0) || (f2[0] === 0 && f2[1] === 0)) continue;
+      gaps.push(ang(f1, f2));
+    }
+    gaps.sort((x, y) => x - y);
+    return gaps.length ? { n: gaps.length, p50: +gaps[Math.floor(gaps.length * .5)].toFixed(2), p90: +gaps[Math.floor(gaps.length * .9)].toFixed(2), max: +gaps[gaps.length - 1].toFixed(2) } : null;
+  };
+  window.navmeshFlowStep = (steps = 60, dt = 1 / 30) => { for (let i = 0; i < steps; i++) for (const g of groups) if (g.field) stepCrowd(mesh, g.field, g.agents, dt, { speed: 1.4, faceDirs: blendOn() ? g.dirs : null }); const g0 = groups[0]; return g0.field ? +((g0.agents.reduce((s, a) => s + Math.hypot(a.x - g0.goal.x, a.z - g0.goal.z), 0)) / g0.agents.length).toFixed(3) : null; };
+  window.navmeshFlowProbe = (x, z, on) => { const p = locate(mesh, x, z); return p < 0 ? null : flowAt(mesh, groups[0].field, p, x, z, on ? groups[0].dirs : null); };
+  if (!window.__noLoop) requestAnimationFrame(frame);
+}
+reset();
+groups[0].goal = { x: 12, z: 3, r: 1.2 }; groups[0].field = buildVertexField(mesh, { goal: groups[0].goal }); groups[0].dirs = buildFaceDirs(mesh, groups[0].field);
+frame();
+</script></html>

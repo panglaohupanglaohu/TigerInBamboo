@@ -1,0 +1,1760 @@
+[
+ {
+  "source": "src/blobshadow.js",
+  "targets": [
+   "src/core/unit-shadow.js",
+   "src/life/unit-shadow-batch.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）光向偏移、坡向椭圆、跨格拼接、楼梯坡面、measure；形变斜坡贴合缺，默认关。",
+  "clips": [
+   "820977247083528192",
+   "821321422140309504",
+   "821680056514781186"
+  ],
+  "sourceExports": [
+   "LIGHT_DIR",
+   "shadowParams",
+   "footprintHalfDiag",
+   "measure"
+  ],
+  "idReferences": [
+   "src/core/unit-shadow.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
+ },
+ {
+  "source": "src/borderpath.js",
+  "targets": [
+   "src/core/frontier.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）前线两侧场细分 + 多条前线；campaign.html 未画。",
+  "clips": [
+   "1097458505315946496"
+  ],
+  "sourceExports": [
+   "scatterNodes",
+   "buildEdgeGraph",
+   "walkBorder",
+   "buildBorder"
+  ],
+  "idReferences": [
+   "src/core/frontier.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/bouncegi.js",
+  "targets": [
+   "src/light/surface-bounce.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）2.5D 形因子 gather + 蒙特卡洛参考 + audit；与参考相关 0.53、校准偏低，未接 View。",
+  "clips": [
+   "1580835075629133825"
+  ],
+  "sourceExports": [
+   "rng",
+   "makeCanyon",
+   "normalAt",
+   "cellAreaAt",
+   "worldAt",
+   "directLight",
+   "samplePattern",
+   "bounce",
+   "bruteForce",
+   "luma",
+   "renderRay",
+   "audit"
+  ],
+  "idReferences": [
+   "src/world/view.js",
+   "src/light/surface-bounce.js",
+   "src/light/lightvolume.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/cheesenav.js",
+  "targets": [
+   "src/world/layerednav.js",
+   "src/world/battle-navigation.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）头顶净空、封门不连通、导航随几何生长、楼梯脚高；格内精细门户、形变侧壁缺。",
+  "clips": [
+   "906425294533394432",
+   "797119718477991936",
+   "1442695040888963407"
+  ],
+  "sourceExports": [
+   "carveCheese",
+   "components",
+   "navNodes",
+   "findPath",
+   "euclid",
+   "selfCheck"
+  ],
+  "idReferences": [
+   "src/capabilities/terrain.js",
+   "src/world/layerednav.js",
+   "src/world/battle-navigation.js",
+   "refactoring-audit.html",
+   "navigation.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
+ },
+ {
+  "source": "src/clouddeck.js",
+  "targets": [
+   "src/core/cloud-depth.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）三层深度视差 + 任意高度接收面云影模型；未接渲染，高耸云体缺。",
+  "clips": [
+   "1243228419162341379"
+  ],
+  "sourceExports": [
+   "LAYERS",
+   "WIND",
+   "SUN_DX",
+   "SUN_DY",
+   "SHADOW_STRENGTH",
+   "makeLayer",
+   "density",
+   "shadowAt",
+   "matchOffset",
+   "measure",
+   "sweepRange"
+  ],
+  "idReferences": [
+   "src/core/cloud-depth.js",
+   "src/life/vegetation.js",
+   "src/life/atmosphere.js",
+   "src/life/impostor.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/colorvolume.js",
+  "targets": [
+   "src/core/color-volume.js",
+   "src/core/oklab.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）八角色体三种插值 + 五特征分离 + 格分类；未接 View shader，无拖拽 UI。",
+  "clips": [
+   "1710031224838771027",
+   "1712088611934371876"
+  ],
+  "sourceExports": [
+   "makeVolume",
+   "sample",
+   "strip",
+   "volumeStats",
+   "volumeSheet",
+   "terrain"
+  ],
+  "idReferences": [
+   "src/core/oklab.js",
+   "src/core/color-volume.js",
+   "textures.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/combatfx.js",
+  "targets": [
+   "src/core/combat-state.js",
+   "src/badnorth/battle.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）落地结算（溺水 / 按落差硬直掉血摔死）；完整动作美术、旋转武器扫掠、3D 遮挡、盾推力缺。",
+  "clips": [
+   "870296307889573889",
+   "903647529203634176",
+   "946660607008403456",
+   "984813819280191488",
+   "995043346778415104",
+   "999191760944418817",
+   "901842167508992000",
+   "902069261304287232"
+  ],
+  "sourceExports": [
+   "ST",
+   "makeUnit",
+   "knockback",
+   "stepUnits",
+   "thrust",
+   "DecalSet",
+   "soakTint",
+   "buildFactionField",
+   "gore"
+  ],
+  "idReferences": [
+   "src/core/combat-state.js",
+   "src/core/combat-profile.js",
+   "src/core/route-preview.js",
+   "src/core/distance-isolines.js",
+   "src/world/view.js",
+   "src/life/vegetation.js",
+   "src/badnorth/flowfield.js",
+   "src/badnorth/damage-numbers.js",
+   "src/badnorth/battle.js",
+   "route-preview.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
+ },
+ {
+  "source": "src/contrasttex.js",
+  "targets": [
+   "src/core/contrast-field.js",
+   "src/core/oklab.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）OKLab 三角松弛（同特征边 ΔE 13.7→0.1）；未接 View，atlas/paint 未迁。",
+  "clips": [
+   "1482346496460828674"
+  ],
+  "sourceExports": [
+   "rgbToOklab",
+   "oklabToRgb",
+   "clampToGamut",
+   "css",
+   "insideDecal",
+   "buildDecal",
+   "initColors",
+   "relaxStep",
+   "solve",
+   "measure",
+   "paint"
+  ],
+  "idReferences": [
+   "src/core/oklab.js",
+   "src/core/contrast-field.js",
+   "textures.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/depfill.js",
+  "targets": [
+   "src/core/depression-fill.js",
+   "src/terrain/drainage.js",
+   "src/terrain/generate.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）epsilon 微坡、局部极小 / 湖簇诊断、填洼后重算河网；湖水面与侵蚀仍缺。",
+  "clips": [
+   "1447488323845509121",
+   "1442695040888963407"
+  ],
+  "sourceExports": [
+   "CFG",
+   "heights",
+   "isLand",
+   "localMinima",
+   "drained",
+   "naiveLift",
+   "priorityFlood",
+   "liftStats",
+   "stepEdges",
+   "lakeClusters",
+   "measure"
+  ],
+  "idReferences": [
+   "src/ui/walkthrough.js",
+   "src/core/depression-fill.js",
+   "src/terrain/generate.js",
+   "src/terrain/drainage.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/dual.js",
+  "targets": [
+   "src/core/vertex-dual.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）gridVertexDual（面积守恒）+ dualFoliageSites 已做；植被管线未切到对偶落点，崖壁竖面未覆盖。",
+  "clips": [
+   "959752525867036672"
+  ],
+  "sourceExports": [
+   "dualCells",
+   "pickFoliageSites"
+  ],
+  "idReferences": [
+   "src/core/vertex-dual.js",
+   "src/world/vertex-dual-overlay.js",
+   "src/life/vegetation.js",
+   "grids.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G1-grids.md"
+ },
+ {
+  "source": "src/edgesmooth.js",
+  "targets": [
+   "src/terrain/shape.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）none/dumb/hierarchical 三模式 + 材质边层级 + smoothingMetrics；边类仍按网格边，regularity 未复现大降。",
+  "clips": [
+   "1670720537662836736",
+   "1670725072540106755"
+  ],
+  "sourceExports": [
+   "ORDER",
+   "ORDER_NAME",
+   "classifyEdges",
+   "hierarchicalSmooth",
+   "refreshBounds",
+   "regularity",
+   "borderKink",
+   "areaDrift",
+   "snapshotAreas"
+  ],
+  "idReferences": [
+   "src/ui/walkthrough.js",
+   "src/terrain/shape.js",
+   "hierarchy.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G1-grids.md"
+ },
+ {
+  "source": "src/floatprobe.js",
+  "targets": [
+   "src/core/float-advect.js",
+   "src/world/float-probe.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）f16/f32/u8 平流误差 CPU 仿真；GPU 平流与跨平台矩阵未测。",
+  "clips": [
+   "1664565063552847873"
+  ],
+  "sourceExports": [
+   "probeFloat"
+  ],
+  "idReferences": [
+   "src/core/float-advect.js",
+   "src/world/float-probe.js",
+   "float.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/flowdemo.js",
+  "targets": [
+   "src/core/wind-flow.js",
+   "src/life/atmosphere.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）体素梯度软化真实网格并约束硬边（node 证明）；未应用到 View 网格。",
+  "clips": [
+   "931196707236392960"
+  ],
+  "sourceExports": [],
+  "idReferences": [],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/flowfield.js",
+  "targets": [
+   "src/world/navmesh-flow.js",
+   "src/world/battle-navigation.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）Battle 分层图生成导航面、连续流向在真实岛跑通（22–23/24 到达）；连续转向默认关，鞍点困人。",
+  "clips": [
+   "816748103193817088"
+  ],
+  "sourceExports": [
+   "buildFlowField",
+   "flowCrowd"
+  ],
+  "idReferences": [
+   "src/world/navmesh-flow.js",
+   "src/world/battle-navigation.js",
+   "navmesh-flow.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
+ },
+ {
+  "source": "src/gridmodes.js",
+  "targets": [
+   "src/core/grid.js",
+   "src/core/wfc.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）buildHexGrid 纯六边 + gridKindStats + 四子三角联合插槽；联合约束只在 2D，无 3D 分层模块。",
+  "clips": [
+   "1670790425232175108",
+   "1447496205282549761",
+   "1147881669350891521"
+  ],
+  "sourceExports": [
+   "squareLattice",
+   "hexLattice",
+   "triLattice",
+   "irregularTriFromCells",
+   "quadDegreeStats",
+   "latticeStats"
+  ],
+  "idReferences": [
+   "src/ui/walkthrough.js",
+   "src/core/grid.js",
+   "src/world/view.js",
+   "src/world/app.js",
+   "grids.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G1-grids.md"
+ },
+ {
+  "source": "src/gridpatch.js",
+  "targets": [
+   "src/core/radial-patch.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）多补丁 insertRadialPatches + 已有 World 迁移；手工模板库 / 带洞边界仍缺。",
+  "clips": [
+   "1301816247479345152"
+  ],
+  "sourceExports": [
+   "mulberry32",
+   "buildGrid",
+   "draw"
+  ],
+  "idReferences": [
+   "src/core/radial-patch.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G1-grids.md"
+ },
+ {
+  "source": "src/hiproof.js",
+  "targets": [
+   "src/core/hip-roof.js",
+   "src/build/buildings.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）公制四坡审计 + hipRoofsJoined 多格零山墙；非精确直骨架，凹屋顶谷线近似。",
+  "clips": [
+   "807256278154301441"
+  ],
+  "sourceExports": [
+   "hipRoof",
+   "gableRoof",
+   "polyArea3",
+   "normalZ",
+   "TOWERS",
+   "FLOOR_H",
+   "audit"
+  ],
+  "idReferences": [
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/holenav.js",
+  "targets": [
+   "src/world/battle-navigation.js",
+   "src/world/layerednav.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）门洞加价 + 封门不可达；格内精细门户、形变侧壁缺。",
+  "clips": [
+   "797119718477991936",
+   "906425294533394432"
+  ],
+  "sourceExports": [
+   "makeCheese",
+   "doorCost",
+   "buildPortalGraph",
+   "route",
+   "straightDist",
+   "routeNoDoors",
+   "report",
+   "growthSeries"
+  ],
+  "idReferences": [
+   "src/capabilities/terrain.js",
+   "src/world/layerednav.js",
+   "src/world/battle-navigation.js",
+   "refactoring-audit.html",
+   "navigation.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
+ },
+ {
+  "source": "src/housekit.js",
+  "targets": [
+   "src/core/house-kit.js",
+   "src/build/buildings.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）烟囱贴坡、檐口等高、窗台全局层线；8 档坡度池、茅草美术、撒村接口仍缺。",
+  "clips": [
+   "781027725452648448"
+  ],
+  "sourceExports": [
+   "FLOOR_H",
+   "EAVE_Y",
+   "EAVE_X",
+   "PITCHES",
+   "FLOORS",
+   "TRIM",
+   "mulberry32",
+   "makeHouse",
+   "buildVillage",
+   "toWorld",
+   "verify"
+  ],
+  "idReferences": [
+   "src/core/house-kit.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/islandpasses.js",
+  "targets": [
+   "src/core/terrace-edges.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）traceRings / interpContour 环追踪全部闭合；最终倒角一致性未验。",
+  "clips": [
+   "1669315384619540487"
+  ],
+  "sourceExports": [
+   "CFG",
+   "grid",
+   "levelOf",
+   "contourSegs",
+   "traceRings",
+   "wireSegs",
+   "shoreSegs",
+   "interpContour",
+   "measure"
+  ],
+  "idReferences": [
+   "src/core/terrace-edges.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/levelflora.js",
+  "targets": [
+   "src/core/level-flora.js",
+   "src/life/vegetation.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）每级台地两物种 + measure 接进 Vegetation；物种几何未建模。",
+  "clips": [
+   "959530111187013632"
+  ],
+  "sourceExports": [
+   "CELL",
+   "LEVEL_H",
+   "SPECIES",
+   "PALETTES",
+   "GLOBAL_PALETTE",
+   "buildTerrain",
+   "levelAt",
+   "buildFlora",
+   "clusterSpread",
+   "measure"
+  ],
+  "idReferences": [
+   "src/core/level-flora.js",
+   "src/life/vegetation.js",
+   "src/badnorth/battle.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/lighting.js",
+  "targets": [
+   "src/light/voxel-field.js",
+   "src/light/bake.js",
+   "src/light/lightvolume.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）体素软法线写回 + 分层场纹理 GLSL 采样（JS 镜像误差 3e-17）；未接 WorldMesh/View，GLSL 未上 GPU。",
+  "clips": [
+   "931196707236392960",
+   "1168571866405097472",
+   "1580846877855338497",
+   "1237305125070426112",
+   "1062374549407350790",
+   "1580845127207387137"
+  ],
+  "sourceExports": [
+   "buildVoxelField",
+   "reblurRect",
+   "bakeVertexAO",
+   "diffuseBounce",
+   "bakeSoftNormals",
+   "buildSDF",
+   "bakeRayBounce",
+   "bakeSixDirVolume",
+   "bakeVertexLight6",
+   "makeLightingUniforms",
+   "patchMaterial"
+  ],
+  "idReferences": [
+   "src/ui/walkthrough.js",
+   "src/ui/flow-markers.js",
+   "src/core/world-probes.js",
+   "src/core/world.js",
+   "src/core/wind-flow.js",
+   "src/core/meshwriter.js",
+   "src/world/view.js",
+   "src/life/atmosphere.js",
+   "src/light/bake.js",
+   "src/light/voxel-field.js",
+   "src/light/lightvolume.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/mountainlight.js",
+  "targets": [
+   "src/core/mountain-bake.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）none/baked/runtime 三模式相关性对照（0.09/0.90/0.93）；山体 atlas、球面混合、View 接入缺。",
+  "clips": [
+   "1786014232594485497"
+  ],
+  "sourceExports": [
+   "buildMountain",
+   "normalAt",
+   "renderShade",
+   "shadeStats",
+   "compare"
+  ],
+  "idReferences": [
+   "src/core/mountain-bake.js",
+   "src/terrain/blotch-atlas.js",
+   "mountain-bake.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/navgraph.js",
+  "targets": [
+   "src/world/navgraph.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）平床判向读河网 / 开凿顺序 + findNavPath/riverRouteStats/simplifyNav；riverFlow 不进存档。",
+  "clips": [
+   "1795831296952041691",
+   "1582293326815862786"
+  ],
+  "sourceExports": [
+   "buildNavGraph"
+  ],
+  "idReferences": [
+   "src/core/frontier-candidates.js",
+   "src/world/navgraph.js",
+   "src/world/navlayer.js",
+   "river-nav.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/overhangterrain.js",
+  "targets": [
+   "src/core/rock-topology.js",
+   "src/terrain/generate.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）measureOverhang + softSlopes；整数层 World 做不出连续软坡，变形侧壁碰撞未做。",
+  "clips": [
+   "1671808851895627776",
+   "1447488323845509121"
+  ],
+  "sourceExports": [
+   "NX",
+   "NY",
+   "NZ",
+   "WATER",
+   "heightField",
+   "buildTerrain",
+   "buildMesh",
+   "measure"
+  ],
+  "idReferences": [
+   "src/ui/walkthrough.js",
+   "src/core/rock-topology.js",
+   "src/core/depression-fill.js",
+   "src/capabilities/terrain.js",
+   "src/terrain/features.js",
+   "src/terrain/generate.js",
+   "src/terrain/drainage.js",
+   "src/terrain/terrainmesh.js",
+   "overhang.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/paintnormal.js",
+  "targets": [
+   "src/core/paint-normal.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）大笔触程序法线 + 切线扰动 + 顶面着色；未接 View。",
+  "clips": [
+   "1481661852887265288"
+  ],
+  "sourceExports": [
+   "paintNormal",
+   "shadeWithNormals",
+   "shadeFlat",
+   "stats",
+   "audit"
+  ],
+  "idReferences": [
+   "src/core/voxel-distance.js",
+   "src/core/paint-normal.js",
+   "src/light/texel-owner.js",
+   "src/light/lightvolume.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/patchblend.js",
+  "targets": [
+   "src/terrain/patch-blend.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）投影补丁 + 岸带手工 UV + 高度混合 + seamStats/edgeJump/AB；未接 terrainmesh/View。",
+  "clips": [
+   "1781405550061687016"
+  ],
+  "sourceExports": [
+   "makeElev",
+   "WATER",
+   "buildWorld",
+   "render",
+   "seamStats",
+   "edgeJump",
+   "abModes"
+  ],
+  "idReferences": [
+   "src/terrain/surface-pattern.js",
+   "src/terrain/patch-blend.js",
+   "src/terrain/terrainmesh.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/penumbra.js",
+  "targets": [
+   "src/core/penumbra.js",
+   "src/light/penumbra.js",
+   "src/world/penumbra-layer.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）大体素均值池化、地形自接收、3D 悬挑接收、带宽统计；View 仍只画在水面上。",
+  "clips": [
+   "1305951750638231552",
+   "1313840428685447170"
+  ],
+  "sourceExports": [
+   "NX",
+   "NY",
+   "buildWorld",
+   "coarsen",
+   "castShadow",
+   "blurMask",
+   "distToMask",
+   "composite",
+   "draw",
+   "drawGizmo",
+   "pickAzimuth"
+  ],
+  "idReferences": [
+   "src/ui/walkthrough.js",
+   "src/ui/learnpanel.js",
+   "src/core/penumbra.js",
+   "src/world/view.js",
+   "penumbra.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/piercefloor.js",
+  "targets": [
+   "src/core/arch-floor-budget.js",
+   "src/build/buildings.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）openingPierce 穿层统计 + 挑檐连续性；过梁几何、拱下净空碰撞仍缺。",
+  "clips": [
+   "802496920790777856"
+  ],
+  "sourceExports": [
+   "CFG",
+   "archTop",
+   "slabBottom",
+   "openingTop",
+   "piercedFloors",
+   "corniceBreaks",
+   "windows",
+   "cutWidth",
+   "measure"
+  ],
+  "idReferences": [
+   "src/core/arch-profile.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/portrait.js",
+  "targets": [
+   "src/core/part-random.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）SLOTS 表 + 内容无关槽位采样 + 剪影 IoU；ui.html 未改用，原素材缺。",
+  "clips": [
+   "958371606350454784",
+   "1010979395719319552"
+  ],
+  "sourceExports": [
+   "SLOTS",
+   "samplePortrait",
+   "drawPortrait",
+   "silhouetteDiversity"
+  ],
+  "idReferences": [
+   "src/core/part-random.js",
+   "ui.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/propanim.js",
+  "targets": [
+   "src/core/prop-anim.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）弹簧 / 错峰 / 缩没 + 按 key 稳定身份；slot 属性未接 World 网格。",
+  "clips": [
+   "1246074663546916873"
+  ],
+  "sourceExports": [
+   "springTrack",
+   "staggerAt",
+   "scaleAt",
+   "bakeProps",
+   "costBoth",
+   "rebake",
+   "audit"
+  ],
+  "idReferences": [
+   "src/core/prop-anim.js",
+   "src/world/view.js",
+   "src/life/effects.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/shrubcard.js",
+  "targets": [
+   "src/core/anchored-billboard.js",
+   "src/life/vegetation.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）折卡度量复现原值，墙根灌木可换折卡（开关默认关）；未目视。",
+  "clips": [
+   "1191990107785572352"
+  ],
+  "sourceExports": [
+   "cardFrame",
+   "halfNormals",
+   "foldAngle",
+   "shadeOf",
+   "sweep",
+   "compareCard"
+  ],
+  "idReferences": [
+   "src/core/anchored-billboard.js",
+   "src/life/vegetation.js",
+   "src/life/impostor.js",
+   "refactoring-audit.html",
+   "billboard-anchor.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/slotsolve.js",
+  "targets": [
+   "src/core/wfc.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）cornerVariantTiles（实为 27 种）+ cornerSlots + explain/dependencyChain；槽位缩略页与时序动画未做。",
+  "clips": [
+   "865200072685912064"
+  ],
+  "sourceExports": [
+   "K",
+   "variants",
+   "makeGrid",
+   "propagate",
+   "solve",
+   "measure"
+  ],
+  "idReferences": [
+   "src/core/wfc.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G1-grids.md"
+ },
+ {
+  "source": "src/smear.js",
+  "targets": [
+   "src/core/camera-motion.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）解析切向拖影 CPU+GLSL + 外圈锐度指标；View 仍用历史叠加。",
+  "clips": [
+   "1727315611959865407",
+   "1727324352264474664"
+  ],
+  "sourceExports": [
+   "velocityField",
+   "smearLengthPx",
+   "smear",
+   "sharpnessBand",
+   "sharpness",
+   "audit"
+  ],
+  "idReferences": [
+   "src/core/camera-motion.js",
+   "src/world/view.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/spherefusion.js",
+  "targets": [
+   "src/sphere/planet-town.js",
+   "planet.html"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）星球适配成共享 World（rock / BUILT 位），地形房子同一套角点；无页面 / GPU 验收。",
+  "clips": [],
+  "sourceExports": [],
+  "idReferences": [],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/spherehouse.js",
+  "targets": [
+   "src/sphere/planet-town.js",
+   "planet.html"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）房子模块按格角点变形放到球面（屋顶朝外、角点贴地）；单层替代件，页面未目视。",
+  "clips": [
+   "1768627849529893109",
+   "1584623053061099520"
+  ],
+  "sourceExports": [
+   "HOUSE",
+   "buildSphereHouses"
+  ],
+  "idReferences": [
+   "src/ui/walkthrough.js",
+   "src/core/halfedge.js",
+   "src/capabilities/terrain.js",
+   "src/world/scenes.js",
+   "src/sphere/planet-town.js",
+   "src/sphere/planet.js",
+   "src/terrain/terrainmesh.js",
+   "src/build/splice.js",
+   "planet.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/spheretown.js",
+  "targets": [
+   "src/sphere/planet-town.js",
+   "src/sphere/worldmap.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）球面河网、3D 噪声海陆、房子融合；多格约束冲突与原模块形状未解决。",
+  "clips": [
+   "1768627849529893109",
+   "1338825080844021760",
+   "1769641473895432220",
+   "1769691526924292506",
+   "1795831296952041691"
+  ],
+  "sourceExports": [
+   "SPHERE",
+   "buildSphereGrid",
+   "generateHeights",
+   "buildSphereMesh",
+   "buildShoreRibbon",
+   "buildSeaShell",
+   "carveRivers"
+  ],
+  "idReferences": [
+   "src/world/navgraph.js",
+   "src/world/navlayer.js",
+   "src/sphere/planet-town.js",
+   "src/sphere/planet.js",
+   "src/terrain/generate.js",
+   "river-nav.html",
+   "planet.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/splice.js",
+  "targets": [
+   "src/build/splice.js",
+   "src/terrain/terrainmesh.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）任意凸格 + 凸占地拉链环带嵌入，面积守恒可撤；不进存档 / 撤销栈 / 编辑器。",
+  "clips": [
+   "1584623053061099520"
+  ],
+  "sourceExports": [
+   "bilinear",
+   "spliceFootprint",
+   "footprintFor"
+  ],
+  "idReferences": [
+   "src/ui/walkthrough.js",
+   "src/core/halfedge.js",
+   "src/capabilities/terrain.js",
+   "src/world/scenes.js",
+   "src/sphere/planet-town.js",
+   "src/terrain/terrainmesh.js",
+   "src/build/splice.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/squadbanner.js",
+  "targets": [
+   "src/core/banner.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）三格徽记图集 + 队色派生 + 公告板偏航限制；金饰盾纹、竖旗横杆、Battle 替换缺。",
+  "clips": [
+   "827216768783495168"
+  ],
+  "sourceExports": [
+   "ROLES",
+   "EMBLEMS",
+   "CELL",
+   "PAD",
+   "drawEmblem",
+   "buildAtlas",
+   "cellInk",
+   "hsl",
+   "toOklab",
+   "dE",
+   "roleColor",
+   "css",
+   "ARMY_HUE",
+   "SQUADS",
+   "POLE_H",
+   "BANNER_W",
+   "BANNER_H",
+   "CLAMP_DEG",
+   "planScene",
+   "bannerWidth",
+   "measure"
+  ],
+  "idReferences": [
+   "src/core/banner.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
+ },
+ {
+  "source": "src/squigglefield.js",
+  "targets": [
+   "src/core/ornament-field.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）桶加速 SDF + 扭动动画 + 边缘探针；ornament.html 未换用。",
+  "clips": [
+   "1105131621391495176"
+  ],
+  "sourceExports": [
+   "seg",
+   "spiral",
+   "buildOrnament",
+   "fold",
+   "sdfAt",
+   "bakeBuckets",
+   "sdfBucketed",
+   "shade",
+   "probeEdge",
+   "inkShare",
+   "ascii"
+  ],
+  "idReferences": [
+   "src/ui/ornament.js",
+   "src/core/ornament-field.js",
+   "textures.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/surfacedeco.js",
+  "targets": [
+   "src/build/buildings.js",
+   "src/core/surface-decoration.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）surfaceFacadeRuns 共线墙段整立面求解（格界违规 51→0）；含门墙段 / 拐角 / 拱门挖洞仍缺。",
+  "clips": [
+   "1181464374839521280"
+  ],
+  "sourceExports": [
+   "DECO_TILES",
+   "runDeco",
+   "validate",
+   "permutationCost",
+   "townFaceCount",
+   "audit"
+  ],
+  "idReferences": [
+   "src/world/navgraph.js",
+   "src/world/navlayer.js",
+   "src/build/buildings.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/surfaceshadow.js",
+  "targets": [
+   "src/light/surface-shadow.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）屋顶投影者、3 射线软边、显著度资格、统计；墙 / 洞 / 形变面不接收。",
+  "clips": [
+   "1704218784028905984",
+   "1705195380457996629"
+  ],
+  "sourceExports": [
+   "buildTerrain",
+   "shadowMap",
+   "shadowStats",
+   "islandSeams",
+   "sweep",
+   "renderTop"
+  ],
+  "idReferences": [
+   "src/light/surface-shadow.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "src/terracecliff.js",
+  "targets": [
+   "src/core/terrace-profile.js",
+   "src/terrain/generate.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）classify 坡度分类 + 缓阶 / 崖边计数；无连续 fieldSmooth 场。",
+  "clips": [
+   "815236105079398400",
+   "781957658597269506"
+  ],
+  "sourceExports": [
+   "CFG",
+   "fieldSmooth",
+   "fieldTerrace",
+   "classify",
+   "measure",
+   "heights"
+  ],
+  "idReferences": [
+   "src/core/terrace-profile.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/terraceladder.js",
+  "targets": [
+   "src/core/ladder-profile.js",
+   "src/world/navlayer.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）锚点共用、端点接触、薄平台识别、攀爬采样；寻路未避薄平台、无攀爬动画。",
+  "clips": [
+   "781957658597269506",
+   "1669315384619540487"
+  ],
+  "sourceExports": [
+   "CFG",
+   "topZ",
+   "ladder",
+   "ladders",
+   "measure"
+  ],
+  "idReferences": [
+   "src/core/terrace-edges.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/tileforce.js",
+  "targets": [
+   "src/core/module-patch.js",
+   "src/core/wfc.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）synthesizeModulePatch + solveWithModule 强制模块出现；3D prefab/socket、缝进已有网格仍缺。",
+  "clips": [
+   "1751932427272909032",
+   "1670794261669769217",
+   "1579483114178768898"
+  ],
+  "sourceExports": [
+   "buildMixedGrid",
+   "clusterModule",
+   "moduleFromCells",
+   "moduleSignature",
+   "findPatch",
+   "countOccurrences",
+   "synthesizePatch",
+   "auditRarity",
+   "ringModule",
+   "audit"
+  ],
+  "idReferences": [
+   "src/core/grid.js",
+   "src/core/wfc.js",
+   "src/core/module-search.js",
+   "src/core/module-audit.js",
+   "src/core/module-fit.js",
+   "src/core/module-patch.js",
+   "src/capabilities/terrain.js",
+   "src/world/scenes.js",
+   "src/terrain/features.js",
+   "src/build/module-volume.js",
+   "src/build/multicell.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G1-grids.md"
+ },
+ {
+  "source": "src/tileplace.js",
+  "targets": [
+   "src/build/tile-assembly.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）FORT/RUIN 标签 tile 在分层 3D 格阵上走共享 WFC，有拼装顺序；无加权熵、无拼装动画。",
+  "clips": [
+   "784847588893814785",
+   "784847933686575104",
+   "787319655648100352",
+   "797844857821732864",
+   "793806535898136576",
+   "784848286272327680"
+  ],
+  "sourceExports": [
+   "SquareLattice",
+   "TriLattice",
+   "VoxelLattice",
+   "expandRotations",
+   "buildCompat",
+   "Placer",
+   "TILESET_FORT",
+   "TILESET_RUIN",
+   "TILESET_TRI",
+   "CONTENTS"
+  ],
+  "idReferences": [
+   "src/core/wfc.js",
+   "src/world/voxel-ghost.js",
+   "src/sphere/planet.js",
+   "src/build/tile-assembly.js",
+   "planet.html",
+   "refactoring-audit.html",
+   "voxel-ghost.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "src/uikit.js",
+  "targets": [
+   "src/core/playful-layout.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）layoutList（键稳定不重叠）+ 色相 / 图标接口；单 Move 目标 / 地面标记 / 游戏指令缺。",
+  "clips": [
+   "1242824460325052417",
+   "1016680972610359298",
+   "1024679338292256769",
+   "1201179450668441600"
+  ],
+  "sourceExports": [
+   "hash01",
+   "jitter",
+   "layoutList",
+   "hueFor",
+   "colorFor",
+   "GLYPHS"
+  ],
+  "idReferences": [
+   "src/ui/icon-ink.js",
+   "src/ui/icon-toolbar.js",
+   "src/core/ui-reveal.js",
+   "src/core/playful-layout.js",
+   "textures.html",
+   "ui.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/voxelflow.js",
+  "targets": [
+   "src/core/wind-flow.js",
+   "src/life/atmosphere.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）软法线写回（保硬边）+ 变形网格碰撞；未对 View 主网格调用。",
+  "clips": [
+   "931196707236392960",
+   "926903893866541057",
+   "943230624369868800"
+  ],
+  "sourceExports": [
+   "fieldFlow"
+  ],
+  "idReferences": [
+   "src/ui/flow-markers.js",
+   "src/core/world-probes.js",
+   "src/core/world.js",
+   "src/core/wind-flow.js",
+   "src/world/view.js",
+   "src/life/atmosphere.js",
+   "src/light/voxel-field.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "src/voxelnav.js",
+  "targets": [
+   "src/world/layerednav.js",
+   "src/world/battle-navigation.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）同柱多层节点、与单值高度图对照、连通统计；格内精细门户、形变侧壁缺。",
+  "clips": [
+   "906425294533394432",
+   "797119718477991936"
+  ],
+  "sourceExports": [
+   "buildVoxelNav",
+   "buildHeightmapNav"
+  ],
+  "idReferences": [
+   "src/capabilities/terrain.js",
+   "src/world/layerednav.js",
+   "src/world/battle-navigation.js",
+   "refactoring-audit.html",
+   "navigation.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
+ },
+ {
+  "source": "src/wind.js",
+  "targets": [
+   "src/core/wind-flow.js",
+   "src/life/atmosphere.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）粒子轨迹 / Catmull-Rom / 旗形 / 风场纹理接进 Atmosphere；旗子着色器未用风纹理。",
+  "clips": [
+   "926903893866541057",
+   "926890207298899969"
+  ],
+  "sourceExports": [
+   "makeWindField",
+   "sampleCurve",
+   "windStats"
+  ],
+  "idReferences": [
+   "src/core/wind-flow.js",
+   "src/life/atmosphere.js",
+   "src/badnorth/battle.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "engine/blotch.js",
+  "targets": [
+   "src/terrain/blotch-atlas.js",
+   "src/terrain/blotch-pattern.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）createBlotchAtlas + World 边缘场 + 受控 bleed 等 CPU/GLSL；未接 View 材质。",
+  "clips": [
+   "1696896119794479541",
+   "1696864977171189980",
+   "1703750394164199473",
+   "1704246032626762189",
+   "1786014232594485497",
+   "1442695040888963407"
+  ],
+  "sourceExports": [
+   "createBlotchAtlas",
+   "createRimField",
+   "createBlotch",
+   "attachBlotch"
+  ],
+  "idReferences": [
+   "src/core/mountain-bake.js",
+   "src/world/view.js",
+   "src/terrain/blotch-atlas.js",
+   "src/terrain/terrainmesh.js",
+   "mountain-bake.html",
+   "textures.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "engine/bnbrush.js",
+  "targets": [
+   "src/core/brush-atlas.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）可平铺方向划痕图集 + 边缘能量对照；未接着色器。",
+  "clips": [],
+  "sourceExports": [
+   "buildBrushAtlas",
+   "buildLedgeField"
+  ],
+  "idReferences": [],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "engine/impostor.js",
+  "targets": [
+   "src/life/impostor.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）树 impostor bend 中心顶点；多俯仰视图、球面卡片、原云材质缺。",
+  "clips": [
+   "1849427564034498642",
+   "1852334860137849222",
+   "926903893866541057",
+   "1191990107785572352",
+   "1205420678859632640",
+   "1243228419162341379",
+   "1593215065423245313"
+  ],
+  "sourceExports": [
+   "makeBlobTree",
+   "makeBlobCloud",
+   "createImpostors"
+  ],
+  "idReferences": [
+   "src/core/wind-flow.js",
+   "src/core/anchored-billboard.js",
+   "src/life/vegetation.js",
+   "src/life/atmosphere.js",
+   "src/life/impostor.js",
+   "impostors.html",
+   "leaf-surface.html",
+   "refactoring-audit.html",
+   "billboard-anchor.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "engine/outline.js",
+  "targets": [
+   "src/world/outline-pass.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）屏幕空间描边整类迁入 + CPU 参考验证；未接 view 渲染循环，法线图集 / 笔触缺。",
+  "clips": [
+   "1482011744843223042",
+   "1017355723171344385"
+  ],
+  "sourceExports": [
+   "OutlinePass"
+  ],
+  "idReferences": [
+   "src/core/normal-contrast.js",
+   "src/world/outline-pass.js",
+   "src/world/outline.js",
+   "textures.html",
+   "normal-contrast.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
+ },
+ {
+  "source": "engine/rivers.js",
+  "targets": [
+   "src/terrain/generate.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）paths/mouths/flowTo 写进 World.riverFlow；BFS 缓坡坍缩、球面、湖洞联合重建仍缺。",
+  "clips": [
+   "1769691526924292506"
+  ],
+  "sourceExports": [
+   "carveRivers",
+   "paintRivers"
+  ],
+  "idReferences": [
+   "src/sphere/planet-town.js",
+   "src/terrain/generate.js",
+   "river-nav.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
+ },
+ {
+  "source": "engine/sphere.js",
+  "targets": [
+   "src/sphere/planet-town.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）球极投影往返、球面 Delaunay 判据与翻边修复、质量指标；阶段动画缺。",
+  "clips": [
+   "1338829205157646336",
+   "1338825080844021760"
+  ],
+  "sourceExports": [
+   "randomSpherePoints",
+   "normalizeAll",
+   "project",
+   "unproject",
+   "delaunay2D",
+   "relaxOnce",
+   "triangleStats",
+   "buildSphere"
+  ],
+  "idReferences": [
+   "src/core/trigraph.js",
+   "src/sphere/planet-town.js",
+   "src/sphere/planet.js",
+   "planet.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ },
+ {
+  "source": "engine/spritepack.js",
+  "targets": [
+   "src/core/atlas.js",
+   "src/core/uv-charts.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）Atlas.repack/grow + uv-charts（法线分片、径向排序、零重叠）；未接贴图烘焙，填充率低。",
+  "clips": [
+   "1593215065423245313",
+   "1852334860137849222",
+   "1849427564034498642",
+   "1478114309263839244"
+  ],
+  "sourceExports": [
+   "SpriteAtlas",
+   "radialPack"
+  ],
+  "idReferences": [
+   "src/core/uv-charts.js",
+   "src/life/vegetation.js",
+   "src/life/impostor.js",
+   "textures.html",
+   "impostors.html",
+   "refactoring-audit.html",
+   "atlas-live.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G1-grids.md"
+ },
+ {
+  "source": "engine/surface.js",
+  "targets": [
+   "src/terrain/surface-pattern.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）完整 surface 层 + attachSurfacePattern 接口；未挂到 View 共享材质。",
+  "clips": [
+   "1241096929490149376",
+   "1714613599035863191",
+   "1781405550061687016",
+   "1699038611125985317",
+   "1699146321318314094"
+  ],
+  "sourceExports": [
+   "makeSurfaceMaterial"
+  ],
+  "idReferences": [
+   "src/core/sediment.js",
+   "src/core/texel-skip.js",
+   "src/world/island-snapshot.js",
+   "src/world/view.js",
+   "src/life/vegetation.js",
+   "src/terrain/surface-pattern.js",
+   "src/terrain/field-pattern.js",
+   "src/terrain/patch-blend.js",
+   "src/terrain/terrainmesh.js",
+   "textures.html",
+   "sediment.html",
+   "fields.html",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "engine/surfaceshadow.js",
+  "targets": [
+   "src/light/surface-shadow.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）相对投射高度 + 屋顶投影 + 竖面窄带 GLSL；竖面着色需改 view.js 未做。",
+  "clips": [
+   "1704218784028905984",
+   "1705195380457996629"
+  ],
+  "sourceExports": [
+   "createSurfaceShadow",
+   "attachSurfaceShadow"
+  ],
+  "idReferences": [
+   "src/light/surface-shadow.js",
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G3-light-texture.md"
+ },
+ {
+  "source": "engine/worldmap.js",
+  "targets": [
+   "src/sphere/worldmap.js"
+  ],
+  "status": "部分覆盖",
+  "gap": "（第 53 批）3D 噪声海陆、1px 海岸、极区拉伸度量、四表面角色；未上星球贴图。",
+  "clips": [
+   "1783792917183606829"
+  ],
+  "sourceExports": [
+   "fbm3",
+   "buildWorldMap",
+   "paintEquirect",
+   "paintSphere",
+   "poleStretch"
+  ],
+  "idReferences": [
+   "refactoring-audit.html"
+  ],
+  "frameReview": true,
+  "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+ }
+]

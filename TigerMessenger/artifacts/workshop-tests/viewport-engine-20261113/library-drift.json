@@ -1,0 +1,65 @@
+{
+  "scope": "Read-only comparison, not a behavioral or visual equivalence test",
+  "modules": [
+    {
+      "path": "src/core/grid.js",
+      "same": false,
+      "sourceSha256": "c9fe9bc4c9f7dcfeaa17cd6f66cc472a877818692236bcb4e4d208fceb50cf0f",
+      "gameSha256": "7466c5c4d28cc12c4990b3b1c536df9e3e6d84f60a3b2af6d8da7de953501de9"
+    },
+    {
+      "path": "src/core/world.js",
+      "same": false,
+      "sourceSha256": "f33d865e74e5270e6f214eb737e637c916d1dda1a332092b084415accfbd8ea2",
+      "gameSha256": "2f5e07963679d6f76c2e468aec4d822a5357d7d91bf5a2978b60c28c5eea6c9e"
+    },
+    {
+      "path": "src/core/meshwriter.js",
+      "same": false,
+      "sourceSha256": "ce730bb510f0791ae7298ffec7ffffca4d086a42f26cb3aa6ff590c0daac6ea7",
+      "gameSha256": "4ee6745fe959736a8560297553b45f15710c2affa6cdbc708e451a416f2dd06e"
+    },
+    {
+      "path": "src/world/worldmesh.js",
+      "same": false,
+      "sourceSha256": "40eebb20a7eab5a8d9e77612f700fef72773867d4f4f9b3949ffe20e2122d48c",
+      "gameSha256": "cde1e69e247ded77a1e706f3cacb24caedaf28bcef3dfd84da4f63096039db3e"
+    },
+    {
+      "path": "src/terrain/shape.js",
+      "same": false,
+      "sourceSha256": "9b3f1847098c047ba073ab974c43651f5a33b59fb83c35406db995d64a4a6478",
+      "gameSha256": "251df1b5e30dea532bffbfb1c4c457b53edb9655b999fd9c7754aa0c909fbd97"
+    },
+    {
+      "path": "src/terrain/terrainmesh.js",
+      "same": false,
+      "sourceSha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9",
+      "gameSha256": "1247b54c804f62610be4e6dab5dfaf165976f89c831c40fb2b0140cf53fbafa5"
+    },
+    {
+      "path": "src/build/buildings.js",
+      "same": false,
+      "sourceSha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819",
+      "gameSha256": "afa31c6e65a589cb19f3c5422a4b5f3b4877e9066ff9be69cb8be60ccdabfcc2"
+    },
+    {
+      "path": "src/light/bake.js",
+      "same": false,
+      "sourceSha256": "b8a1512bab3209c4489821a125ffcdd0ba36a7941d348d422fc913704d7644c2",
+      "gameSha256": "2edc43f5acb1da16b133390223a98f5559e7b6fc87896b88043f6ef6f8b750a5"
+    },
+    {
+      "path": "src/life/vegetation.js",
+      "same": false,
+      "sourceSha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4",
+      "gameSha256": "14ce2e133cf162af59a92bcc970800cdf9d71cc05dd0496b1e8b08d7a2714a84"
+    },
+    {
+      "path": "src/water/shore.js",
+      "same": false,
+      "sourceSha256": "0ab4472edd71e8557d180a291d444440fc4a882639159c7b6e587d62d59e678f",
+      "gameSha256": "d4798b6bd112948d181c308295436d06e64fbe966d1d445dbd54607304e181e2"
+    }
+  ]
+}

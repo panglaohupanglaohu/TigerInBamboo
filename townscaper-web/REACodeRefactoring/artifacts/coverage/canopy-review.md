@@ -15,3 +15,13 @@ canopy-browser.cjs在terrain/town/fusion/badnorth四个真实场景，三种树�
 
 ## 边界
 松弛是本地球并集/弹簧/压力近似，尚未证明全局无自交，也没有原作参数、完整树冠美术及自动处理全部低分辨率歧义。严格预算及无效几何拒绝属于API约束。灌木仍保留旧球团；没有替换游戏副本或认证TigerMessenger实景。原版模块映射按本轮已实现并运行验收的树冠/烘焙能力记迁移增强，边界继续保留。
+
+## 复核记录（第 41 轮，2026-11-10 00:14 起）
+
+- 帧数 / fps / 时长：155 帧 / 10.01 / 15.27s（`artifacts/coverage/1580162341668237312/frames.json` decoded=155）
+- 联系表：sheet-00（0000–0099）、sheet-01（0100–0154）两张全部看过；原尺寸回看 frame-0060
+- 逐帧：0000–0066 是青底白线框的球堆等值面，红线严格落在两球相交的“接缝圈”上（0060 原尺寸可辨：白三角网 + 红色接缝折线，球心之间连线不画）；0067 起硬切成绿色成形树冠压在石台地上，之后 0067–0154 只有相机绕行、几何不动，无 UI
+- 代码复核：`src/core/canopy.js` `buildCanopy()` —— 球并集场 → surface nets 提取 → 按**三角形重心最近球**给面打标签、两面标签不同即硬边（对应原文“edges between triangles closest to different spheres”）→ 软邻域平滑 + 接缝弹簧 + 沿法线外压；闭合/定向/单环链接校验后拒绝退化网格
+- 本轮跑过：`node tests/canopy.mjs` PASS（428 顶点 / 852 三角 / 92 硬边 / 硬边均值 0.03812→0.02974 / 球体有向体积 4.038）；`node tests/canopy-browser.cjs` PASS（terrain/town/fusion/badnorth 四场景重建 + impostor 烘焙，errors 空）
+- 截图核过：`artifacts/coverage/canopy-terrain.png` —— 树冠是融合成一体的绿色团块、叶团之间是软折痕，不是互相穿插的独立球
+- 差异：仍用 surface nets 而非原作 Marching Cubes；灌木仍是旧球团

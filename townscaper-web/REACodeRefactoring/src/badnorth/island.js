@@ -12,8 +12,9 @@
 
 import { fbm, makeRng } from '../core/noise.js';
 import { buildNav } from '../world/navgraph.js';
+import { carveBadNorthCaves, cavesFromUrl } from './island-caves.js';   // 第 56 批 C02：洞穴变体（默认关）
 
-export function generateBadNorth(world, seed = 7) {
+export function generateBadNorth(world, seed = 7, { caves = cavesFromUrl() } = {}) {
   world.reset();
   const rng = makeRng(seed * 53 + 1);
   const cells = world.cells;
@@ -39,17 +40,40 @@ export function generateBadNorth(world, seed = 7) {
     if (far.length) world.fill(far[(rng() * far.length) | 0], 1, { rock: true });
   }
   // 3. 可走性：每块台地都要能从沙滩走上去（917405214638006273）
+  //    片子里的调试层就是「每格一个点、黄线连邻格」的可走图（view.setDebug('navwalk') 画的同一份数据）。
+  //    起点：沙滩（1 层）；三角网格上常常整圈直接从 0 跳到 2 层、一格沙滩都没有，
+  //    这时退到「最低的那圈岸格」，否则整段启发式会被 break 掉（mixed 网格实测 3/5 个 seed 就是这种情况）。
+  const shoreStart = () => {
+    const shore = cells.filter((c) => world.top(c) > 0 && c.edgeNeighbors.some((id) => id >= 0 && world.top(cells[id]) === 0));
+    if (!shore.length) return null;
+    const beach = shore.filter((c) => world.top(c) === 1);
+    if (beach.length) return beach[0];
+    const low = Math.min(...shore.map((c) => world.top(c)));
+    return shore.find((c) => world.top(c) === low) || null;
+  };
+  const navFix = { passes: 0, lowered: 0, unreachableAfter: 0, start: null };
   for (let pass = 0; pass < 6; pass++) {
-    const beach = cells.find((c) => world.top(c) === 1);
+    const beach = shoreStart();
     if (!beach) break;
+    navFix.start = world.top(beach);
     const nav = buildNav(world, { start: beach });
     let fixed = 0;
     for (const c of cells) {
       const t = world.top(c);
       if (t >= 2 && !Number.isFinite(nav.tree.time[c.id])) { world.fill(c, t - 2, { rock: true }); fixed++; }
     }
+    navFix.passes = pass + 1;
+    navFix.lowered += fixed;
+    if (fixed) {
+      const after = buildNav(world, { start: beach });
+      navFix.unreachableAfter = cells.filter((c) => world.top(c) >= 2 && !Number.isFinite(after.tree.time[c.id])).length;
+    } else {
+      navFix.unreachableAfter = 0;
+    }
     if (!fixed) break;
   }
+  world.bnNavFix = navFix;
+  world.bnCaves = caves > 0 ? carveBadNorthCaves(world, seed, { count: caves }) : null;
   // 4. 小屋：台地上（≥2 层）四周平的格子，挑 3–5 个，彼此隔开；墙色 -1 = 主题的白墙
   const flat = cells.filter((c) => { const g = world.ground(c); return g >= 2 && world.top(c) === g && c.edgeNeighbors.every((id) => id >= 0 && world.ground(cells[id]) === g); });
   const houses = [];

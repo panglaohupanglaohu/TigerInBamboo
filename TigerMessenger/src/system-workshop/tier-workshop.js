@@ -2,10 +2,10 @@
  * tier-workshop.js — 一层工坊的通用界面：管线泳道（代码能力 + 目录占位）+ super agent 面板 + 节点详情。
  * 球系统工坊、物件工坊都用它；层的差异由 agent hooks 与 preview 组件提供。
  */
-import { loadCatalog, onCatalogChange, renderNodeDetail, EXEC } from './catalog-view.js?v=sys-r11';
-import { makeDropZone } from './capability-sidebar.js?v=sys-r11';
+import { loadCatalog, onCatalogChange, renderNodeDetail, EXEC } from './catalog-view.js?v=code-r2';
+import { makeDropZone } from './capability-sidebar.js?v=lineage-r1';
 import { saveSet } from './capability-sets.js?v=sys-r4';
-import { createTierAgent } from './tier-agent.js';
+import { createTierAgent } from './tier-agent.js?v=engine-r1';
 
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 const btn = (text, fn, cls) => { const b = el('button', text, cls); b.type = 'button'; b.onclick = (e) => { e.stopPropagation(); fn(); }; return b; };
@@ -19,10 +19,60 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
   // 待完成节点（pending）：集合里还没做好的能力，整组拖入时一起进管线，执行时跳过；能力代码做好后自动转成可执行节点
   pipe.nodes = pipe.nodes.filter((n) => n.pending || caps.some((c) => c.id === n.id));
   for (const n of pipe.nodes) if (n.pending && caps.some((c) => c.id === n.id)) { delete n.pending; n.enabled = true; }
+  // 待完成节点对应的学习条目已经被某个能力实现了：换成那个能力
+  const byLearn = new Map(); for (const c of caps) for (const id of c.learn || []) if (!byLearn.has(String(id))) byLearn.set(String(id), c);
+  pipe.nodes = pipe.nodes.flatMap((n) => { const c = n.pending && byLearn.get(String(n.id)); if (!c) return [n]; if (pipe.nodes.some((x) => x.id === c.id)) return []; return [{ id: c.id, enabled: true, params: {} }]; });
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(pipe)); } catch {} };
   let workshop = null, busy = false, events = [];
 
-  const agent = createTierAgent({ tier, capabilities: caps, ...agentConfig, onEvent: (e) => { events.push(e); if (events.length > 50) events.shift(); renderTimeline(); if (e.type === 'experience') renderPipeline(); } });
+  // 执行进度：正在跑哪个能力（卡片高亮 + 顶部进度条），跑完每个节点标 ✓ / ✗ 和原因。
+  // Worker 跑得很快，进度按队列逐步显示（每步至少停留一下），看得清顺序。
+  let run = null; const runQueue = []; let runTimer = null;
+  const queueRun = (fn) => { runQueue.push(fn); if (runTimer) return; const tick = () => { const next = runQueue.shift(); if (!next) { runTimer = null; return; } if (run) next(); paintRun(); runTimer = setTimeout(tick, 420); }; tick(); };
+  const stepDone = () => { if (run?.active) { run.done.add(run.active); run.active = null; } };
+  function onRunEvent(e) {
+    if (e.type === 'phase' && e.phase === 'transform') { runQueue.length = 0; run = { steps: e.steps, done: new Set(), active: null, phase: 'transform', verdict: new Map(), note: '' }; queueRun(() => { run.active = run.steps[0] || null; }); }
+    else if (e.type === 'beat' && e.step && run) queueRun(() => { if (e.step === '@compile') { stepDone(); run.phase = 'compile'; } else if (e.step !== run.active) { stepDone(); run.active = e.step; } });
+    else if (e.type === 'phase' && e.phase === 'verify' && run) queueRun(() => { for (const s of run.steps) run.done.add(s); run.active = null; run.phase = 'verify'; });
+    else if (e.type === 'phase' && (e.phase === 'idle' || e.phase === 'committed')) { runQueue.length = 0; run = null; paintRun(); }
+  }
+  function finishRun(c, error) {
+    queueRun(() => {
+      if (error) { if (run.active) run.verdict.set(run.active, { status: 'fail', why: error }); run.phase = 'error'; run.note = error; run.active = null; return; }
+      for (const s of run.steps) run.done.add(s);
+      run.active = null; run.phase = c.verification.status;
+      const blamed = new Map();
+      for (const ch of c.verification.checks) if (ch.status !== 'pass') for (const id of ch.blame || []) if (run.steps.includes(id)) blamed.set(id, { status: ch.status, why: ch.name + '：' + ch.detail });
+      for (const r of c.report || []) run.verdict.set(r.id, blamed.get(r.id) || { status: r.status === 'applied' || r.status === 'ok' || !r.status ? 'pass' : 'warn', why: (r.changed || []).join('；') || '' });
+      const failed = c.verification.checks.filter((x) => x.status === 'fail');
+      run.stageFail = failed.some((x) => x.id === 'compile') ? 'compile' : failed.length ? 'verify' : null;
+      run.note = failed.length ? (blamed.size ? `问题出在：${[...blamed.keys()].map((id) => caps.find((x) => x.id === id)?.name || id).join('、')}（红框）` : '验证未通过，不是单个能力的问题，见右栏验证结果') : '';
+    });
+  }
+  const PHASE = { transform: '改造 Worker 执行能力', compile: '编译候选', verify: '验证 Worker 检查', pass: '完成 · 验证通过', warn: '完成 · 有提醒', fail: '完成 · 验证未通过', error: '执行出错' };
+  const runBar = el('div', undefined, 'run-progress'); runBar.hidden = true;
+  function paintRun() {
+    for (const card of lanes.querySelectorAll('.tier-node[data-node-id]')) {
+      const id = card.dataset.nodeId, v = run?.verdict.get(id), inRun = run?.steps.includes(id);
+      card.classList.toggle('run-active', !!run && run.active === id);
+      card.classList.toggle('run-queued', !!run && inRun && run.active !== id && !run.done.has(id));
+      card.classList.toggle('run-done', !!run && inRun && run.done.has(id) && !v);
+      card.classList.toggle('run-pass', v?.status === 'pass'); card.classList.toggle('run-warn', v?.status === 'warn'); card.classList.toggle('run-fail', v?.status === 'fail');
+      const badge = card.querySelector('.run-badge');
+      if (badge) { badge.textContent = !run || !inRun ? '' : run.active === id ? '▶ 执行中' : v ? ({ pass: '✓ 已执行', warn: '! 已执行', fail: '✗ 问题在这里' })[v.status] : run.done.has(id) ? '✓ 已执行' : '… 等待'; badge.title = v?.why || ''; }
+      const why = card.querySelector('.run-why'); if (why) { why.textContent = v?.status === 'fail' || v?.status === 'warn' ? v.why : ''; why.hidden = !why.textContent; }
+      if (run?.active === id) card.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    }
+    for (const lane of lanes.querySelectorAll('.tier-lane')) lane.classList.toggle('run-lane', !!run?.active && !!lane.querySelector(`.tier-node[data-node-id="${CSS.escape(run.active)}"]`));
+    runBar.hidden = !run; if (!run) return;
+    runBar.replaceChildren();
+    const name = (id) => caps.find((c) => c.id === id)?.name || id;
+    run.steps.forEach((id, i) => { const v = run.verdict.get(id); runBar.append(el('span', `${'①②③④⑤⑥⑦⑧⑨⑩'[i] || i + 1} ${name(id)}`, 'run-step' + (run.active === id ? ' active' : v ? ' ' + v.status : run.done.has(id) ? ' done' : ''))); });
+    for (const [ph, label] of [['compile', '编译'], ['verify', '验证']]) { const order = ['transform', 'compile', 'verify']; const cur = order.indexOf(run.phase); const me = order.indexOf(ph); runBar.append(el('span', label + (run.stageFail === ph ? ' ✗' : ''), 'run-step stage' + (run.stageFail === ph ? ' fail' : run.phase === ph ? ' active' : cur > me || cur < 0 ? ' done' : ''))); }
+    runBar.append(el('b', PHASE[run.phase] || run.phase, 'run-phase ' + run.phase));
+    if (run.note) runBar.append(el('small', run.note, 'run-note'));
+  }
+  const agent = createTierAgent({ tier, capabilities: caps, ...agentConfig, onEvent: (e) => { events.push(e); if (events.length > 50) events.shift(); renderTimeline(); onRunEvent(e); if (e.type === 'experience') renderPipeline(); } });
 
   host.classList.add('tier-workshop');
   const left = el('div', undefined, 'tier-main'), right = el('aside', undefined, 'tier-agent agent-panel');
@@ -48,7 +98,7 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
       const nCode = caps.filter((c) => c.domain === dom.id).length;
       return { ok: false, lane, note: nCode ? `「${mine[0].name}」属于「${home}」分区，请拖到「${home}」泳道。` : `「${dom.name}」分区还没有可执行的能力（学习库里 ${dom.counts.refactored + dom.counts.partial + dom.counts.original} 个方法还在占位，重构并封装成能力代码后才能拖入）；「${mine[0].name}」请拖到「${home}」泳道。` };
     } });
-  left.append(head, lanes);
+  left.append(head, runBar, lanes);
   // 预览与来源详情放在实景浏览器旁边（同一个实景窗口下方的侧栏），只在本管线激活时显示
   const side = el('div', undefined, 'tier-side'); side.dataset.tier = sideTier;
   side.append(el('p', intro, 'muted'), preview?.root || el('div'), detail);
@@ -76,6 +126,7 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
   const sorted = () => [...pipe.nodes].sort((a, b) => order(a) - order(b));
   function addPending(it) {
     if (caps.some((c) => c.id === it.id)) return add(it.id, it.params || {}, { quiet: true });
+    const impl = caps.find((c) => (c.learn || []).map(String).includes(String(it.id))); if (impl) return add(impl.id, {}, { quiet: true });
     if (!pipe.nodes.some((x) => x.id === it.id)) pipe.nodes.push({ id: it.id, pending: true, enabled: false, name: it.name || it.id, domain: it.domain || null, params: { ...(it.params || {}) } });
     save(); renderPipeline(); return true;
   }
@@ -114,23 +165,27 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
       const counts = el('span', undefined, 'lane-counts');
       const nCode = caps.filter((c) => c.domain === d.id).length;
       if (nCode) counts.append(el('i', '⚙' + nCode, 'exec-code'));
-      const ph = d.counts.refactored + d.counts.partial + d.counts.original;
+      const learned = new Set(caps.flatMap((c) => (c.learn || []).map(String)));
+      const ph = d.nodes.filter((n) => n.exec !== 'code' && !learned.has(String(n.id))).length;
       if (ph) { const x = el('i', '○' + ph, 'exec-original'); x.title = `学习库里这一分区还有 ${ph} 个方法（${EXEC.refactored[1]} ${d.counts.refactored} · ${EXEC.partial[1]} ${d.counts.partial} · ${EXEC.original[1]} ${d.counts.original}），见左栏`; counts.append(x); }
       h.append(counts); lane.append(h);
       const body = el('div', undefined, 'lane-body');
       for (const n of rows) {
         if (n.pending) { body.append(pendingCard(n)); continue; }
-        const cap = caps.find((c) => c.id === n.id), card = el('article', undefined, 'tier-node' + (n.enabled ? ' on' : ''));
+        const cap = caps.find((c) => c.id === n.id), card = el('article', undefined, 'tier-node' + (n.enabled ? ' on' : '')); card.dataset.nodeId = n.id;
         const top = el('div', undefined, 'tier-node-head'), cb = el('input'); cb.type = 'checkbox'; cb.checked = n.enabled; cb.title = '启用 / 停用';
         cb.onchange = () => { n.enabled = cb.checked; save(); renderPipeline(); renderRoute(); };
         const rm = el('button', '✕', 'node-remove'); rm.type = 'button'; rm.title = '移出管线'; rm.onclick = () => { pipe.nodes = pipe.nodes.filter((x) => x !== n); save(); renderPipeline(); renderRoute(); };
-        top.append(cb, el('strong', '⚙ ' + cap.name), rm); card.append(top, el('p', cap.does));
+        top.append(cb, el('strong', '⚙ ' + cap.name), el('span', '', 'run-badge'), rm); card.append(top, el('p', cap.does));
         for (const [k, def] of Object.entries(cap.params || {})) {
           const lab = el('label', undefined, 'tier-param'), v = n.params?.[k] ?? def.default, inp = el('input');
           if (def.type === 'bool') { inp.type = 'checkbox'; inp.checked = !!v; inp.onchange = () => { n.params = { ...n.params, [k]: inp.checked }; save(); }; lab.append(el('span', def.label), inp); }
-          else { inp.type = 'range'; inp.min = def.min; inp.max = def.max; inp.step = def.step; inp.value = v; const out = el('output', String(v)); inp.oninput = () => (out.textContent = inp.value); inp.onchange = () => { n.params = { ...n.params, [k]: +inp.value }; save(); }; lab.append(el('span', def.label), inp, out); }
+          else { inp.type = 'range'; inp.min = def.min; inp.max = def.max; inp.step = def.step; inp.value = v; const out = el('output', String(v)); inp.oninput = () => { out.textContent = inp.value; warnFor(); }; inp.onchange = () => { n.params = { ...n.params, [k]: +inp.value }; save(); }; lab.append(el('span', def.label), inp, out); }
           card.append(lab);
+          // 已知会失败的取值：执行前就提醒（例如网格细分 2 级以上目前编译不通过）
+          const warn = el('small', def.warn || '', 'param-warn'); const warnFor = () => { warn.hidden = !(def.safeMax != null && +(inp.value ?? v) > def.safeMax); }; warnFor(); if (def.warn) card.append(warn);
         }
+        card.append(Object.assign(el('small', '', 'run-why'), { hidden: true }));
         const e = agent.experience.summary(cap.id); if (e.runs) card.append(el('small', `经验：预览 ${e.runs} · 通过 ${e.passed} · 写入 ${e.committed}${e.lastFailure ? ' · 上次失败：' + e.lastFailure.slice(0, 40) : ''}`, 'muted'));
         body.append(card);
       }
@@ -142,6 +197,7 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
       h.append(el('b', '待完成 · 还没归入分区'), el('small', '执行时跳过', 'muted')); for (const n of orphan) body.append(pendingCard(n));
       lane.append(h, body); lanes.append(lane);
     }
+    paintRun();
   }
   function renderRoute() {
     routeBox.replaceChildren();
@@ -202,8 +258,8 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
     const waiting = pipe.nodes.filter((n) => n.pending), skipNote = waiting.length ? `（跳过 ${waiting.length} 个待完成能力）` : '';
     if (!steps.length) { setNote(waiting.length ? `管线里只有待完成的能力（${waiting.length} 个），还没有能执行的节点；再拖入 ⚙ 能力后执行。` : '管线是空的：从左栏把 ⚙ 能力拖进来，或扫描后按 Router 建议加入。'); return; }
     busy = true; renderActions(); setNote('改造 Worker 执行中：' + steps.map((s) => caps.find((c) => c.id === s.id).name).join(' → ') + skipNote);
-    try { const c = await agent.generate({ steps, goal: pipe.goal }); renderResult(c); setNote((c.verification.status === 'fail' ? '候选验证未通过：不能写入。调整参数后重试，或放弃。' : '候选已预览。确认前不会写入。') + skipNote); status(tier + ' 候选：' + c.verification.summary); }
-    catch (e) { setNote('执行失败：' + e.message); }
+    try { const c = await agent.generate({ steps, goal: pipe.goal }); finishRun(c); renderResult(c); setNote((c.verification.status === 'fail' ? '候选验证未通过：不能写入。调整参数后重试，或放弃。' : '候选已预览。确认前不会写入。') + skipNote); status(tier + ' 候选：' + c.verification.summary); }
+    catch (e) { if (run) finishRun(null, e.message); setNote('执行失败：' + e.message); }
     finally { busy = false; renderActions(); }
   }
   onCatalogChange((cat) => { workshop = cat.workshops.find((w) => w.id === tier); renderPipeline(); });

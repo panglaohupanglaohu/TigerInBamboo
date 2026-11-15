@@ -1,7 +1,8 @@
 import {listSceneObjects,getSceneObject,describeSceneObject} from './scene-objects.js';
-import {setGroup,setCaptureMode,isCaptureMode} from '../ui/uiLayers.js?v=ui-layers-r2-capture';
+import {setGroup,setCaptureMode,isCaptureMode} from '../ui/uiLayers.js?v=ui-layers-r3-local-edit';
 import {validateRecipe,effectiveSettings} from './pipeline-model.js';
 import {createVersionStore} from './store.js';
+import {playtestSceneId} from './playtest-target.js?v=playtest-r1';
 
 /** Studio-edit + capture-clean CSS: hide play HUD chrome while framing in the workshop. */
 const STUDIO_EDIT_CSS=`
@@ -56,6 +57,16 @@ export function mountPipelineBridge(plugin){
  function reply(id,result,error){window.parent.postMessage({type:'tm.pipeline.reply',id,result,error},location.origin);}
  const listener=e=>{if(e.origin!==location.origin||e.source!==window.parent||e.data?.type!=='tm.pipeline.command')return;const {id,action,payload}=e.data;
  try{let result;switch(action){
+ // 海面统一（world/seaStyle/seaStyle.js）：只接受样式数值，不接受代码；莫西斯湖与圣城海湾不动
+ case 'sea.state':case 'sea.preview':case 'sea.compare':case 'sea.revert':case 'sea.commit':case 'sea.reset':case 'sea.cost':{
+  const sea=globalThis.__tmSeaStyle;if(!sea)throw Error('海面统一模块还没加载（刷新游戏后再试）');
+  const style=payload?.style&&typeof payload.style==='object'?JSON.parse(JSON.stringify(payload.style)):undefined;
+  result=action==='sea.state'?sea.state():action==='sea.preview'?sea.preview(style||{}):action==='sea.compare'?sea.compare(!!payload?.on):action==='sea.revert'?sea.revert():action==='sea.commit'?sea.commit(style):action==='sea.reset'?sea.reset():sea.frameCost(Math.min(5000,Math.max(300,+payload?.ms||1000)));break;}
+ // 天气（world/weatherStyle/weatherStyle.js）：只接受样式数值
+ case 'weather.state':case 'weather.preview':case 'weather.compare':case 'weather.revert':case 'weather.commit':case 'weather.reset':{
+  const wx=globalThis.__tmWeatherStyle;if(!wx)throw Error('天气模块还没加载（刷新游戏后再试）');
+  const style=payload?.style&&typeof payload.style==='object'?JSON.parse(JSON.stringify(payload.style)):undefined;
+  result=action==='weather.state'?wx.state():action==='weather.preview'?wx.preview(style||{}):action==='weather.compare'?wx.compare(!!payload?.on):action==='weather.revert'?wx.revert():action==='weather.commit'?wx.commit(style):wx.reset();break;}
  case 'objects.list':{const g=gs();result=g?g.list():listSceneObjects();break;}
  case 'objects.select':{if(typeof payload?.id!=='string'||payload.id.length>128)throw Error('对象ID无效');document.getElementById('start-btn')?.click();setCaptureMode(true);document.body.classList.add('studio-edit');const g=gs();if(g){g.setObjectPicking(false);const row=g.get(payload.id);g.focusObject(row);result=g.describe(row);break;}const row=getSceneObject(payload.id);plugin.setObjectPicking(false);plugin.focusObject(row.object,row.bounds);result=describeSceneObject(row);break;}
  case 'objects.clear':{const g=gs();if(g){g.setObjectPicking(false);g.clearObjectFocus();result={cleared:true};break;}plugin.setObjectPicking(false);plugin.clearObjectFocus();edits()?.drag(null,false);result={cleared:true};break;}
@@ -84,7 +95,7 @@ export function mountPipelineBridge(plugin){
  case 'gscene.drafts.remove':{const g=gs();if(!g)throw Error('当前不是通用插件场景');result=g.drafts.remove(String(payload?.id||''));break;}
  case 'scenes.status':{const id=String(payload?.id||activeScene);if(id===plugin.id){result={scene:id,label:plugin.name,plugin:'workbench',checks:[{name:'场景编辑插件',passed:true,detail:'体素建造 / 物件 / 风格 / 草稿 / 定稿'},{name:'物件登记',passed:listSceneObjects().length>0,detail:listSceneObjects().length+' 个对象'}]};break;}const g=plugin.sceneAdapter?.(id);if(!g)throw Error('这个场景还没有根对象，无法接入');result=g.status();break;}
  case 'scenes.list':result=plugin.listScenes?.()||[{id:plugin.id,label:plugin.name,edit:'workbench'}];break;
- case 'scenes.focus':{if(typeof plugin.frameScene!=='function')throw Error('此插件不支持场景切换');const id=String(payload?.id||'');if(!/^[\w:-]{1,64}$/.test(id))throw Error('场景 id 无效');document.getElementById('start-btn')?.click();setGroup(null);document.body.classList.add('studio-edit');setCaptureMode(true);if(id!==plugin.id){activeScene=plugin.sceneAdapter?.(id)?id:plugin.id;}else activeScene=plugin.id;result={...plugin.frameScene(id),active:activeScene};break;}
+ case 'scenes.focus':{if(typeof plugin.frameScene!=='function')throw Error('此插件不支持场景切换');const id=String(payload?.id||'');if(!/^[\w:-]{1,64}$/.test(id))throw Error('场景 id 无效');document.getElementById('start-btn')?.click();setGroup(null);document.body.classList.add('studio-edit');setCaptureMode(true);if(id!==plugin.id){activeScene=plugin.sceneAdapter?.(id)?id:plugin.id;}else activeScene=plugin.id;result={...plugin.frameScene(id,{preserveCamera:payload?.preserveCamera===true}),active:activeScene};break;}
  case 'scenes.editor':{const id=String(payload?.id||'');if(!/^[\w:-]{1,64}$/.test(id))throw Error('场景 id 无效');result=plugin.openSceneEditor?.(id);break;}
  case 'planet.state':result=plugin.planetState?.()||null;break;
  case 'objects.layout':{const ed=edits();if(!ed)throw Error('此场景未接入物件编辑');result={scene:activeScene,rows:ed.layout()};break;}
@@ -107,13 +118,15 @@ export function mountPipelineBridge(plugin){
   plugin.open();
   result={opened:true,captureMode:isCaptureMode()};
   break;
- case 'play':
+ case 'play':{
+  // 游玩检验跟随工坊「当前场景」：payload.id 缺省 / 非法时回落莫西斯湖（与进入编辑相同）
+  const id=playtestSceneId(payload?.id);
   setGroup(null);
   document.body.classList.remove('studio-edit');
   setCaptureMode(false);
-  plugin.play?.();
-  result={playing:true,captureMode:isCaptureMode()};
-  break;
+  const placed=plugin.play?.(id);
+  result={playing:true,scene:id,placed:placed||null,captureMode:isCaptureMode()};
+  break;}
  case 'captureClean':{
   const on=payload===undefined?true:!!payload;
   setCaptureMode(on);

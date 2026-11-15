@@ -28,3 +28,9 @@
 新增2段790帧，全帧学习累计138/285，剩147。三角图仅本轮局部修正验收1段，Half Edge实现待补1段；未同步 TigerMessenger 游戏副本。下一批先复核球面投影/三角化两段，再处理显式半边接口与局部编辑缺口，既有视频不重复计数。
 
 补充回归：tests/atlas-browser.cjs 的真实小镇/地形/融合GPU、图集加减/重置、手机与定时清理通过，三截图已查看。首页和pipeline的138/285、剩147与trigraph入口通过实际浏览器检查；285条README/本地视频一致，泳道缺0段，diff空白检查通过。
+
+
+## 第 56 批（C08）
+
+- 1677242779162877952：新增 trigraph-edit-c08.js（插点差分/删点/移点 + checkLive）与 trigraph-c08.html（改动边彩色淡出）。tests/trigraph-edit-c08.mjs；截图 C08-trigraph-insert/delete.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。
+- 1458921394855718917：新增 halfedge-patch-c08.js + halfedge-c08.html：方格块 → 剩余区域半边边界环 → 间隙三角 → 合成网格 Euler=1。tests/halfedge-patch-c08.mjs；截图 C08-halfedge-t0.6/t1.9/t3.2.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

@@ -61,7 +61,9 @@ test('?cartonCapture=1 arms captureMode; setCaptureMode toggles tm-capture-clean
   const oldLocation = globalThis.location;
   const oldStorage = globalThis.localStorage;
   const oldDocument = globalThis.document;
+  const oldWindow = globalThis.window;
   try {
+    globalThis.window = {addEventListener() {}};
     globalThis.localStorage = { getItem: () => '{}', setItem() {} };
     globalThis.location = {
       hostname: '127.0.0.1',
@@ -124,19 +126,23 @@ test('?cartonCapture=1 arms captureMode; setCaptureMode toggles tm-capture-clean
     const ui = await import('../src/ui/uiLayers.js?capture-clean-flag=1');
     assert.equal(ui.isCaptureMode(), true);
     assert.equal(ui.uiLayersState().captureMode, true);
+    const notifications=[];ui.onUiLayersChange(s=>notifications.push(s));
     // Minimal DOM install so class toggle runs
     ui.installUiLayers();
     assert.ok(root.classList.contains('tm-capture-clean'));
     const off = ui.setCaptureMode(false);
     assert.equal(off.captureMode, false);
+    assert.equal(notifications.at(-1).captureMode,false);
     assert.ok(!root.classList.contains('tm-capture-clean'));
     const on = ui.setCaptureMode(true);
     assert.equal(on.captureMode, true);
+    assert.equal(notifications.at(-1).captureMode,true);
     assert.ok(Array.isArray(on.hiddenSelectors) && on.hiddenSelectors.length > 10);
     assert.ok(root.classList.contains('tm-capture-clean'));
   } finally {
     globalThis.location = oldLocation;
     globalThis.localStorage = oldStorage;
     globalThis.document = oldDocument;
+    globalThis.window = oldWindow;
   }
 });

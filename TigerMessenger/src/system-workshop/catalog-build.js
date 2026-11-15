@@ -17,7 +17,8 @@ export const WORKSHOPS = [
 
 const T = (re) => (s) => re.test(s);
 const is = {
-  weather: T(/雪|风场|风向|wind|雾|fog|云|cloud|雨|rain|闪电|lightning|天气|atmosphere/i),
+  // 用词边界：否则 wind 会命中 window（窗户条目全进了天气）、rain 会命中 terrain / train（地形、火车条目也进来）
+  weather: T(/雪|风场|风向|\bwinds?\b|\bwindy\b|雾|\bfog\b|\bmist\b|云|\bclouds?\b|雨|\brain(?:y|ing|drops?)?\b|闪电|lightning|天气|atmosphere|\bsnow/i),
   vehicle: T(/船|boat|ship|wake|尾迹|车|tram|train|飞艇|airship|aircraft|载具/i),
   transport: T(/左行|traffic|会车|走廊|道路|road|铁路|rail|运河|canal|航线|河流导航|river-nav|路径|path/i),
   camera: T(/镜头|camera|透视|perspective|motion ?blur|拖影|smear|构图|转镜/i),

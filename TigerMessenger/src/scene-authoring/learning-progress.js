@@ -1,3 +1,5 @@
+import {loadBacklogDeliveries} from './learning-backlog-deliveries.js';
+import {reconcileBacklog,renderBacklog} from './learning-backlog.js';
 // Read the exact same progress sources as the upstream index/pipeline; never persist a copy.
 export function mountLearningProgress(host,root,{load,onError}={}){
  const section=document.createElement('section');section.className='learning-card';section.id='learning-progress';
@@ -6,6 +8,7 @@ export function mountLearningProgress(host,root,{load,onError}={}){
  const notice=document.createElement('p');notice.setAttribute('role','status');const body=document.createElement('div');section.append(heading,refresh,notice,body);host.append(section);
  const el=(tag,text)=>{const n=document.createElement(tag);n.textContent=text;return n;};
  const link=(title,path)=>{const a=el('a',title);a.href=new URL(path,root).href;a.target='_blank';a.rel='noopener';return a;};
+ const reviewPromise=fetch(new URL('./catalog/learning-backlog-review.json',import.meta.url),{cache:'no-store'}).then(r=>{if(!r.ok)throw Error();return r.json();}).catch(()=>null);
  let pending=null;
  async function update(){if(pending)return pending;refresh.disabled=true;
  pending=(async()=>{try{
@@ -19,7 +22,7 @@ export function mountLearningProgress(host,root,{load,onError}={}){
   function folder(id,title){const node=document.createElement('details');node.dataset.progressSection=id;node.open=openSections.has(id);node.append(el('summary',title));folders.append(node);return node;}
   const evidence=folder('evidence','证据与实景入口（'+(latest.links||[]).length+'）');const evidenceList=el('ul','');for(const item of latest.links||[]){const row=el('li','');row.append(link(item.label,item.href));evidenceList.append(row);}evidence.append(evidenceList);
   const recent=folder('history','完成记录（'+progress.completed.length+'）');const list=el('ul','');for(const text of progress.completed)list.append(el('li',text));recent.append(list);
-  const upcoming=folder('next','后续学习与缺口（'+progress.next.length+'）');const next=el('ul','');for(const task of progress.next){const row=el('li',task.title);for(const id of task.clips||[])row.append(' · ',link(id,'../../REA-agent/gifs/'+id+'.mp4'));next.append(row);}upcoming.append(next);draft.append(folders);
+  const deliveries=await loadBacklogDeliveries(prepared.learn);if(!deliveries.verified)draft.append(el('p','本轮交付证据未应用：'+deliveries.error+'；保留原待办状态。'));const backlog=await reconcileBacklog(progress,map,await reviewPromise,deliveries);const upcoming=folder('next','整理后待办（'+backlog.active.length+'） · 已核销 '+backlog.closed.length);renderBacklog(upcoming,backlog,{link,el});draft.append(folders);
   if(prepared.updates){const diff=prepared.updates,updates=document.createElement('details');updates.id='learning-updates';updates.dataset.baselineId=diff.baselineId||'';updates.append(el('summary',diff.baselineId?'方法登记更新：新增 '+diff.added.length+' · 修改 '+diff.changed.length+' · 撤回 '+diff.removed.length+' · 需核对 '+diff.conflicts.length:'首次读取方法基线 · 需核对 '+diff.conflicts.length));updates.append(el('p','与本页或最后缓存的资料比较，仅供审核；只比较管线登记，源码依赖变化尚未纳入。配方和场景不会自动替换，来源位置变化或重复标识需要核对。'));
    if(diff.baselineUpdatedAt)updates.append(el('p','比较基线：'+diff.baselineUpdatedAt));
    for(const [label,rows]of [['新增',diff.added],['修改',diff.changed.map(r=>r.current)],['撤回',diff.removed]]){if(!rows.length)continue;updates.append(el('h4',label+'（'+rows.length+'）'));for(const row of rows){const text=el('p',row.item.name+' · '+(row.identity.post||'无帖子ID')+' · '+row.identity.where);text.dataset.changeKind=label;updates.append(text);}}

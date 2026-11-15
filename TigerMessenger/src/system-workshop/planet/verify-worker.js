@@ -1,6 +1,6 @@
 // 球系统 · 验证 Worker：独立复算候选（确定性），再跑 verifyPlanet。只读。
-import { compileAndSummarize } from './summarize.js?v=sys-r11';
-import { verifyPlanet } from './verify.js?v=sys-r11';
+import { compileAndSummarize } from './summarize.js?v=sys-r15';
+import { verifyPlanet } from './verify.js?v=sys-r15';
 onmessage = ({ data: msg }) => {
   const { job } = msg;
   try {

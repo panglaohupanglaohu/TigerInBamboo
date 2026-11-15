@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-07T14:46:08.010295+08:00",
+  "updatedAt": "2026-11-14T18:40:00+08:00",
   "completed": [
     "建立原版 128 个 JS 模块逐项清单、导出接口、职责落点与已知差距。",
     "配置每30分钟承接学习任务并更新首页/管线进度。",
@@ -189,9 +189,341 @@
     "新增空间射线64帧和3D模块拼装67帧全核，共131帧，累计175/285，剩110。固定步长3D开阔度迁到实际共享World，双网格室内/屋顶开阔度0.097/0.611、0.119/0.584，开关/缓存/World不变通过。3D拼装仅学习；六类局部墙饰成果保留，四重点仍有完整性缺口；原版并行新增2模块待映射。",
     "原版新增islandpasses局部迁入：台地层界/顶面线框/格边岸界共用真实World多边形端点和当前笼形变，双网格616/488层界段、2005/1454线框段、166/117岸界段，逐点投影/只读/编辑刷新通过。复用649帧不重计，175/285；完整环追踪/最终倒角一致性仍缺，木梯模块尚未迁移。",
     "跨层梯长策略接真实共享导航几何：梯脚/台沿来自当前笼形变，按3D锚点长度画双梁与等距踏棍，可切回旧台阶。1000逻辑例及双网格84/96把实际木梯、有限坐标/World和导航不变/关闭恢复通过。旧109帧不重计，175/285；原薄悬平台、端点体积接触和攀爬动作仍缺。",
-    "本轮8小时窗口已结束，应用工具已确认暂停本automation。新增4段1114帧全核（171→175/285），剩110，按8小时为0.5段/小时；3段有局部代码验收、1段3D拼装仅学习。旧片续作迁入六类墙饰、近云投影、河网重建、通口前视、台地格边与木梯等，但完整覆盖尚未完成。"
+    "本轮8小时窗口已结束，应用工具已确认暂停本automation。新增4段1114帧全核（171→175/285），剩110，按8小时为0.5段/小时；3段有局部代码验收、1段3D拼装仅学习。旧片续作迁入六类墙饰、近云投影、河网重建、通口前视、台地格边与木梯等，但完整覆盖尚未完成。",
+    "第40轮（队列已空）：按四条口径独立全量核验 285/285 全过；补 4 条老 done 的全帧+运行时标记，done 缺标记 22→18。"
   ],
   "next": [
+    {
+      "title": "缺口（第 101 轮 · 灌木 600+257）：同口径重测后 **P50 对上（本仓 4px vs 原片 4–6px），P90 只有原片 ~60%（本仓 10px vs 原片 14–18px）** → `SHRUB_BAND.max`（1.36）上沿偏低。但两边机位/缩放不可比（本仓 1100×760 全景 vs 原片 460 见方特写），**不许直接改常数**。步骤：① 把本仓渲染固定到原片的等轴特写机位（镜头高度/俯角/画幅先对齐）；② 同机位取 P50/P90；③ 按 P90 反推 max，再跑三条回归；④ `splitCells` 三角化边缘那一圈带子的走向仍未逐帧对照。",
+      "clips": [
+        "1707497006640365880",
+        "1707490932017279035"
+      ]
+    },
+    {
+      "title": "缺口（第 101 轮 · 837）：`tests/stain-joint-curve-browser.cjs` 已把地面斑接进同一条时间轴（12/12），但 badnorth 场景里 `view.smoke.fireAt` 不可用 → 「火先起 / 地面后跟」的先后断言被**跳过**（不是通过）。要真联：把 c01 的火光强度（`#fireGlow` 那条）暴露成 `rea.battle.c01.fireStats` 之类的探针，再补该断言；爆燃三层高度在曲线上仍测不到（沿用 r100）。",
+      "clips": [
+        "837027901853810688"
+      ]
+    },
+    {
+      "title": "定案（第 101 轮 · 912）：绝对 α 已到素材上限 —— 400×400 / JPEG q≈88 下柱内残余 11.98 与平坦区噪声底 5.12 只差 2.3×，任何 α∈[0.85,1.00] 都给不出统计显著差异。峰值 **0.7–0.85**，r100 的 `1.00` 作废为「标定假设值」。**不再排期**，除非换到更高分辨率原始素材。第三机位柱宽维持「不可测」（r98）。",
+      "clips": [
+        "912691357440978945"
+      ]
+    },
+    {
+      "title": "纪律（第 101 轮 · 已落地并关闭）：`tests/worldmesh-setter-guard.mjs` 8/8，含**突变测试**（删 `set bandTri` 立刻红）。新增同类纪律：`tools/beam-transmission.py` 这种「自检不过只作诊断」的工具，必须显式打 CALIBRATION FAILED 且**不返非零退出码**，否则下一轮会把它当回归去修。",
+      "clips": [
+        "1707497006640365880"
+      ]
+    },
+    {
+      "title": "定案（第 97 轮·体素 794993371261665280）：色板已按实测换成灰青族（H 156–204°/S 12–16%），页面抄的第二份旧色板已删（改 `import LAYER_PALETTE`）；`bandHeight=3` 因原片外表面**量不出层带边界**，明确标为估计值、**不再排期**；内部玫瑰墙（H≈355°）不建模（属镜头内侧，不是层带）。",
+      "clips": [
+        "794993371261665280",
+        "797844857821732864"
+      ]
+    },
+    {
+      "title": "定案（第 93 轮·天光柱）：触发源**永久降级**（同 r91），列在此仅为提醒别再排期。寿命 0.46s 已按两窗各 15 帧标定。",
+      "clips": [
+        "912691357440978945"
+      ]
+    },
+    {
+      "title": "纪律（第 93 轮·流场）：389 帧只有格边骨架线 + 色块，无箭头/流线/图例 → `continuousFlow` 接 battle.js 无原片依据，维持「本仓扩展、不排队」。LOD 永久不适用。",
+      "clips": [
+        "902069261304287232",
+        "901842167508992000"
+      ]
+    },
+    {
+      "title": "缺口（第 83 轮结论·流场）：LOD 第 9 次测不出 → 永久维持「不适用」（两条片子都是固定等轴 + 整岛入画 + 无图例，r75 已在 badnorth 实景页给出透视解释）。唯一剩余硬缺口：`battle.js:190` 未传 `continuousFlow`，改默认会动移动行为，需 30/60/120Hz + 分层回归成套跑 → **必须单独一轮**。",
+      "clips": [
+        "902069261304287232",
+        "901842167508992000"
+      ]
+    },
+    {
+      "title": "缺口（第 61 轮收敛·节点图）：serialize/fromJSON/NODE_REGISTRY + 只读连线图已落地（往返后位置不跳、90 帧轨迹一致）；仍缺可拖拽的真节点编辑器（拖节点/拖线/增删）与 ScriptableObject 资产面板的字段分组（1724449858369568780）",
+      "clips": [
+        "1724449858369568780"
+      ]
+    },
+    {
+      "title": "缺口（第 60 轮实测·伤害数字）：+10 已并入同池（kind=kill），仍缺 ① 受击方向抖动（现只是同帧横向错位 sx）；② +10 的上浮速度与 +4 共用常量，原片略快（903647529203634176）",
+      "clips": [
+        "903647529203634176"
+      ]
+    },
+    {
+      "title": "第 50 轮迁入的 9 个模块大多只有 node 验收：页面入口（grids.html 平移窗口、wfc.html 诊断面板、navmesh-flow.html 漏斗路径、ui.html 等墨量图标）未做；navmesh 漏斗 / 流场未接 battle.js；walk-reach 未接生成器默认流程；texel-owner 未接 impostor 烘焙",
+      "clips": [
+        "1151137783785771008",
+        "972829402873716737",
+        "917405214638006273",
+        "1164926304640229376",
+        "1481661852887265288",
+        "1201179450668441600"
+      ]
+    },
+    {
+      "title": "缺口（第 48 轮实测·导航面流场）：共边带混合已把跨面差压到 0°，但流向仍是「面内线性」，面上到崖边那一格方向仍偏直（沿 z=2.2 直线 0.02 步长最大跳 4.77°）；且 navmesh-flow 仍未接进 battle.js（主场景是格心流场）、缺通口前视，导航面还是规则地形手搓、未由共享 World 分层导航自动生成（816748103193817088）",
+      "clips": [
+        "816748103193817088"
+      ]
+    },
+    {
+      "title": "缺口（第 47 轮新发现·多格 tile）：未接共享 World；构件是体块，缺原片带窗洞/栏杆的美术模块；无限高只到 24 层上限（793545297376972801）",
+      "clips": [
+        "793545297376972801"
+      ]
+    },
+    {
+      "title": "navmesh-flow 接进 battle.js（替换格心流场 + 通口前视），导航面从共享 World 分层导航自动生成；multitile WFC 接进共享 World（多格 tile 落到不规则格）",
+      "clips": [
+        "816748103193817088",
+        "793545297376972801"
+      ]
+    },
+    {
+      "title": "缺口（第 44 轮新发现·长矛）：本仓矛只绕 Y 轴 → 永远水平，原片待机是斜向上约 40°、刺出才转平；原片还有粉红放射状命中/方向细线；伤害数字与每次刺击的命中集是两处实现，未联动（903647529203634176）",
+      "clips": [
+        "903647529203634176"
+      ]
+    },
+    {
+      "title": "缺口（第 43 轮新发现·精灵）：方向歧义度量不是标定过的违和度，小尺寸仍要目视；单方向精灵模式无逐单位 UV 血斑/受击摆动，战斗场景第 0 波无守军导致截图看不到成队精灵（969860566322958336）",
+      "clips": [
+        "969860566322958336"
+      ]
+    },
+    {
+      "title": "缺口：火焰粒子颜色与尺寸解耦——旧粒子（橙红档）尺寸已 <1px，画面只剩奶白核心；要么给色带加可见下限，要么把橙红档放到更大/更长寿的独立粒子层，补片中光晕与飘散火星（1056992291108413446）",
+      "clips": [
+        "1056992291108413446"
+      ]
+    },
+    {
+      "title": "体素梯度软化网格并约束硬边、形变碰撞及表面光照剩余缺口",
+      "clips": [
+        "931196707236392960",
+        "1791049306213912823"
+      ]
+    },
+    {
+      "title": "缺口（低优先）：角色外观分件与 UV 渐变调试材质（v 方向色带看 UV 朝向/翻转）（847717312912211970）",
+      "clips": [
+        "847717312912211970"
+      ]
+    },
+    {
+      "title": "缺口：小队占位线网——凹形占位应沿格边界而非凸包、接进 battle.js 选中态并随 world.top 贴地、旗顶悬空白菱形标记、箭矢细白轨迹线（883447205176238083）",
+      "clips": [
+        "883447205176238083"
+      ]
+    },
+    {
+      "title": "缺口：战斗 HUD 层——血泊贴地累积贴花与尸体层、登陆木跳板、旗布摆动相位、飘字数值取自击杀还是伤害（839067977781768193）",
+      "clips": [
+        "839067977781768193"
+      ]
+    },
+    {
+      "title": "缺口：等值面渲染层——水面只有浅色椭圆没有真平面倒影；过渡中的碎片应当是暗色（背光/内翻），现在是亮色；水线是落地边折线而不是沿等值面等距外扩的带状轮廓（818857408848130048、832633189277409280）",
+      "clips": [
+        "818857408848130048",
+        "832633189277409280"
+      ]
+    },
+    {
+      "title": "缺口：等值面只作用于地形层，建筑层应保留硬边（坡屋顶/烟囱/门洞），现在是方盒经模糊后与地形熔在一起（832633189277409280）",
+      "clips": [
+        "832633189277409280"
+      ]
+    },
+    {
+      "title": "缺口：阻力弹道扇面只按地面 y=0 收尾，缺场景碰撞截断（片子弧碰到体块就断）、二次阻力档（片子里分不出线性/二次）、Inspector 第三行参数读不到未猜，也没和 ballistic-table.js 的定点射表角度口径打通（816332161036984320）",
+      "clips": [
+        "816332161036984320"
+      ]
+    },
+    {
+      "title": "缺口：整个队列层缺失——成列行军（沿同一路径固定间距排队、拐角内圈减速）、跨层列队（上台阶拉成竖列、脚贴地）、到达后展开成 3–4 排方块的落位；片中有等弧长白色引导点可作调试视图（816743289500106752、817323301357948928）",
+      "clips": [
+        "816743289500106752",
+        "817323301357948928"
+      ]
+    },
+    {
+      "title": "缺口：路线/轨迹编辑器——gizmo 拖检查点后重采样并显示点数与总长、累积轨迹模式（点只增不减）、quad 面三角剖分线调试层（现有 aomesh 只画体素壳）(810157485638189056)",
+      "clips": [
+        "810157485638189056"
+      ]
+    },
+    {
+      "title": "缺口：球面胞元壳还是只有整格一级——片子里每格内部是一坨多层小方块（两级尺度），另外装配起点只能取默认根、不能指定从哪一格起长，表面也没有生物群系斑块着色（784848286272327680）",
+      "clips": [
+        "784848286272327680"
+      ]
+    },
+    {
+      "title": "缺口：球面星球的两级尺度没做——片中同一块壳上既有跨多格的平滑大平板，又有一整片格内细分的小方块碎片堆（每块独立朝向/高度），本仓胞元只有整格一级，格内无细分（784847588893814785）",
+      "clips": [
+        "784847588893814785"
+      ]
+    },
+    {
+      "title": "缺口：装配起点固定在最高格，片子是从一处随机位置起长；planet.js 的 root 参数已留但页面没入口；片中同层还有细碎凹坑没做（784847933686575104）",
+      "clips": [
+        "784847933686575104"
+      ]
+    },
+    {
+      "title": "缺口：飞岛只做到几何（环→抬升场→船壳→支撑腿），飞行操控状态机（选中环/起飞/悬停/平移）、船壳外沿那圈白色蝶形小构件、建筑随岛抬升、抬升后侧壁按层生成都没有（1313837640366596096）",
+      "clips": [
+        "1313837640366596096"
+      ]
+    },
+    {
+      "title": "缺口：2016 早期演示片里整片拆解/重建的时序定不下来（9.94fps 下块整块出现消失、顺序无规律），要复刻建造动画得另找 2018+ 带逐块过程的素材（806856212260278272）",
+      "clips": [
+        "806856212260278272"
+      ]
+    },
+    {
+      "title": "缺口：血腥开关只做了后果（血迹/血滴/尸体整层消失），原片拍不到面板，开关样式与 break-glass 部件无从对照；血在深浅底材上的色差用单一色近似（999191760944418817）",
+      "clips": [
+        "999191760944418817"
+      ]
+    },
+    {
+      "title": "缺口：AO 烘焙网格视图是实心体素壳、不是原片那摞半透明层叠薄板；且本仓建筑不走体素，壳里只有地形台地、没有建筑体积（1298689301488775169 第 329–359 帧的对照）",
+      "clips": [
+        "1298689301488775169"
+      ]
+    },
+    {
+      "title": "下一批队列：1313837640366596096（飞岛，上一轮只看了第1张联系表，需补全片 4 张）",
+      "clips": [
+        "1313837640366596096"
+      ]
+    },
+    {
+      "title": "缺口：血迹只有一套空间，原作躯干走皮肤空间、盔与手臂走精灵空间（片 999185422403055616 的 0096 用棋盘格画出这条界线）；斑块是整面块状，与 PALETTE_PATCH 斑纹混淆，缺棋盘格调试层",
+      "clips": [
+        "999185422403055616"
+      ]
+    },
+    {
+      "title": "缺口：流场调试线配色偏淡（亮草地上几乎看不清），缺逐格白色方向箭头与网格底线；三角网格流场还没在页面上做过截图验收（972829402873716737）",
+      "clips": [
+        "972829402873716737"
+      ]
+    },
+    {
+      "title": "缺口：可走图缺格角红点与背景六边形网格线框；削台档数（2 档）是自定的，片子里看不出原作者削几档，也没有「削之前」的对照（917405214638006273）",
+      "clips": [
+        "917405214638006273"
+      ]
+    },
+    {
+      "title": "缺口：片中的血流飞溅是贴图/精灵，我们的血滴 Points 只做可见化不参与命中；崖壁流挂宽度/长度仍是随机（912691357440978945）",
+      "clips": [
+        "912691357440978945"
+      ]
+    },
+    {
+      "title": "第 30 轮缺口：色斑缺原作 atlas / 受控跨崖采样，配色不随生态变化；树冠瓣径比偏均匀、缺顶部亮边；草簇是概率撒点，缺沿台地边缘的连续边带与 7–9 瓣；逆光的阴影遮罩仍是「法线朝下」近似，没查 shadow map；墨线颜色比片子偏深",
+      "clips": [
+        "1480635131614355459",
+        "1580158269267406849",
+        "1590669875869286400",
+        "1751945034851570056"
+      ]
+    },
+    {
+      "title": "第 29 轮缺口：投影暗部幅度仍比片中亮一档、无 less-contrast 档；texture-only / light-only 只作用于共用 town 材质；灯塔塔身红白分层靠调色板碰运气、灯室玻璃偏白；无限网格页仍是 2D 俯视，缺斜视透视与高亮闪烁节奏",
+      "clips": [
+        "1305948413872267265",
+        "1313841094069817344",
+        "1331905048801144836",
+        "1332410042784641026"
+      ]
+    },
+    {
+      "title": "第 20 轮缺口：灰模阶段的 AO 与软阴、生成后地形微调、真 job 线程与四轮循环节奏、被吞墙面的墙裙残留与悬檐联动、节点图缺可视化连线编辑器与 ScriptableObject 式序列化",
+      "clips": [
+        "1654401054828638214",
+        "1670064751181791233",
+        "1671840905957978113",
+        "1724449858369568780"
+      ]
+    },
+    {
+      "title": "第 19 轮缺口：格心彩色小块语义不可证；线框只有俯视伪倾斜，未接 world.js 实景与 3D 透视；radialLayout 还没拿去查连通分量/补丁分组；极坐标底网十字与刻度未复刻",
+      "clips": [
+        "1459169210752507904",
+        "1466059785703460870",
+        "1489193847422865410",
+        "1490068909042642944"
+      ]
+    },
+    {
+      "title": "第 18 轮缺口：三角剖分顶点竖棒层与共享边稀疏线网层没有；walkthrough.js 仍是手点切换；缺「连续换岛 + 先线稿后着色」循环页；贴花累加与图集 padding 未实现",
+      "clips": [
+        "1427721874490933250",
+        "1430227487376781317",
+        "1447483550257799171",
+        "1448039167057879048"
+      ]
+    },
+    {
+      "title": "第 17 轮缺口：view.js 仍是透视相机，未接混合投影（要同步 pick() 的 raycast、水面倒影、轮廓层相机矩阵与 k 开关），逐像素匹配未做",
+      "clips": [
+        "1310503825510367232",
+        "1370772056279805953",
+        "1371191380773629956",
+        "1410697531424714752"
+      ]
+    },
+    {
+      "title": "第 16 轮缺口：拱顶只到解析/几何层，archedEntry 仍是贴片门，opening-punch.html 缺跨两层高拱龛；无限网格在 passes:60 仍有 14 格收缩到 0.46×",
+      "clips": [
+        "1258005604066627586",
+        "1275089608758484992",
+        "1277554535297236994",
+        "1302686201401442309"
+      ]
+    },
+    {
+      "title": "第 15 轮缺口：悬空体块缺斜撑/偏移支撑/腿分段（architecture.html 未出运行验收）",
+      "clips": [
+        "1209519206233968641",
+        "1210969316071477248",
+        "1239901715266244609",
+        "1257213678056857600"
+      ]
+    },
+    {
+      "title": "第 13 轮缺口：爆炸缺 explodeAt(point) 一次性编排（环+火球+烟+焦痕+火星时序）与焦痕贴片；缺 3D 等值面模块（marching cubes）与生长动画、marching-cubes.html",
+      "clips": [
+        "1022855252574437376",
+        "1092709665199345664",
+        "1151152046055272449",
+        "1163836000688365571"
+      ]
+    },
+    {
+      "title": "第 14 轮缺口（由 CHANGELOG 重建）：做到哪：新增 `src/render/opening-punch.js`（`planFacade` 校验洞口并给解析面积；`createFacadeScene` 按 interior→mask→wall(NotEqual)→decal 四通道搭建，mask 只写 stencil 不落色不写深度）+ 实验页 `opening-punch.html`（贴片/挖洞",
+      "clips": [
+        "1174406613031170049",
+        "1189109278361165825",
+        "1195463004919357443",
+        "1205422438437273601"
+      ]
+    },
     {
       "title": "到期交接暂停；后续继续连续面内导航/坡高、跨格整墙、云影软化/水植被接收与球面联合河网",
       "clips": [
@@ -361,13 +693,6 @@
       ]
     },
     {
-      "title": "草地与灌木续项：任意高度建筑台地草坪/石边带、墙根灌木卡片和纹理；固定中心仅草卡片局部实验，649帧不重复计数",
-      "clips": [
-        "1178731576982724611",
-        "1191990107785572352"
-      ]
-    },
-    {
       "title": "道具动画优先补差：稳定道具键、保留消失几何、出现/移除错峰及跨重建身份；306帧已学，不重复计数",
       "clips": [
         "1246074663546916873"
@@ -415,24 +740,10 @@
       ]
     },
     {
-      "title": "已学调色/生成续项：OkHsl/OkLab、自由拖角点与取样色带/导出；低模表面纹理灌木生成算法和小阴影仍待补，不重复本批1224帧",
-      "clips": [
-        "1712088611934371876",
-        "1707497006640365880"
-      ]
-    },
-    {
       "title": "已学色彩/对比续项：五特征HSL离散预览、彩色约束与atlas输出/接缝；标量诊断违例和原版完整接口待补",
       "clips": [
         "1710031224838771027",
         "1482346496460828674"
-      ]
-    },
-    {
-      "title": "已学599帧续项：真正表面纹理灌木、微阴影/浮凸及低模接缝；保留球团与锚点修复，不以其代替纹理法",
-      "clips": [
-        "1707490274425884929",
-        "1707490932017279035"
       ]
     },
     {
@@ -605,13 +916,6 @@
       ]
     },
     {
-      "title": "体素梯度软化网格并约束硬边、形变碰撞及表面光照剩余缺口",
-      "clips": [
-        "931196707236392960",
-        "1791049306213912823"
-      ]
-    },
-    {
       "title": "走廊空间、弧顶/门口版式和纹样复杂度及贴面光照",
       "clips": [
         "1897266928961700215",
@@ -634,530 +938,24 @@
     }
   ],
   "validation": {
-    "framesThisBatch": 0,
+    "framesThisBatch": 2576,
     "implementationAcceptedClipsThisBatch": 0,
     "implementationPendingClipsThisBatch": 0,
-    "acceptanceScope": "窗口收尾：计数/证据/暂停确认；非新视频或全模块完成",
-    "logic": "ladder-profile：1000组锚点/沿梁等距与坏输入通过",
-    "browser": "wood-ladders-browser：84/96把实际梯、World/导航不变、关闭精确恢复通过，截图已看",
+    "acceptanceScope": "缺口专项：网格窗口接选中态（改码 + 纯逻辑/浏览器验收）；837 炭黑亮度层次口径推翻；600 灌木带宽三测；912 单位柱几何复核",
+    "logic": "grid-window.mjs 13 项 ALL PASS（新增 ⑪⑫⑬：格→包围盒 / 多盒求并 / 选中态三写法+空选中+坏输入）",
+    "browser": "grid-window-browser 34/34 ALL PASS（原 26 + ⑬4 + ⑭3）；回归 house-char-browser 12 条、sky-beam-unit-browser ALL PASS、grid-surface-browser ALL PASS",
     "environmentPanel": {
       "scope": "已有能力实景接线；未增加视频学习或模块完整覆盖计数",
       "test": "tests/environment-panel-browser.cjs",
       "evidence": "artifacts/coverage/environment-panel-browser.json"
     },
     "inventory": "161模块：34增强/88部分/39静态/0未覆盖，只说明有落点，不是全部完成",
-    "recheckedFramesThisBatch": 2,
+    "recheckedFramesThisBatch": 4,
     "framesThisHeartbeat": 0,
     "newClipsThisHeartbeat": 0,
     "implementationAcceptedClipsThisHeartbeat": 0
   },
-  "latest": {
-    "title": "8小时窗口结束 · 已暂停并保存交接",
-    "summary": "本轮8小时窗口已结束，应用工具已确认暂停本automation。新增4段1114帧全核（171→175/285），剩110，按8小时为0.5段/小时；3段有局部代码验收、1段3D拼装仅学习。旧片续作迁入六类墙饰、近云投影、河网重建、通口前视、台地格边与木梯等，但完整覆盖尚未完成。",
-    "evidence": "learn/accelerated-handoff.md",
-    "links": [
-      {
-        "label": "台地层界/线框/岸界 · 实际共享场景",
-        "href": "terraces.html"
-      },
-      {
-        "label": "实际空间射线 · 室内/屋顶/网格切换",
-        "href": "space-visibility.html"
-      },
-      {
-        "label": "实际建筑 · 六类墙饰/旧模式/关闭对照",
-        "href": "building-components.html"
-      },
-      {
-        "label": "实际河网 · 生成/重建/恢复",
-        "href": "drainage.html"
-      },
-      {
-        "label": "首页 · 流动云层＋近云投影",
-        "href": "index.html?scene=town"
-      },
-      {
-        "label": "原版差距与优先级",
-        "href": "GAP-PRIORITIES.md"
-      },
-      {
-        "label": "实际北境 · 发船泊位预留",
-        "href": "index.html?scene=badnorth"
-      },
-      {
-        "label": "实际建筑 · 楼板保留厚度/拱洞",
-        "href": "arches.html"
-      },
-      {
-        "label": "共享地形 · 真实盆地填洼/恢复",
-        "href": "drainage.html"
-      },
-      {
-        "label": "实际建筑 · 装饰WFC开关",
-        "href": "building-components.html"
-      },
-      {
-        "label": "无限网格 · 实际重心预计算缓存",
-        "href": "grids.html?t=infinite"
-      },
-      {
-        "label": "实际小镇 · 拱洞曲线精度",
-        "href": "arches.html"
-      },
-      {
-        "label": "实际小镇 · 悬空房屋与窗型分组",
-        "href": "building-components.html"
-      },
-      {
-        "label": "实际北境 · 弹道代价权重",
-        "href": "ballistics.html"
-      },
-      {
-        "label": "实际小镇 · 遮蔽/反弹四种对照",
-        "href": "ao-stages.html"
-      },
-      {
-        "label": "新多格/体素AO · 102帧学习证据",
-        "href": "artifacts/coverage/multitile-ao-review.md"
-      },
-      {
-        "label": "远云 · 实际三组差速开关",
-        "href": "clouds.html"
-      },
-      {
-        "label": "实际北境 · 三队旗徽切换",
-        "href": "squad-banners.html"
-      },
-      {
-        "label": "实际小镇 · 四檐顶/原屋顶切换",
-        "href": "hip-roofs.html"
-      },
-      {
-        "label": "实际北境 · 房屋分层攻击/守卫",
-        "href": "index.html?scene=badnorth"
-      },
-      {
-        "label": "WFC · 真实候选域/传播过程",
-        "href": "wfc-trace.html"
-      },
-      {
-        "label": "实际北境 · 逐人层高",
-        "href": "index.html?scene=badnorth"
-      },
-      {
-        "label": "无限网格 · 实际模式接缝对照",
-        "href": "grids.html?t=infinite"
-      },
-      {
-        "label": "实际World · 同高片/逻辑阶差诊断",
-        "href": "terraces.html"
-      },
-      {
-        "label": "实际小镇 · 门窗完整外缘",
-        "href": "index.html?scene=town"
-      },
-      {
-        "label": "共享网格 · 切角/面积/源拓扑对照",
-        "href": "corner-cuts.html"
-      },
-      {
-        "label": "分层地被 · 实际World开关",
-        "href": "level-flora.html"
-      },
-      {
-        "label": "本轮8小时迁移队列与截止时间",
-        "href": "learn/accelerated-session.json"
-      },
-      {
-        "label": "单位等级 · 实际北境外观对照",
-        "href": "unit-tiers.html"
-      },
-      {
-        "label": "单位软盘 · 实际北境/楼层/凸格裁剪",
-        "href": "unit-shadows.html"
-      },
-      {
-        "label": "拓扑直线 · 有向判环/真实线段",
-        "href": "grids.html?t=lines"
-      },
-      {
-        "label": "WFC · 四边形对角四分/父格追溯",
-        "href": "wfc.html?subtiles=1"
-      },
-      {
-        "label": "球面 · 三角化/松弛阶段对照",
-        "href": "planet.html?stage=tri"
-      },
-      {
-        "label": "三角图 · 确定性增量检查",
-        "href": "trigraph.html"
-      },
-      {
-        "label": "格型 · 真正正交方格/合并菱形对照",
-        "href": "grids.html?t=kinds"
-      },
-      {
-        "label": "笼形变 · 连续高度/实际沉积线",
-        "href": "cage.html"
-      },
-      {
-        "label": "硬边 · 真实地形钉点/解除对照",
-        "href": "hierarchy.html"
-      },
-      {
-        "label": "球面 · 模块格选择/尺寸诊断",
-        "href": "planet.html"
-      },
-      {
-        "label": "沿河导航 · 实际河段/顺逆费用",
-        "href": "river-nav.html"
-      },
-      {
-        "label": "岩壁 · 原光照/底色/烘焙/实时对照",
-        "href": "mountain-bake.html"
-      },
-      {
-        "label": "法线反差 · 共享材质开关/宽度",
-        "href": "normal-contrast.html"
-      },
-      {
-        "label": "树/云 · 共享World转镜对照",
-        "href": "impostors.html"
-      },
-      {
-        "label": "运行时图集 · 真实GPU加组/释放",
-        "href": "atlas-live.html"
-      },
-      {
-        "label": "图集 · 实际查询/增删/碎片",
-        "href": "grids.html?t=atlas"
-      },
-      {
-        "label": "头像/卡片 · 输入种子复现",
-        "href": "ui.html?t=face"
-      },
-      {
-        "label": "图标工具条 · 键盘与单选",
-        "href": "ui.html?t=icons"
-      },
-      {
-        "label": "标题/外纹两轨 · 拖动时序",
-        "href": "ornament.html"
-      },
-      {
-        "label": "斜按钮 · 稳定命中槽",
-        "href": "ui.html?t=menu"
-      },
-      {
-        "label": "横排确认 · 切队/Esc/手机",
-        "href": "ui.html?t=pop"
-      },
-      {
-        "label": "远景阴云 · 低机位与双网格",
-        "href": "clouds.html"
-      },
-      {
-        "label": "风场 / 雪片 / 洞口近景",
-        "href": "flow.html"
-      },
-      {
-        "label": "真实船迹与背景雾控制",
-        "href": "wake-fog.html"
-      },
-      {
-        "label": "中心锚点草卡片实景对照",
-        "href": "billboard-anchor.html"
-      },
-      {
-        "label": "庭院封闭 / 桥下开口 / 重封闭",
-        "href": "garden.html"
-      },
-      {
-        "label": "首页回放/OBJ（更多能力实验内）",
-        "href": "index.html?scene=town"
-      },
-      {
-        "label": "分享存档 / 主体GPU提交验收",
-        "href": "save-mesh.html"
-      },
-      {
-        "label": "16步编辑压力回放",
-        "href": "qa-replay.html"
-      },
-      {
-        "label": "首页风与天气实景控制",
-        "href": "index.html?scene=fusion"
-      },
-      {
-        "label": "全部管线与学习状态",
-        "href": "pipeline.html"
-      },
-      {
-        "label": "实际小镇墙色编辑",
-        "href": "wall-palette.html"
-      },
-      {
-        "label": "四角色盘实景编辑",
-        "href": "palette-editor.html"
-      },
-      {
-        "label": "HSL实景与三角约束诊断",
-        "href": "color-lab.html"
-      },
-      {
-        "label": "实际地形灌木",
-        "href": "index.html?scene=terrain"
-      },
-      {
-        "label": "实际地表阴影对照",
-        "href": "surface-shadows.html"
-      },
-      {
-        "label": "旋涡/疏密真实地形对照",
-        "href": "blotches.html"
-      },
-      {
-        "label": "共享地面笔触",
-        "href": "index.html?scene=terrain&on=blotch"
-      },
-      {
-        "label": "实际岩壁层理对照",
-        "href": "sediment.html"
-      },
-      {
-        "label": "本轮形变保护与923帧证据",
-        "href": "artifacts/coverage/slope-cliff-review.md"
-      },
-      {
-        "label": "八方向单纹理",
-        "href": "mirror.html"
-      },
-      {
-        "label": "共享悬挑诊断",
-        "href": "overhang.html"
-      },
-      {
-        "label": "连通庭院小径",
-        "href": "garden.html"
-      },
-      {
-        "label": "球面叶片对照",
-        "href": "leaf-surface.html"
-      },
-      {
-        "label": "共享格块田纹",
-        "href": "fields.html"
-      },
-      {
-        "label": "实际浅水叠层（共享World）",
-        "href": "index.html?scene=town&on=watervol"
-      },
-      {
-        "label": "全帧/资源验收及patch差距",
-        "href": "artifacts/coverage/water-patch-review.md"
-      },
-      {
-        "label": "实际World分岛/加桥/恢复小镇",
-        "href": "shoreloops.html"
-      },
-      {
-        "label": "本批全帧与拓扑证据",
-        "href": "artifacts/coverage/shore-topology-review.md"
-      },
-      {
-        "label": "实际彩色反射/单色/扰动对照",
-        "href": "reflection.html"
-      },
-      {
-        "label": "本批全帧与GPU证据",
-        "href": "artifacts/coverage/reflection-review.md"
-      },
-      {
-        "label": "三场半影/太阳控制/实际水面对照",
-        "href": "penumbra.html"
-      },
-      {
-        "label": "本批全帧及数值/运行证据",
-        "href": "artifacts/coverage/penumbra-review.md"
-      },
-      {
-        "label": "分段/连续浪峰对照",
-        "href": "waves.html"
-      },
-      {
-        "label": "本批全帧及GPU证据",
-        "href": "artifacts/coverage/wave-crest-review.md"
-      },
-      {
-        "label": "进退浪/周期/时间/线框验收",
-        "href": "waves.html"
-      },
-      {
-        "label": "本批全帧与GPU证据",
-        "href": "artifacts/coverage/wave-cycle-review.md"
-      },
-      {
-        "label": "真实黄蓝岸线",
-        "href": "index.html?scene=terrain&on=shorelines"
-      },
-      {
-        "label": "全帧与岸线验收证据",
-        "href": "artifacts/coverage/shore-review.md"
-      },
-      {
-        "label": "距离场/六AO/梯度诊断（启用距离场并重烘）",
-        "href": "lightvolume.html"
-      },
-      {
-        "label": "本批全帧与数值/运行证据",
-        "href": "artifacts/coverage/distance-ao-review.md"
-      },
-      {
-        "label": "六方向切片/反弹对照",
-        "href": "lightvolume.html"
-      },
-      {
-        "label": "本批全帧与运行证据",
-        "href": "artifacts/coverage/directional-bounce-review.md"
-      },
-      {
-        "label": "实际点光体积对照",
-        "href": "lightvolume.html"
-      },
-      {
-        "label": "房屋整体编辑（保留成果）",
-        "href": "multicell.html"
-      },
-      {
-        "label": "本批全帧与运行证据",
-        "href": "artifacts/coverage/house-point-review.md"
-      },
-      {
-        "label": "坍缩周边候选（点击枚举按钮）",
-        "href": "wfc.html"
-      },
-      {
-        "label": "楼间绳线/衣物实景",
-        "href": "index.html?scene=town&on=wires"
-      },
-      {
-        "label": "本批逐帧与运行证据",
-        "href": "artifacts/coverage/wire-frontier-review.md"
-      },
-      {
-        "label": "规则补丁/顶点对偶（共享World）",
-        "href": "gridpatch.html"
-      },
-      {
-        "label": "本批逐帧与运行证据",
-        "href": "artifacts/coverage/radial-dual-review.md"
-      },
-      {
-        "label": "通用旗形/徽记",
-        "href": "banners.html"
-      },
-      {
-        "label": "本批逐帧与实景证据",
-        "href": "artifacts/coverage/banner-bunting-review.md"
-      },
-      {
-        "label": "真实庭院彩旗绳",
-        "href": "index.html?scene=town&on=wires"
-      },
-      {
-        "label": "本批学习与实景证据",
-        "href": "artifacts/coverage/ornament-flags-review.md"
-      },
-      {
-        "label": "边境实验（勾选边境路径）",
-        "href": "campaign.html"
-      },
-      {
-        "label": "本批学习与路径证据",
-        "href": "artifacts/coverage/frontier-review.md"
-      },
-      {
-        "label": "真实World快照对照",
-        "href": "snapshot.html"
-      },
-      {
-        "label": "快照逐帧证据",
-        "href": "artifacts/coverage/snapshot-review.md"
-      },
-      {
-        "label": "分组逐帧证据",
-        "href": "artifacts/coverage/region-groups-review.md"
-      },
-      {
-        "label": "战役逐帧证据",
-        "href": "artifacts/coverage/campaign-graph-review.md"
-      },
-      {
-        "label": "浮点GPU实测",
-        "href": "float.html"
-      },
-      {
-        "label": "边境学习记录",
-        "href": "artifacts/coverage/border-learning-review.md"
-      },
-      {
-        "label": "球面高度光照",
-        "href": "planet.html"
-      },
-      {
-        "label": "树冠与烘焙",
-        "href": "index.html?scene=terrain"
-      },
-      {
-        "label": "北境战斗",
-        "href": "index.html?scene=badnorth"
-      },
-      {
-        "label": "局部网格验收",
-        "href": "patch.html"
-      },
-      {
-        "label": "火焰验收",
-        "href": "fire.html"
-      },
-      {
-        "label": "两遍烟雾验收",
-        "href": "smoke.html"
-      },
-      {
-        "label": "共享体素验收",
-        "href": "flow.html"
-      },
-      {
-        "label": "双格整体编辑",
-        "href": "multicell.html"
-      },
-      {
-        "label": "WFC与局部修复",
-        "href": "wfc.html"
-      },
-      {
-        "label": "等值线",
-        "href": "contour.html"
-      },
-      {
-        "label": "近似视线",
-        "href": "visibility.html"
-      },
-      {
-        "label": "单方向精灵",
-        "href": "sprites.html"
-      },
-      {
-        "label": "墙饰表面",
-        "href": "doodle.html"
-      },
-      {
-        "label": "几何邻接",
-        "href": "adjacency.html"
-      }
-    ]
-  },
+  "latest": "第 101 轮：天光柱峰值 **α=1.00 被推翻** —— r100 的 1.00 来自 `beam-alpha-slope.py` 的 `cal_alpha=1.0`（标定假设，循环论证）；新 `tools/beam-transmission.py` 用柱后残余对比度反解，自检 0.442 判不可用于绝对 α，实拍 0288 残余 11.98 / 柱外 44.55 / 噪声 5.12 → α≈0.83，4× 目视岩边仍透出 → 峰值改记 **0.7–0.85**，素材（400×400/JPEG）已到上限。837 新增 `tests/stain-joint-curve-browser.cjs`（12/12）：685 帧、台阶 0.05s→0.25 / 3.56s→0.44 / 11.4s→1.00 零回落、渲染乘性特征 R 差 0 / G −13 / B −9、地面 (r−g) 5→15 单调。纪律项落地 `tests/worldmesh-setter-guard.mjs`（8/8 + 突变测试：删 `set bandTri` 立刻红）。灌木 600/257 同口径重测：P50 对上（4 vs 4–6px），P90 只有原片 ~60%（10 vs 14–18px）→ `SHRUB_BAND.max` 上沿偏低但机位不可比，未改常数。总账仍 285/285；done 71 / partial 177 / ref 15 / na 22。",
   "learningPace": {
     "targetClipsPerHour": 4,
     "goalHours": 78,
@@ -1166,11 +964,11 @@
     "baselineReviewedClips": 27,
     "baselineRemainingClips": 258,
     "totalClips": 285,
-    "reviewedClips": 175,
-    "remainingClips": 110,
+    "reviewedClips": 285,
+    "remainingClips": 0,
     "countBasis": "独立视频ID、对应全帧记录和学习证据；不等同全部代码验收通过",
-    "actualClipsPerHour": 1.75,
-    "measuredAt": "2026-11-07T14:46:08.052337+08:00"
+    "actualClipsPerHour": 1.01,
+    "measuredAt": "2026-11-14T18:32:00.158336+08:00"
   },
   "session": {
     "status": "paused",

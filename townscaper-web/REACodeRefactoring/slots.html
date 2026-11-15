@@ -1,0 +1,100 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>SLOTS 槽位缩略页 + 求解时序 · REACode重构版</title><link rel="icon" href="data:,">
+<style>
+body{margin:0;background:#3a3446;color:#ece6f2;font:14px/1.6 system-ui}
+header{padding:12px 22px 4px}a{color:#9fd3e0}h1{font:600 26px/1.2 system-ui;letter-spacing:.2em;margin:4px 0}
+button{margin:4px 6px 4px 0;padding:5px 14px;border:0;border-radius:4px;background:#d9cfe6;color:#2d2838;font-weight:600;cursor:pointer}
+button:disabled{opacity:.4;cursor:default}canvas{display:block;margin:6px 22px}#info{padding:0 22px;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace;color:#cfc6dc}
+label{margin-right:12px}
+</style>
+<header><a href="index.html" target="_top">首页</a> · <a href="wfc.html">共享WFC</a> · <a href="wfc-trace.html">候选过程</a>
+<p style="margin:4px 0;max-width:1100px">865200072685912064（2017-05-18，「a small browser demo to help explain how the WFC algorithm works」）：原片是标题 SLOTS + 10×8 槽位表，每格一张缩略图，底部 RESET / SOLVE / 暗按钮。
+这里槽位表跑在共享 <code>solveWFC</code> 上：边值 = 两角点值之和 mod 3，变体池 <b>27</b> 种（<code>cornerVariantTiles</code>）；槽位里画的是该格<b>当前候选集</b>的叠影（数字 = 候选数），定下来后变成那一张缩略图；
+时序动画逐帧播放求解器真实的候选快照（<code>traceLimit</code>），红线是 <code>explain</code> 记录回溯出的依赖链（决定/给定格 → … → 被删候选的格）。缩略图美术是程序化替代（天蓝底 + 赭红拱 / 凹口 + 沙色台基），不是原素材。</p></header>
+<h1 style="padding:0 22px">SLOTS</h1>
+<div style="padding:0 22px"><button id="reset">RESET</button><button id="solve">SOLVE</button><button id="play">▶ 播放</button><button id="conflict">冲突示例</button>
+<label>帧 <input id="frame" type="range" min="0" value="0" style="width:360px"></label><output id="fv"></output></div>
+<canvas id="c" width="1240" height="700"></canvas><div id="info"></div>
+<script type="module">
+import{cornerSlots,solveWFC,dependencyChain}from'./src/core/wfc.js';import{generateModulePatch}from'./src/core/module-patch.js';
+const q=new URLSearchParams(location.search),COLS=10,ROWS=8,K=3;
+// 10×8 square slot table as a shared half-edge grid
+const vertices=[],faces=[];for(let r=0;r<=ROWS;r++)for(let c=0;c<=COLS;c++)vertices.push([c,r]);
+for(let r=0;r<ROWS;r++)for(let c=0;c<COLS;c++){const v=(cc,rr)=>rr*(COLS+1)+cc;faces.push([v(c,r),v(c+1,r),v(c+1,r+1),v(c,r+1)]);}
+const grid=generateModulePatch({vertices,faces});
+const slot=grid.cells.map(c=>({c:Math.round(c.cx-.5),r:Math.round(c.cz-.5)}));
+const seed=Number(q.get('seed')??7),S=cornerSlots(grid,{K,seed,givenRatio:.18}),byId=new Map(S.tiles.map(t=>[t.id,t]));
+// which edge of a cell points N/E/S/W on screen (edges are in the cell's own winding)
+const side=grid.cells.map(c=>c.pts.map((p,i)=>{const q2=c.pts[(i+1)%c.n],mx=(p.x+q2.x)/2-c.cx,mz=(p.z+q2.z)/2-c.cz;return Math.abs(mx)>Math.abs(mz)?(mx>0?'E':'W'):(mz>0?'S':'N');}));
+const ctx=document.querySelector('#c').getContext('2d'),slider=document.querySelector('#frame'),info=document.querySelector('#info');
+const CW=74,CH=60,OX=20,OY=8;
+let result=null,pins={...S.pins},mode='idle',selected=null,frameIdx=0,playing=false,lastT=0;
+/** procedural thumbnail of one variant: sky, sand plinth, an ochre profile per edge value (0 flat, 1 arch, 2 notch) */
+function thumb(x,y,w,h,t,cell,alpha=1){
+  ctx.save();ctx.globalAlpha=alpha;ctx.fillStyle='#8fc8e8';ctx.fillRect(x,y,w,h);
+  ctx.fillStyle='#e1c78f';ctx.fillRect(x,y+h*.72,w,h*.28);
+  const val=d=>{const e=side[cell].indexOf(d);return t.edges[e];};
+  ctx.fillStyle='#b5563a';
+  // N profile = roof line, S = plinth notch, E/W = side pillars
+  const n=val('N'),s=val('S'),e=val('E'),wv=val('W');
+  ctx.beginPath();ctx.moveTo(x+w*.12,y+h*.72);ctx.lineTo(x+w*.12,y+h*.3);
+  if(n===1){ctx.quadraticCurveTo(x+w*.5,y+h*.02,x+w*.88,y+h*.3);}else if(n===2){ctx.lineTo(x+w*.4,y+h*.3);ctx.lineTo(x+w*.5,y+h*.42);ctx.lineTo(x+w*.6,y+h*.3);ctx.lineTo(x+w*.88,y+h*.3);}else ctx.lineTo(x+w*.88,y+h*.3);
+  ctx.lineTo(x+w*.88,y+h*.72);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#8fc8e8';ctx.beginPath();ctx.moveTo(x+w*.3,y+h*.72);ctx.lineTo(x+w*.3,y+h*.5);ctx.quadraticCurveTo(x+w*.5,y+h*(s===1?.28:.38),x+w*.7,y+h*.5);ctx.lineTo(x+w*.7,y+h*.72);ctx.fill();
+  ctx.fillStyle='#e1c78f';if(s===2)ctx.fillRect(x+w*.42,y+h*.72,w*.16,h*.12);
+  ctx.fillStyle='#7c3a28';if(e)ctx.fillRect(x+w*.88,y+h*(e===1?.3:.5),w*.07,h*(e===1?.42:.22));if(wv)ctx.fillRect(x+w*.05,y+h*(wv===1?.3:.5),w*.07,h*(wv===1?.42:.22));
+  ctx.restore();
+}
+const domainAt=()=>{if(!result)return Object.fromEntries(grid.cells.map(c=>[c.id,S.tiles.filter(t=>t.edges.length===c.n&&(pins[c.id]===undefined||t.id===pins[c.id])).map(t=>t.id)]));return result.trace[Math.min(frameIdx,result.trace.length-1)].domains;};
+const centre=id=>[OX+slot[id].c*CW+CW/2,OY+slot[id].r*CH+CH/2];
+function chainAt(){if(!result?.causes)return[];const fr=result.trace[Math.min(frameIdx,result.trace.length-1)];
+  const live=result.causes.filter(c=>c.decisions<=fr.decisions);
+  if(mode==='conflict'&&result.conflicts?.length&&frameIdx>=result.trace.length-1)return result.conflicts[0];
+  if(selected!==null)return dependencyChain(live,selected);const li=live.findLastIndex(c=>c.from!==null&&c.from!==undefined);return li<0?[]:dependencyChain(live.slice(0,li+1),live[li].cell);}
+function draw(){
+  ctx.fillStyle='#3a3446';ctx.fillRect(0,0,1240,700);const dom=domainAt();
+  for(const c of grid.cells){const {c:col,r}=slot[c.id],x=OX+col*CW,y=OY+r*CH,d=dom[c.id];
+    ctx.fillStyle='#2a2533';ctx.fillRect(x+2,y+2,CW-4,CH-4);
+    if(d.length===1)thumb(x+4,y+4,CW-8,CH-8,byId.get(d[0]),c.id);
+    else if(d.length){for(const id of d)thumb(x+4,y+4,CW-8,CH-8,byId.get(id),c.id,Math.min(1,1.6/d.length));ctx.fillStyle='rgba(42,37,51,.45)';ctx.fillRect(x+4,y+4,CW-8,CH-8);ctx.fillStyle='#fff';ctx.font='600 15px system-ui';ctx.fillText(d.length,x+CW/2-8,y+CH/2+5);}
+    else{ctx.fillStyle='#c0392b';ctx.fillRect(x+4,y+4,CW-8,CH-8);ctx.fillStyle='#fff';ctx.fillText('∅',x+CW/2-5,y+CH/2+5);}
+    if(pins[c.id]!==undefined){ctx.strokeStyle=mode==='conflict'&&c.id===conflictCell?'#ff4136':'#f7e08a';ctx.lineWidth=3;ctx.strokeRect(x+3,y+3,CW-6,CH-6);}
+    if(c.id===selected){ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.strokeRect(x+1,y+1,CW-2,CH-2);}
+  }
+  const chain=chainAt();window.__slots.chainLength=chain.length;
+  if(chain.length){ctx.strokeStyle='#ff3b30';ctx.lineWidth=4;ctx.lineCap='round';ctx.beginPath();chain.forEach((r,i)=>{const[x,y]=centre(r.cell);i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();
+    for(const r of chain){const[x,y]=centre(r.cell);ctx.fillStyle=r.from===null||r.from===undefined?'#ffdc00':'#ff3b30';ctx.beginPath();ctx.arc(x,y,r.from===null||r.from===undefined?8:5,0,7);ctx.fill();}}
+  // variant palette (the thumbnail page): all 27 variants of the pool
+  const py=OY+ROWS*CH+18;ctx.fillStyle='#ece6f2';ctx.font='13px system-ui';ctx.fillText(`变体池 ${S.tiles.length} 种（K=${K}；原注释写 24，实跑 27）· 黄框 = 给定槽位 · 数字 = 候选数 · 红线 = 依赖链 · 黄点 = 链源（决定/给定）`,OX,py-4);
+  const proto=grid.cells.find(c=>slot[c.id].r===0&&slot[c.id].c===0).id;
+  S.tiles.forEach((t,i)=>{const x=OX+(i%14)*58,y=py+4+Math.floor(i/14)*48;thumb(x,y,52,42,t,proto);ctx.fillStyle='#ece6f2';ctx.font='10px ui-monospace';ctx.fillText(t.edges.join(''),x+2,y+40);});
+  // right panel: timeline sparkline of undecided count
+  if(result){const tx=OX+COLS*CW+20,tw=1240-tx-16,th=180;ctx.strokeStyle='#8a7fa0';ctx.strokeRect(tx,OY,tw,th);const n=result.trace.length,undec=result.trace.map(f=>Object.values(f.domains).filter(d=>d.length>1).length);
+    ctx.strokeStyle='#9fd3e0';ctx.beginPath();undec.forEach((u,i)=>{const x=tx+i/(Math.max(1,n-1))*tw,y=OY+th-u/grid.cells.length*th;i?ctx.lineTo(x,y):ctx.moveTo(x,y);});ctx.stroke();
+    const fx=tx+frameIdx/(Math.max(1,n-1))*tw;ctx.strokeStyle='#ff3b30';ctx.beginPath();ctx.moveTo(fx,OY);ctx.lineTo(fx,OY+th);ctx.stroke();
+    ctx.fillStyle='#ece6f2';ctx.font='12px system-ui';ctx.fillText('未定槽位数 / 帧',tx+4,OY+14);
+    const fr=result.trace[Math.min(frameIdx,n-1)];ctx.fillText(`阶段 ${fr.stage} · 决定 ${fr.decisions} · 传播步 ${fr.steps}`,tx+4,OY+th+18);ctx.fillText(`未定 ${undec[Math.min(frameIdx,n-1)]} 格 · ${result.ok?'解成功':'失败: '+result.reason}`,tx+4,OY+th+36);
+    const ok=result.ok?grid.cells.filter(c=>result.tiles[c.id]===S.truth[c.id]).length:0;ctx.fillText(`与真值相同 ${ok}/80（给定之外允许不同解）`,tx+4,OY+th+54);}
+  document.querySelector('#fv').textContent=result?`${frameIdx+1}/${result.trace.length}`:'未求解';
+  Object.assign(window.__slots,{frame:frameIdx,frames:result?.trace.length??0,mode,ok:result?.ok??null,undecided:Object.values(dom).filter(d=>d.length>1).length,empty:Object.values(dom).filter(d=>!d.length).length});
+}
+let conflictCell=null;
+function solve(){const t0=performance.now();result=solveWFC(grid,{tiles:S.tiles,seed,pins,traceLimit:256,explain:true});slider.max=result.trace.length-1;frameIdx=0;slider.value=0;
+  info.textContent=`共享 solveWFC：${result.ok?'解成功':'失败 '+result.reason} · 决定 ${result.decisions} · 回溯 ${result.backtracks} · 快照 ${result.trace.length}${result.traceTruncated?'（截断）':''} · 删减记录 ${result.causes.length} · 冲突链 ${result.conflicts.length} · ${(performance.now()-t0).toFixed(1)} ms\n点任意槽位 → 画它当前帧的依赖链。`;
+  window.__slots.result={ok:result.ok,reason:result.reason,decisions:result.decisions,causes:result.causes.length,conflicts:result.conflicts.length,trace:result.trace.length};draw();}
+document.querySelector('#reset').onclick=()=>{playing=false;mode='idle';pins={...S.pins};conflictCell=null;result=null;selected=null;draw();};
+document.querySelector('#solve').onclick=()=>{mode='solve';solve();frameIdx=result.trace.length-1;slider.value=frameIdx;draw();};
+document.querySelector('#play').onclick=()=>{if(!result){mode='solve';solve();}frameIdx=0;playing=true;};
+document.querySelector('#conflict').onclick=()=>{playing=false;mode='conflict';pins={...S.pins};
+  // pin a given slot to a variant that disagrees with a given neighbour → contradiction chain
+  const c=grid.cells.find(c=>pins[c.id]!==undefined&&c.edgeNeighbors.some(nb=>pins[nb]!==undefined));conflictCell=c.id;
+  const nb=c.edgeNeighbors.findIndex(nb=>pins[nb]!==undefined),cur=byId.get(pins[c.id]);pins[c.id]=S.tiles.find(t=>t.edges[nb]!==cur.edges[nb]).id;solve();frameIdx=result.trace.length-1;slider.value=frameIdx;draw();};
+slider.oninput=()=>{playing=false;frameIdx=Number(slider.value);draw();};
+document.querySelector('#c').onclick=e=>{const r=e.target.getBoundingClientRect(),x=e.clientX-r.left-OX,y=e.clientY-r.top-OY,c=Math.floor(x/CW),rr=Math.floor(y/CH);const id=grid.cells.findIndex(k=>slot[k.id].c===c&&slot[k.id].r===rr);selected=id>=0?id:null;draw();};
+window.__slots={variants:S.tiles.length,givens:Object.keys(S.pins).length};
+function loop(t){if(playing&&result&&t-lastT>90){lastT=t;frameIdx++;if(frameIdx>=result.trace.length){frameIdx=result.trace.length-1;playing=false;}slider.value=frameIdx;draw();}requestAnimationFrame(loop);}
+draw();
+if(q.get('conflict')==='1')document.querySelector('#conflict').click();
+else if(q.has('frame')){mode='solve';solve();frameIdx=Math.min(result.trace.length-1,Math.round(Number(q.get('frame'))*(result.trace.length-1)));slider.value=frameIdx;draw();}
+else if(q.get('play')==='1'){document.querySelector('#play').click();}
+requestAnimationFrame(loop);
+</script></html>

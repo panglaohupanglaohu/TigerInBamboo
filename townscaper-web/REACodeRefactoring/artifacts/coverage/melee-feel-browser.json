@@ -1,0 +1,30 @@
+{
+  "firstFrame": {
+    "hp": 2,
+    "drops": 8,
+    "soak": 0.33333333333333337,
+    "dist": 0.25,
+    "stun": 0.5499999999999995,
+    "drawnDrops": 8,
+    "dropVisible": true
+  },
+  "d0": 0.15,
+  "hp0": 3,
+  "blood0": 0,
+  "afterLanding": {
+    "blood": 10,
+    "drops": 0,
+    "drawnDrops": 0
+  },
+  "corpse": {
+    "dead": true,
+    "hp": 0,
+    "blood": 13
+  },
+  "cell": {
+    "cx": -0.3142437763999864,
+    "cz": -0.8206872114131979,
+    "y": 3
+  },
+  "errors": []
+}

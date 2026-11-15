@@ -1,0 +1,297 @@
+{
+  "errors": [],
+  "scope": "real four transform Workers, actual capability code and independent verifier, real generic preview/commit/revert in isolated GPU fixture",
+  "session": {
+    "engine": {
+      "name": "PipeLineEngine",
+      "version": 1,
+      "status": "executed",
+      "adapter": "materials",
+      "context": {
+        "tier": "scene",
+        "sceneId": "TEST-engine"
+      },
+      "catalogHash": "b786c4b1e9e603684f66038df1695ff1f3f010661dea879a0b32e6f905e4431c",
+      "planHash": "e63e4cfc7d32a48442a73507a3274078a740a917f2520fb0f7550c64d592ba2c",
+      "inputHash": "af0d59c9ff81b19c65d78e17e72c507e7d096bbac5f6ae4227457fa20141b5ed",
+      "outputHash": "adaece953d19c5736253a8002748e428482276bef3885f159d7ab740dee4666e",
+      "steps": [
+        {
+          "id": "scene.tone",
+          "params": {
+            "hue": 20,
+            "sat": 1.1,
+            "light": 0.08,
+            "includeEdited": false
+          }
+        },
+        {
+          "id": "scene.oklab-contrast",
+          "params": {
+            "gain": 1.15,
+            "maxDelta": 8,
+            "includeEdited": false
+          }
+        }
+      ],
+      "implementations": [
+        {
+          "id": "scene.tone",
+          "module": "src/system-workshop/gscene/capabilities.js#scene.tone"
+        },
+        {
+          "id": "scene.oklab-contrast",
+          "module": "src/system-workshop/gscene/capabilities.js#scene.oklab-contrast"
+        }
+      ]
+    },
+    "verification": {
+      "status": "pass",
+      "checks": [
+        {
+          "id": "values",
+          "name": "数值",
+          "status": "pass",
+          "detail": "5 种材质改色"
+        },
+        {
+          "id": "manual",
+          "name": "人工调色保留",
+          "status": "pass",
+          "detail": "已保存材质未改变"
+        },
+        {
+          "id": "light",
+          "name": "整体明度",
+          "status": "pass",
+          "detail": "0.52 → 0.59（上限变化 0.25）"
+        },
+        {
+          "id": "contrast",
+          "name": "明暗层次",
+          "status": "pass",
+          "detail": "明度标准差 0.174 → 0.204（低于一半判失败：画面会糊成一片）"
+        },
+        {
+          "id": "variety",
+          "name": "颜色数",
+          "status": "pass",
+          "detail": "6 → 6 种"
+        }
+      ],
+      "summary": "数值✓ 人工调色保留✓ 整体明度✓ 明暗层次✓ 颜色数✓"
+    },
+    "fresh": true,
+    "preview": true,
+    "changed": 5,
+    "compared": true,
+    "rejected": true,
+    "discarded": true,
+    "storageRejected": true,
+    "retained": true,
+    "committed": true,
+    "geometryUnchanged": true,
+    "events": [
+      "phase",
+      "job",
+      "beat",
+      "job",
+      "phase",
+      "phase",
+      "job",
+      "beat",
+      "job",
+      "phase",
+      "phase",
+      "job",
+      "beat",
+      "beat",
+      "beat",
+      "beat",
+      "job",
+      "phase",
+      "job",
+      "beat",
+      "job",
+      "phase",
+      "experience",
+      "phase",
+      "experience",
+      "phase",
+      "phase",
+      "job",
+      "beat",
+      "job",
+      "phase",
+      "phase",
+      "job",
+      "beat",
+      "beat",
+      "beat",
+      "beat",
+      "job",
+      "phase",
+      "job",
+      "beat",
+      "job",
+      "phase",
+      "experience",
+      "phase",
+      "experience",
+      "phase"
+    ]
+  },
+  "workers": {
+    "rows": [
+      {
+        "kind": "object",
+        "engine": {
+          "name": "PipeLineEngine",
+          "version": 1,
+          "status": "executed",
+          "adapter": "object",
+          "context": {
+            "tier": "object",
+            "sceneId": "apostles"
+          },
+          "catalogHash": "7ed0f342625a0fb0a5c516057f4441ca52e19f31145c9a334af8285699ab2896",
+          "planHash": "a68623d309e3c6833c2910565f75f06bdd164175b6e4c85b65e6923a45028ac5",
+          "inputHash": "5e18d337761eb0582c85fd5d3ab04e6505bfa5c342c9887815329db8fef76abb",
+          "outputHash": "0401b53c307655c19798422c03a31aed482c76cc61d1af9e5ac193411ea9533f",
+          "steps": [
+            {
+              "id": "object.scale-variety",
+              "params": {
+                "amount": 0.15,
+                "includeEdited": false
+              }
+            },
+            {
+              "id": "object.yaw-variety",
+              "params": {
+                "degrees": 90,
+                "includeEdited": false
+              }
+            }
+          ],
+          "implementations": [
+            {
+              "id": "object.scale-variety",
+              "module": "src/system-workshop/object/capabilities.js#object.scale-variety"
+            },
+            {
+              "id": "object.yaw-variety",
+              "module": "src/system-workshop/object/capabilities.js#object.yaw-variety"
+            }
+          ]
+        },
+        "edited": 3
+      },
+      {
+        "kind": "voxel",
+        "engine": {
+          "name": "PipeLineEngine",
+          "version": 1,
+          "status": "executed",
+          "adapter": "voxel",
+          "context": {
+            "tier": "scene",
+            "sceneId": "morris-lake"
+          },
+          "catalogHash": "138a209492d7d08105840ad11c5b3b1eaecc55b9714d9396c9e5c395eadc074e",
+          "planHash": "a740706dc14f1144b579618ba4639ac3b35e9726955b7346fcacf04cde6cd5df",
+          "inputHash": "80f9a81edf855e79759d9648d7398b8b00f039c4a530842cedcde78941cfb637",
+          "outputHash": "bb8a10325ccb8f091ba99ec8e16ec2b8cf7ef5742bb0b0fb560381c406173a85",
+          "steps": [
+            {
+              "id": "build.lighthouse",
+              "params": {
+                "count": 1,
+                "height": 7
+              }
+            },
+            {
+              "id": "build.lighthouse-light",
+              "params": {}
+            }
+          ],
+          "implementations": [
+            {
+              "id": "build.lighthouse",
+              "module": "townscaper-web/REACodeRefactoring/src/capabilities/registry.js#build.lighthouse"
+            },
+            {
+              "id": "build.lighthouse-light",
+              "module": "townscaper-web/REACodeRefactoring/src/capabilities/registry.js#build.lighthouse-light"
+            }
+          ]
+        },
+        "changed": true,
+        "report": [
+          {
+            "id": "build.lighthouse",
+            "status": "applied",
+            "applied": [
+              "lighthouse:57"
+            ],
+            "tried": 1,
+            "ms": 0,
+            "params": {
+              "count": 1,
+              "height": 7
+            },
+            "layer3d": "lighthouse",
+            "reasons": [
+              "楼 57（2 层）临水、邻格最高 0 层，加高到 7 层即成灯塔"
+            ],
+            "focus": [
+              57
+            ]
+          },
+          {
+            "id": "build.lighthouse-light",
+            "status": "layer",
+            "layer3d": "lighthouse",
+            "params": {}
+          }
+        ]
+      },
+      {
+        "kind": "planet",
+        "engine": {
+          "name": "PipeLineEngine",
+          "version": 1,
+          "status": "executed",
+          "adapter": "planet",
+          "context": {
+            "tier": "planet",
+            "sceneId": "planet"
+          },
+          "catalogHash": "23c21723e9d1ab38a6b5d56dd5a8ef61e0409a915fd52edd9d7a9e84f53e553c",
+          "planHash": "ca51dcf29349ffe302f0a0f8fba211a78dcebe78d7f6a7391d12bf4a619f7102",
+          "inputHash": "f7e954a260a87746a99bc1235a71ed60492de6322a80d2589fa002bec2e021ef",
+          "outputHash": "9f91911048f302b504c436e1237d363dadfcd31ad32a891c97e1897be1537324",
+          "steps": [
+            {
+              "id": "planet.sea-level",
+              "params": {
+                "level": 0.25
+              }
+            }
+          ],
+          "implementations": [
+            {
+              "id": "planet.sea-level",
+              "module": "src/system-workshop/planet/capabilities.js#planet.sea-level"
+            }
+          ]
+        },
+        "seaLevel": 0.25,
+        "compiled": true,
+        "raster": 73728
+      }
+    ],
+    "missingRejected": true
+  },
+  "passed": true
+}

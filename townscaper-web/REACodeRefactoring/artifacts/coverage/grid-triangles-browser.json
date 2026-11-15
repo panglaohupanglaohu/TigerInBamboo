@@ -1,0 +1,244 @@
+{
+ "ok": true,
+ "checks": [
+  {
+   "name": "① 格网先建起来",
+   "ok": true,
+   "detail": "{\"cols\":64,\"rows\":55,\"spacing\":0.454382}"
+  },
+  {
+   "name": "① 默认不出黄三角",
+   "ok": true,
+   "detail": "默认 tri=null"
+  },
+  {
+   "name": "② region 内出三角",
+   "ok": true,
+   "detail": "{\"split\":\"auto\",\"quads\":9,\"skipped\":0,\"dropped\":0,\"triangles\":9,\"edges\":27,\"splits\":{\"a\":4,\"b\":5},\"region\":{\"minX\":-0.7270112000000001,\"maxX\":0.7270112000000001,\"minZ\":-0.7270112000000001,\"maxZ\":0.7270112000000001},\"colored\":false,\"yMin\":2.02,\"yMax\":3.02}"
+  },
+  {
+   "name": "② 顶点数 = 三角数 × 3 边 × 2 端",
+   "ok": true,
+   "detail": "count=54 tri=9"
+  },
+  {
+   "name": "② 图层可见",
+   "ok": true,
+   "detail": "visible=true"
+  },
+  {
+   "name": "② 颜色是黄",
+   "ok": true,
+   "detail": "#e9e33c"
+  },
+  {
+   "name": "③ 顶点贴地（y 跨度 > 0）",
+   "ok": true,
+   "detail": "y 2.02..3.02"
+  },
+  {
+   "name": "② 两个对角线方向都出现",
+   "ok": true,
+   "detail": "{\"a\":4,\"b\":5}"
+  },
+  {
+   "name": "④ region 放大 → 三角变多",
+   "ok": true,
+   "detail": "9 → 42"
+  },
+  {
+   "name": "⑤ 岛外 region → 0 个三角且隐藏",
+   "ok": true,
+   "detail": "{\"tri\":{\"split\":\"auto\",\"quads\":0,\"skipped\":0,\"dropped\":0,\"triangles\":0,\"edges\":0,\"splits\":{\"a\":0,\"b\":0},\"region\":{\"minX\":181.7528,\"maxX\":182.661564,\"minZ\":181.7528,\"maxZ\":182.661564},\"colored\":false,\"yMin\":0,\"yMax\":0},\"visible\":false,\"count\":0}"
+  },
+  {
+   "name": "⑥ 不给 region 报错",
+   "ok": true,
+   "detail": "setGridTriangles 需要 region（原片是局部调试层，不给区域会把整张格网画满对角线）"
+  },
+  {
+   "name": "⑦ 关掉后图层清空",
+   "ok": true,
+   "detail": "{\"tri\":null,\"visible\":false,\"count\":0}"
+  },
+  {
+   "name": "⑧ 白格线/亮斑/外缘未受影响",
+   "ok": true,
+   "detail": "{\"dots\":731,\"rims\":103,\"seg\":921}"
+  },
+  {
+   "name": "⑨ 两组各自出三角",
+   "ok": true,
+   "detail": "{\"split\":\"auto\",\"quads\":8,\"skipped\":0,\"dropped\":0,\"triangles\":8,\"edges\":24,\"splits\":{\"a\":4,\"b\":4},\"groups\":2,\"colored\":true,\"yMin\":2.02,\"yMax\":4.02,\"per\":[{\"region\":{\"minX\":-1.363146,\"maxX\":-0.454382,\"minZ\":-0.908764,\"maxZ\":0},\"color\":\"#2233aa\",\"quads\":4},{\"region\":{\"minX\":0.454382,\"maxX\":1.363146,\"minZ\":-0.908764,\"maxZ\":0},\"color\":\"#dcdf66\",\"quads\":4}]}"
+  },
+  {
+   "name": "⑨ 顶点色 = 两组各自的色",
+   "ok": true,
+   "detail": "{\"c\":[\"0.133,0.200,0.667\",\"0.863,0.875,0.400\"],\"t\":[\"0.133,0.200,0.667\",\"0.863,0.875,0.400\"]}"
+  },
+  {
+   "name": "⑨ 顶点色档已开",
+   "ok": true,
+   "detail": "vc=true visible=true"
+  },
+  {
+   "name": "⑩ 坏分组报错（缺 region / min>max / 非数组）",
+   "ok": true,
+   "detail": "RangeError,RangeError,TypeError"
+  },
+  {
+   "name": "⑪ 清空分组回到单色档",
+   "ok": true,
+   "detail": "{\"groups\":null,\"vc\":false,\"hasColor\":false}"
+  }
+ ],
+ "base": {
+  "lattice": {
+   "cols": 64,
+   "rows": 55,
+   "spacing": 0.454382
+  },
+  "drape": {
+   "drape": true,
+   "breakMode": "none",
+   "vertices": 3640,
+   "kept": 733,
+   "dropped": 2907,
+   "edges": 7159,
+   "drawn": 921,
+   "stepped": 0,
+   "vertical": 0,
+   "skipped": 460,
+   "corners": 731,
+   "rim": 103,
+   "inner": 628,
+   "yFlat": 4.5,
+   "minY": 0.52,
+   "maxY": 5.02,
+   "breakRatio": 0.5,
+   "spacing": {
+    "min": 0.454382,
+    "median": 0.454382,
+    "max": 0.454382,
+    "spread": 0
+   },
+   "regular": true
+  },
+  "tri": null
+ },
+ "on": {
+  "tri": {
+   "split": "auto",
+   "quads": 9,
+   "skipped": 0,
+   "dropped": 0,
+   "triangles": 9,
+   "edges": 27,
+   "splits": {
+    "a": 4,
+    "b": 5
+   },
+   "region": {
+    "minX": -0.7270112000000001,
+    "maxX": 0.7270112000000001,
+    "minZ": -0.7270112000000001,
+    "maxZ": 0.7270112000000001
+   },
+   "colored": false,
+   "yMin": 2.02,
+   "yMax": 3.02
+  },
+  "count": 54,
+  "visible": true,
+  "color": "e9e33c",
+  "spacing": 0.454382,
+  "region": {
+   "minX": -0.7270112000000001,
+   "maxX": 0.7270112000000001,
+   "minZ": -0.7270112000000001,
+   "maxZ": 0.7270112000000001
+  }
+ },
+ "wider": {
+  "split": "auto",
+  "quads": 42,
+  "skipped": 0,
+  "dropped": 0,
+  "triangles": 42,
+  "edges": 126,
+  "splits": {
+   "a": 21,
+   "b": 21
+  },
+  "region": {
+   "minX": -1.4540224000000002,
+   "maxX": 1.4540224000000002,
+   "minZ": -1.4540224000000002,
+   "maxZ": 1.4540224000000002
+  },
+  "colored": false,
+  "yMin": 2.02,
+  "yMax": 4.02
+ },
+ "reg": {
+  "dots": 731,
+  "rims": 103,
+  "seg": 921
+ },
+ "two": {
+  "tri": {
+   "split": "auto",
+   "quads": 8,
+   "skipped": 0,
+   "dropped": 0,
+   "triangles": 8,
+   "edges": 24,
+   "splits": {
+    "a": 4,
+    "b": 4
+   },
+   "groups": 2,
+   "colored": true,
+   "yMin": 2.02,
+   "yMax": 4.02,
+   "per": [
+    {
+     "region": {
+      "minX": -1.363146,
+      "maxX": -0.454382,
+      "minZ": -0.908764,
+      "maxZ": 0
+     },
+     "color": "#2233aa",
+     "quads": 4
+    },
+    {
+     "region": {
+      "minX": 0.454382,
+      "maxX": 1.363146,
+      "minZ": -0.908764,
+      "maxZ": 0
+     },
+     "color": "#dcdf66",
+     "quads": 4
+    }
+   ]
+  },
+  "colors": [
+   "0.133,0.200,0.667",
+   "0.863,0.875,0.400"
+  ],
+  "thickColors": [
+   "0.133,0.200,0.667",
+   "0.863,0.875,0.400"
+  ],
+  "visible": true,
+  "vc": true
+ },
+ "screenshots": [
+  "grid-triangles-on.png",
+  "grid-triangles-wide.png",
+  "grid-triangles-two-groups.png"
+ ],
+ "problems": []
+}

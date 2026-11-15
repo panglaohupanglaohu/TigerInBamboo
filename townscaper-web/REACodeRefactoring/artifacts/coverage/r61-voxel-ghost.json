@@ -1,0 +1,71 @@
+{
+  "report": {
+    "voxels": 949,
+    "spine": {
+      "x": 7,
+      "z": 6,
+      "cells": 49,
+      "bottom": {
+        "x": 6,
+        "y": 0,
+        "z": 5
+      },
+      "top": {
+        "x": 8,
+        "y": 16,
+        "z": 6
+      }
+    },
+    "spineOrder": {
+      "headLen": 49,
+      "inSpine": true,
+      "mono": true,
+      "first": {
+        "x": 6,
+        "y": 0,
+        "z": 5
+      },
+      "last": {
+        "x": 8,
+        "y": 16,
+        "z": 6
+      },
+      "total": 949
+    },
+    "layers": {
+      "on": true,
+      "bands": 6,
+      "counts": [
+        266,
+        175,
+        175,
+        202,
+        57,
+        74
+      ]
+    },
+    "colorStats": {
+      "off": {
+        "colors": 81,
+        "nonBg": 255782
+      },
+      "on": {
+        "colors": 231,
+        "nonBg": 255782
+      }
+    },
+    "goRun": {
+      "mid": 0.125,
+      "end": 1,
+      "after700ms": 1
+    },
+    "dolly": [
+      1,
+      1,
+      1,
+      1.22
+    ],
+    "problems": []
+  },
+  "errors": []
+}

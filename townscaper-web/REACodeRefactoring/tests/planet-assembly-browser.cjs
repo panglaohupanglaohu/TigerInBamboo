@@ -1,0 +1,62 @@
+const { chromium } = require('playwright');
+const fs = require('fs');
+const path = require('path');
+
+// 784847933686575104 / 784847588893814785：球壳从一小片沿前沿铺满整球。
+// 这里验页面装配滑杆真的在改网格（不是只改数字），并把四档截图落盘给人眼核。
+(async () => {
+  const b = await chromium.launch({
+    executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    headless: true,
+    args: ['--enable-unsafe-swiftshader', '--use-gl=angle', '--use-angle=swiftshader'],
+  });
+  const p = await b.newPage({ viewport: { width: 1440, height: 1000 } });
+  const errors = [], reports = [];
+  const out = path.resolve(__dirname, '../artifacts/coverage');
+  p.on('pageerror', (e) => errors.push(e.message));
+  try {
+    await p.goto('http://localhost:8769/planet.html');
+    await p.waitForFunction(() => window.planetAssembly && window.planetDemo);
+    await p.click('#spin'); // 停自转，保证四档同机位可比
+    await p.evaluate(() => { const cam = planetLighting.camera; cam.position.set(0, 6.5, 24); cam.lookAt(0, 0, 0); });
+    const total = await p.evaluate(() => planetAssembly.order.length);
+    for (const asm of [0.12, 0.4, 0.7, 1]) {
+      await p.evaluate((v) => window.planetAssembly.set(v), asm);
+      await p.waitForTimeout(120);
+      const s = await p.evaluate(() => ({
+        asm: planetAssembly.asm,
+        cells: planetDemo.only ? planetDemo.only.size : planetAssembly.order.length,
+        verts: planetDemo.land.geometry.attributes.position.count,
+        faces: planetDemo.land.geometry.attributes.position.count / 3,
+        only: planetDemo.only ? planetDemo.only.size : null,
+      }));
+      reports.push({ asm, total, ...s });
+      await p.screenshot({ path: path.join(out, `planet-assembly-${String(asm).replace('.', '')}.png`) });
+    }
+    // 装配 0 必须一块面都没有（不是留一个空球）
+    const zero = await p.evaluate(() => { planetAssembly.set(0); return planetDemo.land.geometry.attributes.position.count; });
+    if (zero !== 0) throw Error('装配 0 仍有面：' + zero);
+    // 顶点数：0 < 12% < 40% < 70%，铺满后因断口侧壁消失而回落
+    for (let i = 1; i <= 2; i++) if (!(reports[i].verts > reports[i - 1].verts)) throw Error('装配中顶点数没有增长：' + JSON.stringify(reports));
+    if (!(reports[3].verts < reports[2].verts)) throw Error('铺满后断口侧壁应消失，顶点数应回落：' + JSON.stringify(reports));
+    if (reports[3].cells !== total) throw Error('铺满时格子数不等于陆地格数');
+    // 白模 / 薄壳
+    await p.evaluate(() => window.planetAssembly.set(0.45));
+    await p.click('#clay');
+    await p.click('#shell');
+    await p.waitForTimeout(120);
+    const mats = await p.evaluate(() => ({
+      clay: planetDemo.clayOn, shell: planetDemo.shellOn,
+      vertexColors: planetDemo.land.material.vertexColors,
+      children: planetDemo.world.children.length,
+    }));
+    await p.screenshot({ path: path.join(out, 'planet-assembly-clay-shell.png') });
+    if (!mats.clay || mats.vertexColors) throw Error('白模没生效');
+    if (!mats.shell || mats.children !== 1) throw Error('薄壳没生效（应只剩陆地一层）');
+    if (errors.length) throw Error('页面报错：' + errors.join(' | '));
+    fs.writeFileSync(path.join(out, 'planet-assembly-browser.json'), JSON.stringify({ total, reports, mats, errors }, null, 2));
+    console.log({ total, reports: reports.map((r) => [r.asm, r.cells, r.verts]), mats });
+  } finally {
+    await b.close();
+  }
+})().catch((e) => { console.error(e); process.exit(1); });

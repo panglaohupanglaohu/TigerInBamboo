@@ -1,0 +1,38 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>多格 tile 三维 WFC + 体素 AO · REACode重构版</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#3c3a39;color:#eef2ef;font:14px/1.5 system-ui}header{padding:10px 18px;background:#2e2c2b}a{color:#9fd8e8}button,input,select{font:inherit;margin:2px 4px}canvas{display:block;margin:0 auto}small{opacity:.75}</style>
+<header><b>多格 tile 三维 WFC + 顶点体素 AO</b>（<a href="gifs/793545297376972801.mp4">793545297376972801</a>：「I got multi tiles and voxel AO working… Maybe if it was infinitely tall?」）
+· <a href="pipeline.html">管线</a> · <a href="index.html">主场景</a><br>
+<label>种子 <input id="seed" type="number" value="3" min="1" style="width:5em"></label>
+<label>尺寸 <select id="size"><option value="5,7,5" selected>5×7×5</option><option value="4,10,4">4×10×4（高楼）</option><option value="6,5,6">6×5×6</option></select></label>
+<button id="go">生成</button><button id="play">▶ 回放长出来</button>
+<label><input id="ao" type="checkbox" checked>体素 AO</label>
+<input id="step" type="range" min="0" max="1" value="1" style="width:260px"> <span id="info"></span><br>
+<small>每个多格构件拆成部件，内部面贴私有标签，WFC 传播时整块一起出现；拱（3×2×1）下中空、底面须悬空；最少可能数优先坍缩，所以构件是跳着长出来的（与原片一致）。AO：每个外露面 4 个顶点看两侧 + 对角三个体素。</small></header>
+<canvas id="c" width="900" height="620"></canvas>
+<script type="module">
+import { solveMultitile } from './src/build/multitile-wfc.js';
+import { drawMultitileIso } from './src/build/multitile-iso.js';
+const c = document.querySelector('#c'), ctx = c.getContext('2d'), $ = (s) => document.querySelector(s);
+let res = null, timer = null;
+function draw() {
+  ctx.fillStyle = '#3c3a39'; ctx.fillRect(0, 0, c.width, c.height);
+  if (!res?.ok) { $('#info').textContent = '无解：' + (res?.reason || ''); return; }
+  const [W, H, D] = res.size, s = Math.min(36, 520 / (H + (W + D) * .5));
+  // 地台
+  ctx.fillStyle = '#9fb4a9'; ctx.beginPath();
+  for (const [x, z] of [[-.5, -.5], [W + .5, -.5], [W + .5, D + .5], [-.5, D + .5]]) ctx.lineTo(450 + (x - z) * s * .866, 560 - (W + D) * s * .5 + (x + z) * s * .5 - 0);
+  ctx.fill();
+  const upto = Number($('#step').value);
+  const n = drawMultitileIso(ctx, res, { upto: upto >= res.trace.length ? null : upto, ao: $('#ao').checked, s, ox: 450, oy: 560 - (W + D) * s * .5 });
+  $('#info').textContent = `坍缩 ${Math.min(upto, res.trace.length)}/${res.trace.length} 步 · 构件 ${res.placements.length}（多格 ${res.stats.multi}）· 实心 ${res.stats.solid} · 回溯 ${res.stats.backtracks} · 面 ${n}`;
+  window.multitileReview = { ok: res.ok, size: res.size, trace: res.trace.length, multi: res.stats.multi, faces: n, upto };
+}
+function gen() {
+  clearInterval(timer); timer = null;
+  res = solveMultitile({ size: $('#size').value.split(',').map(Number), seed: Number($('#seed').value) || 1 });
+  $('#step').max = res.trace?.length || 1; $('#step').value = $('#step').max; draw();
+}
+$('#go').onclick = gen; $('#ao').onchange = draw; $('#step').oninput = draw; $('#size').onchange = gen;
+$('#play').onclick = () => { if (!res?.ok) return; clearInterval(timer); let k = 0; timer = setInterval(() => { $('#step').value = ++k; draw(); if (k >= res.trace.length) { clearInterval(timer); timer = null; } }, 80); };
+gen();
+</script></html>

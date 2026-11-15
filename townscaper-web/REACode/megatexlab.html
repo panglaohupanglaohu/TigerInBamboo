@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Mega texture · 烘进一张大图，再从 texel 反查回哪个面</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:10px 18px 8px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 74%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:10px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:15px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mega texture：150 块面片烘进一张 512² 大图，再从任意一个 texel 反查「属于哪个面、面的哪个 u,v」</h1>
+  <p>原片顶上一排是烘出来的图（紫蓝调的大笔触法线图 + 灰色密排的体积切片），下面那坨白模没上贴图 ——
+     一张大图里塞了很多面的数据，于是「这个像素是谁的」成了必须回答的问题。做法：烘的时候顺手写一张
+     <b>owner 表</b>（+ 一张垫边表），反查就是一次数组查表；垫边用来挡住双线性采样踩到隔壁面。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { measure, genFaces, shelfPack, bake, resolve, bilinear, mipDown, CFG } from './src/megatex.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#a9791a', GOOD = '#146c4a', BAD = '#b4402f';
+
+const M = measure();
+const A0 = M[0].A, R0 = M[0].R;
+const A2 = M[2].A, R2 = M[2].R;
+
+// mip 后渗色（垫边只有 2px，越往下越小）
+const mipBleed = [];
+for (const lv of [0, 1, 2]) {
+  const D = lv ? mipDown(A2, lv) : A2;
+  let tot = 0, bad = 0;
+  for (const f of M.faces ? genFaces() : []) {
+    const r = R2[f.id]; if (!r) continue;
+    const rw = Math.max(1, r.w / (1 << lv)), rh = Math.max(1, r.h / (1 << lv));
+    const x0 = r.x / (1 << lv), y0 = r.y / (1 << lv);
+    for (let t = 0; t < 8; t++) {
+      const u = (t + 0.5) / 8;
+      for (const [px, py] of [[x0 - 0.1, y0 + u * rh], [x0 + rw + 0.1, y0 + u * rh],
+                              [x0 + u * rw, y0 - 0.1], [x0 + u * rw, y0 + rh + 0.1]]) {
+        const b = (lv ? bilinear(D, px, py) : bilinear(A2, px, py));
+        tot++; if (b.hits.some((o) => o !== f.id)) bad++;
+      }
+    }
+  }
+  mipBleed.push({ lv, rate: bad / Math.max(1, tot) });
+}
+
+// ---------- 版面 ----------
+const PA = { x: 20, y: 110, w: 556, h: 508 };
+const PB = { x: 592, y: 110, w: 668, h: 250 };
+const PC = { x: 592, y: 370, w: 668, h: 248 };
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.textBaseline = 'alphabetic'; ctx.fillText(s, x, y);
+};
+const panel = (p, title, sub) => {
+  ctx.save();
+  ctx.fillStyle = 'rgba(255,255,255,.97)'; ctx.strokeStyle = '#dbe4e0'; ctx.lineWidth = 1;
+  const r = 10;
+  ctx.beginPath(); ctx.moveTo(p.x + r, p.y);
+  ctx.arcTo(p.x + p.w, p.y, p.x + p.w, p.y + p.h, r);
+  ctx.arcTo(p.x + p.w, p.y + p.h, p.x, p.y + p.h, r);
+  ctx.arcTo(p.x, p.y + p.h, p.x, p.y, r);
+  ctx.arcTo(p.x, p.y, p.x + p.w, p.y, r);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  txt(title, p.x + 14, p.y + 20, INK, '650 12.5px -apple-system,system-ui,sans-serif');
+  if (sub) txt(sub, p.x + 14, p.y + 37, MUTED, '11.5px -apple-system,system-ui,sans-serif');
+  ctx.restore();
+};
+ctx.fillStyle = '#eef3f1'; ctx.fillRect(0, 0, 1280, 800);
+
+// ---------- 左：整张图集 ----------
+panel(PA, `图集 512 × 512 · ${M.faces - M[2].fail} / ${M.faces} 面已落位（垫边 2px）`,
+  '每块面片一套色相，垫边画成半透明灰带；细线是面片边界');
+const AX = PA.x + 22, AY = PA.y + 50, AS = Math.min(PA.w - 44, PA.h - 78);
+const mkCanvas = (A) => {
+  const c = document.createElement('canvas'); c.width = A.atlasW; c.height = A.atlasH;
+  const g = c.getContext('2d');
+  const img = g.createImageData(A.atlasW, A.atlasH);
+  for (let k = 0; k < A.atlasW * A.atlasH; k++) {
+    img.data[k * 4] = A.rgb[k * 3]; img.data[k * 4 + 1] = A.rgb[k * 3 + 1];
+    img.data[k * 4 + 2] = A.rgb[k * 3 + 2]; img.data[k * 4 + 3] = 255;
+  }
+  g.putImageData(img, 0, 0);
+  return c;
+};
+const CV2 = mkCanvas(A2);
+ctx.save();
+ctx.imageSmoothingEnabled = false;
+ctx.drawImage(CV2, 0, 0, 512, 512, AX, AY, AS, AS);
+ctx.restore();
+// 面片边界 + 垫边带
+ctx.save();
+for (const f of genFaces()) {
+  const r = R2[f.id]; if (!r) continue;
+  const s = AS / 512;
+  ctx.strokeStyle = 'rgba(31,43,40,.30)'; ctx.lineWidth = 0.6;
+  ctx.strokeRect(AX + r.x * s, AY + r.y * s, r.w * s, r.h * s);
+}
+ctx.strokeStyle = 'rgba(31,43,40,.55)'; ctx.lineWidth = 1;
+ctx.strokeRect(AX - 0.5, AY - 0.5, AS + 1, AS + 1);
+ctx.restore();
+txt(`未落位 ${M[2].fail} 块（装不下）· 占空比 ${(M[2].occupancy * 100).toFixed(1)}% · 垫边占 ${(M[2].padShare * 100).toFixed(1)}%`,
+  PA.x + 22, PA.y + PA.h - 12, MUTED, '11.5px -apple-system,system-ui,sans-serif');
+
+// ---------- 右上：真实像素的边缘放大对照 ----------
+panel(PB, '同一条面片边界，两种烘法的真实像素（放大 10×，一个 texel = 10px）', '红圈 = 采样点的 2×2 tap 落到了隔壁面的 texel');
+// 找一块右侧紧挨着别人的面
+let pick = null;
+for (const f of genFaces()) {
+  const r = R2[f.id], r0 = R0[f.id];
+  if (!r || !r0) continue;
+  // pad=2 时边界外 2px 是自己垫边，第 3 px 之后才是"别人"——要选在两边都紧邻邻居的面
+  const nb2 = A2.owner[r.y * 512 + r.x + r.w + 3];
+  const nb0 = A0.owner[r0.y * 512 + r0.x + r0.w + 1];
+  if (nb2 >= 0 && nb2 !== f.id && nb0 >= 0 && nb0 !== f.id) { pick = { f, r0, r2: r, nb: nb2 }; break; }
+}
+const Z = 10, SW = 32, SH = 13;          // 源区 32×13 texel，放大 10 倍（一个 texel 10px，看得见）
+const drawCrop = (A, r, x0, y0, label, ok) => {
+  const C = mkCanvas(A);
+  const srcX = Math.max(0, r.x + r.w - 25), srcY = Math.max(0, r.y + 4);
+  const dw = SW * Z, dh = SH * Z;
+  ctx.save(); ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(C, srcX, srcY, SW, SH, x0, y0 + 26, dw, dh);
+  ctx.restore();
+  // 面片右边界（虚线）
+  const bx = x0 + (r.x + r.w - srcX) * Z;
+  ctx.save(); ctx.strokeStyle = 'rgba(31,43,40,.75)'; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+  ctx.beginPath(); ctx.moveTo(bx, y0 + 26); ctx.lineTo(bx, y0 + 26 + dh); ctx.stroke(); ctx.restore();
+  ctx.save(); ctx.strokeStyle = '#dbe4e0'; ctx.lineWidth = 1; ctx.strokeRect(x0, y0 + 26, dw, dh); ctx.restore();
+  txt(label, x0, y0 + 16, ok ? GOOD : BAD, '650 12px -apple-system,sans-serif');
+  // 采样点：边界内侧 0.8 texel；2×2 tap 每格 1 texel
+  const px = bx - 0.8 * Z, py = y0 + 26 + dh * 0.55;
+  ctx.save();
+  ctx.strokeStyle = ok ? GOOD : BAD; ctx.lineWidth = 1.4;
+  for (let j = 0; j < 2; j++) for (let i = 0; i < 2; i++) {
+    ctx.strokeRect(Math.floor(px / Z) * Z + i * Z, Math.floor(py / Z) * Z + j * Z, Z, Z);
+  }
+  ctx.fillStyle = ok ? GOOD : BAD;
+  ctx.beginPath(); ctx.arc(px, py, 2, 0, 7); ctx.fill();
+  ctx.restore();
+  return bx;
+};
+if (pick) {
+  const { r0, r2 } = pick;
+  drawCrop(A0, r0, PB.x + 12, PB.y + 46, '无垫边：边界外就是隔壁的面', false);
+  drawCrop(A2, r2 || r0, PB.x + 348, PB.y + 46, '垫边 2px：边界外是本面边缘复制', true);
+  txt(`选中面 #${pick.f.id} 与邻面 #${pick.nb}（左右两图取自各自那张图集的同一位置，放大 ${Z}×）`,
+    PB.x + 16, PB.y + PB.h - 10, MUTED, '11.5px -apple-system,sans-serif');
+}
+
+// ---------- 右下：数字 ----------
+panel(PC, '垫边的账：省下来的内存 vs 渗出去的颜色', '');
+const cx = [PC.x + 16, PC.x + 150, PC.x + 262, PC.x + 396, PC.x + 528];
+let ry = PC.y + 60;
+txt('烘法', cx[0], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+txt('落位', cx[1], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+txt('占空比', cx[2], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+txt('边缘渗色', cx[3], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+txt('平均色差', cx[4], ry - 20, MUTED, '11.5px -apple-system,sans-serif');
+const rows = [
+  ['无垫边', `${M.faces - M[0].fail}/${M.faces}`, `${(M[0].occupancy * 100).toFixed(1)}%`, `${(M[0].bleedRate * 100).toFixed(1)}%`, `${M[0].meanErr.toFixed(1)}`, BAD],
+  ['垫边 2px', `${M.faces - M[2].fail}/${M.faces}`, `${(M[2].occupancy * 100).toFixed(1)}%`, `${(M[2].bleedRate * 100).toFixed(1)}%`, `${M[2].meanErr.toFixed(1)}`, GOOD],
+];
+for (const r of rows) {
+  txt(r[0], cx[0], ry, r[5], '600 12px -apple-system,sans-serif');
+  for (let i = 1; i < 5; i++) txt(r[i], cx[i], ry, INK, '600 12px ui-monospace,monospace');
+  ry += 24;
+}
+const notes = [
+  `反查正确率 ${(M[2].exactRate * 100).toFixed(2)}%（${M[2].exact}/${M[2].checked} 个 texel），uv 误差 ${M[2].maxUV.toExponential(0)} —— 查表是精确的，不是估算。`,
+  `垫边只有 2px：mip L0 渗色 ${(mipBleed[0].rate * 100).toFixed(1)}%，L1 ${(mipBleed[1].rate * 100).toFixed(1)}%，L2 ${(mipBleed[2].rate * 100).toFixed(1)}% —— 越往下越挡不住。`,
+  `代价：同样 512²，垫边吃掉 ${M[2].fail - M[0].fail} 块面的位置；要让 ${M.faces} 块全落位得换 768²（面积 2.25×）。`,
+];
+let ny = PC.y + 128;
+for (const s of notes) {
+  ctx.fillStyle = GOLD; ctx.beginPath(); ctx.arc(PC.x + 19, ny - 4, 2, 0, 7); ctx.fill();
+  txt(s, PC.x + 28, ny, MUTED, '11.5px -apple-system,system-ui,sans-serif');
+  ny += 24;
+}
+
+// ---------- 底条 ----------
+document.getElementById('stats').innerHTML = [
+  `面片 <b>${M.faces}</b>`, `图集 <b>${CFG.W}²</b>`,
+  `垫边 <b>${CFG.PAD}px</b>`,
+  `反查 <b class="ok">${(M[2].exactRate * 100).toFixed(0)}%</b>`,
+  `渗色 <b class="no">${(M[0].bleedRate * 100).toFixed(0)}%</b> → <b class="ok">${(M[2].bleedRate * 100).toFixed(0)}%</b>`,
+  `色差 <b>${M[0].meanErr.toFixed(1)}</b> → <b>${M[2].meanErr.toFixed(1)}</b>`,
+  `mipL2 渗色 <b>${(mipBleed[2].rate * 100).toFixed(0)}%</b>`,
+].join('<span style="opacity:.28">|</span>');
+
+window.__lab = { M, mipBleed };
+</script>
+</body>
+</html>

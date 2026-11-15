@@ -1,0 +1,58 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>运行时精灵图集（单视角/残影/扩容）· REACode 重构版</title>
+<style>html,body{margin:0;background:#2b2b2b;font:13px/1.5 system-ui;color:#203b42}#ui{position:absolute;left:8px;top:8px;z-index:2;background:#f0f6f4e8;padding:8px 10px;border-radius:10px;max-width:360px}button,label{margin:2px 3px}#wrap{position:relative;margin:0 auto}#wrap canvas{position:absolute;left:0;top:0}#st{display:block;font-size:12px}</style>
+<div id="ui"><a href="index.html">首页</a> · <a href="atlas-live.html">8 视角 Baker 页</a> · <a href="atlas-tree-c09.html">矩形树</a> · <b>运行时精灵图集（C09）</b><br>
+1593215065423245313：网格现场烘成精灵，运行时增删分配区。每区有编号，存活描黄框；删掉的留暗淡残影（灰编号），新分配盖上才清；部分分配区是 2×2 四个视角；满板可整批重排扩容。分配用共享 <code>Atlas</code>；白模为程序化替代。<br>
+<button id="play">暂停</button><button id="add">加一个</button><button id="rm">删一个</button><label><input type="checkbox" id="res" checked>残影</label><label><input type="checkbox" id="grow">满板扩容</label><output id="st"></output></div>
+<div id="wrap"><canvas id="gl"></canvas><canvas id="ov"></canvas></div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { SpritePackPlan, LiveSpritePacker, spriteMeshes } from './src/life/sprite-pack-c09.js';
+const Q = new URLSearchParams(location.search), num = (k, d) => Q.has(k) ? +Q.get(k) : d, $ = (s) => document.querySelector(s);
+$('#res').checked = Q.get('residue') !== '0'; $('#grow').checked = Q.get('grow') === '1';
+const D = Math.min(innerWidth, innerHeight) - 8, wrap = $('#wrap'); wrap.style.width = wrap.style.height = D + 'px';
+const renderer = new THREE.WebGLRenderer({ canvas: $('#gl'), antialias: false, preserveDrawingBuffer: true }); renderer.setPixelRatio(1); renderer.setSize(D, D);
+const ov = $('#ov'); ov.width = ov.height = D; const g = ov.getContext('2d');
+let plan = new SpritePackPlan(num('size', 512), { grow: $('#grow').checked, maxSize: 1024, seed: num('seed', 3) });
+let packer = new LiveSpritePacker(THREE, renderer, plan);
+const meshes = spriteMeshes(THREE), kinds = Object.keys(meshes);
+const view = new THREE.Scene(), cam = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1), bgM = new THREE.MeshBasicMaterial({ color: 0x3a3a3a });
+const board = new THREE.Mesh(new THREE.PlaneGeometry(1.84, 1.84), bgM); view.add(board);
+const sprM = new THREE.MeshBasicMaterial({ map: packer.rt.texture, transparent: true }), spr = new THREE.Mesh(new THREE.PlaneGeometry(1.84, 1.84), sprM); view.add(spr);
+renderer.setClearColor(0x2b2b2b);
+let rnd = (() => { let s = num('seed', 3) * 7 + 1; return () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296); })();
+let phase = 'fill', stats = { added: 0, removed: 0, failed: 0 };
+function add() {
+  const kind = kinds[Math.floor(rnd() * kinds.length)], px = 16 * (2 + Math.floor(rnd() * rnd() * 9)), views = kind === 'box' && rnd() < .5 ? 4 : 1;
+  const geo = meshes[kind](); let res;
+  try { res = packer.bake(geo, px, { views, kind, yaw: rnd() * 6.28, pitch: .3 + rnd() * .4 }); } finally { geo.dispose(); }
+  if (res) stats.added++; else stats.failed++;
+  return res;
+}
+function removeOne() { const ids = [...plan.live.keys()]; if (!ids.length) return false; const id = ids[Math.floor(rnd() * ids.length)]; packer.release(id, { residue: $('#res').checked }); stats.removed++; return true; }
+function tick() {
+  if (phase === 'fill') { const r = add(); if (!r || plan.live.size > 60) phase = 'drain'; }
+  else { if (!removeOne() || (plan.live.size < 3 && rnd() < .5)) phase = 'fill'; }
+  draw();
+}
+function draw() {
+  sprM.map = packer.rt.texture; sprM.needsUpdate = true; renderer.render(view, cam);
+  const S = plan.size, m = D * .04, sc = D * .92 / S, X = (x) => m + x * sc, Y = (y) => D - m - y * sc;
+  g.clearRect(0, 0, D, D); g.font = `${Math.max(9, Math.round(11 * D / 700))}px system-ui`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  // 空闲叶：深色细框（板子的切分）
+  const stack = [plan.atlas.root]; g.strokeStyle = 'rgba(0,0,0,.55)'; g.lineWidth = 1;
+  while (stack.length) { const n = stack.pop(); if (n.a) { stack.push(n.a, n.b); continue; } if (!n.used) g.strokeRect(X(n.x) + .5, Y(n.y + n.h) + .5, n.w * sc - 1, n.h * sc - 1); }
+  for (const gh of plan.ghosts) { g.fillStyle = 'rgba(200,200,200,.55)'; g.fillText(String(gh.id), X(gh.x + gh.w / 2), Y(gh.y + gh.h / 2)); }
+  g.strokeStyle = '#e6dc3c'; g.lineWidth = 1.5;
+  for (const e of plan.live.values()) { const s = e.slot; g.strokeRect(X(s.x) + 1, Y(s.y + s.h) + 1, s.w * sc - 2, s.h * sc - 2); g.fillStyle = '#ffffff'; g.fillText(String(e.id), X(s.x + s.w / 2), Y(s.y + s.h / 2)); }
+  const R = plan.atlas.report();
+  $('#st').textContent = `板 ${S}² · 存活 ${plan.live.size} · 残影 ${plan.ghosts.length} · 已加 ${stats.added} / 删 ${stats.removed} / 满板 ${stats.failed} · 扩容 ${packer.grew || 0} 次 · 占用 ${(R.fill * 100).toFixed(1)}% · ${phase === 'fill' ? '加' : '删'}${plan.check() ? '' : ' · 重叠!'}`;
+}
+$('#grow').onchange = (e) => { plan.grow = e.target.checked; };
+let timer = null; const setPlay = (on) => { clearInterval(timer); timer = on ? setInterval(tick, 220) : null; $('#play').textContent = on ? '暂停' : '播放'; };
+$('#play').onclick = () => setPlay(!timer); $('#add').onclick = () => { setPlay(false); add(); draw(); }; $('#rm').onclick = () => { setPlay(false); removeOne(); draw(); };
+for (let i = 0; i < num('steps', 0); i++) tick();
+if (Q.has('drain')) { phase = 'drain'; for (let i = 0; i < num('drain', 0); i++) { removeOne(); } phase = 'fill'; for (let i = 0; i < num('refill', 0); i++) add(); }
+window.spriteLive = { plan, packer, add, removeOne, tick, draw, stats, readAlpha(x, y) { const b = new Uint8Array(4); renderer.readRenderTargetPixels(packer.rt, x, y, 1, 1, b); return [...b]; } };
+draw(); setPlay(Q.get('auto') !== '0');
+</script></html>

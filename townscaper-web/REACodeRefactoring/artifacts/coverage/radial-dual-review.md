@@ -29,3 +29,18 @@ src/world/vertex-dual-overlay.js使用真实World格子扇形三角化，按各�
 仅本机Chrome/SwiftShader运行，不声称跨平台已验证。src/gridpatch.js从未覆盖变部分覆盖，src/dual.js保留部分覆盖。尚缺：完整手工规则/放射模板库、多补丁选择和周边再网格、复杂孔洞、已有世界身份迁移、统一植被/导航与垂直面贴合。
 
 视觉检查补充：环院/对偶显示可见、两种网格功能通过；中央塔在细长放射格上出现偏高屋顶，未通过原片小塔比例匹配。记录visualMatchAccepted=false，下一步改模板中心格质量及建筑屋顶适配，不把拓扑/运行通过当作美术还原完成。
+
+
+## 第 56 批（C04）
+
+959752525867036672：VertexDualOverlay 在真实 terrain World 上抛 disconnected vertex fan（实测），本批不改它，新增 view-c04 `?c04=dualcells`，用 gridVertexDual（每格楔块带自己的台地高度）画脉动对偶边；配合 r55 `fx=dualflora` 即片子两半。截图 shots-r56/959752525867036672-dualcells-on.png（2601 格 / 5752 线段）。判定 done。 详见 [r56-C04-bn-world.md](r56-C04-bn-world.md)。
+
+## 第 56 批（C06）
+
+### 1301816247479345152
+- 做了什么：新建 core/grid-gems-c06.js sprinkleGems：按种子在生成网格随机撒 4 块（courtyard/radial/block/rhombus），每块走共享 fitTemplatePatch，互不重叠、面积守恒、半边互逆；主场景 ?gems=N 在建 World 之前换网格（默认关，存档不受影响），补丁上直接建造
+- 落点：src/core/radial-patch.js · src/core/grid-gems-c06.js · index.html?gems=4
+- 测试：tests/grid-gems-c06.mjs、tests/radial-dual.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-gems-temple.png（已看）
+- 对照：放射补丁上建出放射屋顶的圆形神庙，对 0111–0199 的环院俯视；屋顶/塔的美术造型与原片不同（程序化建筑），机制一致
+- 判定：done

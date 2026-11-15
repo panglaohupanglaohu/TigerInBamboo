@@ -1,0 +1,6786 @@
+[
+  {
+    "shotId": "cover",
+    "file": "cover.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -139.22416634973155,
+        -173.83801336719216,
+        -156.35715705777932
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "4dc91635e73c9db4c859d517de7b6e47b0250a56bdcfb28edf3fae3557140be2"
+  },
+  {
+    "shotId": "p01-1",
+    "file": "p01-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -143.083789498523,
+        -177.96834905501953,
+        -126.20684998593276
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "88d3c5f27c3310734fbf5dadab2106d5448e58ea51fd526d8cf9e2ce71c76aaa"
+  },
+  {
+    "shotId": "p01-2",
+    "file": "p01-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -52.769359743238496,
+        -123.78630415544515,
+        -86.6312709677514
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "970b4c1af3309660577e7721e8c3cfb089aec72de6cfe8c64eca20dd85ac43be",
+    "reusedFrom": "shots/p02-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p01-3",
+    "file": "p01-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -139.522865651983,
+        -145.8803002051572,
+        -106.68694888879853
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "1985951c61fb8c849a28c9b8164a7bdb7c1ca34478fc72aac0e856eada7d7a32"
+  },
+  {
+    "shotId": "p02-1",
+    "file": "p02-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -52.769359743238496,
+        -123.78630415544515,
+        -86.6312709677514
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "970b4c1af3309660577e7721e8c3cfb089aec72de6cfe8c64eca20dd85ac43be"
+  },
+  {
+    "shotId": "p02-2",
+    "file": "p02-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -61.646821975131616,
+        -130.07246988105828,
+        -39.847849484966005
+      ],
+      "aim": [
+        -56.9443513011018,
+        -130.26632412778724,
+        -38.92560218032659
+      ],
+      "size": [
+        0.6832240175692874,
+        0.6389194229213047,
+        1.7942025944502689
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "0916650400cd1f72b94a9dff6816dc62a7ac09c5b8a44c9a43d0e6f995c630dd"
+  },
+  {
+    "shotId": "p02-3",
+    "file": "p02-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -52.769359743238496,
+        -123.78630415544515,
+        -86.6312709677514
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "970b4c1af3309660577e7721e8c3cfb089aec72de6cfe8c64eca20dd85ac43be",
+    "reusedFrom": "shots/p02-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p03-1",
+    "file": "p03-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -143.083789498523,
+        -177.96834905501953,
+        -126.20684998593276
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "88d3c5f27c3310734fbf5dadab2106d5448e58ea51fd526d8cf9e2ce71c76aaa",
+    "reusedFrom": "shots/p01-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p03-2",
+    "file": "p03-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -73.33348395663943,
+        -110.68042540706334,
+        -69.1596970279695
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "04489944ddfe013e53283b52095837d41825e465a7d7b5cae9b8faff8be9345f"
+  },
+  {
+    "shotId": "p03-3",
+    "file": "p03-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -139.522865651983,
+        -145.8803002051572,
+        -106.68694888879853
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "1985951c61fb8c849a28c9b8164a7bdb7c1ca34478fc72aac0e856eada7d7a32",
+    "reusedFrom": "shots/p01-3.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p04-1",
+    "file": "p04-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -75.40043426318223,
+        -145.8237371536285,
+        -50.75897976583007
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "95bdc27d53d84391f44cbb02cf5cf7dfbf58b31765f65f8661a317667d0c2964"
+  },
+  {
+    "shotId": "p04-2",
+    "file": "p04-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -59.46107853315365,
+        -130.90832747586117,
+        -41.50117836986133
+      ],
+      "aim": [
+        -57.11912717836982,
+        -131.1101769753073,
+        -39.91103824037603
+      ],
+      "size": [
+        0.978098043200518,
+        1.7029194727413994,
+        0.7594088242994275
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "c34a620b54919d75eb5a60f79eb7a81dfc8178a9d72b1ef4b0845bc9f7fe8d02"
+  },
+  {
+    "shotId": "p04-3",
+    "file": "p04-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -74.54270764716215,
+        -140.14583622121367,
+        -47.380436332438265
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ea71817c4191bc3fc9d4d849f6ea54bfac98d613cfc1aa0d764425d47e1bb4e4"
+  },
+  {
+    "shotId": "p05-1",
+    "file": "p05-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -117.3041976541873,
+        -179.17958401824268,
+        -141.64245280432394
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "538c65a7df6de2a86eb082fb2c36d4933c13c4ee739988844c6f9e3f95bbbbce"
+  },
+  {
+    "shotId": "p05-2",
+    "file": "p05-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -74.72317225089468,
+        -142.70012380789007,
+        -34.74894854012818
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "deadc5d497fa5c5e6bb1335cbbecbcf3a65fd5f799a8a3236caf891591581371"
+  },
+  {
+    "shotId": "p05-3",
+    "file": "p05-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -114.09162505350449,
+        -150.2305834254321,
+        -124.03210724930068
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "2e8476989adc28d014cd94f7508037650d048d031663f72f94ae8dc9ae1710e1"
+  },
+  {
+    "shotId": "p06-1",
+    "file": "p06-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -43.0403501646737,
+        -126.57843977302952,
+        -85.80147016280598
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "d8023e34c3968392237da8b71867b0e7f6e77cfb7ef8157b90ebe27989c117fc"
+  },
+  {
+    "shotId": "p06-2",
+    "file": "p06-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -58.94561854571163,
+        -130.32802541905693,
+        -42.071722447888945
+      ],
+      "aim": [
+        -57.09026858745797,
+        -131.1038448845224,
+        -39.965082780216036
+      ],
+      "size": [
+        0.9287992913114564,
+        1.7131605029138655,
+        0.8607769340446367
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "f4e5923ada71adb2bb8f21287cb7eda9bfb14bc8dc337836ef9f0096531863c6"
+  },
+  {
+    "shotId": "p06-3",
+    "file": "p06-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -52.769359743238496,
+        -123.78630415544515,
+        -86.6312709677514
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "970b4c1af3309660577e7721e8c3cfb089aec72de6cfe8c64eca20dd85ac43be",
+    "reusedFrom": "shots/p02-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p07-1",
+    "file": "p07-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -139.7509215404507,
+        -174.81878118532143,
+        -120.84381662909445
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "e3216a91d6074d3021d1160812999af2dcea65d9417ecb8ac7d08e6e3705f1e8",
+    "reusedFrom": "shots/p10-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p07-2",
+    "file": "p07-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -52.769359743238496,
+        -123.78630415544515,
+        -86.6312709677514
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "970b4c1af3309660577e7721e8c3cfb089aec72de6cfe8c64eca20dd85ac43be",
+    "reusedFrom": "shots/p02-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p07-3",
+    "file": "p07-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -114.09162505350449,
+        -150.2305834254321,
+        -124.03210724930068
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "2e8476989adc28d014cd94f7508037650d048d031663f72f94ae8dc9ae1710e1",
+    "reusedFrom": "shots/p05-3.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p08-1",
+    "file": "p08-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -71.36340814693094,
+        -146.18646758381215,
+        -53.75803615138412
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "9204850628d4c8c1fa8814b429119ad26c4c44f450e54948b4ef6370d44f6f00"
+  },
+  {
+    "shotId": "p08-2",
+    "file": "p08-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -61.047909298925596,
+        -131.46581645009272,
+        -40.13163569900034
+      ],
+      "aim": [
+        -57.08877306962742,
+        -131.10500454505166,
+        -39.967684221302484
+      ],
+      "size": [
+        0.9261816015439948,
+        1.7165841211029544,
+        0.8655811073910087
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "862dc09c8a0f2277c8c31f329be5e968c3275cd21dd120bb3b2418f0e48c562d"
+  },
+  {
+    "shotId": "p08-3",
+    "file": "p08-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -70.57055161111406,
+        -140.93798773031943,
+        -50.63501280959337
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "a6bd1dcb160b30619dae9958fd26cd1dc43b55e6e4a8ed091e4d4511e6772c61"
+  },
+  {
+    "shotId": "p09-1",
+    "file": "p09-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -52.769359743238496,
+        -123.78630415544515,
+        -86.6312709677514
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "970b4c1af3309660577e7721e8c3cfb089aec72de6cfe8c64eca20dd85ac43be",
+    "reusedFrom": "shots/p02-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p09-2",
+    "file": "p09-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -190.22285802727208,
+        -158.8650618904481,
+        -30.526908550882744
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "981b165c718f95fa28f5f4b6d78ea7676e7868333ebcd3d189762a484fdb19a8"
+  },
+  {
+    "shotId": "p09-3",
+    "file": "p09-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -52.769359743238496,
+        -123.78630415544515,
+        -86.6312709677514
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "970b4c1af3309660577e7721e8c3cfb089aec72de6cfe8c64eca20dd85ac43be",
+    "reusedFrom": "shots/p02-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p10-1",
+    "file": "p10-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -139.7509215404507,
+        -174.81878118532143,
+        -120.84381662909445
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "e3216a91d6074d3021d1160812999af2dcea65d9417ecb8ac7d08e6e3705f1e8"
+  },
+  {
+    "shotId": "p10-2",
+    "file": "p10-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -60.41078239920824,
+        -130.54538928149273,
+        -41.337556404209494
+      ],
+      "aim": [
+        -57.08907617679677,
+        -131.10669758551848,
+        -39.96781162512664
+      ],
+      "size": [
+        0.9268060221736221,
+        1.7200242885348587,
+        0.8658162043754842
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "dd197888b61903726a5e1721ee91137caa9392f3753bd961d8e388d059ca8894"
+  },
+  {
+    "shotId": "p10-3",
+    "file": "p10-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -136.5383489397679,
+        -145.8697805925109,
+        -103.23347107407116
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "0e6026cf45db5f8f7123c1a9fb5fdc2bc331a8eab566422bbe981e50380cd14d"
+  },
+  {
+    "shotId": "p11-1",
+    "file": "p11-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        155.80013617538054,
+        -112.33069502814803,
+        -217.91613630277863
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "4bc3d92dfb0f205cafc94d3e21f108913cd16959e89040edf3f6870542b7085b"
+  },
+  {
+    "shotId": "p11-2",
+    "file": "p11-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        9.13678661839211,
+        -65.56183133154408,
+        -158.07632156911419
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ccfc9adc288ce96214613ef2e3052c39acf903e20d6fe749b2d8eeaa320832bf"
+  },
+  {
+    "shotId": "p11-3",
+    "file": "p11-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        145.82600402805906,
+        -83.73881440516153,
+        -194.2615394709104
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "d1cd95d7515d8e6904867d7133d5b43020e8f62e64d9cc5e9e61cc9d2dd2484b"
+  },
+  {
+    "shotId": "p12-1",
+    "file": "p12-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        10.588445538447175,
+        -67.73854484691617,
+        -157.9773056033665
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ee618d2e1de0fc27f6817e18cd24f5a7838f516e12489d2cbd2d53075b352492"
+  },
+  {
+    "shotId": "p12-2",
+    "file": "p12-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        83.28719621870727,
+        -45.87950367802583,
+        -228.1138540006407
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ea090d5869114e1a1c9913b1cc3a3be797da24f42668f7dd295cce56c015ebe1"
+  },
+  {
+    "shotId": "p12-3",
+    "file": "p12-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        10.40832773200644,
+        -67.00247514897467,
+        -157.2677206209281
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "438019bbfbf7c3e4f7dbfcafd3233ef24743c57f0ef294ca8af264b993761c0d"
+  },
+  {
+    "shotId": "p13-1",
+    "file": "p13-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        11.096118664808051,
+        -67.9661384490664,
+        -157.9985054478285
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "a34edb2599e4240dc684f93b27f183a0d2426ddf84b3d741e07d8b79a8a97450"
+  },
+  {
+    "shotId": "p13-2",
+    "file": "p13-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        95.93465394792094,
+        -46.81334023497476,
+        -231.08340204039516
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "d337e66d403e320f8bef9df59be76528d5834da146062b3d9032ec896d585720"
+  },
+  {
+    "shotId": "p13-3",
+    "file": "p13-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        10.89995075680329,
+        -67.1644783820014,
+        -157.2256901204203
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "6e02d87270e2b011bd829cd0852b17cdf19e63ef27a6a6b13ca52249425de98b"
+  },
+  {
+    "shotId": "p14-1",
+    "file": "p14-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        196.3564652072934,
+        -150.6184031381672,
+        -220.4000972320394
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "d20e5b08e115b841655a5626e30eeba027b1c82cd3f2a19bd986a8f2973ded8c"
+  },
+  {
+    "shotId": "p14-2",
+    "file": "p14-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        9.600029314343734,
+        -65.72414527066553,
+        -158.19143743421455
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "a9357fc9e63f15c147aed4bb603bce1681f0e67ac07c4e0ad1dca3e0a511acb6"
+  },
+  {
+    "shotId": "p14-3",
+    "file": "p14-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        183.4551421036928,
+        -113.63542711495636,
+        -189.8033904603838
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "79156961906a478bb166497bc8534fb943beffdee63458daca509b747319ef2b"
+  },
+  {
+    "shotId": "p15-1",
+    "file": "p15-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        10.663841826805218,
+        -67.9650604733325,
+        -157.59073789175974
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "54308417412bfef5bd7d968762d71b4bf44279849cde6436334c1de3c4758fe1"
+  },
+  {
+    "shotId": "p15-2",
+    "file": "p15-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        90.6918888678339,
+        -62.85342109907969,
+        -207.2635826359071
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "95f6f4329211cadceab9c4304d282019879df97f15ba99404c6e462375e16691"
+  },
+  {
+    "shotId": "p15-3",
+    "file": "p15-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        10.515824223492537,
+        -67.36017151363801,
+        -157.00761359926082
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "1b32eaff9de6fadfc17148e35bee505c534153ee6c99a64254bfb4b830c6f2e4"
+  },
+  {
+    "shotId": "p16-1",
+    "file": "p16-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        12.216733115478046,
+        -68.73651676490817,
+        -158.04665507703425
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "e960bc6e364a3a9d53145aa88bffb50cb41644fc62bb0ab7f3f5feef9ecf940d"
+  },
+  {
+    "shotId": "p16-2",
+    "file": "p16-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        10.917477963886068,
+        -68.22383003488918,
+        -157.6928237964457
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "604628f9278673c0565f4e3b56dfe82cfc1ca507c3d8fdcd694a61d1b68e42a7"
+  },
+  {
+    "shotId": "p16-3",
+    "file": "p16-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        12.216733115478046,
+        -68.73651676490817,
+        -158.04665507703425
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "be0ba5b7d599fa8436211ddca09b8abed46972034431d28cbb582e80df1b1645"
+  },
+  {
+    "shotId": "p17-1",
+    "file": "p17-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        196.3564652072934,
+        -150.6184031381672,
+        -220.4000972320394
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "d20e5b08e115b841655a5626e30eeba027b1c82cd3f2a19bd986a8f2973ded8c",
+    "reusedFrom": "shots/p14-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p17-2",
+    "file": "p17-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        10.917477963886068,
+        -68.22383003488918,
+        -157.6928237964457
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "7ee280f3181b8425b54490554a255ec829a82d99ff2b989036a23330b654333b"
+  },
+  {
+    "shotId": "p17-3",
+    "file": "p17-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        90.6918888678339,
+        -62.85342109907969,
+        -207.2635826359071
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "95f6f4329211cadceab9c4304d282019879df97f15ba99404c6e462375e16691",
+    "reusedFrom": "shots/p15-2.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p18-1",
+    "file": "p18-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -122.68659752175054,
+        -63.47673340107262,
+        -91.91078884040301
+      ],
+      "aim": [
+        -101.26415666241391,
+        -73.80187995143525,
+        -72.36672640850931
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "3cc32185cdb8e51c07effc2b5e0d447fdd684340a3b87174f52c63acd4e23b09"
+  },
+  {
+    "shotId": "p18-2",
+    "file": "p18-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-repair-barge",
+      "eye": [
+        -104.69695714558284,
+        -64.23419413367347,
+        -66.77361719497075
+      ],
+      "aim": [
+        -104.03601696747648,
+        -65.62253618831232,
+        -62.33381778031542
+      ],
+      "size": [
+        2.3454575200834853,
+        1.8714553536311058,
+        2.5792634763603246
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "6ba7ee62eb225d4675bcd0985c1feab84ee7194d2461bbdc1ae353e7f4dab2a6"
+  },
+  {
+    "shotId": "p18-3",
+    "file": "p18-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -122.68659752175054,
+        -63.47673340107262,
+        -91.91078884040301
+      ],
+      "aim": [
+        -101.26415666241391,
+        -73.80187995143525,
+        -72.36672640850931
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "555b7e57060c3cfa31e7b0a18f1c3d9322f2e884e9d6040e5b487678a4c863e2"
+  },
+  {
+    "shotId": "p19-1",
+    "file": "p19-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-towering-tree",
+      "eye": [
+        -200.2504262424767,
+        -79.9359182737207,
+        -44.67846008800447
+      ],
+      "aim": [
+        -127.03171613759805,
+        -62.22712428729832,
+        -76.47533900618964
+      ],
+      "size": [
+        37.34053051932588,
+        32.65812602021636,
+        30.434322928231424
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ded9074e03e3a06bb4fbb78f8656861df274616055435d47a50a45d326227275"
+  },
+  {
+    "shotId": "p19-2",
+    "file": "p19-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-longtail-monkey",
+      "eye": [
+        -102.94644873144263,
+        -68.90502688207756,
+        -63.33685255681822
+      ],
+      "aim": [
+        -104.0212598647862,
+        -65.96613735503536,
+        -61.470999032159234
+      ],
+      "size": [
+        1.7602412963286156,
+        1.5415522445574226,
+        1.520697876898538
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "d51e3ee011e0d9fe58bbc5791c3cc587e6d05af839a83309a5f0ddec721eb359"
+  },
+  {
+    "shotId": "p19-3",
+    "file": "p19-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-towering-tree",
+      "eye": [
+        -180.79073709159422,
+        -80.10165563657563,
+        -34.673121438990904
+      ],
+      "aim": [
+        -127.03171613759805,
+        -62.22712428729832,
+        -76.47533900618964
+      ],
+      "size": [
+        37.34053051932588,
+        32.65812602021636,
+        30.434322928231424
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "5190bdbff8eb4b38614322b93accc85cea2e0556d3ee9e817eff358121ecfc81"
+  },
+  {
+    "shotId": "p20-1",
+    "file": "p20-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -123.69559010880145,
+        -70.60197880129697,
+        -91.23048600646935
+      ],
+      "aim": [
+        -101.26415666241391,
+        -73.80187995143525,
+        -72.36672640850931
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "cbe3b5984161eea750b02f3ad9b228441b2db8fd3855e37e2c4a0fa86003f062"
+  },
+  {
+    "shotId": "p20-2",
+    "file": "p20-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-giant-flower",
+      "eye": [
+        -98.44176545808507,
+        -57.55513916096502,
+        -83.27249491970542
+      ],
+      "aim": [
+        -93.46564483794594,
+        -63.15990421624076,
+        -78.58298221274487
+      ],
+      "size": [
+        4.842806527835634,
+        3.4234003673345015,
+        4.8533864984957376
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "f6b1cb5e97c3291d9ebfa2b8fb97ebe5eafd1aee42364c054b90c668692ce06a"
+  },
+  {
+    "shotId": "p20-3",
+    "file": "p20-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -123.69559010880145,
+        -70.60197880129697,
+        -91.23048600646935
+      ],
+      "aim": [
+        -101.26415666241391,
+        -73.80187995143525,
+        -72.36672640850931
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "c8148bab63f7ed0d9ea5d0280cbc4237df7d5e51a80819b576fe74a0f3e5974c"
+  },
+  {
+    "shotId": "p21-1",
+    "file": "p21-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -131.54980869284734,
+        -54.72972028492201,
+        -95.54542257081128
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "add1e78bd0e3067a167a91284e3f560fe527a11dbe46f4d90903d9af7c84ff11"
+  },
+  {
+    "shotId": "p21-2",
+    "file": "p21-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -113.20720890277941,
+        -80.52652244913418,
+        -60.27713565635524
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "e97224df5e65bd5059b09e27ace27f9be17b10259177948529d0b70dc69b1461"
+  },
+  {
+    "shotId": "p21-3",
+    "file": "p21-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -124.88273621198704,
+        -51.06019288586221,
+        -85.3058844577122
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "6714f9ac5e6ace4bf3598fccd73bc9e7299d9a3db8d143a9eda5831ce781b793"
+  },
+  {
+    "shotId": "p22-1",
+    "file": "p22-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-rooted-ecology",
+      "eye": [
+        -150.74839375565475,
+        -46.739032282818414,
+        -99.7924828209429
+      ],
+      "aim": [
+        -100.05216718064099,
+        -71.89264585159776,
+        -69.31679382223113
+      ],
+      "size": [
+        30.84143729764169,
+        34.10484281404193,
+        29.866318805653897
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "904774800c57394ab6b68fa8c782e9b05d5fc085aa54a612f2d60db66e278e02"
+  },
+  {
+    "shotId": "p22-2",
+    "file": "p22-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-repair-barge",
+      "eye": [
+        -104.69695714558284,
+        -64.23419413367347,
+        -66.77361719497075
+      ],
+      "aim": [
+        -104.03601696747648,
+        -65.62253618831232,
+        -62.33381778031542
+      ],
+      "size": [
+        2.3454575200834853,
+        1.8714553536311058,
+        2.5792634763603246
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "66245fd2b9cc4e0239b72900e2c3204d9854742e220922980947e66b0067e70e"
+  },
+  {
+    "shotId": "p22-3",
+    "file": "p22-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-rooted-ecology",
+      "eye": [
+        -141.88397915051016,
+        -41.86009743343958,
+        -86.17818487229096
+      ],
+      "aim": [
+        -100.05216718064099,
+        -71.89264585159776,
+        -69.31679382223113
+      ],
+      "size": [
+        30.84143729764169,
+        34.10484281404193,
+        29.866318805653897
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "aaa6bb75a13c11faa4fca3094126d9cde3b250532f44d579ae3453b455c73188"
+  },
+  {
+    "shotId": "p23-1",
+    "file": "p23-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -110.79550040490841,
+        -71.36250912616505,
+        -68.31693122482581
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "33ce95cf1610ee7e3d890443358d1fbcfa16c763e9bbc71f68e463c0eee2c658"
+  },
+  {
+    "shotId": "p23-2",
+    "file": "p23-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-rooted-ecology",
+      "eye": [
+        -144.89124755256117,
+        -63.92644530167961,
+        -62.517773539472806
+      ],
+      "aim": [
+        -100.05216718064099,
+        -71.89264585159776,
+        -69.31679382223113
+      ],
+      "size": [
+        30.84143729764169,
+        34.10484281404193,
+        29.866318805653897
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "81a2d8e7afb6d8f2fea3e19369a00db67fcc215895cab131018f3177d9e94224"
+  },
+  {
+    "shotId": "p23-3",
+    "file": "p23-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -107.9143945192412,
+        -69.77676110596592,
+        -63.89202154987403
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "c13c90314221d2b0b6c0d2b9504f04d6d945792b4f28e158ba5832f6b56325ed"
+  },
+  {
+    "shotId": "p24-1",
+    "file": "p24-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -137.64699550088287,
+        -47.11843388720192,
+        -111.49899568615243
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "cb9b70fed4f5eb1c1459b1912d100423a67279421abefade28e787d27e94b14c"
+  },
+  {
+    "shotId": "p24-2",
+    "file": "p24-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -113.20720890277941,
+        -80.52652244913418,
+        -60.27713565635524
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "6d20e6b1938014124f840e05e2e09f609ee5dfb9ddabf7885834353d253ce847"
+  },
+  {
+    "shotId": "p24-3",
+    "file": "p24-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -129.02328218324837,
+        -42.37197996885281,
+        -98.25437573551339
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "8edf0c08112cb23d3ed6ee3a7dfd1edc635365bd4d937e68aa8a1e9650873c47"
+  },
+  {
+    "shotId": "p25-1",
+    "file": "p25-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-dry-service-shelf",
+      "eye": [
+        -98.74172693513093,
+        -62.801962564420705,
+        -85.29868202975314
+      ],
+      "aim": [
+        -96.84510334693988,
+        -64.65418938881143,
+        -83.52223047604019
+      ],
+      "size": [
+        2.18766050470866,
+        1.8221956963364008,
+        1.6250775953169523
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "7fc1ed93b8b7c14c230695e64c8a08c5811ddddea0adb66c5c95c6bb8cbef6fa"
+  },
+  {
+    "shotId": "p25-2",
+    "file": "p25-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -118.94683900676314,
+        -66.2798715028454,
+        -74.21242773507636
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "09681c85b65f4524ef3a2c5d1486d9df35580942b231ddf0c530c6d289b3ed2e"
+  },
+  {
+    "shotId": "p25-3",
+    "file": "p25-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-dry-service-shelf",
+      "eye": [
+        -98.27445397180605,
+        -62.54477757855426,
+        -84.58102681737596
+      ],
+      "aim": [
+        -96.84510334693988,
+        -64.65418938881143,
+        -83.52223047604019
+      ],
+      "size": [
+        2.18766050470866,
+        1.8221956963364008,
+        1.6250775953169523
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "5a8dbfc77f8d202c759b1b76b5abc00f31ff69f7b290ae1eaaf7f33bb19992ef"
+  },
+  {
+    "shotId": "p26-1",
+    "file": "p26-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -123.52466821733071,
+        -67.7352802354997,
+        -94.39321031311891
+      ],
+      "aim": [
+        -101.26415666241391,
+        -73.80187995143525,
+        -72.36672640850931
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "7ad607e3bdb8526e6444c7ef7f0b079708b8bba05b4f80642634bc5a01346977"
+  },
+  {
+    "shotId": "p26-2",
+    "file": "p26-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-repair-barge",
+      "eye": [
+        -104.69695714558284,
+        -64.23419413367347,
+        -66.77361719497075
+      ],
+      "aim": [
+        -104.03601696747648,
+        -65.62253618831232,
+        -62.33381778031542
+      ],
+      "size": [
+        2.3454575200834853,
+        1.8714553536311058,
+        2.5792634763603246
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "cfd18e164e5de8b86cc2b27f387d7588be5cef7a4e536ce8a3a380f0c5073eb0"
+  },
+  {
+    "shotId": "p26-3",
+    "file": "p26-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -123.52466821733071,
+        -67.7352802354997,
+        -94.39321031311891
+      ],
+      "aim": [
+        -101.26415666241391,
+        -73.80187995143525,
+        -72.36672640850931
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "b8f26c27bbdebc4361476c51a95306b55e9bdaead8caf48f6ef09c1ca4764990"
+  },
+  {
+    "shotId": "p27-1",
+    "file": "p27-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -140.9045257953555,
+        -53.910187166984464,
+        -88.86539001895818
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "b049468ff7ac64318e041a686855c05f2cf8500d61831c4f1fc8ff550bc80d00"
+  },
+  {
+    "shotId": "p27-2",
+    "file": "p27-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -113.20720890277941,
+        -80.52652244913418,
+        -60.27713565635524
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "33cbb5033064204bb0ea60ca8edfea27171f56d73cb7d5bd4ac4d32cd9f687cf"
+  },
+  {
+    "shotId": "p27-3",
+    "file": "p27-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -133.58523970223715,
+        -49.88168426149489,
+        -77.62415796001244
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "713df2570e21879718173ed449ee17b4300e9e065809ff738003214c48163d60"
+  },
+  {
+    "shotId": "p28-1",
+    "file": "p28-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -38.828775755058146,
+        156.25345110241128,
+        29.46428441404936
+      ],
+      "aim": [
+        -34.21080487084581,
+        154.927727912183,
+        28.641604077917417
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    },
+    "reusedFrom": "artifacts/crystal-rescue/scout2/fox3.png",
+    "sha256": "19de53f210814c1cdf9e0c10684df1a6c0b49033841177fc3fe5671f012d3643"
+  },
+  {
+    "shotId": "p28-2",
+    "file": "p28-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -34.83546037601095,
+        156.51140607173397,
+        26.083915866499122
+      ],
+      "aim": [
+        -34.14714677304311,
+        154.6394445907874,
+        28.588308926268642
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "4c0025a8df789cdbbcdc692e118c96ef56898ccf509be1ab12178a210e63e7c8"
+  },
+  {
+    "shotId": "p28-3",
+    "file": "p28-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -31.717439379619375,
+        156.10377811920222,
+        28.635735710919185
+      ],
+      "aim": [
+        -34.14714677304311,
+        154.6394445907874,
+        28.588308926268642
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "e16dd8954b66efc2b6c62f246bdc44755e974d828e309fddcf54089d5406180f"
+  },
+  {
+    "shotId": "p29-1",
+    "file": "p29-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -34.83546037601095,
+        156.51140607173397,
+        26.083915866499122
+      ],
+      "aim": [
+        -34.14714677304311,
+        154.6394445907874,
+        28.588308926268642
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "01328fb132119fdbbd5f17ba3066c3a4b6bd9e0765a677683101f04a807d553e"
+  },
+  {
+    "shotId": "p29-2",
+    "file": "p29-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -31.717439379619375,
+        156.10377811920222,
+        28.635735710919185
+      ],
+      "aim": [
+        -34.14714677304311,
+        154.6394445907874,
+        28.588308926268642
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "26b04892ff787012e4433b302cc5ef930b3ba36c70e940c3d0d0b835bcd40a24"
+  },
+  {
+    "shotId": "p29-3",
+    "file": "p29-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -34.031756050299585,
+        155.36203300240118,
+        31.57235835087712
+      ],
+      "aim": [
+        -34.14714677304311,
+        154.6394445907874,
+        28.588308926268642
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "5f08cdae23ab926aa4c6940765fb896e678d0c5cf838bbd06ea2bb3bcf1676d0"
+  },
+  {
+    "shotId": "p30-1",
+    "file": "p30-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -31.717439379619375,
+        156.10377811920222,
+        28.635735710919185
+      ],
+      "aim": [
+        -34.14714677304311,
+        154.6394445907874,
+        28.588308926268642
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "eeec4f3028fa2442c12d9eb3a7f681aaf8279a8d08fdc0c8c10be5fff9f3c84f"
+  },
+  {
+    "shotId": "p30-2",
+    "file": "p30-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -34.031756050299585,
+        155.36203300240118,
+        31.57235835087712
+      ],
+      "aim": [
+        -34.14714677304311,
+        154.6394445907874,
+        28.588308926268642
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "34f7f7ed264a9a8255a0ff0ccf08e970916206e8f74ade69e0f7de30c49e498f"
+  },
+  {
+    "shotId": "p30-3",
+    "file": "p30-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -34.83546037601095,
+        156.51140607173397,
+        26.083915866499122
+      ],
+      "aim": [
+        -34.14714677304311,
+        154.6394445907874,
+        28.588308926268642
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "4207acb922191402817e9cd0c95746945c14b5f018140a01933fb6c3bbdc5126"
+  },
+  {
+    "shotId": "p31-1",
+    "file": "p31-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -133.4392575255443,
+        -50.41235945416152,
+        -97.30446169633966
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "569f7dc31f245ee139f8dded246ad7d7140849bf5bc296f81190770599c5f9f1"
+  },
+  {
+    "shotId": "p31-2",
+    "file": "p31-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -113.20720890277941,
+        -80.52652244913418,
+        -60.27713565635524
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "066178c35317448af66e2d509c4c9fdedc149e2afe2e305ad92680f9c313d917"
+  },
+  {
+    "shotId": "p31-3",
+    "file": "p31-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -126.77218504468398,
+        -46.742832055101715,
+        -87.06492358324057
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "35a7d691463b56e6faac4ed59f2240e23cfe1c88eb4bc79f94c0d6dd4aaacd33"
+  },
+  {
+    "shotId": "p32-1",
+    "file": "p32-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -108.07204084503482,
+        -74.14108995935369,
+        -68.01212963239611
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ff02861c6f45b8e7910e4c8f04d8077aff39247370c9c7d014c2652ad8afc06f"
+  },
+  {
+    "shotId": "p32-2",
+    "file": "p32-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-rooted-ecology",
+      "eye": [
+        -137.16924779941132,
+        -69.16313592329408,
+        -64.07014765734569
+      ],
+      "aim": [
+        -100.05216718064099,
+        -71.89264585159776,
+        -69.31679382223113
+      ],
+      "size": [
+        30.84143729764169,
+        34.10484281404193,
+        29.866318805653897
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "6436001c3f8eedc8d316798d5f74c2b530eee06141926e6ab3fd3d10948c269d"
+  },
+  {
+    "shotId": "p32-3",
+    "file": "p32-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -105.42666180455856,
+        -72.68508495898904,
+        -63.94925802175856
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "06a87c1d310e12809d9b5a459e3fe8376cba3f5eeadca2b9c2373b6e51c587b9"
+  },
+  {
+    "shotId": "p33-1",
+    "file": "p33-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-towering-tree",
+      "eye": [
+        -201.44341946513958,
+        -57.04576532579248,
+        -53.7018727198146
+      ],
+      "aim": [
+        -127.03171613759805,
+        -62.22712428729832,
+        -76.47533900618964
+      ],
+      "size": [
+        37.34053051932588,
+        32.65812602021636,
+        30.434322928231424
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "23b35d309240ece83cef1071ab6f0874076a84aebcba5b52a1a42ef9f87a4ce2"
+  },
+  {
+    "shotId": "p33-2",
+    "file": "p33-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -108.07204084503482,
+        -74.14108995935369,
+        -68.01212963239611
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ff02861c6f45b8e7910e4c8f04d8077aff39247370c9c7d014c2652ad8afc06f",
+    "reusedFrom": "shots/p32-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p33-3",
+    "file": "p33-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-towering-tree",
+      "eye": [
+        -183.4554715105424,
+        -57.198967930112154,
+        -44.4532403551802
+      ],
+      "aim": [
+        -127.03171613759805,
+        -62.22712428729832,
+        -76.47533900618964
+      ],
+      "size": [
+        37.34053051932588,
+        32.65812602021636,
+        30.434322928231424
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "1b47deadaa2c82cf5eff3f6fabb24bca0dfbc0a8821b7ac14eb599023c288445"
+  },
+  {
+    "shotId": "p34-1",
+    "file": "p34-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -111.95759396324269,
+        -73.71941130183079,
+        -59.29188025294529
+      ],
+      "aim": [
+        -113.34120008521255,
+        -70.70106090983393,
+        -58.434445118150855
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "179a2a179632a612bd0faf3c5a68de6e0f16b1affffd54d0eec72f276582f831"
+  },
+  {
+    "shotId": "p34-2",
+    "file": "p34-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -113.01897244314141,
+        -74.41735110614259,
+        -57.494799290852214
+      ],
+      "aim": [
+        -113.20245352092246,
+        -71.08611961464455,
+        -58.23590079816959
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "887a223f59148a999ab852b341a4065bae3b3850b65d29aa37a849c54ac6f373"
+  },
+  {
+    "shotId": "p34-3",
+    "file": "p34-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -113.72088036436419,
+        -74.84649226743419,
+        -55.675046695968064
+      ],
+      "aim": [
+        -112.74391703215305,
+        -72.24984894650031,
+        -57.69073171882366
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "c00e95bb7b0bad9779b015ddd22e684adb5bbd42d4ec1803a369547e8b84165b",
+    "reusedFrom": "shots/p35-2.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p35-1",
+    "file": "p35-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -112.62202691653684,
+        -75.20952026090725,
+        -57.242373628185746
+      ],
+      "aim": [
+        -112.90372357211946,
+        -71.86074291682947,
+        -57.863933998564136
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "de57c6cc5cbf464b001cecaad8c3c83861ee46e42b062bc046823c5a16c46bcf"
+  },
+  {
+    "shotId": "p35-2",
+    "file": "p35-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -113.72088036436419,
+        -74.84649226743419,
+        -55.675046695968064
+      ],
+      "aim": [
+        -112.74391703215305,
+        -72.24984894650031,
+        -57.69073171882366
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "c00e95bb7b0bad9779b015ddd22e684adb5bbd42d4ec1803a369547e8b84165b"
+  },
+  {
+    "shotId": "p35-3",
+    "file": "p35-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -111.95759396324269,
+        -73.71941130183079,
+        -59.29188025294529
+      ],
+      "aim": [
+        -113.34120008521255,
+        -70.70106090983393,
+        -58.434445118150855
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "179a2a179632a612bd0faf3c5a68de6e0f16b1affffd54d0eec72f276582f831",
+    "reusedFrom": "shots/p34-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p36-1",
+    "file": "p36-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -113.26735048886431,
+        -75.7170559784559,
+        -55.42185135279656
+      ],
+      "aim": [
+        -112.4038937828602,
+        -73.03049816884938,
+        -57.370402007128824
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "b6f42d21b21d62ad506c3b08e356fd2bf5ae8d3e63badaeb8827d5d3f7979ae8"
+  },
+  {
+    "shotId": "p36-2",
+    "file": "p36-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -110.68868233849393,
+        -76.18464250685797,
+        -58.55337190057115
+      ],
+      "aim": [
+        -112.22387836321884,
+        -73.42157922655177,
+        -57.22346420652152
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ce54657034767b1e04d655b3c987788119b5f6768b00f20fa93b0f127fa1bec1"
+  },
+  {
+    "shotId": "p36-3",
+    "file": "p36-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -113.01897244314141,
+        -74.41735110614259,
+        -57.494799290852214
+      ],
+      "aim": [
+        -113.20245352092246,
+        -71.08611961464455,
+        -58.23590079816959
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "887a223f59148a999ab852b341a4065bae3b3850b65d29aa37a849c54ac6f373",
+    "reusedFrom": "shots/p34-2.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p37-1",
+    "file": "p37-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -110.27759913044581,
+        -76.88187307376683,
+        -58.417550747615905
+      ],
+      "aim": [
+        -111.84437270570582,
+        -74.2040967955903,
+        -56.9564775913701
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "4d3fcecbda2b02aaab35d834f97b2fb5c32b7ca732d52c508b0cc6d7b9dd60af"
+  },
+  {
+    "shotId": "p37-2",
+    "file": "p37-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -111.04203367744823,
+        -77.95409778214952,
+        -56.65428155930828
+      ],
+      "aim": [
+        -111.6451071306313,
+        -74.59507006591177,
+        -56.83658682969973
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "31cd46c72f4cf7a1bc6c830628234fd1b927c26a825592524036ef185f19ac8e"
+  },
+  {
+    "shotId": "p37-3",
+    "file": "p37-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -110.68868233849393,
+        -76.18464250685797,
+        -58.55337190057115
+      ],
+      "aim": [
+        -112.22387836321884,
+        -73.42157922655177,
+        -57.22346420652152
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "ce54657034767b1e04d655b3c987788119b5f6768b00f20fa93b0f127fa1bec1",
+    "reusedFrom": "shots/p36-2.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p38-1",
+    "file": "p38-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -110.68592814217692,
+        -78.50400108083572,
+        -56.59177810299681
+      ],
+      "aim": [
+        -111.34974158190904,
+        -75.15268040383054,
+        -56.681228855417324
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "06f546cf68e61b0b8c0902e66679e0325127750a9bb5a666d4cc1f2f81e939d0"
+  },
+  {
+    "shotId": "p38-2",
+    "file": "p38-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -111.90393284119638,
+        -78.05674423556087,
+        -54.9436197770095
+      ],
+      "aim": [
+        -111.34974158190904,
+        -75.15268040383054,
+        -56.681228855417324
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "02e4dc353be6a488db450dda2d73bf92088ca77cb1e27b4ae68f7f2d4b45d955"
+  },
+  {
+    "shotId": "p38-3",
+    "file": "p38-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -109.75184455308549,
+        -77.72001435846425,
+        -58.29848624082686
+      ],
+      "aim": [
+        -111.34974158190904,
+        -75.15268040383054,
+        -56.681228855417324
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "14ff65950dd234c7e0cc20c95a71558bacfcdb4d8460e01730339ce288c31fde",
+    "reusedFrom": "shots/p40-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p39-1",
+    "file": "p39-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-dry-service-shelf",
+      "eye": [
+        -100.16641825862476,
+        -62.193858898341006,
+        -85.02757340177442
+      ],
+      "aim": [
+        -96.84510334693988,
+        -64.65418938881143,
+        -83.52223047604019
+      ],
+      "size": [
+        2.18766050470866,
+        1.8221956963364008,
+        1.6250775953169523
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "f6f8d55c50da36e7142b7d67b9cfffc2f48a057d7491442b3f930806393a8470"
+  },
+  {
+    "shotId": "p39-2",
+    "file": "p39-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -135.59913208522653,
+        -66.17701699864672,
+        -63.93796089811179
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "44acaf8376c6abf109608987f6082e24401acb5f357d535488c86b344e894c05"
+  },
+  {
+    "shotId": "p39-3",
+    "file": "p39-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -111.90393284119638,
+        -78.05674423556087,
+        -54.9436197770095
+      ],
+      "aim": [
+        -111.34974158190904,
+        -75.15268040383054,
+        -56.681228855417324
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "02e4dc353be6a488db450dda2d73bf92088ca77cb1e27b4ae68f7f2d4b45d955",
+    "reusedFrom": "shots/p38-2.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p40-1",
+    "file": "p40-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -109.75184455308549,
+        -77.72001435846425,
+        -58.29848624082686
+      ],
+      "aim": [
+        -111.34974158190904,
+        -75.15268040383054,
+        -56.681228855417324
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "14ff65950dd234c7e0cc20c95a71558bacfcdb4d8460e01730339ce288c31fde"
+  },
+  {
+    "shotId": "p40-2",
+    "file": "p40-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -110.39349854382841,
+        -78.94035454184771,
+        -56.555973400826275
+      ],
+      "aim": [
+        -111.104599568479,
+        -75.59758274531208,
+        -56.57053530409652
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "69ed1b5d07dc74e1c5cfcd9fc03638f5cd22be11ffd8ebde05f5dee3e52e3e10"
+  },
+  {
+    "shotId": "p40-3",
+    "file": "p40-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -110.39349854382841,
+        -78.94035454184771,
+        -56.555973400826275
+      ],
+      "aim": [
+        -111.104599568479,
+        -75.59758274531208,
+        -56.57053530409652
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "69ed1b5d07dc74e1c5cfcd9fc03638f5cd22be11ffd8ebde05f5dee3e52e3e10",
+    "reusedFrom": "shots/p40-2.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p41-1",
+    "file": "p41-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -112.73693562299994,
+        -74.84507362795195,
+        -57.570021352134226
+      ],
+      "aim": [
+        -110.16795092776688,
+        -76.92643074502851,
+        -56.70499523296031
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 44.55000000000002,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "4c0de040ff4710780eb7b3d2b1b7398f5d324feb137118d27665d6943f8296ef"
+  },
+  {
+    "shotId": "p41-2",
+    "file": "p41-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -111.0535915089081,
+        -75.37239339208178,
+        -59.68441424028823
+      ],
+      "aim": [
+        -109.73284743029085,
+        -77.26063448229615,
+        -57.14469365250233
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 44.20000000000004,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "577d6b2b89726599757a4a874fccbfc9b4bf13c787a61b121abeb936ade10633"
+  },
+  {
+    "shotId": "p41-3",
+    "file": "p41-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.08290874516522,
+        -131.0459854200133,
+        -43.32242558949277
+      ],
+      "aim": [
+        -55.26090137841806,
+        -131.35723267288,
+        -40.386544193794414
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "e254ba6d7960421736e0f230733f06efd073d2d5211e27b03a65d03f509da905"
+  },
+  {
+    "shotId": "p42-1",
+    "file": "p42-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -110.96484287120091,
+        -75.44056137181808,
+        -59.774100110346076
+      ],
+      "aim": [
+        -109.64409879258366,
+        -77.32880246203246,
+        -57.23437952256018
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 43.50000000000008,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "c8de9ffa8b6c0391b873121b236ddb638ecdba6d456f3a5d15e717790f83b6e0"
+  },
+  {
+    "shotId": "p42-2",
+    "file": "p42-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -112.53367165709703,
+        -75.86270567278125,
+        -56.12197466711935
+      ],
+      "aim": [
+        -109.64181557897511,
+        -77.33055620229285,
+        -57.23668684810681
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 43.1500000000001,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "5c5b54211bb89f674c801b58a2aee28594005b96efc5b760e1d52a23a2e8db31"
+  },
+  {
+    "shotId": "p42-3",
+    "file": "p42-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.08290877556837,
+        -131.0459854768206,
+        -43.32242561602055
+      ],
+      "aim": [
+        -55.26090140882121,
+        -131.3572327296873,
+        -40.3865442203222
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "8eb99e1dfcfca73c8214e0b7ac80de8d9bf02ce5a66e5b169c964cb65abaf8c1"
+  },
+  {
+    "shotId": "p43-1",
+    "file": "p43-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -138.22169541790404,
+        -41.919735458504746,
+        -110.42218657380418
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 42.500000000000135,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "1ae24a80446f02f0cdf8e9978ab1266ddc08b0fffec51042198287bd8a471903"
+  },
+  {
+    "shotId": "p43-2",
+    "file": "p43-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -113.20720890277941,
+        -80.52652244913418,
+        -60.27713565635524
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 42.20000000000015,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "837b3972b3a3c728bfa3bc9ccff7faaf235a6c763e96860366aec79b0df2af65"
+  },
+  {
+    "shotId": "p43-3",
+    "file": "p43-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -130.2501957125276,
+        -37.532257046585414,
+        -98.1792605690118
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 41.90000000000017,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "43f6afcbd24a4749a8cbefa06b3ab0635770b6eca3553ee9cf00543fab10f711"
+  },
+  {
+    "shotId": "p44-1",
+    "file": "p44-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-dry-service-shelf",
+      "eye": [
+        -98.74172693513093,
+        -62.801962564420705,
+        -85.29868202975314
+      ],
+      "aim": [
+        -96.84510334693988,
+        -64.65418938881143,
+        -83.52223047604019
+      ],
+      "size": [
+        2.18766050470866,
+        1.8221956963364008,
+        1.6250775953169523
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "7fc1ed93b8b7c14c230695e64c8a08c5811ddddea0adb66c5c95c6bb8cbef6fa",
+    "reusedFrom": "shots/p25-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p44-2",
+    "file": "p44-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -118.94683900676314,
+        -66.2798715028454,
+        -74.21242773507636
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "09681c85b65f4524ef3a2c5d1486d9df35580942b231ddf0c530c6d289b3ed2e",
+    "reusedFrom": "shots/p25-2.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p44-3",
+    "file": "p44-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-dry-service-shelf",
+      "eye": [
+        -98.27445397180605,
+        -62.54477757855426,
+        -84.58102681737596
+      ],
+      "aim": [
+        -96.84510334693988,
+        -64.65418938881143,
+        -83.52223047604019
+      ],
+      "size": [
+        2.18766050470866,
+        1.8221956963364008,
+        1.6250775953169523
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "5a8dbfc77f8d202c759b1b76b5abc00f31ff69f7b290ae1eaaf7f33bb19992ef",
+    "reusedFrom": "shots/p25-3.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p45-1",
+    "file": "p45-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -107.91758096473744,
+        -77.26608818443,
+        -62.477083430758064
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 40.70000000000024,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "93665bfe7576e73401b9b694c8eec5abfd8c57e4aacffb2c8561488f96fd6a2d"
+  },
+  {
+    "shotId": "p45-2",
+    "file": "p45-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -110.79550040490841,
+        -71.36250912616505,
+        -68.31693122482581
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "33ce95cf1610ee7e3d890443358d1fbcfa16c763e9bbc71f68e463c0eee2c658",
+    "reusedFrom": "shots/p23-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p45-3",
+    "file": "p45-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -105.74365561464309,
+        -76.0695692237343,
+        -59.138287948748996
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 40.10000000000027,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "6e7915bffba36bd45e38c1ceb230a49931620735e6636be11ca46a309527fe00"
+  },
+  {
+    "shotId": "p46-1",
+    "file": "p46-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "citadel-new-main-gate",
+      "eye": [
+        74.24354901258124,
+        135.25321990302834,
+        129.4304786735052
+      ],
+      "aim": [
+        73.64470705216675,
+        112.55285904761905,
+        133.93902881252225
+      ],
+      "size": [
+        16.103434248863053,
+        15.000099982605192,
+        12.252871338556986
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "0852be3ce1782537c58d21355488be65411a726acc09bb33a6ab949ceb58c729"
+  },
+  {
+    "shotId": "p46-2",
+    "file": "p46-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        83.0534936249796,
+        -35.51249234338237,
+        -227.8958909730233
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 39.75000000000029,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "bbd22b61b320df7799baa677e22f87fceaadc43d79198016d13f17b149c923bb"
+  },
+  {
+    "shotId": "p46-3",
+    "file": "p46-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "citadel-new-main-gate",
+      "eye": [
+        72.71640791799224,
+        138.96853711653682,
+        128.60808194480924
+      ],
+      "aim": [
+        73.64470705216675,
+        112.55285904761905,
+        133.93902881252225
+      ],
+      "size": [
+        16.103434248863053,
+        15.000099982605192,
+        12.252871338556986
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 39.150000000000325,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "424959f1de579204528edcab3246daafe82efd20f2ad086c9dc562e444898377",
+    "reusedFrom": "shots/p47-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p47-1",
+    "file": "p47-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "citadel-new-main-gate",
+      "eye": [
+        72.71640791799224,
+        138.96853711653682,
+        128.60808194480924
+      ],
+      "aim": [
+        73.64470705216675,
+        112.55285904761905,
+        133.93902881252225
+      ],
+      "size": [
+        16.103434248863053,
+        15.000099982605192,
+        12.252871338556986
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 39.150000000000325,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "424959f1de579204528edcab3246daafe82efd20f2ad086c9dc562e444898377"
+  },
+  {
+    "shotId": "p47-2",
+    "file": "p47-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        95.53757351251706,
+        -34.72964580194456,
+        -231.76288401613297
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 38.85000000000034,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "54bb8596c630e9bca494ae8677ae43d9e50e30ea5e8a6d55045552f78f5284ed"
+  },
+  {
+    "shotId": "p47-3",
+    "file": "p47-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "citadel-new-main-gate",
+      "eye": [
+        72.91264150695541,
+        133.73653365655946,
+        122.54698717786157
+      ],
+      "aim": [
+        73.64470705216675,
+        112.55285904761905,
+        133.93902881252225
+      ],
+      "size": [
+        16.103434248863053,
+        15.000099982605192,
+        12.252871338556986
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 38.55000000000036,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "95345de470acba144b1203d8dda252c48f38495501a6a45709c491de593d1f57"
+  },
+  {
+    "shotId": "p48-1",
+    "file": "p48-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -49.44267746901254,
+        -127.04405752616432,
+        -86.98869137684467
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 38.25000000000038,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "d24640afa7fb2241556390888d0691c92729cfb37748d1ac54d16451d01ff197"
+  },
+  {
+    "shotId": "p48-2",
+    "file": "p48-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -58.37544287581542,
+        -130.64006682755968,
+        -41.8664307667533
+      ],
+      "aim": [
+        -57.08869579155938,
+        -131.10493470281227,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9260461865089695,
+        1.7165013008143717,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "b3e3f38584b20319af574852c1ff9dcedce76b9a21ea0a8f018c7d7e0b1935e8"
+  },
+  {
+    "shotId": "p48-3",
+    "file": "p48-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -52.769359743238496,
+        -123.78630415544515,
+        -86.6312709677514
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "970b4c1af3309660577e7721e8c3cfb089aec72de6cfe8c64eca20dd85ac43be",
+    "reusedFrom": "shots/p02-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p49-1",
+    "file": "p49-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -144.64751977150485,
+        -182.47015690714926,
+        -177.63667092688198
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 37.05000000000043,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "ee6d703f1a9a42239b20c4c473a5bee5ff6cb7ec409b50483f45b6c10cee079d"
+  },
+  {
+    "shotId": "p49-2",
+    "file": "p49-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -79.33877029312306,
+        -142.12775518432844,
+        -34.80678316487973
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 36.75000000000045,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "99d99abb4bb8fbd48d25b223964472549b33786a6c8ae3e4c19cf908e09d3861"
+  },
+  {
+    "shotId": "p49-3",
+    "file": "p49-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -140.04154218739336,
+        -140.96496328613173,
+        -152.38810320341486
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 36.450000000000465,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "ee4205ef003323e71b70340f8bdd584f4d7ad0e293280490a172dc6320e03c3c"
+  },
+  {
+    "shotId": "p50-1",
+    "file": "p50-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -72.86139228993181,
+        -144.63119251679532,
+        -46.945396544282715
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 36.15000000000048,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "fba8908e29802ef8d74314769e03ac7e693ce75f54f761586b5276ab60d3b409"
+  },
+  {
+    "shotId": "p50-2",
+    "file": "p50-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -62.01638231305081,
+        -130.93728133398056,
+        -40.48838665405247
+      ],
+      "aim": [
+        -57.08905649250223,
+        -131.10667351090044,
+        -39.96781816811272
+      ],
+      "size": [
+        0.926767588394668,
+        1.7199789169907262,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "b881bd8fc65438064a34dffa33b062495547e43dcfbccd026d55ca9013985b8b"
+  },
+  {
+    "shotId": "p50-3",
+    "file": "p50-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -72.26314599472454,
+        -140.670975900069,
+        -44.58893347729516
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 35.40000000000052,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "34d3f2fedfcda9b56583435c80a9f98cc039ddd4cb5955a3dee4d688fc4f3a2a"
+  },
+  {
+    "shotId": "p51-1",
+    "file": "p51-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -144.64751977150485,
+        -182.47015690714926,
+        -177.63667092688198
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 37.05000000000043,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "ee6d703f1a9a42239b20c4c473a5bee5ff6cb7ec409b50483f45b6c10cee079d",
+    "reusedFrom": "shots/p49-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p51-2",
+    "file": "p51-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -75.40043426318223,
+        -145.8237371536285,
+        -50.75897976583007
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 3,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "fox"
+    },
+    "sha256": "95bdc27d53d84391f44cbb02cf5cf7dfbf58b31765f65f8661a317667d0c2964",
+    "reusedFrom": "shots/p04-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p51-3",
+    "file": "p51-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -176.83017209036439,
+        -176.21792152018998,
+        -147.81693954311922
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 32.1000000000007,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "891fcd7121735eaf5d9edabef7f526842f16fb136c4fb1da9e44c5a3cf40f018",
+    "reusedFrom": "shots/p54-1.png",
+    "editorialReason": "场所回接或遮挡废片替换；保留实拍来源"
+  },
+  {
+    "shotId": "p52-1",
+    "file": "p52-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -111.64191262769303,
+        -185.27454510426494,
+        -174.6549764736671
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 34.200000000000585,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "617f3898b0b911bee57d1a7c3385ddf5d3dd72e5a381976dd4945736141f69e6"
+  },
+  {
+    "shotId": "p52-2",
+    "file": "p52-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -59.64304555710457,
+        -130.96576769453296,
+        -41.054798374904365
+      ],
+      "aim": [
+        -57.08921641663841,
+        -131.1065893950945,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9270874366670228,
+        1.7198106853788033,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "c8abea3e8d1a9da1d3b604f0b89cdcb80d17a11bf30c06e1cc3d30b7ff277471"
+  },
+  {
+    "shotId": "p52-3",
+    "file": "p52-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -107.73263753529588,
+        -150.04744799735087,
+        -153.2255198344219
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 33.45000000000062,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "64024c42108b458ca2384340a813438e31a59d610d042af2ed7a426697276ee8"
+  },
+  {
+    "shotId": "p53-1",
+    "file": "p53-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "stagedActors": true,
+    "staging": "Existing three runtime actors positioned on the real mother-port landing for a comic tableau; isolated browser only",
+    "actors": [
+      {
+        "name": "player-courier-root",
+        "world": [
+          -32.25509447209343,
+          -101.15328939846731,
+          -85.59000371292302
+        ]
+      },
+      {
+        "name": "fox-ali",
+        "world": [
+          -33.533201476045285,
+          -101.84064062687852,
+          -85.6029159843706
+        ]
+      },
+      {
+        "name": "moebius-cyber-ink-tiger",
+        "world": [
+          38.42628127814004,
+          -11.074774805013618,
+          -131.9719640569368
+        ]
+      }
+    ],
+    "eye": [
+      -36.11630870104314,
+      -106.82441739413308,
+      -81.9132551842443
+    ],
+    "aim": [
+      -33.261890357192655,
+      -101.33472124461284,
+      -85.98210417434366
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "b9d3545c4ff03947c292a3b677144cbe0d9b63da576bbdc096fcafe2adb10269"
+  },
+  {
+    "shotId": "p53-2",
+    "file": "p53-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "stagedActors": true,
+    "staging": "Existing three runtime actors positioned on the real mother-port landing for a comic tableau; isolated browser only",
+    "actors": [
+      {
+        "name": "player-courier-root",
+        "world": [
+          -32.25509447209343,
+          -101.15328939846731,
+          -85.59000371292302
+        ]
+      },
+      {
+        "name": "fox-ali",
+        "world": [
+          -33.533201476045285,
+          -101.84064062687852,
+          -85.6029159843706
+        ]
+      },
+      {
+        "name": "moebius-cyber-ink-tiger",
+        "world": [
+          38.4259170997568,
+          -11.0770281005818,
+          -131.97068418378777
+        ]
+      }
+    ],
+    "eye": [
+      -34.11818974033439,
+      -107.14999130248934,
+      -82.3025137731718
+    ],
+    "aim": [
+      -33.261890357192655,
+      -101.33472124461284,
+      -85.98210417434366
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "274a2f28e5488d6c74f644079fb2d324fbe32da578510fa1230fa7b2329b1636"
+  },
+  {
+    "shotId": "p53-3",
+    "file": "p53-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "stagedActors": true,
+    "staging": "Existing three runtime actors positioned on the real mother-port landing for a comic tableau; isolated browser only",
+    "actors": [
+      {
+        "name": "player-courier-root",
+        "world": [
+          -32.25509447209343,
+          -101.15328939846731,
+          -85.59000371292302
+        ]
+      },
+      {
+        "name": "fox-ali",
+        "world": [
+          -33.533201476045285,
+          -101.84064062687852,
+          -85.6029159843706
+        ]
+      },
+      {
+        "name": "moebius-cyber-ink-tiger",
+        "world": [
+          38.423888608505806,
+          -11.08957906614279,
+          -131.96355522829586
+        ]
+      }
+    ],
+    "eye": [
+      -35.79894729399661,
+      -109.0640461480348,
+      -82.26445994220472
+    ],
+    "aim": [
+      -33.261890357192655,
+      -101.33472124461284,
+      -85.98210417434366
+    ],
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "bbff199f1b83013db537f08a15f82a3e427ec896691281505ede8126e83fd234"
+  },
+  {
+    "shotId": "p54-1",
+    "file": "p54-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -176.83017209036439,
+        -176.21792152018998,
+        -147.81693954311922
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 32.1000000000007,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "891fcd7121735eaf5d9edabef7f526842f16fb136c4fb1da9e44c5a3cf40f018"
+  },
+  {
+    "shotId": "p54-2",
+    "file": "p54-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -59.11060931466038,
+        -130.375895459766,
+        -41.68750305970529
+      ],
+      "aim": [
+        -57.08869579155938,
+        -131.10635735386424,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9260461865089695,
+        1.7193466029183355,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "f049024655b6b9df09d1ba0f7c7793afa4f5f8a24ef56693315060afc354ba2d"
+  },
+  {
+    "shotId": "p54-3",
+    "file": "p54-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -172.22419450625293,
+        -134.71272789917242,
+        -122.56837181965209
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 31.35000000000069,
+      "cooldown": 0,
+      "target": "citadel"
+    },
+    "sha256": "7a602c1e104c51f20565a6bfe8d1d0c35dedc0536cef1f133ba88e78e6576b2c"
+  }
+]

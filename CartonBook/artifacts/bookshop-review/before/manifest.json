@@ -1,0 +1,86 @@
+{
+  "id": "bookshop-letter",
+  "mode": "fixtures",
+  "realCapture": false,
+  "note": "使用 chapters/_fixtures（来源为本游戏既有验收截屏，非 AI 生成）",
+  "generatedAt": "2026-11-04T08:42:54.529Z",
+  "shots": [
+    {
+      "shotId": "cover",
+      "file": "cover.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "01-wide.png"
+    },
+    {
+      "shotId": "s01",
+      "file": "s01.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "02-close.png"
+    },
+    {
+      "shotId": "s02",
+      "file": "s02.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "03-player.png"
+    },
+    {
+      "shotId": "s03",
+      "file": "s03.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "04-interact.png"
+    },
+    {
+      "shotId": "s04",
+      "file": "s04.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "05-path.png"
+    },
+    {
+      "shotId": "s05",
+      "file": "s05.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "06-path-after.png"
+    },
+    {
+      "shotId": "s06",
+      "file": "s06.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "07-gameplay.png"
+    },
+    {
+      "shotId": "s07",
+      "file": "s07.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "08-site-close.png"
+    },
+    {
+      "shotId": "s08",
+      "file": "s08.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "09-building.png"
+    },
+    {
+      "shotId": "s09",
+      "file": "s09.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "10-building-before.png"
+    },
+    {
+      "shotId": "s10",
+      "file": "s10.png",
+      "source": "fixture",
+      "ok": true,
+      "fixture": "01-wide.png"
+    }
+  ]
+}

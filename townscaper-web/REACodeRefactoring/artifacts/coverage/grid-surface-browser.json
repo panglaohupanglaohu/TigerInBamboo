@@ -1,0 +1,129 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "① 贴面档生效",
+      "pass": true,
+      "detail": "surface=true cells=736 segs=2748"
+    },
+    {
+      "name": "① 高度随台地抬升",
+      "pass": true,
+      "detail": "maxY=5.015（levelHeight 单位）"
+    },
+    {
+      "name": "① 跨层竖边存在",
+      "pass": true,
+      "detail": "stats.vertical=743 实测竖直段=743"
+    },
+    {
+      "name": "② 水平段都在整层高度上",
+      "pass": true,
+      "detail": "水平 2005 段，偏离整层 >1e-3 的有 0 条（最大 0）"
+    },
+    {
+      "name": "② 无斜穿段",
+      "pass": true,
+      "detail": "既非水平也非竖直的段 = 0"
+    },
+    {
+      "name": "② 四边形数=段数",
+      "pass": true,
+      "detail": "quads=2748 segs=2748"
+    },
+    {
+      "name": "③ 关掉回到平铺",
+      "pass": true,
+      "detail": "surface=false maxY=0.015 非 0.015 顶点=0"
+    },
+    {
+      "name": "④ 开/关像素不同",
+      "pass": true,
+      "detail": "不同像素=320781"
+    }
+  ],
+  "on": {
+    "st": {
+      "segments": 2748,
+      "vertical": 743,
+      "cells": 736,
+      "surface": true,
+      "maxY": 5.015,
+      "flat": false,
+      "regular": false,
+      "lattice": null,
+      "drape": null,
+      "dots": 0,
+      "rims": 0,
+      "breakMode": "none",
+      "order": {
+        "lines": 5,
+        "rim": 5.5,
+        "tri": 6
+      },
+      "lineDepthWrite": false,
+      "lineDepthTest": true,
+      "window": null,
+      "tri": null,
+      "px": {
+        "ref": 460,
+        "base": {
+          "line": 2,
+          "dot": 0,
+          "rim": 6,
+          "rimStroke": 1
+        },
+        "scale": 1
+      }
+    },
+    "horiz": 2005,
+    "vert": 743,
+    "badH": 0,
+    "badV": 0,
+    "maxDev": 0,
+    "quads": 2748
+  },
+  "off": {
+    "st": {
+      "segments": 5116,
+      "vertical": 0,
+      "cells": 0,
+      "surface": false,
+      "maxY": 0.015,
+      "flat": true,
+      "regular": false,
+      "lattice": null,
+      "drape": null,
+      "dots": 0,
+      "rims": 0,
+      "breakMode": "none",
+      "order": {
+        "lines": 5,
+        "rim": 5.5,
+        "tri": 6
+      },
+      "lineDepthWrite": false,
+      "lineDepthTest": false,
+      "window": null,
+      "tri": null,
+      "px": {
+        "ref": 460,
+        "base": {
+          "line": 2,
+          "dot": 0,
+          "rim": 6,
+          "rimStroke": 1
+        },
+        "scale": 1.9565,
+        "viewport": 900,
+        "line": 3.91,
+        "dot": 0,
+        "rim": 11.74
+      }
+    },
+    "flat": 10232,
+    "notFlat": 0,
+    "quads": 5116
+  },
+  "pxDiff": 320781
+}

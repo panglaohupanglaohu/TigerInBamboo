@@ -1,0 +1,6 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#68a6ac}</style><body><div id="touch-toggle-slot"></div>
+<script type="module">
+const html=await(await fetch('/TigerMessenger/index.html')).text(),doc=new DOMParser().parseFromString(html,'text/html');for(const style of doc.querySelectorAll('head style'))document.head.append(style.cloneNode(true));
+const {createTouchControls}=await import('/TigerMessenger/src/ui/touchControls.js');createTouchControls({keys:{},isGameStarted:()=>true,onOrbit(){},onOrbitPitch(){}});
+const ui=await import('/TigerMessenger/src/ui/uiLayers.js?v=ui-layers-r3-local-edit');ui.installUiLayers();window.ready=true;
+</script></body>

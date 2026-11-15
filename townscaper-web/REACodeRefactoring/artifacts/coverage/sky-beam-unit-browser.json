@@ -1,0 +1,70 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "① 开跑时没有单位柱（差分为空）",
+      "pass": true,
+      "detail": "beams=0 diffpx=0"
+    },
+    {
+      "name": "② 挨打起一根单位柱",
+      "pass": true,
+      "detail": "beams=1 kinds=[\"unit\"]"
+    },
+    {
+      "name": "② 宽度 = 0.18（比旗顶版 0.30 窄一档）",
+      "pass": true,
+      "detail": "w=0.18"
+    },
+    {
+      "name": "② 柱底 = 单位 y + 1.0（悬在头顶上方）",
+      "pass": true,
+      "detail": "base=2 期望=2.00"
+    },
+    {
+      "name": "② 线芯色是淡奶油 #e6e4c5",
+      "pass": true,
+      "detail": "color=#e6e4c5"
+    },
+    {
+      "name": "② 画面里真的画出柱子（差分像素）",
+      "pass": true,
+      "detail": "diffpx=14786"
+    },
+    {
+      "name": "② 竖直跨度到画面上缘",
+      "pass": true,
+      "detail": "y0=0 y1=499 span=499px"
+    },
+    {
+      "name": "② 细柱不是面",
+      "pass": true,
+      "detail": "宽 31px / 画面 1440px"
+    },
+    {
+      "name": "② 柱底投影 ≈ 单位上方 1 单位处",
+      "pass": true,
+      "detail": "柱底 y=499 期望投影 y=500"
+    },
+    {
+      "name": "② 色相：奶油（R≈G 且都高于 B）",
+      "pass": true,
+      "detail": "mean=[224,223,195]"
+    },
+    {
+      "name": "③ 0.60s 后自动回收",
+      "pass": true,
+      "detail": "beams=0 残余差 0px"
+    },
+    {
+      "name": "④ 关掉后可逆",
+      "pass": true,
+      "detail": "flag=false beams=0"
+    },
+    {
+      "name": "无控制台异常",
+      "pass": true,
+      "detail": "0 条"
+    }
+  ]
+}

@@ -27,3 +27,13 @@ ui-reveal.mjs核起末空白、标题先于外纹、标题已退时外纹保留�
 本批2段406帧，累计114/285、剩171。两段局部交互/时序验收通过，非原完整美术或游戏接入。141模块状态继续以生成映射为准，原版只读。下一批958371606350454784头像生成器与1010979395719319552游戏头像：先README/全帧，保留ui.html已有层级生成器。
 
 收口：原ui-interaction-browser与ornament-browser回归通过，三档GPU区域cutoff泄漏0、镜像误差1/255、单纹理及旧播放/停止保持。icons-flair-pages.json确认index/pipeline共用114/285、剩171和新能力入口，town/terrain/fusion实际加载无pageerror，三张回归截图已目视。原版范围仍141模块33增强/58静态/50部分；285素材/README匹配、管线缺0、帧记录连续及空白检查通过。实测速率2.44段/小时，未按目标或定时触发次数虚增计数。
+
+## 第 56 批（C06）
+
+### 1201179450668441600
+- 做了什么：game-ui-c06.js 左侧工具条（?gameui=1）：共享 mountIconToolbar + icon-ink 等墨量线宽，建造/拆除/刷色接主场景 setTool，选中项倾斜放大 + 白色三角指示；下方撤销/重做/清空接真实命令；开启时隐藏原 HUD 工具栏
+- 落点：src/ui/icon-toolbar.js · src/ui/game-ui-c06.js · index.html?gameui=1
+- 测试：tests/game-ui-c06.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-gameui-icons.png（已看）
+- 对照：左侧竖排图标、粉色选中块 + 白三角，与 0000–0099 帧一致；点击切到 erase/paint 再回 build 均生效
+- 判定：done

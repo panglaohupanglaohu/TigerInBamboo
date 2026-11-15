@@ -1,0 +1,476 @@
+{
+ "ok": true,
+ "setup": {
+  "rimCount": 103,
+  "cornerCount": 731,
+  "visible": true,
+  "isShader": true,
+  "uSize": 9.91,
+  "uStroke": 1.4,
+  "matSize": 9.91,
+  "px": {
+   "ref": 460,
+   "base": {
+    "line": 2,
+    "dot": 0,
+    "rim": 6,
+    "rimStroke": 1
+   },
+   "scale": 1.6522,
+   "viewport": 760,
+   "line": 3.3,
+   "dot": 0,
+   "rim": 9.91
+  },
+  "fill": "f4f7f8",
+  "edge": "14181c"
+ },
+ "pick": {
+  "screened": 41,
+  "pts": [
+   {
+    "x": 274,
+    "y": 127.9,
+    "r": 4
+   },
+   {
+    "x": 757.7,
+    "y": 127.9,
+    "r": 4
+   },
+   {
+    "x": 781.9,
+    "y": 149.3,
+    "r": 4
+   },
+   {
+    "x": 249,
+    "y": 170.8,
+    "r": 4
+   },
+   {
+    "x": 783,
+    "y": 170.8,
+    "r": 4
+   },
+   {
+    "x": 224.6,
+    "y": 192.5,
+    "r": 4
+   },
+   {
+    "x": 784.2,
+    "y": 192.5,
+    "r": 4
+   },
+   {
+    "x": 196.8,
+    "y": 163.4,
+    "r": 4
+   },
+   {
+    "x": 766.6,
+    "y": 205,
+    "r": 4
+   },
+   {
+    "x": 193.4,
+    "y": 227.4,
+    "r": 4
+   },
+   {
+    "x": 786.5,
+    "y": 236.5,
+    "r": 4
+   },
+   {
+    "x": 127.8,
+    "y": 190.1,
+    "r": 4
+   }
+  ],
+  "rimPx": 9.91,
+  "viewport": {
+   "w": 1000,
+   "h": 760
+  }
+ },
+ "ring": [
+  {
+   "x": 274,
+   "y": 128,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    135,
+    10.7,
+    170,
+    67
+   ],
+   "edgeMin": 10.7,
+   "edgeMax": 170,
+   "solid": 2.3
+  },
+  {
+   "x": 758,
+   "y": 128,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    200.7,
+    70,
+    170,
+    27.3
+   ],
+   "edgeMin": 27.3,
+   "edgeMax": 200.7,
+   "solid": 2.3
+  },
+  {
+   "x": 782,
+   "y": 149,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    170,
+    58.7,
+    64.3,
+    2.3
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 170,
+   "solid": 2.3
+  },
+  {
+   "x": 249,
+   "y": 171,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    152.7,
+    10.3,
+    186,
+    11.3
+   ],
+   "edgeMin": 10.3,
+   "edgeMax": 186,
+   "solid": 2.3
+  },
+  {
+   "x": 783,
+   "y": 171,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    117,
+    4.3,
+    186,
+    87.7
+   ],
+   "edgeMin": 4.3,
+   "edgeMax": 186,
+   "solid": 2.3
+  },
+  {
+   "x": 225,
+   "y": 193,
+   "r": 4,
+   "center": 140.3,
+   "edges": [
+    143.3,
+    58.7,
+    99,
+    187.7
+   ],
+   "edgeMin": 58.7,
+   "edgeMax": 187.7,
+   "solid": 140.3
+  },
+  {
+   "x": 784,
+   "y": 193,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    81,
+    2.3,
+    230.7,
+    142.7
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 230.7,
+   "solid": 2.3
+  },
+  {
+   "x": 197,
+   "y": 163,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    186,
+    54.3,
+    22.7,
+    6.3
+   ],
+   "edgeMin": 6.3,
+   "edgeMax": 186,
+   "solid": 2.3
+  },
+  {
+   "x": 767,
+   "y": 205,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    222.7,
+    119.3,
+    135,
+    10
+   ],
+   "edgeMin": 10,
+   "edgeMax": 222.7,
+   "solid": 2.3
+  },
+  {
+   "x": 193,
+   "y": 227,
+   "r": 4,
+   "center": 183.3,
+   "edges": [
+    178,
+    184.7,
+    180.3,
+    179.7
+   ],
+   "edgeMin": 178,
+   "edgeMax": 184.7,
+   "solid": 183.3
+  },
+  {
+   "x": 787,
+   "y": 237,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    234.7,
+    109,
+    230.7,
+    96
+   ],
+   "edgeMin": 96,
+   "edgeMax": 234.7,
+   "solid": 2.3
+  },
+  {
+   "x": 128,
+   "y": 190,
+   "r": 4,
+   "center": 235.7,
+   "edges": [
+    200.7,
+    52.7,
+    98.7,
+    2.3
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 200.7,
+   "solid": 2.3
+  }
+ ],
+ "solidSetup": {
+  "uSize": 9.91,
+  "uStroke": 0
+ },
+ "solid": [
+  {
+   "x": 274,
+   "y": 128,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    10.7,
+    2.3,
+    67
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 67
+  },
+  {
+   "x": 758,
+   "y": 128,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    70,
+    2.3,
+    27.3
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 70
+  },
+  {
+   "x": 782,
+   "y": 149,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    58.7,
+    2.3,
+    2.3
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 58.7
+  },
+  {
+   "x": 249,
+   "y": 171,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    10.3,
+    2.3,
+    11.3
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 11.3
+  },
+  {
+   "x": 783,
+   "y": 171,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    4.3,
+    2.3,
+    87.7
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 87.7
+  },
+  {
+   "x": 225,
+   "y": 193,
+   "r": 4,
+   "center": 140.3,
+   "edges": [
+    144.7,
+    58.7,
+    99,
+    187.7
+   ],
+   "edgeMin": 58.7,
+   "edgeMax": 187.7
+  },
+  {
+   "x": 784,
+   "y": 193,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    2.3,
+    2.3,
+    142.7
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 142.7
+  },
+  {
+   "x": 197,
+   "y": 163,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    54.3,
+    2.3,
+    2.3
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 54.3
+  },
+  {
+   "x": 767,
+   "y": 205,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    119.3,
+    2.3,
+    10
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 119.3
+  },
+  {
+   "x": 193,
+   "y": 227,
+   "r": 4,
+   "center": 183.3,
+   "edges": [
+    178,
+    184.7,
+    180.3,
+    179.7
+   ],
+   "edgeMin": 178,
+   "edgeMax": 184.7
+  },
+  {
+   "x": 787,
+   "y": 237,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    109,
+    2.3,
+    96
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 109
+  },
+  {
+   "x": 128,
+   "y": 190,
+   "r": 4,
+   "center": 2.3,
+   "edges": [
+    2.3,
+    52.7,
+    2.3,
+    2.3
+   ],
+   "edgeMin": 2.3,
+   "edgeMax": 52.7
+  }
+ ],
+ "at460": {
+  "uSize": 6,
+  "uStroke": 1,
+  "scale": 1
+ },
+ "guards": {
+  "wrongAccepted": []
+ },
+ "checks": {
+  "rimLayerPresent": true,
+  "rimOnlyAtRim": true,
+  "rimVisible": true,
+  "rimIsShaderRing": true,
+  "rimSizeFromMeasurement": true,
+  "rimScaledToViewport": true,
+  "ringHollow": true,
+  "solidHasDarkCenter": true,
+  "ringBrighterThanSolid": true,
+  "backToOriginalAt460": true,
+  "guardsThrow": true
+ },
+ "problems": []
+}

@@ -27,3 +27,13 @@ grids.html?t=lines保留点击高亮，增加真实入边到对边段和每向�
 累计144/285，剩141。本批拓扑直线局部验收1段；四边网1068帧学习/主体保留，未新增原生成阶段动画、6度顶点启发式或无限铺设验收。原版辅助导出/质量分布接口、游戏连刷/手柄和飞岛支撑规则仍分别待补；游戏副本未同步。
 
 补充回归：atlas-browser.cjs三主场GPU、手机/图集和定时清理通过，三主场截图已查看。首页/pipeline实际显示144/285、剩141及拓扑直线入口；285条README/本地视频一致、泳道缺0段、diff检查通过。
+
+## 第 56 批（C06）
+
+### 1384958097542819845
+- 做了什么：新建 src/ui/game-ui-c06.js 的拓扑直线层（主场景 ?topoline=1）：鼠标移动时按移动方向选出口边，用共享 traceStraightReport 正反两向拼成整条线画白色虚线；方向键/手柄十字键（navigator.getGamepads 轮询）让光标沿拓扑直线一格格走、左右换向；「直线连刷」工具按下拖动把整条线每格加一层，进同一撤销栈
+- 落点：src/core/grid.js · src/ui/game-ui-c06.js · index.html?topoline=1
+- 测试：tests/game-ui-c06.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-topoline-loop.png、artifacts/coverage/shots-r56/C06-gameui-menu.png（已看）
+- 对照：空海面上俯视一条 46 格闭环虚线，与 0285–0299 帧一致；连刷 181 格后撤销完全恢复。真实手柄硬件没测（无设备），只测了键盘路径
+- 判定：done

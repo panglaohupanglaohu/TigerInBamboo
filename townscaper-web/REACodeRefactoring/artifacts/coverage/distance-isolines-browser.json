@@ -1,0 +1,23 @@
+{
+  "reports": [
+    {
+      "coarse": {
+        "spacing": 1.25,
+        "levels": 4,
+        "segs": 374,
+        "closed": 9,
+        "max": 5.0990195135927845
+      },
+      "dense": {
+        "levels": 2,
+        "segs": 128
+      },
+      "sameGeom": {
+        "segs": 374,
+        "closed": 9
+      },
+      "outside": 0
+    }
+  ],
+  "errors": []
+}

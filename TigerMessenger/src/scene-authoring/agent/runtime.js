@@ -16,7 +16,7 @@ export class Watchdog {
     this.jobs.set(id, job); this.onEvent({ type: 'job', id, name, state: 'running' });
     return job;
   }
-  beat(id, stage) { const j = this.jobs.get(id); if (!j) return; j.last = Date.now(); j.stage = stage; this.onEvent({ type: 'beat', id, name: j.name, stage }); }
+  beat(id, stage, step) { const j = this.jobs.get(id); if (!j) return; j.last = Date.now(); j.stage = stage; this.onEvent({ type: 'beat', id, name: j.name, stage, ...(step ? { step } : {}) }); }
   stop(id, state = 'done') { const j = this.jobs.get(id); if (!j) return; clearInterval(j.timer); this.jobs.delete(id); this.onEvent({ type: 'job', id, name: j.name, state, ms: Date.now() - j.startedAt }); }
   active() { return [...this.jobs.values()].map(({ id, name, stage, startedAt }) => ({ id, name, stage, ms: Date.now() - startedAt })); }
 }
@@ -28,7 +28,7 @@ export class WorkerSlot {
     this.w = new Worker(this.file, { type: 'module', name: this.name });
     this.w.onmessage = ({ data }) => {
       const p = this.waiting.get(data.job); if (!p) return;
-      if (data.heartbeat) { this.dog.beat(p.id, data.stage); return; }
+      if (data.heartbeat) { this.dog.beat(p.id, data.stage, data.step); return; }
       this.waiting.delete(data.job); this.dog.stop(p.id, data.ok ? 'done' : 'failed');
       data.ok ? p.resolve(data.result) : p.reject(new Error(data.error));
     };
@@ -57,7 +57,8 @@ export function experienceStore(key, storage = globalThis.localStorage) {
       const has = (r) => r.steps?.some((s) => s.id === id);
       const runs = rows.filter((r) => r.outcome === 'previewed' && has(r));
       return { runs: runs.length, passed: runs.filter((r) => r.verify !== 'fail').length, failed: runs.filter((r) => r.verify === 'fail').length,
-        committed: rows.filter((r) => r.outcome === 'committed' && has(r)).length, lastFailure: [...runs].reverse().find((r) => r.verify === 'fail')?.why || '' };
+        committed: rows.filter((r) => r.outcome === 'committed' && has(r)).length, lastFailure: ((f) => f && (!f.blame?.length || f.blame.includes(id)) ? f.why : '')([...runs].reverse().find((r) => r.verify === 'fail')) };
+      // 失败只记在出问题的能力上（blame）；没有指明是谁时才算在整条管线上
     },
   };
 }

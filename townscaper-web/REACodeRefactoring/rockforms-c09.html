@@ -1,0 +1,37 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>岩脊 / 岩柱群 / 架空岩盖 c09 · 共享 World</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#edf4f3;color:#20343c;font:14px/1.5 system-ui}header{padding:8px 14px}iframe{border:0;width:100%;height:calc(100vh - 120px)}a{color:#26758a}#stats{font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;max-height:48px;overflow:auto;background:#f8fbfa;padding:4px 8px}label{margin-right:10px}</style>
+<header><b>岩脊 / 岩柱群 / 架空岩盖</b>（1708815475801505819 斜向崖脊、1671808851895627776 岩檐悬垂）· 第 56 批 C09-B · 主场景 index.html?scene=terrain 同一个 World / WorldMesh ·
+<a href="?kind=ridge">斜脊 + 柱群</a> · <a href="?kind=dolmen">石桌岩盖</a> · <a href="?kind=dolmen&cam=low">岩盖低机位</a> · <a href="?kind=ridge&soft=0">斜脊关软坡（台阶对照）</a> · <a href="overhang.html">overhang.html</a>
+<div id="stats">加载中…</div></header>
+<iframe id="scene"></iframe>
+<script type="module">
+/* URL: ?kind=ridge|dolmen&grid=quad|mixed&soft=1|0&guard=1|0&cam=orbit|low|top&yaw=&pitch=&dist=&clean=1
+ * 只写共享 World（rockforms-c09.js）+ world.softTops / worldMesh.shapeOptions 开关，不改 view.js / worldmesh.js。 */
+import { rockScene, capUndersideArea } from './src/terrain/rockforms-c09.js';
+import { rockTopology } from './src/core/rock-topology.js';
+const q = new URLSearchParams(location.search), kind = q.get('kind') === 'dolmen' ? 'dolmen' : 'ridge', grid = q.get('grid') === 'mixed' ? 'mixed' : 'quad';
+const f = document.querySelector('#scene'); f.src = 'index.html?scene=terrain&grid=' + grid;
+async function apply() {
+  const r = f.contentWindow.rea, w = r.world, v = r.view;
+  const rep = rockScene(w, { kind, s: 1, seed: +(q.get('seed') || 1) });
+  w.softTops = q.get('soft') !== '0';
+  v.worldMesh.shapeOptions = { guardCells: q.get('guard') !== '0' };
+  v.changed(); v.worldMesh.invalidate();
+  if (q.get('clean') !== '0') { const st = f.contentDocument.createElement('style'); st.textContent = 'body *{visibility:hidden!important}#view{visibility:visible!important}'; f.contentDocument.head.appendChild(st); for (const k of ['clouds', 'birds', 'boats', 'butterflies', 'flags']) try { v.setDebug(k, false); } catch (e) {} }
+  const cam = q.get('cam') || 'orbit';
+  v.target.set(0, kind === 'ridge' ? 1.6 : 1.4, 0);
+  v.distance = +(q.get('dist') || (cam === 'low' ? 13 : 19));
+  v.yaw = +(q.get('yaw') || (kind === 'ridge' ? 0.75 : -0.5));
+  v.pitch = +(q.get('pitch') || (cam === 'low' ? 0.12 : cam === 'top' ? 1.1 : 0.55));
+  v.updateCamera();
+  await new Promise((ok) => setTimeout(ok, 1500));
+  const shape = v.worldMesh.shape ?? null, topo = rockTopology(w);
+  const stats = { kind, grid, soft: w.softTops, parts: rep.parts, houses: rep.houses.length, voidCells: rep.voidCells,
+    rock: { voxels: topo.rockVoxels, undersides: topo.undersides, cavityColumns: topo.cavityColumns, unsupported: topo.unsupported },
+    capArea: shape ? (({ cells, ratio, minRatio }) => ({ cells, ratio: +ratio.toFixed(3), minRatio: +minRatio.toFixed(3) }))(capUndersideArea(w, shape)) : null,
+    guardedSlices: shape?.guard?.guardedSlices ?? null };
+  window.__c09rock = stats; document.querySelector('#stats').textContent = JSON.stringify(stats);
+  if (q.get('spin') === '1') { const t0 = performance.now(), y0 = v.yaw; const tick = () => { v.yaw = y0 + (performance.now() - t0) / 4000; v.updateCamera(); requestAnimationFrame(tick); }; tick(); }
+}
+const timer = setInterval(() => { const r = f.contentWindow.rea; if (r?.view?.worldMesh) { clearInterval(timer); apply(); } }, 200);
+</script></html>

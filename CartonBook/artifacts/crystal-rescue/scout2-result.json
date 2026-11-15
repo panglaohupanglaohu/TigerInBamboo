@@ -1,0 +1,562 @@
+[
+  {
+    "shotId": "swamp0",
+    "file": "swamp0.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -138.53253809178142,
+        -57.23306235012019,
+        -101.09897360446544
+      ],
+      "aim": [
+        -101.26415666241391,
+        -73.80187995143525,
+        -72.36672640850931
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "swamp1",
+    "file": "swamp1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -120.89630450652325,
+        -68.56184390284679,
+        -89.23002363166606
+      ],
+      "aim": [
+        -100.91424596212913,
+        -73.54686308912898,
+        -72.1166686116589
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "swamp2",
+    "file": "swamp2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -127.2297159030319,
+        -78.22805319079532,
+        -70.50965242583383
+      ],
+      "aim": [
+        -100.91424596212913,
+        -73.54686308912898,
+        -72.1166686116589
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "swamp3",
+    "file": "swamp3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-swamp-placement",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -104.45086113779733,
+        -95.57906790658996,
+        -84.68942900787589
+      ],
+      "aim": [
+        -100.91424596212913,
+        -73.54686308912898,
+        -72.1166686116589
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "tiger0",
+    "file": "tiger0.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -114.88266325558227,
+        -62.576138888305046,
+        -64.56349881017785
+      ],
+      "aim": [
+        -114.20651964101276,
+        -62.40672589642284,
+        -65.12254178764773
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "tiger1",
+    "file": "tiger1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -114.05255947254933,
+        -63.440033169666,
+        -64.84405229787835
+      ],
+      "aim": [
+        -114.23310681659409,
+        -62.56828389458383,
+        -64.92057587563117
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "tiger2",
+    "file": "tiger2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -114.84338837123192,
+        -62.187847316198905,
+        -65.01444895884518
+      ],
+      "aim": [
+        -114.26274293263107,
+        -62.77322909723979,
+        -64.67009587688217
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "tiger3",
+    "file": "tiger3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -114.16265340907127,
+        -63.16421171158484,
+        -65.37119473467251
+      ],
+      "aim": [
+        -114.28837313551148,
+        -62.98144726112614,
+        -64.4218835601716
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "tiger4",
+    "file": "tiger4.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -114.93483212956117,
+        -63.775157676156226,
+        -64.46742319624511
+      ],
+      "aim": [
+        -114.3099896838377,
+        -63.19287549561327,
+        -64.17601389604269
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "fox0",
+    "file": "fox0.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -30.399169892134363,
+        157.25359345963227,
+        28.49399566266993
+      ],
+      "aim": [
+        -34.21080487084581,
+        154.927727912183,
+        28.641604077917417
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "fox1",
+    "file": "fox1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -33.952841322993585,
+        155.62723276774287,
+        33.04661801263177
+      ],
+      "aim": [
+        -34.21080487084581,
+        154.927727912183,
+        28.641604077917417
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "fox2",
+    "file": "fox2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -35.06291066485659,
+        156.91886738964868,
+        24.73401155859161
+      ],
+      "aim": [
+        -34.21080487084581,
+        154.927727912183,
+        28.641604077917417
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "fox3",
+    "file": "fox3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -38.828775755058146,
+        156.25345110241128,
+        29.46428441404936
+      ],
+      "aim": [
+        -34.21080487084581,
+        154.927727912183,
+        28.641604077917417
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "fox4",
+    "file": "fox4.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "fox-ali",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -34.36716684316506,
+        159.21167097098234,
+        30.04993031944581
+      ],
+      "aim": [
+        -34.21080487084581,
+        154.927727912183,
+        28.641604077917417
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  }
+]

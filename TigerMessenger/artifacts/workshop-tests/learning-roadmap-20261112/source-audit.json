@@ -1,0 +1,4401 @@
+{
+  "scope": "Original src/engine JS; no execution, no behavior equivalence claim",
+  "modules": [
+    {
+      "source": "src/adjacency.js",
+      "sha256": "c4734ada0f008da717aeed85ec13cb5622380ecae30c1698283a504eda9e482c",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/adjacency.js",
+          "exists": true,
+          "sha256": "c90f66e56b048b52b5addf1af19ef6598525dcbfdf527c5f7b631fea62b74ff8"
+        },
+        {
+          "path": "adjacency.html",
+          "exists": true,
+          "sha256": "d65b49754119902f5f31d1a455083998fe0cdf5be222f41b12ee0374f5b502ed"
+        },
+        {
+          "path": "wfc.html",
+          "exists": true,
+          "sha256": "f50297f050d55e1871ce8d713c666055e1aa7f2fda6a0df96b7083fde7b3678c"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "几何抽边、边界候选与共享网格审核已补；平移/平行等长仅为候选，不保证完整面轮廓或实体无碰撞。实际建筑多格tile接入仍独立待做。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/app.js",
+      "sha256": "2e946fd83732a2a8517dfda60d0825d890c329923edc7bb2748af782b29097ae",
+      "imports": [
+        "three",
+        "./quadgrid.js",
+        "./town.js",
+        "./scene.js",
+        "./demo.js",
+        "./save.js",
+        "./learnpanel.js"
+      ],
+      "targets": [
+        {
+          "path": "src/world/app.js",
+          "exists": true,
+          "sha256": "a8eeed94fb3ca0d8332aaeeb830c722d8d145cc3e6785c41dfaa7107124833ec"
+        },
+        {
+          "path": "src/core/snapshot-replay.js",
+          "exists": true,
+          "sha256": "b8b28fa398e66e34575bb249d4c0a7cd2c78aa1eb8638e5f8a4dd89d411720ab"
+        },
+        {
+          "path": "src/tools/objexport.js",
+          "exists": true,
+          "sha256": "3bbd635fe0244f9d908dc9dea31d7b3b0e7550c6707eda8fcbaf6878b9b768c4"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "本批288+167帧复核，保留共享编辑/撤销；新增回放取消/异常恢复、只读UI与60条截断修复，精确OBJ坐标/法线语法/属性校验，双网格实际下载和历史回归通过。未覆盖第三方DCC导入验收、实例植被/水/完整材质导出与逐动作动画/水花/音效/镜头轨迹录制。",
+      "domains": [
+        "core",
+        "tools",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/archvoid.js",
+      "sha256": "606360b1994f9cd39d92aed6971c4c487e4de25a8c6a78c408531cbf25bf4c06",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/arch-profile.js",
+          "exists": true,
+          "sha256": "22338e6ac7e38b9441702391372cb542833fa30ad28379d83330f57c6b6830a2"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）楔石 / 键石 / measureArch / 变形弦误差接进真实拱（开关默认关）；原水渠美术未复现。",
+      "domains": [
+        "build",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/ballistic.js",
+      "sha256": "08435a1f35974ff154022dd7afbcf93b740e73ffa46f9b47606eecbebfbb315b",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/ballistic-table.js",
+          "exists": true,
+          "sha256": "7cb8188195b76077eed25ac4441c02f66b31906b148ebee8d9ea4c772c76fbb4"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "exists": true,
+          "sha256": "9414fa2e3cb4a0ba51af015e8e8633fba4499fc7707df249a51f9eba2773f536"
+        },
+        {
+          "path": "ballistics.html",
+          "exists": true,
+          "sha256": "b6aa3b022a41252be964e3b58eab6e16ddd8f15b1bfb5b2db1c0f49445c338bf"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）Cost/Valid 表达式分开编译 + 带阻力烘表 + 候选轨迹；Battle 默认仍用无阻力表。",
+      "domains": [
+        "badnorth",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/barycentric.js",
+      "sha256": "692e32c0465ca23c27e9df80e09468aa68a619fe314f7212c3bea57d51fa8704",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/spatial.js",
+          "exists": true,
+          "sha256": "1a4258cc7a5a91b5ce22bac3c0413632c0620eedcd08c60a6154d6438f16f012"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）baryPrep3 任意 3D 平面重心（投影权重 + 离面距离，极瘦三角稳定），XZ 上与 baryPrep 一致；教学 gizmo 页未做。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/birds.js",
+      "sha256": "74f3bd561fde3120eb8972154edd2c18d67b3dd703bf2fecd65dcbacedfd65af",
+      "imports": [
+        "three",
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/life/birds.js",
+          "exists": true,
+          "sha256": "0f2cd63f63139446a0ee14109053ad366affc5f742c1d20fb60c67d3877b24a2"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/blobrelax.js",
+      "sha256": "fb742bdd6d66e6e6592564c87d785c8c55a47296029d4eb3808086357fddaecd",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/canopy.js",
+          "exists": true,
+          "sha256": "f7aefb671c7077b4b7e41ff72b897159276cb792598a6541b1546b01b8405974"
+        },
+        {
+          "path": "src/life/vegetation.js",
+          "exists": true,
+          "sha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4"
+        },
+        {
+          "path": "src/life/impostor.js",
+          "exists": true,
+          "sha256": "85286187f8e3e6f40a71f241673e67371802402bd9119f3aee70a7a98de8bdab"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "155帧复核，闭合球并集surface nets、三角形接缝松弛及真实树冠/烘焙输入通过；低分辨率歧义明确拒绝，原作MC/参数、美术及全局自交证明未复现。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/blobshadow.js",
+      "sha256": "f466cd22be5d7a1895829f624fd3b0aff6facfb4080ccd6131df2266f800ea42",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/life/unit-shadow-batch.js",
+          "exists": true,
+          "sha256": "ee18c59a6d3b30ac65f4b37e8133953d0191ecf4cb0d142850bf0a156b870e1c"
+        },
+        {
+          "path": "src/badnorth/battle-g3.js",
+          "exists": true,
+          "sha256": "0c05108cecffd85906b7c5a31588eb57008b42a5d1bd3aa217417d5d6ef8508d"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）5 射线拟合平面贴形变斜坡（shadowFit 默认关），12° 斜面误差 .006。",
+      "domains": [
+        "badnorth",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/borderpath.js",
+      "sha256": "1682a52880ccb85908f253314094da9f73210c017ad7652ad7dfe963114938c8",
+      "imports": [
+        "../engine/sphere.js"
+      ],
+      "targets": [
+        {
+          "path": "src/campaign/frontier-overlay.js",
+          "exists": true,
+          "sha256": "7028c99ef272e92b1a78dfef5ab7dcfc08a8157ae56680c8f84ad2c406574cfb"
+        },
+        {
+          "path": "campaign.html",
+          "exists": true,
+          "sha256": "65cb9a6b42f6a14bcbb14c5b7cc57dae85b549b9ede2d7820c9f4111bb1b0b0a"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）campaign.html ?fields=1 画多条前线与两侧场；ear-clip 长扇三角保真度问题未改。",
+      "domains": [
+        "campaign"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/bouncegi.js",
+      "sha256": "7424513a0a4d483883b4b1c46c38fc1f301c42d48aacf7adebd6ca6560a9d4d7",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/light/surface-bounce.js",
+          "exists": true,
+          "sha256": "2eb1e06c46c88d86e2eb591a730c57d5bde11cf7390198aa6f1b0bc4b34bd395"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）split 模型与蒙特卡洛参考相关 0.53→0.82–0.91、总量比≈1、系数=1；两跳 gather 纹理接进 View 间接光。",
+      "domains": [
+        "light",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/boxtest.js",
+      "sha256": "3ca285ffe38d67b710297674c5125f8fdf90bfda873f23627e956497b928d12b",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/obb.js",
+          "exists": true,
+          "sha256": "9a45bcaa08facd51007da69c93b5ddedfb49fde6336d135194e89ef64b9c715c"
+        },
+        {
+          "path": "src/badnorth/landing-plan.js",
+          "exists": true,
+          "sha256": "bc327649f6660099f0966d82476eda3294617e671fd49544ad768bed597de6ee"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）穿透深度、俯视 2D、裁剪面积真值、航道避礁石陆地、换车道；无动态避让（原版同为静态）。",
+      "domains": [
+        "badnorth",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/campaignmap.js",
+      "sha256": "f93a786927fa7abd11c71fcddb6945d1d3c89dd84cffa0e736e8d980458b0fa1",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/campaign/campaign.js",
+          "exists": true,
+          "sha256": "e5417aae0f9ead404263eea24116f4581d8638ea9c35bcc175611cf95c810076"
+        },
+        {
+          "path": "src/core/campaign-graph.js",
+          "exists": true,
+          "sha256": "9f4032c1c3a8f3e41ff6306663dd78963fa1107325796a22f0bc9056052e7129"
+        },
+        {
+          "path": "campaign.html",
+          "exists": true,
+          "sha256": "65cb9a6b42f6a14bcbb14c5b7cc57dae85b549b9ede2d7820c9f4111bb1b0b0a"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "本次目录重扫补录同职责文件。原版scatter/cull/walk/branches/extras在重构战役页/共享图管线有对应，图连通修复已有旧运行证据；保留原版kNN与重构Delaunay+近邻的算法差异，未逐个导出兼容、不声称917405214638006273已全帧。",
+      "domains": [
+        "campaign",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/cavepath.js",
+      "sha256": "4e8403fbbfa2b753ee975a450e93d540906c2a68aa7348db2c89e0ad3fdd0a9f",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        },
+        {
+          "path": "src/world/layerednav.js",
+          "exists": true,
+          "sha256": "dde230ab0727f07bc139a6f69e0feea2b850d79de832aa603f68e9afb95786a2"
+        },
+        {
+          "path": "navigation.html",
+          "exists": true,
+          "sha256": "00a2540b31a943fd9d8c970b3667990bd7baa136dcf3605adf6cd412b0e322cf"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "分层导航路线天然带层号，测试确认穿洞 / 翻越分层；未做弧长重采样与法向偏移的可视化。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/cheesenav.js",
+      "sha256": "664386994c5f2d20ca851e49832e272332745da38dd5f556cf96e308b2236b22",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/fine-portals.js",
+          "exists": true,
+          "sha256": "9607d28ea213a50bb9d50b73794541c47fc20143104cb8aab43314131b010d58"
+        },
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        },
+        {
+          "path": "navigation.html",
+          "exists": true,
+          "sha256": "00a2540b31a943fd9d8c970b3667990bd7baa136dcf3605adf6cd412b0e322cf"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）格内精细门户 + 形变侧壁（共享 fine-portals.js）接进 BattleNavigation（finePortals，默认关）与 navigation.html。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/clouddeck.js",
+      "sha256": "f9f838b0c11fdff85f74bbc919832c176a6fdf6a4ab0d5cc6817859c3c642407",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/cloud-deck-layer.js",
+          "exists": true,
+          "sha256": "5b1d2d36f88c87ed24d5c7b34f86239f0e59e9634f1fd0f08b953a09b23bed39"
+        },
+        {
+          "path": "src/core/cloud-depth.js",
+          "exists": true,
+          "sha256": "1a145432fb9f66b932c7136829ed70fe3483c965083139878fb24f0789e8e750"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=clouddeck 三圈高耸积云带视差 + 云影投到地形屋顶；水面不读云影。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/colorgamut.js",
+      "sha256": "1edece2248e260f457b89d7142bd347eb2894c8c033eb57c7ff7ca98dc559e36",
+      "imports": [],
+      "targets": [
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [],
+      "mapped": true
+    },
+    {
+      "source": "src/colorvolume.js",
+      "sha256": "016f184b2a96f8f01d4707a785223859f25b7d5c3cbbfc22beec7d4378138292",
+      "imports": [
+        "./contrasttex.js"
+      ],
+      "targets": [
+        {
+          "path": "src/core/color-volume.js",
+          "exists": true,
+          "sha256": "ed9ebddfcbd4bb54ee3550d94a746e568daaa5b870a222bf692bd278ca1773ba"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        },
+        {
+          "path": "src/ui/shading-panel.js",
+          "exists": true,
+          "sha256": "9956f58661443dc07dd167e9d3c14e9122b5d5ed1d9de4e5c6d2e086c4a089ef"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）每格五特征栅格 + GPU 八角点 OKLab 三线性插值接进 View（?shade=colorvolume，默认关），面板角点取色器实时改；浏览器开关对照已看。",
+      "domains": [
+        "core",
+        "ui",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/combatfx.js",
+      "sha256": "333ea38951dbdafe77d59a40ab2b9082b51348759616632ad2f26a4df51c5198",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/melee-sweep.js",
+          "exists": true,
+          "sha256": "ca0bad202a1dc780bc566d70b93f3abdc50a104fdaf3dcf1156f411e2ad51548"
+        },
+        {
+          "path": "src/badnorth/battle-g3.js",
+          "exists": true,
+          "sha256": "0c05108cecffd85906b7c5a31588eb57008b42a5d1bd3aa217417d5d6ef8508d"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "exists": true,
+          "sha256": "9414fa2e3cb4a0ba51af015e8e8633fba4499fc7707df249a51f9eba2773f536"
+        }
+      ],
+      "upstreamStatus": "部分覆盖",
+      "gap": "（第 55 批）旋转扫掠、刃碰墙遮挡、盾推力接进 Battle（meleeFx 默认关）；缺原作动作美术（只有程序化刃）。",
+      "domains": [
+        "badnorth",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/contrast.js",
+      "sha256": "d6015f18a853b634e64ed465a066ee81ae799a23f2aef5d898e7fc84507f4a0a",
+      "imports": [],
+      "targets": [
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [],
+      "mapped": true
+    },
+    {
+      "source": "src/contrasttex.js",
+      "sha256": "3359896df58ea280b3427353c1708c86c2d1092dcc358dbf8af307fbaf2f8c59",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/contrast-field.js",
+          "exists": true,
+          "sha256": "05f819449be2e597e104630864c1de76abdb0a017af19e21037afc69da9cdd3d"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）World 三角扇 OKLab 松弛（ΔE 13.75→0.10）画进 512² 世界图，顶面取色 + 对比边细线接进 View；浏览器对照已看。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/coroutine.js",
+      "sha256": "66d1c582ab969c19e9cf3b827fac0caf2aea20e138bb6eaf7bb4463b770d85bd",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/coroutine.js",
+          "exists": true,
+          "sha256": "7abe00db49ea2d62baee7211f9611ba8a8484352530d4bce7bed5491b017f09b"
+        },
+        {
+          "path": "scheduler.html",
+          "exists": true,
+          "sha256": "216d4c171c3ed08836d47ef645465a9c6744a74eeba41b28038c54d800018468"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "嵌套递归、预算、取消和演示已补；合作式步骤不可抢占，取消仅同步finally清理。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/demo.js",
+      "sha256": "46203bb44c70238a19c31a7cb0a7efc5dae8d404096e53b7f770be24843f64e4",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/townDemo.js",
+          "exists": true,
+          "sha256": "bff7742dc1b58a0304194e75caae977483f5182bd36d072230d2946987bcf91a"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/depfill.js",
+      "sha256": "f261027499a7891cbd4bf6ce189d95ab55b38d22792ab4b61a33e3cb6a28fb6a",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/depression-fill.js",
+          "exists": true,
+          "sha256": "35eb9bfa0ea88d315f67b1283f644674447f2231480fdf7e21033c1b8fdf1766"
+        },
+        {
+          "path": "src/terrain/drainage.js",
+          "exists": true,
+          "sha256": "95cfd8b4bc6fa04b20253f0ec7f1240eb0eca76f418268545fd78f78e68be553"
+        },
+        {
+          "path": "src/terrain/terrainmesh.js",
+          "exists": true,
+          "sha256": "0b5e31d3d93fb06df6f7713e99e35e35d14b8dbee85f742f16e9fec9f3c5584b"
+        },
+        {
+          "path": "terrain-r55.html",
+          "exists": true,
+          "sha256": "3a4525b252d675a1653b031438a20e3e1622f41ba6ab6eaad61d67c891dd6b2e"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）水位填洼写 World.lakes，terrainmesh 画湖面多边形；整数 stream-power + 崩塌侵蚀。湖面为平面河色，非独立水 shader。",
+      "domains": [
+        "core",
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/dfgrow.js",
+      "sha256": "a6ed252d5ab7899e486eb401d21f049b0c151d4110652feff0791d89704ed7fe",
+      "imports": [],
+      "targets": [
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [],
+      "mapped": true
+    },
+    {
+      "source": "src/dirsprites.js",
+      "sha256": "c0bce3c51372888f615b1c5f9b5bd8ec44e402aa1e35fdb2917e50bd34e9cbe8",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/sprite-ambiguity.js",
+          "exists": true,
+          "sha256": "3806cc7063524a937e92067bf8e0b14b56735cf0a7cf6f7f6ea34f5bae3a2379"
+        },
+        {
+          "path": "src/life/unit-sprites.js",
+          "exists": true,
+          "sha256": "0151d9508f64e956082e75535426bbfd0be8d2af372d8b94bfe0e5a037897631"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "exists": true,
+          "sha256": "9414fa2e3cb4a0ba51af015e8e8633fba4499fc7707df249a51f9eba2773f536"
+        },
+        {
+          "path": "sprites.html",
+          "exists": true,
+          "sha256": "8c7a0ae225257510ba91127385980587bb97accdba03f2da484b870f7aa18113"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留翻转指标、锚点/alpha修复及单方向模式；新增逐单位UV血斑和受击摆动。原作美术、完整兵种/攻击动画与精灵阴影待补齐，保留原3D模式。",
+      "domains": [
+        "badnorth",
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/doodlewall.js",
+      "sha256": "8704ff601a1993f2051fc4da285e0760a5c9b156d814cdbd009e6248020a21f1",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/doodle-layout.js",
+          "exists": true,
+          "sha256": "d354545fb65031433f260d903f51c3bcefebe79a6bd7c0825d08c8a3966003ea"
+        },
+        {
+          "path": "src/build/doodle-wall.js",
+          "exists": true,
+          "sha256": "797fa25288330ce306a6d618abdad8f8440e1aadadeae4480de0c371b62e3310"
+        },
+        {
+          "path": "src/world/doodle-overlay.js",
+          "exists": true,
+          "sha256": "e3da21b0400ede662998e6f893d4e85fecc77b614b67bb94840255ed44d1e5ab"
+        },
+        {
+          "path": "doodle.html",
+          "exists": true,
+          "sha256": "be86611e2aa74c2b16f69e21cba296ed3215309a7c8b857e6de76faf3039efe9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "墙饰生成器和World可选贴面已迁移：板号种子、逐板裁剪、墨线遮罩。完整室内走廊/弧顶/门口版式、纹样复杂度及贴面光照烘焙仍待补。",
+      "domains": [
+        "build",
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/dual.js",
+      "sha256": "c7597ed901fec077dbbe272f1f523169e41ed185ce9be827dea8ad8a968fc51d",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/life/flora-species.js",
+          "exists": true,
+          "sha256": "0ba03724c2bc138d005d4c040bbebce28d11d730ab6c0aaee652f9b288cd9c94"
+        },
+        {
+          "path": "src/core/vertex-dual.js",
+          "exists": true,
+          "sha256": "8c32d9679cf28bbd37bb9070c44363a231cd000b6464570c21ec2947507e24a2"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=dualflora 地被落到顶点对偶点 + 崖壁竖面落点 dualWallSites。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/edgeplant.js",
+      "sha256": "0e05dc70235d99314ea40d5083c9b7f3a7d1bc60d582617c46f319c46159288d",
+      "imports": [
+        "./bouncegi.js"
+      ],
+      "targets": [
+        {
+          "path": "src/life/vegetation.js",
+          "exists": true,
+          "sha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4"
+        },
+        {
+          "path": "src/core/garden-paths.js",
+          "exists": true,
+          "sha256": "3c65e95fe746f692fb02b80315e532ce88ac5d08e7e88811d7ea79e3942c2c0b"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        },
+        {
+          "path": "garden.html",
+          "exists": true,
+          "sha256": "36cc3f1e391bdebfba02a0283089c867b0964f86a94256ae888a3e48cbd758f6"
+        },
+        {
+          "path": "src/core/edge-inset.js",
+          "exists": true,
+          "sha256": "51eae500a1323d6373f5852b031e053dd76515047ff08dba2f16ef9850578ea8"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留崖沿/墙根植被，新增共享World院内连通路由；原版完整CPU统计/平面渲染接口、原作门洞规则/细石板/中心装饰未完整迁移。草丛contrast texture+背景射线原法仍未实现，不能由静态邻崖启发式替代。 本批599帧复核确认原作纯纹理灌木，已有球团近似保留；修复基于未形变格心的错误内收方向并对薄格限幅，双网格实例锚点通过。原片纹理灌木/微阴影仍未实现，锚点在格内不保证球团整个体积在内。 续作600帧多岛生成已学，未从效果臆测内部纹理生成算法，保留待实现。",
+      "domains": [
+        "build",
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/edgesmooth.js",
+      "sha256": "225da37b769ae09eb38139239e27b7c8af2bf8a5c9d93e2c4e73ac672891522a",
+      "imports": [
+        "straight through"
+      ],
+      "targets": [
+        {
+          "path": "src/terrain/edge-square-relax.js",
+          "exists": true,
+          "sha256": "d5fd529a794d843f1adbf5524dc7b7c0017bd235c8bc66ad16ed552cc8ff171e"
+        },
+        {
+          "path": "edge-smooth.html",
+          "exists": true,
+          "sha256": "74544e85fad0eb0c34b49eda24871a8c52d835800f8886b18ca7a149a733822c"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）方格目标松弛 + 边类层级复现 regularity 大降（26.9→14.1），硬线不动。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/floatprobe.js",
+      "sha256": "f6862d355d3eb7f8f0f26f609defa2a47ff8181995f572a880aac89f6c09af38",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/float-advect-gpu.js",
+          "exists": true,
+          "sha256": "93850efd2e2bf4b4685f44279672954e2d10d9566a8837cc1c2038e304fad960"
+        },
+        {
+          "path": "float.html",
+          "exists": true,
+          "sha256": "77105d74202c9cf2492166b91dcdee4b5ee6215e5e8ba9d8f3856d077f9af5f2"
+        }
+      ],
+      "upstreamStatus": "部分覆盖",
+      "gap": "（第 55 批）WebGL2 实测 32F/16F/8 位 ping-pong 平流与 CPU 仿真一致（16F 差 1.9e-6）；只有 SwiftShader 一个 GPU，跨平台矩阵测不了。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/flowdemo.js",
+      "sha256": "d98d7a74bca393367f686bfda55f517eeb71a0efa6afd9513e520cbefd59dd1a",
+      "imports": [
+        "three",
+        "./quadgrid.js",
+        "./town.js",
+        "./terrainmesh.js",
+        "./lighting.js",
+        "./voxelflow.js",
+        "./townmesh.js",
+        "../engine/noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/world/view-post-extras.js",
+          "exists": true,
+          "sha256": "d93cf95147adf558fc94f9336adad6b936117624474815cdac8a4b918244ac21"
+        },
+        {
+          "path": "src/life/atmosphere.js",
+          "exists": true,
+          "sha256": "0af4ee512d4031ba48c3e7faa8406b90792a08c583220df952e098a32f550553"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=softnormals 软法线写回 View 主网格（37296 软化/276 保硬边），关时逐值还原。",
+      "domains": [
+        "life",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/flowfield.js",
+      "sha256": "18069077b730c51790dee5deb7f5fd6334db0d87942f71f88ca989eade7e67ad",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/navmesh-flow.js",
+          "exists": true,
+          "sha256": "a89ea94e28fefe71a1285e87f06e0904c782ec0134f392465bbe0836bda8352f"
+        },
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        }
+      ],
+      "upstreamStatus": "部分覆盖",
+      "gap": "（第 55 批）guardedFlowAt 解决鞍点（24/24 到达）；Battle 实测 quad 网格更慢，连续转向仍默认关。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/foliageblob.js",
+      "sha256": "4663e5226df272b461e6999c7c9a848fb21894e2175592ae7a3772a4c55fb682",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/canopy.js",
+          "exists": true,
+          "sha256": "f7aefb671c7077b4b7e41ff72b897159276cb792598a6541b1546b01b8405974"
+        },
+        {
+          "path": "src/life/vegetation.js",
+          "exists": true,
+          "sha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "canopy kernel:metaball；植被默认仍用 union，未切换默认。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/frontier.js",
+      "sha256": "80974f1d67342a2074e5ea13c2b97aea2cfa4bfb609042104df4e015744f8eb9",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/frontier-candidates.js",
+          "exists": true,
+          "sha256": "5489b2b2ef825c9bb927ea603e9a0202115b1858db57294322f108d6f6a3a3d4"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）expandFrontier 增量坍缩边放置 + 前向检查 + 导航互连并查集；一步前向检查不等于全局可行。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/fusion.js",
+      "sha256": "2239c080941056caca449a4fb660f8f167091d1d0dc846c3dc81b77b039c5d8c",
+      "imports": [
+        "three",
+        "./quadgrid.js",
+        "./town.js",
+        "./townmesh.js",
+        "./terrainmesh.js",
+        "./shore.js",
+        "./lighting.js",
+        "../engine/noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/world/scenes.js",
+          "exists": true,
+          "sha256": "d55c4dd400f232e500ccf8ab64dbd8b137a186ce68256bbae6fc1ec948e12508"
+        },
+        {
+          "path": "src/build/multicell.js",
+          "exists": true,
+          "sha256": "ab8f24ed8fa5d8d84afd2fc1a873183001559653be397f9d2a72f9923392c1e9"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "共享World融合场景及显式双格模板已运行验收；完整预制轮廓socket/多格联合求解另列splice后续。",
+      "domains": [
+        "build",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/grasscards.js",
+      "sha256": "c4563642297724749968af9ef52ada0fb1e967bed2135a2e6af0b924eb1611ae",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/life/vegetation.js",
+          "exists": true,
+          "sha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4"
+        },
+        {
+          "path": "src/life/leaf-surface.js",
+          "exists": true,
+          "sha256": "894300a9203411e4c16f9f795e3e9c699bfa21b36af7f43af3e8b73dce0056ac"
+        },
+        {
+          "path": "leaf-surface.html",
+          "exists": true,
+          "sha256": "e5f044a761186a4938104aaac5a93bc6b10898793cb30385e582e80ed261a224"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 本轮611帧复核仅补近景球冠/灌木纹理alpha；远景impostor/草卡片未接同一叶纹，原有实现保留，不升级为整模块运行通过。",
+      "domains": [
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/grid.js",
+      "sha256": "a60736e21f3384a9dd98d15aef2dd125432ca1b9e8f393c8bd50598671b90abd",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/grid.js",
+          "exists": true,
+          "sha256": "c9fe9bc4c9f7dcfeaa17cd6f66cc472a877818692236bcb4e4d208fceb50cf0f"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/gridmodes.js",
+      "sha256": "45d6da45b10c631db46ff3e8a9ae9fff1ba5dfb89a8af227c0f434e83bcb0096",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/wfc.js",
+          "exists": true,
+          "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e"
+        },
+        {
+          "path": "joint3d.html",
+          "exists": true,
+          "sha256": "a4a8119643d707b8cd2e4616a3300ddcf23a0a0cb102d25a79a234a5bcf81f27"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）layerGrid + layeredJointCatalog：多层辐条联合插槽、重力规则、跨层塔模块。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/gridpatch.js",
+      "sha256": "eb2d240e41829a6331e7711ae631d24331e739f7c8aac0ee136be79c3b1fe3a4",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/radial-patch.js",
+          "exists": true,
+          "sha256": "ccb1bef1d1de0b38f80d3581e7f94653f61675c58509c7c84dc068b29952f686"
+        },
+        {
+          "path": "gridpatch.html",
+          "exists": true,
+          "sha256": "754b5b01efaeebabf10ec779e9c836ede349fe358cb5f213b67735eaabba2917"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）模板库（radial/block/rhombus/courtyard）+ 带洞边界 + fitTemplatePatch，全凸无折叠面积守恒。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/gridwfc.js",
+      "sha256": "1b63bf5819beb4492b2afa8c27aae7109494ee75835dbb396ef599aba9ec55f9",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/wfc.js",
+          "exists": true,
+          "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e"
+        },
+        {
+          "path": "wfc.html",
+          "exists": true,
+          "sha256": "f50297f050d55e1871ce8d713c666055e1aa7f2fda6a0df96b7083fde7b3678c"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留已验收的任意多边形半边、确定性、迭代回溯、pins、预算与局部修复。本轮可选四分子格网格进入真实求解流程；四子格联合模块约束、3D预制tile/建筑和地形联合生成仍待补。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/grouping.js",
+      "sha256": "6b056bb6d53d5f4db8317023205135f73cd2a63f2df3a0a88f87ef416f71a190",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/region-groups.js",
+          "exists": true,
+          "sha256": "ba7f04b974194cf8bdf09bc21a8055ac79559a9190533ccc7f3f895f7e30ac01"
+        },
+        {
+          "path": "src/core/campaign-graph.js",
+          "exists": true,
+          "sha256": "9f4032c1c3a8f3e41ff6306663dd78963fa1107325796a22f0bc9056052e7129"
+        },
+        {
+          "path": "src/campaign/campaign.js",
+          "exists": true,
+          "sha256": "e5417aae0f9ead404263eea24116f4581d8638ea9c35bcc175611cf95c810076"
+        },
+        {
+          "path": "campaign.html",
+          "exists": true,
+          "sha256": "65cb9a6b42f6a14bcbb14c5b7cc57dae85b549b9ede2d7820c9f4111bb1b0b0a"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "两段773帧、100种子4455份连通历史和12次真实页面回放通过。共享World混合/四边形适配及权重切边量化通过；本地整组合并+节点调整，不承诺原作精确权重/调度或旧函数签名；固定迭代/512节点限制，边境轮廓另列。",
+      "domains": [
+        "campaign",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/halfedge.js",
+      "sha256": "8b0a126d00b5e9dc5ecf4acc64e95b3976d2784ca5ef316024d66abfa11853ea",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/halfedge.js",
+          "exists": true,
+          "sha256": "879f45847886252668c506d6963e4b4bf9a19c7b6f667b12e4547a65f48a04c5"
+        },
+        {
+          "path": "src/core/grid.js",
+          "exists": true,
+          "sha256": "c9fe9bc4c9f7dcfeaa17cd6f66cc472a877818692236bcb4e4d208fceb50cf0f"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "显式半边 next/prev/twin、边界环、顶点扇、Euler、方格切三角迁入并实测；grid.js 内部仍用 edgeNeighbors/edgeTwins。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/hiproof.js",
+      "sha256": "2a3900acf827c28d3913c9944a1f0e9ac02ca5a121df614d9593158a503545af",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/straight-skeleton.js",
+          "exists": true,
+          "sha256": "382d1459b48d9d623de1710f46706b49656573d08cf05ab64370680c210c8b05"
+        },
+        {
+          "path": "src/core/hip-roof.js",
+          "exists": true,
+          "sha256": "ac377d1217c517cca9578701885eacf1c9e803de78df2e45369f6671646ef5a4"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        },
+        {
+          "path": "building-kit-r55.html",
+          "exists": true,
+          "sha256": "d516d146b2a624101ab078dfe1af4a392dc80e67f202f92640910c566b0cac39"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）精确直骨架（含洞/凹屋顶谷线），多格块与带洞庭院全四坡。",
+      "domains": [
+        "build",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/holenav.js",
+      "sha256": "181bd8943b3b70830f49bffb2e67fe0c86b3741f23bd6103fbb60434c3388ca7",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/fine-portals.js",
+          "exists": true,
+          "sha256": "9607d28ea213a50bb9d50b73794541c47fc20143104cb8aab43314131b010d58"
+        },
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        },
+        {
+          "path": "navigation.html",
+          "exists": true,
+          "sha256": "00a2540b31a943fd9d8c970b3667990bd7baa136dcf3605adf6cd412b0e322cf"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）同 fine-portals：身高超拱顶封门，绕无顶缺口。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/housekit.js",
+      "sha256": "f5a2e0725749c1f80a3977b4c6c49939db1afd4e82dfc2a6a0254ee5f90c0a58",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/house-kit.js",
+          "exists": true,
+          "sha256": "92cb7f09e0f77e044c5c7ba5f77fdd10419d6622773e71c1361ea340bd4401e7"
+        },
+        {
+          "path": "src/build/village.js",
+          "exists": true,
+          "sha256": "5818e86497de5bd2195733040aee21418e253d8839fd8f78aae72d37ef5afcb3"
+        },
+        {
+          "path": "building-kit-r55.html",
+          "exists": true,
+          "sha256": "d516d146b2a624101ab078dfe1af4a392dc80e67f202f92640910c566b0cac39"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）8 档坡度池 + 程序化分层茅草 + scatterVillage 撒村写 World。",
+      "domains": [
+        "build",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/infograph.js",
+      "sha256": "e8695d86cf9dbe13594a8954f1941870d2bc3054bcc4f48524d0d4a2bd8fe4b8",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/badnorth/info-graph.js",
+          "exists": true,
+          "sha256": "8547f73ce159df11d6d202e1b3b848f5821e338a2d132bac58f6b84f7a4dcf33"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "exists": true,
+          "sha256": "9414fa2e3cb4a0ba51af015e8e8633fba4499fc7707df249a51f9eba2773f536"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）动态节点图（距离 / 同层 / 视线，每跳 ×0.55、≤2 跳），真实 Battle 中按同伴转告追击。",
+      "domains": [
+        "badnorth"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/islandpasses.js",
+      "sha256": "261ec9441ac8985f9e5029175097607a78acf3607109947bf6d789a5e6bc6eed",
+      "imports": [
+        "./terracecliff.js"
+      ],
+      "targets": [
+        {
+          "path": "src/core/terrace-edges.js",
+          "exists": true,
+          "sha256": "84b697aed67dd002d48dc43c53afe422435c88f22f216cbda4fbfa468a454870"
+        },
+        {
+          "path": "src/world/terrace-edges.js",
+          "exists": true,
+          "sha256": "8520d2bc68b776c18e9b851bcda4a5369ef67daf97726a083ec274d2d57fafff"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）finalSegments 与网格同一采样，台地边线与最终倒角零误差（3 模式×软坡×两网格）。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/learnpanel.js",
+      "sha256": "7e095e2588678a94c8dda2a1a5617062019902addfd94932c7cb04213fb3e7ac",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/ui/learnpanel.js",
+          "exists": true,
+          "sha256": "f5ab438e2b3ba985f59412c9579d9ab3d7fcbda4018d73eae1a92f532a913805"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "ui"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/levelflora.js",
+      "sha256": "465ebda192d2f0101daaf59bf12a4e22f82cb45961d1f37047a5ab7e2b0bac9d",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/life/flora-species.js",
+          "exists": true,
+          "sha256": "0ba03724c2bc138d005d4c040bbebce28d11d730ab6c0aaee652f9b288cd9c94"
+        },
+        {
+          "path": "src/core/level-flora.js",
+          "exists": true,
+          "sha256": "3cd269b4018077d9720a80de013476f95d328864ea694f87da8017bb2773a1ca"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）六种物种程序化几何，?fx=levelflora 每级台地形状可辨（无原素材）。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/lighting.js",
+      "sha256": "76083f5395dff4fbced6ee1de1988a10a4b04774fd2e7bd3a2c98052b57d6800",
+      "imports": [
+        "three",
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/light/voxel-field.js",
+          "exists": true,
+          "sha256": "16721215a0877f03a32299ddab58fdd7ca3d081244bcd4ff0eb8374eff6b2a4a"
+        },
+        {
+          "path": "src/light/bake.js",
+          "exists": true,
+          "sha256": "b8a1512bab3209c4489821a125ffcdd0ba36a7941d348d422fc913704d7644c2"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）分层场浮点纹理在 GPU 顶点着色器采样（已在 WebGL2 跑）+ 体素软法线写回主网格；与 G2 softnormals 勿同开。",
+      "domains": [
+        "light",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/lightingcache.js",
+      "sha256": "b7064bacc5895ab3357063be9af05f67a32e8f9968b6c87b62d309e38acc96a5",
+      "imports": [
+        "./lighting.js",
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/world/worldmesh.js",
+          "exists": true,
+          "sha256": "f4a5616fd7ab8dfc07fcda64283d02ef750415beea24ef42a04c430b76d6b007"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/looptown.js",
+      "sha256": "c847bc4edfaa2bae7e8dec22f02b76bece65fdace1e86220195f7c17f40ef099",
+      "imports": [
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "build"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/mandala.js",
+      "sha256": "52136713e27bfbb7a041528f4b3d699973d90d94d45f00ca486550f05253c939",
+      "imports": [],
+      "targets": [
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [],
+      "mapped": true
+    },
+    {
+      "source": "src/march.js",
+      "sha256": "4ee2296975c3e9fd3439d0836365107af05cfdf4b7055508fa8ed07215fd7f9b",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/contour.js",
+          "exists": true,
+          "sha256": "f664f3b41aca3b3288573eeb9790b132f932781c5f467f1c2745d891d1836156"
+        },
+        {
+          "path": "contour.html",
+          "exists": true,
+          "sha256": "aaf8eaf3367bc3779bd430c5a3227af031079d478eeabcf0d1a92d8fe51522f4"
+        },
+        {
+          "path": "grids.html",
+          "exists": true,
+          "sha256": "9838f2d42b4249f8227b82bf80aa26395c041eeb92d2238b32a499d3c15a9384"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "不规则网格 marching squares 完整迁移并实测（跨格端点重合 / 无蝴蝶结 / 鞍点决断 / 多层级）；岸线绘制仍是另一套。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/megatex.js",
+      "sha256": "9d9a327b9b65b2f01155e96ff1a9ae371173169b9d243bb658852dcc18be4570",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/light/texel-owner.js",
+          "exists": true,
+          "sha256": "fddc48c7cfc67a88a1c4ce5a6d37ff16e693be61be5f22db984434c8a9340344"
+        },
+        {
+          "path": "src/core/atlas.js",
+          "exists": true,
+          "sha256": "628b497799dd296fbc922a24c9b97d2fab3b9faadfb62788ee8325c7d421faff"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "owner 表反查 + 垫边防串色接共享 Atlas；未接 impostor 烘焙器 / SDF·AO 卷。",
+      "domains": [
+        "core",
+        "light"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/mesh.js",
+      "sha256": "cc89d56db5e4bb7680cf77a6748b116bf97f48092140635f41d8c77bd8e6e089",
+      "imports": [
+        "three",
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/world/worldmesh.js",
+          "exists": true,
+          "sha256": "f4a5616fd7ab8dfc07fcda64283d02ef750415beea24ef42a04c430b76d6b007"
+        },
+        {
+          "path": "src/core/meshwriter.js",
+          "exists": true,
+          "sha256": "22f3d21bc893dcf38bfbed39c07594607b4a7aa0fede150935b612f51f0b77f2"
+        },
+        {
+          "path": "src/tools/mesh-audit.js",
+          "exists": true,
+          "sha256": "1a7f19629a36153e1ef76857dc2ffa6f476c732410ee61534a8a2319d3349930"
+        },
+        {
+          "path": "save-mesh.html",
+          "exists": true,
+          "sha256": "bf0fd45130b09ed87dbf563fa31d8d7631f9cbefa33c8402bb467df7dc13d4f2"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "349帧复核并保留既有分块缓存后合并主体；双网格编辑前后主体GPU提交均1次。并非全场景单call，不覆盖原作Switch性能/动态合批算法。",
+      "domains": [
+        "core",
+        "tools",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/mipcustom.js",
+      "sha256": "097342e1041403f9dfc61b1a0df62296ca086be72629132fc54a553c31de6487",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/light/mip-chain.js",
+          "exists": true,
+          "sha256": "5c15332c0a0df1032c74691acefe33bf6f897613208771225f34510e15948844"
+        },
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "四档自定义 mip + 线性空间 + 三线性 / 各向异性采样迁入共享模块并实测；未接 impostor 图集与 textures 页。",
+      "domains": [
+        "light"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/mipfilter.js",
+      "sha256": "b36c02adb440c5d64df0c434017fc6ec06d0d59096bc595389bb2d21056303c1",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/light/mip-chain.js",
+          "exists": true,
+          "sha256": "5c15332c0a0df1032c74691acefe33bf6f897613208771225f34510e15948844"
+        },
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "同 mipcustom（两份实验合成 mip-chain.js）；原 renderGround/paint 可视化未迁。",
+      "domains": [
+        "light"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/mirrordecor.js",
+      "sha256": "b4ccfed84303ac6f6532815c4b006ff8d5c6210b1d726ac1925529a470bba646",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/mirror-uv.js",
+          "exists": true,
+          "sha256": "5e8d5a4be3b96bc6996648ba79034afc8b901721bb0bfca035656250b2466718"
+        },
+        {
+          "path": "src/core/ornament-field.js",
+          "exists": true,
+          "sha256": "ca7ed48bef5a75a4320728f925d77ffa9e5e195181528e27e2ed42b4c3f8107b"
+        },
+        {
+          "path": "src/ui/ornament.js",
+          "exists": true,
+          "sha256": "f91b77f5fac6aea463bd374831b52cb1c756c99622873d6ca592d054ed79ada5"
+        },
+        {
+          "path": "mirror.html",
+          "exists": true,
+          "sha256": "15bcf3cdd65bf1d3dc7e8fd09c2cb9fdf531a77ffbe203ba880e31ca1f4ba536"
+        },
+        {
+          "path": "ornament.html",
+          "exists": true,
+          "sha256": "5d2006727379cab3793c3ee8becf523fe3217952ecfea12ebe7aad1142949b03"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "单纹理D4八方向、中心折叠和uniform尺寸控制已实测；保留原距离场/独立cutoff动画。原作细线纹样/精确任意尺寸布局、makeMotif/paintRect/seamError CPU参考接口仍未逐一兼容。",
+      "domains": [
+        "core",
+        "ui"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/mixedwfc.js",
+      "sha256": "2d8dd7e27bf193fee0ed6ea9fe79348840f672aa3c2c535c9e142d2917ded296",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/wfc.js",
+          "exists": true,
+          "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e"
+        },
+        {
+          "path": "src/core/grid.js",
+          "exists": true,
+          "sha256": "c9fe9bc4c9f7dcfeaa17cd6f66cc472a877818692236bcb4e4d208fceb50cf0f"
+        },
+        {
+          "path": "wfc.html",
+          "exists": true,
+          "sha256": "f50297f050d55e1871ce8d713c666055e1aa7f2fda6a0df96b7083fde7b3678c"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "真实三角 / 四边形混合格直接求解；未做「方格 = 4 三角捆绑」的表示与 MODULES 对照。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/mountainlight.js",
+      "sha256": "d8579f5db99f9ab29f26e3565b6f255f26dea508af1cd8d438ca7749cb05e17f",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/mountain-bake.js",
+          "exists": true,
+          "sha256": "257d79fee5a7d7134833eaaa4682b90e8c4ed2afe115db41c0b57e8141ef95de"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）山体烘焙图集接进 View 岩壁，运行时 0 次法线采样；「球面混合」核实原模块没有（已过时）；真 GPU 性能未测。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/navgraph.js",
+      "sha256": "b80d42ea33d77480b81933410f9e0e82a17ec471666e533967af093fea0a6975",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/save.js",
+          "exists": true,
+          "sha256": "523d3336f6e30e38948b0de4107e7dfad03d0cdb31baba0cab9f1c33822d1ba7"
+        },
+        {
+          "path": "river-nav.html",
+          "exists": true,
+          "sha256": "2ee7819958ddabddff7022918532434dd0cb05c45f69333d2e3a68aad68c5cb9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）riverFlow 写进存档可选尾段，旧码逐字节兼容，读档 91 段一致。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/navgrid.js",
+      "sha256": "6aa926906939da949daac35a75d8f5f31f661e242676f4087c1caa024d8e57ae",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/navgraph.js",
+          "exists": true,
+          "sha256": "ee981274d9be2580b9ec7fa77b7dc887c24f92488b8e5558a4f3d4b6f6b59949"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/navribbon.js",
+      "sha256": "e4afb9ae618c2d3b5339682efe4946f6a2d4270444420b0141c794e08952625d",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/path-samples.js",
+          "exists": true,
+          "sha256": "7d100b148ebdfaae2c70fe420e0296c450185a1ce0d0e02cb81866f3520b3800"
+        },
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "exists": true,
+          "sha256": "9414fa2e3cb4a0ba51af015e8e8633fba4499fc7707df249a51f9eba2773f536"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）命令路径 Catmull-Rom（不出可站区）、弧长等距、贴地含楼梯、净距带状格；尘粒 AO 是另一片。",
+      "domains": [
+        "badnorth",
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/overhangterrain.js",
+      "sha256": "c657519ce11983391a748de29414d2f76d7ec31d7d66721ecd98be8e1cc753e1",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/terrain/soft-tops.js",
+          "exists": true,
+          "sha256": "d50c66e31febf5b7fa1c57bb83c6a0d3aae2f5719d6110212c9d7052b39f9369"
+        },
+        {
+          "path": "src/terrain/terrain-collide.js",
+          "exists": true,
+          "sha256": "06097070d42dafbb6c30901d00c3e51966c9a28d20da742b997d2dfe84025292"
+        },
+        {
+          "path": "src/terrain/terrainmesh.js",
+          "exists": true,
+          "sha256": "0b5e31d3d93fb06df6f7713e99e35e35d14b8dbee85f742f16e9fec9f3c5584b"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）terrainmesh 层连续软坡（world.softTops，无裂缝）+ 形变侧壁碰撞 pushOut/heightAt；Battle 单位尚未调用。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/paintnormal.js",
+      "sha256": "0a895610ee8c6a423dd4a564e5cc7882b37bfc81958384f513536fbcffb33910",
+      "imports": [
+        "./bouncegi.js"
+      ],
+      "targets": [
+        {
+          "path": "src/core/paint-normal.js",
+          "exists": true,
+          "sha256": "05f3958b92bc8a2cd5eb71c9d6efec2751e9a60e57eb6b293f676ad07bd00072"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）大笔触法线图主轴投影、切线空间扰动接进 View；浏览器对照已看。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/palette.js",
+      "sha256": "55e6db4325a2896ad082548ab7fa8bbbcb22666619751eef20dcba650a87b0d6",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/palette.js",
+          "exists": true,
+          "sha256": "5a476ab77c80c9515725e2f4f0f34e99494b2139c2af543eef0baa23f7e45652"
+        },
+        {
+          "path": "src/world/app.js",
+          "exists": true,
+          "sha256": "a8eeed94fb3ca0d8332aaeeb830c722d8d145cc3e6785c41dfaa7107124833ec"
+        },
+        {
+          "path": "wall-palette.html",
+          "exists": true,
+          "sha256": "d2767bb30dc5f04988796cd3c9dcc21f1711b83fc1544f1e88634b9facad8ef4"
+        },
+        {
+          "path": "src/core/qa-replay.js",
+          "exists": true,
+          "sha256": "427e98341ae1ddb9866dba2787a0e6b25699439376098d72e1d16b4211108e27"
+        },
+        {
+          "path": "qa-replay.html",
+          "exists": true,
+          "sha256": "8e7d3ae89b8fa4bf61ebe8b4da78e6683a726a6d21c955c2c78e47cdae3fbf4c"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留已有墙色预设/固定屋顶成果；本轮524帧后补独立色槽更新、真实World重建和还原。原PNG热更新、多行贴图、最短色相跨调色板渐变/QA及完整原接口仍待补。172732仅可作配色外观参考，实际主题是拖抹，已移至smear映射。 本批200帧复核后补本地最短色相HSL滑杆、无彩色端点处理；不从画面推导原公式/过渡时长，PNG、QA和持久化仍待补。 本批814帧纠正QA误归：视频为复杂建筑编辑，不证明随机模块色；新增16步编辑/检查/异常恢复为本地回放，完整原作QA和PNG仍未覆盖。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/partsprites.js",
+      "sha256": "75addd5f1d44588a458d251bc75dd62a3c26183a29d5b5bd580ef9505607da92",
+      "imports": [],
+      "targets": [
+        {
+          "path": "ui.html",
+          "exists": true,
+          "sha256": "975499021e0b87e59a39a1458cb4529b8d624d36cd5030d383cdb4e70b89403d"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [],
+      "mapped": true
+    },
+    {
+      "source": "src/patchblend.js",
+      "sha256": "ff230bda1e86fbd8c166711fab7abdc1607f5ae7b28cb1b16d8c9f2a51d4d778",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/terrain/patch-blend.js",
+          "exists": true,
+          "sha256": "104600619903115512bcaaba129d1a3940cf9f4a7ae27f33d53bbd3785547b68"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）岸带手工 UV + 高度混合接进 View；贴图为程序化替身，只画陆侧（水侧是海面材质）。",
+      "domains": [
+        "terrain",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/patchcluster.js",
+      "sha256": "76c4f6466d8f51610fa04bf2330ad630f98e332e0ab37f637a9cfd1ff219c107",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/infinite.js",
+          "exists": true,
+          "sha256": "3c501e4c3ea0aff81a96ed683aa37723b9d112a3b7812803a48c4d3b9e1ca413"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）createInfiniteStream 按需流式（3/7 块簇均实跑，无缝）+ quadDual；原 consensus 对照未迁。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/penumbra.js",
+      "sha256": "1d1d673594220ad2dc7fd48f3b8c14a1cca2e74019af37df634b69e6e5cb74cf",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/penumbra-terrain.js",
+          "exists": true,
+          "sha256": "6c4df78a8e677e7f8c5d4d1ef6f0c6fabef36ea1a67c7829afdf61c821df2f19"
+        },
+        {
+          "path": "src/light/penumbra.js",
+          "exists": true,
+          "sha256": "39f4c18263f930c5fedd559b7a3e7b18443919360a1efb31826c9f6cb9a3a7b6"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=penumbra3d 地形与悬挑接收面体素半影；开启时非 World 物体（树）不再投 PCF 影。",
+      "domains": [
+        "light",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/piercefloor.js",
+      "sha256": "c88e829e4be700a5b59eee908d543774a776808fd3d9ff8be0f143c498bf0bbf",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/arch-floor-budget.js",
+          "exists": true,
+          "sha256": "2e63255209b7e23524e54d34e4cd80f373a32c88041b6ded62c88de1023cb117"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        },
+        {
+          "path": "src/world/navgraph.js",
+          "exists": true,
+          "sha256": "ee981274d9be2580b9ec7fa77b7dc887c24f92488b8e5558a4f3d4b6f6b59949"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）过梁几何 + 拱下精确净空 + buildNav underArches；Battle 运行时尚未接。",
+      "domains": [
+        "build",
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/piperepair.js",
+      "sha256": "a4505f17c83eaea3c635a5935e80a8a0e96493f38496b2f0f30b456738622c89",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/infinite.js",
+          "exists": true,
+          "sha256": "3c501e4c3ea0aff81a96ed683aa37723b9d112a3b7812803a48c4d3b9e1ca413"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/portrait.js",
+      "sha256": "3d14eb907d895d2eda788a2f36d7c8236e72da00d1e21da9fce77e74538e81fe",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/ui/slot-portrait.js",
+          "exists": true,
+          "sha256": "72896e0f950e1c4b7fcb5cf117adc042db9a08e908aac43fc7c1461060f3f6d8"
+        },
+        {
+          "path": "ui.html",
+          "exists": true,
+          "sha256": "975499021e0b87e59a39a1458cb4529b8d624d36cd5030d383cdb4e70b89403d"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）ui.html ?portrait=slots 按 PORTRAIT_SLOTS 画程序化头像，IoU 0.994（无原素材）。",
+      "domains": [
+        "ui"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/propanim.js",
+      "sha256": "170dc9a77618340a3abc4718d97451a8e77b5231311738ed782826686f2d507b",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/prop-anim-layer.js",
+          "exists": true,
+          "sha256": "2cdc18d36b5bd0b16d5a7a017156ba9e7af062bbe8c3c674eacbd67b0d4ae1b8"
+        },
+        {
+          "path": "src/core/prop-anim.js",
+          "exists": true,
+          "sha256": "51ad16f7fb2d13fbb0453ceffb702dc19b805dc2412bc96c6aae2cc98fd11234"
+        },
+        {
+          "path": "src/world/app.js",
+          "exists": true,
+          "sha256": "a8eeed94fb3ca0d8332aaeeb830c722d8d145cc3e6785c41dfaa7107124833ec"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）合并道具网格逐顶点 slot 属性 + shader 弹簧，只上传变化槽位；?propanim=1。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/propframe.js",
+      "sha256": "fa963c73f34ecfedd94c3f3ae9650765413148540434df32bc6679042faa1fa0",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/opening-footprint.js",
+          "exists": true,
+          "sha256": "9ed0b9ed4e45cddcc00cf0f6730e5facd1fdf0ff7c24a6aaa97ae3f1e8ca230b"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）贪心刚性框道具接进 World 后院（yardProps 开关），零重叠；道具是简单盒子。",
+      "domains": [
+        "build",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/quadgrid.js",
+      "sha256": "f6459ae35f5cab54c7f998e07af652f72da06ddbeebf7f9e739378a70273625c",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/grid.js",
+          "exists": true,
+          "sha256": "c9fe9bc4c9f7dcfeaa17cd6f66cc472a877818692236bcb4e4d208fceb50cf0f"
+        },
+        {
+          "path": "grids.html",
+          "exists": true,
+          "sha256": "9838f2d42b4249f8227b82bf80aa26395c041eeb92d2238b32a499d3c15a9384"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "1068帧已复核；三角合并/共享边中点/细分与松弛主体保留，已有重构不重做。本批未新增完整生成动画、6度顶点启发式或无限拼接运行验收；signedArea/isConvex辅助导出和质量接口待核。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/quadinf.js",
+      "sha256": "ae3d39071771027b424a9cab1009be0b442cf18fe729b32dab5456a0f8d893d0",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/infinite.js",
+          "exists": true,
+          "sha256": "3c501e4c3ea0aff81a96ed683aa37723b9d112a3b7812803a48c4d3b9e1ca413"
+        },
+        {
+          "path": "grids.html",
+          "exists": true,
+          "sha256": "9838f2d42b4249f8227b82bf80aa26395c041eeb92d2238b32a499d3c15a9384"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "buildInfinite 支持 origin 任意块中心开窗口、windowSeam 实测重叠区 raw/patch/blend 逐位一致；页面里未加平移窗口的交互。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/quadtex.js",
+      "sha256": "6aae9728e4f5756cc8c42db33981e7c799368a810201f710944ee830038ab11c",
+      "imports": [],
+      "targets": [
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [],
+      "mapped": true
+    },
+    {
+      "source": "src/rayvis.js",
+      "sha256": "340bbc09a0c5957ba8da984981442e207febec2d1fb869dda24ca40749c28675",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/space-visibility.js",
+          "exists": true,
+          "sha256": "b806afc6034135ea1107302ff00ae6b75eb1ac89b6581bea66c0104b90b140e0"
+        },
+        {
+          "path": "src/world/space-visibility.js",
+          "exists": true,
+          "sha256": "31f7db5ffdb806133d8af0f80d998f81d3c77be626ce96fdcf982462646942dc"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）逐格穿行射线（薄墙不漏）+ 整楼明暗烘焙 + 灰点叠加层；未写入地形顶点色。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/rectpack.js",
+      "sha256": "d303fc962e36cc952ccbd9bfff372c1436f4ba68db4975990ea0f34a125fcd80",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/atlas.js",
+          "exists": true,
+          "sha256": "628b497799dd296fbc922a24c9b97d2fab3b9faadfb62788ee8325c7d421faff"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）recursiveFill / 90° 旋转 / shelfPack 基线 / 手指数两口径；非最优、不自动压缩同原作。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/reflstreak.js",
+      "sha256": "b0cd7c107f01e795359f8345dedc5d0f1d78d45f5073830017f8cc8b1ffb90c7",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/view.js",
+          "exists": true,
+          "sha256": "ae9b401ba9e387d2ebe3d672aab9caf1a47e2770f527041882067cb9d28f439f"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/repeatbreak.js",
+      "sha256": "ad7b7e15b8fc4b1efb91d9195783164859ff0fb42a9ec033481ab5204ef84857",
+      "imports": [
+        "./bouncegi.js"
+      ],
+      "targets": [
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [],
+      "mapped": true
+    },
+    {
+      "source": "src/save.js",
+      "sha256": "571988e321d12d7fbfa6f97375b6095262ed76b3baab9e94407cae1cee1f7722",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/save.js",
+          "exists": true,
+          "sha256": "523d3336f6e30e38948b0de4107e7dfad03d0cdb31baba0cab9f1c33822d1ba7"
+        },
+        {
+          "path": "src/world/app.js",
+          "exists": true,
+          "sha256": "a8eeed94fb3ca0d8332aaeeb830c722d8d145cc3e6785c41dfaa7107124833ec"
+        },
+        {
+          "path": "save-mesh.html",
+          "exists": true,
+          "sha256": "bf0fd45130b09ed87dbf563fa31d8d7631f9cbefa33c8402bb467df7dc13d4f2"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "321帧复核后修复坏输入原子拒绝、游程越界/尾随垃圾与空列元数据，北境场景身份可往返；兼容旧v5合法串。原作位格式、跨平台拓扑身份、自定义配色及天气/玩法状态仍未覆盖。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/savestring.js",
+      "sha256": "1d41d982db884726364ddbfd8516dce423876646cd95687d864dcf8673c6142b",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/save.js",
+          "exists": true,
+          "sha256": "523d3336f6e30e38948b0de4107e7dfad03d0cdb31baba0cab9f1c33822d1ba7"
+        },
+        {
+          "path": "src/world/app.js",
+          "exists": true,
+          "sha256": "a8eeed94fb3ca0d8332aaeeb830c722d8d145cc3e6785c41dfaa7107124833ec"
+        },
+        {
+          "path": "save-mesh.html",
+          "exists": true,
+          "sha256": "bf0fd45130b09ed87dbf563fa31d8d7631f9cbefa33c8402bb467df7dc13d4f2"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "321帧复核后修复坏输入原子拒绝、游程越界/尾随垃圾与空列元数据，北境场景身份可往返；兼容旧v5合法串。原作位格式、跨平台拓扑身份、自定义配色及天气/玩法状态仍未覆盖。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/scene.js",
+      "sha256": "28d62166230f76f4f9121299f9f4c7aaa293ce5968a5b4deaf98c8eb97872eab",
+      "imports": [
+        "three",
+        "./birds.js",
+        "./townmesh.js",
+        "./shore.js",
+        "./halfedge.js",
+        "./trace.js",
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/world/view.js",
+          "exists": true,
+          "sha256": "ae9b401ba9e387d2ebe3d672aab9caf1a47e2770f527041882067cb9d28f439f"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/shore.js",
+      "sha256": "f231a8fe14381377f603d2be4756fa77eaf4f236f7e0c497588089ad922863d3",
+      "imports": [
+        "three",
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/water/shore.js",
+          "exists": true,
+          "sha256": "0ab4472edd71e8557d180a291d444440fc4a882639159c7b6e587d62d59e678f"
+        },
+        {
+          "path": "src/core/shore-profile.js",
+          "exists": true,
+          "sha256": "da37ab90e4bee055dea9204a07c37eb334be67f86368d198586da996a6f10c59"
+        },
+        {
+          "path": "src/core/shore-loops.js",
+          "exists": true,
+          "sha256": "e7e917335dac16176e9bc7293c4a6413013be5f00e0c1e3d00ec64c92c2f1d36"
+        },
+        {
+          "path": "shoreloops.html",
+          "exists": true,
+          "sha256": "965f4fd6d3e31cac4b6f8ddf8b4866c87cb76f6ef7648c4fede61a40f63835d6"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "已有真实边界/形变法线保留，新增规范绕序、角接分岛/水洞自接闭环分解，1024组合及共享World桥接验收通过。窄湾外推浪带交叠、精确拱底截面/泡沫mask仍缺。",
+      "domains": [
+        "core",
+        "water"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/shrubcard.js",
+      "sha256": "69a69810e2554765da4039314da851cc227471ea7eac1bbbfd45f4d4b0c5b1b1",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/life/vegetation.js",
+          "exists": true,
+          "sha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4"
+        },
+        {
+          "path": "src/world/view-post-extras.js",
+          "exists": true,
+          "sha256": "d93cf95147adf558fc94f9336adad6b936117624474815cdac8a4b918244ac21"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=wallcards 墙根 574 张折卡已目视。",
+      "domains": [
+        "life",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/slotsolve.js",
+      "sha256": "c5b7cec42ef5807169f80cbe19cc1a7e98912184e19ad38360be43c4db49b177",
+      "imports": [],
+      "targets": [
+        {
+          "path": "slots.html",
+          "exists": true,
+          "sha256": "525b94675c759de3e44ee0e6f1c10353032ecf37ac8aa4941ece7bef90fa00e1"
+        },
+        {
+          "path": "src/core/wfc.js",
+          "exists": true,
+          "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）槽位表 + 27 变体缩略池 + 按 trace 逐帧播放、依赖链与冲突示例。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/smear.js",
+      "sha256": "34330b608d9814eb5a6be37ca65e5286060e1ffdb667db0b512137000cbf7faa",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/view-post-extras.js",
+          "exists": true,
+          "sha256": "d93cf95147adf558fc94f9336adad6b936117624474815cdac8a4b918244ac21"
+        },
+        {
+          "path": "src/core/camera-motion.js",
+          "exists": true,
+          "sha256": "35dbb521b4766f71510afc256d50cce52ec096b4a75553ea3e65ee11ed15b95c"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=smear 解析切向拖影接进渲染循环，与历史叠加并存；转动时外圈 p95 梯度 17.2→9.7，静止不变。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/smokefx.js",
+      "sha256": "dc865d3a9259d772955d65469908cc91f9047663ca435ebe91fdeb4149a366a7",
+      "imports": [
+        "three",
+        "../engine/noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/core/smoke-order.js",
+          "exists": true,
+          "sha256": "38613a5ff9495219422675d11ee2c210d5ad6e7917d5b63f3c067a296bc0dc36"
+        },
+        {
+          "path": "src/life/effects.js",
+          "exists": true,
+          "sha256": "46b6942c9ba31b703abc77bd7bb8cd3c3f99b6c09420f10afc7f1b3c27b957fd"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）火焰卡片噪声 / UV 滚动 / mip 随龄 / cutoff 亮边 + 随火量 PointLight；透明穿插近似。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/snapshot64.js",
+      "sha256": "0eb764c1b80e8caac4e4f0aaed3c91464c3e3439094887fd4cf9afeef8638cdf",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/island-snapshot.js",
+          "exists": true,
+          "sha256": "5354339de52760401172454227bf97dbc1ff5959147a5221128173e4dc58596f"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）World 剪影真值 64² 存储、crisp 着色器 CPU 孪生、IoU/edgeEnergy/peakGradient/bandPixels/rmse 对照、GPU 读回接口。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/socketrock.js",
+      "sha256": "81c934ee1c742b69ffe5a0aa35fd31d745cfea18b7af141e0ded2c3b47576ae1",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/wfc.js",
+          "exists": true,
+          "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e"
+        },
+        {
+          "path": "wfc.html",
+          "exists": true,
+          "sha256": "f50297f050d55e1871ce8d713c666055e1aa7f2fda6a0df96b7083fde7b3678c"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "diagnoseTiles：多边形网格 AC 传播找死 tile 与无人接的接口；页面未显示诊断结果。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/spherefusion.js",
+      "sha256": "00c858d864abe643cda8d38dd71af7adfbb0a0ef0ee3a7098afc4a09d5f6300f",
+      "imports": [
+        "three",
+        "./spheretown.js",
+        "./spherehouse.js"
+      ],
+      "targets": [
+        {
+          "path": "src/sphere/planet-town.js",
+          "exists": true,
+          "sha256": "80bd865b972138faeef26f832f64f6ff5513a69d31c2eb00ca916fa0b17581ba"
+        },
+        {
+          "path": "planet.html",
+          "exists": true,
+          "sha256": "8f350819bb33493f1fa8ebfbc340c1e74d7e75e3d503c047916c9cf84af76dfa"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）planet.html ?fusion=1 星球作为共享 World 显示，页面验收零错误。",
+      "domains": [
+        "sphere"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/spherehouse.js",
+      "sha256": "abe0e31d296df36ec86718c4e509950a72fe35fe733ba22a32f16762b8c7eea1",
+      "imports": [
+        "three",
+        "../engine/noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/sphere/planet-town.js",
+          "exists": true,
+          "sha256": "80bd865b972138faeef26f832f64f6ff5513a69d31c2eb00ca916fa0b17581ba"
+        },
+        {
+          "path": "planet.html",
+          "exists": true,
+          "sha256": "8f350819bb33493f1fa8ebfbc340c1e74d7e75e3d503c047916c9cf84af76dfa"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）1–3 层房子按各层松弛角点变形（?floors=mixed），程序化模块。",
+      "domains": [
+        "sphere"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/spheretown.js",
+      "sha256": "2283b04a487709655dc32eb25e10eda56079263212469a30e3a990ef4b2ed7e0",
+      "imports": [
+        "three",
+        "../engine/sphere.js",
+        "../engine/noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/sphere/planet.js",
+          "exists": true,
+          "sha256": "b0c0f3829eb773bcd3d775220d682418e3197b4ce977f71f4bb1116b347b10a9"
+        },
+        {
+          "path": "planet.html",
+          "exists": true,
+          "sha256": "8f350819bb33493f1fa8ebfbc340c1e74d7e75e3d503c047916c9cf84af76dfa"
+        }
+      ],
+      "upstreamStatus": "部分覆盖",
+      "gap": "（第 55 批）solver:shape 让共享角点分歧 0.095→0.007、墙最大倾斜 45°→28°；宽高原蘑菇化有几何下界，原模块目标形状无出处。",
+      "domains": [
+        "sphere"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/splice.js",
+      "sha256": "197da81e5e284a4e675c1054c1cfcacb0975f2a323a2b982dd2ba4eae0069603",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/build/splice.js",
+          "exists": true,
+          "sha256": "0b33f0a04e40e4274671d49294def66d60a47d9ad40ce05bb4b387f4594f884c"
+        },
+        {
+          "path": "src/core/world.js",
+          "exists": true,
+          "sha256": "f33d865e74e5270e6f214eb737e637c916d1dda1a332092b084415accfbd8ea2"
+        },
+        {
+          "path": "src/world/save.js",
+          "exists": true,
+          "sha256": "523d3336f6e30e38948b0de4107e7dfad03d0cdb31baba0cab9f1c33822d1ba7"
+        },
+        {
+          "path": "src/world/app.js",
+          "exists": true,
+          "sha256": "a8eeed94fb3ca0d8332aaeeb830c722d8d145cc3e6785c41dfaa7107124833ec"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）嵌入的房子进存档尾段、快照撤销、编辑器工具（?tool=splice / I 键）。",
+      "domains": [
+        "build",
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/squadbanner.js",
+      "sha256": "8a3cefcc05b89df5fac92ea5980daa931d57c00af82d6979df0305db3039bf72",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/badnorth/squad-standard.js",
+          "exists": true,
+          "sha256": "84c53e4c571a5a50d6eb6ba270421e68a8f421a9a69f3630dd25f8b71d3eed2e"
+        },
+        {
+          "path": "src/badnorth/battle-g3.js",
+          "exists": true,
+          "sha256": "0c05108cecffd85906b7c5a31588eb57008b42a5d1bd3aa217417d5d6ef8508d"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）竖旗横杆金球、金边燕尾旗、金饰盾纹替换 Battle 旗（standards 默认关），程序化。",
+      "domains": [
+        "badnorth"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/squarehex.js",
+      "sha256": "3ef315ad4303fdbb63fbde3151401572de1b964586fb8e9c5feb93903cfeb0d8",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/corner-footprint.js",
+          "exists": true,
+          "sha256": "0b29eff71f6eb37ad5f9c28b826c342c48a059fd746e3719722358c88b99bc64"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）cornerCutPlan 二分着色切角 + footprintMetrics（与原 runMetrics 一致）+ islandFootprints；只读未接 WorldMesh。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/squigglefield.js",
+      "sha256": "514ea43634373d993394b6de1fada4eb8e719fbb8d629a30241f9bc187c46d89",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/ornament-field.js",
+          "exists": true,
+          "sha256": "ca7ed48bef5a75a4320728f925d77ffa9e5e195181528e27e2ed42b4c3f8107b"
+        },
+        {
+          "path": "src/ui/ornament.js",
+          "exists": true,
+          "sha256": "f91b77f5fac6aea463bd374831b52cb1c756c99622873d6ca592d054ed79ada5"
+        },
+        {
+          "path": "ornament.html",
+          "exists": true,
+          "sha256": "5d2006727379cab3793c3ee8becf523fe3217952ecfea12ebe7aad1142949b03"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）ornament.html 换用卷草场：四折镜像、扭动动画、扫光（?squiggle=1）。",
+      "domains": [
+        "core",
+        "ui"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/storydatum.js",
+      "sha256": "d72ffaec3b8a7bbedb9b0eff60d8d8835bea83887f8b75a03ab3c7240f5c508f",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/story-datum.js",
+          "exists": true,
+          "sha256": "9e6c0710ffa446fad6bbddd9c28c837a7d6eee2be6778946f61230d90dcf676a"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）共享 World 整数层下楼层线偏差 0；非整数塔基 datum 规则与 measureFacade/windowRows 已迁并测。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/surfacedeco.js",
+      "sha256": "d6a44ff21d8ba5c072263f64671770fb89f9156b8f0b73412d16139585a6029d",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/surface-decoration.js",
+          "exists": true,
+          "sha256": "a0023c484c37034bd79cbb107b14dde57fb00e246e28cc254c38993a993061e4"
+        },
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）门墙段并入长立面、立面绕拐角、archCutout 真挖拱洞。",
+      "domains": [
+        "build",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/surfaceshadow.js",
+      "sha256": "c7ff6226107280a9fe35d1269494d2bd9c64d427426c6d02bf6af8ebcf22788e",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/light/surface-shadow.js",
+          "exists": true,
+          "sha256": "9870cc64dcd7b05c49f6be7c86a113459dac18c5e7c3b12d68d6b39b94a56b46"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）墙接收窄条、洞内地面射线阴影、贴形变顶面接进 View；洞内只有浏览器度量（205 纹素中 152 被挡）无清晰截图。",
+      "domains": [
+        "light",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/terracecliff.js",
+      "sha256": "951187bffb206b3ba50243445fe3779428b2259e603cdbbcc680dac019da56eb",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/terrace-profile.js",
+          "exists": true,
+          "sha256": "c27c6ad24aca7ec4766929982b7e92286f63a841baee01a7da0dfe3b84eb27dc"
+        },
+        {
+          "path": "src/terrain/soft-tops.js",
+          "exists": true,
+          "sha256": "d50c66e31febf5b7fa1c57bb83c6a0d3aae2f5719d6110212c9d7052b39f9369"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）softTops 提供连续场；meshSlopeProfile 在真实网格上量平/软/陡。",
+      "domains": [
+        "core",
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/terraceladder.js",
+      "sha256": "234b6531dfb63edafaff47a28763d329638ab8ae4eaf997814183e80d4351bd4",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        },
+        {
+          "path": "src/badnorth/battle-g3.js",
+          "exists": true,
+          "sha256": "0c05108cecffd85906b7c5a31588eb57008b42a5d1bd3aa217417d5d6ef8508d"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）寻路避薄平台 + 按横档的攀爬动画。",
+      "domains": [
+        "badnorth",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/terrainmesh.js",
+      "sha256": "77402cbe15fd6c4d0d62f5eb866a1d03b2391b2d3aa83ad397dcdd76ed6f1ab0",
+      "imports": [
+        "three",
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/terrain/terrainmesh.js",
+          "exists": true,
+          "sha256": "0b5e31d3d93fb06df6f7713e99e35e35d14b8dbee85f742f16e9fec9f3c5584b"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/texelsnap.js",
+      "sha256": "5a0516ecc1db67c7b35b18da89d155a08e7f2a733d1189b61cac1d141581fece",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/texel-skip.js",
+          "exists": true,
+          "sha256": "78de575670dc414036b9432d84a32bce9392dda14e10827e6e4a9e1715077eb3"
+        },
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        },
+        {
+          "path": "src/core/leaf-atlas.js",
+          "exists": true,
+          "sha256": "2324860db2900db1d5e7a7598fde4a8e2f33c3f925368444289b75e877e9b03d"
+        },
+        {
+          "path": "src/life/leaf-surface.js",
+          "exists": true,
+          "sha256": "894300a9203411e4c16f9f795e3e9c699bfa21b36af7f43af3e8b73dce0056ac"
+        },
+        {
+          "path": "src/life/vegetation.js",
+          "exists": true,
+          "sha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4"
+        },
+        {
+          "path": "leaf-surface.html",
+          "exists": true,
+          "sha256": "e5f044a761186a4938104aaac5a93bc6b10898793cb30385e582e80ed261a224"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "新增128²/32²植物保留区、连续texel采样及实际球冠/灌木接入；完整bakeAtlas/audit/植物素材、全场景一张atlas及一般mipmap仍待迁移。对象球面经度导数绕缝、区域边界半texel夹紧和远处均值淡出仅本地近似。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/tileforce.js",
+      "sha256": "a2ad458ae63b096b5117c8380d1c41b61c5253872805994dfc99e0d70e9093ae",
+      "imports": [
+        "./quadgrid.js"
+      ],
+      "targets": [
+        {
+          "path": "src/core/module-patch.js",
+          "exists": true,
+          "sha256": "3071b68a69183107a6c79632f7db38a6a8e26795937faa55614dd07c8bcae8a1"
+        },
+        {
+          "path": "src/core/wfc.js",
+          "exists": true,
+          "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e"
+        },
+        {
+          "path": "prefab.html",
+          "exists": true,
+          "sha256": "3c33d13c2dee2fbee30b027e370b793b1a1bd8941feda669f1d8ae6ce1e77718"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）spliceModulePatch 缝进已有网格（Euler=1）+ 两层 3D prefab 带 W/D/R/S socket。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/tileplace.js",
+      "sha256": "d2fec40c41c0a3189df5992a2f43c9f38cb6266888f8ce744394620ea1d1a4a0",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/wfc.js",
+          "exists": true,
+          "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e"
+        },
+        {
+          "path": "src/build/tile-assembly.js",
+          "exists": true,
+          "sha256": "eb390355eb7fd04fbf540d35013cec9c66c6d0b15886e05d6908dbcf83a9b4af"
+        },
+        {
+          "path": "assembly.html",
+          "exists": true,
+          "sha256": "72b32f278bbc34381c3bdd535e55a2f3bbc4224599db7d71d34a75b14d765488"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）加权香农熵（默认关时逐字节一致）+ View 播放的拼装动画。",
+      "domains": [
+        "build",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/tilerepair.js",
+      "sha256": "898f2d02738e7830b0414834c7db3e7a9eeecfba0bac8a3bd565cfbb7f12b880",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/wfc.js",
+          "exists": true,
+          "sha256": "bf65ccfbc873faed0fb79cb26dc7146ff95eedc4e1b68a07343ec8fb7c8fef4e"
+        },
+        {
+          "path": "wfc.html",
+          "exists": true,
+          "sha256": "f50297f050d55e1871ce8d713c666055e1aa7f2fda6a0df96b7083fde7b3678c"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "独立socket局部修复已补；范围外不变、原值优先、扩区/预算/失败回滚。完整建筑多格tile与增量传播性能另列后续。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/topoline.js",
+      "sha256": "81ecb731efb33307195678376366a070e073f63c6e215c02ea99920d440d0c01",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/grid.js",
+          "exists": true,
+          "sha256": "c9fe9bc4c9f7dcfeaa17cd6f66cc472a877818692236bcb4e4d208fceb50cf0f"
+        },
+        {
+          "path": "grids.html",
+          "exists": true,
+          "sha256": "9838f2d42b4249f8227b82bf80aa26395c041eeb92d2238b32a499d3c15a9384"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留确定性对边遍历，新增有向格/出边判环、停止原因、真实中点段与坏twin拒绝；1254走法及实际Canvas通过。原随机转侧边不据视频照搬；手柄/连刷、完整高度绘制与飞岛支撑规则仍待接入。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/town.js",
+      "sha256": "78b993e639c9b250e790b18fd52e48a4d6cc7deed7aff8221b042079d0fb150b",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/world.js",
+          "exists": true,
+          "sha256": "f33d865e74e5270e6f214eb737e637c916d1dda1a332092b084415accfbd8ea2"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/townmesh.js",
+      "sha256": "047d0d0b7618a0d2ebd33059b2a32ba4962b6b01733c5e0a8cd5d8759cfae01d",
+      "imports": [
+        "three",
+        "./town.js",
+        "./lighting.js",
+        "./lightingcache.js"
+      ],
+      "targets": [
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        },
+        {
+          "path": "src/core/courtyards.js",
+          "exists": true,
+          "sha256": "722c9d0f0dfce88acd64438d7e8e49a4eca1d4bf490ed926a4d21b4252abeb7f"
+        },
+        {
+          "path": "src/world/worldmesh.js",
+          "exists": true,
+          "sha256": "f4a5616fd7ab8dfc07fcda64283d02ef750415beea24ef42a04c430b76d6b007"
+        },
+        {
+          "path": "garden.html",
+          "exists": true,
+          "sha256": "36cc3f1e391bdebfba02a0283089c867b0964f86a94256ae888a3e48cbd758f6"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "本批202帧庭院复核，保留共享建筑/小径，新增按真实第2层墙体识别围合；桥下开口/地面开口/重封闭双网格通过。原作矮墙分区、精细门拱/形变边界、完整建筑模块与植物视觉不计完成。 本批333帧确认早期grass plots有高层台地分区，原帖树是未来计划；现有地面庭院不能替代完整高层地块/石边带，列后续。",
+      "domains": [
+        "build",
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/trace.js",
+      "sha256": "c02699a45dd4561fcb129983c032d01c2aa1095a5b1b001a7671e44b5a0e4a44",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/app.js",
+          "exists": true,
+          "sha256": "a8eeed94fb3ca0d8332aaeeb830c722d8d145cc3e6785c41dfaa7107124833ec"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/traffic.js",
+      "sha256": "a9d5ac9ba70e7ab141b4cbef6eb079a63082df8f6e47ab6a67f04ddf2da5e418",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        },
+        {
+          "path": "src/world/layerednav.js",
+          "exists": true,
+          "sha256": "dde230ab0727f07bc139a6f69e0feea2b850d79de832aa603f68e9afb95786a2"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）L 弯 / T 岔 / 直廊对穿压测全到无死锁，体型重路由；分离仍软约束。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/triGraph.js",
+      "sha256": "205f8929bc7dd43d83d40a8436208704b6548d3776cd9362b4ae3938014aa550",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/trigraph.js",
+          "exists": true,
+          "sha256": "d230ab7d2caa627e24fdd411c65d9b0bf45e8e1e0dae96b8b8eb02edfeaf8a3c"
+        },
+        {
+          "path": "trigraph.html",
+          "exists": true,
+          "sha256": "febdb98fb2036b8a504d5b792db7557e5929b0d08f7986da9e1a229e3aaab202"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "locate / edgeMap / clone / flip / legalize 迁入并实测；浮点谓词无精确算术。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/triflow.js",
+      "sha256": "d06202988d61a60a020d13e09e69fc42752826d0eabdd85e10172f17e84d55f5",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/badnorth/flowfield.js",
+          "exists": true,
+          "sha256": "b9397288bfb803cf54c09e899c69bae402856e030cd40a0563e4d80b6c5d8b0d"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "badnorth"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/triflowfield.js",
+      "sha256": "97a974c041fe2d082e3b9026d2de22f2d9c4f93b2716ed5fd01d94b4f70c9bc5",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/navmesh-flow.js",
+          "exists": true,
+          "sha256": "a89ea94e28fefe71a1285e87f06e0904c782ec0134f392465bbe0836bda8352f"
+        },
+        {
+          "path": "navmesh-flow.html",
+          "exists": true,
+          "sha256": "95a6ecf6e25ad75daeb53e8e8a1dced64e6dd2bab5779693496aaa7fe3e3a3bb"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "面级流场 + 通口 + 漏斗 + 视线捷径接到共享导航面；未接 battle.js，未做方格流场对照页。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/triisland.js",
+      "sha256": "38226037147e6db4654424a6dbbaf5f0da26ef4ac2fc7bc5685b3714744063ba",
+      "imports": [
+        "../engine/sphere.js"
+      ],
+      "targets": [
+        {
+          "path": "src/terrain/generate.js",
+          "exists": true,
+          "sha256": "c146a3fb010ffb212437c526574d908d996916d9f720aafa611b25d40c8207ee"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/uidecor.js",
+      "sha256": "e7411e4d4501920667b4c18478504b1cf0e2e110cdcd3811a2a1513cd692ed61",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/ui/icon-ink.js",
+          "exists": true,
+          "sha256": "7175b1149b398e155e4a6088f1b7a6d8681394b0e40394b687b2780f25bc2f27"
+        },
+        {
+          "path": "src/ui/icon-toolbar.js",
+          "exists": true,
+          "sha256": "ed939784822a9afc70eca3ed9f11595b712bc88c814543c00cf2f966ff44096d"
+        },
+        {
+          "path": "ui.html",
+          "exists": true,
+          "sha256": "975499021e0b87e59a39a1458cb4529b8d624d36cd5030d383cdb4e70b89403d"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "等墨量线宽接进共享工具栏；徽记只做折数闭合检查，未画徽记图形。",
+      "domains": [
+        "ui"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/uikit.js",
+      "sha256": "66de5f47ea29201cacb43c4cc70b9932df27c31a7f8fd9b51339dca4b7dc864d",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/badnorth/battle-g3.js",
+          "exists": true,
+          "sha256": "0c05108cecffd85906b7c5a31588eb57008b42a5d1bd3aa217417d5d6ef8508d"
+        },
+        {
+          "path": "src/core/playful-layout.js",
+          "exists": true,
+          "sha256": "4fe57883f0b4153c1292637cf30317f62608bfae7731da70919ead6d5dd2f26a"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）俏皮指令条 + 每队单 Move 目标 + 地面标记，hold/retreat 真改小队目标（commands 默认关）。",
+      "domains": [
+        "badnorth",
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/unitbatch.js",
+      "sha256": "d7ae09bc5d53d334c0837989571e55d232086ec9961bc56dc450002af1cedc07",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/badnorth/unit-batch-lod.js",
+          "exists": true,
+          "sha256": "e9d6071c72fab34e05139f337a798a94a580867ce7d6e0de4ab2d165ed324989"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "exists": true,
+          "sha256": "9414fa2e3cb4a0ba51af015e8e8633fba4499fc7707df249a51f9eba2773f536"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）原缺口过时（早已实例化）；补视锥剔除 + 小于 9px 简化显示（有渲染器时默认开）。",
+      "domains": [
+        "badnorth"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/unitsnap.js",
+      "sha256": "2a28e783720feaa0c50ddd275d97748353bf34be39545434af600b5bf51aeaec",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        },
+        {
+          "path": "src/core/unit-ground-height.js",
+          "exists": true,
+          "sha256": "d1f27ab33686a15f8a2847d4a29efdc89a9dae9a329064b4d9ce278e22dbf012"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "exists": true,
+          "sha256": "9414fa2e3cb4a0ba51af015e8e8633fba4499fc7707df249a51f9eba2773f536"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）楼梯踏面脚高接进每帧缓动 + 逐人悬空 / 埋入统计（停下均为 0）。",
+      "domains": [
+        "badnorth",
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/voxelao.js",
+      "sha256": "7559d082f5506fe1bdfa11a10615bf6cb01f62afe1bfba5d622cd33e4be14808",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/light/bake.js",
+          "exists": true,
+          "sha256": "b8a1512bab3209c4489821a125ffcdd0ba36a7941d348d422fc913704d7644c2"
+        },
+        {
+          "path": "src/light/voxel-ao.js",
+          "exists": true,
+          "sha256": "6ca74600dbb3a20f09c082eb35354a0f8c4bf7d9f47bde12b46850567af30012"
+        },
+        {
+          "path": "src/world/worldmesh.js",
+          "exists": true,
+          "sha256": "f4a5616fd7ab8dfc07fcda64283d02ef750415beea24ef42a04c430b76d6b007"
+        },
+        {
+          "path": "ao-stages.html",
+          "exists": true,
+          "sha256": "2cba0b5ee51d997b351d5917755fd972c097017dc7de64d8134e105634b4dc20"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）flat/up/vertex/directional 四档 aoMode（六向遮蔽）；SSAO 原作已弃，不迁。",
+      "domains": [
+        "light",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/voxelflow.js",
+      "sha256": "27b796955a965b5bc74e986afed6b1bb7351cbe1f7273b9064c3659e319cb8d2",
+      "imports": [
+        "./town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/world/view-post-extras.js",
+          "exists": true,
+          "sha256": "d93cf95147adf558fc94f9336adad6b936117624474815cdac8a4b918244ac21"
+        },
+        {
+          "path": "src/core/wind-flow.js",
+          "exists": true,
+          "sha256": "24d16022500aaa17ebf812119ed49f142c8c2b566be950a0dac017772163155f"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）软法线对主网格调用；meshCollider 读实时形变网格（groundAt）。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/voxelnav.js",
+      "sha256": "71f1b4bd278bbc08c50e7a9aeed68936d745ff43f9d0ad4bacd31e67793dab9e",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/fine-portals.js",
+          "exists": true,
+          "sha256": "9607d28ea213a50bb9d50b73794541c47fc20143104cb8aab43314131b010d58"
+        },
+        {
+          "path": "src/world/layerednav.js",
+          "exists": true,
+          "sha256": "dde230ab0727f07bc139a6f69e0feea2b850d79de832aa603f68e9afb95786a2"
+        },
+        {
+          "path": "src/world/battle-navigation.js",
+          "exists": true,
+          "sha256": "c19d282ef3c6e99afdbd68ab36c3d8be6eb186a92e6c8931e84f6fc40e1af9a3"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）同 fine-portals：portal.width 让体型分档避开窄门。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/wake.js",
+      "sha256": "a06efa49e91aa2ea4f203a4a44bd0bcb9d5285d8b951099ccc42278c4ce7c362",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/wake-sampling.js",
+          "exists": true,
+          "sha256": "fd5482472094691d802213279260287f5d369cd6b9f2387807915db28cb86ac3"
+        },
+        {
+          "path": "src/life/boats.js",
+          "exists": true,
+          "sha256": "0d3bb396aa5badb41ee72a21902cc32d7fd9387c2c8e7c6eb44d619dbea56dca"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）Wake/Ship 粒子：舷侧泡沫、淡雾、船头水花、Kelvin 角 19.39°，接进 Boats。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/walkreach.js",
+      "sha256": "c83bfbb3ef762435d602deb4d3202409bb54ad7cd48ae79ab99bbf9320b7a596",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/terrain/walk-reach.js",
+          "exists": true,
+          "sha256": "838f426207d7776ce341e353a74ad15dc5a18bfa4b4990974b951ac5f05a7e32"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "共享 World 可走分量 + 沿路线补台阶 / 削台；加高可能切断低侧格与更低邻格的连接，个别图全岛可达比例下降；未接生成器默认流程。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/wind.js",
+      "sha256": "b2213f2e964b4c731c1b88ca7f3cdf89e04eefdede8e550e9e854343ec05a0fa",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/world/view-post-extras.js",
+          "exists": true,
+          "sha256": "d93cf95147adf558fc94f9336adad6b936117624474815cdac8a4b918244ac21"
+        },
+        {
+          "path": "src/life/atmosphere.js",
+          "exists": true,
+          "sha256": "0af4ee512d4031ba48c3e7faa8406b90792a08c583220df952e098a32f550553"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=windflag 旗子 shader 采风场纹理，随风向转弯垂抖；小瑕疵：法线未随转。",
+      "domains": [
+        "life",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "src/wobbletex.js",
+      "sha256": "0efdcd5c7827052321cdb0ced2b24edec3692de65aa55a4bb38fd63e6da01c40",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/sediment.js",
+          "exists": true,
+          "sha256": "21a8224d62531cae43f10264e0cd4eb4eaf4e5ba1e72e1c2f2e1102504513753"
+        },
+        {
+          "path": "src/terrain/terrainmesh.js",
+          "exists": true,
+          "sha256": "0b5e31d3d93fb06df6f7713e99e35e35d14b8dbee85f742f16e9fec9f3c5584b"
+        },
+        {
+          "path": "src/world/view.js",
+          "exists": true,
+          "sha256": "ae9b401ba9e387d2ebe3d672aab9caf1a47e2770f527041882067cb9d28f439f"
+        },
+        {
+          "path": "sediment.html",
+          "exists": true,
+          "sha256": "33ed6342b3df7b1fbac8623d4018684a7da8b4ff836a1c272cca7ec49ce2e79b"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "新增可精确逆Y剪切/世界坐标层理、岩壁专用mask及实际GPU验收，保留旧窄条。原作坐标场/完整纹样未知，通用3D逆场、原CPU曲率/面积漂移/缝差指标接口未逐一迁移，反射/阴影/轮廓仍旧几何近似。",
+      "domains": [
+        "core",
+        "terrain",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/backlit.js",
+      "sha256": "ffc5c478a36e9d7fb845a34fe08c60329f2a9a7da9035bf473de91ae76af52d8",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/world/outline.js",
+          "exists": true,
+          "sha256": "c044c65a997ccf919a153a30b23342cfab662a02f36c416ea8010296f5108ca2"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/birds.js",
+      "sha256": "6b2ad75b5045eccd44ce345b687e8248d9675983cd8217b806597fecccfd9264",
+      "imports": [
+        "three",
+        "./normalsmooth.js"
+      ],
+      "targets": [
+        {
+          "path": "src/life/birds.js",
+          "exists": true,
+          "sha256": "0f2cd63f63139446a0ee14109053ad366affc5f742c1d20fb60c67d3877b24a2"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/blotch.js",
+      "sha256": "0fe5df3f615091a33b9c2fe0f9cd66b86f093d53a1f7dda8ff03fd2f9e51e1f8",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/terrain/blotch-atlas.js",
+          "exists": true,
+          "sha256": "a6bd6f90957473b640efee649540d455d847f1bad50858f9c55f67d61ead0a27"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）斑块图集 + World 边缘场 + 受控渗漏接进 View 主材质；浏览器对照已看。",
+      "domains": [
+        "terrain",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/bnbrush.js",
+      "sha256": "46cf74c8733ea4598a13f7cc150b68c2152b6d59ae64694854a6a6d487d7f277",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/brush-atlas.js",
+          "exists": true,
+          "sha256": "bd2788bfc9e9648ee79c35ab8c6868d9dcfd9907b10e937f32d4d915494da315"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）划痕图集阈值化、沿口淡出接进 View；浏览器对照已看。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/bncanopy.js",
+      "sha256": "5dc0fad4eb361e8e34b9dd1614effa5aff5f8cd3a3bf71b0fdb6d437dff5fa77",
+      "imports": [
+        "three",
+        "../src/blobrelax.js"
+      ],
+      "targets": [
+        {
+          "path": "src/core/canopy.js",
+          "exists": true,
+          "sha256": "f7aefb671c7077b4b7e41ff72b897159276cb792598a6541b1546b01b8405974"
+        },
+        {
+          "path": "src/life/vegetation.js",
+          "exists": true,
+          "sha256": "5e6e6077899866715e9c7628cd2478fde6284c0869a85122e4240be00560dca4"
+        },
+        {
+          "path": "src/life/impostor.js",
+          "exists": true,
+          "sha256": "85286187f8e3e6f40a71f241673e67371802402bd9119f3aee70a7a98de8bdab"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "155帧复核，闭合球并集surface nets、三角形接缝松弛及真实树冠/烘焙输入通过；低分辨率歧义明确拒绝，原作MC/参数、美术及全局自交证明未复现。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/butterflies.js",
+      "sha256": "e8068d638a8fb38207acfd4f6bd5584de3f7180ef1fcc1102ef42e461a5788d7",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/life/decor.js",
+          "exists": true,
+          "sha256": "a8b4ec46becb715b18df6b17f1df7e026b87b41abaabb34742c7ecc358e28403"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/cage.js",
+      "sha256": "e770761683361b4a68ecfcbf0aa33c8e64d5b19ab10eead4cc64fcb19595dee4",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/terrain/shape.js",
+          "exists": true,
+          "sha256": "9b3f1847098c047ba073ab974c43651f5a33b59fb83c35406db995d64a4a6478"
+        },
+        {
+          "path": "src/core/deformation-guard.js",
+          "exists": true,
+          "sha256": "794658423c7e5f565c4e219bbf240585d697de7b0050854d38bf5ee5327ec14b"
+        },
+        {
+          "path": "src/world/worldmesh.js",
+          "exists": true,
+          "sha256": "f4a5616fd7ab8dfc07fcda64283d02ef750415beea24ef42a04c430b76d6b007"
+        },
+        {
+          "path": "overhang.html",
+          "exists": true,
+          "sha256": "5a320bcaeca3758708c9f79cd54c6e949a3d0912e84106281f79d6f1ad81f9c6"
+        },
+        {
+          "path": "src/terrain/terrainmesh.js",
+          "exists": true,
+          "sha256": "0b5e31d3d93fb06df6f7713e99e35e35d14b8dbee85f742f16e9fec9f3c5584b"
+        },
+        {
+          "path": "cage.html",
+          "exists": true,
+          "sha256": "e6dff8c5ee3ffe34b1436e2e49bffb60483ec8c5d8b6d7f4e74a9a1725463842"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留既有XZ层级Taubin/笼形变形与面积/边长/扇形回退；新增分数层连续笼角点采样、沉积线复用及硬边输入。原完整cage拟合、扭曲壁面内部/跨切面3D相交与精确碰撞仍缺。",
+      "domains": [
+        "core",
+        "terrain",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/contour.js",
+      "sha256": "6f2bc9a1668e74f985170c0d052934cb89836d44be91bd57eca90024125aeabb",
+      "imports": [
+        "three",
+        "../src/march.js"
+      ],
+      "targets": [
+        {
+          "path": "src/core/contour.js",
+          "exists": true,
+          "sha256": "f664f3b41aca3b3288573eeb9790b132f932781c5f467f1c2745d891d1836156"
+        },
+        {
+          "path": "src/world/contour-overlay.js",
+          "exists": true,
+          "sha256": "0355ed4f3f0afa52fdfaae246728e05550c9bf1c4ed9b9b4a9ccb504b061b01d"
+        },
+        {
+          "path": "src/world/view.js",
+          "exists": true,
+          "sha256": "ae9b401ba9e387d2ebe3d672aab9caf1a47e2770f527041882067cb9d28f439f"
+        },
+        {
+          "path": "contour.html",
+          "exists": true,
+          "sha256": "aaf8eaf3367bc3779bd430c5a3227af031079d478eeabcf0d1a92d8fe51522f4"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "共享角点、跨边缓存交点、闭环/开放/分叉诊断及真实World覆盖层已补；语义平面诊断不等于形变后的泡沫岸线。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/flags.js",
+      "sha256": "0fb653b541055cb4c8b7441553531e4fd2f43080ed0f4424b31a5eee2d654b6a",
+      "imports": [
+        "three",
+        "../src/wind.js"
+      ],
+      "targets": [
+        {
+          "path": "src/core/banner.js",
+          "exists": true,
+          "sha256": "e7f9917fd525ee1cebe097266d0d362c8e4b99a283580ffb4d46e49696398a4e"
+        },
+        {
+          "path": "src/life/banner.js",
+          "exists": true,
+          "sha256": "ffd78cebae81a170a0dc61a930858ed247dc1419d1d080bb306ea50500669aca"
+        },
+        {
+          "path": "src/badnorth/battle.js",
+          "exists": true,
+          "sha256": "9414fa2e3cb4a0ba51af015e8e8633fba4499fc7707df249a51f9eba2773f536"
+        },
+        {
+          "path": "src/life/decor.js",
+          "exists": true,
+          "sha256": "a8b4ec46becb715b18df6b17f1df7e026b87b41abaabb34742c7ecc358e28403"
+        },
+        {
+          "path": "banners.html",
+          "exists": true,
+          "sha256": "6e7f2e963f1e15b5d8ed3b9c6518de26f5256b451ff59927783a22df63476101"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留已有风粒子/Bezier与暂停修复；54帧新核验后补六种透明旗尾/本地徽记并接入真实Battle，双网格暂停、共享风/曲线/资源释放及GPU alpha通过。原作完整徽记、精确画稿、跨帧率/布料碰撞仍待补；彩旗绳归因单列纠正，非屋顶旗证据。",
+      "domains": [
+        "badnorth",
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/fog.js",
+      "sha256": "9d1ba5e7cfae63dee4dd4b572308b840b3a535e0db38f1a1d6426542c2982127",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/core/fog-envelope.js",
+          "exists": true,
+          "sha256": "a7fafaf6e3b6bd187f0067d062ee8d7647b742bc7de9f6067a9b7fbe9618368d"
+        },
+        {
+          "path": "src/life/atmosphere.js",
+          "exists": true,
+          "sha256": "0af4ee512d4031ba48c3e7faa8406b90792a08c583220df952e098a32f550553"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）贴水雾片随风、遇体素切向绕开、深度遮挡、出圈回卷；未 GPU 验收。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/impostor.js",
+      "sha256": "4d32700db0498e369889fb5cfdc1f2b173c7d8fce2f969fa429759d4724d8fe7",
+      "imports": [
+        "three",
+        "./spritepack.js"
+      ],
+      "targets": [
+        {
+          "path": "src/life/impostor.js",
+          "exists": true,
+          "sha256": "85286187f8e3e6f40a71f241673e67371802402bd9119f3aee70a7a98de8bdab"
+        },
+        {
+          "path": "src/world/view-post-extras.js",
+          "exists": true,
+          "sha256": "d93cf95147adf558fc94f9336adad6b936117624474815cdac8a4b918244ac21"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）3 行×8 方位多俯仰烘焙 + 球面卡片 + 原 makeBlobCloud 云材质；?fx=impostorpitch。",
+      "domains": [
+        "life",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/islands.js",
+      "sha256": "5f0d453ca4da2273a166d558af31467fffb2a1f1e015ed2097a012c3983e4b69",
+      "imports": [
+        "./noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/badnorth/island.js",
+          "exists": true,
+          "sha256": "c33a7e53242b0871227febc53f831870e6dc59ae4fb63ba29830a892390ba3d2"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "badnorth"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/lightvol.js",
+      "sha256": "01791db3ae624f739c8768b7c939e71573b0b539d9f56c90fbcb6577fac457db",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/core/voxel-ray.js",
+          "exists": true,
+          "sha256": "f715afbd3f64e3e0b8fc6f6ac42ff903a0e1429acd488ffbba3d94bf85884762"
+        },
+        {
+          "path": "src/light/lightvolume.js",
+          "exists": true,
+          "sha256": "c1a2b14af4215a2534ca35054ad77c1ded46a5e9ba8a03357527403822938a43"
+        },
+        {
+          "path": "src/world/view.js",
+          "exists": true,
+          "sha256": "ae9b401ba9e387d2ebe3d672aab9caf1a47e2770f527041882067cb9d28f439f"
+        },
+        {
+          "path": "lightvolume.html",
+          "exists": true,
+          "sha256": "7c703bf129bf80675fa7431c5a0a52511a50cab1be3847b81ea39a6f9b4922c7"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留点光/太阳DDA与六向RGB；新增可选中心EDT距离场保守步进、DDA兜底、六向距离AO及梯度诊断，两网格与DDA渲染属性对照通过。体素中心距离不是形变表面SDF；笔触法线、命中UV/mega反馈、全方向传播和实时增量仍缺。",
+      "domains": [
+        "core",
+        "light",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/los.js",
+      "sha256": "736871374ee18b42e872d4d8a941f32821f8e624c23c5d95f1ee564ca11d7b92",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/core/nav-visibility.js",
+          "exists": true,
+          "sha256": "ee103f91836c8237f94371d2134ffce1154be3ec4f621d5ff601d07df7d88b34"
+        },
+        {
+          "path": "src/world/visibility.js",
+          "exists": true,
+          "sha256": "2929429695af29dbb8ebfd75ccb5b1e9de2824d2726299122ea5d571855c5832"
+        },
+        {
+          "path": "src/world/view.js",
+          "exists": true,
+          "sha256": "ae9b401ba9e387d2ebe3d672aab9caf1a47e2770f527041882067cb9d28f439f"
+        },
+        {
+          "path": "visibility.html",
+          "exists": true,
+          "sha256": "f302d095978cc6a091eeec66cffbb5ff923b018637c4f977545fdd43ef15b7db"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "分层导航门户的角度采样查询及World诊断已补；导航规则不等于光学遮挡，未接管战斗AI或箭矢精确碰撞。",
+      "domains": [
+        "core",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/mesa.js",
+      "sha256": "7c5ab4e3df973738d9ebd46397b60c93568beace336ef5e5d5742609366d0cab",
+      "imports": [
+        "../src/grid.js",
+        "../src/town.js",
+        "./noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/terrain/generate.js",
+          "exists": true,
+          "sha256": "c146a3fb010ffb212437c526574d908d996916d9f720aafa611b25d40c8207ee"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/meshcheck.js",
+      "sha256": "5addb03d44bfca4a10e8ec98fbc0bad5e2c8bfcb106b8b18379c458b9d7aa34d",
+      "imports": [],
+      "targets": [
+        {
+          "path": "grids.html",
+          "exists": true,
+          "sha256": "9838f2d42b4249f8227b82bf80aa26395c041eeb92d2238b32a499d3c15a9384"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [],
+      "mapped": true
+    },
+    {
+      "source": "engine/noise.js",
+      "sha256": "c42245fb5c63b7a3174ff40ece45fc8dfb98f41cda17e1a08263bbcf26e88bb1",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/noise.js",
+          "exists": true,
+          "sha256": "b79b31dad5e4f0df599cf1ce7886d75f0b10a44d6ad6eb163ac75ac4199d3498"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/normalsmooth.js",
+      "sha256": "d040aef01db16fe2e81a026dcd6e748d65941c1b872857669bf2e58701135fbb",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/terrain/shape.js",
+          "exists": true,
+          "sha256": "9b3f1847098c047ba073ab974c43651f5a33b59fb83c35406db995d64a4a6478"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/ornament.js",
+      "sha256": "911a0b5ae549b80b5393d8dd20af49eb0d2a6344104a6d3f04a503bbb04d3bfe",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/ornament-field.js",
+          "exists": true,
+          "sha256": "ca7ed48bef5a75a4320728f925d77ffa9e5e195181528e27e2ed42b4c3f8107b"
+        },
+        {
+          "path": "src/ui/ornament.js",
+          "exists": true,
+          "sha256": "f91b77f5fac6aea463bd374831b52cb1c756c99622873d6ca592d054ed79ada5"
+        },
+        {
+          "path": "ornament.html",
+          "exists": true,
+          "sha256": "5d2006727379cab3793c3ee8becf523fe3217952ecfea12ebe7aad1142949b03"
+        },
+        {
+          "path": "textures.html",
+          "exists": true,
+          "sha256": "02077065e5d0e4d0170bd59240a515c3a3122fd5b35bc09db5d232945c0c86e6"
+        },
+        {
+          "path": "src/core/ui-reveal.js",
+          "exists": true,
+          "sha256": "49c27378c7f41a76576becece4a7bee6c25fa747767964bd4910cbfc9be3e29e"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "单张128²距离场、镜像UV、边区/中心独立阈值和uniform展开通过三尺寸GPU验收；保留旧演示。原作画稿/分层时序、九宫格不变形未复现，样例界面非游戏编辑器接入。 续审UI flair100帧，新增标题先显/先退、外纹后显/后退两轨本地时序及透明文字inert；单图集不变。没有原中心徽章/逐部件时序、白亮到金色材质或原画稿，局部通过不代表完整效果。",
+      "domains": [
+        "core",
+        "ui"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/outline.js",
+      "sha256": "cb9e6749f930c0242169cb191ecbf1b020975e31b6d629e72f35e4c2e894a282",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/world/outline-pass.js",
+          "exists": true,
+          "sha256": "4d5f9438f664c7c5db67d9fd729f9f7d13a09e219df9250a17d911e47cf2bd88"
+        },
+        {
+          "path": "src/world/view-post-extras.js",
+          "exists": true,
+          "sha256": "d93cf95147adf558fc94f9336adad6b936117624474815cdac8a4b918244ac21"
+        }
+      ],
+      "upstreamStatus": "部分覆盖",
+      "gap": "（第 55 批）屏幕空间描边接进渲染循环（?fx=outline），零报错、修掉云卡/水面假墨线；缺原片程序化笔触法线图 / 反差贴图作线源。",
+      "domains": [
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/props.js",
+      "sha256": "9c91d42b3802cf8d34e7784d3df51271ee9c6c267ec4b618ae83224891d3c54e",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "build"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/reflection.js",
+      "sha256": "b69d862246d90b8e94404c3a6b1020f4a516b2d25d41133e0bb7bb0332ade335",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/water/reflection.js",
+          "exists": true,
+          "sha256": "df076315939147a7f45a1ff7fb5c44e66efee72a8d1c0aef4012239adeeaf876"
+        },
+        {
+          "path": "src/world/view.js",
+          "exists": true,
+          "sha256": "ae9b401ba9e387d2ebe3d672aab9caf1a47e2770f527041882067cb9d28f439f"
+        },
+        {
+          "path": "reflection.html",
+          "exists": true,
+          "sha256": "189674fcadbc343b479c17ce3b578f664df4accce48fe62d6d16d0bdf0df6e46"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "纠正原静态映射误指岸浪文件。保留实际WorldMesh翻转/颜色反射，补裁掉水面上方残影、受限深度淡出/线性中点及参数验收；不等于原作完整色块/遮挡算法，原版createFlatReflection等名API未保留。",
+      "domains": [
+        "water",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/relax.js",
+      "sha256": "b1faee6a2517745102e57bacbeb18cc7a9897670304e677cd9ecc26cfc5f815e",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/sphere/planet.js",
+          "exists": true,
+          "sha256": "b0c0f3829eb773bcd3d775220d682418e3197b4ce977f71f4bb1116b347b10a9"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "sphere"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/rivers.js",
+      "sha256": "7c9f8f8f07969fd1c49396b3be0fd6a6093b71936cdf6e9a9c54a2deea312cbf",
+      "imports": [
+        "./noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/terrain/generate.js",
+          "exists": true,
+          "sha256": "c146a3fb010ffb212437c526574d908d996916d9f720aafa611b25d40c8207ee"
+        },
+        {
+          "path": "terrain-r55.html",
+          "exists": true,
+          "sha256": "3a4525b252d675a1653b031438a20e3e1622f41ba6ab6eaad61d67c891dd6b2e"
+        },
+        {
+          "path": "planet-rivers-r55.html",
+          "exists": true,
+          "sha256": "b09e9541f301c9c1474f3e460a6e8318b0489da25e772657be7b10f84fe96535"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）relaxRiverSlopes BFS 缓坡坍缩 + 湖洞联合重建（全入海、无环、不逆流），球面 World 同管线。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/roofs.js",
+      "sha256": "7c1011672741adf96fee99f64bcb3790022b55f23e6fd45733eee963bd4805fd",
+      "imports": [
+        "three",
+        "./props.js"
+      ],
+      "targets": [
+        {
+          "path": "src/build/buildings.js",
+          "exists": true,
+          "sha256": "b392244adb2cb7c4de1602dfac0b3f8063bf26d563d83c1320c3a4ac6761f819"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "build"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/shorefield.js",
+      "sha256": "d6aeb3905bcfaded67296ba56058c0725cca261ca6a5dc35c48194901b0bca3a",
+      "imports": [
+        "../src/town.js"
+      ],
+      "targets": [
+        {
+          "path": "src/water/shore.js",
+          "exists": true,
+          "sha256": "0ab4472edd71e8557d180a291d444440fc4a882639159c7b6e587d62d59e678f"
+        },
+        {
+          "path": "src/core/shore-profile.js",
+          "exists": true,
+          "sha256": "da37ab90e4bee055dea9204a07c37eb334be67f86368d198586da996a6f10c59"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "已有chamfer栅格迁移到共享水层，本轮补起点阈值/硬步长上限和4M栅格预算；不是精确欧氏场，也未保留独立buildShoreDistance导出。",
+      "domains": [
+        "core",
+        "water"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/snapshot.js",
+      "sha256": "6f201295ebcc5af40f21a13435ae3b694987fd812c577c3097e234450244877f",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/world/island-snapshot.js",
+          "exists": true,
+          "sha256": "5354339de52760401172454227bf97dbc1ff5959147a5221128173e4dc58596f"
+        },
+        {
+          "path": "snapshot.html",
+          "exists": true,
+          "sha256": "2a891874148d92c58d48103c62efa0428ab070da42d0c22a17c04697e340284e"
+        },
+        {
+          "path": "src/campaign/campaign.js",
+          "exists": true,
+          "sha256": "e5417aae0f9ead404263eea24116f4581d8638ea9c35bcc175611cf95c810076"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "350帧复核；双网格真实World 64²捕获、异常状态恢复、跨上下文显式上传及GPU alpha阈值通过。原作通道编码/内轮廓未知；战役图标仍程序近似，全量真实快照缓存与游戏接入待后续集成。",
+      "domains": [
+        "campaign",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/snow.js",
+      "sha256": "323cd5a28fde37c48be3de597fdf6478838b1709013b196517e0da43a97153d5",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/life/atmosphere.js",
+          "exists": true,
+          "sha256": "0af4ee512d4031ba48c3e7faa8406b90792a08c583220df952e098a32f550553"
+        },
+        {
+          "path": "src/core/wind-flow.js",
+          "exists": true,
+          "sha256": "24d16022500aaa17ebf812119ed49f142c8c2b566be950a0dac017772163155f"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）圆形软点、大小不一、World 支撑面接触 AO、远处淡出，接进 Atmosphere；未目视。",
+      "domains": [
+        "core",
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/sphere.js",
+      "sha256": "17e8067371fb09e3defc3fc79a1bf03b7edf8fe2f5c264fe81e75b18c01323a6",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/sphere/sphere-stages.js",
+          "exists": true,
+          "sha256": "437bda3bededd0d1487b27f56f58de8e8f6aa86ea1fba512ed31a330efa64485"
+        },
+        {
+          "path": "src/sphere/planet.js",
+          "exists": true,
+          "sha256": "b0c0f3829eb773bcd3d775220d682418e3197b4ce977f71f4bb1116b347b10a9"
+        },
+        {
+          "path": "planet.html",
+          "exists": true,
+          "sha256": "8f350819bb33493f1fa8ebfbc340c1e74d7e75e3d503c047916c9cf84af76dfa"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）阶段动画用真实迭代快照（?stages=1 / ?stageT=）。",
+      "domains": [
+        "sphere"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/splash.js",
+      "sha256": "c9c01fe653a72dedf6fa81404a9d49a46fbcb081f91b5adbb2df8360b0a63390",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/life/effects.js",
+          "exists": true,
+          "sha256": "46b6942c9ba31b703abc77bd7bb8cd3c3f99b6c09420f10afc7f1b3c27b957fd"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "life"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/spritepack.js",
+      "sha256": "acca99c9403625aada76e114d67fc4d01b63a6ad0040bddbc9005d0f9145b035",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/core/uv-charts.js",
+          "exists": true,
+          "sha256": "4e101a24d1d2bdd02bee666c4448df68f3433f39d4d205f3b186fa0878bb9e1b"
+        },
+        {
+          "path": "src/core/uv-bake.js",
+          "exists": true,
+          "sha256": "ee818272aa28e5055722206aad97fd3b57545c2284820b72c56e306ac0eb14ae"
+        },
+        {
+          "path": "uv-bake.html",
+          "exists": true,
+          "sha256": "d5fc88d668f2a37fd35d17c6af486ceddd8d6dd60bdb81966d4ff42a1055a1d4"
+        }
+      ],
+      "upstreamStatus": "部分覆盖",
+      "gap": "（第 55 批）填充率 0.158→0.31/0.48、零重叠，bakeChartPage 进共享 Atlas 并贴回；仍 <0.5（需墙带展开/图块合并），未接主场景 View。",
+      "domains": [
+        "core"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/surface.js",
+      "sha256": "6fcbd94fb0f611c93114f0a03e28313c49d3fd9f367cfb3f51dfaaae4949462d",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/terrain/surface-pattern.js",
+          "exists": true,
+          "sha256": "541338a08e5589062e4f03b09a8d3d0ee8f15a3a5e7cf685437707e91eb1b06b"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）surface 层（格线/层理/砂砾）挂到 View 共享材质地形面；浏览器对照已看。",
+      "domains": [
+        "terrain",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/surfaceshadow.js",
+      "sha256": "629cc15dd1230817ca653e91621ce591c6338a57dba2e7ad5d23cf46f9dfbec7",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/light/surface-shadow.js",
+          "exists": true,
+          "sha256": "9870cc64dcd7b05c49f6be7c86a113459dac18c5e7c3b12d68d6b39b94a56b46"
+        },
+        {
+          "path": "src/world/view-shading.js",
+          "exists": true,
+          "sha256": "39100e573830739ac3e63169dfae5020a7269a4641da006e94c5cd15bedeb8a9"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）竖面窄带（0.28 倍）在 View 着色器生效，屋顶排除；浏览器对照已看。",
+      "domains": [
+        "light",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/terrain.js",
+      "sha256": "e26ea2833cf7a2bb56e3bd38c4e7dedd744953d7b5182068d47d1827998cd259",
+      "imports": [
+        "../src/grid.js",
+        "../src/town.js",
+        "./noise.js"
+      ],
+      "targets": [
+        {
+          "path": "src/terrain/generate.js",
+          "exists": true,
+          "sha256": "c146a3fb010ffb212437c526574d908d996916d9f720aafa611b25d40c8207ee"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "terrain"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/vertexlight.js",
+      "sha256": "75cb609c0cf595342f23ec004920cf2dda3b9c5a5c0c3bff85e336a5c39168de",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/core/cube-height.js",
+          "exists": true,
+          "sha256": "4ef20ed23ca76693ab81bdf69228446dded1aa8f9ba582107e8a869a6867336d"
+        },
+        {
+          "path": "src/light/cube-height.js",
+          "exists": true,
+          "sha256": "d2e05dc56098b526080a83b9e1f287127ae32e1ce1dec258d517ad712aab9cfc"
+        },
+        {
+          "path": "src/sphere/planet.js",
+          "exists": true,
+          "sha256": "b0c0f3829eb773bcd3d775220d682418e3197b4ce977f71f4bb1116b347b10a9"
+        },
+        {
+          "path": "planet.html",
+          "exists": true,
+          "sha256": "8f350819bb33493f1fa8ebfbc340c1e74d7e75e3d503c047916c9cf84af76dfa"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "273帧复核，真实6面低分辨率高度CubeTexture、顶点单次查询及球面实验通过；本地高度暗化解释不等同原作光照/投射阴影，游戏共享World球面融合未接入。",
+      "domains": [
+        "core",
+        "light",
+        "sphere"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/voxelshadow.js",
+      "sha256": "84b35946f9bd727e08275a3274eb18f15b3912d8b573c8a7e6a1537c838ade57",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/light/bake.js",
+          "exists": true,
+          "sha256": "b8a1512bab3209c4489821a125ffcdd0ba36a7941d348d422fc913704d7644c2"
+        },
+        {
+          "path": "src/world/worldmesh.js",
+          "exists": true,
+          "sha256": "f4a5616fd7ab8dfc07fcda64283d02ef750415beea24ef42a04c430b76d6b007"
+        },
+        {
+          "path": "ao-stages.html",
+          "exists": true,
+          "sha256": "2cba0b5ee51d997b351d5917755fd972c097017dc7de64d8134e105634b4dc20"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）逐顶点体素太阳阴影进 bakeLighting（与 AO 同一占用场），分块烘焙按影长加边；未接 View 太阳 UI、未目视。",
+      "domains": [
+        "light",
+        "world"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/waterfall.js",
+      "sha256": "7e8d19f4b1b813d50deeba8f703856364eddb26026f72973b4dd6bd837f5098a",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/water/waterfall.js",
+          "exists": true,
+          "sha256": "71c7bd4d0b12934a0e248e1de1a16d238a01bc09b0c5eb38ee43dc11ccc994bc"
+        }
+      ],
+      "upstreamStatus": "已合并/迁移（静态确认）",
+      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。",
+      "domains": [
+        "water"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/watervol.js",
+      "sha256": "9ea0c1145b5144a976577324f4a47c412f3c79b167764b33a9790e92f8b5bbfa",
+      "imports": [
+        "three"
+      ],
+      "targets": [
+        {
+          "path": "src/water/watervol.js",
+          "exists": true,
+          "sha256": "567d2096cc612241b7283d6ffebe2ee2540d4ced5093c7586ab1ae1623de17f8"
+        },
+        {
+          "path": "src/water/land-distance.js",
+          "exists": true,
+          "sha256": "fc40a96221ad30c8252e87a5906fc56d279678d0a16083a21a65d7fd04b60170"
+        },
+        {
+          "path": "src/core/voxel-distance.js",
+          "exists": true,
+          "sha256": "37666f8f98cad628153d9694d87a3200336a5bd62f51e71e723a8ccd17af9917"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留已有平面叠层，补level1陆地/各向异性2D中心距离、版本缓存、空场无残影和8资源释放，pipeline补真实开关。仅本地浅水近似，不是一般SDF/完整反射；形变后mask与原作效果仍缺，原版createWaterVolume同名API未保留。",
+      "domains": [
+        "core",
+        "water"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/waves.js",
+      "sha256": "327211d422145ab8e19e0570594332089939250752c226beca46a4dec1fc8de7",
+      "imports": [
+        "three",
+        "./shorefield.js"
+      ],
+      "targets": [
+        {
+          "path": "src/water/shore.js",
+          "exists": true,
+          "sha256": "0ab4472edd71e8557d180a291d444440fc4a882639159c7b6e587d62d59e678f"
+        },
+        {
+          "path": "src/core/wave-cycle.js",
+          "exists": true,
+          "sha256": "a9a03399574437dd69ab5b25bebdf07f77ffe50a910d5bb7728d99777f79353a"
+        },
+        {
+          "path": "waves.html",
+          "exists": true,
+          "sha256": "8e45d875fe3fbc6751bed067eb510c2c08fc6cbacedb108649b68053831cf876"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "保留进退方向/独立周期，新增闭环分段浪峰及宽度，可在实际View开关对照。局部谐波是本地美术近似；全局泡沫mask、窄湾交叠和原版同名API仍缺。",
+      "domains": [
+        "core",
+        "water"
+      ],
+      "mapped": true
+    },
+    {
+      "source": "engine/worldmap.js",
+      "sha256": "2ce56650c8885dca4367a086071e8401f7efb27d3709f080a8f499024959b7d5",
+      "imports": [],
+      "targets": [
+        {
+          "path": "src/sphere/worldmap.js",
+          "exists": true,
+          "sha256": "24ef46c9bf8d972432878d778a4b7f2037a652272e251663a87ad91038bf3899"
+        },
+        {
+          "path": "src/sphere/worldmap-material.js",
+          "exists": true,
+          "sha256": "519734166e2b7d6f4f25469644e219d7761e2fb6ebb99bc6779a85aa116dc275"
+        },
+        {
+          "path": "planet.html",
+          "exists": true,
+          "sha256": "8f350819bb33493f1fa8ebfbc340c1e74d7e75e3d503c047916c9cf84af76dfa"
+        }
+      ],
+      "upstreamStatus": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）512×256 等距贴图四表面混合上星球，无经度接缝，与格子海陆一致 97%（?map=1）。",
+      "domains": [
+        "sphere"
+      ],
+      "mapped": true
+    }
+  ],
+  "counts": {
+    "actualSources": 170,
+    "mapped": 170,
+    "unmapped": 0,
+    "missingTargets": 0
+  },
+  "staleMappings": []
+}

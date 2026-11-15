@@ -1,0 +1,642 @@
+[
+  {
+    "shotId": "city",
+    "file": "city.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v9-tower",
+      "eye": [
+        -128.86198294165098,
+        -160.39355142078836,
+        -166.8662138576093
+      ],
+      "aim": [
+        -69.62830029811902,
+        -169.94326751577745,
+        -38.83676606927737
+      ],
+      "size": [
+        52.922927459512,
+        83.27451125656944,
+        41.370503211867586
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "port",
+    "file": "port.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-mother-port",
+      "eye": [
+        -42.8876624420904,
+        -121.1815834719959,
+        -88.62902948917775
+      ],
+      "aim": [
+        -50.93662134890168,
+        -118.1044833388539,
+        -45.39328281711559
+      ],
+      "size": [
+        14.37229029876108,
+        25.965251059321005,
+        15.587819704100312
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "shore",
+    "file": "shore.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "crystal-v7-shores",
+      "eye": [
+        -76.8885724232851,
+        -91.19596171226436,
+        90.2644793518288
+      ],
+      "aim": [
+        -76.8885724232851,
+        -91.19596171226436,
+        -57.710139592006996
+      ],
+      "size": [
+        98.72019304730054,
+        103.47875450617886,
+        102.34803136286101
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "garden",
+    "file": "garden.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "v9-transparent-habitat",
+      "eye": [
+        -73.87506483741227,
+        -142.3866863047961,
+        -49.965673579335295
+      ],
+      "aim": [
+        -65.62382204346953,
+        -143.7777514792412,
+        -32.5697243754518
+      ],
+      "size": [
+        11.369304985727418,
+        8.504993711937487,
+        10.884421435115975
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "gate",
+    "file": "gate.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-seat-root",
+      "eye": [
+        167.80578181733995,
+        -115.82453272386499,
+        -164.4891582317489
+      ],
+      "aim": [
+        27.42252455317825,
+        -84.9923127226123,
+        -155.54155394994768
+      ],
+      "size": [
+        68.50781772647241,
+        84.81561325117022,
+        83.95076399101782
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "heroes",
+    "file": "heroes.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "gate-heroes",
+      "eye": [
+        11.15116308934179,
+        -67.82567204113104,
+        -157.43104825277823
+      ],
+      "aim": [
+        7.762144024305544,
+        -66.9787336905573,
+        -156.83351925787358
+      ],
+      "size": [
+        1.1124604121290371,
+        1.871564983757679,
+        2.0872869008778707
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "moss",
+    "file": "moss.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "mossyGround",
+      "eye": [
+        -32.11447242882503,
+        142.7576452970935,
+        -124.80844230940221
+      ],
+      "aim": [
+        -69.32170127756257,
+        84.74200437598687,
+        -117.6824003773211
+      ],
+      "size": [
+        40.8089564602426,
+        23.922713214051413,
+        32.04843722166578
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "swamp",
+    "file": "swamp.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "moebius-swamp-placement",
+      "eye": [
+        -229.7353949746378,
+        51.32452665088174,
+        -155.73785373832186
+      ],
+      "aim": [
+        -105.810484138521,
+        -82.39024609479524,
+        -77.02237629038126
+      ],
+      "size": [
+        112.11369674946988,
+        78.15941347436618,
+        116.95575520184019
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "roots",
+    "file": "roots.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-towering-tree",
+      "eye": [
+        -177.9273685527013,
+        -53.006012264397036,
+        -39.812409078871404
+      ],
+      "aim": [
+        -127.03171613759805,
+        -62.22712428729832,
+        -76.47533900618964
+      ],
+      "size": [
+        37.34053051932588,
+        32.65812602021636,
+        30.434322928231424
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "path",
+    "file": "path.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-three-bank-path",
+      "eye": [
+        -123.79299926995927,
+        -38.66812130806491,
+        -93.66895476067484
+      ],
+      "aim": [
+        -93.95486031262716,
+        -70.86342363198479,
+        -74.71616037625571
+      ],
+      "size": [
+        24.00263064912886,
+        28.160133842558885,
+        24.895630526201508
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "ecology",
+    "file": "ecology.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-rooted-ecology",
+      "eye": [
+        -136.18924822907687,
+        -32.90079548445226,
+        -92.27059357976574
+      ],
+      "aim": [
+        -100.05216718064099,
+        -71.89264585159776,
+        -69.31679382223113
+      ],
+      "size": [
+        30.84143729764169,
+        34.10484281404193,
+        29.866318805653897
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "water",
+    "file": "water.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "swamp-opposite-drinking-stair",
+      "eye": [
+        -108.00549732554501,
+        -71.38915290585297,
+        -66.5973682008285
+      ],
+      "aim": [
+        -97.22122323100487,
+        -83.02536672315001,
+        -59.74733878742194
+      ],
+      "size": [
+        6.72117381886892,
+        10.177799705650415,
+        3.1375647443337655
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "shelf",
+    "file": "shelf.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "greg-swamp-dry-service-shelf",
+      "eye": [
+        -99.16312209272837,
+        -62.15305101621077,
+        -84.99460557057881
+      ],
+      "aim": [
+        -96.84510334693988,
+        -64.65418938881143,
+        -83.52223047604019
+      ],
+      "size": [
+        2.18766050470866,
+        1.8221956963364008,
+        1.6250775953169523
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "fox",
+    "file": "fox.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "fox-ali",
+      "eye": [
+        -30.93101386793752,
+        156.26877368748774,
+        29.406227417723944
+      ],
+      "aim": [
+        -34.091976421614106,
+        154.61721147534394,
+        28.542119794839707
+      ],
+      "size": [
+        2.1365270945638315,
+        0.9651073989166719,
+        2.16127759877525
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "tiger",
+    "file": "tiger.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "moebius-cyber-ink-tiger",
+      "eye": [
+        -90.09634513244085,
+        -73.60537546087606,
+        -89.45855031153165
+      ],
+      "aim": [
+        -89.52895073302145,
+        -75.52293343386476,
+        -86.71404033418872
+      ],
+      "size": [
+        1.4193066498184805,
+        1.866382500534172,
+        1.50175399665018
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  },
+  {
+    "shotId": "citadel",
+    "file": "citadel.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "citadel-new-main-gate",
+      "eye": [
+        66.40273086127932,
+        138.2036821242724,
+        127.84272259563285
+      ],
+      "aim": [
+        73.64470705216675,
+        112.55285904761905,
+        133.93902881252225
+      ],
+      "size": [
+        16.103434248863053,
+        15.000099982605192,
+        12.252871338556986
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 0,
+      "rescuedFox": false,
+      "rescuedTiger": false,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "bookshop"
+    }
+  }
+]

@@ -456,8 +456,8 @@ export function createCitadelEditorPanel({
 
   function persistTerrainObjects() {
     try {
-      localStorage.setItem(instanceStorageKeys().objects, JSON.stringify(terrainObjects));
-    } catch { /* private mode */ }
+      localStorage.setItem(instanceStorageKeys().objects, JSON.stringify(terrainObjects));return true;
+    } catch { return false; }
   }
 
   /** Delete one tower/tree, persist immediately, and hot-rebuild the 3D group. */
@@ -1299,8 +1299,8 @@ export function createCitadelEditorPanel({
   }
   function persistTerrain() {
     try {
-      localStorage.setItem(instanceStorageKeys().terrain, JSON.stringify(terrain));
-    } catch { /* private mode */ }
+      localStorage.setItem(instanceStorageKeys().terrain, JSON.stringify(terrain));return true;
+    } catch { return false; }
   }
   const TERRAIN_FIELDS = [
     { key: "radius", label: "本层半径", min: 4, max: 36, step: 0.25 },
@@ -2040,10 +2040,10 @@ export function createCitadelEditorPanel({
   }
   const junctionEditor=()=>getCitadelTarget?.()?.userData?.junctionEditor;
   function save() {
-    if(junctionEditor()){try{junctionEditor().save();dirty=false;applyDirty();toast("已保存交汇城堡模块",1.5);}catch(error){toast(String(error),2);}return;}
+    if(junctionEditor()){try{junctionEditor().save();dirty=false;applyDirty();toast("已保存交汇城堡模块",1.5);return true;}catch(error){toast(String(error),2);return false;}}
     if (applyFailure) {
       toast(`草稿尚未应用，${failedSceneStatus()}。请修改或撤销后再保存。`, 2.6);
-      return;
+      return false;
     }
     try {
       saveCitadelLevelsSave(localStorage, serializeLayout(), getCitadelTarget?.()?.userData?.lastIncrementalEdit || {
@@ -2055,17 +2055,18 @@ export function createCitadelEditorPanel({
         normalize: normalizeCitadelTerraceLayout,
       });
       // 台地层半径/层高 + 护城河等高线（内径/外径/高度）
-      persistTerrain();
+      if(!persistTerrain())throw Error("地形保存失败");
       // 瞭望塔 / 参天树 / 木马
-      persistTerrainObjects();
+      if(!persistTerrainObjects())throw Error("地形物件保存失败");
     } catch (error) {
       console.warn("[citadel-editor] 保存失败：", error);
       toast(describeStorageWriteError(error), 2.6);
-      return;
+      return false;
     }
     dirty = false;
     applyDirty();
     toast("已保存：城堡布局 · 台地层 · 地形地貌 · 护城河", 1.8);
+    return true;
   }
   btnSave.onclick = save;
   btnTerrainSave.onclick = save;
@@ -2466,6 +2467,7 @@ export function createCitadelEditorPanel({
   // ---------- 开关 ----------
   const api = {
     element: panel,
+    save,
     open() {
       if (open) return;
       open = true;

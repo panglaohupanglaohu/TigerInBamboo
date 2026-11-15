@@ -1,0 +1,15 @@
+{
+  "reports": [
+    {
+      "kind": "http://localhost:8769/index.html?scene=terrain&grid=quad",
+      "raised": 29,
+      "idempotent": true
+    },
+    {
+      "kind": "http://localhost:8769/index.html?scene=terrain&grid=mixed",
+      "raised": 25,
+      "idempotent": true
+    }
+  ],
+  "errors": []
+}

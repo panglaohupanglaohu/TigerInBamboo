@@ -5,11 +5,21 @@ const EDGES=[[0,1],[2,3],[4,5],[6,7],[0,2],[1,3],[4,6],[5,7],[0,4],[1,5],[2,6],[
 const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
 const sub=(a,b)=>a.map((v,i)=>v-b[i]);
 function normals(vertices,triangles){const out=vertices.map(()=>[0,0,0]);for(const[a,b,c]of triangles){const n=cross(sub(vertices[b],vertices[a]),sub(vertices[c],vertices[a]));for(const id of [a,b,c])for(let k=0;k<3;k++)out[id][k]+=n[k]}return out.map(n=>{const l=Math.hypot(...n)||1;return n.map(v=>v/l)})}
-export function buildCanopy(blobs,{resolution=14,passes=6,hardStiff=.15,softStiff=.3}={}){
+/* 第 50 轮，迁自 REACode src/foliageblob.js（1580158269267406849「Can you make good looking foliage from Marching Cubes-blobs?」）：
+ * 原版逐帧看到树冠是一整坨融合的圆包、接缝处平滑过渡、内部没有交线——是 metaball 等值面，不是球体并集（max）。
+ * 并集在两球相交处留一道折痕（这里原来靠 seam springs 事后松弛去磨）；kernel:'metaball' 改用 Wyvill 核
+ * w(t)=(1−t²)²（t=d/(r·influence)）求和，阈值取单球在 d=r 处的核值 → 孤立的包仍是半径 r，靠近的包在接缝处自然鼓起相连。 */
+const wyvill=t=>t>=1?0:(1-t*t)**2;
+export function buildCanopy(blobs,{resolution=14,passes=6,hardStiff=.15,softStiff=.3,kernel='union',influence=1.6}={}){
+ if(kernel!=='union'&&kernel!=='metaball'||!Number.isFinite(influence)||influence<=1.05||influence>3)throw new RangeError('Invalid canopy kernel');
  if(!Array.isArray(blobs)||!blobs.length||blobs.length>32||blobs.some(b=>![b.x,b.y,b.z,b.r].every(Number.isFinite)||b.r<=0)||!Number.isInteger(resolution)||resolution<6||resolution>48||!Number.isInteger(passes)||passes<0||passes>30||![hardStiff,softStiff].every(v=>Number.isFinite(v)&&v>=0&&v<=.5))throw new RangeError('Invalid canopy input');
  const nearest=p=>{let id=0,best=Infinity;blobs.forEach((b,i)=>{const d=Math.hypot(p[0]-b.x,p[1]-b.y,p[2]-b.z)-b.r;if(d<best){best=d;id=i}});return id};
- const field=p=>Math.max(...blobs.map(b=>b.r-Math.hypot(p[0]-b.x,p[1]-b.y,p[2]-b.z)));
- const lo=[0,1,2].map(k=>Math.min(...blobs.map(b=>[b.x,b.y,b.z][k]-b.r))),hi=[0,1,2].map(k=>Math.max(...blobs.map(b=>[b.x,b.y,b.z][k]+b.r)));
+ const iso=wyvill(1/influence),meanR=blobs.reduce((s,b)=>s+b.r,0)/blobs.length;
+ const field=kernel==='metaball'
+  ?p=>(blobs.reduce((s,b)=>s+wyvill(Math.hypot(p[0]-b.x,p[1]-b.y,p[2]-b.z)/(b.r*influence)),0)-iso)*meanR
+  :p=>Math.max(...blobs.map(b=>b.r-Math.hypot(p[0]-b.x,p[1]-b.y,p[2]-b.z)));
+ const pad=kernel==='metaball'?.25:0;
+ const lo=[0,1,2].map(k=>Math.min(...blobs.map(b=>[b.x,b.y,b.z][k]-b.r*(1+pad)))),hi=[0,1,2].map(k=>Math.max(...blobs.map(b=>[b.x,b.y,b.z][k]+b.r*(1+pad))));
  const size=Math.max(...hi.map((v,k)=>v-lo[k]))*1.254,step=size/resolution,min=lo.map((v,k)=>(v+hi[k]-size)/2),n=resolution+1;
  const at=(x,y,z)=>(z*n+y)*n+x,grid=new Float64Array(n*n*n),point=(x,y,z)=>[min[0]+x*step,min[1]+y*step,min[2]+z*step];
  for(let z=0;z<n;z++)for(let y=0;y<n;y++)for(let x=0;x<n;x++)grid[at(x,y,z)]=field(point(x,y,z));

@@ -102,3 +102,17 @@ S18真实悬铃树对象：前置S07显式切回场景页（避免定向L01遗�
 S19对象查看生命周期：前置S07/S18，依次选择桥边与湖岸2号树，刷新列表并切学习工坊后返回，确认选择/只读范围与同一iframe保留；任何时刻仅一个高亮。通过geometry/material的dispose事件分别确认换树和进入编辑各释放一个暂态框（合计各2），进入编辑清掉对象范围、重新开放场景应用和原编辑器。前后World/settings、recipe与全部localStorage相同。此项验证查看/退出和资源生命周期，不能当移动树或对象修改持久化通过。
 
 S20实际画布点选：从辅助目录先定位桥边树，按几何边界投影出可见冠层位置，开启实景点选并用Playwright真实canvas pointer点击；等待选择模式结束及“从实景选中”事件，验证plane-tree类型。再定位目录中的柏树并实际点击，验证cypress类型/名称不同。测试不是直接调用选择命令伪装点击；目录定位仅准备相机。退出后实际World/settings、recipe及localStorage不变。S21单独无游戏bootstrap的Three fixture验证合批顶点区间边界命中、两个实例的不同ID和实例矩阵边界（minX 2.5/11.5），geometry坐标不变；该fixture不能替代S20真实游戏交互。
+
+新增材质适配：gscene-perceptual.test.mjs已入统一单元入口，检验真实量化输出ΔE、输入重排确定性、人工保护与严格bool、非法数值/色值、色域极端。gscene-perceptual-browser.mjs用隔离Chrome真实GenericScene+改造/验证Worker+GPU渲染，检查几何/人工材质/场景外共享材质保留，候选对照/放弃、存储拒绝不误报、成功保存和恢复；另核真实pipeline来源卡局部适配入口。隔离场景不能代替完整正式游戏验收。
+
+正式材质入口：gscene-perceptual-formal.mjs使用新context、正常pipeline和真实游戏iframe，选择书店镇→双击感知组合→执行→实际gscene.style.get→对照→放弃恢复。保存actual before/candidate与API日志，不写用户存档。rendered-scene-check.mjs对截图做颜色箱/主色占比门槛，旧整片水遮挡须失败；仍需实际看图，不能用门槛冒称美术验收。首轮遮挡失败及修复后的正式图均保留在perceptual-adapters-20261112。
+
+全目录源代码：reacode-file-status.test.mjs核对实际290文件集合/SHA256/目标存在，不允许页面继承依赖模块完成状态。统一入口新增refactor-code组，运行9个源库测试。source-refactor-browser.mjs验证mip/图集页交互、双网格笔触法线normalRT变化及World/位置/材质保留、map释放、父工坊290行/本轮4项筛选；成功回执绑定逐目标源码hash。上游学习进度是活动数据，历史核销测试从审阅账本构建固定113样本，并另测当前源完整保留，不能继续依赖当前next数组下标。
+
+
+2026-11-12增量：统一入口加learning-backlog-deliveries单元与源库trajectory-trace/nav-diagnostic-geometry/node-graph-{runtime,serialize,editor}/house-char/battle-c01/c02-bn-fx-b/c03-battle/battle-g3，共19组源文件。环境菜单专项tests/environment-menu-browser.mjs每种网格新context，逐个post11/北境45开关读回恢复，碰撞终点高于海面、三导航实际几何、主体World不变、焦黑两owner保留/完整恢复、移动菜单边界；源码hash记录首尾一致。节点tests/node-editor-browser.mjs用真实鼠标拖节点/端口/删线，不用模型API冒称UI编辑，保留非法导入截图；90帧状态/布局单元对照。tests/backlog-delivery-browser.mjs跑真实8931学习工坊，检查学习0、来源2、飞岛旧排期核销；数量变化按上游记录解释。历史learning-backlog-browser已改活动源预期并写唯一新目录，不能再用113/100硬编码或覆盖历史报告。
+
+2026-11-14：capability-evolution.test.mjs 纳入统一单元；capability-evolution-browser.mjs 支持 --source-only 先验8769，随后验实际8931/API同指纹、全部partial批注、局部替代/分支、前身精确跳转、同选择跨页、切页保留、390px不溢出。新context不触用户存档，不把时间线操作计为视频学习或代码实现验收。每次浏览器保留唯一时间目录。
+
+2026-11-14 能力谱系：capability-lineage.test.mjs 纳入统一单元（合成来源验证代际切分 / 方向 / 组合 / 得分 / 经验与管线需求回流 / 替代不排队，真实资料验证全量入线、队列覆盖与确定性）。capability-lineage-browser.mjs 用新 context 验 8769 与 8931 同线数、同缺口数、同代际，学习→演进定位、左栏→学习工坊、学习工坊→场景管线、两种左栏视图、390px 不溢出；加入管线只在测试上下文，不保存配方。证据目录 artifacts/capability-lineage-20261114/run-*。
+workshops-browser.mjs（36 例）上次带浏览器运行是 11-05；11-14 运行 11 通过 / 25 失败（20261114T115043544670Z）。失败项含已隐藏的旧左栏选择器、旧顶部页签、旧节点数与上游进度数据形状等，属系统工坊改版后未同步的用例；本轮没有改版前基线，不能逐条排除本轮影响，需单独一轮更新该套件。

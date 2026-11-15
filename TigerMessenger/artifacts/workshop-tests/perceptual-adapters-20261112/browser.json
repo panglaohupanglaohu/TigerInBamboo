@@ -1,0 +1,169 @@
+{
+  "scope": "Actual generic plugin + real transform/verification Workers + rendered isolated scene. No main game or user storage.",
+  "checks": [
+    {
+      "name": "run-preview-protect-shared-geometry",
+      "pass": true,
+      "run": {
+        "colors": {
+          "m1": "#728181",
+          "m2": "#be9967",
+          "m3": "#85646c",
+          "m4": "#fbfbd9",
+          "m5": "#517250"
+        },
+        "report": [
+          {
+            "id": "scene.oklab-palette",
+            "status": "applied",
+            "params": {
+              "colors": 3,
+              "strength": 0.7,
+              "maxDelta": 5,
+              "includeEdited": false
+            },
+            "count": 3,
+            "changed": [
+              "3组感知主色，保留材质明暗；不是World八角点色体"
+            ]
+          },
+          {
+            "id": "scene.oklab-contrast",
+            "status": "applied",
+            "params": {
+              "gain": 1.25,
+              "maxDelta": 4,
+              "includeEdited": false
+            },
+            "count": 5,
+            "changed": [
+              "材质表OKLab明暗适配；不是三角面contrast texture"
+            ]
+          }
+        ],
+        "after": [
+          {
+            "id": "m0",
+            "name": "验证材质 0",
+            "base": "#334466",
+            "color": "#3d4867",
+            "uses": 1,
+            "locked": true,
+            "shared": false
+          },
+          {
+            "id": "m1",
+            "name": "验证材质 1",
+            "base": "#668899",
+            "color": "#728181",
+            "uses": 1,
+            "locked": false,
+            "shared": true
+          },
+          {
+            "id": "m2",
+            "name": "验证材质 2",
+            "base": "#bc9765",
+            "color": "#be9967",
+            "uses": 1,
+            "locked": false,
+            "shared": false
+          },
+          {
+            "id": "m3",
+            "name": "验证材质 3",
+            "base": "#a15e77",
+            "color": "#85646c",
+            "uses": 1,
+            "locked": false,
+            "shared": false
+          },
+          {
+            "id": "m4",
+            "name": "验证材质 4",
+            "base": "#eeeecc",
+            "color": "#fbfbd9",
+            "uses": 1,
+            "locked": false,
+            "shared": false
+          },
+          {
+            "id": "m5",
+            "name": "验证材质 5",
+            "base": "#428245",
+            "color": "#517250",
+            "uses": 1,
+            "locked": false,
+            "shared": false
+          }
+        ]
+      },
+      "verification": {
+        "status": "pass",
+        "checks": [
+          {
+            "id": "values",
+            "name": "数值",
+            "status": "pass",
+            "detail": "5 种材质改色"
+          },
+          {
+            "id": "manual",
+            "name": "人工调色保留",
+            "status": "pass",
+            "detail": "已保存材质未改变"
+          },
+          {
+            "id": "delta",
+            "name": "感知色差预算",
+            "status": "pass",
+            "detail": "总预算 9，超限 0 种材质"
+          },
+          {
+            "id": "light",
+            "name": "整体明度",
+            "status": "pass",
+            "detail": "0.52 → 0.52（上限变化 0.25）"
+          },
+          {
+            "id": "contrast",
+            "name": "明暗层次",
+            "status": "pass",
+            "detail": "明度标准差 0.174 → 0.194（低于一半判失败：画面会糊成一片）"
+          },
+          {
+            "id": "variety",
+            "name": "颜色数",
+            "status": "pass",
+            "detail": "6 → 6 种"
+          }
+        ],
+        "summary": "数值✓ 人工调色保留✓ 感知色差预算✓ 整体明度✓ 明暗层次✓ 颜色数✓"
+      },
+      "unchanged": true,
+      "manual": "#3d4867",
+      "outside": true,
+      "sharedClone": true
+    },
+    {
+      "name": "compare-revert-save-failure-save-restore",
+      "pass": true,
+      "comparison": true,
+      "reverted": true,
+      "denied": true,
+      "failedSavePreservesSnapshot": true,
+      "saved": {
+        "saved": 6
+      },
+      "restored": true,
+      "geometry": true,
+      "outside": true
+    },
+    {
+      "name": "parent-source-to-adapter-entry",
+      "pass": true
+    }
+  ],
+  "errors": [],
+  "passed": true
+}

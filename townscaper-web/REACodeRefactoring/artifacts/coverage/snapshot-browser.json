@@ -3,8 +3,8 @@
     {
       "mixed": true,
       "size": 64,
-      "occupied": 1493,
-      "vertices": 12114,
+      "occupied": 1460,
+      "vertices": 12318,
       "versionBefore": 354,
       "versionAfter": 354,
       "stateRestored": true,
@@ -13,44 +13,44 @@
         {
           "size": 128,
           "crisp": false,
-          "on": 5972,
-          "transition": 776,
-          "rgb": 1229016
+          "on": 5840,
+          "transition": 848,
+          "rgb": 1204263
         },
         {
           "size": 128,
           "crisp": true,
-          "on": 5972,
-          "transition": 112,
-          "rgb": 1228727
+          "on": 5840,
+          "transition": 138,
+          "rgb": 1202909
         },
         {
           "size": 256,
           "crisp": false,
-          "on": 23876,
-          "transition": 2984,
-          "rgb": 4914945
+          "on": 23348,
+          "transition": 3256,
+          "rgb": 4816150
         },
         {
           "size": 256,
           "crisp": true,
-          "on": 23876,
-          "transition": 1002,
-          "rgb": 4909982
+          "on": 23348,
+          "transition": 1076,
+          "rgb": 4808186
         },
         {
           "size": 512,
           "crisp": false,
-          "on": 95480,
-          "transition": 11216,
-          "rgb": 19659315
+          "on": 93368,
+          "transition": 12208,
+          "rgb": 19264285
         },
         {
           "size": 512,
           "crisp": true,
-          "on": 95480,
-          "transition": 2074,
-          "rgb": 19639565
+          "on": 93368,
+          "transition": 2228,
+          "rgb": 19231702
         }
       ],
       "lines": [
@@ -81,8 +81,8 @@
     {
       "mixed": false,
       "size": 64,
-      "occupied": 1496,
-      "vertices": 16458,
+      "occupied": 1451,
+      "vertices": 16638,
       "versionBefore": 406,
       "versionAfter": 406,
       "stateRestored": true,
@@ -91,44 +91,44 @@
         {
           "size": 128,
           "crisp": false,
-          "on": 5984,
-          "transition": 784,
-          "rgb": 1230428
+          "on": 5804,
+          "transition": 840,
+          "rgb": 1194386
         },
         {
           "size": 128,
           "crisp": true,
-          "on": 5984,
-          "transition": 118,
-          "rgb": 1230091
+          "on": 5804,
+          "transition": 126,
+          "rgb": 1192970
         },
         {
           "size": 256,
           "crisp": false,
-          "on": 23928,
-          "transition": 3018,
-          "rgb": 4920847
+          "on": 23204,
+          "transition": 3236,
+          "rgb": 4776269
         },
         {
           "size": 256,
           "crisp": true,
-          "on": 23928,
-          "transition": 1018,
-          "rgb": 4918110
+          "on": 23204,
+          "transition": 1106,
+          "rgb": 4768558
         },
         {
           "size": 512,
           "crisp": false,
-          "on": 95696,
-          "transition": 11364,
-          "rgb": 19682427
+          "on": 92792,
+          "transition": 12200,
+          "rgb": 19104443
         },
         {
           "size": 512,
           "crisp": true,
-          "on": 95696,
-          "transition": 2114,
-          "rgb": 19671407
+          "on": 92792,
+          "transition": 2290,
+          "rgb": 19072612
         }
       ],
       "lines": [

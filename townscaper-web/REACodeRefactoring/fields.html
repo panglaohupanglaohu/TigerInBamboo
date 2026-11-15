@@ -1,3 +1,56 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>格块田纹 · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:12px 22px}iframe{width:100%;height:76vh;border:0}a{color:#26758a}label{margin-right:18px}</style><header><b>共享World地形 · 格块田纹</b> · <a href="pipeline.html" target="_top">管线</a> · <a href="textures.html">像素采样实验</a> · <a href="artifacts/coverage/texture-fields-review.md">逐帧证据</a><p>1714613599035863191：条纹沿格块改变方向，四次切换岛屿并显示生成过程。本地用格块坐标与导数抗锯齿曲线近似；尚无原作手绘田纹atlas/投射patch。</p><label>网格<select id="grid"><option value="mixed">三角＋四边</option><option value="quad">四边形</option></select></label><label><input id="show" type="checkbox" checked>地形田纹（关闭可对照）</label><span id="status">加载…</span></header><iframe id="scene" title="共享地形田纹"></iframe><script type="module">
-const $=s=>document.querySelector(s);let api;function apply(){if(!api)return;api.view.setDebug('fields',$('#show').checked);$('#status').textContent=`World ${api.world.version} · 顶面专用属性，不修改存档`;}function load(){api=null;window.fieldReview=null;$('#scene').src='index.html?scene=terrain&grid='+$('#grid').value+'&on=fields'}$('#scene').onload=()=>{const ready=()=>{const r=$('#scene').contentWindow.rea;if(!r?.view?.worldMesh.geometry.attributes.aField?.count){setTimeout(ready,100);return}api=r;window.fieldReview={api};apply()};ready()};$('#grid').onchange=load;$('#show').oninput=apply;load();
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>格块田纹 · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:12px 22px}iframe{width:100%;height:76vh;border:0}a{color:#26758a}label{margin-right:18px}</style><header><b>共享World地形 · 格块田纹</b> · <a href="pipeline.html" target="_top">管线</a> · <a href="textures.html">像素采样实验</a> · <a href="artifacts/coverage/texture-fields-review.md">逐帧证据</a><p>1714613599035863191：条纹沿格块改变方向，四次切换岛屿并显示生成过程。本地用格块坐标与导数抗锯齿曲线近似；尚无原作手绘田纹atlas/投射patch。</p><label>网格<select id="grid"><option value="mixed">三角＋四边</option><option value="quad">四边形</option></select></label><label><input id="show" type="checkbox" checked>地形田纹（关闭可对照）</label><label><input id="plots" type="checkbox">田块拼贴（r56 C08：格内不规则地块，各自色调/垄向/垄沟描边）</label><span id="status">加载…</span></header><iframe id="scene" title="共享地形田纹"></iframe><section id="plots-wrap"><h2>田块耕纹主轴 · 1798310423554658732</h2><p>左：同一地块的格共用一条主轴，垄线是中线对折的人字（本模块 <code>src/core/field-plots.js</code>）。右：照旧逐格 <code>hash01(c.id*19+5)</code> 取角（现行 <code>src/terrain/terrainmesh.js:143</code>）——同一块地里垄沟互相顶死。灰黄一圈是田埂格。</p><label>种子<input id="seed" type="number" min="1" max="99" value="5" style="width:56px"></label><span id="plotsStats">…</span><br><canvas id="plots" width="836" height="396" style="max-width:100%;border-radius:8px;background:#e7efe6"></canvas></section><script type="module">
+const $=s=>document.querySelector(s);let api;function apply(){if(!api)return;api.view.setDebug('fields',$('#show').checked);if($('#show').checked&&$('#plots').checked)api.view.fieldOn.value=2;$('#status').textContent=`World ${api.world.version} · 顶面专用属性，不修改存档`;}function load(){api=null;window.fieldReview=null;$('#scene').src='index.html?scene=terrain&grid='+$('#grid').value+'&on=fields'}$('#scene').onload=()=>{const ready=()=>{const r=$('#scene').contentWindow.rea;if(!r?.view?.worldMesh.geometry.attributes.aField?.count){setTimeout(ready,100);return}api=r;window.fieldReview={api};apply()};ready()};$('#grid').onchange=load;$('#show').oninput=apply;$('#plots').checked=new URLSearchParams(location.search).get('plots')==='1';$('#plots').oninput=apply;load();
+
+// ── 田块耕纹对照画布（1798310423554658732）─────────────────────────────
+import { buildSquareGrid } from './src/core/grid.js';
+import { partitionPlots, plotUV, mulberry32, plotBorderCells } from './src/core/field-plots.js';
+const R=5, N=R*2+1, PW=396, PH=396, GAP=44, Wd=2*PW+GAP;
+const cvs=$('#plots'), ctx=cvs.getContext('2d');
+const grid=buildSquareGrid({radius:R});
+const cells=grid.cells, byId=new Map(cells.map(c=>[c.id,c]));
+const nb=c=>c.edgeNeighbors.filter(i=>i>=0).map(i=>byId.get(i));
+const cellAt=(x,z)=>{const ix=Math.round(x+R), iz=Math.round(z+R);return (ix<0||iz<0||ix>=N||iz>=N)?null:byId.get(iz*N+ix)};
+const dirt=[201,188,152];
+function draw(){
+  const seed=Math.max(1,Math.min(99,+$('#seed').value||5));
+  const {plotOf,plots}=partitionPlots({cells,neighbors:nb,seed,joinChance:.72,maxCells:10});
+  const borders=plotBorderCells({cells,neighbors:nb,plotOf});
+  const img=ctx.createImageData(Wd,PH), d=img.data;
+  const skew=.3, width=.18;
+  for(let py=0;py<PH;py++)for(let px=0;px<Wd;px++){
+    const o=(py*Wd+px)*4;
+    const panel=px<PW?0:(px>PW+GAP-1?1:-1);
+    if(panel<0){d[o]=d[o+1]=d[o+2]=231;d[o+3]=255;continue}
+    const lx=(panel?px-PW-GAP:px), wx=lx/PW*(N+1)-(N+1)/2, wz=py/PH*(N+1)-(N+1)/2;
+    const cell=cellAt(wx,wz);
+    if(!cell){d[o]=231;d[o+1]=239;d[o+2]=230;d[o+3]=255;continue}
+    let row;
+    if(!panel){const p=plotOf.get(cell.id), pl=plots[p]; const {u,v}=plotUV(pl,wx,wz); row=v-skew*Math.abs(u);}
+    else {const ang=mulberry32(cell.id*19+5)()*Math.PI, u=(wx-cell.cx)*Math.cos(ang)+(wz-cell.cz)*Math.sin(ang), v=-(wx-cell.cx)*Math.sin(ang)+(wz-cell.cz)*Math.cos(ang); row=v-skew*Math.abs(u);}
+    const band=Math.floor(row/width), t=row/width-band;
+    const ridge=.5+.5*Math.cos(Math.PI*2*t);
+    let r=124+58*ridge, g=176+54*ridge, b=92+36*ridge;
+    // 田埂只在"对面是别的地块"的那几条边上画一圈细土带（约 0.09 格宽）
+    const ex=wx-cell.cx, ez=wz-cell.cz, me=plotOf.get(cell.id), T=.09;
+    if(Math.abs(ex)>.5-T||Math.abs(ez)>.5-T){
+      let dirtEdge=false;
+      if(.5-Math.abs(ex)<T){const nx=cellAt(wx+Math.sign(ex)*.62,wz); if(!nx||plotOf.get(nx.id)!==me) dirtEdge=true}
+      if(.5-Math.abs(ez)<T){const nz=cellAt(wx,wz+Math.sign(ez)*.62); if(!nz||plotOf.get(nz.id)!==me) dirtEdge=true}
+      if(dirtEdge){r=dirt[0];g=dirt[1];b=dirt[2]}
+    }
+    d[o]=r;d[o+1]=g;d[o+2]=b;d[o+3]=255;
+  }
+  ctx.putImageData(img,0,0);
+  ctx.strokeStyle='#20343c';ctx.lineWidth=1;ctx.strokeRect(.5,.5,PW-1,PH-1);ctx.strokeRect(PW+GAP+.5,.5,PW-1,PH-1);
+  // 统计：块内主轴差（应为 0）+ 异块主轴差中位数（应显著 > 0）
+  const diffs=[], seen=new Set();
+  for(const c of cells){const a=plotOf.get(c.id);for(const o of nb(c)){const b=plotOf.get(o.id);if(a===b)continue;const k=a<b?a+'|'+b:b+'|'+a;if(seen.has(k))continue;seen.add(k);let dd=Math.abs((plots[a].axis-plots[b].axis)*180/Math.PI)%180;if(dd>90)dd=180-dd;diffs.push(dd)}}
+  diffs.sort((x,y)=>x-y);
+  $('#plotsStats').textContent=`seed ${seed} · ${plots.length} 块 / ${cells.length} 格 · 异块边界 ${diffs.length} 条，主轴中位差 ${diffs.length?diffs[(diffs.length/2)|0].toFixed(1):0}° · 块内主轴差 0°`;
+  // 找一条"块内接缝"（两格同块且都不是田埂格），给验收脚本量左右栏在接缝上的连续性
+  let seam=null;
+  for(const c of cells){if(borders.has(c.id))continue;for(const o of nb(c)){if(o.cz!==c.cz)continue;if(plotOf.get(o.id)!==plotOf.get(c.id))continue;if(borders.has(o.id))continue;const mx=(c.cx+o.cx)/2, mz=c.cz;seam={px:(mx+(N+1)/2)/(N+1)*PW, py:(mz+(N+1)/2)/(N+1)*PH, cells:[c.id,o.id], plot:plotOf.get(c.id)};break}if(seam)break}
+  window.fieldPlotsDemo={ready:true,seed,plots:plots.length,cells:cells.length,borders:borders.size,borderAngles:diffs,seam,stats:{median:diffs.length?diffs[(diffs.length/2)|0]:0}};
+}
+$('#seed').oninput=draw;draw();
 </script></html>

@@ -4065,3 +4065,232 @@ Guide/Test/Log已更新固定范围仅数据参数、同源存储依赖；代码
 ### 2026-11-06 用户明确重心：生命/植被算法作用于选中目标
 用户要的是能力节点绑定目标并执行，不仅选择框或移动/旋转面板。核对真实来源后新增TARGET_CAPABILITY_GUIDE.md：targetRef固定对象revision/部位或区域mask，capabilityRef真实模块/函数/revision，输入适配→局部候选patch→比较采用→对象历史与版本恢复。当前只有命中来源区间，尚无可执行target节点/目标快照，不要写成已完成。
 实际输入边界：Vegetation.refresh要World/shape/区域，不能当单树Mesh编辑；buildCanopy要blobs（surface-nets），现有莫里斯叶片扇冠需转换且不得默认替换风格；leaf-surface需shader/material通道，不能改共享材质影响全林。下一实现优先一条真实算法的目标适配+局部输出+候选/撤销/保存完整闭环，停止围绕通用transform按钮偏移用户核心目标。最新文档含测试门槛与待实现契约，非已上线API。
+
+### 2026-11-08 用户要求：鸟群去模型、两船 50 米、莫西斯湖积雪、霸天自动逐场景打击
+- 水晶城 V 字黑鸟（moebius-hall-birds）：createMoebiusHallBirdFlocks 直接返回同形状空接口（group/flocks:[]/update/migratePatrolHome/rotateCoreHomes），不建任何 mesh；?moebiusBirds=1 恢复。实测 0 mesh。
+- DUKE（bookshopJakubHarbor.js K=50/61.6，duke-scale 组缩放，码头跳板/缆绳按 K）与李白号 LeeBai（bookshopFactoryBase.js LEEBAI_SCALE=50/18.3，靠码头船舷不动）均为 50 米：实测 49.5 / 50.0 m。泊位画面未单独截图核对。
+- 积雪：morrisTownStage 的 uSnow 由 0/1 改为按量渐变（噪声破边、墙面偏冷、湖面倒影屋顶同白）；weatherStyle 新增 snow{on,amount}，经 globalThis.__tmMorrisStage 驱动；系统工坊新能力 planet.weather-snow-cover，已加入「雪天」集合。着色器编译已探针验证；隔离浏览器里湖上没有建筑，积雪画面待在用户自己的湖上看。
+- 霸天：main.js 默认 auto='campaign'（书店镇→十二门徒→高山圣城→旧港湾→湖沼→苔庭→月湖→叹息之门，逐个打），不再要求玩家靠近书店镇；系统工坊内嵌不自动；?batianAuto=0 关闭。实测正常入口加载后自动进入「书店镇 · 集结」。
+- 2026-11-08 晚：莫西斯湖积雪改为莫西斯湖特有常开（morrisTownStage snowBase 默认 0.85，?morrisSnow=0 关 / =0.5 调量）；天气只能在其上加厚，不会清掉。系统工坊「建造编辑」菜单：实景右侧 340px 栏里两张卡片改为上下排，菜单按 构建对象+开始建造 → 快捷图标一行 → 工具 → 色板 8 格一行；1440 宽实测。
+- 2026-11-08 晚：莫西斯湖常年冬景（morrisTownStage this.winter，默认开，?morrisWinter=0 关）：飘雪（atmosphere.snow）、岛周薄雾（atmosphere.fog）、流动云层（vegetation.cloudField）、远景阴云（vegetation.backdrop）+ 常开积雪 snowBase。触屏遥控新增 Q 钮（召唤航空艇，与键盘 Q 同入口）。霸天自动出征实测：书店镇整轮约 3 分钟后自动转十二门徒；乘坐编队飞机时舰队待命（同一编队），状态栏与提示说明原因。书店镇偏亮排查：主场景实际只有 1 个主日光；关掉书店镇全部 67 盏灯与地面光晕后同机位画面几乎不变，灯不是主因；偏亮来自暮色天空霞光与粉橙环境/雾色，未改。
+- 2026-11-08 夜：高山圣城/十二门徒暮色按目标图 artifacts/pipeline/citadel-target-20261024/highland-citadel-target-v1.png 调色：新模块 src/world/citadelDuskGrade.js（main.js 每帧在 bookshopAtmosphere 后调用；暮色 0.62–0.93、镜头距圣城/十二门徒 130→250m 渐变）：天顶淡蓝紫 / 地平线细桃色、霞光强度 ×0.3、环境光 ×0.7 偏冷、平行光 ×0.75 偏桃；天空着色器颜色按显示色写入（该 shader 不做色彩空间转换）。?citadelDusk=0 关。书店镇一带：环境光/半球光 ×0.7、平行光 ×0.8（bookshopAtmosphere，?bookshopAmbient=1 关）。系统工坊实景 0.76 同机位对照已看；海水仍比目标图浅（未改）。
+- 2026-11-09 凌晨（用户授权 5 小时继续学习优化，按目标图 citadel-target-20261024）：
+  - 远山：src/world/citadelFarMountains.js —— 不建模，程序画山脊剪影贴图（远层/近层/山脊暖边）贴在围绕镜头的环带上，下沿贴星球真实地平线（dip=acos(R/|cam|)），颜色取天空当下颜色（空气透视），仅圣城/十二门徒一带、镜头不高时显示；?farMountains=0 关。
+  - 暮色：citadelDuskGrade 增加——天空「漫画式大云带」在圣城暮色贴近天色（原来染成桃色硬边大弧）；颜色改为记录原值再混、离开还原；圣城一带海近岸青绿、外海深蓝（seaStyle api 暴露 uniforms）；描边外壳逆光暖边（assets/toon.js OUTLINE_RIM，学习 1751945034851570056，默认强度 0 与原来一致）。
+  - 层理：src/world/citadelRockStrata.js —— 岩体材质克隆 + 着色器：沿星球半径的弯曲水平层线（学习 1699146321318314094 先抖再分层）、逐层明暗（1786014232594485497 烘进明度）、崖面偏灰蓝石灰岩，平台草面不动；?citadelStrata=0 关。
+  - 云：cloudImpostorMaterial 增 uTmDuskAmt（默认 0；树冠 vShape 基本不受影响），圣城暮色时贴图云淡紫底桃亮面；citadel-orbit-cloud 受光团云底色混粉紫。
+  - 窗：main.js 圣城暮色权重 >0.35 且 0.66–0.82 时按入夜点窗（目标图蓝调时刻满城暖窗）；实测 275 扇中 209 扇 litTonight。
+  - 瀑布已有落水白沫/扩散水纹（targetOldCityWaterfall），未改；新城灯笼属隐藏备用城体（highland-west-city），未改。
+  - 更正：buildingOwnedProps / townWindows（275 格）属于已隐藏的旧布局；可见圣城是 citadel-target-* 新设计。「暮色提前点窗」只作用于旧布局记录，可见建筑窗灯效果未证实。
+  - 风中旗帜：src/world/windBanners.js（学习 926890207298899969 / 958410200146497537，引入 REACodeRefactoring core/banner.js 到 vendor 副本）——可见 house-*-roof 最高点挑 8 座立旗，3 风粒子 + 三次贝塞尔旗面，读 P.windSpeed/P.windDir 投影到切平面，两种旗合成两网格 + 旗杆实例网格；main.js 每 5 秒尝试安装直到圣城建好。planet.weather-wind 能力登记两条学习条目；REACodeRefactoring refactoring-status 两条标注已接入。
+  - 系统工坊目录：catalog-build 天气关键词改为词边界（wind≠window、rain≠terrain/train），天气泳道 40→12 条；已重新生成 system-catalog.json（浏览器里旧的扫描缓存需点「扫描能力库」刷新）。
+  - 暖窗：src/world/citadelWindowGlow.js —— 可见新设计窗玻璃（target-old-city-glass / target-new-stairs-glass，仅窗格/嵌板网格，门扇与地基不动）换发光副本，强度 max(入夜, 圣城暮色×0.85)，约七成亮三成微亮；实测 46 块窗格。撤回 main.js 里只作用于隐藏旧布局的「提前点窗」。
+  - 逆光亮边：描边外壳为世界尺寸 ~2cm，开/关对照画面几乎无差别，记为「已接入、效果弱」，未达 REACodeRefactoring 屏幕 3px 亮边效果。
+  - 步道灯：src/world/citadelPathLanterns.js —— 沿可见长步道扶手（崖面长廊、新/老城连接道）每 ~5 米一盏（实测 22 盏，桥面两侧成串），暖灯泡实例网格 + 加色光晕点精灵，无真实光源；离海 40 米内的灯在海面放朝向镜头的倒影光带。亮度规则同暖窗。main.js 与旗子同一安装时机。
+  - 新能力 planet.light-time「时刻与太阳」（光照与时间泳道首个 ⚙，学习 1313840428685447170）：weatherStyle 支持 time{on,at,speed}，放弃时恢复原昼夜速度；新能力集合「圣城蓝调暮色（目标图）」（0.76 停住 + 微风 60° + 淡雾 0.18）。系统工坊实测：双击集合入管线 → 执行 → 游戏 timeOfDay 0.76 / daySpeed 0 / 风 0.9·60° / 雾 0.18；放弃后风恢复。
+  - 逆光亮边结论：toon.js OUTLINE_RIM 已补屏幕像素外扩（uTmRimPx 3，uTmRes 由 citadelDuskGrade 每帧更新），但圣城 980 个 addOutline 外壳全属隐藏旧布局，可见新设计（citadel-target-*）没有任何描边外壳 → 在圣城无可见效果。若要实现需给新设计加墨线层（画风变化，未擅自做）。其余场景默认强度 0，与原来一致。
+  - 远山开阔视角未能取到（海湾上方机位落在峡谷里），远山在开阔海面方向的效果待用户实景确认。
+  - 远山 v3：海面机位（圣城外 80–100m 海上 11m 高，射线确认海面）实拍朝外开阔方向：原版只有一条很淡很平的地平线带；调高环带 18°、近层峰更高更连续、颜色更深后，出现深灰蓝主峰 + 淡远山两层，接近目标图。
+  - 本轮未验证项：步道灯海面倒影在低视角下的效果（海面机位落在桥拱下未取到）；莫西斯湖冬景 / 积雪（隔离浏览器湖上无建筑）；远山在被崖壁包围的视角里露得少。
+  - 原文件备份（设备 /tmp）：toon.before-rim.js / toon.before-rimpx.js、cloudImpostorMaterial.before.js、weatherStyle.before*.js、main.before-*.js、bookshopFactoryBase.before.js、bookshopAtmosphere.before.js、catalog system-catalog.before.json、refactoring-status.before-flags.js、studio.before-menu.css、touchControls.before.js、index.before-q.html。
+
+### 2026-11-09 用户三项新任务（维京远征 · 龙纛反击 · 圣城墨线 + 光照能力）
+- 总规划：`docs/plans/2026-11-09-vikings-dragon-banner-citadel-ink.md`（第 1、2 项按用户要求只写上船与战斗规划，全面复用 REACodeRefactoring 的 Bad North 战斗：长船登陆、planLanding、小队/旗、近战/弓箭/矛击/眩晕、流场；缺口只有回船/士气集结/溃退三个小规则）。接手按规划 §7 P0→P6 顺序做。
+- 第 3 项由主代理实施：圣城墨线 + 逆光亮边（复用 REACodeRefactoring world/outline.js），光照与时间 24 条逐条落能力。
+
+## 2026-11-09 圣城墨线 + 逆光亮边接入；「光照与时间」24 条变成 6 个能力
+- main.js：`installCitadelInkOutline` 在旗子装好的同一个惰性块里安装（圣城新设计建好后），每帧 `citadelInk.update(renderer, camera, skyMat.uniforms.glowSunDir, phase)`。
+  - 合成 732 个可见静态网格 / 258k 顶点，构建约 0.5 s；离圣城 >450 m 整组隐藏。`?citadelInk=0` 关。
+  - 注意：系统工坊内嵌时要带 `citadelRuntime=1` 才是新城（targetCityRelease.js），否则没有新设计、墨线不装。
+  - 已验：暮色同机位开/关、逆光开/关（docs 外：outputs/dusk/citadel-ink-compare.png）。亮边逆光时偏淡紫，不算很暖。FPS 未测（预览窗口被隐藏时浏览器限帧）。
+- 新文件 `src/world/lightStyle/lightStyle.js`：天气样式的 `light` 字段执行端（weatherStyle.set → `__tmLightStyle.apply(st.light)`，恢复时 apply({})）。灯光强度 / 半球光地面色 / 曝光只在渲染期间乘系数，scene.onAfterRender 写回原值——第一版用追踪值，和圣城暮色、书店镇环境光的追踪互相累乘，重置后灯没回原值，已改。
+- 新能力（capabilities.js / capability-usage.js；套装「圣城蓝调暮色」加了墨线、反弹、岩层；新套装「光照检查（只看光照）」）：
+  - planet.light-sun-shadow（直射光、投影软硬：>0 切 PCFShadowMap+radius，0 回原来的 Basic 硬边；投影开关）← 1305948413872267265, 1305951750638231552；1190191289922465793 体素阴影、1704218784028905984/1705195380457996629 高度图阴影只学未接。
+  - planet.light-ambient-bounce（天光强度、半球光地面色偏暖土红）← 1237305125070426112, 1791049306213912823；1580835075629133825/1580846877855338497/1580845127207387137/1582757294672314368 体素 GI 只学，用地面色近似。
+  - planet.light-ao（K3 体素 AO 强度）← 1168168400155267072, 1168571866405097472, 793557992931266561；体素 AO 默认没开（?oskLightingV1=1&voxelAoV1=1），没开时验证写「未开」。
+  - planet.light-ink-rim（墨线粗细 / 亮边强度 → __tmCitadelInk.setStyle）← 1017355723171344385；929417420921556993 软硬法线混合未接。
+  - planet.light-rock（岩层 / 崖面冷灰 → __tmRockStrata）← 1786014232594485497, 1480635131614355459（只崖面）；1707490932017279035、1063115611289645057 未接。
+  - planet.light-view-grade（视图 0 正常/1 只看光照/2 只看贴图（逐网格换材质，自定义着色器不换）、饱和度（画布 CSS saturate）、曝光）← 1313841094069817344, 1298689301488775169（AO 网格可视化没做）, 1197909675443916803。
+  - 798580832906739712 是寻路开阔度，误分到光照，不做。加上已有的 planet.light-time（1313840428685447170）= 光照与时间全部 25 条有去处。
+- 备份：/tmp/*.before-light、/tmp/main.before-ink.js。
+
+## 2026-11-09 十二门徒 9→6 座；圣城山体减面
+- twelveApostlesTarget.js：APOSTLE_MASSES 只留 back-left / back-right / front-left / front-right / bay-1 / bay-2（实际原来是 9 座、8 座可见，用户口径「12 个」）。`?apostlesAll=1` 恢复，`?apostlesKeep=id,id` 自选。原 8 座可见合计 8.56 万三角，去掉的 back-tower 4.8k、bay-4 2.6k、bay-3（原本隐藏）。
+- 新 src/world/citadelTerrainSimplify.js + vendor/jsm/libs/meshopt_simplifier.module.js（meshoptimizer 0.22，MIT，许可证同目录）：圣城建好后对 citadel-oskar-grid-mountain-surface 焊接（1 mm）+ 简化（绝对误差 0.12 m，锁边界）+ 展开回平面着色；背光高亮层同步。实测 144,616 → 33,018 三角（-77%），94 ms；同机位正午前后对照几乎一样。`?citadelTerrainLod=0` 关，`?citadelTerrainErr=` 改误差。
+  - 注意：圣城树冠 citadel-canopy-broadleaf 有 27.4 万三角，比山体还多，未动（用户这次只要山体）。
+
+## 2026-11-09 维京远征 · 龙纛反击按规划落地（P0–P5）
+详见 docs/plans/2026-11-09-vikings-dragon-banner-citadel-ink.md §9（每阶段改了什么、实测数据、未验项）。
+- 入口：`?vikingMuster=1` 或控制台 `__tmStartVikingMuster()`。
+- 新文件：
+  - src/world/rea/reaBattleStage.js
+  - src/world/vikings/{bookshopBoarding,vikingVoyage,campaignDirector,citadelBattle}.js
+  - src/player/cargoRide.js
+- 改动：
+  - main.js（懒加载 + `__tmRobotOps`）
+  - bookshopPedestrians.js（跳过登船者）
+  - bookshopFactoryBase.js（吊车 loading 倒放）
+  - vendor battle.js 3 处 [TM] 接口 + 26 个 REA 文件复制
+- 最大的已知问题：圣城单位高度按 4 m 一层量化，可能埋进地面。
+
+## 2026-11-10 维京航线可跨铁轨 · 战前约 10 分钟离港
+用户纠正：不要纠结自动/手动二选一辩论；船可跨铁轨；苔庭开战前约 10 分钟离开书店镇并提前占锚地控制位。
+- 规划新增 §10：`docs/plans/2026-11-09-vikings-dragon-banner-citadel-ink.md`
+- 代码：`vikingVoyage.js`（`isCrossableRailOrTram` / `BOOKSHOP_TO_MOSS_ROUTE` / `VOYAGE_TIMING` / `planBookshopToMoss`）、`campaignDirector.js`（预计算 + `hold-moss`）、`main.js`（`maybeAutoVikingMuster`，阈值开战前 16 分钟）
+- 实测：A* 李白 449 m≈599 s、Duke 322 m≈430 s（0.75 m/s）；`?vikingMuster=1` 预计算日志通过。未验整段实航与霸天自动连跑。
+- 纯测：`tools/tests/test_viking_voyage_timing.mjs`
+
+## 2026-11-10 维京：击退落水 · 霸天先苔庭后圣城 · 士兵 1.7 m
+详见 docs/plans/2026-11-09-vikings-dragon-banner-citadel-ink.md §11（复查清单）、§12。
+- 落水：vendor core/knockoff-water.js（改写自 REACode combatfx.js）+ battle.js [TM]；`node tools/tests/test_rea_knockoff_water.mjs` 通过。
+- 霸天顺序：main.js batianTargets 苔庭移到圣城前；batianMossGate 让霸天等维京到苔庭锚地再出征。
+- 士兵 1.7 m：reaBattleStage `unitHeightM`；苔庭 scale 4 ×2.36、圣城 scale 8 ×1.18；长船同比。
+- 备份：artifacts/backups/viking-20261110/（battle.before-drown.js、battle.before-unitscale.js、main.before-order.js、reaBattleStage.before-unitscale.js）。
+- 未验：三项都没在浏览器里看画面。
+
+## 2026-11-10 维京：航速 15 m/s · 苔庭维京人打霸天
+- 规划 §12.6 / §12.7。新 src/world/vikings/mossBatianAttack.js（投矛打霸天舰队、扑砍先锋重甲兵）；vendor battle.js [TM] u.tmGoal。
+- 测试：tools/tests/test_viking_moss_batian_attack.mjs、test_viking_voyage_timing.mjs、test_rea_knockoff_water.mjs、test_viking_deck_slots.mjs。
+- 未验：真游戏画面。
+
+## 2026-11-10 先锋重甲兵近战动作加强（学能力库 Bad North 近战：1022573208590057472 / 912691357440978945 / 984813819280191488 / 903647529203634176）
+- 新 src/world/vanguardMeleeFeel.js：蓄力 → 劈出 → 收势三段（0.42 s，0.35 起劈、0.5 砍中、0.62 收势）；三种刀路轮换（竖劈 / 左→右横斩 / 右→左横斩）；刀落到人那一帧才结算伤害并卡帧 0.06 s；青白刀光弧（透明、transientFx，不进渲染批）；命中目标沿刀向顶开 0.35 m（有盾 0.2）+ 血滴 / 激光火花朝背离攻击者方向抛出（共享粒子池）。
+- 接入：updateVanguardCombat（vanguardTrooper.js，苔庭 / 圣城）与 batianTrooperTactics.strike（书店镇突袭）；优化骨架 assets/vanguardOptimizedRig.js 新增 action 'melee'（meleeRigPose：右手目标 / 刀轴 / 整身下沉、前倾、前跨、拧腰 + 弓步腿），旧 'windup' / 'slash' 仍可用。
+- 测试：node tools/tests/test_vanguard_melee_feel.mjs（真模型，非优化骨架）PASS：出手→砍中 0.2 s、卡帧、三刀路轮换、刀光 0.71、喷溅 21 点、目标顶开贴球面。优化骨架只做了姿态函数断言，浏览器实看未做。
+- 备份：artifacts/backups/viking-20261110/{vanguardOptimizedRig,vanguardTrooper,batianTrooperTactics}.before-melee.js。
+- REACodeRefactoring 同轮：能力库新增 terrain.shrub-texture（纯纹理灌木，工坊扫描 registry.js 自动出现）；见 townscaper-web/REACodeRefactoring/CHANGELOG.md 第 46 轮。
+
+## 2026-11-10 海面倒影修正（用户截图：开阔海面上一团半透明、看得见内部轮辐的「倒影」，上方没有东西）
+- 原因 1：src/world/seaStyle/seaStyle.js buildReflections 只在建倒影时拷一次原件世界矩阵，之后不更新。名字过滤只挡 ship/boat 等词，李白号（bookshop-steam-parts-freighter）、Duke（duke-coastal-steam-freighter）名字里没有这些词 → 被选进倒影；维京远征离港、吊车吊货移动、物件隐藏后，倒影留在原地，成了「海上鬼影」。
+- 原因 2：倒影材质透明 + DoubleSide + 不写深度 → 背面、内部构件全叠出来，像 X 光片。
+- 改：倒影记 userData.src，每帧（rAF）照抄原件位姿；原件或祖先不可见 / 已移出场景 → 倒影隐藏；对外加 sync()。原件单面 → 倒影只画 BackSide（径向镜像翻转绕序，镜中朝镜头的面），双面原件保持双面。
+- 测试：node tools/tests/test_sea_reflection_follow.mjs PASS。浏览器未实看；同一物体的前后面仍可能半透明叠加（没有深度预写），若还嫌叠影再做深度预写两遍法。
+- 备份：artifacts/backups/viking-20261110/seaStyle.before-follow.js。
+
+## 2026-11-10 维京战场：飞在天上的长船 / 站在空中的红袍 / 小船从母船出发 / 圣城停旧城码头
+- 根因（飞船）：REA 战场舞台是星球上的一块**平切面**，圣城舞台半径约 112 m，平面离切点 112 m 处比球面高出 35 m → 长船、尾迹、远处的兵悬在天上。
+- 改（src/world/rea/reaBattleStage.js）：舞台坐标改成**贴球坐标**（x,z = 沿球面弧长，y = 离海面径向高度）。toWorld / worldToStage 互逆；采样按贴球坐标；舞台里所有材质加顶点阶段映射（warpMaterials：标准材质替换 project_vertex，ShaderMaterial 替换 projectionMatrix*modelViewMatrix*vec4(position,1.)），每帧补新材质；舞台物体关投影（深度材质不弯）、关视锥剔除。citadelBattle / mossBatianAttack / mossDefenders 的世界↔舞台换算改用 worldToStage。
+- 根因（红袍悬空）：一格 8 m 只取格心一个高度，双层轨桥被采成地面 → 格子靠桥外那部分的兵悬空。改：桥 / 高架 / 双层轨桥不采（isCrossableRailOrTram + bridge|viaduct|double-deck）；新增 0.5 舞台单位（圣城 4 m）细网格地面高 fineAt，visualOffset 按人脚下双线性取高，跨崖取最近角。
+- 小船从母船出发：vendor battle.js [TM] view.boatOrigins() → 长船起点 = 李白 / Duke（轮流），在 10 次泊位规划里挑离母船最近的滩，航向母船→滩，时长按距离（≥ 9 s，约 1.5 格/秒）；回程沿原路驶回母船方向。
+- 圣城锚地：改到旧城码头（target 'old-port'，旧港整组贴在圣城岸湾）离码头 14 m 起找水；找锚地时轨桥 / 高架算障碍（不再停到双层轨桥底下），航行仍可从桥下穿。
+- 测试：tools/tests/test_rea_stage_curved.mjs（互逆、y=0 在球面、GLSL 与 CPU 同式、17/17 材质补丁、贴球采样、轨桥不采、细网格、长船从母船出发）PASS；其余维京测试回归通过。浏览器未实看。
+- 备份：artifacts/backups/viking-20261110/{reaBattleStage.before-floating,campaignDirector.before-oldquay}.js。
+
+## 2026-11-10 湖沼沉船挪到湖底（用户截图：沉船悬在下沉湖坑边的水里）
+- 原因：scenes/messenger/loadMoebius.js 把 swamp-shipwreck 放在湖沼中心 + 世界轴偏移（-0.55 是世界 y，不是当地「下」）的原地表高度、挂在 scene 根；湖沼改成下沉湖（坑口 = 原地表，湖面 SWAMP_WATER_Y=25、湖底 SWAMP_FLOOR_Y=10，均为内层局部）后，它就悬在坑边。
+- 改：挂进湖沼内层 moebius-swamp-zone（与湖底、修船坞、两条湖内战船同一坐标系），斜躺在湖底藻地上：局部 (cos4.4·7, FLOOR−0.15, sin4.4·7)，比例 2（同湖内战船），避开修船坞（角 2.05）和出港战船（约 0.73）；湖沼整体移动也跟着走。找不到内层时退回旧放法。
+- 未验：浏览器实看（与湖底树根 / 乱石是否穿插）。备份 artifacts/backups/viking-20261110/loadMoebius.before-wreck.js。
+
+## 2026-11-10 莫西斯湖小镇关墨线（用户：「小镇没必要描墨边，去掉吧，浪费性能」）
+- src/world/morrisTownStage.js：OutlineLayers 墨线层（整镇几何背面外扩再画一遍）与植被墨线默认关；setDebug('outline', true) 也被挡住（固定版本 / 配方里存的 outline:true 不再生效）；?morrisInk=1 才允许打开。逆光亮边（backlit）层未动。
+- 备份 artifacts/backups/viking-20261110/morrisTownStage.before-noink.js。未在浏览器量帧率。
+- 2026-11-10 补：弹唱老人已在莫西斯湖（用户确认），与湖沼沉船无关；loadMoebius / loadCitadel 里的旧注释已改。
+
+## 2026-11-10 高山圣城山体体素化（用户：建筑下基础平面不动，原山体体素化减面）
+- 新 src/world/citadel/citadelVoxelMountain.js，main.js 在 simplifyCitadelTerrain 之后懒加载调用；?citadelVoxel=0 关，?citadelVoxelCell=（格宽米，默认 6）、?citadelVoxelLevel=（层高米，默认 山高/11 取 0.5 m）。
+- 做法：圣城中心「贴球」局部坐标 → 原山体三角形分桶 → REA quad 网格每格中心取原山面最高点 → 取整写 REA World → vendor terrain/terrainmesh.js buildTerrain 出台地 + 崖壁（层明暗 / 沉积线 / 崖顶亮边 / 草皮垂边）→ 顶点换回世界、挂在原山体父节点下（名 citadel-voxel-mountain，raycast 关）。
+- 原山体与 backlit-highlight 层：几何不动，材质换成 visible=false 克隆、不投影 → 走路 / 房子基础平面 / 种树 / 岸线仍读原平滑山面。__tmCitadelVoxel.restore() 可恢复。
+- 限制：REA World 最多 12 层 → 层高 ≈ 山高 / 11（70 m 山约 7 m 一层），台阶偏粗；房子、树与台阶最多错开约半层。
+- 测试 tools/tests/test_citadel_voxel_mountain.mjs（合成 70 m 崎岖山 4.5 万三角）：→ 1.38 万（30.6%），贴球、平均高度误差 2.8 m、原山面可射线查询、可恢复。真圣城的面数 / 画面未在浏览器里看（console 打印 [citadelVoxel] report）。
+
+## 2026-11-11 苔庭松树换成参考图丛松（用户：松树造型 / 丛内距离照图，高度 = 原 2.5 倍）
+- 新 src/assets/saihojiClusterPine.js：程序化低模丛松（树高 1 建模，2 网格/棵：树皮+枝 / 叶垫，顶点色 + 共享 MeshToonMaterial）。干高细、外倾 3–6°、缓弯，灰橙斑驳；枝起于 0.555H，最低叶垫 ≈0.56–0.58H（下部光秃）；树冠为多层水平扁平云团叶垫，深灰绿；6 棵丛中最高偏后一棵（A）为稀疏枯枝状。
+- 布局：三丛 6+5+5 = 16 棵（原 25 株 Blender 古松停用；工厂 saihojiPineOptimized.js 未改，主岛林带 nature.js / 圣城台地 terracePlanting.js 仍用旧松）。saihoji.js 按景区簿记创建（旧 PINE_LAYOUTS 循环只消耗随机数，后续苔斑序列不变；LEGACY_PINES_ENABLED=false）；saihojiPineLayout.arrangeSaihojiPines 改为丛落位：期望中心 ±5/±3、朝向 ±0.6 rad 内找全部根落在真实地壳、避浅池/石组的位置；丛下加极薄苔霜毯（白霜+苔斑+根际小石，合并）。隐蔽槽射线起点抬到岛局部 40，叶垫标 userData.pineCrown。saihojiGarden.js 叶片吸食起点改读 userData.crownWorldHeight。
+- 数值（岛局部单位，世界 = ×0.5）：原 25 株平均高 5.448（旧公式复算一致），新 16 棵平均 13.620（×2.500），范围 11.57–16.88；丛内最高/最矮 1.36（6 棵丛）/1.28；相邻根距 0.067–0.149H（B–C 两棵近乎贴在一起），根部跨度 0.531H，冠幅（沿丛长轴）0.86–0.88H，光秃 55.5–57.5%。伏击隐蔽槽仍 50 个（最小净空 ≈3.3 世界单位）。
+- 测试：node tools/tests/test_saihoji_cluster_pines.mjs ALL PASS；test_viking_moss_batian_attack / test_vanguard_melee_feel 回归 PASS。tools/pipeline/test_saihoji_pine_layout_web.mjs 已改成丛松口径（16 棵、pineCrown），但它要 Chrome channel，未在 VM 跑。
+- 浏览器：artifacts/pines-20261111/fixture.html（只加载真实 saihojiGarden SceneModule，同相机同光照）截 before-/after-{far,near,side}.png 对照；苔庭三角形 11.3 万→约 3.9 万（far 视角整场景计数）。整局游戏在 SwiftShader 45 s 内未加载完，未在整局里实看；?scene=saihoji 单独启动本来就因 messenger 为空报错（main.js:1734，与本改动无关）。
+- 未做 / 风险：Godot 侧（export_saihoji_target_garden / check_kun_tree_sync 仍找 giantTreeGroup）未同步；隐蔽槽 50 个余量不大（布局再改需重跑测试）；三丛在 30 长的鲲背上冠幅会彼此靠近，组团间隙约 2–3 单位。
+- 备份：artifacts/backups/pines-20261111/（saihoji.js、saihojiPineLayout.js、saihojiGarden.js、两份 pipeline 测试、改前 PROJECT_HANDOFF.md）。
+
+## 2026-11-11 系统工坊「游玩检验」跳回莫西斯湖（用户：十二门徒编辑器点游玩检验进了莫西斯湖）
+- 原因：pipeline.html 的「游玩检验」只发 `play`（studio.js `run('play')`，不带场景）；游戏端 pipeline-bridge `play` → morrisTownscaper `play()` 只把镜头还给玩家（`returnToPlayer`），而玩家一直停在莫西斯湖，所以十二门徒 / 高山圣城 / 水晶城 / 任何通用插件场景点游玩检验都会回到莫西斯湖。另外实景栏标题在 system-tabs.js 写死「实景 / 莫西斯湖（· 点选物件）」，换场景也不变；「对照原始参数」在非莫西斯湖场景下仍把莫西斯湖管线基线参数套到实景上。
+- 修复：新 src/scene-authoring/playtest-target.js（纯函数：场景 id 回落、标题、落点选择）。studio.js 游玩检验发 `play {id: 当前场景}` 并按返回写状态；pipeline-bridge `play` 把 id 交给 `plugin.play(id)`；morrisTownscaper `play(id)` 对非 morris-lake 场景先调 main.js 新增的 `globalThis.__tmPlaytestAt(id)`：在场景方向周围由近到远采样，用玩家物理同一套 `playerSupportRadius` 与官方海面高度，挑高于水面、不在岩柱顶上的最近陆地放玩家（面朝场景中心，载具上不移动），再回到玩家视角。莫西斯湖行为不变。标题改为 `viewerTitle(tier, 当前场景名)`（scene-picker 写 `window.__tmCurrentSceneLabel`）；对照原始参数在非莫西斯湖场景只提示、不再套莫西斯湖参数。缓存版本：studio.js ?v=playtest-r1、system-tabs / scene-picker ?v=sys-r16、morrisLake → morrisTownscaper ?v=playtest-r1。
+- 测试：node tools/tests/test_workshop_playtest_scene.mjs PASS（id 回落、标题、落点：海中岩柱场景落到最近岸上且贴地 / 面朝中心 / 全是水返回 null、三处调用链静态检查）；TigerMessenger/tests 下 7 个工坊单元 node --test 19/19 PASS。
+- 浏览器：VM 4 GB 内存跑完整游戏约 60–70 s 渲染进程被 OOM 杀掉（系统内存 3.6 GB 时崩），整局实景未验。改用真实 pipeline.html + 真实 pipeline-bridge.js、iframe 换成假插件（artifacts/playtest-scene-fix-20261111/studio_play_stub.py）：选十二门徒 / 高山圣城 / 书店镇 / 莫西斯湖各走 进入编辑 → 游玩检验，桥收到的 play 分别是 apostles / citadel / bookshop / morris-lake，标题分别变成对应场景名，无页面错误；截图 artifacts/playtest-scene-fix-20261111/studio-stub-apostles-play.png，结果 studio-stub-result.json。
+- 未验：真实游戏里 `__tmPlaytestAt('apostles')` 落点是否站得住（十二门徒岩柱在海里，落点取周围最近陆地；岩柱网格本身不在 playerSupportRadius 里）、各场景落点画面。需在用户 8931 浏览器里实际点一次确认。
+
+## 2026-11-12 学习工坊需求路线与双工坊组合回接
+
+最新用户要求：系统归类原版REACode并明确重构方向。已新增学习默认需求组合/全量源码职责视图，复用现有4套能力集合，组合可带目标和验收要求加入对应工坊；能力库有学习路线返回入口。原版170份JS盘点均有映射、目标文件存在，非行为等价证明。专项真实API/隔离Chrome通过，基础四组回归PASS；完整游戏组合/导航/承托验收未做。详见WORKSHOP_LOG末节与`artifacts/workshop-tests/learning-roadmap-20261112/`。保留现有并行修改，原版/上游记录未改，无提交发布。
+
+## 2026-11-12 113条旧排期整理完成，真实能力接入开始
+
+113条→合并7条重复→6组历史核销→100待办（学习8/实现81/验证8/核对3）。账本保留原文，标题+来源指纹/证据变化重新核对，上游不改。学习进度已展示分类。新增object.path-spacing复用上游弧长采样并接真实Worker，保锁/范围/位移/不新增重叠；本轮不声称整个导航来源或全部占位完成。7项账本、4项新能力+7项系统单元、隔离浏览器与基础四组回归过；游戏预览未做。证据backlog-reconciliation-20261112，详WORKSHOP_LOG末节。最终额外JEV外发被自动审批拒绝，未绕行，已本地复核。
+
+## 2026-11-12 场景材质新增两项执行接口
+
+scene.oklab-contrast / scene.oklab-palette直接复用上游OKLab代码，已接通用场景Worker、参数、匹配、验证、预览/放弃/保存。新增组合及来源卡“加入已适配部分”，不冒称原算法完整迁移。保护已保存人工颜色、量化后ΔE限制；修复generic style.save存储失败误报。6新单元及20项相关回归、四组基础回归、真实Chrome隔离GPU+Worker生命周期通过；正式大场景未跑。证据perceptual-adapters-20261112/review.html、browser.json、两份失败定位记录保留。无上游/用户存档改动、无提交发布。继续项见WORKSHOP_LOG末节。
+
+### 同批补充：正式书店镇验证已完成
+
+正常pipeline实际游戏的新隔离上下文中，感知两项组合修改25种材质，UI对照/放弃后逐色恢复，saved不变、errors=[]。首次发现莫西斯湖overlay距门槛覆盖其他场景导致全水截图，已限制明确外部scene/object工坊镜头不叠湖层/湖光照，新鲜正常入口截图可见书店镇建筑。formal.json与实际before/candidate根已查看；旧失败保留。review.html已加入正式图片。其他场景及完整性能未验；无用户存档写入、无提交发布。
+
+## 2026-11-12 全目录290文件账与源库重构批次
+
+用户最新明确要求REACode目录280+全部代码的状态列表并做完。已盘点290（175 JS/11 MJS/104 HTML），新入口`pipeline.html?learningView=files#learning`、文档REACODE_REFACTOR_STATUS.md，逐文件hash/目标/范围/证据/缺口。完成本轮3原模块+1页范围：mip透视/度量消费者、程序笔触法线进outline normalRT、共享Atlas上的SpriteAtlas完整生命周期/径向原版差分。源码都在REACodeRefactoring，原版不改。9组代码+3清单测试、双网格真实GPU、图集/UI交互通过；源码hash绑定成功回执。最终五组统一回归20261112T043611354424Z PASS。并行上游进度111条变动导致旧测试下标失效，已固定历史fixture并增加动态源保全测试。完整290项尚未清零，状态不虚报。详WORKSHOP_LOG末节，证据source-refactor-20261112，未覆写上游共享学习账本、无用户存档写入/提交发布。
+
+
+## 2026-11-12 菜单与待办补齐批次
+
+最新请求：做完待学习/待实现，菜单补全部已有能力。新增104个已有实现开关（48场景/11post/45北境）及碰撞弹道、共享World导航三层、可编辑节点图（拖/连/增删/参数/存载/撤销重做）。修复C01/C03叠加焦黑停战残留，按owner共同保管原色。独立补充交付层核对6条已有全帧学习，不覆盖并行上游数据；关闭飞岛过时学习排期和本轮节点编辑器，实现/来源不足继续列出。真实快照学习0/实现77/验证8/核对10/来源2/核销7（动态）。源码/审阅/回执hash变化使补充失效，不虚报清零。
+
+最终统一五组20261112T131240915856Z PASS；双网格104开关抽样/45北境逐项、真实碰撞导航、组合焦黑恢复、实际鼠标节点编辑、真实父学习工坊均通过。失败保留。证据environment-menu-20261112/review.html、node-editor-20261112/browser.json；详细变更与限制见WORKSHOP_LOG末节。原REACode/用户存档未改，无提交发布。下一条：补弹道与定点射表共享运行轨迹/真实战斗衔接，保持原默认不变；仍有77实现和2来源问题，全部290未完成。
+
+
+## 2026-11-13 当前优先：镜头已修，继续已有组合执行引擎适配
+用户确认先修进入编辑后的自由旋转/平移/缩放。共享viewport-orbit、局部镜头清旧所有权、generic物件rig及scene rig接通；真实十二门徒入口三手势PASS，6个岩体全部编码/场景存储不变，errors=[]。证据viewport-engine-20261113/{browser.json,before.png,after.png,input-browser.json}。源码引擎已找到：registry.runPlan + orchestrator/Worker + capability-runtime预览/对照/写入，tier-agent通用三层；9体素显示/5材质/4物件能力。十二门徒用vendor旧WorldMesh，与最新10核心模块全不同，独立shader/光照/密度与多World适配存在缺口。详CAPABILITY_ENGINE_AUDIT.md及WORKSHOP_LOG最新节。不要重造引擎或盲拷最新View/覆盖vendor；接下来适配十二门徒实际World和候选恢复，再补共享渲染能力。上游view已变化使昨日菜单回执按设计失效，未伪造重验；测试已将固定fixture与真实漂移分开。
+
+## 2026-11-13 实际代码能力库重扫、首页更新与引擎闭环
+
+用户明确：整个REACodeRefactoring是能力库，registry9项只是执行适配子集。已用esbuild物理解析359个src JS/MJS模块（src363文件，139根HTML，564测试代码），模块/导出/依赖/SHA与原版290文件候选/接口差距进入实时只读API `/api/workshop/code-library`。双工坊目录改为实际模块，旧学习目录单独保留；旧v1缓存不覆盖新模式；学习页默认源码库，7组真实依赖组合可追到已适配部分。修复扫描与学习刷新竞态、rain误命中terrain分类、通用组合目标误改莫西斯湖配方。
+
+源库index首页已实际修改，右上角“能力库”窗口有源码搜索、7依赖组合、双工坊/比较/测量入口，以及海岸生态/风云薄雾/光影检查3种当前View组合试用和恢复。实际8769融合场景三组合与恢复PASS，完整World编码不变，errors=[]。按钮宽度后续修正后需按最新截图为准。source-index-browser.json。
+
+真实新增源库代码：video-cycle-metrics纯分析 + capture/Worker + tools/measure.html/mjs；comparison-pages + comparison-page消费者与compare.html。岸浪原片120时间样本实际Worker+CLI通过；只查看既有0–3秒100帧联系表，不重写上游全帧学习账。测量无循环极小值、DFT受镜头移动影响，不冒称浪周期复现。4个旧页面漏映射已注明理由，不当新迁移交付。原版未写。
+
+正式8931学习源码组合→进入书店镇编辑→加入OKLab已适配部分→PipeLineEngine真实Worker→25材质候选/对照/放弃恢复PASS，saved不变、errors=[]。前三个相关失败保留：刷新竞态、测试等待快照、隐藏侧栏重复定位；未进入编辑时纯水图亦保留，最终正常编辑流程通过，视觉门槛未放宽。最终基础五组统一20261113T143756823974Z全部PASS（3目录单元、引擎及22源库文件）。详细证据code-library-rebuild-20261113/review.html。
+
+PipeLineEngine实际实现和学习/库/扫描/适配/Worker/验证/预览/采纳架构见PIPELINE_ENGINE_ARCHITECTURE.md。源文件SHA尚未全部绑定Worker回执，catalogHash是描述签名。不能把357/359目录数或依赖组合当全部Worker可执行。仍10文件无落点（辅助页/工具/生成联系表/历史打包页）；核心候选存在但行为/动作资产/性能/跨GPU等差距未全部核验，见REACODE_LIBRARY_ALIGNMENT.md，不能声称两库完全拉齐。下一步按该清单阅读源代码/视频，优先真实功能缺口，避免复制历史生成物凑零。
+
+苔庭松树此前同批已按用户海岸松图优化：灰色光滑法线树干/纵裂纹、分离针叶簇、较多枯枝与稀疏最高树；直接调用最新源库path-samples。6树、2.5倍均高、50隐蔽点与2网格/树回归PASS；实际SceneModule固定三机位前后GPU图已看，calls不增、正面三角26275→51697。完整正式主游戏松树长时性能未验。证据pines-reference-20261113；保留失败第一候选46槽。未改其他岛古松和原始参考资产。
+
+没有提交/发布或写用户浏览器存档。按此前JEV外发审批限制仅本地复核，未绕行；规定threejs技能入口仍缺失，未声称加载。保留所有其他模型修改。
+
+## 2026-11-13 用户要求适合的能力直接加入index场景
+
+已完成本请求：新增ui/scene-enhancement.js，用源库现有API把6项显示能力默认应用到非北境首页：cloudshadow、shading.surfaceshadow、post.windflag/wallcards、C11.grassline/shrubband。不是只列菜单。提供原效果对照/重新启用，串行执行、失败回滚、保留原已开启效果与自定义着色参数；恢复灌木width/ragged/shadow/coverage/color。首图边带过亮过宽，已收至.12/.035/.16/.6、#b7a16a，原参数完整还原。北境组合受限，不自动改变战斗主题。
+
+ui/environment-discovery.js补全部开关统计、当前可操作/受限计数、搜索和展开/收起及分组数量。实际融合142控制开关/91可操作/51受限（不是142算法）；5个原URL专属C11开关新增真实菜单。源库物理清单随新增模块重建为361个JS/MJS、365src文件、139根HTML、565测试代码；7源码依赖组合不变，290原版文件与10未关联仍未虚报清零。
+
+证据index-scene-enhancement-20261113/review.html：实际8769融合默认6项、对照/再启用、World完整编码/主体position字节hash/相机不变、灌木四参数与颜色复原、C11真实鼠标勾选、北境限制，pageerrors/GLSL=[]。原始过宽候选保留。另将旧environment-menu-browser脚本复制到新证据目录重跑（不覆盖旧证明），quad/mixed的11post+45战斗开关、碰撞导航、焦黑组合及390px布局通过，environment-regression.json。最终统一五组20261113T145408433032Z全PASS，新增scene-enhancement串行/回滚/重试/保护已有着色单元；未做长时性能或跨GPU验收。无用户存档写入、无提交发布；JEV沿用既有外发限制本地复核。
+
+## 2026-11-13 主游戏右下角编辑按钮恢复
+用户指触控按钮旁原“编辑”入口消失。根因uiLayers将本机主游戏也默认当纯游玩界面，隐藏整个原编辑dock。已恢复localhost主游戏的原dock；显式dev=0/release=1与公共域名仍遵原隐藏规则。5处uiLayers引用统一r3-local-edit，避免主程序、桥、建造菜单与订阅器各持不同状态。capture通知带captureMode，Morris在纯截图时不因隐藏工具而退出建造/重置镜头。
+
+原四个工具分组保留，另加“地图 · 直接编辑”调用既有mapEditor.setOpen(true)（与原开发菜单相同API），无需新建编辑器。退出构建组关闭地图拾取。六个原触控键未改。触控遥控实际上位于底部中间；首轮误按右侧位置计算造成重叠，已纠正，最终编辑保持右下，弹出菜单在390px内。
+
+证据restore-edit-button-20261113/browser.json：真实默认8931/TigerMessenger/index.html，无dev参数，右下编辑→地图直接编辑打开真实map-editor，390px按钮在视口内、原六键顺序保持，errors=[]；desktop/mobile图已看。touch-layout.json单独使用实际touchControls/uiLayers/index样式、390px真coarse touch上下文验证无重叠与真实tap打开构建组，明确只是布局fixture。首轮构建组无默认已打开面板与触屏布局失败保留。地图仍是原平面编辑器，不声称所有场景已具统一物件编辑/球面投影。
+
+入口/显式纯游玩/公共域名与截图清理三单元PASS，统一五组20261113T152416957729Z全PASS。最后补充关闭地图拾取与capture通知保护通过语法/既有单元；正式主游戏浏览器记录验证打开入口，未另作其后的长时玩法验收。无用户浏览器存档改写/提交发布。保留其他模型改动；沿用既有JEV外发限制，仅本地核对。
+
+## 2026-11-14 用户明确：原编辑菜单“构建”内选择场景、现场鼠标编辑并保存
+本节替代前批“地图直接编辑”作为主入口的理解。真正第二处阻挡在scene-authoring/workbench.js：独立主游戏强制display:none隐藏了整个原Morris构建HUD。已删除该强制隐藏，恢复由UI层管理；原dock“构建”会展开原浮动场景面板并启用相应编辑器，不跳转工坊或平面地图。
+
+morrisTownscaper.js统一场景选择：莫西斯湖、十二门徒、高山圣城、水晶城、地图。选择即定位镜头；湖/岩群启动现有鼠标体素编辑，城堡/水晶切原生面板。切换会关闭其他原生编辑器；native模式隐藏Morris专属色板/工具/学习栏，但保留场景选择和统一保存。仅主3D canvas响应湖/岩群编辑，避免在2D编辑图上点击误改湖体素。关闭构建会释放编辑镜头，捕获清理不关闭原建造。
+
+“保存当前场景”按选项调用真实persist/save；Morris/岩群存储返回结果，citadel/crystal/map原有保存接口已暴露布尔成功结果，失败不报成功。城堡地形/物件写失败可上报（不声称多键事务原子保存）。各自面板原保存按钮保留，原生键盘Ctrl+S复用同接口。移除前批dock里额外“地图直接编辑”项，地图改为构建面板下的一项；更新旧入口验收脚本对应选择路径。
+
+实景证据artifacts/build-scene-editor-20261114/review.html、browser.json：默认主游戏无dev参数，点击真实dock“构建”、实际下拉五项、Morris真实mouse.click改变体素并保存，整页reload后固体数组仍不同于原值且存档一致；其他4项入口/镜头/保存成功，关闭镜头释放，pageerrors=[]。四个实景截图已看；非湖场景未在本批重验所有鼠标编辑操作，不冒称全矩阵通过。统一五组20261113T233011541067Z全PASS（UTC对应上海11月14日）；本轮没有改用户浏览器存档/提交/发布。JEV沿用前次外发限制只作本地证据核对。
+
+## 2026-11-14 最新：作者时间线与能力补全批注
+
+用户要求先8769再8931，按 Bad North → Townscaper → next → sphere 导航，逐项部分实现加低/中/高与理由。已实现同源同组件时间线：285来源、28主题、85关系、177partial批注（31高/119中/27低），前身/后续/分支和跨项目组合分别处理。4日期冲突/14早期标签待核，next无已确认正式名；2024-03-15球面展示有保存原文与ID时间，不代表第一次想到球面。原REACode只读。
+
+源码：源库 learn/pipeline.js.evolution、src/core/capability-evolution.js、src/ui/capability-evolution.js/css；父 learning-workshop 默认新页签；物理scan和catalog带来源演进，不再把扫描日当作者日期。两页面/API指纹一致，177源记录/189原泳道重复行批注实测；按优先级/阶段筛选、来源追溯与双端窄屏通过。详见 docs/CAPABILITY_EVOLUTION.md、WORKSHOP_LOG.md、artifacts/capability-evolution-20261114/review.html。
+
+本轮只整理与接通，没有把177代码缺口写成已实现。下一阶段按31高优先级再核当前源码及历史后续交付，合并同模块多视频任务，逐项实现/独立验证/真实场景接线。节点编辑器/轨迹碰撞旧待办先对账，3处旧局部方案有明确后继。不存在自动按日期替换用户定稿/Worker。
+
+
+## 2026-11-14 学习工坊 ⇄ 能力库闭环（能力谱系，lineage-r1）
+入口：docs/WORKSHOP_LOOP_PLAN.md（规划、规则、后续顺序）与生成文件 docs/CAPABILITY_LINEAGE.md。同一计算 REACodeRefactoring/src/core/capability-lineage.js 供 8769 学习管线、8931 学习工坊默认页签「能力成长与闭环」、系统工坊左栏默认视图「能力线 · 时间」和 CLI 使用：能力线按发布时间切代际，标代码到达与向前的下一步，import 方向给出组合前置，缺口按公开公式排成补学队列；可执行能力、本机执行经验、场景管线里不能执行的节点回流加权。
+当前 27 线 / 104 代、缺口 166（高 30）、6 条线待封装；本轮只归类排序和接通页面，没有新增或验收能力代码。上游 data.js 更新导致的 4 条批注已重评。workshops-browser 旧套件 25 例失败待单独更新。详见 WORKSHOP_LOG.md 同日条目；证据 artifacts/capability-lineage-20261114。

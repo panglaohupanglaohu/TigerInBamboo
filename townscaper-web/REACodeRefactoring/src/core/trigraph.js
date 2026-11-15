@@ -71,6 +71,50 @@ export class TriGraph {
     return id;
   }
 
+  /* 第 51 轮，迁自 REACode src/triGraph.js 的接口（1677242779162877952 「rewriting my generic triangle graph system … manifold and delauney-ish」）：
+   * locate / clone / edgeMap / flip（局部 Lawson 翻边 + 改动记录）。超级三角保留在内部（顶点 0..2），对外顶点号仍减 3。 */
+  /** 点落在哪个三角（含超级三角）；onEdge = 压在某条边上时那条边的两个内部顶点号。 */
+  locate(px, py, eps = 1e-12) {
+    const { x, y } = this, o = (a, b) => (x[b] - x[a]) * (py - y[a]) - (y[b] - y[a]) * (px - x[a]);
+    for (let t = 0; t < this.tris.length; t++) {
+      const [a, b, c] = this.tris[t], d1 = o(a, b), d2 = o(b, c), d3 = o(c, a), s = Math.max(Math.abs(d1), Math.abs(d2), Math.abs(d3)) * eps;
+      if (d1 >= -s && d2 >= -s && d3 >= -s) return { tri: t, onEdge: Math.abs(d1) <= s ? [a, b] : Math.abs(d2) <= s ? [b, c] : Math.abs(d3) <= s ? [c, a] : null };
+    }
+    return null;
+  }
+  /** 边 → 共享它的三角序号表（键 "小,大"）。 */
+  edgeMap() {
+    const m = new Map();
+    this.tris.forEach(([a, b, c], t) => { for (const [u, v] of [[a, b], [b, c], [c, a]]) { const k = u < v ? u + ',' + v : v + ',' + u; if (!m.has(k)) m.set(k, []); m.get(k).push(t); } });
+    return m;
+  }
+  /** 深拷贝（编辑前留底 / A-B 对照用）。 */
+  clone() { const g = new TriGraph(this.bound);   // 用构造函数（私有方法 #circum 需要真实实例）
+   ; g.x = this.x.slice(); g.y = this.y.slice(); g.tris = this.tris.map((t) => t.slice()); g.circ = this.circ.map((c) => c.slice()); g.lastFlips = []; return g; }
+  /**
+   * 翻边 (u,v) → (p,q)：两侧三角存在、四边形严格凸，且 force 或「对点在外接圆内」（非 Delaunay）时才翻。
+   * 翻后两个三角都保持逆时针，外接圆同步更新；改动记进 lastFlips。返回 true = 翻了。
+   */
+  flip(u, v, { force = false } = {}) {
+    const k = u < v ? u + ',' + v : v + ',' + u, adj = this.edgeMap().get(k) || [];
+    if (adj.length !== 2) return false;
+    const opp = (t) => this.tris[t].find((i) => i !== u && i !== v), p = opp(adj[0]), q = opp(adj[1]);
+    const { x, y } = this, o = (a, b, c) => (x[b] - x[a]) * (y[c] - y[a]) - (y[b] - y[a]) * (x[c] - x[a]);
+    if (o(u, v, p) * o(u, v, q) >= 0 || o(p, q, u) * o(p, q, v) >= 0) return false;   // 非凸四边形翻了会重叠
+    if (!force) { const [ux, uy, r2] = this.circ[adj[0]]; if (!((x[q] - ux) ** 2 + (y[q] - uy) ** 2 < r2 * (1 - 1e-12))) return false; }
+    const ccw = (a, b, c) => (o(a, b, c) > 0 ? [a, b, c] : [a, c, b]);
+    this.tris[adj[0]] = ccw(p, q, u); this.tris[adj[1]] = ccw(p, q, v);
+    this.circ[adj[0]] = this.#circum(...this.tris[adj[0]]); this.circ[adj[1]] = this.#circum(...this.tris[adj[1]]);
+    (this.lastFlips ||= []).push([u, v, p, q]);
+    return true;
+  }
+  /** 从一条边开始的 Lawson 传播（栈式），直到局部都满足 Delaunay；返回翻边次数。 */
+  legalize(u, v, guard = 4096) {
+    const stack = [[u, v]]; let n = 0;
+    while (stack.length && guard-- > 0) { const [a, b] = stack.pop(); const before = (this.lastFlips ||= []).length; if (this.flip(a, b)) { n++; const [, , p, q] = this.lastFlips[before]; stack.push([p, a], [a, q], [p, b], [b, q]); } }
+    return n;
+  }
+
   /** 去掉超级三角的三个顶点；返回的顶点号减 3，和输入点的顺序一致 */
   triangles() {
     return this.tris.filter((t) => t[0] > 2 && t[1] > 2 && t[2] > 2).map((t) => t.map((v) => v - 3));

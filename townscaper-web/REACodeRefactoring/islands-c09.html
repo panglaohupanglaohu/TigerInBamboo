@@ -1,0 +1,53 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>岛屿连播 · 每个种子都出好岛（r56 C09）</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#edf4f3;color:#20343c;font:14px/1.5 system-ui}header{padding:8px 14px}iframe{border:0;width:100%;height:calc(100vh - 128px)}a{color:#26758a}#stats{font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;max-height:48px;overflow:auto;background:#f8fbfa;padding:4px 8px}label,button{margin-right:10px}</style>
+<header><b>岛屿连播</b> · 1669315384619540487「The generator consistently spits out pretty cool islands now」· 主场景 index.html?scene=terrain 的同一个 World / View · <a href="index.html" target="_top">首页</a><br>
+<label>种子 <input id="seed" type="number" value="1" min="1" max="99999" style="width:70px"></label><button id="next">下一座岛</button><label><input type="checkbox" id="auto">自动连播</label><label><input type="checkbox" id="consistent" checked>体检不过就换派生种子（consistentIsland）</label><label><input type="checkbox" id="soft" checked>软坡 + 湖 + 河道缓坡</label>
+<div id="stats">加载中…</div></header>
+<iframe id="scene"></iframe>
+<script type="module">
+/* URL: ?grid=quad|mixed&seed=1&auto=1&consistent=0&soft=0&stage=shore|silhouette|full&yaw=&pitch=&dist=&clean=1
+ * 每座岛：空海面 → 海岸轮廓线（逐段画出）→ 黑色剪影 → 成品，然后转台。与片子同一节奏；只改本页叠加物与 View 可见性，不改 view.js。 */
+import{generateTerrain}from'./src/terrain/generate.js';
+import{consistentIsland,islandReport,islandVerdict,pruneIslets}from'./src/terrain/island-quality-c09.js';
+import{terraceEdges,finalSegments}from'./src/core/terrace-edges.js';
+const q=new URLSearchParams(location.search),grid=q.get('grid')==='mixed'?'mixed':'quad',$=s=>document.querySelector(s);
+$('#seed').value=+(q.get('seed')||1);$('#auto').checked=q.get('auto')==='1';$('#consistent').checked=q.get('consistent')!=='0';$('#soft').checked=q.get('soft')!=='0';
+const f=$('#scene');f.src='index.html?scene=terrain&grid='+grid;
+let THREE,r,shore=null,black=null,phase={name:'idle',t:0},spin=true,last=performance.now(),cycle=0;
+function opts(seed){const s=$('#soft').checked;return s?{seed,softSlopes:true,riverRelax:true,lakes:true,basins:1}:{seed};}
+function build(){
+ const w=r.world,seed=+$('#seed').value;let res;
+ if($('#consistent').checked)res=consistentIsland(w,generateTerrain,opts(seed));
+ else{w.reset();generateTerrain(w,opts(seed));const rep=islandReport(w);res={seed,tries:1,report:rep,verdict:islandVerdict(rep),pruned:0};}
+ w.softTops=$('#soft').checked;r.view.changed();r.view.worldMesh.invalidate();r.view.frameTown?.();
+ // 海岸轮廓：terraceEdges().shore → finalSegments（与地形网格同一笼形变端点），压到海面高度
+ const L=r.view.levelHeight,shape=r.view.worldMesh.shape,at=(p,s)=>shape?shape.at(p,s):[p.x,p.z];
+ const fin=finalSegments(w,terraceEdges(w).shore,{at,L});const pos=[];for(const g of fin.segments)pos.push(g.a[0],.04,g.a[2],g.b[0],.04,g.b[2]);
+ if(shore){r.view.scene.remove(shore);shore.geometry.dispose();}
+ shore=new THREE.LineSegments(new THREE.BufferGeometry(),new THREE.LineBasicMaterial({color:'#f4d27a',depthTest:false,transparent:true}));shore.geometry.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));shore.renderOrder=5;shore.frustumCulled=false;r.view.scene.add(shore);
+ window.__c09islands={grid,asked:seed,...res,shoreSegments:fin.segments.length};
+ $('#stats').textContent=JSON.stringify({grid,seed:res.seed,asked:seed,tries:res.tries,pruned:res.pruned,cool:res.verdict.cool,failed:res.verdict.failed,report:Object.fromEntries(Object.entries(res.report).map(([k,v])=>[k,typeof v==='number'?+v.toFixed(2):v]))});
+ setPhase(q.get('stage')||'sea');
+}
+let saved=null;
+function setPhase(name){phase={name,t:0};const v=r.view,sc=v.scene,seg=shore.geometry.attributes.position.count;
+ // 先恢复上一次隐藏的东西，再按阶段处理：sea / shore 只留灯光 + 海面 + 轮廓线；silhouette 整岛（含梯子、瀑布等附属）一律纯黑、海面也藏起只剩底色；full 全复原
+ if(saved){for(const [o,vis] of saved)o.visible=vis;saved=null;}sc.overrideMaterial=null;
+ if(name!=='full'){saved=new Map();const lights=new Set([v.ambient,v.hemi,v.sun,v.fill,shore]);
+  for(const o of sc.children){if(lights.has(o))continue;saved.set(o,o.visible);
+   if(name==='silhouette')o.visible=o===v.mesh||(o.visible&&o!==v.water&&o!==v.waves&&o!==v.skirt&&o!==v.shadowCatcher&&o!==v.reflection);
+   else o.visible=o===v.water;}
+  if(name==='silhouette'){if(!black)black=new THREE.MeshBasicMaterial({color:'#000'});sc.overrideMaterial=black;}}
+ shore.visible=name==='shore'||name==='silhouette';shore.geometry.setDrawRange(0,name==='shore'?0:seg);}
+function tick(now){const dt=Math.min(.1,(now-last)/1000);last=now;if(r&&shore){phase.t+=dt;const fixed=q.get('stage');
+ if(phase.name==='shore'){const seg=shore.geometry.attributes.position.count;shore.geometry.setDrawRange(0,fixed?seg:Math.min(seg,Math.ceil(seg*phase.t/1.2/2)*2));}
+ if(!fixed){if(phase.name==='sea'&&phase.t>.4)setPhase('shore');else if(phase.name==='shore'&&phase.t>1.4)setPhase('silhouette');else if(phase.name==='silhouette'&&phase.t>.35)setPhase('full');
+  else if(phase.name==='full'&&$('#auto').checked&&phase.t>7){$('#seed').value=+$('#seed').value+1;build();}}
+ if(phase.name==='full'&&spin&&!fixed){r.view.yaw+=dt*.35;r.view.updateCamera();}}
+ requestAnimationFrame(tick);}
+$('#next').onclick=()=>{$('#seed').value=+$('#seed').value+1;build();};for(const k of['#consistent','#soft'])$(k).onchange=build;
+const timer=setInterval(async()=>{r=f.contentWindow.rea;if(!r?.view?.worldMesh)return;clearInterval(timer);THREE=await f.contentWindow.eval("import('three')");
+ for(const k of['clouds','birds','boats','butterflies','flags'])try{r.view.setDebug(k,false)}catch(e){}
+ if(q.get('clean')){const st=f.contentDocument.createElement('style');st.textContent='body *{visibility:hidden!important}#view{visibility:visible!important}';f.contentDocument.head.appendChild(st);}
+ build();const v=r.view;if(q.get('yaw'))v.yaw=+q.get('yaw');if(q.get('pitch'))v.pitch=+q.get('pitch');if(q.get('dist'))v.distance=+q.get('dist');v.updateCamera();requestAnimationFrame(tick);},200);
+</script></html>

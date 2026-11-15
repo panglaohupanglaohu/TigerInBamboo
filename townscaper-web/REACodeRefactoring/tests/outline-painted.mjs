@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';import {THREE} from './fixtures/g5-battle.mjs';
+const {ScreenOutlinePass}=await import('../src/world/outline-pass.js');
+const renderer={getPixelRatio:()=>1,getDrawingBufferSize:v=>v.set(64,64),target:null,getRenderTarget(){return this.target},setRenderTarget(t){this.target=t},clear(){},render(){}};
+const pass=new ScreenOutlinePass(renderer),scene=new THREE.Scene(),mesh=new THREE.Mesh(new THREE.BoxGeometry(),new THREE.MeshBasicMaterial()),other=new THREE.Mesh(new THREE.BoxGeometry(),new THREE.MeshBasicMaterial()),line=new THREE.Line(new THREE.BufferGeometry(),new THREE.LineBasicMaterial());scene.add(mesh,other,line);
+const original=mesh.material,otherOriginal=other.material,texture=new THREE.DataTexture(new Uint8Array([128,128,255,255]),1,1),camera=new THREE.PerspectiveCamera();
+pass.setPaintedNormals(mesh,texture);assert.equal(pass.paintedMesh,mesh);assert.equal(pass.paintUniforms.uOutlinePaintMap.value,texture);assert.throws(()=>pass.setPaintedNormals(mesh,texture,{scale:0}));
+let draws=0;renderer.render=()=>{draws++;if(draws===2){assert.equal(mesh.material,pass.paintedMaterial);assert.equal(other.material,pass.normalMaterial);assert.equal(line.visible,false);throw Error('simulated GPU failure');}};
+assert.throws(()=>pass.render(scene,camera),/simulated/);assert.equal(mesh.material,original);assert.equal(other.material,otherOriginal);assert.equal(line.visible,true);assert.equal(scene.overrideMaterial,null);assert.equal(renderer.target,null);
+pass.setPaintedNormals(null,null);assert.deepEqual(pass.uniforms.uNormalThreshold.value.toArray(),[.55,.98]);assert.equal(pass.paintedMesh,null);
+let disposed=0;texture.addEventListener('dispose',()=>disposed++);pass.dispose();assert.equal(disposed,0,'external normal texture remains caller-owned');
+console.log('PASS mapped normal source and threshold toggles, exception-safe material/visibility/render-target restoration, texture ownership');

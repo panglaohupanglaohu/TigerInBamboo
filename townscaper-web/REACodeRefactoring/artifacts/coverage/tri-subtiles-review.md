@@ -29,3 +29,9 @@ wfc.html?subtiles=1可选该派生网格进入现有求解/固定/修复/周边�
 并行清单审计：原版新增blobshadow.js与navribbon.js。现有地表烘焙/导航线不等于单位软盘或弧长走廊生成；保持2项未覆盖，纳入后续5段素材学习。146模块统计与142段视频计数分别记录。
 
 补充回归：原wfc-browser.cjs双网格/换种子/pin通过，atlas-browser.cjs主场GPU/手机/图集与定时器清理通过，三主场截图已查看。首页/pipeline的142/285、剩143和新入口通过实际浏览器检查；README/本地285条一致，泳道缺0段，diff检查通过。
+
+
+## 第 56 批（C08）
+
+- 1447496205282549761：?grid=tri 纯不规则三角底网进主场景出岛（含河道/瀑布）。tests/grid-kinds-c08.mjs；截图 C08-grid-tri-wire.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。
+- 1447494168448753667：新增 module-lib-c08.html：共享 jointSubtileCatalog 模块库可视化；复核 joint3d.html。截图 C08-module-lib.png、C08-joint3d-probe.png。判 done。详见 artifacts/coverage/r56-C08-nx-grid.md。

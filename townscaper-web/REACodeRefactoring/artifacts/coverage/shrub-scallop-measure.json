@@ -1,0 +1,30 @@
+{
+ "ok": true,
+ "checks": {
+  "bandFound": true,
+  "enoughPeaks": true,
+  "singleScaleInRange": true,
+  "noCrash": true
+ },
+ "setup": {
+  "pxPerUnitX": 60.05,
+  "latticeSpacing": null,
+  "shrubStyle": {
+   "x": 0.5,
+   "y": 0.22,
+   "z": 1,
+   "w": 0.5
+  },
+  "tooth": 46,
+  "width": 1000,
+  "height": 460
+ },
+ "measure": {
+  "bandPixels": 41842,
+  "peaks": 61,
+  "periodPx": 10.5,
+  "edgePx": 27.29,
+  "ratio": 0.385,
+  "contourSpanPx": 841
+ }
+}

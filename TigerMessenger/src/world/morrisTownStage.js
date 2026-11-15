@@ -59,22 +59,32 @@ export class MorrisTownStage{
   // world mesh + material (view.js constructor)
   this.worldMesh=new WorldMesh(world,{levelHeight});
   this.material=styleMat('morris.townStage.town-voxels','MeshStandardMaterial',{vertexColors:true,roughness:.92,metalness:0});
-  this.nightUniform={value:0};this.pop=popShaderChunk();this.snowUniform={value:0};
+  this.nightUniform={value:0};this.pop=popShaderChunk();// 2026-11-08 主人要求：积雪是莫西斯湖特有的常开设定（雪后的湖上建筑），不跟天气走；?morrisSnow=0 关、?morrisSnow=0.5 调量。
+  {const q=new URLSearchParams(globalThis.location?.search||'').get('morrisSnow');const v=q===null?NaN:Number(q);this.snowBase=Number.isFinite(v)?Math.max(0,Math.min(1,v)):.85;}
+  this.snowUniform={value:this.snowBase};
   this.material.onBeforeCompile=shader=>{shader.uniforms.uNight=this.nightUniform;shader.uniforms.uTime=this.waterUniforms.uTime;shader.uniforms.uSnow=this.snowUniform;Object.assign(shader.uniforms,this.pop.uniforms);
-   shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float aGlow;\nvarying float vGlow;\nvarying float vUp;\nuniform float uTime;\n'+this.pop.pars).replace('#include <begin_vertex>','#include <begin_vertex>\nvGlow = aGlow;\nvUp = normalize(objectNormal).y;\n'+this.pop.body);
-   shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float uNight;\nuniform float uSnow;\nvarying float vGlow;\nvarying float vUp;').replace('#include <color_fragment>','#include <color_fragment>\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.93, 0.95, 0.98), uSnow * smoothstep(0.55, 0.85, vUp));').replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.72, 0.32) * vGlow * uNight * 1.6;');};
+   shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nattribute float aGlow;\nvarying float vGlow;\nvarying float vUp;\nvarying vec3 vSnowP;\nuniform float uTime;\n'+this.pop.pars).replace('#include <begin_vertex>','#include <begin_vertex>\nvGlow = aGlow;\nvUp = normalize(objectNormal).y;\n'+this.pop.body+'\nvSnowP = transformed;\n');
+   shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float uNight;\nuniform float uSnow;\nvarying float vGlow;\nvarying float vUp;\nvarying vec3 vSnowP;\nfloat tmSnowHash(vec2 p){return fract(sin(dot(p,vec2(12.9898,78.233)))*43758.5453);}').replace('#include <color_fragment>','#include <color_fragment>\nif(uSnow>0.001){float sn=clamp(uSnow,0.0,1.0);float wob=sin(vSnowP.x*3.1+vSnowP.z*2.3)*0.5+sin(vSnowP.x*7.7-vSnowP.z*6.1)*0.25;float grain=tmSnowHash(floor(vSnowP.xz*9.0))-0.5;float cover=smoothstep(0.80-0.50*sn,0.93-0.38*sn,vUp+wob*0.10+grain*0.05)*smoothstep(0.0,0.2,sn);vec3 snowCol=mix(vec3(0.80,0.86,0.94),vec3(0.95,0.96,0.98),smoothstep(0.6,1.0,vUp));diffuseColor.rgb=mix(diffuseColor.rgb*mix(vec3(1.0),vec3(0.90,0.94,1.0),sn*0.6),snowCol,cover);}').replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.72, 0.32) * vGlow * uNight * 1.6;');};
   this.mesh=new THREE.Mesh(this.worldMesh.geometry,this.material);this.mesh.name='morris-reacode-refactoring-world';this.mesh.castShadow=this.mesh.receiveShadow=true;this.scene.add(this.mesh);
   this.outline=new OutlineLayers(this.worldMesh.geometry);this.scene.add(this.outline.group);
   this.birds=new Birds({scene:this.scene,town:world,grid,index,levelHeight,water:this.waterUniforms.uShallow});
   this.vegetation=new Vegetation({scene:this.scene,levelHeight,uTime:this.waterUniforms.uTime});this.impostorsReady=false;
+  // 2026-11-10 用户：「小镇没必要描墨边，去掉吧，浪费性能」——墨线层（整镇几何再画一遍）与植被墨线默认关；?morrisInk=1 才允许打开（固定版本 / 配方里存的 outline:true 也不再生效）。
+  this.inkAllowed=new URLSearchParams(globalThis.location?.search||'').get('morrisInk')==='1';
+  this.outline.inkVisible=this.inkAllowed;this.vegetation.ink=this.inkAllowed;
   this.atmosphere=new Atmosphere({scene:this.scene,levelHeight,uTime:this.waterUniforms.uTime});
   this.effects=new Effects({scene:this.scene,uTime:this.waterUniforms.uTime,popUniforms:this.pop.uniforms});
   this.navLayer=new NavLayer({scene:this.scene,levelHeight});
   this.sound=new Sound();
   this.decor=new Decor({scene:this.scene,uTime:this.waterUniforms.uTime,uWind:this.atmosphere.uWind,levelHeight});
+  // 2026-11-08 主人要求：莫西斯湖常年冬景（莫西斯湖特有，不跟天气走）—— 飘雪（雪片沿风场绕岛，943230624369868800）、表面积雪（snowBase）、
+  // 岛周薄雾（906207980802252801 "subtlety is key"）、流动云层（impostor 云沿风漂，1852334860137849222）、远景阴云（1243228419162341379 moody clouds）。
+  // ?morrisWinter=0 回到原来的晴天湖面（积雪另由 ?morrisSnow 控制）。
+  this.winter=new URLSearchParams(globalThis.location?.search||'').get('morrisWinter')!=='0';
+  if(this.winter){this.atmosphere.showSnow=true;this.atmosphere.showFog=true;this.debugState.snow=true;this.debugState.fog=true;this.debugState.clouds=true;this.debugState.moody=true;}
   // reflection (view.js): mirrored town flattened toward the water/town midpoint colour
-  this.reflectMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,vertexColors:true,uniforms:{uTime:this.waterUniforms.uTime,uWater:this.waterUniforms.uShallow,uNight:this.nightUniform},
-   vertexShader:'uniform float uTime;\nattribute float aGlow;\nvarying vec3 vCol;\nvarying float vDepth;\nvarying float vGlow;\nvoid main(){vec4 w=modelMatrix*vec4(position,1.0);vDepth=-w.y;w.x+=sin(w.y*9.0+uTime*1.3+w.z*0.7)*0.018*vDepth;w.z+=cos(w.y*7.0-uTime*1.1+w.x*0.5)*0.012*vDepth;vCol=color;vGlow=aGlow;gl_Position=projectionMatrix*viewMatrix*w;}',
+  this.reflectMaterial=new THREE.ShaderMaterial({transparent:true,depthWrite:false,vertexColors:true,uniforms:{uTime:this.waterUniforms.uTime,uWater:this.waterUniforms.uShallow,uNight:this.nightUniform,uSnow:this.snowUniform},
+   vertexShader:'uniform float uTime;\nuniform float uSnow;\nattribute float aGlow;\nvarying vec3 vCol;\nvarying float vDepth;\nvarying float vGlow;\nvoid main(){vec4 w=modelMatrix*vec4(position,1.0);vDepth=-w.y;w.x+=sin(w.y*9.0+uTime*1.3+w.z*0.7)*0.018*vDepth;w.z+=cos(w.y*7.0-uTime*1.1+w.x*0.5)*0.012*vDepth;vCol=mix(color,vec3(0.93,0.95,0.98),clamp(uSnow,0.0,1.0)*smoothstep(0.35,0.7,normal.y));vGlow=aGlow;gl_Position=projectionMatrix*viewMatrix*w;}',
    fragmentShader:'uniform vec3 uWater;\nuniform float uNight;\nvarying vec3 vCol;\nvarying float vDepth;\nvarying float vGlow;\nvoid main(){vec3 mid=mix(uWater,vCol*1.25+0.04,0.5);mid+=vec3(1.0,0.7,0.3)*vGlow*uNight*0.6;float fade=exp(-vDepth*0.9);gl_FragColor=vec4(mid,0.82*fade);\n#include <colorspace_fragment>\n}'});
   this.reflection=new THREE.Mesh(this.worldMesh.geometry,this.reflectMaterial);this.reflection.scale.y=-1;this.reflection.renderOrder=1;this.scene.add(this.reflection);
   this.skirtMaterial=makeSkirtMaterial(new THREE.Color('#9fd0d3'));this.skirt=new THREE.Mesh(new THREE.BufferGeometry(),this.skirtMaterial);this.skirt.renderOrder=2;this.scene.add(this.skirt);
@@ -101,12 +111,12 @@ export class MorrisTownStage{
   case 'reflection':this.reflection.visible=on;this.birds.reflections=on;break;case 'birds':this.birds.visible=on;break;
   case 'vegetation':this.vegetation.visible=on;break;case 'grass':case 'shrubs':case 'trees':case 'flowers':this.vegetation.setLayer(name,on);break;
   case 'leafy':this.vegetation.leafyOn=on;break;case 'impostor':this.vegetation.impostor=on;break;case 'clouds':this.vegetation.clouds=on;break;case 'moody':this.vegetation.moody=on;break;
-  case 'wind':this.atmosphere.showArrows=on;break;case 'snow':this.atmosphere.showSnow=on;this.snowUniform.value=on?1:0;break;case 'fog':this.atmosphere.showFog=on;break;
+  case 'wind':this.atmosphere.showArrows=on;break;case 'snow':this.atmosphere.showSnow=on||this.winter;this.snowUniform.value=on&&!this.winter?Math.max(1,this.snowBase):this.snowBase;break;case 'fog':this.atmosphere.showFog=on||this.winter;break;
   case 'fire':this.effects.showFire=on;break;case 'sound':this.sound.enabled=on;break;case 'nav':this.navLayer.showGraph=on;break;
   case 'modules':this.worldMesh.debugModules=on;this.worldMesh.invalidate();break;case 'stairs':this.navLayer.showStairs=on;break;
   case 'flags':case 'wires':case 'butterflies':this.decor.setLayer(name,on);break;
   case 'shadows':this.sun.castShadow=on;this.shadowCatcher.visible=on;break;case 'ao':this.worldMesh.bake=on;this.worldMesh.invalidate();break;
-  case 'smooth':this.worldMesh.smooth=on;this.worldMesh.invalidate();break;case 'outline':this.outline.inkVisible=on;this.vegetation.ink=on;break;case 'backlit':this.outline.rimVisible=on;break;
+  case 'smooth':this.worldMesh.smooth=on;this.worldMesh.invalidate();break;case 'outline':on=on&&this.inkAllowed;this.debugState.outline=on;this.outline.inkVisible=on;this.vegetation.ink=on;break;case 'backlit':this.outline.rimVisible=on;break;
   case 'lightonly':this.material.vertexColors=!on;this.material.color.set(on?0xf2efe8:0xffffff);this.material.needsUpdate=true;break;case 'wire':this.material.wireframe=on;break;default:break;}}
  /** Ray march over the voxel columns (view.js pick), ray given in town units. */
  pickRay(ray){const o=ray.origin,d=ray.direction,L=this.levelHeight,maxY=MAX_LEVEL*L+1.5;let tStart=0,tEnd=220;

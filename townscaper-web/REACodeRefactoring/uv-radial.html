@@ -1,0 +1,109 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>径向 UV 图集 · 三角反差纹理 · REACode 重构版</title>
+<style>:root{color-scheme:light}body{margin:0;background:#98a8ae;color:#1d2b30;font:13px/1.5 system-ui}header{padding:8px 14px;background:#eef3f1}main{display:flex;flex-direction:column;align-items:center;gap:6px;padding:8px}canvas{display:block}#page{width:480px;height:480px;image-rendering:pixelated}#view{width:480px;height:420px}#strip{display:flex;gap:6px}#strip canvas{width:112px;height:112px;background:#7f8c90;image-rendering:pixelated}label{margin-right:10px}a{color:#145f6c}#status{font-variant-numeric:tabular-nums}</style>
+<header><nav><a href="index.html" target="_top">首页</a> · <a href="uv-bake.html">UV 页烘焙（r55）</a> · <a href="color-lab.html">反差场</a></nav>
+<b>1478114309263839244 径向大小排序 UV 图集（上：UV 页线框，逐片放置；下：同一座岛 线框 → 棋盘格）· 1482346496460828674 三角反差纹理画进该图集（随机开始 → 逐轮迭代）</b>
+<div><label>模式 <select id="mode"><option value="wire">线框</option><option value="checker">棋盘格</option><option value="contrast">反差纹理</option></select></label><label>分片 <select id="charting"><option value="top">朝上面合并</option><option value="angle">法线夹角（r55）</option></select></label><button id="play">播放</button> <span id="status" role="status"></span></div>
+<small>岛是与片子同构的测试岛（底板 + 三根崖柱 + 拱洞），写在共享 World 上、用共享 terrainmesh 出网格。分片/排布/反差求解是本地实现（原片只给画面与一句配文）。</small></header>
+<main><div id="strip"></div><canvas id="page" width="512" height="512"></canvas><canvas id="view" width="480" height="420"></canvas></main>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { buildMixedGrid } from './src/core/grid.js';
+import { decorateCells } from './src/core/spatial.js';
+import { World } from './src/core/world.js';
+import { shapeTerrain } from './src/terrain/shape.js';
+import { MeshWriter } from './src/core/meshwriter.js';
+import { buildTerrain } from './src/terrain/terrainmesh.js';
+import { weldSoup, buildCharts, radialChartPack, countChartOverlaps } from './src/core/uv-charts.js';
+import { clipIsland, topMergeCharts, chartHoles, radialSpearman, rasterizeChartPage, paintCheckerPage, meshContrastGraph, contrastSimulation, paintContrastPage, dilatePage } from './src/core/uv-radial-atlas.js';
+const $ = (s) => document.querySelector(s), qs = new URLSearchParams(location.search);
+if (qs.has('mode')) $('#mode').value = qs.get('mode'); if (qs.has('charting')) $('#charting').value = qs.get('charting');
+const SIZE = 512, t0 = performance.now();
+const grid = buildMixedGrid({ radius: 7, seed: 3 }); decorateCells(grid); const world = new World(grid); const island = clipIsland(world, { seed: +(qs.get('seed') ?? 4) });
+const w = new MeshWriter(); buildTerrain(w, world, { L: 0.5, shape: shapeTerrain(world) });
+const mesh = weldSoup(w.pos), T = mesh.triangles.length;
+const ch = $('#charting').value === 'top' ? topMergeCharts(mesh, { maxAngle: 40 }) : buildCharts(mesh, { maxAngle: 40 });
+const pack = radialChartPack(ch.charts, { cell: 0.1, gap: 1, footprint: 'raster' }), page = rasterizeChartPage(mesh.triangles, pack.uv, SIZE);
+const rankOf = new Int32Array(ch.charts.length); pack.placements.forEach((p, k) => { rankOf[p.chart] = k; });
+const triRank = Int32Array.from(mesh.triangles, (_, t) => rankOf[ch.owner[t]]);
+const big = ch.charts[pack.placements[0].chart], total = ch.charts.reduce((s, c) => s + c.area, 0);
+const graph = meshContrastGraph(mesh, { creaseDeg: 35 });
+let sim = contrastSimulation(graph, { seed: 3, random: true, centroids: graph.centroids });
+const state = { tris: T, charts: ch.charts.length, topCharts: ch.topCharts ?? 0, centerShare: +(big.area / total).toFixed(3), centerHoles: chartHoles(big, mesh.triangles), spearman: +radialSpearman(pack.placements).toFixed(3), fill: +pack.fill.toFixed(3), pageFill: +page.fill.toFixed(3), overlaps: countChartOverlaps(pack), island, contrastEdges: graph.edges.filter((e) => e.contrast).length, edges: graph.edges.length, buildMs: 0 };
+state.buildMs = Math.round(performance.now() - t0);
+
+// ---------- UV 页（2D）：灰蓝底 + 深色三角线框；逐片放置 ----------
+const pc = $('#page'), px = pc.getContext('2d');
+function drawPage(step, fillRGBA) {
+  px.fillStyle = '#98a8ae'; px.fillRect(0, 0, SIZE, SIZE);
+  if (fillRGBA) { const img = px.createImageData(SIZE, SIZE); for (let o = 0; o < SIZE * SIZE; o++) { const t = page.tri[o]; if (t < 0 || triRank[t] >= step) { img.data[o * 4 + 3] = 0; continue; } for (let k = 0; k < 4; k++) img.data[o * 4 + k] = fillRGBA[o * 4 + k]; img.data[o * 4 + 3] = 255; } const off = new OffscreenCanvas(SIZE, SIZE); off.getContext('2d').putImageData(img, 0, 0); px.drawImage(off, 0, 0); }
+  px.strokeStyle = 'rgba(28,36,40,.9)'; px.lineWidth = 0.7; px.beginPath();
+  for (let t = 0; t < T; t++) { if (triRank[t] >= step) continue; const uv = pack.uv(t); px.moveTo(.5 + uv[0][0] * (SIZE - 1), .5 + uv[0][1] * (SIZE - 1)); px.lineTo(.5 + uv[1][0] * (SIZE - 1), .5 + uv[1][1] * (SIZE - 1)); px.lineTo(.5 + uv[2][0] * (SIZE - 1), .5 + uv[2][1] * (SIZE - 1)); px.closePath(); }
+  px.stroke();
+}
+// ---------- 模型（3D）----------
+const renderer = new THREE.WebGLRenderer({ canvas: $('#view'), antialias: true, preserveDrawingBuffer: true }); renderer.setPixelRatio(1); renderer.setSize(480, 420, false);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#98a8ae');
+const camera = new THREE.PerspectiveCamera(36, 480 / 420, .1, 200);
+const pos = new Float32Array(T * 9), uvs = new Float32Array(T * 6), bar = new Float32Array(T * 9);
+mesh.triangles.forEach((tri, t) => { const uv = pack.uv(t); tri.forEach((v, k) => { pos.set(mesh.positions[v], t * 9 + k * 3); uvs[t * 6 + k * 2] = uv[k][0]; uvs[t * 6 + k * 2 + 1] = uv[k][1]; bar[t * 9 + k * 3 + k] = 1; }); });
+const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.BufferAttribute(uvs, 2)); geo.setAttribute('aBary', new THREE.BufferAttribute(bar, 3)); geo.computeBoundingSphere();
+const pageTex = new THREE.DataTexture(new Uint8Array(SIZE * SIZE * 4), SIZE, SIZE, THREE.RGBAFormat); pageTex.flipY = false; pageTex.colorSpace = THREE.SRGBColorSpace; pageTex.magFilter = THREE.LinearFilter; pageTex.minFilter = THREE.LinearFilter; pageTex.generateMipmaps = false;
+const U = { uTex: { value: pageTex }, uMode: { value: 0 }, uLight: { value: new THREE.Vector3(.45, .8, .35).normalize() } };
+const mat = new THREE.ShaderMaterial({ uniforms: U, extensions: { derivatives: true }, side: THREE.DoubleSide,
+  vertexShader: 'attribute vec3 aBary; varying vec2 vUv; varying vec3 vB; varying vec3 vW; void main(){ vUv=uv; vB=aBary; vec4 w=modelMatrix*vec4(position,1.); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }',
+  fragmentShader: `uniform sampler2D uTex; uniform float uMode; uniform vec3 uLight; varying vec2 vUv; varying vec3 vB; varying vec3 vW;
+  vec3 toSRGB(vec3 c){ return mix(c*12.92, 1.055*pow(c,vec3(1./2.4))-.055, step(vec3(.0031308),c)); }
+  void main(){
+    vec3 n = normalize(cross(dFdx(vW), dFdy(vW))); float lam = .55 + .45*max(0., dot(n, uLight));
+    vec3 d = fwidth(vB); vec3 a3 = smoothstep(vec3(0.), d*1.2, vB); float wire = 1. - min(min(a3.x,a3.y),a3.z);
+    if (uMode < .5) { vec3 c = mix(vec3(.60,.66,.69)*lam, vec3(.11,.15,.17), wire*.95); gl_FragColor = vec4(c,1.); return; }
+    vec3 t = texture2D(uTex, vUv).rgb;   // 线性（sRGB 纹理已解码）
+    if (uMode < 1.5) { vec3 c = t*lam; c = mix(c, vec3(.92), wire*.35); gl_FragColor = vec4(toSRGB(c),1.); return; }
+    // 1482346496460828674：反差纹理里色差大的地方出像素细线。邻像素的 UV（dFdx/dFdy）取样；落到 gutter（alpha<.9 = 图块外接缝）的不算
+    vec2 du = dFdx(vUv), dv = dFdy(vUv); vec3 c0 = toSRGB(t); float e = 0.;
+    for (int k = 0; k < 4; k++) { vec2 o = k == 0 ? du : k == 1 ? -du : k == 2 ? dv : -dv; vec4 s = texture2D(uTex, vUv + o); if (s.a > .9) e = max(e, length(toSRGB(s.rgb) - c0)); }
+    float line = smoothstep(.07, .16, e);
+    vec3 c = mix(t*lam, vec3(.05,.07,.08), line*.85); gl_FragColor = vec4(toSRGB(c),1.); }` });
+const model = new THREE.Mesh(geo, mat); scene.add(model);
+const r = geo.boundingSphere.radius, ctr = geo.boundingSphere.center; camera.position.set(ctr.x + r * 1.1, ctr.y + r * 1.5, ctr.z + r * 2.3); camera.lookAt(ctr.x, ctr.y - r * .1, ctr.z);
+// 顶部调试条：反差色 UV 页（片子 frame-0240 顶部那排贴图）
+const strip = $('#strip'), stripCanvases = ['反差色 UV 页', '对比边', '棋盘 UV 页'].map((title) => { const c = document.createElement('canvas'); c.width = c.height = SIZE; c.title = title; strip.appendChild(c); return c; });
+function paintStrip(rgbaContrast, checker) {
+  const put = (c, data) => { const img = new ImageData(SIZE, SIZE); img.data.set(data); for (let i = 3; i < img.data.length; i += 4) if (img.data[i] < 254) { img.data[i - 3] = 127; img.data[i - 2] = 140; img.data[i - 1] = 144; img.data[i] = 255; } c.getContext('2d').putImageData(img, 0, 0); };
+  put(stripCanvases[0], rgbaContrast); put(stripCanvases[2], checker);
+  const e = new Uint8ClampedArray(SIZE * SIZE * 4); for (let y = 1; y < SIZE - 1; y++) for (let x = 1; x < SIZE - 1; x++) { const o = (y * SIZE + x) * 4; if (rgbaContrast[o + 3] !== 255) continue; let d = 0; for (const j of [o + 4, o + SIZE * 4]) if (rgbaContrast[j + 3] === 255) d = Math.max(d, Math.abs(rgbaContrast[o] - rgbaContrast[j]) + Math.abs(rgbaContrast[o + 1] - rgbaContrast[j + 1]) + Math.abs(rgbaContrast[o + 2] - rgbaContrast[j + 2])); const v = d > 24 ? 20 : 235; e[o] = e[o + 1] = e[o + 2] = v; e[o + 3] = 255; }
+  put(stripCanvases[1], e);
+}
+const checker = dilatePage(paintCheckerPage(page, { cells: 40 }), SIZE, 3, 128);
+let contrastRGBA = null;
+function setMode(m) {
+  U.uMode.value = m === 'wire' ? 0 : m === 'checker' ? 1 : 2;
+  if (m === 'checker') { pageTex.image.data.set(checker); pageTex.needsUpdate = true; }
+  if (m === 'contrast') refreshContrast();
+  strip.style.display = m === 'contrast' ? 'flex' : 'none';
+}
+function refreshContrast() { contrastRGBA = dilatePage(paintContrastPage(page, mesh, graph, sim.rgb()), SIZE, 3, 128); pageTex.image.data.set(contrastRGBA); pageTex.needsUpdate = true; paintStrip(contrastRGBA, checker); }
+let step = +(qs.get('step') ?? pack.placements.length), iter = +(qs.get('iter') ?? 220), playing = qs.get('autoplay') === '1', yaw = +(qs.get('yaw') ?? 0);
+sim.step(iter);
+function status() { const m = sim.measure(); state.iter = sim.iter; state.step = step; state.measure = { contrastDE: +m.contrastDE.toFixed(2), sameDE: +m.sameDE.toFixed(2), minContrastDE: +m.minContrastDE.toFixed(2) }; state.before = { contrastDE: +sim.before.contrastDE.toFixed(2), sameDE: +sim.before.sameDE.toFixed(2) };
+  $('#status').textContent = `${T} 三角 → ${state.charts} 片（朝上合并 ${state.topCharts}）· 中心片 ${(state.centerShare * 100).toFixed(1)}% 洞 ${state.centerHoles} · 面积名次~距离 Spearman ${state.spearman} · 排布填充 ${(state.fill * 100).toFixed(1)}% · 重叠 ${state.overlaps} · 放置 ${Math.min(step, state.charts)}/${state.charts}` + ($('#mode').value === 'contrast' ? ` · 反差第 ${sim.iter} 轮：对比边 ΔE ${state.measure.contrastDE}（最小 ${state.measure.minContrastDE}）同类边 ΔE ${state.measure.sameDE}` : ''); window.uvRadial = { state, pack, page, graph, sim }; }
+setMode($('#mode').value); drawPage(step, $('#mode').value === 'checker' ? checker : $('#mode').value === 'contrast' ? contrastRGBA : null); status();
+$('#mode').onchange = () => { setMode($('#mode').value); drawPage(step, $('#mode').value === 'checker' ? checker : $('#mode').value === 'contrast' ? contrastRGBA : null); status(); };
+$('#charting').onchange = () => { qs.set('charting', $('#charting').value); location.search = qs; };
+$('#play').onclick = () => { playing = true; step = 0; if ($('#mode').value === 'contrast') { sim = contrastSimulation(graph, { seed: 3, random: true, centroids: graph.centroids }); window.uvRadial.sim = sim; } };
+let frame = 0;
+function loop() {
+  frame++;
+  if (playing && frame % 2 === 0) {
+    const m = $('#mode').value;
+    if (step < state.charts) { step = Math.min(state.charts, step + Math.max(1, Math.round(step * .06))); drawPage(step, m === 'checker' ? checker : m === 'contrast' ? contrastRGBA : null); }
+    else if (m === 'contrast' && sim.iter < 220) { sim.step(4); refreshContrast(); drawPage(step, contrastRGBA); }
+    else playing = false;
+    status();
+  }
+  model.rotation.y = yaw + frame * (qs.get('spin') === '0' ? 0 : .003);
+  renderer.render(scene, camera); requestAnimationFrame(loop);
+}
+loop();
+</script></html>

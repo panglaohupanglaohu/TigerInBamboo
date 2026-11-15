@@ -1,0 +1,4063 @@
+{
+ "rows": [
+  {
+   "id": "839067977781768193",
+   "frames": 227,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/839067977781768193-review.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/squad-hud.js",
+    "squad-hud.html"
+   ],
+   "missing": [],
+   "pages": [
+    "squad-hud.html"
+   ],
+   "pageSource": "where",
+   "note": "227帧全核（3张联系表+4张原尺寸）；战斗HUD两件：旗顶槽按存活比绿/黄/红缩短+受击左端闪红0.15s，击杀白色+10上升1s淡出、同队连杀合并；新建 squad-hud.js，缺献血泊尸体/木跳板/旗布摆动/接battle.js"
+  },
+  {
+   "id": "883447205176238083",
+   "frames": 654,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/883447205176238083-review.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/squad-footprint.js",
+    "squad-footprint.html"
+   ],
+   "missing": [],
+   "pages": [
+    "squad-footprint.html"
+   ],
+   "pageSource": "where",
+   "note": "654帧全核（7张联系表+4张原尺寸）；选中队伍脚下的占位线网=凸包轮廓+中心辐条+角上小方块，旗顶悬空白菱形、+12飘字、箭矢细白线；新建 squad-footprint.js，缺凹形占位按格边界走/接battle.js选中态/菱形标记/箭矢线"
+  },
+  {
+   "id": "818857408848130048",
+   "frames": 302,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/818857408848130048-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/field-surface.js",
+    "field-surface.html"
+   ],
+   "missing": [],
+   "pages": [
+    "field-surface.html"
+   ],
+   "pageSource": "where",
+   "note": "302帧全核（4张联系表+5张原尺寸）；白模黏土岛形态循环，柱顶半球/崖棱倒角/无一根方格边=占位场模糊后抽等值面，切换时先缩到消失再长成；新建 field-surface.js，做到崩解重组+平滑等值面，缺水面真倒影/暗色碎片/带状水线/坡屋顶细节"
+  },
+  {
+   "id": "832633189277409280",
+   "frames": 192,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/832633189277409280-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/field-surface.js",
+    "field-surface.html"
+   ],
+   "missing": [],
+   "pages": [
+    "field-surface.html"
+   ],
+   "pageSource": "where",
+   "note": "192帧全核（2张联系表+3张原尺寸）；同一工具的带投影录屏，确认地形走等值面、房子是独立硬边几何；共用 field-surface.js，缺'地形圆角+建筑硬棱'的分层混合"
+  },
+  {
+   "id": "837027901853810688",
+   "frames": 514,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/837027901853810688-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/smoke.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "514帧全核（6张联系表）；Bad North 夜间烧村实机：黑烟球+橙色火舌、血迹随时间变暗变淡、348–366帧出现亮黄竖条来袭标记；未改码，缺烟球体积+火光照明联动、血迹淡出、黄条标记"
+  },
+  {
+   "id": "816743289500106752",
+   "frames": 431,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/816743289500106752-review.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "431帧全核；石膏台地岛上白盔海军成列行军：队列沿路径按固定间距排队、跨台阶时拉成竖列、到位展开成3–4排方块，路径有白色引导点。缺成列行军/跨层列队/到达集结落位，均未实现"
+  },
+  {
+   "id": "816332161036984320",
+   "frames": 177,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/816332161036984320-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/trajectory-fan.js",
+    "trajectory-fan.html"
+   ],
+   "missing": [],
+   "pages": [
+    "trajectory-fan.html"
+   ],
+   "pageSource": "where",
+   "note": "177帧全核；判出Unity「Trajectory Calculator」：同一Speed/Drag按整排角度画带阻力弹道+等弧长白色方向划线（实测划线等距42–43px）。新建trajectory-fan.js/html：线性阻尼解析解+等弧长切线采样，Drag 0→2射程5.91→2.38单位、划线188→88；缺场景碰撞截断、二次阻力档、Inspector第三参数读不到"
+  },
+  {
+   "id": "810157485638189056",
+   "frames": 510,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/810157485638189056-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/route-preview.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "route-preview.html"
+   ],
+   "pageSource": "import",
+   "note": "510帧全核；俯视调试视图：棕色三角化块体+沿可行走区密集采样(1–2px点距)的路线点串+三轴gizmo拖拽标记，点阵基本累积静止(帧间差>20仅2129px)。判为路线/轨迹采样编辑器；缺路线编辑与检查点拖拽、累积轨迹模式、块面三角剖分线调试层"
+  },
+  {
+   "id": "797844857821732864",
+   "frames": 117,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/797844857821732864-review-r61.md",
+   "evOk": true,
+   "files": [
+    "src/world/voxel-ghost.js",
+    "voxel-ghost.html"
+   ],
+   "missing": [],
+   "pages": [
+    "voxel-ghost.html"
+   ],
+   "pageSource": "where",
+   "note": "117帧全核（sheet-00/01 两页）；本轮补齐：中轴竖柱装配序（49格，x/z跨度≤3，y 从0到塔顶；t=0.34 实体80格全在竖柱上、其余780格线框=先竖后横）、片尾 dolly（t>0.78 推近至1.22×）、任意网格体素化（同上共用）；仍缺真三维环绕镜头（本仓等轴测无透视环绕）、窗格/天线美术细节"
+  },
+  {
+   "id": "794993371261665280",
+   "frames": 158,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/794993371261665280-review-r61.md",
+   "evOk": true,
+   "files": [
+    "src/world/voxel-ghost.js",
+    "voxel-ghost.html"
+   ],
+   "missing": [],
+   "pages": [
+    "voxel-ghost.html"
+   ],
+   "pageSource": "where",
+   "note": "158帧全核（sheet-00/01 两页）；本轮补齐三项：逐层材质分组（6段/6色，色相81→231）、Go! 一次性触发（0→0.125→1.000，700ms后仍1.000不循环）、任意三角网格体素化（奇偶射线+交点去重，空腔保留，2³=8格/4³壳56格）；仍缺原片具体色板与层高、片尾真三维环绕（本仓等轴测推近1.22×）"
+  },
+  {
+   "id": "784848286272327680",
+   "frames": 272,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/784848286272327680-review.md",
+   "evOk": true,
+   "files": [
+    "src/sphere/planet.js",
+    "planet.html"
+   ],
+   "missing": [],
+   "pages": [
+    "planet.html"
+   ],
+   "pageSource": "where",
+   "note": "272帧全核；planet.js 的 assemblyOrder(frontier)/assemblySlice/planetMesh(only) 三档实测 37/185/383/618 格、前沿断口侧壁可见，与片子单粒起点→前沿铺满一致；缺格内两级细分（片中一格是一坨小方块）、装配起点不可指定单格、表面生物群系斑块"
+  },
+  {
+   "id": "784847588893814785",
+   "frames": 270,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/784847588893814785-review.md",
+   "evOk": true,
+   "files": [
+    "src/sphere/planet.js",
+    "planet.html"
+   ],
+   "missing": [],
+   "pages": [
+    "planet.html"
+   ],
+   "pageSource": "where",
+   "note": "270帧全核；与 784847933686575104 共用同一落点（装配生长/断口侧壁/薄壳/白模）；片中多一层两级尺度——跨多格的大平板 + 一整片格内细分的小方块碎片堆，本仓胞元只有一级，碎片堆未实现"
+  },
+  {
+   "id": "784847933686575104",
+   "frames": 268,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/784847933686575104-review.md",
+   "evOk": true,
+   "files": [
+    "src/sphere/planet.js",
+    "planet.html"
+   ],
+   "missing": [],
+   "pages": [
+    "planet.html"
+   ],
+   "pageSource": "where",
+   "note": "268帧全核；planet.js 补 assemblyOrder/assemblySlice + planetMesh(only)，页面加装配滑杆/白模/薄壳，铺满618格，四档顶点 5907→19797→29508→24765（铺满后断口侧壁消失）；缺装配起点可指定与格内细分"
+  },
+  {
+   "id": "1991103578011029507",
+   "frames": 529,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wave-crest-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/shore.js",
+    "src/core/wave-cycle.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "refactoring-audit.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "529帧全复核：固定教堂岛，主要动态为分段白色近岸浪；不把“克制动态海洋”推断为现有整片海面颜色漂移公式。保留本地背景处理但纠正归因，新增可开关沿岸周期分段浪峰，实际双网格GPU对照通过。"
+  },
+  {
+   "id": "1991101097818403263",
+   "frames": 477,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wave-cycle-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/shore.js",
+    "src/core/wave-cycle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "477帧全复核：线框浪带展开/到岸，绕高崖与海蚀洞；README明确生成时烘入/出方向和时间偏移。补独立aIn/aOut/aPeriod；退浪局部几何反射是本地近似，不宣称原作公式。真实GPU及View动态像素通过，完整浪形/碰撞仍部分。"
+  },
+  {
+   "id": "1991099314714902634",
+   "frames": 545,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wave-crest-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/shore.js",
+    "src/core/wave-cycle.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "refactoring-audit.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "545帧全复核：高崖岛/海蚀洞换角度，白色岸浪分段展开/聚散；README只称新岸浪。保留独立进退/周期，补aCrest/aWidth与闭环整数谐波，遮罩/拓扑碰撞及完整原作形态仍缺。"
+  },
+  {
+   "id": "1897266928961700215",
+   "frames": 108,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/doodle-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/doodle-layout.js",
+    "src/build/doodle-wall.js",
+    "src/world/doodle-overlay.js",
+    "doodle.html"
+   ],
+   "missing": [],
+   "pages": [
+    "doodle.html"
+   ],
+   "pageSource": "where",
+   "note": "全帧复核。迁移墙饰路径，补板号独立种子、逐板裁剪与独立墨线遮罩统计，真实World可选贴面。完整室内/弧顶、门口版式及参考纹样复杂度仍待补。"
+  },
+  {
+   "id": "1890018647655272491",
+   "frames": 243,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/doodle-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/doodle-layout.js",
+    "src/build/doodle-wall.js",
+    "src/world/doodle-overlay.js",
+    "doodle.html"
+   ],
+   "missing": [],
+   "pages": [
+    "doodle.html"
+   ],
+   "pageSource": "where",
+   "note": "全帧复核。迁移墙饰路径，补板号独立种子、逐板裁剪与独立墨线遮罩统计，真实World可选贴面。完整室内/弧顶、门口版式及参考纹样复杂度仍待补。"
+  },
+  {
+   "id": "1852334860137849222",
+   "frames": 235,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/impostor-view-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/impostor.js",
+    "impostors.html"
+   ],
+   "missing": [],
+   "pages": [
+    "impostors.html"
+   ],
+   "pageSource": "where",
+   "note": "235帧全核验，云与树共享impostor原文确认；共享修复与背景云GPU时钟/连续运动/遮挡回归通过。原蓬松云形、前景云层次及完整风材质仍未复现。"
+  },
+  {
+   "id": "1849732997945110651",
+   "frames": 437,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/shore-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/shore.js",
+    "src/core/shore-profile.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "437帧全复核：黄线贴岸/蓝线外推，270起红三角浪带；窄湾蓝线有交叠。修复黄线Chaikin切凸角、形变后仍用旧法线；只平滑海侧并拒绝落入栅格陆地的端点。全局岩石泡沫mask、折叠消解与浪带全路径防穿岸仍缺。"
+  },
+  {
+   "id": "1849730611964973481",
+   "frames": 599,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wave-cycle-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/shore.js",
+    "src/core/wave-cycle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "599帧全复核：微弱错开岸浪、镜头移位、408起红色重叠三角带。保留实际多浪带，各层烘不同周期，闭环弧长相位改整周期频率，避免接缝正弦频率不闭合。到岸opacity连续，循环端隐藏。GPU/实际双网格通过；泡沫mask/窄湾交叠仍缺。"
+  },
+  {
+   "id": "1849427564034498642",
+   "frames": 334,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/impostor-view-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/impostor.js",
+    "impostors.html"
+   ],
+   "missing": [],
+   "pages": [
+    "impostors.html"
+   ],
+   "pageSource": "where",
+   "note": "全帧已核验；共享锚点随实例/父组旋转、正交平行选图、透视视差/64步周界GPU通过。octagonal不独立证明八水平图；原球面卡片/多俯仰仍缺。"
+  },
+  {
+   "id": "1798310423554658732",
+   "frames": 614,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1798310423554658732-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/field-plots.js",
+    "fields.html"
+   ],
+   "missing": [],
+   "pages": [
+    "fields.html"
+   ],
+   "pageSource": "where",
+   "note": "614帧全核；新片是六边格地形工具实录：农田按地块共用耕纹主轴并中线折成人字，本仓原为逐格hash随机角，已新建 field-plots.js 并加 fields.html 左右对照；尚未接回 terrainmesh 实际着色"
+  },
+  {
+   "id": "1795831296952041691",
+   "frames": 598,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/river-nav-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/navgraph.js",
+    "river-nav.html"
+   ],
+   "missing": [],
+   "pages": [
+    "river-nav.html"
+   ],
+   "pageSource": "where",
+   "note": "598帧全核验；实际高差优先、平床河口距离，未知方向保持中性河费用；Battle/分层流场双网格局部通过。原球面/复杂汇流与完整接口仍缺。"
+  },
+  {
+   "id": "1786014232594485497",
+   "frames": 234,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/mountain-texture-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/mountain-bake.js",
+    "mountain-bake.html"
+   ],
+   "missing": [],
+   "pages": [
+    "mountain-bake.html"
+   ],
+   "pageSource": "where",
+   "note": "234帧全核验，配文未确认斜率烘焙；本地用实际World顶点法线烘焙明度，底色/烘焙/实时法线局部GPU通过。原山体纹理atlas/笔触、原接口及低端性能未验。"
+  },
+  {
+   "id": "1783792917183606829",
+   "frames": 242,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/mountain-texture-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "242帧全核验，球面海陆全景/转镜/近岸色块与浪边。无证据断言每帧重生或唯一3D噪声方法；已有planet网格不等于原纹理，代码待实现验收。"
+  },
+  {
+   "id": "1781405550061687016",
+   "frames": 219,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/water-patch-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "219帧全核验：球面投影草/水与手工UV岸带，119附近atlas窗口移入后移出；原文将高度混合列为后续设想。纠正顶面颜色平均=该patch算法的归因，保留本地混色成果；投射/手工UV与atlas/接缝指标接口尚未迁移，本片仅学习完成，未计代码实现/运行通过。"
+  },
+  {
+   "id": "1769691526924292506",
+   "frames": 194,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/river-network-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/generate.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "assembly.html",
+    "drainage.html",
+    "planet-rivers-r55.html",
+    "refactoring-audit.html",
+    "terrain-r55.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "194帧全核验；已有DFS开挖/局部削岸保留，不能冒充球面河道约束坍缩＋其余BFS缓坡，完整生成本批待实现。 复用194帧续作，汇水累计/出口树接共享World真实河网，双网格6组局部通过；完整球面WFC/BFS仍缺。"
+  },
+  {
+   "id": "1769641473895432220",
+   "frames": 479,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/sphere-relax-review.md",
+   "evOk": true,
+   "files": [
+    "src/sphere/planet.js",
+    "planet.html"
+   ],
+   "missing": [],
+   "pages": [
+    "planet.html"
+   ],
+   "pageSource": "where",
+   "note": "479帧全核验；保留足迹弹簧，新增显式模块格约束/逐格尺寸诊断。单格局部通过，多格最差边误差可增大，完整模块形状拟合待补。"
+  },
+  {
+   "id": "1768627849529893109",
+   "frames": 229,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/sphere-relax-review.md",
+   "evOk": true,
+   "files": [
+    "src/sphere/planet.js",
+    "planet.html"
+   ],
+   "missing": [],
+   "pages": [
+    "planet.html"
+   ],
+   "pageSource": "where",
+   "note": "229帧全核验；现有对偶柱群球面能力保留，原片平滑海岸/模块视觉与平面World/游戏接入仍缺，本批仅学习审核。"
+  },
+  {
+   "id": "1765115069837221962",
+   "frames": 247,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/atlas-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/atlas.js"
+   ],
+   "missing": [],
+   "pages": [
+    "grids.html",
+    "refactoring-audit.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "247帧全核验；真实树查询事件与暂停/拖动、显式栈统计通过。保留first-fit叶内切分，不以模拟手臂代替原遍历；原3D树/跨叶候选待补。"
+  },
+  {
+   "id": "1765041830461055127",
+   "frames": 558,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/atlas-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/atlas.js"
+   ],
+   "missing": [],
+   "pages": [
+    "grids.html",
+    "refactoring-audit.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "558帧全核验，侧视彩块变薄不能误认为删除；重复/过期/跨实例释放拒绝，存活坐标稳定、空兄弟合并与残留碎片验收通过。跨叶放置及完整RectBin接口仍缺。"
+  },
+  {
+   "id": "1764958522398146667",
+   "frames": 296,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/atlas-candidates-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/atlas.js"
+   ],
+   "missing": [],
+   "pages": [
+    "grids.html",
+    "refactoring-audit.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "296帧全核验；可选边角/有界随机候选、树剪枝碰撞与跨叶分配/key释放；9000增删和真实查询页面通过，存活槽不动。原3D树和完整RectBin/shelfPack接口仍缺。"
+  },
+  {
+   "id": "1758251637280268481",
+   "frames": 213,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/water-patch-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/watervol.js",
+    "src/water/land-distance.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "213帧全核验：小岛镜头降到水面，线框/倒影随角度变化；原文说叠平面采SDF，未说明维度。保留本地浅水近似，补各向异性精确2D中心距离、level1遮罩、版本缓存/空场清理/共享资源释放，实际双网格通过；不同于原片完整反射效果。"
+  },
+  {
+   "id": "1758250248483278925",
+   "frames": 516,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/reflection-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/reflection.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "516帧全核验：高崖、低平教堂、中高教堂岛依次转动，反射轮廓/颜色克制；原文没有公式。保留共享几何近似而不冒称原作算法，新增实际场景颜色混合/扰动/线框对照；完整反射投影/遮挡仍缺。"
+  },
+  {
+   "id": "1751932427272909032",
+   "frames": 552,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/module-volume-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/module-patch.js",
+    "module-search.js",
+    "module-fit.js",
+    "patch.html",
+    "src/build/module-volume.js"
+   ],
+   "missing": [
+    "module-search.js",
+    "module-fit.js"
+   ],
+   "pages": [
+    "patch.html"
+   ],
+   "pageSource": "where",
+   "note": "复用552帧，显式patch/搜索/几何后接共享World原子体量放置、支撑占用预检和按列撤回；完整prefab/socket、形变碰撞及补网/WFC待续。"
+  },
+  {
+   "id": "1727324352264474664",
+   "frames": 303,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/camera-wall-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/camera-motion.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "303帧全核验；结合相邻motion blur smear配文纠正为快速转镜拖抹，不是调色算法。保留历史帧叠加，修复角度周界误速、关闭历史失效及resize纹理/材质/几何释放。原作强几何轮廓拖抹、速度场/CPU审计接口仍待补。"
+  },
+  {
+   "id": "1727315611959865407",
+   "frames": 337,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/palette-transition-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/camera-motion.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "337帧全核验。保留上一批历史帧/释放修复，新增按dt换算的历史留存，30/60/120Hz实际渲染参数通过；原片方向性轮廓拖抹、速度场与全指标接口仍待补。"
+  },
+  {
+   "id": "1724449858369568780",
+   "frames": 134,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1724449858369568780-review-r61.md",
+   "evOk": true,
+   "files": [
+    "src/core/node-graph-runtime.js",
+    "node-graph.html"
+   ],
+   "missing": [],
+   "pages": [
+    "node-graph.html"
+   ],
+   "pageSource": "where",
+   "note": "134帧全核（sheet-00/01 两页）；本轮补齐序列化：serialize/fromJSON/NODE_REGISTRY，导出含节点type+params+连线+lerp当前值（往返后位置-202.9不跳回、90帧轨迹逐帧一致差<1e-9）；sink 上次值移入 state 避免载入误触发；页面新增只读连线图（7框6线、框内实时值）与导出/载入；仍缺可拖拽的真实节点编辑器"
+  },
+  {
+   "id": "1714613599035863191",
+   "frames": 620,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/texture-fields-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/field-pattern.js",
+    "terrainmesh.js"
+   ],
+   "missing": [
+    "terrainmesh.js"
+   ],
+   "pages": [
+    "refactoring-audit.html",
+    "architecture.html",
+    "fields.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "620帧全核验：条纹弯曲随格块换向，浅崖横带；135/256/473/571附近空屏后换岛，依次出现黑轮廓、无光材质、亮面和田纹；不能把该显示过程断定为原生成算法。补共享World专用顶面属性、逐格固定方向、导数抗锯齿/远处均值，双网格GPU开关通过。仍为解析近似，未完成原作手绘纹样与投射atlas。"
+  },
+  {
+   "id": "1712088611934371876",
+   "frames": 624,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/palette-editor-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/palette-patch.js",
+    "src/world/view.js",
+    "palette-editor.html"
+   ],
+   "missing": [],
+   "pages": [
+    "palette-editor.html"
+   ],
+   "pageSource": "where",
+   "note": "624帧全核验。四角/白三角/取样色带与OkHsl/OkLab/Srgb菜单可见；新增sRGB四角取样和真实地形顶面编辑，双网格GPU通过。白三角仅预览，OkHsl/OkLab、自由拖点/导出与全材质接入仍待补。"
+  },
+  {
+   "id": "1710031224838771027",
+   "frames": 515,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/color-lab-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/color-volume.js",
+    "src/world/view.js",
+    "color-lab.html"
+   ],
+   "missing": [],
+   "pages": [
+    "color-lab.html"
+   ],
+   "pageSource": "where",
+   "note": "515帧全核验，实际画面为五特征H/S/L范围调色，不证明地形三轴/八角点。新增HSL范围与跨零色相，接实际View顶面；其他特征、离散采样和原版完整接口待补。"
+  },
+  {
+   "id": "1708815475801505819",
+   "frames": 267,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/slope-cliff-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/features.js",
+    "shape.js",
+    "src/core/deformation-guard.js"
+   ],
+   "missing": [
+    "shape.js"
+   ],
+   "pages": [
+    "refactoring-audit.html",
+    "hierarchy.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "267帧全核验：游戏中斜向狭长崖脊/柱群、小屋和环绕镜头，并非实景照片或确证蘑菇帽生成。保留本地石柱扩展并纠正归因；共享形变新增面积/边长/三角扇回退，双网格薄檐AB通过。未复现原作斜脊布局和整体视觉。"
+  },
+  {
+   "id": "1707497006640365880",
+   "frames": 600,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1707497006640365880-review-r60.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/shrub-texture.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "600帧全核（6张联系表）；同一套纯贴图灌木（换岛复现），随本轮 shrub-texture 调宽后每层台地边缘一条饱和橙带、最窄的边变细但不断；仍缺崖高绑定与水面暖色倒影"
+  },
+  {
+   "id": "1707490932017279035",
+   "frames": 257,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1707490932017279035-review-r60.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/shrub-texture.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "257帧全核（3张联系表）；灌木带宽 0.36→0.50、cover 改为 mix(.5,1,cover) 只收窄不清零（原直接相乘把带子断成一坨坨）、颜色改饱和橙 #e2723f；顶面灌木占比 0.163→0.244、nearEdge 0.783；仍缺带宽随崖高缩放与真倒影暖色"
+  },
+  {
+   "id": "1707490274425884929",
+   "frames": 342,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/shrub-edge-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/edge-inset.js",
+    "src/life/vegetation.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "342帧全核验。保留既有球团近似；修复形变后仍用旧格心判内侧，改按实际多边形绕序/下一边界限幅。双网格实际556/564锚点通过平移形变、恢复及World不变验收；只保证锚点不保证球团体积。"
+  },
+  {
+   "id": "1705195380457996629",
+   "frames": 300,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/surface-shadow-review.md",
+   "evOk": true,
+   "files": [
+    "src/light/surface-shadow.js",
+    "src/world/view.js",
+    "surface-shadows.html"
+   ],
+   "missing": [],
+   "pages": [
+    "surface-shadows.html"
+   ],
+   "pageSource": "where",
+   "note": "300帧全核验。新增共享World地表高度图阴影，局部凸起筛选投射体、独立深度偏置；实际双网格GPU/缓存通过。仅地面2.5D近似，不是完整纹理浮凸/屋檐/洞内/UV接缝复现，保留已有体素阴影。"
+  },
+  {
+   "id": "1704246032626762189",
+   "frames": 564,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/blotch-style-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/blotch-pattern.js",
+    "src/world/view.js",
+    "blotches.html"
+   ],
+   "missing": [],
+   "pages": [
+    "blotches.html"
+   ],
+   "pageSource": "where",
+   "note": "564帧全核验。共享View补可调旋转角度场、独立低频密度阈值场与导数柔边；浅高度层理复用已有共享着色。实际双网格GPU及参数/零强度验证；本地近似，原作atlas/细卷边、配色、跨崖/反射一致性仍待补。"
+  },
+  {
+   "id": "1704218784028905984",
+   "frames": 335,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/surface-shadow-review.md",
+   "evOk": true,
+   "files": [
+    "src/light/surface-shadow.js",
+    "src/world/view.js",
+    "surface-shadows.html"
+   ],
+   "missing": [],
+   "pages": [
+    "surface-shadows.html"
+   ],
+   "pageSource": "where",
+   "note": "335帧全核验。新增共享World地表高度图阴影，局部凸起筛选投射体、独立深度偏置；实际双网格GPU/缓存通过。仅地面2.5D近似，不是完整纹理浮凸/屋檐/洞内/UV接缝复现，保留已有体素阴影。"
+  },
+  {
+   "id": "1703750394164199473",
+   "frames": 592,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/blotch-style-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/blotch-pattern.js",
+    "src/world/view.js",
+    "blotches.html"
+   ],
+   "missing": [],
+   "pages": [
+    "blotches.html"
+   ],
+   "pageSource": "where",
+   "note": "592帧全核验。共享View补可调旋转角度场、独立低频密度阈值场与导数柔边；浅高度层理复用已有共享着色。实际双网格GPU及参数/零强度验证；本地近似，原作atlas/细卷边、配色、跨崖/反射一致性仍待补。"
+  },
+  {
+   "id": "1699146321318314094",
+   "frames": 456,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/sediment-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/sediment.js",
+    "src/terrain/terrainmesh.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "architecture.html",
+    "fields.html",
+    "uv-bake.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "456帧全核验：青灰多面崖壁上层带弯曲连续，换岛后继续环绕。原文说整体扭曲/纹理/还原；本地用可精确逆的Y剪切场采样，几何原位，10000点逆变换及生产GLSL三角剖分无缝/双网格GPU通过。原作场未知，不宣称完整通用3D逆场和原CPU指标API迁移。"
+  },
+  {
+   "id": "1699038611125985317",
+   "frames": 620,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/sediment-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/sediment.js",
+    "src/terrain/terrainmesh.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "architecture.html",
+    "fields.html",
+    "uv-bake.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "620帧全核验：宽窄相间直层带，多组岛形与红线框/黑轮廓生成显示。补实际岩壁专用着色、直/弯层理模式与抗锯齿，保留旧窄条网格对照；双网格GPU通过。原作图案密度/配色/反射与阴影一致性仍待补。"
+  },
+  {
+   "id": "1696896119794479541",
+   "frames": 550,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/blotch-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/terrainmesh.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "fields.html",
+    "refactoring-audit.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "550帧全核验。保留已有沿形变崖面圆瓣草边几何；这是本地近似，未迁移原版rim距离场/atlas受控跨崖采样及可调bleed等接口，本片实现/运行验收仍待完成。"
+  },
+  {
+   "id": "1696864977171189980",
+   "frames": 502,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/blotch-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/blotch-pattern.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "502帧全核验。共享View修复绿色屋顶被地面笔触误染：显式顶面标记+法线/颜色筛选，按真实levelHeight选层。实际材质GPU对照排除屋顶/岩壁、双网格通过；原版atlas/rim距离场和完整参数接口待补，局部修复不等于视觉等价。"
+  },
+  {
+   "id": "1677242779162877952",
+   "frames": 279,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/trigraph-halfedge-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/trigraph.js",
+    "trigraph.html"
+   ],
+   "missing": [],
+   "pages": [
+    "trigraph.html"
+   ],
+   "pageSource": "where",
+   "note": "白色三角线框扩展、不规则外轮廓和局部彩边变化；画面不证明严格Delaunay或无几何交叉。 本轮确定性检查/坏输入拒绝局部验收通过，局部编辑接口待补。"
+  },
+  {
+   "id": "1671840905957978113",
+   "frames": 246,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1671840905957978113-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/terrain-burial.js",
+    "terrain-stages.html"
+   ],
+   "missing": [],
+   "pages": [
+    "terrain-stages.html"
+   ],
+   "pageSource": "where",
+   "note": "246帧全核（原判na有误）；抬地面吞建筑的体素规则已落地（terrain-burial.js + terrain-stages.html 掩埋栏），peeking 3/吞12层；缺墙裙残留与悬檐联动"
+  },
+  {
+   "id": "1671808851895627776",
+   "frames": 303,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/mirror-overhang-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/rock-topology.js",
+    "terrain/features.js",
+    "terrainmesh.js"
+   ],
+   "missing": [
+    "terrain/features.js",
+    "terrainmesh.js"
+   ],
+   "pages": [
+    "overhang.html",
+    "refactoring-audit.html",
+    "architecture.html",
+    "fields.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "303帧全核验：岩檐、柱间空洞、下层地面与环绕低机位。保留已有World分层rock及侧/底面，补岩石区间/空隙/level1连通诊断；真实双网格底面6顶点、断开支撑可报1未连岩石。薄岩檐平滑形变仍收缩，视觉未等价；原版软坡/侵蚀有效生成与完整接口待补。"
+  },
+  {
+   "id": "1670790425232175108",
+   "frames": 610,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/grid-kinds-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/grid.js"
+   ],
+   "missing": [],
+   "pages": [
+    "adjacency.html",
+    "architecture.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "contour.html",
+    "corner-cuts.html",
+    "edge-smooth.html",
+    "fields.html",
+    "grid-graph.html",
+    "gridpatch.html",
+    "grids.html",
+    "joint3d.html",
+    "loop-lift.html",
+    "marching-cubes.html",
+    "module-catalog-r56.html",
+    "openings-r56.html",
+    "patch.html",
+    "prefab.html",
+    "refactoring-audit.html",
+    "scheduler.html",
+    "terrain-stages.html",
+    "textures.html",
+    "uv-bake.html",
+    "visibility.html",
+    "wfc-trace.html",
+    "wfc.html"
+   ],
+   "pageSource": "import",
+   "note": "610帧全核验；修“纯方格”仍有三角的误标，新增真正正交方格，保留合并菱形对照，局部Canvas/WorldMesh通过；独立六边地形/原模块仍缺。"
+  },
+  {
+   "id": "1670725072540106755",
+   "frames": 164,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/hierarchy-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/shape.js",
+    "hierarchy.html"
+   ],
+   "missing": [],
+   "pages": [
+    "hierarchy.html"
+   ],
+   "pageSource": "where",
+   "note": "164帧全核验，原片依次切换三模式；保留已有分层/Taubin/保护，但完整无/普通/分层对照及原模块语义仍待补。"
+  },
+  {
+   "id": "1670720537662836736",
+   "frames": 102,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/hierarchy-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/shape.js",
+    "hierarchy.html"
+   ],
+   "missing": [],
+   "pages": [
+    "hierarchy.html"
+   ],
+   "pageSource": "where",
+   "note": "102帧全核验；共享切面补显式hardEdges/全层钉点，双网格局部通过。原模块/材质三角网语义仍缺。"
+  },
+  {
+   "id": "1670064751181791233",
+   "frames": 420,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1670064751181791233-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/pipeline-stages.js",
+    "terrain-stages.html"
+   ],
+   "missing": [],
+   "pages": [
+    "terrain-stages.html"
+   ],
+   "pageSource": "where",
+   "note": "420帧全核；累积分阶段执行器+共享时钟+每tick预算慢放已落地（StageRunner/advance）；缺真job线程与四轮节奏还原"
+  },
+  {
+   "id": "1669315384619540487",
+   "frames": 649,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/terrace-edges-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/generate.js",
+    "src/core/terrace-edges.js",
+    "terraces.html"
+   ],
+   "missing": [],
+   "pages": [
+    "terraces.html"
+   ],
+   "pageSource": "where",
+   "note": "649帧全核验，多岛成果/构建过渡与转镜；完整软坡/模块联合生成和原美术质量仍待补，本批仅学习审核。 旧649帧续作：真实World共格边层界/线框/岸界及笼投影局部验收；原完整生成/倒角一致性未完成。"
+  },
+  {
+   "id": "1666429884208381953",
+   "frames": 630,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/shore-topology-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/shore.js",
+    "src/core/shore-loops.js",
+    "src/world/townDemo.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "refactoring-audit.html",
+    "shoreloops.html"
+   ],
+   "pageSource": "import",
+   "note": "630帧全核验：旋转/固定高崖岛，凹湾与白色岸裙细微聚散；原文只说Bad North/Townscaper改良版，不证明具体距离算法。共享水层改规范绕序/按左侧陆地转向及自接闭环分解，1024组合及实际双网格通过；蓝线窄湾交叠/泡沫mask仍缺。"
+  },
+  {
+   "id": "1664566546683899905",
+   "frames": 340,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/shore-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/shore.js",
+    "src/core/shore-profile.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "340帧全复核：旋转岛屿与缓动近岸裙；README称distance-field-like，不证明精确欧氏距离或不折叠。保留chamfer栅格；修复最大步进越界/起点已达阈值及预算；真实双网格通过，独立原版buildShoreDistance API未迁移。"
+  },
+  {
+   "id": "1664565063552847873",
+   "frames": 117,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/float-probe-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/float-probe.js",
+    "float.html"
+   ],
+   "missing": [],
+   "pages": [
+    "float.html"
+   ],
+   "pageSource": "where",
+   "note": "117帧已核验；本环境16F/32F写入、负值/HDR回读和线性过滤通过；跨平台及平流/CPU误差待补。"
+  },
+  {
+   "id": "1654401054828638214",
+   "frames": 343,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1654401054828638214-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/pipeline-stages.js",
+    "terrain-stages.html"
+   ],
+   "missing": [],
+   "pages": [
+    "terrain-stages.html"
+   ],
+   "pageSource": "where",
+   "note": "343帧全核；增量Delaunay三角化+抬升+灰模+上色四段已落地（pipeline-stages.js + terrain-stages.html）；缺AO软阴与生成后地形微调，非视觉等价"
+  },
+  {
+   "id": "1593215065423245313",
+   "frames": 164,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/atlas-candidates-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/impostor.js",
+    "atlas-live.html"
+   ],
+   "missing": [],
+   "pages": [
+    "atlas-live.html"
+   ],
+   "pageSource": "where",
+   "note": "164帧全核验；原片释放后仍留暗纹理。共享8视角Baker补整组预留、清padding/释放、异常恢复与满板回滚，真实GPU验收；本地清透明不等于原调试残影，自动扩容/重排、原素材/完整SpriteAtlas接口仍缺。"
+  },
+  {
+   "id": "1590674061092212738",
+   "frames": 181,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/garden-contrast-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "181帧全核验：全片反差纹理诊断配色，镜头环绕多层岛，草缘随背景变化。原文明说顶点shader采站立处与背景射线的contrast texture差值。当前仅静态邻崖距离aEdge，未实现该GPU采样/背景射线；只记学习完成，实现及运行验收待补，不把已有启发式当原法。"
+  },
+  {
+   "id": "1584623053061099520",
+   "frames": 453,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/house-point-review.md",
+   "evOk": true,
+   "files": [
+    "src/build/multicell.js",
+    "src/world/scenes.js",
+    "multicell.html"
+   ],
+   "missing": [],
+   "pages": [
+    "multicell.html"
+   ],
+   "pageSource": "where",
+   "note": "453帧全序列复核：线框接缝遍历后切实体屋与整岛；不能从画面证明双线性切洞。保留已有显式双格/整体编辑/工程身份，复测两网格各6栋同World融合通过；本批未重写既有房屋算法，任意轮廓插入/地形周边重新网格化仍缺。"
+  },
+  {
+   "id": "1582293326815862786",
+   "frames": 434,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wire-frontier-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/frontier-candidates.js",
+    "wfc.html"
+   ],
+   "missing": [],
+   "pages": [
+    "wfc.html"
+   ],
+   "pageSource": "where",
+   "note": "434帧核验：是坍缩边缘候选评估/简化导航扩展，不是战役边境，也不等于旧同高区域图。新增只读邻接候选枚举，真实半边、三角/四边格及预算不完整结果；WFC页接入、184域与双网格运行通过。尚未实现增量生成与简化导航互连。"
+  },
+  {
+   "id": "1580846877855338497",
+   "frames": 41,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/directional-bounce-review.md",
+   "evOk": true,
+   "files": [
+    "src/light/lightvolume.js",
+    "src/world/view.js",
+    "lightvolume.html"
+   ],
+   "missing": [],
+   "pages": [
+    "lightvolume.html"
+   ],
+   "pageSource": "where",
+   "note": "41帧复核（不是旧注释11帧）：重置→直射→体积→阴影填充。新增0/1/3/6次实景对照与每次平均/最大/相对变化，取消“任意场景第三次后不变”推断。两网格实测变化递减，但不是原片像素误差或普遍收敛证明；完整贴图/体积往返反馈仍缺。"
+  },
+  {
+   "id": "1580845127207387137",
+   "frames": 213,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/directional-bounce-review.md",
+   "evOk": true,
+   "files": [
+    "src/light/lightvolume.js",
+    "src/world/view.js",
+    "lightvolume.html"
+   ],
+   "missing": [],
+   "pages": [
+    "lightvolume.html"
+   ],
+   "pageSource": "where",
+   "note": "213帧复核：原文SDF距离/UV→mega-texture→六方向体积。新增可选六RGB方向/法线权重、静态命中缓存、太阳有限DDA和切片；真实双网格通过。反弹反馈仍使用平均RGB与逐格反照率，不等同原作SDF/UV/mega-texture反馈，继续部分。"
+  },
+  {
+   "id": "1580835075629133825",
+   "frames": 185,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/distance-ao-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/voxel-distance.js",
+    "src/light/lightvolume.js",
+    "lightvolume.html"
+   ],
+   "missing": [],
+   "pages": [
+    "lightvolume.html"
+   ],
+   "pageSource": "where",
+   "note": "185帧全复核：拱洞峡谷的转光照，没有独立反弹开关，不能从画面证明逆平方/表面形因子。保留既有共享体素反弹，补距离场保守步进与DDA兜底对照。原版2.5D形因子gather/暴力参考接口未迁移，映射改列部分，已有重构保留。"
+  },
+  {
+   "id": "1579483114178768898",
+   "frames": 177,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/house-project-review.md",
+   "evOk": true,
+   "files": [
+    "src/build/multicell.js",
+    "src/world/scenes.js",
+    "multicell.html"
+   ],
+   "missing": [],
+   "pages": [
+    "multicell.html"
+   ],
+   "pageSource": "where",
+   "note": "177帧已复核；共享World显式双格及整体编辑保留，工程JSON保存独立实例ID/编辑回执，完整重载后继续编辑与页面撤销通过。通用模块身份、统一撤销栈及完整prefab/socket待续。"
+  },
+  {
+   "id": "1579478470098243584",
+   "frames": 272,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/cage-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/shape.js",
+    "src/terrain/terrainmesh.js",
+    "cage.html"
+   ],
+   "missing": [],
+   "pages": [
+    "cage.html"
+   ],
+   "pageSource": "where",
+   "note": "272帧全核验，含线框构建/着色/转镜；保留共享切面与保护，修分数层高查询并复用到沉积线，连续角点局部通过；完整原cage/3D碰撞仍缺。"
+  },
+  {
+   "id": "1579474420749725696",
+   "frames": 454,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/cage-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/generate.js",
+    "cage.html"
+   ],
+   "missing": [],
+   "pages": [
+    "cage.html"
+   ],
+   "pageSource": "where",
+   "note": "454帧全核验，片中两组岛线框构建/着色/转镜；原文未揭示生成器算法，完整坡面/模块联合生成仍待补。"
+  },
+  {
+   "id": "1490068909042642944",
+   "frames": 427,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1490068909042642944-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/graph-layout.js"
+   ],
+   "missing": [],
+   "pages": [
+    "grid-graph.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "427帧全核（5张联系表全看+原尺寸回看390）；判出真机制=邻接图的极坐标同心环布局：BFS分层成环、环内按父角度定角、颜色按根分支分连续圆弧；新增adjacencyComponents/radialLayout与grid-graph.html右栏，26环/4分支/同环249跨环1004已验；缺节点半径其余语义、颜色到底是分支还是分量无法证、极坐标刻度未复刻"
+  },
+  {
+   "id": "1482346496460828674",
+   "frames": 517,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/color-lab-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/contrast-field.js"
+   ],
+   "missing": [],
+   "pages": [
+    "color-lab.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "517帧全核验，纠正原注释6帧；图集预览、灰岛上色和两组岛环绕。新增确定性标量对比图求解与实际网格三角诊断，预算修复后仍报告违例；原作彩色图集/贴花和实景接入未完成，未计整片代码运行验收。"
+  },
+  {
+   "id": "1482011744843223042",
+   "frames": 384,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/normal-radial-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/normal-contrast.js",
+    "normal-contrast.html"
+   ],
+   "missing": [],
+   "pages": [
+    "normal-contrast.html"
+   ],
+   "pageSource": "where",
+   "note": "384帧全核验；源为程序化normal map反差，不是后续contrast迭代。共享地形材质新增解析法线场/物理像素覆盖局部近似，GPU双网格通过；原笔触normal atlas与投影接缝仍缺。"
+  },
+  {
+   "id": "1481661852887265288",
+   "frames": 425,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/distance-ao-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/voxel-distance.js",
+    "src/light/lightvolume.js",
+    "lightvolume.html"
+   ],
+   "missing": [],
+   "pages": [
+    "lightvolume.html"
+   ],
+   "pageSource": "where",
+   "note": "425帧全复核：旋转、线框/重建、法线/SDF/六AO图。补各向异性精确体素中心EDT、保守距离下界步进+DDA兜底，六向距离AO及梯度法线诊断接真实View；不等于形变表面SDF。笔触法线/切线贴图和SDF命中UV/mega反馈仍缺。"
+  },
+  {
+   "id": "1478114309263839244",
+   "frames": 346,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/normal-radial-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "346帧全核验，原片三角UV样式图块/棋盘模型与线框调试。旧圆块螺旋和矩形radialPack不能代表UV分片/参数化/装箱，本片仅学习审核完成，代码待实现验收。"
+  },
+  {
+   "id": "1471817524148940807",
+   "frames": 556,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/corner-cuts-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/corner-footprint.js",
+    "corner-cuts.html"
+   ],
+   "missing": [],
+   "pages": [
+    "corner-cuts.html"
+   ],
+   "pageSource": "where",
+   "note": "556帧阶段生成/旋转岩岛。迁移Workbuddy切角作为共享格只读绘制轮廓实验，非原算法证明；不改World导航，完整岩岛模块生成未迁移。"
+  },
+  {
+   "id": "1459169210752507904",
+   "frames": 609,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1459169210752507904-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/grid-wireframe.js"
+   ],
+   "missing": [],
+   "pages": [
+    "grid-graph.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "609帧全核（7张联系表全看+原尺寸回看340/500）；判出真机制=不规则四边格+保留三角形的混合网，三角带横穿成条、每40-60帧整片清空重铺；新增classifyWireframe/seamBands与grid-graph.html左栏，四边/三角/带轮廓/岛缘分类与长带串接已验；缺格心彩色小块语义、3D透视视角、接world实景"
+  },
+  {
+   "id": "1458921394855718917",
+   "frames": 511,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/trigraph-halfedge-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/grid.js",
+    "src/core/adjacency.js"
+   ],
+   "missing": [],
+   "pages": [
+    "adjacency.html",
+    "architecture.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "contour.html",
+    "corner-cuts.html",
+    "edge-smooth.html",
+    "fields.html",
+    "grid-graph.html",
+    "gridpatch.html",
+    "grids.html",
+    "joint3d.html",
+    "loop-lift.html",
+    "marching-cubes.html",
+    "module-catalog-r56.html",
+    "openings-r56.html",
+    "patch.html",
+    "prefab.html",
+    "refactoring-audit.html",
+    "scheduler.html",
+    "terrain-stages.html",
+    "textures.html",
+    "uv-bake.html",
+    "visibility.html",
+    "wfc-trace.html",
+    "wfc.html"
+   ],
+   "pageSource": "import",
+   "note": "圆内四边形组与彩色剩余区域轮廓、间隙三角网，反复重置铺组/填网；未据颜色推断具体半边指令。 现有互反邻接保留，显式半边环/扇及编辑接口待补，本轮仅学习。"
+  },
+  {
+   "id": "1448039167057879048",
+   "frames": 952,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1448039167057879048-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/stroke-reveal.js",
+    "stroke-reveal.html",
+    "src/ui/walkthrough.js"
+   ],
+   "missing": [],
+   "pages": [
+    "stroke-reveal.html"
+   ],
+   "pageSource": "where",
+   "note": "952帧全核；4轮循环=管线各阶段错峰逐笔画：三角剖分帐篷(顶点竖棒)→密集顶点阵→逐笔线稿→三角共享边线网→等高线→着色岛；本轮新增stroke-reveal.js(错峰+弧长裁剪)与stroke-reveal.html并跑通两测；仍缺顶点竖棒层、线网层、walkthrough自动计时推进、每轮换岛"
+  },
+  {
+   "id": "1447496205282549761",
+   "frames": 383,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/tri-subtiles-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/grid.js",
+    "src/terrain/generate.js"
+   ],
+   "missing": [],
+   "pages": [
+    "adjacency.html",
+    "architecture.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "contour.html",
+    "corner-cuts.html",
+    "edge-smooth.html",
+    "fields.html",
+    "grid-graph.html",
+    "gridpatch.html",
+    "grids.html",
+    "joint3d.html",
+    "loop-lift.html",
+    "marching-cubes.html",
+    "module-catalog-r56.html",
+    "openings-r56.html",
+    "patch.html",
+    "prefab.html",
+    "refactoring-audit.html",
+    "scheduler.html",
+    "terrain-stages.html",
+    "textures.html",
+    "uv-bake.html",
+    "visibility.html",
+    "wfc-trace.html",
+    "wfc.html",
+    "drainage.html",
+    "planet-rivers-r55.html",
+    "terrain-r55.html"
+   ],
+   "pageSource": "import",
+   "note": "全383帧核验，多个不规则三角底图到分层线框/完成岛例；完整软坡/河道/预制tile生成仍未覆盖，本批仅学习审核。"
+  },
+  {
+   "id": "1447494168448753667",
+   "frames": 178,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/tri-subtiles-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/grid.js"
+   ],
+   "missing": [],
+   "pages": [
+    "adjacency.html",
+    "architecture.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "contour.html",
+    "corner-cuts.html",
+    "edge-smooth.html",
+    "fields.html",
+    "grid-graph.html",
+    "gridpatch.html",
+    "grids.html",
+    "joint3d.html",
+    "loop-lift.html",
+    "marching-cubes.html",
+    "module-catalog-r56.html",
+    "openings-r56.html",
+    "patch.html",
+    "prefab.html",
+    "refactoring-audit.html",
+    "scheduler.html",
+    "terrain-stages.html",
+    "textures.html",
+    "uv-bake.html",
+    "visibility.html",
+    "wfc-trace.html",
+    "wfc.html"
+   ],
+   "pageSource": "import",
+   "note": "全178帧模块库核验；新增四边形对角四分/父格映射并进入共享WFC，四子格联合模块约束及原3Dtile仍缺。"
+  },
+  {
+   "id": "1447488323845509121",
+   "frames": 656,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/slope-cliff-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/generate.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "assembly.html",
+    "drainage.html",
+    "planet-rivers-r55.html",
+    "refactoring-audit.html",
+    "terrain-r55.html",
+    "uv-bake.html"
+   ],
+   "pageSource": "import",
+   "note": "656帧全核验：缓坡/硬崖同框、多组生成的稀疏白线/暗轮廓/完整岛与旋转。配文明确侵蚀有效无局部低洼，但画面不能证明该保证；现有XZ层级形变不等于完整连续坡面/排水算法。本批仅学习完成，原软坡/侵蚀实现和运行验收待补，相关薄檐形变保护另记。"
+  },
+  {
+   "id": "1447483550257799171",
+   "frames": 565,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1447483550257799171-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/generate.js",
+    "src/core/contour.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "assembly.html",
+    "drainage.html",
+    "planet-rivers-r55.html",
+    "refactoring-audit.html",
+    "terrain-r55.html",
+    "uv-bake.html",
+    "contour.html",
+    "stroke-reveal.html"
+   ],
+   "pageSource": "import",
+   "note": "565帧全核；44s循环showreel：彩色岛（暗岩块+蓝河网+岩柱）↔切黑后白线逐笔累积成岛轮廓，每轮岛形态不同=连续程序化生成；本仓generate.js只单次生成、无连续换岛演示页，线稿层stroke-reveal.js已落地但未接地形管线"
+  },
+  {
+   "id": "1430227487376781317",
+   "frames": 279,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1430227487376781317-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/palette.js"
+   ],
+   "missing": [],
+   "pages": [
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "module-catalog-r56.html",
+    "openings-r56.html",
+    "patch.html",
+    "refactoring-audit.html",
+    "terrain-stages.html",
+    "wall-palette.html"
+   ],
+   "pageSource": "import",
+   "note": "279帧全核；判出真机制：全城建筑共用一张总贴图 TownColor.png（PS 标题栏 200% Layer0 RGB/8 证实），改这张图即整城换肤（0207后墙面屋顶全变蓝涂鸦）；本仓建筑走逐面调色板顶点色，无共享 surface 图集与运行时热替换"
+  },
+  {
+   "id": "1430224300003545091",
+   "frames": 288,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/obj-replay-review.md",
+   "evOk": true,
+   "files": [
+    "src/tools/objexport.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "288帧全核验。保留共享主体OBJ导出，默认精确值避免1e-4量化吞掉细小有效三角，缺失法线时用合法无vn语法；检查有限属性/索引/完整面，显式量化才统计掉面。双网格实际下载并独立解析拓扑/逐坐标一致；第三方DCC及水/植被/材质尚未验收。"
+  },
+  {
+   "id": "1427721874490933250",
+   "frames": 188,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1427721874490933250-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "188帧全核；判出真机制：每帧累加方块贴花导致 line boil（贴花密集处相邻帧差分 mean 5.4→7.3），且需图集 padding；本仓斑块是逐像素 fbm 噪声、不随帧变，无贴花累加与图集 bleed，画风表达不了"
+  },
+  {
+   "id": "1401145625572425728",
+   "frames": 349,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/save-mesh-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/worldmesh.js",
+    "src/tools/mesh-audit.js",
+    "save-mesh.html"
+   ],
+   "missing": [],
+   "pages": [
+    "save-mesh.html"
+   ],
+   "pageSource": "where",
+   "note": "349帧全核验。README是Switch动态合批不足后自写mesh merger；视频线框/着色不能独立证明三倍性能。保留既有WorldMesh分块缓存后拼成单一主体，新增真实GPU主体提交诊断；双网格编辑前后均1次提交，不含水/植被/阴影，未宣称Switch复现或全场景单call。"
+  },
+  {
+   "id": "1384958097542819845",
+   "frames": 679,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/topoline-quad-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/grid.js"
+   ],
+   "missing": [],
+   "pages": [
+    "adjacency.html",
+    "architecture.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "contour.html",
+    "corner-cuts.html",
+    "edge-smooth.html",
+    "fields.html",
+    "grid-graph.html",
+    "gridpatch.html",
+    "grids.html",
+    "joint3d.html",
+    "loop-lift.html",
+    "marching-cubes.html",
+    "module-catalog-r56.html",
+    "openings-r56.html",
+    "patch.html",
+    "prefab.html",
+    "refactoring-audit.html",
+    "scheduler.html",
+    "terrain-stages.html",
+    "textures.html",
+    "uv-bake.html",
+    "visibility.html",
+    "wfc-trace.html",
+    "wfc.html"
+   ],
+   "pageSource": "import",
+   "note": "679帧全核验；有向格/出边判环、停止原因和真实中点段局部验收通过；游戏手柄/连刷仍未接入。"
+  },
+  {
+   "id": "1371460793032716290",
+   "frames": 524,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/camera-wall-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/palette.js",
+    "src/world/app.js",
+    "wall-palette.html"
+   ],
+   "missing": [],
+   "pages": [
+    "wall-palette.html"
+   ],
+   "pageSource": "where",
+   "note": "524帧全核验。Photoshop Palette.png窗口编辑色条与墙色联动；新增独立墙色色槽API与真实小镇编辑/还原，不修改预设。原PNG热重载、多行贴图和完整渐变/色彩接口仍待补。"
+  },
+  {
+   "id": "1344290848180203523",
+   "frames": 814,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/qa-palette-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/qa-replay.js",
+    "qa-replay.html"
+   ],
+   "missing": [],
+   "pages": [
+    "qa-replay.html"
+   ],
+   "pageSource": "where",
+   "note": "814帧全核验，纠正旧说明：原片主要是复杂悬空建筑连续增删QA，不足以证明随机/模块调试配色。新增共享World确定性16步压力回放、属性/索引诊断及异常恢复；不冒充原作QA、无漏面或完整几何验收。"
+  },
+  {
+   "id": "1338829205157646336",
+   "frames": 316,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/sphere-stages-review.md",
+   "evOk": true,
+   "files": [
+    "src/sphere/planet.js"
+   ],
+   "missing": [],
+   "pages": [
+    "planet-rivers-r55.html",
+    "planet-wfc.html",
+    "planet.html",
+    "refactoring-audit.html",
+    "sphere-insert.html"
+   ],
+   "pageSource": "import",
+   "note": "711帧两片全核验；修三角化/松弛阶段误用同一最终坐标，保留现有投影/松弛；区分真实球面拓扑与平面60面抽样，局部GPU通过。原投影往返/动态重三角化与完整视觉仍待补。"
+  },
+  {
+   "id": "1338825080844021760",
+   "frames": 395,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/sphere-stages-review.md",
+   "evOk": true,
+   "files": [
+    "src/sphere/planet.js"
+   ],
+   "missing": [],
+   "pages": [
+    "planet-rivers-r55.html",
+    "planet-wfc.html",
+    "planet.html",
+    "refactoring-audit.html",
+    "sphere-insert.html"
+   ],
+   "pageSource": "import",
+   "note": "711帧两片全核验；修三角化/松弛阶段误用同一最终坐标，保留现有投影/松弛；区分真实球面拓扑与平面60面抽样，局部GPU通过。原投影往返/动态重三角化与完整视觉仍待补。"
+  },
+  {
+   "id": "1313840428685447170",
+   "frames": 501,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/penumbra-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/penumbra.js",
+    "src/light/penumbra.js",
+    "src/world/penumbra-layer.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "501帧全核验：二维太阳盘与滑条改变光照，夜间窗户亮，457附近恢复白天。保留原有日夜/太阳方位，补方位+高度控制共享真实View及水面三场阴影；不是复制原界面或完整地平线日照模拟。"
+  },
+  {
+   "id": "1313837640366596096",
+   "frames": 315,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1313837640366596096-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/loop-lift.js",
+    "loop-lift.html"
+   ],
+   "missing": [],
+   "pages": [
+    "loop-lift.html"
+   ],
+   "pageSource": "where",
+   "note": "315帧全核（4张联系表+2张原尺寸）；完美环判定已有，新增 loop-lift：环内格抬升场+船壳厚度+等距支撑腿（3环/最大119格/11腿/船壳0.90）；缺飞行操控、船壳外沿白色构件、建筑随岛抬升"
+  },
+  {
+   "id": "1310503825510367232",
+   "frames": 200,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1310503825510367232-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/mixed-perspective.js",
+    "mixed-perspective.html"
+   ],
+   "missing": [],
+   "pages": [
+    "mixed-perspective.html"
+   ],
+   "pageSource": "where",
+   "note": "200帧全核；原文的mixed perspective是自定义投影：w行的世界y系数衰减到0→竖线两端w相同→屏幕x相同(笔直平行)，w仍随水平距离增长→远处照旧变小。新增src/core/mixed-perspective.js+实验页四块同尺寸标尺，帧缓冲量得k=1上下沿等宽/竖边横移0px、宽度88→47仍递减，k=0与普通透视逐值相同。缺：主视图view.js未接(k=0默认)、pick/倒影相机矩阵未同步、原版Unity移轴逐像素未对"
+  },
+  {
+   "id": "1305951750638231552",
+   "frames": 521,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/penumbra-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/penumbra.js",
+    "src/light/penumbra.js",
+    "src/world/penumbra-layer.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "521帧全核验：塔楼编辑/旋转与长影，409起RGB阴影纹理通道检查。共享World顶面派生三场水面阴影，正确保留粗格世界尺度/最高遮挡、内收/合成与预算；真实双网格编辑/转太阳/释放通过。2.5D仅水面，洞/悬挑/形变表面及原片半影宽度匹配仍缺。"
+  },
+  {
+   "id": "1302686201401442309",
+   "frames": 241,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1302686201401442309-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "241帧全核；画面就是bug现场：翻折块塌成深色皱褶、非翻折邻块被拉长成跨块巨块。verify()原只查翻折/接缝，量不到第二种症状，本轮补了以本格原始点阵为基准的拉伸度量(maxStretch/minShrink/maxEdgeStretch/stretched)并在grids.html显示；实测passes60时翻折0、拉伸最大1.83×、无格超2×；还缺把面积拉回点阵的松弛权重(现有14格收缩到0.46×)"
+  },
+  {
+   "id": "1301816247479345152",
+   "frames": 324,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/radial-dual-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/radial-patch.js → World / WorldMesh；gridpatch.html"
+   ],
+   "missing": [
+    "src/core/radial-patch.js → World / WorldMesh；gridpatch.html"
+   ],
+   "pages": [
+    "src/core/radial-patch.js → World / WorldMesh；gridpatch.html"
+   ],
+   "pageSource": "where",
+   "note": "324帧复核：是六边形外轮廓中的规则四边格/放射模板与环形庭院，不是正六边形格子。补单个星形孔洞的规则内环/过渡四边格并复用原边界。48组25通过23明确拒绝；多补丁/完整手工库、填充世界迁移待补。双网格真实World/WorldMesh编辑刷新、脉动不写体素及清理通过；见本批运行证据，能力仍列部分。 视觉限制：中央放射细长格产生偏高塔顶，与原片小塔比例不符，需模板/建筑屋顶继续适配。"
+  },
+  {
+   "id": "1298689301488775169",
+   "frames": 544,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1298689301488775169-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "544帧六张联系表全核；平涂/着色/只看光照三种原有，本轮补第四种 AO 烘焙网格（buildBakeShellGeometry 逐层体素壳 608面/1216三角、面板可勾）；缺半透明层叠画法、壳不含建筑体积、原片四小部件界面未复刻"
+  },
+  {
+   "id": "1290997501332525056",
+   "frames": 187,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/garden-contrast-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/garden-paths.js",
+    "src/build/buildings.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "architecture.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "module-catalog-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "187帧全核验：院落封闭转草坪、门洞通路/横向小径和中心装饰；原文只说新增garden paths。修本地PCA窄带筛格可能断路，改主轴端点+院内邻接BFS，90种连通占用/环洞/双网格真实World通过。保留既有墙边灌木；细石板宽度、门口优先和中心装饰仍待补。"
+  },
+  {
+   "id": "1279107097108635649",
+   "frames": 256,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1279107097108635649-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "256帧全核；把拼图块平铺在网格上飞行巡览，同一种邻接签名同色（原文545块）。签名算法与片子口径一致(n/上下层/逐边实心)，但只给墙身上色(底座/屋顶/窗饰仍原色)，没有零件目录页；本轮补：modules 由 sigs.size(仅调试色时统计)改为独立 moduleSigs 恒统计=27，并给此前无入口的 modules 开关加进场景面板，截图对比确认墙面分色"
+  },
+  {
+   "id": "1275089608758484992",
+   "frames": 369,
+   "status": "partial",
+   "impl": true,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1275089608758484992-review.md",
+   "evOk": true,
+   "files": [
+    "opening-punch.html"
+   ],
+   "missing": [],
+   "pages": [
+    "opening-punch.html"
+   ],
+   "pageSource": "where",
+   "note": "369帧全核；原文说的church doors与ladders都拍到了：竖梯(双梁+约14横档，水面爬到高脚楼底)本仓ladder-profile.js已有；教堂门实为跨两层的高拱龛(矩形段+半椭圆拱顶+石框+洞内蓝墙+洞底小拱门)，本轮给opening-punch.js补了rise拱顶洞口(解析面积/命中/像素账/ShapeGeometry挡模板)，还缺接进buildings.js与页面第四栏、洞内墙面与台阶"
+  },
+  {
+   "id": "1260586697538113537",
+   "frames": 167,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/obj-replay-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/snapshot-replay.js",
+    "src/world/app.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "index.html"
+   ],
+   "pageSource": "import",
+   "note": "167帧全核验。保留撤销栈快照回放，修复60条截断后sceneStart偏移、回放中编辑污染以及异常/取消不恢复；新增只读/取消回放helper和Esc/再次点击停止。正常结束、取消、UI锁和撤销重做保留已双网格实测；完整动作动画/水花音效、镜头和节奏录制仍缺。"
+  },
+  {
+   "id": "1258421104756097029",
+   "frames": 436,
+   "status": "partial",
+   "impl": true,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1258421104756097029-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/effects.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "436帧全核；落水/拆到水面触发水花：现有实现=1圈泡沫环(1.1s)+26颗飞沫(重力-5.5、落水即灭)，事件口径与片一致但只压到一半观感；片子是冠状竖直水帘+2–3圈环(末帧3.2s仍在)+9–12颗飞沫，缺冠状竖条与多环长寿命"
+  },
+  {
+   "id": "1257213678056857600",
+   "frames": 296,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1257213678056857600-review.md",
+   "evOk": true,
+   "files": [
+    "architecture.html"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html"
+   ],
+   "pageSource": "where",
+   "note": "296帧全核；9秒内同一座水中建筑被反复加高/削平，露出悬空体块的钢腿支撑：竖腿+腿脚横梁与短三角撑仓内已有(buildings.js legs段)，但片中红屋右下角那根斜接到下方白屋屋脊的长斜杆本仓没有，腿也不会随下方支撑点水平偏移而内倾，高脚塔的通长腿还缺分段/接头表现；本轮未改代码"
+  },
+  {
+   "id": "1246074663546916873",
+   "frames": 306,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/courtyard-props-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "306帧全核验，确认道具会随布局变化出现/消失；旧uPops只是柱顶增长的局部缩放，拆除灰尘不是逐道具缩没。保留原反馈但src/propanim映射改部分覆盖，稳定身份/保留消失几何/错峰及原CPU接口均待接，未记运行验收完成。"
+  },
+  {
+   "id": "1243228419162341379",
+   "frames": 489,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/cloud-shadow-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/vegetation.js",
+    "src/life/impostor.js",
+    "clouds.html",
+    "src/light/cloud-shadow.js"
+   ],
+   "missing": [],
+   "pages": [
+    "clouds.html"
+   ],
+   "pageSource": "where",
+   "note": "489帧全核验；修复远云固定时钟，连续环带/远平面深度避免盖建筑；首页独立开关。双网格GPU/三场局部通过，原片高耸云体/层次、真实风平流仍缺。 后续迁移：可选三组逆深度角速度接实际远云，GPU读回/开关通过；云影/模糊/完整三层仍缺，不重计489帧。 本次共享近云同图集世界高度投影/首页开关GPU局部通过；水/植被/远云影/模糊未完成。"
+  },
+  {
+   "id": "1242824460325052417",
+   "frames": 383,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/ui-interaction-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/playful-layout.js",
+    "ui.html"
+   ],
+   "missing": [],
+   "pages": [
+    "ui.html"
+   ],
+   "pageSource": "where",
+   "note": "383帧全核验。按键/种子确定轻微倾斜，旋转AABB限制间距，只改视觉层、原生按钮命中槽稳定；换页复现/Enter通过。原布局/图标API及游戏菜单尚未完整接入。"
+  },
+  {
+   "id": "1241096929490149376",
+   "frames": 302,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/texture-fields-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/texel-skip.js",
+    "textures.html"
+   ],
+   "missing": [],
+   "pages": [
+    "textures.html"
+   ],
+   "pageSource": "where",
+   "note": "302帧全核验：同机位砖石小镇，细线/粗线效果反复切换；137附近拉远、251附近拉近。原文仅说明采样前UV加速经过隔像素线，不说明确切公式。原硬切函数改共享连续重映射+线性采样，6档CPU积分/4档真实GPU验收；仅放大约1px，缩小仍缺mipmap，建筑/植被atlas未全面接入。"
+  },
+  {
+   "id": "1241046107125399552",
+   "frames": 168,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/leaf-surface-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/leaf-atlas.js",
+    "src/life/leaf-surface.js",
+    "vegetation.js"
+   ],
+   "missing": [
+    "vegetation.js"
+   ],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "168帧全核验：后院灌木与盆栽、镜头往返；原文说明植物占128²的32²角落，画面未打开atlas。补真实128²/32²保留区、连续texel采样并接入共享灌木/树冠。不是全场景共用atlas，原作植物素材与所有植物种类仍待迁移。"
+  },
+  {
+   "id": "1238474550511308800",
+   "frames": 202,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/courtyard-props-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/courtyards.js",
+    "src/build/buildings.js",
+    "garden.html"
+   ],
+   "missing": [],
+   "pages": [
+    "garden.html"
+   ],
+   "pageSource": "where",
+   "note": "202帧全核验。提取共享courtyards分类器，院墙按地面上实际第2层实心判定，修复上层桥/悬空屋顶误封闭；双网格封闭→墙层镂空/地面开口→重封闭通过。规则为本地离散近似，未复现原作矮墙分区/精细拱门/形变边界与全部植物。"
+  },
+  {
+   "id": "1215644531221311488",
+   "frames": 270,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/reflection-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/reflection.js",
+    "src/world/view.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "openings-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "270帧全核验：彩色中间倒影/宽岸裙，160起倒影与建筑线框。保留共享WorldMesh翻转，补实际水面上方裁切、受限深度淡出及线性颜色中点模块；GPU/双网格通过。未复现全部块面艺术与岸裙尺度。"
+  },
+  {
+   "id": "1215642481162887168",
+   "frames": 330,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/shore-topology-review.md",
+   "evOk": true,
+   "files": [
+    "src/water/shore.js",
+    "src/core/shore-loops.js",
+    "src/world/townDemo.js"
+   ],
+   "missing": [],
+   "pages": [
+    "architecture.html",
+    "refactoring-audit.html",
+    "shoreloops.html"
+   ],
+   "pageSource": "import",
+   "note": "330帧全核验：空水面逐块长出码头/房屋/拱口/多塔，岸线与倒影跟随。保留已有实际World小镇，补角接分岛/加桥合并的闭环稳定性；真实双网格2→1闭环及恢复小镇通过。拱底精确截面/完整建造美术仍缺。"
+  },
+  {
+   "id": "1205422438437273601",
+   "frames": 390,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1205422438437273601-review.md",
+   "evOk": true,
+   "files": [
+    "src/render/opening-punch.js",
+    "opening-punch.html"
+   ],
+   "missing": [],
+   "pages": [
+    "opening-punch.html"
+   ],
+   "pageSource": "where",
+   "note": "390帧全核；确有机制（非贴片）：洞口写 stencil 让墙体拒绘、z-buffer 少一块，隔层空间透出且随镜头有视差；已做独立原型+三栏对照，缺墙体厚度/洞口侧壁与主管线接入"
+  },
+  {
+   "id": "1205420678859632640",
+   "frames": 443,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/leaf-surface-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/leaf-atlas.js",
+    "src/life/leaf-surface.js",
+    "vegetation.js"
+   ],
+   "missing": [
+    "vegetation.js"
+   ],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "443帧全核验：盆栽球冠随镜头俯仰旋转，242附近线框开启并保留至结尾。保留旧噪声，对照新增对象球面坐标纹理/视角alpha、导数过渡/MSAA覆盖，双网格三角度GPU通过；原作手绘轮廓和匹配的阴影caster/impostor仍待补。"
+  },
+  {
+   "id": "1205416648397721601",
+   "frames": 261,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/opening-footprint-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/opening-footprint.js",
+    "src/build/buildings.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "architecture.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "module-catalog-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "261帧完整建屋/编辑，非旧注释6帧空格变面。保留既有正矩形门窗，修放置只计框宽遗漏1.6倍窗台外缘；2000旋转边界和三场GPU通过。完整家具贪心摆放仍缺。"
+  },
+  {
+   "id": "1201179450668441600",
+   "frames": 306,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/icons-flair-review.md",
+   "evOk": true,
+   "files": [
+    "src/ui/icon-toolbar.js",
+    "ui.html"
+   ],
+   "missing": [],
+   "pages": [
+    "ui.html"
+   ],
+   "pageSource": "where",
+   "note": "306帧全核验。上部四工具反复选中、白三角指示移动；原生工具条/aria单选、循环方向键跳过禁用项、跨页保持及dispose通过。下三项因本地未接命令禁用，不推断原作永久禁用；游戏语义/图稿仍缺。"
+  },
+  {
+   "id": "1200520827898343425",
+   "frames": 200,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/palette-transition-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/palette.js",
+    "wall-palette.html"
+   ],
+   "missing": [],
+   "pages": [
+    "wall-palette.html"
+   ],
+   "pageSource": "where",
+   "note": "200帧全核验，墙色由鲜艳到灰米，屋顶仍橙红；画面不足以证明原注释1.5秒/最短色相公式。新增可选本地HSL短弧过渡及无彩色端点处理，真实墙色滑杆双网格通过；PNG/完整原接口与持久化仍待补。"
+  },
+  {
+   "id": "1198957499027795969",
+   "frames": 321,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/save-mesh-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/save.js",
+    "save-mesh.html"
+   ],
+   "missing": [],
+   "pages": [
+    "save-mesh.html"
+   ],
+   "pageSource": "where",
+   "note": "321帧全核验，左上字符串随建造/旋转变换，未从视频推断位流。保留本地v5，修复解码先清岛导致坏输入破坏、游程越界/尾随垃圾、空列色槽/河道丢失及北境场景身份；实际分享重载/拒绝保岛通过。自定义palette和玩法/天气状态仍未存档。"
+  },
+  {
+   "id": "1197909675443916803",
+   "frames": 456,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/qa-palette-review.md",
+   "evOk": true,
+   "files": [
+    "src/build/buildings.js",
+    "src/light/bake.js",
+    "wall-palette.html"
+   ],
+   "missing": [],
+   "pages": [
+    "wall-palette.html"
+   ],
+   "pageSource": "where",
+   "note": "456帧全核验：原帖重点为显示器饱和度纠偏、建筑效果、花园草地和彩色反弹光。可见多色墙与暖橙屋顶；不将“屋顶永远”或彩色反弹数学当视频证明。本批回归墙色私有编辑不改固定BUILD/位置，保留已有烘焙和草地；完整原作视觉与参数未复现。"
+  },
+  {
+   "id": "1191990107785572352",
+   "frames": 316,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/anchored-plots-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/vegetation.js",
+    "src/core/anchored-billboard.js",
+    "billboard-anchor.html"
+   ],
+   "missing": [],
+   "pages": [
+    "billboard-anchor.html"
+   ],
+   "pageSource": "where",
+   "note": "316帧全核验。新增可选实例轴固定中心的草卡片对照，沿用默认旧模式；四视角实际GPU顶点坐标读回：旧中心漂移约0.106/0.108，固定中心漂移0，World不变。原片墙根灌木材质/形状、远景atlas与生命周期仍待接，不冒充草卡片已等价原灌木。"
+  },
+  {
+   "id": "1189902695303458816",
+   "frames": 296,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/building-components-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "296帧全核：编辑/移除楼层显露长钢柱、横梁/斜撑。现有几何保留，完整钢架WFC仍缺，本批不计代码验收"
+  },
+  {
+   "id": "1181464374839521280",
+   "frames": 505,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/facade-decoration-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/building-components.js",
+    "src/build/buildings.js",
+    "building-components.html"
+   ],
+   "missing": [],
+   "pages": [
+    "building-components.html"
+   ],
+   "pageSource": "where",
+   "note": "全帧核验；悬空/跨层组件独立身份已接实际窗型，双网格通过；独立装饰WFC仍缺 旧片续作：六类1–3槽墙段WFC/实绘百叶与装饰圆拱接实际建筑，双网格局部验收；跨格整墙/真正洞口仍缺。"
+  },
+  {
+   "id": "1178731576982724611",
+   "frames": 333,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/anchored-plots-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "333帧全核验，纠正旧“草地块会长树”：本片无树，README明确是将来计划。高层台地草坪/石边带随建筑重排，当前只有地面层庭院与岩石地形植被，完整高层grass plots未实现，不记运行验收完成。"
+  },
+  {
+   "id": "1168571866405097472",
+   "frames": 551,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/ao-stages-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/worldmesh.js",
+    "src/light/bake.js",
+    "ao-stages.html"
+   ],
+   "missing": [],
+   "pages": [
+    "ao-stages.html"
+   ],
+   "pageSource": "where",
+   "note": "551帧全核，保留分层烘焙，新增实际遮蔽/反弹分离对照及恢复验收；原GPU重投影/动态纹理仍缺。"
+  },
+  {
+   "id": "1163836000688365571",
+   "frames": 353,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1163836000688365571-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "353帧全核；判出机制=不规则四边形网格上的三维等值面生长（面只在格边交点、同格歧义消解、底面阶梯化）。现仅同族2D marching squares（contour.js，见1120036868966502401），缺3D 256情形查表+顶点焊接+生长动画，本轮不写代码"
+  },
+  {
+   "id": "1151770831619534848",
+   "frames": 532,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/infinite-verify-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/infinite.js"
+   ],
+   "missing": [],
+   "pages": [
+    "grids.html",
+    "infinite-stream.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "532帧全核，保留现有三块簇/插值；修verify始终查blend及只查前两owner，实际只簇模式接缝原被隐藏，浏览器全owner逐模式验收。按块边界钉住实际无缝，不沿用旧说明。"
+  },
+  {
+   "id": "1151137783785771008",
+   "frames": 449,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1151137783785771008-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/infinite.js"
+   ],
+   "missing": [],
+   "pages": [
+    "grids.html",
+    "infinite-stream.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "449帧全核；六边块拼贴+块/簇各自松弛+三表示重心插值已实现，19块378对表示差3.7e-15；新增环数1/7/19三档对照片中一块块外长；仍缺真无限流式（页面最多19块）与块内疏密均匀度"
+  },
+  {
+   "id": "1120036868966502401",
+   "frames": 703,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1120036868966502401-review-r60.md",
+   "evOk": true,
+   "files": [
+    "src/world/contour-overlay.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "703帧全核（8张联系表）；补区域边界按层多色（6色/10层/1128段）与候选格黑白棋盘整格填充（40格 white20 black20、tris=Σ(v-2)）；仍缺真区域id配色与 WFC 逐格候选上色"
+  },
+  {
+   "id": "1097458505315946496",
+   "frames": 14,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/frontier-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/frontier.js",
+    "campaign.html"
+   ],
+   "missing": [],
+   "pages": [
+    "campaign.html"
+   ],
+   "pageSource": "where",
+   "note": "已学14帧续项：外围padding、避让节点的边中点通路、自适应Bezier采样通过96条逻辑/24项页面；两侧细分未实现。"
+  },
+  {
+   "id": "1092709665199345664",
+   "frames": 474,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1092709665199345664-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/effects.js",
+    "src/life/smoke.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "474帧全核；判出机制=一次性爆炸（火球膨胀收缩+地面红焦痕+火星）+持续黑烟+崖顶战报横幅。烟可由smoke.js承载、横幅可由banner.js承载、火球靠effects.js粒子池，缺explodeAt时序编排与焦痕贴片，本轮未写代码"
+  },
+  {
+   "id": "1061221291137605633",
+   "frames": 379,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/mirror-overhang-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/mirror-uv.js",
+    "src/ui/ornament.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "textures.html",
+    "mirror.html",
+    "ornament.html"
+   ],
+   "pageSource": "import",
+   "note": "379帧全核验：方/横/窄高矩形拖动、Orientation变化。复用已有单距离场，补D4八方向和可选固定像素尺度中心重复折叠，GPU八方向各异/镜像无误差，改尺寸不重烘，旧实验回归通过。固定尺度重复是本地方案，非已证实原布局；纹样/CPU绘图API仍不同。"
+  },
+  {
+   "id": "1024679338292256769",
+   "frames": 100,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/icons-flair-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/ui-reveal.js",
+    "ornament.html"
+   ],
+   "missing": [],
+   "pages": [
+    "ornament.html"
+   ],
+   "pageSource": "where",
+   "note": "100帧全核验。中央徽章/标题先显、外纹后展，中央先退/外侧尾迹最后消失。保留共享SDF，新增可拖动标题/外纹本地两轨时序，透明文字inert；非原徽章/逐部件原时序或图稿。"
+  },
+  {
+   "id": "1016680972610359298",
+   "frames": 370,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/ui-interaction-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "370帧全核验。原片既有单Move目标确认也有横排三项，纠正旧圆弧描述；本地横排/生命周期清理、快速切队、Esc、手机边界通过。未实现目标位置单Move/地面标记/移动交换游戏语义。"
+  },
+  {
+   "id": "1015142746372366336",
+   "frames": 303,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/1015142746372366336-review-r60.md",
+   "evOk": true,
+   "files": [
+    "src/life/smoke.js",
+    "smoke.html"
+   ],
+   "missing": [],
+   "pages": [
+    "smoke.html"
+   ],
+   "pageSource": "where",
+   "note": "303帧全核（4张联系表+2.5倍裁切）；本轮未改码，只实核：原片柱身是 6–7 个直径≈柱宽的大瓣、顶端之后断开另有一团独立烟、两柱之间有低对比弥散薄雾；三条缺口全部保留（沿用第59轮实测 solidBase 0.994/凸起9）"
+  },
+  {
+   "id": "1010979395719319552",
+   "frames": 100,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/portraits-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/part-random.js",
+    "ui.html"
+   ],
+   "missing": [],
+   "pages": [
+    "ui.html"
+   ],
+   "pageSource": "where",
+   "note": "100帧全核验，切角卡/头盔/兜帽/锁甲/配饰组合。保留本地卡片绘制并验证稳定种子身份；原作素材/全装备层级和游戏角色接入未完成，不以不同画板哈希充当原多样性指标。"
+  },
+  {
+   "id": "1007587828992266240",
+   "frames": 300,
+   "status": "partial",
+   "impl": true,
+   "runtime": false,
+   "evidence": "artifacts/coverage/1007587828992266240-review.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/battle.js",
+    "src/life/effects.js",
+    "src/life/banner.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "300帧全核；白垩崖台地上两队混战+小屋/崖缘着火+紫旗标，机制归到既有battle/effects/banner，仅判读未做运行时对齐"
+  },
+  {
+   "id": "999185422403055616",
+   "frames": 229,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/999185422403055616-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "229帧全核；血斑按物体空间噪声画、头部这轮补上了（头 48px/身 179px 已量），但只有一套空间：原作躯干走皮肤空间、盔与手臂走精灵空间（0096 棋盘格分出界线）没有；斑块是整面块状、与调色板斑混淆"
+  },
+  {
+   "id": "995043346778415104",
+   "frames": 386,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/995043346778415104-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/route-preview.js",
+    "route-preview.html"
+   ],
+   "missing": [],
+   "pages": [
+    "route-preview.html"
+   ],
+   "pageSource": "where",
+   "note": "386帧全核；移动路线预览落地为落崖弧+圆角（新建 route-preview.js，左埋31点/右0点），battle.js #drawPath 尚未接入、预览仍是淡出的一次性点串"
+  },
+  {
+   "id": "995034777756536833",
+   "frames": 564,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/995034777756536833-review.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "564帧全核；血迹贴花累积/队伍旗/箭矢三项已在 battle.js 对上，缺指挥官能力（Plunge）、能力键冷却环与 No valid targets 提示，本轮未写代码"
+  },
+  {
+   "id": "987267068495003648",
+   "frames": 678,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/ballistic-table-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/ballistic-table.js",
+    "src/badnorth/battle.js",
+    "ballistics.html"
+   ],
+   "missing": [],
+   "pages": [
+    "ballistics.html"
+   ],
+   "pageSource": "where",
+   "note": "678帧全核；Inspector代价/Validity动态编辑。保留无阻力游戏参数，提共享表/可调权重，修真实目标高差量化误差；双网格实际弓手发射通过。原表达式/drag/Validity仍缺。"
+  },
+  {
+   "id": "984813819280191488",
+   "frames": 934,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/984813819280191488-review-r55.md",
+   "evOk": true,
+   "files": [
+    "src/core/combat-state.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "934帧全核（10张联系表）；复核成立：浸血自下而上=剩余血量、阵亡僵直留地不消失；地面血斑是各自独立小斑，同点位反复死亡不叠加变深→本仓缺「堆厚变暗」（现只有2.4s外渗1.42x定型）；本轮未改码，impl/runtime 沿用第54轮实测"
+  },
+  {
+   "id": "974579499802202113",
+   "frames": 815,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/bary-prep-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/spatial.js",
+    "src/core/infinite.js"
+   ],
+   "missing": [],
+   "pages": [
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "grids.html",
+    "module-catalog-r56.html",
+    "openings-r56.html",
+    "refactoring-audit.html",
+    "uv-bake.html",
+    "infinite-stream.html"
+   ],
+   "pageSource": "import",
+   "note": "全帧核验；XZ预计算真正接入块/簇插值缓存，快照原点/退化处理，10264顶点基线与真实页面通过；3D原gizmo未完整迁移。"
+  },
+  {
+   "id": "974564862729838592",
+   "frames": 478,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/bary-prep-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/spatial.js",
+    "src/core/infinite.js"
+   ],
+   "missing": [],
+   "pages": [
+    "assembly.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "gridpatch.html",
+    "grids.html",
+    "module-catalog-r56.html",
+    "openings-r56.html",
+    "refactoring-audit.html",
+    "uv-bake.html",
+    "infinite-stream.html"
+   ],
+   "pageSource": "import",
+   "note": "全帧核验；XZ预计算真正接入块/簇插值缓存，快照原点/退化处理，10264顶点基线与真实页面通过；3D原gizmo未完整迁移。"
+  },
+  {
+   "id": "974325184525201409",
+   "frames": 504,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/landing-approach-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/obb.js",
+    "src/badnorth/landing-plan.js",
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "504帧全核；核心接触策略/输入防NaN通过，实际规划消费者待接 后续已接真实发船泊位/固定朝向直线走廊预留，完整岸礁/动态避让仍缺。"
+  },
+  {
+   "id": "959752525867036672",
+   "frames": 31,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/radial-dual-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/vertex-dual.js → src/world/vertex-dual-overlay.js；gridpatch.html"
+   ],
+   "missing": [
+    "src/core/vertex-dual.js → src/world/vertex-dual-overlay.js；gridpatch.html"
+   ],
+   "pages": [
+    "src/core/vertex-dual.js → src/world/vertex-dual-overlay.js；gridpatch.html"
+   ],
+   "pageSource": "where",
+   "note": "31帧复核：顶点格在实际台地上收缩/扩大。新增三角网重心对偶及边界闭合，共享World扇形三角输入和分层脉动观察/候选点。640格面积测试通过；不是原作中心规则证明，尚未统一植被/导航。双网格真实World/WorldMesh编辑刷新、脉动不写体素及清理通过；见本批运行证据，能力仍列部分。"
+  },
+  {
+   "id": "959530111187013632",
+   "frames": 203,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/level-flora-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/level-flora.js",
+    "src/life/vegetation.js",
+    "level-flora.html"
+   ],
+   "missing": [],
+   "pages": [
+    "level-flora.html"
+   ],
+   "pageSource": "where",
+   "note": "203帧，准确日期2018-02-02；109帧硬切紫色雨景。迁移分层色组至共享World实际地被，保留落点和默认；完整物种/生态/雨景未复现。"
+  },
+  {
+   "id": "958371606350454784",
+   "frames": 88,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/portraits-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/part-random.js",
+    "ui.html"
+   ],
+   "missing": [],
+   "pages": [
+    "ui.html"
+   ],
+   "pageSource": "where",
+   "note": "88帧全核验；保留层级部件，修复显式mirror分支随机重放/单次消费，显式种子与固定槽ID保证重画、切页和手机换列身份；完整spec/数据接口/剪影IoU仍缺。"
+  },
+  {
+   "id": "946660607008403456",
+   "frames": 440,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/946660607008403456-review-r55.md",
+   "evOk": true,
+   "files": [
+    "src/core/platform-anchor.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "440帧全核（5张联系表）；复核：舱内是整舱浸透不是斑点、船左水面大片血雾随流变淡、岸边浅水有白泡沫带与成片白点；本轮未改码，impl/runtime 沿用第54轮实测（deckPool 25段带 opacity0.94、boat-deck-pool-browser PASS）；仍缺船外沿岸白泡沫带与白花簇"
+  },
+  {
+   "id": "943230624369868800",
+   "frames": 318,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wind-snow-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/atmosphere.js",
+    "src/core/world-probes.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "flow.html"
+   ],
+   "pageSource": "import",
+   "note": "318帧全核验；修复屋顶下空洞误用柱顶碰撞，雪片改读共享World实际solid层，重生避实心、dt校验；双网格即时封洞/重开通过。现有表面混白保留，不是物理堆积；Points方点/统一大小与亮度，软片、接触AO/完整冬景仍未复现。"
+  },
+  {
+   "id": "943230620242796544",
+   "frames": 306,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/clouds-winter-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/atmosphere.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "306帧全核验；0–209安静雪岛，210突切为满船/士兵旗帜/血迹黑烟景观，不是积雪增长。已有雪/战斗主体保留；完整冬景美术/植被覆盖及船群战斗组合未实现验收。"
+  },
+  {
+   "id": "926903893866541057",
+   "frames": 516,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wind-snow-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/atmosphere.js",
+    "src/core/world-probes.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "flow.html"
+   ],
+   "pageSource": "import",
+   "note": "516帧全核验；保留按层避障/三线性风场与共享uWind，双网格通洞/封洞及改风向运行复核。原片矢量受空间障碍影响，不能据画面恢复精确解算器；完整makeWindField/trace/sampleCurve接口和局部场GPU采样未迁移。"
+  },
+  {
+   "id": "912691357440978945",
+   "frames": 759,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/912691357440978945-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "759帧全核；补崖壁竖直血斑与崖脚积血（原血斑全为水平圆片），实测墙面竖斑34/地面圆斑50；缺烧焦痕与血泊不规则扩散"
+  },
+  {
+   "id": "906425294533394432",
+   "frames": 246,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/battle-navigation-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/layerednav.js",
+    "src/world/battle-navigation.js",
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "visibility.html"
+   ],
+   "pageSource": "import",
+   "note": "本轮逐帧复核246帧：新增 world/layerednav.js，直接从共享 World 枚举洞底/洞顶多层节点，净空与台阶验证，navigation.html 可对照柱顶假设。北境战斗完整多层接入仍待补齐。 本批真实Battle已接入层选择、单位高度、路径、近战与箭矢占用遮挡，两种网格验证穿洞和封洞；精细门户/侧壁碰撞及分层流场仍待补齐。 分层流场现已与实际路由统一，剩余精细门户和碰撞。 水平半径与连续移动扫掠已补，形变侧壁及脚高插值继续处理。"
+  },
+  {
+   "id": "906416813810049025",
+   "frames": 725,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/cloud-depth-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "725帧全核，紫色厚岩拱洞/多层战斗与船只，仅学习。保留既有分层导航，不冒充原tileset或完整关卡已实现。"
+  },
+  {
+   "id": "906207980802252801",
+   "frames": 326,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wake-fog-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/atmosphere.js",
+    "src/core/fog-envelope.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "326帧全核验。修复本地有限雾盘外缘硬截断，新增浓度/相对漂移速度控制，默认淡雾0.35；实际GPU边界alpha为0、浓度0关闭、速度0冻结通过。仍是圆盘近似，未迁移原FogLayer软片/风场平流与体积/遮挡，未从加速片推断真实速度。"
+  },
+  {
+   "id": "903647529203634176",
+   "frames": 654,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/903647529203634176-review-r60.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/damage-numbers.js",
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "654帧全核（7张联系表）；击杀金色+10并入伤害数字同池（kind=kill、同字号/上浮/遮挡、贴图键 kill|+10），新增同帧横向错位 sx 防叠；仍缺按受击方向抖动与 +10 独立上浮速度"
+  },
+  {
+   "id": "902103473365417984",
+   "frames": 705,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/902103473365417984-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/distance-isolines.js",
+    "distances.html"
+   ],
+   "missing": [],
+   "pages": [
+    "distances.html"
+   ],
+   "pageSource": "where",
+   "note": "705帧全核；岛上等距亮线=距离场等值线（非流向继承），新建 distance-isolines.js+distances.html，EDT 与暴力解一致；缺 3D 多层台阶投影、任意多边形占地、battle.js 调试接入"
+  },
+  {
+   "id": "902069261304287232",
+   "frames": 389,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/902069261304287232-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "389帧全核；继承树每格一段连父格、颜色按守军队伍（不再 squad%3 撞色）并提亮；缺底下的四边形网格线框"
+  },
+  {
+   "id": "901842167508992000",
+   "frames": 571,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/901842167508992000-review.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/flowfield.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "571帧全核；流场携带兵种已在代码里生效（维京绕矛兵），本轮给调试视图加按兵种配色+每格散须；缺格面着色与色卡图例"
+  },
+  {
+   "id": "901469409579061248",
+   "frames": 138,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wake-fog-review.md",
+   "evOk": true,
+   "files": [
+    "src/life/boats.js",
+    "src/core/wake-sampling.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "138帧全核验。保留绕岛V形带状船迹，补连续时间采样/相位余量/帧内插值，30/60/120Hz实际采样数和年龄一致；重建释放船体几何。原片断续泡沫、舷侧喷溅、靠岸船行为与独立Wake接口仍待补，未恢复KELVIN角度。"
+  },
+  {
+   "id": "880853661936734211",
+   "frames": 601,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/body-separation-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/traffic.js",
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "601帧已复核，保留左行与常驻点线；补体型半径/dt分离及车道余量，64人三帧率与实际Battle暂停冻结通过。弯道、多岔和复杂拥挤/体型重路由待续。"
+  },
+  {
+   "id": "870296307889573889",
+   "frames": 351,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/870296307889573889-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "351帧全核；击退越沿→逐级滚落→落差≥3层摔死已修（贴壁下落、沿口推进、跨级续滚），实测6层→2层跨4层/水平位移1.02；缺翻滚姿态与落地扬尘"
+  },
+  {
+   "id": "797119718477991936",
+   "frames": 265,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/battle-navigation-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/layerednav.js",
+    "src/world/battle-navigation.js",
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "visibility.html"
+   ],
+   "pageSource": "import",
+   "note": "本轮逐帧复核265帧：模块生成后内部多层活动点。新增共享 World 多层导航与门户边；混合格和四边形测试通过。预制模块精细内部 portal 与战斗接入仍待补齐。 本批真实Battle已接入层选择、单位高度、路径、近战与箭矢占用遮挡，两种网格验证穿洞和封洞；精细门户/侧壁碰撞及分层流场仍待补齐。 分层流场现已与实际路由统一，剩余精细门户和碰撞。 水平半径与连续移动扫掠已补，形变侧壁及脚高插值继续处理。"
+  },
+  {
+   "id": "886199305522085890",
+   "frames": 624,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/886199305522085890-review-r55.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "624帧全核（7张联系表）；机制复核成立：点线只出现在两块实体间那一格宽处、被建筑挡住即整段不画、点距:点径≈2:1；本轮未改码，impl/runtime 沿用第54轮实测（spacing 0.28、roofs遮挡、dmPeak 187.6，traffic-dots/traffic-fade/traffic-sight 全PASS）；仍缺通用调试层（只挂badnorth）与近景点距略疏"
+  },
+  {
+   "id": "820977247083528192",
+   "frames": 25,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/unit-shadow-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/unit-shadow.js",
+    "unit-shadows.html"
+   ],
+   "missing": [],
+   "pages": [
+    "unit-shadows.html"
+   ],
+   "pageSource": "where",
+   "note": "先按准确配文理解动画参考请求；25帧全核验，可选单位接触软盘局部GPU通过，原动画/坡面/参数待补。"
+  },
+  {
+   "id": "821321422140309504",
+   "frames": 315,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/unit-shadow-review.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "315帧全核验，主内容为选点/登台/战斗与尸体，暗斑不能单独证明原阴影方法；本批仅学习复核。"
+  },
+  {
+   "id": "821680056514781186",
+   "frames": 763,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/unit-tiers-review.md",
+   "evOk": true,
+   "files": [
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "早期复仇战斗763帧复核；仅学习，不能认证软影高度或坡面算法。"
+  },
+  {
+   "id": "827215002448846848",
+   "frames": 524,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/unit-tiers-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/unit-tier.js",
+    "unit-tiers.html"
+   ],
+   "missing": [],
+   "pages": [
+    "unit-tiers.html"
+   ],
+   "pageSource": "where",
+   "note": "原文单位等级，非无文字弧长教程；本地可选头盔/盾牌色阶与实际Battle通过，原雕饰/旗徽/升级机制未复现。"
+  },
+  {
+   "id": "815236105079398400",
+   "frames": 185,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/terrace-profile-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/terrace-profile.js",
+    "terraces.html"
+   ],
+   "missing": [],
+   "pages": [
+    "terraces.html"
+   ],
+   "pageSource": "where",
+   "note": "原文irregular is the new hex，185帧；既有量化保留，新增真实World同高片/逻辑阶差面积诊断，非原算法恢复。"
+  },
+  {
+   "id": "781957658597269506",
+   "frames": 109,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wood-ladders-review.md",
+   "evOk": true,
+   "files": [
+    "src/terrain/generate.js",
+    "src/core/ladder-profile.js",
+    "src/world/navlayer.js",
+    "terraces.html"
+   ],
+   "missing": [],
+   "pages": [
+    "terraces.html"
+   ],
+   "pageSource": "where",
+   "note": "109帧黄色薄平台/柱/梯洞与屋树旋转，仅学习；不等于可用顶列量化复现悬垂结构。 旧片续作：3D锚点梁长/等距踏棍接实际台地木梯，双网格模式恢复通过；原薄台/攀爬仍缺。"
+  },
+  {
+   "id": "828984794407170048",
+   "frames": 387,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/unit-ground-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/unit-ground-height.js",
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "387帧坡地接敌/火焰/房屋焦黑；保留已有每人navFloor，修高度缓动随帧率变化，30/60/120Hz真实Battle双楼层解析一致。原火球/动作/坡面未复现。"
+  },
+  {
+   "id": "865200072685912064",
+   "frames": 908,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/wfc-trace-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/wfc.js",
+    "wfc-trace.html"
+   ],
+   "missing": [],
+   "pages": [
+    "wfc-trace.html"
+   ],
+   "pageSource": "where",
+   "note": "908帧候选收缩/红色冲突/重置求解，非旧注释无文字6帧静态。复用共享求解器加有界不可变真实候选快照和回看页；默认解/修复/四分子格回归通过。原图片/动画/完整建筑接入仍缺。"
+  },
+  {
+   "id": "890611046435627008",
+   "frames": 666,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/house-door-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/house-door-presence.js",
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "666帧全核，层间指令/阶梯支援/房屋遇袭和守卫。保留逐人层高，修房屋燃烧/守卫仅看XZ导致跨层干涉；双网格实际burn检查通过。原火焰/抛射/奖励动画仍缺。"
+  },
+  {
+   "id": "823848950553780226",
+   "frames": 227,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/path-samples-review.md",
+   "evOk": true,
+   "files": [],
+   "missing": [],
+   "pages": [],
+   "pageSource": "none",
+   "note": "227帧全核，尘粒AO仅学习；命令路径弧长采样是独立工程迁移，不冒充原尘粒实现。"
+  },
+  {
+   "id": "807256278154301441",
+   "frames": 344,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/hip-roof-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/hip-roof.js",
+    "src/build/buildings.js"
+   ],
+   "missing": [],
+   "pages": [
+    "refactoring-audit.html",
+    "architecture.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "module-catalog-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "344帧全核。原文群体寻路、图像塔楼及球点，纠正原版无文字六帧说明。共享独立四边房屋可选四檐顶真实重建通过；群体寻路及多格完整规则未验收。"
+  },
+  {
+   "id": "827216768783495168",
+   "frames": 23,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/squad-banners-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/banner.js",
+    "src/badnorth/battle.js"
+   ],
+   "missing": [],
+   "pages": [
+    "banners.html",
+    "refactoring-audit.html"
+   ],
+   "pageSource": "import",
+   "note": "23帧全核，三队徽记/雕饰盾。复用现有Bezier旗面新增可选本地骷髅/剑/三叉戟；真实GPU纹理与开关通过。金饰盾/竖旗/原图集仍缺。"
+  },
+  {
+   "id": "793545297376972801",
+   "frames": 102,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/793545297376972801-review-r47.md",
+   "evOk": true,
+   "files": [
+    "src/build/multitile-wfc.js",
+    "src/build/multitile-iso.js",
+    "multitile.html"
+   ],
+   "missing": [],
+   "pages": [
+    "multitile.html"
+   ],
+   "pageSource": "where",
+   "note": "102帧复看sheet-00；真实浏览器跑通：5×7×5 坍缩89步/多格8/面117、关AO面不变、回放40%面34、4×10×4 多格12/面130；缺接共享World与窗洞栏杆美术模块"
+  },
+  {
+   "id": "793557992931266561",
+   "frames": 6,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/ao-stages-review.md",
+   "evOk": true,
+   "files": [
+    "src/world/worldmesh.js",
+    "src/light/bake.js",
+    "ao-stages.html"
+   ],
+   "missing": [],
+   "pages": [
+    "ao-stages.html"
+   ],
+   "pageSource": "where",
+   "note": "6帧全核，原五阶段仅学习；不将本地四选项冒充SSAO/方向AO。"
+  },
+  {
+   "id": "806904557502464000",
+   "frames": 123,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/arch-profile-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/arch-profile.js",
+    "src/build/buildings.js",
+    "arches.html"
+   ],
+   "missing": [],
+   "pages": [
+    "arches.html"
+   ],
+   "pageSource": "where",
+   "note": "全帧核验；现有拱轮廓保留，迁移解析净空/有界弦误差角分段至实际建筑，双网格通过；楔石/完整桥构仍缺。"
+  },
+  {
+   "id": "802496920790777856",
+   "frames": 292,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/arch-profile-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/arch-profile.js",
+    "src/build/buildings.js",
+    "arches.html"
+   ],
+   "missing": [],
+   "pages": [
+    "arches.html"
+   ],
+   "pageSource": "where",
+   "note": "全帧核验；现有拱轮廓保留，迁移解析净空/有界弦误差角分段至实际建筑，双网格通过；楔石/完整桥构仍缺。"
+  },
+  {
+   "id": "816748103193817088",
+   "frames": 479,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/816748103193817088-review-r48.md",
+   "evOk": true,
+   "files": [
+    "src/world/navmesh-flow.js",
+    "navmesh-flow.html"
+   ],
+   "missing": [],
+   "pages": [
+    "navmesh-flow.html"
+   ],
+   "pageSource": "where",
+   "note": "479帧全核（5张联系表+frame-0128原尺寸）；本轮把「逐面常量流向→过面换向」改成共边带混合：352条共面边 p90 22.50°→0.000°、max 90°→0°（浏览器实测同值），百人 9.6s 全到/出面0/换面抖动 1732→1513；顶点梯度+均值坐标虽也做到0°但抹平崖壁切向导致崖脚卡人40s，已弃用；还缺接进 battle.js、通口前视、共享World自动生成导航面"
+  },
+  {
+   "id": "798580832906739712",
+   "frames": 64,
+   "status": "partial",
+   "impl": true,
+   "runtime": true,
+   "evidence": "artifacts/coverage/space-visibility-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/space-visibility.js",
+    "src/world/space-visibility.js",
+    "space-visibility.html"
+   ],
+   "missing": [],
+   "pages": [
+    "space-visibility.html"
+   ],
+   "pageSource": "where",
+   "note": "64帧全核；原注释24帧不符。共享World空间射线开阔度局部通过，非灰度烘焙/精确光学视线或游戏AI。"
+  },
+  {
+   "id": "787319655648100352",
+   "frames": 67,
+   "status": "partial",
+   "impl": false,
+   "runtime": false,
+   "evidence": "artifacts/coverage/space-visibility-review.md",
+   "evOk": true,
+   "files": [
+    "src/core/wfc.js",
+    "src/build/buildings.js"
+   ],
+   "missing": [],
+   "pages": [
+    "joint3d.html",
+    "prefab.html",
+    "refactoring-audit.html",
+    "slots.html",
+    "wfc-trace.html",
+    "wfc.html",
+    "architecture.html",
+    "build-r56.html",
+    "building-kit-r55.html",
+    "module-catalog-r56.html"
+   ],
+   "pageSource": "import",
+   "note": "67帧全核，仅学习；底板上逐步拼装桥廊/围合楼体，空中零件待置。已有WFC/建筑保留，原3D模块库/动画未迁入。"
+  }
+ ],
+ "groups": {
+  "A_双向都有": [
+   "1991103578011029507",
+   "1705195380457996629",
+   "1704218784028905984",
+   "1344290848180203523",
+   "1313840428685447170",
+   "1151770831619534848",
+   "1024679338292256769",
+   "999185422403055616",
+   "815236105079398400",
+   "798580832906739712"
+  ],
+  "B_双向都有但有缺口": [
+   "839067977781768193",
+   "883447205176238083",
+   "818857408848130048",
+   "832633189277409280",
+   "816332161036984320",
+   "797844857821732864",
+   "794993371261665280",
+   "784848286272327680",
+   "784847588893814785",
+   "784847933686575104",
+   "1991101097818403263",
+   "1991099314714902634",
+   "1852334860137849222",
+   "1849732997945110651",
+   "1849730611964973481",
+   "1849427564034498642",
+   "1798310423554658732",
+   "1795831296952041691",
+   "1786014232594485497",
+   "1769691526924292506",
+   "1769641473895432220",
+   "1765115069837221962",
+   "1765041830461055127",
+   "1764958522398146667",
+   "1758251637280268481",
+   "1758250248483278925",
+   "1727324352264474664",
+   "1727315611959865407",
+   "1724449858369568780",
+   "1714613599035863191",
+   "1712088611934371876",
+   "1710031224838771027",
+   "1708815475801505819",
+   "1707497006640365880",
+   "1707490932017279035",
+   "1707490274425884929",
+   "1704246032626762189",
+   "1703750394164199473",
+   "1699146321318314094",
+   "1699038611125985317",
+   "1696864977171189980",
+   "1677242779162877952",
+   "1671840905957978113",
+   "1671808851895627776",
+   "1670790425232175108",
+   "1670720537662836736",
+   "1670064751181791233",
+   "1669315384619540487",
+   "1666429884208381953",
+   "1664566546683899905",
+   "1664565063552847873",
+   "1654401054828638214",
+   "1593215065423245313",
+   "1584623053061099520",
+   "1582293326815862786",
+   "1580846877855338497",
+   "1580845127207387137",
+   "1580835075629133825",
+   "1579478470098243584",
+   "1490068909042642944",
+   "1482011744843223042",
+   "1481661852887265288",
+   "1471817524148940807",
+   "1459169210752507904",
+   "1448039167057879048",
+   "1447494168448753667",
+   "1430224300003545091",
+   "1401145625572425728",
+   "1384958097542819845",
+   "1371460793032716290",
+   "1338829205157646336",
+   "1338825080844021760",
+   "1313837640366596096",
+   "1310503825510367232",
+   "1305951750638231552",
+   "1302686201401442309",
+   "1301816247479345152",
+   "1298689301488775169",
+   "1290997501332525056",
+   "1279107097108635649",
+   "1260586697538113537",
+   "1243228419162341379",
+   "1242824460325052417",
+   "1241096929490149376",
+   "1241046107125399552",
+   "1238474550511308800",
+   "1215644531221311488",
+   "1215642481162887168",
+   "1205422438437273601",
+   "1205420678859632640",
+   "1205416648397721601",
+   "1201179450668441600",
+   "1200520827898343425",
+   "1198957499027795969",
+   "1197909675443916803",
+   "1191990107785572352",
+   "1181464374839521280",
+   "1168571866405097472",
+   "1151137783785771008",
+   "1120036868966502401",
+   "1097458505315946496",
+   "1061221291137605633",
+   "1016680972610359298",
+   "1015142746372366336",
+   "1010979395719319552",
+   "995043346778415104",
+   "987267068495003648",
+   "984813819280191488",
+   "974579499802202113",
+   "974564862729838592",
+   "974325184525201409",
+   "959752525867036672",
+   "959530111187013632",
+   "958371606350454784",
+   "946660607008403456",
+   "943230624369868800",
+   "926903893866541057",
+   "912691357440978945",
+   "906207980802252801",
+   "903647529203634176",
+   "902103473365417984",
+   "902069261304287232",
+   "901842167508992000",
+   "901469409579061248",
+   "870296307889573889",
+   "886199305522085890",
+   "820977247083528192",
+   "827215002448846848",
+   "781957658597269506",
+   "828984794407170048",
+   "865200072685912064",
+   "890611046435627008",
+   "807256278154301441",
+   "827216768783495168",
+   "793545297376972801",
+   "806904557502464000",
+   "802496920790777856",
+   "816748103193817088"
+  ],
+  "C_缺运行时": [
+   "1275089608758484992",
+   "1258421104756097029",
+   "1007587828992266240"
+  ],
+  "D_缺实现": [
+   "837027901853810688",
+   "816743289500106752",
+   "810157485638189056",
+   "1897266928961700215",
+   "1890018647655272491",
+   "1783792917183606829",
+   "1781405550061687016",
+   "1768627849529893109",
+   "1751932427272909032",
+   "1696896119794479541",
+   "1670725072540106755",
+   "1590674061092212738",
+   "1579483114178768898",
+   "1579474420749725696",
+   "1482346496460828674",
+   "1478114309263839244",
+   "1458921394855718917",
+   "1447496205282549761",
+   "1447488323845509121",
+   "1447483550257799171",
+   "1430227487376781317",
+   "1427721874490933250",
+   "1257213678056857600",
+   "1246074663546916873",
+   "1189902695303458816",
+   "1178731576982724611",
+   "1163836000688365571",
+   "1092709665199345664",
+   "995034777756536833",
+   "943230620242796544",
+   "906425294533394432",
+   "906416813810049025",
+   "880853661936734211",
+   "797119718477991936",
+   "821321422140309504",
+   "821680056514781186",
+   "823848950553780226",
+   "793557992931266561",
+   "787319655648100352"
+  ]
+ }
+}

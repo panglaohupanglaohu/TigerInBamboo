@@ -4,6 +4,7 @@ export function verifyPlanet(before, after, again) {
   if (!after.ok) {
     const hint = after.recipe?.subdivision > 1 ? '。网格细分 2 级以上目前过不了地形链检查，把「网格细分」调回 1 级或移出管线。' : '';
     add('compile', '编译', 'fail', (after.error || `停在 ${after.stage} 阶段`) + hint);
+    if (hint) checks.at(-1).blame = ['planet.grid-subdivision'];
     return { status: 'fail', checks, summary: '候选星球编译失败' };
   }
   add('compile', '编译', 'pass', `${after.pipeline?.length || 8} 个阶段全部完成，${after.ms} ms`);
@@ -13,10 +14,14 @@ export function verifyPlanet(before, after, again) {
   add('determinism', '确定性', same ? 'pass' : 'fail', same ? '独立复算哈希一致' : '同一配方两次编译结果不同');
   const sea = after.recipe.seaLevel;
   const drowned = after.landmarks.filter((m) => !m.water && m.height <= sea);
+  const blameLast = (ids) => { const c = checks.at(-1); if (c.status !== 'pass') c.blame = ids; };
   add('landmarks', '场景锚点', drowned.length ? 'fail' : 'pass', drowned.length ? `被海淹没：${drowned.map((m) => `${m.id}（高 ${m.height.toFixed(2)} ≤ 海平面 ${sea}）`).join('、')}` : `${after.landmarks.length} 个场景锚点都在原位，陆上场景都高于海平面`);
+  blameLast(['planet.sea-level', 'planet.reseed']);
   const dLand = after.stats.land - before.stats.land;
   add('land', '陆地比例', Math.abs(dLand) > 0.3 ? 'warn' : 'pass', `${Math.round(before.stats.land * 100)}% → ${Math.round(after.stats.land * 100)}%`);
+  blameLast(['planet.sea-level', 'planet.reseed']);
   add('budget', '编译预算', after.ms > 5000 ? 'fail' : after.ms > 2500 ? 'warn' : 'pass', `${before.ms} ms → ${after.ms} ms（游戏启动时同步编译）`);
+  blameLast(['planet.surface-detail', 'planet.grid-subdivision', 'planet.chart-split']);
   const status = checks.some((c) => c.status === 'fail') ? 'fail' : checks.some((c) => c.status === 'warn') ? 'warn' : 'pass';
   return { status, checks, summary: checks.map((c) => `${c.name}${c.status === 'pass' ? '✓' : c.status === 'warn' ? '!' : '✗'}`).join(' ') };
 }

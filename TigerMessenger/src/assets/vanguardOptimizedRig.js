@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { meleeRigPose } from '../world/vanguardMeleeFeel.js';
 
 // Original Blender IK assembly port. Original arm/leg Euler objects remain the
 // gameplay command inputs; only their evaluated matrices drive the refined rig.
@@ -51,9 +52,11 @@ export function createVanguardRig(controller) {
     const walking=Math.abs(left)<.6 && Math.abs(right)<.7;
     const rope=u.climbing || (u.onGround===false && !u.aboard && u.vehicleSlot?.kind==='pod');
     const anim=u._swingAnim,attacking=Number.isFinite(anim)&&anim<1;
-    const action=forced?.action || (u.dead||u.downed?'stagger':rope?'rope':attacking?(anim<.3?'windup':'slash'):walking?'walk':left> -1.9 && left<-.6?'aim':'idle');
+    const action=forced?.action || (u.dead||u.downed?'stagger':rope?'rope':attacking?'melee':walking?'walk':left> -1.9 && left<-.6?'aim':'idle');
+    // 2026-11-10 近战三段式（vanguardMeleeFeel：蓄力→劈出→收势，三种刀路轮换）
+    const meleeK=action==='melee'?(forced?.k ?? anim ?? 1):null,meleeStyle=forced?.style||u._swingStyle||'overhead';
     const gunScale=parts.gun.scale.clone();
-    const signature=[action,left,right,parts.legL.rotation.x,parts.legR.rotation.x,forced?.swing,forced?.walk,anim,...gunScale.toArray()].join('|');
+    const signature=[action,meleeK,meleeStyle,left,right,parts.legL.rotation.x,parts.legR.rotation.x,forced?.swing,forced?.walk,anim,...gunScale.toArray()].join('|');
     if(signature===last)return;last=signature;busy=true;
     try {
       let direction=V(0,.95,.312),target=V(-.34,.765,.22),bladeAxis=V(.02,-.925,.38),bend=.08,lean=0,drop=0;
@@ -68,7 +71,9 @@ export function createVanguardRig(controller) {
         target.lerp(V(-.32,.80,.38),swing);bladeAxis.lerp(V(.25,-.83,.50),swing);bend+=swing*.12;
       }
       if(action==='windup'){target.set(-.33,1.14,.30);bladeAxis.set(-.08,.90,.42);}
-      direction.normalize();bladeAxis.normalize();set('n1',V(0,drop,0),new THREE.Quaternion().setFromAxisAngle(V(1,0,0),lean));
+      let lunge=0,twist=0;
+      if(action==='melee'){const m=meleeRigPose(meleeStyle,meleeK);target.copy(m.hand);bladeAxis.copy(m.axis);bend=m.bend;lean=m.lean;drop=m.drop;lunge=m.lunge;twist=m.twist;}
+      direction.normalize();bladeAxis.normalize();set('n1',V(0,drop,lunge),new THREE.Quaternion().setFromEuler(new THREE.Euler(lean,twist,0,'YXZ')));
       const origin=V(.255,1.46,-.085),gunQ=new THREE.Quaternion().setFromUnitVectors(V(0,0,1),direction);
       const gunGrip=V(0,-.11,-.12).multiply(gunScale).applyQuaternion(gunQ).add(origin);
       const leftTarget=action==='shield'?V(.25,1,.4):action==='rope'?V(.47,1.48,.14):gunGrip;
@@ -78,6 +83,7 @@ export function createVanguardRig(controller) {
       set('n59',target.clone().sub(V(-.21,1.12,0)),new THREE.Quaternion().setFromUnitVectors(V(1,0,0),bladeAxis));
       set('add:rope-grip',leftTarget);
       const stationary=forced?forced.walk===0:(!walking&&action!=='walk');
+      if(action==='melee'){leg('L',bend,-1.1*Math.max(0,lunge));leg('R',-bend*.45,.7*Math.max(0,lunge));meta.action=action;meta.liveRig=true;meta.leftHandRole='gun grip';return;}
       leg('L',bend,stationary?0:parts.legL.rotation.x);
       leg('R',-bend*.45,stationary?0:parts.legR.rotation.x);
       meta.action=action;meta.liveRig=true;meta.leftHandRole=action==='shield'?'shield emitter':action==='rope'?'rope':'gun grip';

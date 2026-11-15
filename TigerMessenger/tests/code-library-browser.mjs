@@ -1,0 +1,32 @@
+import {createRequire} from 'node:module';import fs from 'node:fs';import path from 'node:path';
+const require=createRequire(import.meta.url),{chromium}=require('/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const out=path.resolve('TigerMessenger/artifacts/code-library-rebuild-20261113');fs.mkdirSync(out,{recursive:true});
+const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',args:['--mute-audio']});
+const report={errors:[]};
+try{
+ const context=await browser.newContext({viewport:{width:1450,height:1000}}),page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));
+ await page.goto('http://localhost:8931/TigerMessenger/pipeline.html#learning');
+ await page.getByRole('button',{name:'重构代码能力库',exact:true}).click();
+ await page.waitForSelector('[data-module-path="src/core/path-samples.js"]');
+ report.moduleCards=await page.locator('[data-module-path]').count();if(report.moduleCards<350)throw Error('physical modules missing');
+ await page.getByRole('button',{name:'重新扫描源码与组合',exact:true}).click();
+ await page.waitForSelector('[data-module-path="src/core/video-cycle-metrics.js"]');
+ await page.waitForSelector('[data-source-scan-mode="live-filesystem"]');
+ report.catalog=await page.evaluate(async()=>{const m=await import('/TigerMessenger/src/system-workshop/catalog-view.js?v=code-r2');const c=await m.loadCatalog();return{snapshotId:c.snapshotId,scanMode:c.scanMode,modules:c.modules.length,combinations:c.combinations.map(x=>({name:x.name,count:x.moduleOrder.length})),counts:c.sources.physicalCode};});
+ report.uiScanMode=await page.locator('[data-source-scan-mode]').getAttribute('data-source-scan-mode');if(report.uiScanMode!=='live-filesystem')throw Error('not real filesystem scan');
+ await page.screenshot({path:path.join(out,'learning-code-library.png'),fullPage:false});
+ await page.getByRole('button',{name:'返回当前场景管线 →',exact:true}).click();
+ await page.getByRole('button',{name:'⟳ 扫描能力库',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('.cap-scan-note')?.textContent.includes('扫描完成'));
+ report.sidebar=await page.locator('.cap-scan-note').innerText();if(!report.sidebar.includes('实际文件'))throw Error('sidebar scan fallback');
+ await page.getByRole('textbox',{name:'搜索能力',exact:true}).fill('path-samples');
+ await page.getByRole('button',{name:'全部工坊',exact:true}).click();
+ if(await page.locator('[data-capability-id="module:src/core/path-samples.js"]').count()!==1)throw Error('module not reachable in sidebar');
+ await page.screenshot({path:path.join(out,'system-library-search.png'),fullPage:false});
+ await page.goto('http://localhost:8931/townscaper-web/REACodeRefactoring/tools/measure.html');
+ await page.getByRole('button',{name:'抽样并测量',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('测量完成'),{},{timeout:90000});
+ report.videoMetrics=JSON.parse(await page.locator('#out').innerText());if(report.videoMetrics.frames!==120)throw Error('video capture sample count');
+ await page.screenshot({path:path.join(out,'video-measurement.png'),fullPage:false});
+ await context.close();if(report.errors.length)throw Error('page errors '+report.errors.join(';'));report.pass=true;
+}catch(error){report.pass=false;report.failure=error.stack;throw error;}finally{fs.writeFileSync(path.join(out,'browser.json'),JSON.stringify(report,null,2));await browser.close();}

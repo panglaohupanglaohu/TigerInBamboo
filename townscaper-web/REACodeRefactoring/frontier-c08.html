@@ -1,0 +1,67 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><link rel="icon" href="data:,"><title>坍缩边扩展 + 简化导航互连（r56 C08）</title>
+<style>body{margin:0;background:#2f5658;font:13px/1.5 system-ui,"PingFang SC",sans-serif;overflow:hidden}canvas{display:block;width:100vw;height:100vh}#ui{position:fixed;left:12px;top:12px;max-width:390px;background:rgba(255,255,255,.93);color:#1d2f36;border-radius:12px;padding:10px 12px}#ui p{margin:3px 0;font-size:12px;color:#3e5a5e}button{border:1px solid #c9d8d7;background:#fff;border-radius:8px;padding:3px 8px;cursor:pointer;font:inherit}button.on{background:#2f7f8a;color:#fff}#stat{font-size:12px;color:#2f7f8a;white-space:pre-wrap}</style>
+<canvas id="c"></canvas>
+<div id="ui"><a href="index.html">← 首页</a> · <a href="wfc.html">WFC 页</a>
+<h3 style="margin:4px 0">只在坍缩边上评估 + 扩展导航图（1582293326815862786）</h3>
+<p>共享 core/frontier-candidates.js 的 expandFrontier：两颗种子格开始，只枚举「已坍缩区域边缘」的格子的候选（绿框 + 数字 = 当前候选数），候选最少者先放；每放一格就把可走的共享边连进简化导航图（黄线），两片生长区在某一步互连（红圈）。最后按 tile 高度着色成岛（程序化替代原美术）。</p>
+<button id="play" class="on">播放</button> <button id="grid">换网格</button>
+<div id="stat"></div></div>
+<script type="module">
+import { buildQuadGrid, buildMixedGrid } from './src/core/grid.js';
+import { World } from './src/core/world.js';
+import { generateTerrain } from './src/terrain/generate.js';
+import { expandFrontier, frontierCandidates } from './src/core/frontier-candidates.js';
+const Q = new URLSearchParams(location.search), cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const L = 3, tiles = [3, 4].flatMap((n) => Array.from({ length: L ** n }, (_, code) => { const e = []; let x = code; for (let i = 0; i < n; i++) { e.push(x % L); x = Math.floor(x / L); } return { id: n + ':' + code, edges: e, h: Math.round(e.reduce((a, b) => a + b, 0) / n) }; }));
+const byId = new Map(tiles.map((t) => [t.id, t]));
+const walkable = (a, ea, b, eb) => a.edges[ea] === b.edges[eb] && Math.abs(a.h - b.h) <= 1;
+let kind = Q.get('grid') || 'mixed', S, step = Q.has('step') ? Number(Q.get('step')) : 0, playing = !Q.has('step');
+function build() {
+  const g = kind === 'quad' ? buildQuadGrid({ radius: 5, seed: 3 }) : buildMixedGrid({ radius: 7, seed: 3 }), w = new World(g);
+  generateTerrain(w, { seed: 4, maxLevels: 3 });
+  const want = (c) => Math.min(L - 1, w.ground(c)), prefer = (c, t) => Math.abs(t.h - want(c));
+  const inner = g.cells.filter((c) => c.edgeNeighbors.every((n) => n >= 0)), a = inner[0], b = inner.at(-1);
+  const flat = (c) => tiles.find((t) => t.edges.length === c.n && t.edges.every((e) => e === want(c)));
+  const r = expandFrontier(g, { tiles, seeds: { [a.id]: flat(a).id, [b.id]: flat(b).id }, walkable, prefer });
+  const placeAt = new Map(r.order.map((o, i) => [o.cell, i]));
+  S = { g, r, placeAt, seeds: [a.id, b.id] };
+}
+build();
+const fill = ['#6aa8b4', '#d9cf96', '#9fc27a'];
+function draw() {
+  const dpr = Math.min(2, devicePixelRatio); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = '#2f5658'; ctx.fillRect(0, 0, innerWidth, innerHeight);
+  const { g, r, placeAt } = S, N = r.order.length, k = Math.min(N, Math.floor(step));
+  let ext = 0; for (const v of g.verts) ext = Math.max(ext, Math.abs(v.x), Math.abs(v.z));
+  const sc = Math.min(innerWidth - 430, innerHeight - 40) / (2 * ext + 1), ox = 430 + (innerWidth - 430) / 2, oy = innerHeight / 2;
+  const P = (x, z) => [ox + x * sc, oy + z * sc];
+  const done = step >= N + 8;
+  const placed = new Map(); for (let i = 0; i < k; i++) placed.set(r.order[i].cell, byId.get(r.order[i].tile));
+  // frontier at this step (read-only probe with the cells collapsed so far)
+  const collapsed = {}; for (const [id, t] of placed) collapsed[id] = t.id;
+  const fr = k > 0 && !done ? frontierCandidates(g, { tiles, collapsed }) : { rows: [] };
+  for (const c of g.cells) {
+    const t = placed.get(c.id); ctx.beginPath(); c.pts.forEach((p, i) => i ? ctx.lineTo(...P(p.x, p.z)) : ctx.moveTo(...P(p.x, p.z))); ctx.closePath();
+    if (done && t) { ctx.fillStyle = fill[t.h]; ctx.fill(); }
+    ctx.strokeStyle = t ? 'rgba(220,235,225,.55)' : 'rgba(150,180,180,.25)'; ctx.lineWidth = 1; ctx.stroke();
+    if (r.dead.includes(c.id) && k >= N) { ctx.fillStyle = 'rgba(220,60,60,.5)'; ctx.fill(); }
+  }
+  ctx.font = '11px system-ui'; ctx.textAlign = 'center';
+  for (const row of fr.rows) { const c = g.cells[row.cell]; ctx.beginPath(); c.pts.forEach((p, i) => i ? ctx.lineTo(...P(p.x, p.z)) : ctx.moveTo(...P(p.x, p.z))); ctx.closePath(); ctx.strokeStyle = '#5cff8a'; ctx.lineWidth = 1.6; ctx.stroke(); ctx.fillStyle = '#c9ffd6'; ctx.fillText(row.candidates.length, ...P(c.cx, c.cz + .12)); }
+  // nav graph among placed cells
+  ctx.strokeStyle = '#ffd84a'; ctx.lineWidth = 2; ctx.beginPath();
+  let navNow = 0; for (const [x, y] of r.nav) { if ((placeAt.get(x) ?? 1e9) < k && (placeAt.get(y) ?? 1e9) < k) { const a = g.cells[x], b = g.cells[y]; ctx.moveTo(...P(a.cx, a.cz)); ctx.lineTo(...P(b.cx, b.cz)); navNow++; } }
+  ctx.stroke();
+  const m0 = r.merges[0], mStep = m0 ? (m0.step ?? m0.at ?? null) : null;
+  for (const s of S.seeds) { const c = g.cells[s]; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(...P(c.cx, c.cz), 5, 0, Math.PI * 2); ctx.fill(); }
+  if (m0 && mStep !== null && k > mStep) { const c = g.cells[r.order[mStep].cell]; ctx.strokeStyle = '#ff5050'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(...P(c.cx, c.cz), 12, 0, Math.PI * 2); ctx.stroke(); }
+  const avg = fr.rows.length ? fr.rows.reduce((s2, x) => s2 + x.candidates.length, 0) / fr.rows.length : 0;
+  document.getElementById('stat').textContent = `网格 ${kind} · ${g.cells.length} 格 · 步 ${k}/${N}${done ? '（完成，按高度着色）' : ''}\n坍缩边 ${fr.rows.length} 格，平均候选 ${avg.toFixed(1)}（全集 ${tiles.filter((t) => t.edges.length === 4).length}/${tiles.filter((t) => t.edges.length === 3).length}）\n导航边 ${navNow} · 两片互连于第 ${mStep ?? '?'} 步 · 死格 ${r.dead.length}`;
+  window.frontierC08 = { kind, k, N, frontier: fr.rows.length, avgCandidates: avg, nav: navNow, mergeStep: mStep, dead: r.dead.length, done };
+}
+document.getElementById('play').onclick = (e) => { playing = !playing; e.target.classList.toggle('on', playing); };
+document.getElementById('grid').onclick = () => { kind = kind === 'quad' ? 'mixed' : 'quad'; build(); step = 0; draw(); };
+addEventListener('resize', draw);
+setInterval(() => { if (!playing) return; step += .5; if (step > S.r.order.length + 30) step = 0; draw(); }, 60);
+draw();
+</script></html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>纯描边图标的光学重量 + 徽记花饰的层序 —— 两件事都不是"画得好看"，而是能算的</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:9px 18px 7px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 76%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 2px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:160ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:10px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:6px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:14px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>图标列 + 徽记花饰：纯描边图形怎么"看起来一样重"，花饰怎么"转 90° 还对得上"</h1>
+  <p>原片 1201179450668441600（Icons!）左侧是一列<b>沿同一条斜轴等距排下来、每片自己再歪一点</b>的方底片，
+     图标全是描边；原片 1024679338292256769（Some UI flair）是一枚六边形徽记：皇冠 + 两枝月桂 + 环 + 四重内芯，
+     背景一圈放射三角。下面把「墨量 = 路径长 × 线宽」和「每层的角向重复数」都算出来。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { CFG, ICONS, ICON_NAMES, measure, pathLen, bbox, emblem, EMB } from './src/uidecor.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#a9791a', GOOD = '#146c4a', BAD = '#b4402f';
+const CHIP_BG = ['#c9d8c3', '#bcd3d8', '#e6d9ae', '#e3c6a9', '#cdc7de', '#cfd8de', '#e5c0bc', '#c3d6cd'];
+const EMB_TEAL = '#4e6a62', EMB_DARK = '#2f423c', EMB_GOLD = '#b08a4a';
+
+const M = measure();
+const W = M.W, LAY = M.L, E = M.E;
+const EMR = emblem();
+
+// ---------- 版面 ----------
+const PA = { x: 20, y: 108, w: 296, h: 470 };
+const PB = { x: 332, y: 108, w: 424, h: 286 };
+const PC = { x: 772, y: 108, w: 488, h: 286 };
+const PD = { x: 332, y: 400, w: 928, h: 178 };
+const PE = { x: 20, y: 588, w: 1240, h: 152 };
+
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.textBaseline = 'alphabetic'; ctx.fillText(s, x, y);
+};
+const panel = (p, title, sub) => {
+  ctx.save();
+  ctx.fillStyle = 'rgba(255,255,255,.97)';
+  ctx.strokeStyle = '#dbe4e0'; ctx.lineWidth = 1;
+  const r = 10;
+  ctx.beginPath(); ctx.moveTo(p.x + r, p.y);
+  ctx.arcTo(p.x + p.w, p.y, p.x + p.w, p.y + p.h, r);
+  ctx.arcTo(p.x + p.w, p.y + p.h, p.x, p.y + p.h, r);
+  ctx.arcTo(p.x, p.y + p.h, p.x, p.y, r);
+  ctx.arcTo(p.x, p.y, p.x + p.w, p.y, r);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  txt(title, p.x + 14, p.y + 20, INK, '650 12.5px -apple-system,system-ui,sans-serif');
+  if (sub) txt(sub, p.x + 14, p.y + 37, MUTED, '11.5px -apple-system,system-ui,sans-serif');
+  ctx.restore();
+};
+const roundRect = (x, y, w, h, r) => {
+  ctx.beginPath(); ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+};
+
+/** 画一条描边图标：box = 单位框（−1..1）映射到的像素边长 */
+function drawIcon(name, cx, cy, box, w, sNorm, color = INK) {
+  const paths = ICONS[name];
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.scale(sNorm, sNorm);
+  ctx.strokeStyle = color; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.lineWidth = w * (box / 24);
+  for (const p of paths) {
+    ctx.beginPath();
+    p.forEach((q, i) => { const X = q[0] * box / 2, Y = q[1] * box / 2; i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); });
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// ---------- 背景 ----------
+ctx.fillStyle = '#eef3f1'; ctx.fillRect(0, 0, 1280, 800);
+
+// ================= 左：倾斜的图标列 =================
+panel(PA, '图标列 · 8 片底片沿斜轴等距排下来', `歪角 ≤${CFG.TILT}° 只加在旋转上 · 包围盒最小缝 ${LAY.minGap.toFixed(1)}px`);
+
+// 斜轴（底片的中心连线）
+const ax0 = PA.x + 12, ax1 = PA.x + PA.w - 12;
+ctx.save(); ctx.strokeStyle = 'rgba(31,43,40,.16)'; ctx.lineWidth = 1; ctx.setLineDash([5, 4]);
+ctx.beginPath(); ctx.moveTo(ax0, PA.y + 128); ctx.lineTo(ax1, PA.y + PA.h - 28); ctx.stroke(); ctx.restore();
+
+const colTop = PA.y + 62, colAvail = PA.h - 62 - 26;
+const K = colAvail / (LAY.chips[LAY.chips.length - 1].cy + CFG.CHIP + 4);
+const CH = CFG.CHIP * K, step = (CFG.CHIP + CFG.GAP) * K;
+LAY.chips.forEach((c, i) => {
+  const cx = PA.x + PA.w / 2 - 22, cy = colTop + 4 + c.cy * K + CH / 2;
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(c.tilt * Math.PI / 180);
+  // 底片
+  ctx.fillStyle = CHIP_BG[i % CHIP_BG.length];
+  roundRect(-CH / 2, -CH / 2, CH, CH, CH * 0.16); ctx.fill();
+  ctx.strokeStyle = 'rgba(31,43,40,.22)'; ctx.lineWidth = 1; ctx.stroke();
+  // 一条亮边（原片每片左上角有一道浅边）
+  ctx.beginPath(); ctx.moveTo(-CH / 2 + 3, -CH / 2 + 3); ctx.lineTo(CH / 2 - 4, -CH / 2 + 3);
+  ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = 1.6; ctx.stroke();
+  ctx.restore();
+  drawIcon(c.name, cx, cy, CH * 0.92, W.rows[i].wEq, W.rows[i].s * 0.9);
+  if (c.tilt > 0) txt(`+${c.tilt.toFixed(1)}°`, cx + CH / 2 + 6, cy + 4, GOLD, '600 10px ui-monospace,monospace');
+  else txt(`${c.tilt.toFixed(1)}°`, cx - CH / 2 - 6, cy + 4, MUTED, '600 10px ui-monospace,monospace', 'right');
+});
+txt('数字 = 该片自己的歪角（槽位没动）', PA.x + 14, PA.y + PA.h - 9, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 中：三档归一化 =================
+panel(PB, '同一个图标，三种归一化：墨量 = 路径长 × 线宽', '每行同一组 8 枚图标；刻度线是各自墨量的落点（越散越不像一套）');
+const modes = [
+  { key: 'raw', name: '① 原样', sOf: () => 1, wOf: (r) => r.wRaw, label: '不变形、不调线宽' },
+  { key: 'fit', name: '② 统一光学框', sOf: (r) => r.s, wOf: (r) => r.wRawFit, label: `最长边统一到 ${CFG.BOX.toFixed(2)}，线宽仍恒定` },
+  { key: 'eq', name: '③ 再按 1/路径长 反解线宽', sOf: (r) => r.s, wOf: (r) => r.wEq, label: `线宽夹在 ${CFG.WCLAMP[0]}~${CFG.WCLAMP[1]}` },
+];
+const rowY0 = PB.y + 56, rowH = 70;
+const inkAll = W.rows.flatMap((r) => [r.inkRaw, r.inkFit, r.inkEq]);
+const inkMin = Math.min(...inkAll), inkMax = Math.max(...inkAll);
+modes.forEach((m, mi) => {
+  const y = rowY0 + mi * rowH;
+  txt(m.name, PB.x + 14, y + 4, INK, '600 12px -apple-system,sans-serif');
+  txt(m.label, PB.x + 14, y + 19, MUTED, '10.5px -apple-system,sans-serif');
+  // 墨量刻度
+  const rx0 = PB.x + 14, rx1 = PB.x + 176;
+  ctx.save(); ctx.strokeStyle = '#cfd8d4'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(rx0, y + 34); ctx.lineTo(rx1, y + 34); ctx.stroke(); ctx.restore();
+  txt(inkMin.toFixed(1), rx0, y + 48, MUTED, '9.5px ui-monospace,monospace');
+  txt(inkMax.toFixed(1), rx1, y + 48, MUTED, '9.5px ui-monospace,monospace', 'right');
+  const inkOf = (r) => (m.key === 'raw' ? r.inkRaw : m.key === 'fit' ? r.inkFit : r.inkEq);
+  W.rows.forEach((r, i) => {
+    const px = rx0 + (inkOf(r) - inkMin) / (inkMax - inkMin || 1) * (rx1 - rx0);
+    ctx.beginPath(); ctx.arc(px, y + 34, 2.6, 0, 7);
+    ctx.fillStyle = mi === 2 ? GOOD : (mi === 1 ? GOLD : MUTED); ctx.fill();
+  });
+  // 8 枚图标
+  const cellX0 = PB.x + 182, cell = 23;
+  W.rows.forEach((r, i) => {
+    const cx = cellX0 + i * cell + cell / 2, cy = y + 9;
+    drawIcon(r.name, cx, cy, cell, m.wOf(r), m.sOf(r), mi === 2 ? INK : '#3c4a45');
+  });
+  const cvv = mi === 0 ? W.cvRaw : mi === 1 ? W.cvFit : W.cvEq;
+  const spr = mi === 0 ? W.spreadRaw : mi === 1 ? W.spreadFit : W.spreadEq;
+  txt(`CV ${cvv.toFixed(3)} · 极差 ${spr.toFixed(2)}×`, PB.x + 418, y + 48, mi === 2 ? GOOD : INK, '600 11px ui-monospace,monospace', 'right');
+});
+txt(`等墨量要把线宽开到 ${W.wIdealMin.toFixed(2)}~${W.wIdealMax.toFixed(2)}（1.78× 的动态范围），夹住后 ${W.clamped} 枚偏离目标`,
+  PB.x + 14, PB.y + PB.h - 9, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 右：徽记 =================
+panel(PC, '徽记 = 六层同心图形叠起来，转 90° 还对不对得上', `整图对称阶 ${E.order}（不是 ${E.fold}）：只有放射三角(24)与内芯(4)在 90° 下闭合`);
+
+function drawEmblem(cx, cy, R, rot) {
+  ctx.save();
+  ctx.translate(cx, cy); ctx.rotate(rot);
+  const sc = R;
+  // 六边底片
+  ctx.beginPath();
+  EMR.hex.forEach((p, i) => i ? ctx.lineTo(p[0] * sc, p[1] * sc) : ctx.moveTo(p[0] * sc, p[1] * sc));
+  ctx.closePath(); ctx.fillStyle = EMB_TEAL; ctx.fill();
+  ctx.strokeStyle = EMB_DARK; ctx.lineWidth = 1.4; ctx.stroke();
+  // 放射三角
+  ctx.fillStyle = 'rgba(30,52,46,.55)';
+  for (const t of EMR.hatch) {
+    ctx.beginPath();
+    t.forEach((p, i) => i ? ctx.lineTo(p[0] * sc, p[1] * sc) : ctx.moveTo(p[0] * sc, p[1] * sc));
+    ctx.closePath(); ctx.fill();
+  }
+  // 外环 + 内圆
+  ctx.strokeStyle = EMB_GOLD; ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.arc(0, 0, EMR.ring[1] * sc, 0, 7); ctx.stroke();
+  ctx.beginPath(); ctx.arc(0, 0, EMR.ring[0] * sc, 0, 7); ctx.stroke();
+  // 月桂
+  ctx.fillStyle = EMB_GOLD;
+  for (const lf of EMR.leaves) {
+    ctx.save(); ctx.translate(lf.x * sc, lf.y * sc); ctx.rotate(-lf.rot);
+    ctx.beginPath(); ctx.ellipse(0, 0, lf.s * sc * 1.7, lf.s * sc * 0.72, 0, 0, 7); ctx.fill();
+    ctx.restore();
+  }
+  // 内芯四重 + 十字
+  ctx.strokeStyle = EMB_GOLD; ctx.lineWidth = 1.8;
+  for (const k of EMR.knot) {
+    ctx.beginPath(); ctx.arc(k[0] * sc, k[1] * sc, EMB.rKnot * sc, 0, 7); ctx.stroke();
+  }
+  ctx.beginPath(); ctx.moveTo(-0.42 * sc, 0); ctx.lineTo(0.42 * sc, 0);
+  ctx.moveTo(0, -0.42 * sc); ctx.lineTo(0, 0.42 * sc); ctx.stroke();
+  // 皇冠（只在顶部一次 —— 它是把 4 重破掉的那一层）
+  ctx.fillStyle = EMB_GOLD;
+  ctx.beginPath();
+  ctx.moveTo(-0.26 * sc, -0.98 * sc); ctx.lineTo(-0.13 * sc, -1.24 * sc); ctx.lineTo(0, -1.02 * sc);
+  ctx.lineTo(0.13 * sc, -1.24 * sc); ctx.lineTo(0.26 * sc, -0.98 * sc); ctx.closePath(); ctx.fill();
+  ctx.fillRect(-0.28 * sc, -0.99 * sc, 0.56 * sc, 0.09 * sc);
+  ctx.restore();
+}
+drawEmblem(PC.x + 118, PC.y + 150, 86, 0);
+drawEmblem(PC.x + 330, PC.y + 150, 86, Math.PI / 2);
+txt('0°', PC.x + 118, PC.y + 262, INK, '600 12px ui-monospace,monospace', 'center');
+txt('转 90°：皇冠跑到右边', PC.x + 330, PC.y + 262, BAD, '600 11.5px -apple-system,sans-serif', 'center');
+txt(`层半径 ${E.layers.map((l) => l.r.toFixed(2)).join(' > ')} · 最小间隙 ${E.minGap.toFixed(2)}`, PC.x + 14, PC.y + PC.h - 9, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 下：三档对照表 =================
+panel(PD, '三档的数字（8 枚图标，同一组路径）', '');
+const cx2 = [PD.x + 16, PD.x + 190, PD.x + 300, PD.x + 400, PD.x + 490];
+let ry = PD.y + 56;
+['归一化', '线宽范围', '墨量 CV', '墨量极差', '读法'].forEach((h, i) => txt(h, cx2[i], ry, MUTED, '11.5px -apple-system,sans-serif'));
+ry += 25;
+const trows = [
+  ['① 原样（不变形）', '2.00 恒定', W.cvRaw.toFixed(3), `${W.spreadRaw.toFixed(2)}×`, '叉号最轻、水桶最重：看着不是一个套里的', MUTED],
+  ['② 统一光学框', '2.00 恒定', W.cvFit.toFixed(3), `${W.spreadFit.toFixed(2)}×`, '大小齐了，重量还差 1.78 倍', GOLD],
+  ['③ + 按 1/路径长 反解', `${W.wMin.toFixed(2)}~${W.wMax.toFixed(2)}`, W.cvEq.toFixed(3), `${W.spreadEq.toFixed(2)}×`,
+    `${W.clamped} 枚撞到夹取边界 ${CFG.WCLAMP[0]}~${CFG.WCLAMP[1]}（最重的桶下不去、最轻的箭头擦上限）`, GOOD],
+];
+for (const [n, w, cvv, spr, note, col] of trows) {
+  txt(n, cx2[0], ry, col, '600 12px -apple-system,sans-serif');
+  txt(w, cx2[1], ry, INK, '600 12px ui-monospace,monospace');
+  txt(cvv, cx2[2], ry, INK, '600 12px ui-monospace,monospace');
+  txt(spr, cx2[3], ry, INK, '600 12px ui-monospace,monospace');
+  txt(note, cx2[4], ry, MUTED, '11px -apple-system,sans-serif');
+  ry += 26;
+}
+txt(`墨量 = 路径长 × 线宽。路径长 ${W.rows.map((r) => r.L.toFixed(2)).join(' / ')}（叉号 2.60 与画笔 2.86 只差 10%，但水桶 4.65 是叉号的 1.79 倍）`,
+  PD.x + 16, PD.y + PD.h - 12, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 最下：结论 =================
+panel(PE, '这一条钉住的是什么', '');
+const lc = [
+  [`① 图标：把最长边统一到 ${CFG.BOX.toFixed(2)} 只把墨量 CV 从 ${W.cvRaw.toFixed(3)} 压到 ${W.cvFit.toFixed(3)}；再按 1/路径长 反解线宽才到 ${W.cvEq.toFixed(3)}（极差 ${W.spreadEq.toFixed(2)}×）。`, GOOD],
+  [`② 但反解会让线宽跨度到 ${W.wIdealMin.toFixed(2)}~${W.wIdealMax.toFixed(2)}，夹在 ${CFG.WCLAMP[0]}~${CFG.WCLAMP[1]} 后仍有 ${W.clamped} 枚偏离 —— 收不平说明要回头改图形本身，不是继续调公式。`, BAD],
+  [`③ 底片：槽位等距不动、只给每片加 ${CFG.TILT}° 以内的歪角，旋转后包围盒最小缝 ${LAY.minGap.toFixed(1)}px、重叠 ${LAY.overlap} 对 —— "歪了但没散"是量出来的。`, INK],
+  [`④ 徽记：层半径必须单调（${E.mono ? '是' : '否'}，最小间隙 ${E.minGap.toFixed(2)}），每层的角向重复数决定转 90° 后对不对得上；皇冠只有 1 面 → 整图对称阶被拉到 ${E.order}。`, '#c0741c'],
+];
+let ny2 = PE.y + 54;
+for (const [s, col] of lc) {
+  txt('·', PE.x + 15, ny2, GOLD, '700 12px -apple-system,sans-serif');
+  txt(s, PE.x + 26, ny2, col, '11.5px -apple-system,sans-serif');
+  ny2 += 25;
+}
+txt(`闭合 90° 的层：${E.closed.join('、')}　·　破掉 4 重的层：${E.open.join('、')}`, PE.x + 26, PE.y + PE.h - 12, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 底条 =================
+document.getElementById('stats').innerHTML = [
+  `图标 <b>${ICON_NAMES.length}</b>`, `墨量 CV <b>${W.cvRaw.toFixed(3)}</b> → <b class="ok">${W.cvEq.toFixed(3)}</b>`,
+  `极差 <b>${W.spreadRaw.toFixed(2)}×</b> → <b class="ok">${W.spreadEq.toFixed(2)}×</b>`,
+  `夹取 <b>${W.clamped}</b> 枚`, `底片缝 <b>${LAY.minGap.toFixed(1)}px</b>`, `重叠 <b>${LAY.overlap}</b>`,
+  `徽记层 <b>${E.layers.length}</b>`, `对称阶 <b class="no">${E.order}</b>`,
+].join('<span style="opacity:.28">|</span>');
+
+window.__lab = { cv: [W.cvRaw, W.cvFit, W.cvEq], spread: [W.spreadRaw, W.spreadFit, W.spreadEq], clamped: W.clamped, chipGap: LAY.minGap, overlap: LAY.overlap, order: E.order };
+</script>
+</body>
+</html>

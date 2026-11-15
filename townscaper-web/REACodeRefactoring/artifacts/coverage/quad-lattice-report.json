@@ -1,0 +1,215 @@
+{
+ "ok": true,
+ "mixed": {
+  "stats": {
+   "segments": 2748,
+   "vertical": 743,
+   "cells": 736,
+   "surface": true,
+   "maxY": 5.015,
+   "flat": false,
+   "regular": false,
+   "lattice": null,
+   "drape": null,
+   "dots": 0,
+   "rims": 0,
+   "breakMode": "none",
+   "order": {
+    "lines": 5,
+    "rim": 5.5,
+    "tri": 6
+   },
+   "lineDepthWrite": false,
+   "lineDepthTest": true,
+   "window": null,
+   "tri": null,
+   "px": {
+    "ref": 460,
+    "base": {
+     "line": 2,
+     "dot": 0,
+     "rim": 6,
+     "rimStroke": 1
+    },
+    "scale": 1.6522,
+    "viewport": 760,
+    "line": 3.3,
+    "dot": 0,
+    "rim": 9.91
+   }
+  },
+  "dotsVisible": false,
+  "lines": true
+ },
+ "regular": {
+  "stats": {
+   "segments": 921,
+   "vertical": 0,
+   "cells": 0,
+   "surface": false,
+   "maxY": 5.02,
+   "flat": true,
+   "regular": true,
+   "lattice": {
+    "edges": 7159,
+    "corners": 3640,
+    "vertices": 3640,
+    "diagonals": 0,
+    "spacing": {
+     "min": 0.454382,
+     "median": 0.454382,
+     "max": 0.454382,
+     "spread": 0
+    },
+    "degree": {
+     "2": 4,
+     "3": 234,
+     "4": 3402
+    },
+    "interiorQuads": 3402,
+    "y": 0.02,
+    "regular": true,
+    "cols": 64,
+    "rows": 55,
+    "cells": 3520,
+    "expectedEdges": 7159,
+    "gridSpacing": {
+     "median": 0.454382,
+     "faceSegmentsPerCell": 2.033
+    }
+   },
+   "drape": {
+    "drape": true,
+    "breakMode": "none",
+    "vertices": 3640,
+    "kept": 733,
+    "dropped": 2907,
+    "edges": 7159,
+    "drawn": 921,
+    "stepped": 0,
+    "vertical": 0,
+    "skipped": 460,
+    "corners": 731,
+    "rim": 103,
+    "inner": 628,
+    "yFlat": 4.5,
+    "minY": 0.52,
+    "maxY": 5.02,
+    "breakRatio": 0.5,
+    "spacing": {
+     "min": 0.454382,
+     "median": 0.454382,
+     "max": 0.454382,
+     "spread": 0
+    },
+    "regular": true
+   },
+   "dots": 731,
+   "rims": 103,
+   "breakMode": "none",
+   "order": {
+    "lines": 5,
+    "rim": 5.5,
+    "tri": 6
+   },
+   "lineDepthWrite": false,
+   "lineDepthTest": true,
+   "window": null,
+   "tri": null,
+   "px": {
+    "ref": 460,
+    "base": {
+     "line": 2,
+     "dot": 0,
+     "rim": 6,
+     "rimStroke": 1
+    },
+    "scale": 1.6522,
+    "viewport": 760,
+    "line": 3.3,
+    "dot": 0,
+    "rim": 9.91
+   }
+  },
+  "dotsVisible": false,
+  "rimVisible": true,
+  "dots": 731,
+  "rims": 103,
+  "dotsSize": 0,
+  "rimSize": 9.91,
+  "px": {
+   "ref": 460,
+   "base": {
+    "line": 2,
+    "dot": 0,
+    "rim": 6,
+    "rimStroke": 1
+   },
+   "scale": 1.6522,
+   "viewport": 760,
+   "line": 3.3,
+   "dot": 0,
+   "rim": 9.91
+  },
+  "lineSegments": 921
+ },
+ "small": {
+  "px": {
+   "ref": 460,
+   "base": {
+    "line": 2,
+    "dot": 0,
+    "rim": 6,
+    "rimStroke": 1
+   },
+   "scale": 1,
+   "viewport": 460,
+   "line": 2,
+   "dot": 0,
+   "rim": 6
+  },
+  "dotsSize": 0,
+  "rimSize": 6
+ },
+ "pairMode": {
+  "before": 921,
+  "after": 1841,
+  "restored": 921,
+  "vertical": 0
+ },
+ "dotOptIn": {
+  "off": {
+   "visible": false,
+   "size": 0
+  },
+  "on": {
+   "visible": true,
+   "size": 3
+  },
+  "back": {
+   "visible": false,
+   "size": 0
+  }
+ },
+ "checks": {
+  "regular": true,
+  "diagonalsZero": true,
+  "spacingSpreadZero": true,
+  "oneLinePerEdge": true,
+  "dotsAtEveryCorner": true,
+  "drapeOn": true,
+  "drapeClipsFootprint": true,
+  "drapeLiftsOffPlane": true,
+  "dotsOffByDefault": true,
+  "dotOptIn": true,
+  "surfaceHasNoDots": true,
+  "breakModeNone": true,
+  "rimMarked": true,
+  "rimLayerVisible": true,
+  "rimBiggerThanDot": true,
+  "pxScaledToViewport": true,
+  "pxBackToOriginalAt460": true,
+  "breakModeSwitches": true
+ },
+ "problems": []
+}

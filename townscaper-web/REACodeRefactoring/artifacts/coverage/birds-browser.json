@@ -1,0 +1,30 @@
+{
+  "result": {
+    "count": 86,
+    "perches": 104,
+    "states": {
+      "fly": 18,
+      "sit": 62,
+      "land": 5,
+      "takeoff": 1
+    },
+    "outlineMeshes": 1,
+    "outlineSharesSit": true,
+    "hasFlyOutline": false,
+    "shuffle": {
+      "steps": 266,
+      "maxHop": 0.058
+    },
+    "flight": {
+      "maxStep": 0.028,
+      "maxTurnDeg": 0.3,
+      "jumps": 0
+    },
+    "reflection": {
+      "groupVisible": true,
+      "mirroredSit": 62,
+      "sitCount": 62
+    }
+  },
+  "errors": []
+}

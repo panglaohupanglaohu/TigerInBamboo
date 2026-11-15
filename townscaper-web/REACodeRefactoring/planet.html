@@ -31,21 +31,38 @@
   <h1>球面网格 → 小星球</h1>
   <p>1338825080844021760：随机点 → 散开 → 三角化 → 按三角形松弛。1338829205157646336：三角化在球极投影平面上做（右下角）。1768627849529893109：放到球面上。1769641473895432220：防"蘑菇化"。</p>
   <div class="row" id="steps">
-    <button data-s="random">1 随机点</button><button data-s="spaced">2 散开</button><button data-s="tri">3 三角化</button><button data-s="relaxed">4 松弛</button><button data-s="planet" class="on">5 星球</button>
+    <button data-s="random">1 随机点</button><button data-s="spaced">2 散开</button><button data-s="tri">3 三角化</button><button data-s="relaxed">4 松弛</button><button data-s="planet" class="on">5 星球</button><button data-s="maptest">贴图测试</button>
   </div>
   <div class="row">
-    <button id="cube-light">高度立方体光照</button><button id="relax" class="on">防蘑菇化 relax</button><button id="wire">三角网</button><button id="projbtn">球极投影</button><button id="spin" class="on">自转</button>
+    <button id="cube-light">高度立方体光照</button><button id="relax" class="on">防蘑菇化 relax</button><button id="wire">三角网</button><button id="projbtn">球极投影</button><button id="spin" class="on">自转</button><button id="fusion">World融合：河+房子</button>
+  </div>
+  <div class="row">
+    <button id="stagesbtn">阶段动画</button><button id="floorsbtn">多层房子</button><button id="mapbtn">世界贴图</button><button id="focusbtn">看房子</button>
+    <label>解法 <select id="solver"><option value="spring">边弹簧（旧）</option><option value="shape">整片相似收缩（r55）</option></select></label>
+  </div>
+  <div id="stagelabel" style="font-size:12.5px;color:#2f7f8a"></div>
+  <p>784847933686575104 / 784847588893814785：球壳不是一次出现的——一小片起，沿前沿铺满整球。下列滑杆控制装配进度。</p>
+  <div class="row">
+    <input id="asm" type="range" min="0" max="1" step="0.01" value="1" style="flex:1" />
+    <button id="play">装配播放</button><button id="clay">白模</button><button id="shell">薄壳</button>
   </div>
   <p>1791049306213912823：可选16²×6面高度贴图，顶点单次查询的本地光照实验。</p>
   <label>收缩约束 <select id="modules"><option value="all">所有高地（旧代理）</option><option value="one">显式选择最高一格</option><option value="none">无模块格</option></select></label>
-  <p>本地边长弹簧近似；显式格ID可供模块接入。多格约束可能冲突，最差边长误差可增大，不能仅按平均面积认证。球面演示尚未与平面World/游戏融合。</p>
+  <p>边弹簧（旧）：多格约束在共享角点互相矛盾（见下方「共享角点分歧」）。r55「整片相似收缩」：每层每片相连的高地整体按 R/r 收缩，共享角点一致、形状不变；大小与墙倾斜冲突时墙优先（≤30°），宽大高原剩余的蘑菇化如实列出。星球已是共享 World（rock / BUILT 位），游戏玩法未接入。</p>
   <p><a href="artifacts/coverage/sphere-relax-review.md">本轮708帧核验与差距</a></p><div id="stat"></div>
   <p>源码：<code>src/core/trigraph.js</code> <code>src/sphere/planet.js</code></p>
 </div>
 <script type="module">
 import * as THREE from 'three';
 import {createCubeHeightLookup} from './src/light/cube-height.js';
-import { sphereTopologyReport, buildSphere, buildPlanet, cornerPositions, planetMesh, mushroomRatio, moduleSizeReport } from './src/sphere/planet.js';
+import { sphereTopologyReport, buildSphere, buildPlanet, cornerPositions, planetMesh, mushroomRatio, moduleSizeReport, assemblyOrder, assemblySlice } from './src/sphere/planet.js';
+import { planetWorld, planetRivers, planetFusion } from './src/sphere/planet-town.js';
+import { relaxConflictReport } from './src/sphere/planet.js';
+import { prepareStages, sphereStageFrame } from './src/sphere/sphere-stages.js';
+import { planetHeights3D } from './src/sphere/worldmap.js';
+import { worldMapTexture, attachWorldMap } from './src/sphere/worldmap-material.js';
+// r55 G5 switches (all default off): ?fusion=1 ?floors=mixed|N ?solver=shape ?stages=1 [&stageT=x] ?map=1 ?focus=1
+const Q = new URLSearchParams(location.search);
 
 const canvas = document.getElementById('c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -59,8 +76,11 @@ scene.add(new THREE.HemisphereLight(0xf4f1e6, 0x51606a, 1.4));
 const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(5, 8, 6); scene.add(sun);
 
 const t0 = performance.now();
-const sphere = buildSphere({});
+const sphere = buildSphere({ history: true });   // history: per-iteration snapshots for the stage animation (same result)
 const planet = buildPlanet(sphere);
+const mapOn0 = Q.get('map') === '1';
+const heightsOriginal = planet.H.slice();
+if (mapOn0) planet.H = planetHeights3D(planet, { seed: 7 });   // tiles from the SAME 3D field as the texture
 const tBuild = performance.now() - t0;
 const world = new THREE.Group(); scene.add(world);
 
@@ -68,6 +88,13 @@ const sea = new THREE.Mesh(new THREE.IcosahedronGeometry(planet.R + 0.12, 5), ne
 const core = new THREE.Mesh(new THREE.IcosahedronGeometry(planet.R - 0.02, 4), new THREE.MeshStandardMaterial({ color: 0x3a7c90, roughness: 1 }));
 let land = null, wire = null, dots = null;
 const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, flatShading: true });
+let worldTex = null, mapUniforms = null, seaMapUniforms = null, landMat = mat;
+if (mapOn0) {
+  worldTex = worldMapTexture(Q.get('shore') === '1' ? { w: 1024, h: 512, seed: 7, shore: true } : { w: 512, h: 256, seed: 7 });
+  landMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, flatShading: true });
+  mapUniforms = attachWorldMap(landMat, worldTex.texture, { mix: 1 });
+  seaMapUniforms = attachWorldMap(sea.material, worldTex.texture, { mix: .55, walls: 1 });
+}
 
 const cubeLight=createCubeHeightLookup(direction=>{
  let nearest=planet.cells[0],best=-Infinity;
@@ -78,17 +105,21 @@ cubeLight.attach(mat);
 document.getElementById('cube-light').onclick=e=>{const on=cubeLight.uniforms.uCubeHeightStrength.value===0;cubeLight.uniforms.uCubeHeightStrength.value=on?1:0;e.target.classList.toggle('on',on)};
 window.planetLighting={cubeLight,planet,get land(){return land},renderer,scene,camera};
 
-let moduleCells=null, sizeReport, currentAt;
+let moduleCells=null, sizeReport, currentAt, solver = Q.get('solver') === 'shape' ? 'shape' : 'spring', conflict = null;
+const order = assemblyOrder(planet, { mode: 'frontier', seed: 7 });
+let asm = 1, clayOn = false, shellOn = false, playing = false, onlyNow = null;
 function buildLand(relax) {
-  const at = cornerPositions(planet, { relax, moduleCells });currentAt=at;
+  const at = cornerPositions(planet, { relax, moduleCells, solver });currentAt=at;
   sizeReport=moduleSizeReport(planet,at,{moduleCells});
-  const m = planetMesh(planet, at);
+  conflict = relaxConflictReport(planet, at, { moduleCells });
+  onlyNow = asm >= 1 ? null : assemblySlice(planet, order, asm);
+  const m = planetMesh(planet, at, { only: onlyNow });
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(m.position, 3));
   g.setAttribute('normal', new THREE.Float32BufferAttribute(m.normal, 3));
   g.setAttribute('color', new THREE.Float32BufferAttribute(m.color, 3));
   if (land) { world.remove(land); land.geometry.dispose(); }
-  land = new THREE.Mesh(g, mat); world.add(land);
+  land = new THREE.Mesh(g, landMat); world.add(land);
   return mushroomRatio(planet, at);
 }
 function pointsOf(P, r = planet.R) {
@@ -104,12 +135,65 @@ function wireOf(P, tris, r = planet.R + 0.01) {
 }
 
 const initialStep = new URLSearchParams(location.search).get('stage');
-let step = ['random','spaced','tri','relaxed','planet'].includes(initialStep) ? initialStep : 'planet', relaxOn = true, showWire = false, spin = true, ratio = { on: 0, off: 0 };
+let step = ['random','spaced','tri','relaxed','planet','maptest'].includes(initialStep) ? initialStep : 'planet', relaxOn = true, showWire = false, spin = true, ratio = { on: 0, off: 0 };
 ratio.off = buildLand(false); ratio.on = buildLand(true);
 function stagePoints(){return step==='random'?sphere.steps.random:step==='spaced'?sphere.steps.spaced:step==='tri'?sphere.steps.triangulated:sphere.steps.relaxed;}
+// r53 G4 (spherehouse/spherefusion/spheretown): the planet as a shared World — rivers + houses
+// (BUILT bits) deformed into the same relaxed corners as the terrain. Not browser-verified.
+let fusionOn = Q.get('fusion') === '1', fusionGroup = null, floors = Q.get('floors') ? (Q.get('floors') === 'mixed' ? 'mixed' : Math.max(1, parseInt(Q.get('floors')) || 1)) : 1, fusionInfo = null;
+const HOUSE_RGB = { wall: [0.94, 0.9, 0.83], plinth: [0.55, 0.56, 0.58], trim: [0.97, 0.95, 0.91], window: [0.24, 0.29, 0.35], door: [0.36, 0.29, 0.23], roof: [0.88, 0.48, 0.32] };
+function buildFusion() {
+  const pw = planetWorld(planet); const rivers = planetRivers(pw, { threshold: 8 });
+  const f = planetFusion(pw, planet, { density: .6, seed: 5, floors, maxFloors: 3, solver });
+  const builtBits = pw.cells.reduce((n, c) => n + (pw.top(c) - pw.ground(c)), 0);
+  fusionInfo = { houses: f.houses.placed.length, rivers: rivers.channels, floors: f.houses.placed.map((h) => h.floors), builtBits, regions: pw.regions().regions.length, tris: f.houses.part.length, parts: [...new Set(f.houses.part)], placed: f.houses.placed };
+  const tg = new THREE.BufferGeometry(); tg.setAttribute('position', new THREE.Float32BufferAttribute(f.terrain.position, 3)); tg.setAttribute('color', new THREE.Float32BufferAttribute(f.terrain.color, 3)); tg.computeVertexNormals();
+  const hc = []; f.houses.part.forEach((part, t) => { const c = HOUSE_RGB[part] || HOUSE_RGB.wall, sh = part === 'wall' && f.houses.house[t] % 2 ? .95 : 1; for (let k = 0; k < 3; k++) hc.push(c[0] * sh, c[1] * sh, c[2] * sh); });
+  const hg = new THREE.BufferGeometry(); hg.setAttribute('position', new THREE.Float32BufferAttribute(f.houses.position, 3)); hg.setAttribute('color', new THREE.Float32BufferAttribute(hc, 3)); hg.computeVertexNormals();
+  const g = new THREE.Group(); g.add(new THREE.Mesh(tg, landMat), new THREE.Mesh(hg, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .9, flatShading: true, side: THREE.DoubleSide })));
+  g.userData = { houses: f.houses.placed.length, rivers: rivers.channels };
+  return g;
+}
+document.getElementById('fusion').onclick = (e) => { fusionOn = !fusionOn; e.target.classList.toggle('on', fusionOn); if (fusionOn && !fusionGroup) fusionGroup = buildFusion(); show(); };
+document.getElementById('floorsbtn').onclick = (e) => { floors = floors === 'mixed' ? 1 : 'mixed'; e.target.classList.toggle('on', floors === 'mixed'); fusionGroup = null; if (!fusionOn) document.getElementById('fusion').click(); else { fusionGroup = buildFusion(); show(); } };
+document.getElementById('solver').onchange = (e) => { solver = e.target.value; ratio.off = buildLand(false); ratio.on = buildLand(true); buildLand(relaxOn); if (fusionGroup) fusionGroup = buildFusion(); show(); };
+document.getElementById('mapbtn').onclick = (e) => {
+  if (!mapUniforms) { Q.set('map', '1'); location.search = Q.toString(); return; }
+  const on = mapUniforms.uMapMix.value === 0; mapUniforms.uMapMix.value = on ? 1 : 0; seaMapUniforms.uMapMix.value = on ? .55 : 0; e.target.classList.toggle('on', on); show();
+};
+// stage animation (engine/sphere.js): real per-iteration snapshots, faces revealed in radial insertion order
+const stagePrep = prepareStages(sphere);
+let stageT = Q.has('stageT') ? Math.max(0, Math.min(5, Number(Q.get('stageT')) || 0)) : null, stagePlaying = Q.get('stages') === '1' && !Q.has('stageT'), stageFrame = null;
+const stageGroup = new THREE.Group();
+function drawStage(t) {
+  stageT = t; stageFrame = sphereStageFrame(sphere, stagePrep, t);
+  stageGroup.clear();
+  if (stageFrame.stage === 'planet') { stageGroup.clear(); document.getElementById('stagelabel').textContent = '阶段 ' + stageFrame.label; return show(); }
+  const P = stageFrame.points;
+  stageGroup.add(new THREE.Mesh(new THREE.SphereGeometry(planet.R * 0.99, 48, 32), new THREE.MeshBasicMaterial({ color: 0x4d5f78 })));
+  stageGroup.add(pointsOf(P));
+  if (stageFrame.tris.length) stageGroup.add(wireOf(P, stageFrame.tris));
+  const hl = (E, color) => { if (!E.length) return; const pos = []; for (const [a, b] of E) pos.push(...P[a].map((x) => x * (planet.R + .03)), ...P[b].map((x) => x * (planet.R + .03))); const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); stageGroup.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color, linewidth: 2 }))); for (const [a, b] of E) { const m = new THREE.Mesh(new THREE.SphereGeometry(.07, 8, 6), new THREE.MeshBasicMaterial({ color })); m.position.set(...P[a].map((x, i) => (x + P[b][i]) / 2 * (planet.R + .03))); stageGroup.add(m); } };
+  hl(stageFrame.red, 0xff4d4d); hl(stageFrame.green, 0x5dff7a);
+  document.getElementById('stagelabel').textContent = `阶段 t=${t.toFixed(2)} · ${stageFrame.label}` + (stageFrame.faces != null ? ` · ${stageFrame.faces}/${sphere.tris.length} 面` : '');
+  show();
+}
+document.getElementById('stagesbtn').onclick = (e) => { stagePlaying = !stagePlaying; e.target.classList.toggle('on', stagePlaying); if (stagePlaying) drawStage(0); else { stageT = null; stageFrame = null; show(); } };
+let focusOn = Q.get('focus') === '1';
+document.getElementById('focusbtn').onclick = (e) => { focusOn = !focusOn; e.target.classList.toggle('on', focusOn); if (focusOn && !fusionOn) document.getElementById('fusion').click(); };
 function show() {
   world.clear();
-  if (step === 'planet') { world.add(core, sea, land); if (showWire) world.add(wireOf(sphere.pts, sphere.tris, planet.R + 0.13)); }
+  if (stageFrame && stageFrame.stage !== 'planet') world.add(stageGroup);
+  else if (step === 'maptest') {
+    if (!worldTex) worldTex = worldMapTexture(Q.get('shore') === '1' ? { w: 1024, h: 512, seed: 7, shore: true } : { w: 512, h: 256, seed: 7 });
+    if (!window.__mapTestMat) { window.__mapTestMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .8 }); attachWorldMap(window.__mapTestMat, worldTex.texture, { mix: 1, walls: 1 }); }   // same direction lookup as the planet
+    world.add(new THREE.Mesh(new THREE.SphereGeometry(planet.R, 96, 64), window.__mapTestMat));
+  }
+  else if (step === 'planet') {
+    world.add(fusionOn && fusionGroup ? fusionGroup : land);
+    if (!shellOn && asm >= 1) world.add(core, sea);
+    if (showWire) world.add(wireOf(sphere.pts, sphere.tris, planet.R + 0.13));
+  }
   else {
     const P = stagePoints();
     world.add(new THREE.Mesh(new THREE.SphereGeometry(planet.R * 0.99, 48, 32), new THREE.MeshBasicMaterial({ color: 0x4d5f78 })));
@@ -122,8 +206,12 @@ function show() {
   document.getElementById('stat').innerHTML =
     `${sphere.pts.length} 点 · ${sphere.tris.length} 三角（球面应为 2n−4 = ${2 * sphere.pts.length - 4}）· ${topology ? `球面拓扑 ${topology.closed ? '✓' : '待查'}（Euler ${topology.euler}）` : '点云阶段（未套用后续三角网）'}· 投影平面抽查 ${c.checkedTriangles}/${c.tris} 面 ${c.manifold && c.delaunay ? '✓' : '待查'} · ${tBuild.toFixed(0)} ms<br>` +
     `高台（≥4 层）格子面积 / 海平面面积：relax 关 <b>${ratio.off.toFixed(2)}</b> → 开 <b>${ratio.on.toFixed(2)}</b>（仅面积汇总，不能代表每格形状）<br>` +
-    `当前约束${sizeReport.count}格 · 单格面积比范围 ${sizeReport.minAreaRatio.toFixed(3)}–${sizeReport.maxAreaRatio.toFixed(3)} · 最差边长误差 ${(100*sizeReport.maxEdgeError).toFixed(1)}%`;
-  if(window.planetDemo)Object.assign(window.planetDemo,{land,at:currentAt,sizeReport,moduleCells,relaxOn,step,stagePoints:stagePoints(),topology});
+    `当前约束${sizeReport.count}格 · 单格面积比范围 ${sizeReport.minAreaRatio.toFixed(3)}–${sizeReport.maxAreaRatio.toFixed(3)} · 最差边长误差 ${(100*sizeReport.maxEdgeError).toFixed(1)}%<br>` +
+    `装配 ${onlyNow ? onlyNow.size : order.length}/${order.length} 格（${onlyNow ? '生长中' : '已铺满'}${clayOn ? ' · 白模' : ''}${shellOn ? ' · 薄壳（无海核）' : ''}）<br>` +
+    `多格约束冲突（${solver === 'shape' ? '整片相似收缩' : '边弹簧'}）：共享角点分歧 均 ${conflict.disagreeMean.toFixed(3)} / 最大 ${conflict.disagreeMax.toFixed(2)} 边长 · 形状误差 ${conflict.shapeErrMean.toFixed(3)} · 大小误差 ${conflict.sizeErrMean.toFixed(2)} · 墙倾斜 ≤${conflict.leanMaxDeg.toFixed(0)}° · 翻折 ${conflict.folded}` +
+    (fusionOn && fusionInfo ? `<br>World 融合：${fusionInfo.houses} 栋（层数 ${[...new Set(fusionInfo.floors)].sort().join('/')}）· BUILT 位 ${fusionInfo.builtBits} · 建筑区 ${fusionInfo.regions} · 河道 ${fusionInfo.rivers} 格` : '') +
+    (mapUniforms ? `<br>世界贴图 ${worldTex.map.w}×${worldTex.map.h} · 陆地 ${worldTex.map.stats.landPct}% · 海岸 ${worldTex.map.stats.coastPx}px · 坡 ${worldTex.colors.roles.slope}px` : '');
+  if(window.planetDemo)Object.assign(window.planetDemo,{conflict,solver,fusionOn,fusionInfo,floors,stageFrame:stageFrame&&{stage:stageFrame.stage,label:stageFrame.label,tris:stageFrame.tris.length,red:stageFrame.red.length,green:stageFrame.green.length,faces:stageFrame.faces},mapOn:!!(mapUniforms&&mapUniforms.uMapMix.value),worldMap:worldTex&&{w:worldTex.map.w,h:worldTex.map.h,stats:worldTex.map.stats,roles:worldTex.colors.roles},land,at:currentAt,sizeReport,moduleCells,relaxOn,step,stagePoints:stagePoints(),topology,asm,order,only:onlyNow,clayOn,shellOn});
 }
 document.querySelectorAll('#steps button').forEach((b) => (b.onclick = () => { step = b.dataset.s; show(); }));
 document.getElementById('modules').onchange=e=>{
@@ -133,6 +221,22 @@ document.getElementById('modules').onchange=e=>{
 document.getElementById('relax').onclick = (e) => { relaxOn = !relaxOn; e.target.classList.toggle('on', relaxOn); buildLand(relaxOn); show(); };
 document.getElementById('wire').onclick = (e) => { showWire = !showWire; e.target.classList.toggle('on', showWire); show(); };
 document.getElementById('spin').onclick = (e) => { spin = !spin; e.target.classList.toggle('on', spin); };
+const setAssembly = (p) => {
+  asm = Math.min(1, Math.max(0, Number(p)));
+  document.getElementById('asm').value = String(asm);
+  buildLand(relaxOn); show(); return asm;
+};
+document.getElementById('asm').oninput = (e) => setAssembly(Number(e.target.value));
+document.getElementById('play').onclick = (e) => {
+  playing = !playing; e.target.classList.toggle('on', playing);
+  if (playing && asm >= 1) setAssembly(0);
+};
+document.getElementById('clay').onclick = (e) => {
+  clayOn = !clayOn; e.target.classList.toggle('on', clayOn);
+  mat.vertexColors = !clayOn; mat.color.set(clayOn ? 0xd9d6ce : 0xffffff); mat.needsUpdate = true; show();
+};
+document.getElementById('shell').onclick = (e) => { shellOn = !shellOn; e.target.classList.toggle('on', shellOn); show(); };
+window.planetAssembly = { set: setAssembly, get asm() { return asm; }, get order() { return order; }, assemblyOrder, assemblySlice };
 const pc = document.getElementById('proj');
 document.getElementById('projbtn').onclick = (e) => {
   const on = pc.style.display !== 'block'; pc.style.display = on ? 'block' : 'none'; e.target.classList.toggle('on', on);
@@ -145,9 +249,18 @@ document.getElementById('projbtn').onclick = (e) => {
   for (const [a, b, c] of tris) { const A = pts[a], B = pts[b], C = pts[c]; ctx.moveTo(300 + A[0] * S, 300 + A[1] * S); ctx.lineTo(300 + B[0] * S, 300 + B[1] * S); ctx.lineTo(300 + C[0] * S, 300 + C[1] * S); ctx.closePath(); }
   ctx.stroke();
 };
-buildLand(true);
-window.planetDemo = { sphere, planet, world, ratio, land, at:currentAt, sizeReport, moduleCells, relaxOn };
+document.getElementById('solver').value = solver;
+ratio.off = buildLand(false); ratio.on = buildLand(true);
+window.planetDemo = { sphere, planet, world, ratio, land, at:currentAt, sizeReport, moduleCells, relaxOn, heightsOriginal };
+if (fusionOn) { fusionGroup = buildFusion(); document.getElementById('fusion').classList.add('on'); }
+document.getElementById('floorsbtn').classList.toggle('on', floors === 'mixed');
+document.getElementById('mapbtn').classList.toggle('on', !!mapUniforms);
+document.getElementById('focusbtn').classList.toggle('on', focusOn);
+document.getElementById('stagesbtn').classList.toggle('on', stagePlaying);
 show();
+if (stageT !== null || stagePlaying) drawStage(stageT ?? 0);
+if (Q.get('relaxanim') === '1') import('./src/sphere/planet-relax-c08.js').then((m) => m.installRelaxAnim({ THREE, demo: window.planetDemo, Q }));   // r56 C08: relax-pass playback (default off)
+if (Q.get('smoothcoast') === '1') import('./src/sphere/planet-smooth-c08.js').then((m) => m.installSmoothCoast({ THREE, demo: window.planetDemo }));   // r56 C08: smoothed coasts + ink (default off)
 
 // 拖动旋转
 let drag = null, rx = 0.35, ry = 0;
@@ -157,7 +270,31 @@ addEventListener('pointermove', (e) => { if (!drag) return; ry += (e.clientX - d
 canvas.addEventListener('wheel', (e) => { camera.position.multiplyScalar(e.deltaY > 0 ? 1.08 : 0.93); }, { passive: true });
 function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
 addEventListener('resize', resize); resize();
-renderer.setAnimationLoop(() => { if (spin && !drag) ry += 0.003; world.rotation.set(rx, ry, 0); renderer.render(scene, camera); });
+let lastT = performance.now();
+renderer.setAnimationLoop(() => {
+  const now = performance.now(), dt = Math.min(0.1, (now - lastT) / 1000); lastT = now;
+  if (playing) {
+    const next = asm + dt / 6;
+    if (next >= 1) { playing = false; document.getElementById('play').classList.remove('on'); setAssembly(1); }
+    else setAssembly(next);
+  }
+  if (stagePlaying) { const t = (stageT ?? 0) + dt / 4; if (t >= 5) { stagePlaying = false; document.getElementById('stagesbtn').classList.remove('on'); drawStage(5); } else drawStage(t); }
+  if (spin && !drag) ry += 0.003;
+  const hlE = stageFrame && (stageFrame.red.length ? stageFrame.red : stageFrame.green);
+  if (hlE && hlE.length && !drag) {
+    // repair stage: turn the violating / flipped edge toward the camera
+    const [a, b] = hlE[0], P = stageFrame.points, d = new THREE.Vector3(P[a][0] + P[b][0], P[a][1] + P[b][1], P[a][2] + P[b][2]).normalize();
+    world.quaternion.setFromUnitVectors(d, camera.position.clone().normalize());
+  } else if (focusOn && fusionInfo && fusionInfo.placed.length) {
+    // close-up camera on the tallest house (house checks); the planet stops spinning
+    const h = fusionInfo.placed.reduce((b, p) => p.floors > b.floors ? p : b), d = new THREE.Vector3(...planet.cells[h.cell].c);
+    const t = new THREE.Vector3().crossVectors(d, Math.abs(d.y) < .9 ? new THREE.Vector3(0, 1, 0) : new THREE.Vector3(1, 0, 0)).normalize();
+    const p = d.clone().multiplyScalar(planet.R + (h.ground + h.floors * .5) * planet.L);
+    world.rotation.set(0, 0, 0); camera.up.copy(d); camera.position.copy(p).addScaledVector(d, 1.5).addScaledVector(t, 2.4); camera.lookAt(p);
+  } else if (camera.up.y !== 1 || camera.up.x || camera.up.z) { camera.up.set(0, 1, 0); camera.position.set(0, 5, 23); camera.lookAt(0, 0, 0); world.rotation.set(rx, ry, 0); }
+  else world.rotation.set(rx, ry, 0);
+  renderer.render(scene, camera);
+});
 
 </script>
 </body>

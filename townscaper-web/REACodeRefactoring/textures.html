@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>贴图实验室 · REACode 重构版</title>
+<link rel="icon" href="data:," />
 <style>
   html, body { margin: 0; height: 100%; background: #2a3238; font: 14px/1.5 -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; overflow: hidden; }
   canvas { display: block; width: 100vw; height: 100vh; }
@@ -322,24 +323,74 @@ function decoTile(seed) {
   g.strokeRect(1, 1, 46, 46);
   return c;
 }
+/* 一张贴图以面板中心对折镜像铺贴（等价于 src/core/mirror-uv.js 的 foldMirrorUV）：
+ * 第 k 格相对中心的偏移是 k 格宽，k 为奇数时该格取镜像 → 相邻格互为镜像，
+ * 任何面板尺寸都不会出现硬接缝；orientation 0..7 = 旋转 0/90/180/270 × 是否镜像。 */
+function foldParity(k) { return ((k % 2) + 2) % 2; }
+function decoPanel(tile, x, y, w, h, { orientation = 0, tileSize = 48 } = {}) {
+  const T = tileSize, cx = x + w / 2, cy = y + h / 2;
+  const mirror = orientation >= 4, turn = orientation % 4;
+  let cells = 0;
+  ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+  for (let ky = Math.floor(-h / 2 / T); ky < Math.ceil(h / 2 / T); ky++) {
+    for (let kx = Math.floor(-w / 2 / T); kx < Math.ceil(w / 2 / T); kx++) {
+      ctx.save();
+      ctx.translate(cx + kx * T + T / 2, cy + ky * T + T / 2);
+      ctx.scale(foldParity(kx) ? -1 : 1, foldParity(ky) ? -1 : 1);
+      if (turn) ctx.rotate((turn * Math.PI) / 2);
+      if (mirror) ctx.scale(-1, 1);
+      ctx.drawImage(tile, -T / 2, -T / 2, T, T);
+      ctx.restore(); cells++;
+    }
+  }
+  ctx.restore();
+  return { cells, repeats: Math.max(1, Math.round(w / T)) };
+}
 function drawDeco() {
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   ctx.fillStyle = '#3a4045'; ctx.fillRect(0, 0, W, H);
-  const tile = decoTile(mode === 0 ? 3 : 3);
-  const x0 = W > 800 ? 440 : 20, y0 = 40, cols = Math.floor((W - x0 - 20) / 48), rows = Math.floor((H - 60) / 48);
-  for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
-    // 以中心为对称：左右上下镜像 + 8 种朝向（旋转 0/90/180/270 × 镜像）
-    const mx = i < cols / 2 ? 1 : -1, my = j < rows / 2 ? 1 : -1;
-    const rot = mode >= 1 ? ((i * 7 + j * 13) % 4) : 0;
-    const variant = mode >= 2 ? (i * 3 + j * 5) % 3 : 0;   // 几种不同设置打破重复（同一张贴图）
-    ctx.save();
-    ctx.translate(x0 + i * 48 + 24, y0 + j * 48 + 24);
-    ctx.scale(mx, my); ctx.rotate((rot * Math.PI) / 2);
-    if (variant === 1) ctx.scale(-1, 1);
-    if (variant === 2) ctx.globalAlpha = 0.55;
-    ctx.drawImage(tile, -24, -24);
-    ctx.restore();
+  const tile = decoTile(3);
+  const x0 = W > 800 ? 420 : 16, y0 = 30, aw = W - x0 - 20, ah = H - y0 - 24;
+  const stat = (s) => (document.getElementById('stat').textContent = s);
+  let info = null;
+  if (mode === 0) {
+    // 只镜像：一张 48px 装饰贴图铺满整个面板（8 向全部关掉）
+    info = decoPanel(tile, x0, y0, aw, ah, { orientation: 0, tileSize: 48 });
+    stat(`${info.cells} 格 · 横向重复 ${info.repeats} 次（同一张贴图，仅按中心对折镜像）`);
+  } else if (mode === 1) {
+    // + 8 向：同一张贴图的 8 种朝向各占一格
+    const cw = Math.min(200, (aw - 30) / 4), ch = Math.min(160, (ah - 30) / 2);
+    for (let i = 0; i < 8; i++) {
+      const x = x0 + (i % 4) * (cw + 10), y = y0 + Math.floor(i / 4) * (ch + 10);
+      decoPanel(tile, x, y, cw, ch, { orientation: i, tileSize: 48 });
+      ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = 1; ctx.strokeRect(x + .5, y + .5, cw, ch);
+      ctx.fillStyle = '#cfe4e8'; ctx.font = '12px system-ui'; ctx.fillText('朝向 ' + i, x + 6, y + 15);
+    }
+    stat('8 种朝向 · 同一张贴图（旋转 0/90/180/270 × 镜像）');
+  } else if (mode === 2) {
+    // + 几种设置：三块竖向面板，同一张贴图、不同朝向与格宽（片子里就是三条并排的装饰带）
+    const sets = [{ o: 7, t: 36 }, { o: 3, t: 44 }, { o: 1, t: 52 }];
+    const pw = Math.min(200, (aw - 40) / 3);
+    sets.forEach((s, i) => {
+      const x = x0 + i * (pw + 18);
+      decoPanel(tile, x, y0, pw, ah, { orientation: s.o, tileSize: s.t });
+      ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.strokeRect(x + .5, y0 + .5, pw, ah);
+      ctx.fillStyle = '#cfe4e8'; ctx.font = '12px system-ui';
+      ctx.fillText(`朝向 ${s.o} · 格宽 ${s.t}`, x + 6, y0 + 16);
+    });
+    stat(`3 套设置 · 同一张贴图（朝向 ${sets.map((s) => s.o).join('/')}）`);
+  } else {
+    // 拉太长：贴图尺寸不变，面板越长重复越多 —— 这正是"拉太长就看出重复"
+    const T = 48, bars = [1, 3, 6];
+    bars.forEach((n, i) => {
+      const w = Math.min(aw, n * T * 1.6), y = y0 + i * ((ah - 20) / 3);
+      info = decoPanel(tile, x0, y, w, (ah - 20) / 3 - 12, { orientation: 0, tileSize: T });
+      ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.strokeRect(x0 + .5, y + .5, w, (ah - 20) / 3 - 12);
+      ctx.fillStyle = '#cfe4e8'; ctx.font = '12px system-ui'; ctx.fillText(`${n} 格宽 · 重复 ${n} 次`, x0 + 6, y + 15);
+    });
+    stat(`同一张 48px 贴图 · 面板 1/3/6 格宽 → 重复 1/3/6 次`);
   }
+  if (window.texLab) window.texLab.deco = info;
 }
 
 /* ------------------------------------------------------------ 调度 */
@@ -353,7 +404,7 @@ const NOTES = {
   squiggly: '1104771432440049664 原文为单张距离场贴图+镜像UV，边框/中心可独立调cutoff；本页保留程序SDF/噪声近似，单贴图复用和独立控制尚待接入。第 4 个：1105131621391495176 带动画——镜像 UV 上的对称纹饰，用一个从中心长出的半径做阈值动画（1024679338292256769 UI flair 的展开）。',
   deco: '1061221291137605633 一张贴图 8 种朝向 + 以中心镜像，任意尺寸都能用；1061227418961219585 拉太长会看出重复；1061229717582475264 用同一张贴图的几种不同设置打破重复。',
 };
-const SUBS = { pixel: ['放大看'], blotch: ['大色块', '疏密 + 等高线', '抽象田地'], deco: ['只镜像', '+ 8 向', '+ 几种设置'], contrast: ['迭代'], squiggly: ['静止', '扭动', '+ 内线 + 发光', '镜像纹饰 + 展开动画'] };
+const SUBS = { pixel: ['放大看'], blotch: ['大色块', '疏密 + 等高线', '抽象田地'], deco: ['只镜像', '+ 8 向', '+ 几种设置', '拉太长'], contrast: ['迭代'], squiggly: ['静止', '扭动', '+ 内线 + 发光', '镜像纹饰 + 展开动画'] };
 function setTab(t) {
   tab = t; mode = 0;
   document.querySelectorAll('#tabs button').forEach((b) => b.classList.toggle('on', b.dataset.t === t));

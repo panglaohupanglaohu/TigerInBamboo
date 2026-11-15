@@ -65,3 +65,49 @@ export function buildFrontier(nodes,{position=0,padding=1,clearance=.02,roundnes
   const rounded=sampleFrontierBezier(polyline,nodes,{clearance,roundness});
   return{...base,ok:true,reason:null,polyline,...rounded,edgePath:ids.slice(1,-1),length:rounded.path.slice(1).reduce((sum,p,i)=>sum+distance(rounded.path[i],p),0)};
 }
+
+/** Stage 4 of 1097458505315946496: "Tessellate the fields on either side using the bezier and the
+ * triangulation". The padded rectangle is split by the sampled path into a lower and an upper
+ * field polygon; each is ear-clipped (bezier samples become field vertices) and every
+ * triangulation node is assigned to the side that contains it. Local reconstruction.
+ */
+const area2=(poly)=>{let s=0;for(let i=0;i<poly.length;i++){const a=poly[i],b=poly[(i+1)%poly.length];s+=a.x*b.y-b.x*a.y;}return s/2;};
+export function pointInPolygon(p,poly){let inside=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a.y>p.y)!==(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)inside=!inside;}return inside;}
+export function earClip(polygon){
+ let poly=polygon.filter((p,i)=>distance(p,polygon[(i+1)%polygon.length])>1e-12);
+ if(area2(poly)<0)poly=poly.slice().reverse();
+ const idx=poly.map((_,i)=>i),tris=[],cr=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
+ let guard=0;
+ while(idx.length>3&&guard++<poly.length*poly.length){
+  let cut=false;
+  for(let k=0;k<idx.length;k++){
+   const i0=idx[(k+idx.length-1)%idx.length],i1=idx[k],i2=idx[(k+1)%idx.length],a=poly[i0],b=poly[i1],c=poly[i2];
+   if(cr(a,b,c)<=1e-14)continue;
+   if(idx.some(j=>j!==i0&&j!==i1&&j!==i2&&cr(a,b,poly[j])>=-1e-14&&cr(b,c,poly[j])>=-1e-14&&cr(c,a,poly[j])>=-1e-14))continue;
+   tris.push([a,b,c]);idx.splice(k,1);cut=true;break;
+  }
+  if(!cut)throw new RangeError('earClip: polygon is not simple');
+ }
+ if(idx.length===3)tris.push(idx.map(i=>poly[i]));
+ return tris;
+}
+export function frontierFields(frontier){
+ if(!frontier?.ok)throw new RangeError('frontierFields needs a successful frontier');
+ const xs=frontier.points.map(p=>p.x),ys=frontier.points.map(p=>p.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),path=frontier.path;
+ const below=[...path,{x:maxX,y:minY},{x:minX,y:minY}],above=[...path,{x:maxX,y:maxY},{x:minX,y:maxY}];
+ const belowTris=earClip(below),aboveTris=earClip(above);
+ const nodeSide=frontier.points.slice(0,frontier.points.length-8).map(p=>pointInPolygon(p,below)?'below':'above');
+ return{below,above,belowTris,aboveTris,nodeSide,area:{below:Math.abs(area2(below)),above:Math.abs(area2(above)),rect:(maxX-minX)*(maxY-minY)}};
+}
+/** Several frontier steps at once (one per campaign stage). Steps are kept ordered: a step that
+ * crosses its predecessor is reported, never silently drawn. Each node gets a band index =
+ * number of frontiers it lies above. */
+export function buildFrontiers(nodes,positions,opts={}){
+ if(!Array.isArray(positions)||!positions.length)throw new RangeError('positions required');
+ const sorted=[...positions].sort((a,b)=>a-b),frontiers=sorted.map(position=>buildFrontier(nodes,{...opts,position}));
+ const cross=(p,q)=>{for(let i=1;i<p.length;i++)for(let j=1;j<q.length;j++){const a=p[i-1],b=p[i],c=q[j-1],d=q[j],o=(u,v,w)=>(v.x-u.x)*(w.y-u.y)-(v.y-u.y)*(w.x-u.x);if(o(a,b,c)*o(a,b,d)<0&&o(c,d,a)*o(c,d,b)<0)return true;}return false;};
+ const conflicts=[];for(let k=1;k<frontiers.length;k++)if(frontiers[k].ok&&frontiers[k-1].ok&&cross(frontiers[k-1].path,frontiers[k].path))conflicts.push([k-1,k]);
+ const fields=frontiers.map(f=>f.ok?frontierFields(f):null);
+ const band=nodes.map((n,i)=>fields.reduce((s,f)=>s+(f&&f.nodeSide[i]==='above'?1:0),0));
+ return{frontiers,fields,band,conflicts,positions:sorted};
+}

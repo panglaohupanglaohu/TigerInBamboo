@@ -1,0 +1,98 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>距离场等值线 · 逐帧覆盖实验页</title><link rel="icon" href="data:,"><style>
+body{margin:24px;background:#edf4f0;color:#20343c;font:15px/1.6 system-ui}
+h1{font-size:20px;margin:0 0 6px}p.lead{margin:0 0 14px;color:#3c5760;max-width:1080px}
+.row{display:flex;gap:18px;flex-wrap:wrap}.card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 1px 3px rgba(32,52,60,.12)}
+figure{margin:0}figcaption{font-size:13px;color:#4a656e;margin-top:6px}
+canvas{display:block;background:#d5e3dc;border-radius:8px;max-width:100%}
+label{font:inherit;margin-right:16px}input[type=range]{vertical-align:middle}
+#stats{font-size:13px;color:#3c5760;margin:10px 0 14px;font-variant-numeric:tabular-nums}
+a{color:#276e86}
+</style>
+<h1>距离场 → 等值线</h1>
+<p class="lead">对照片子 902103473365417984「Ok, one more visualization. Distances this time」：岛上每隔固定距离铺一道亮线，平地上是嵌套闭环，遇到建筑和岸线就绕开。
+左边是同一份距离场的原始值（每格到最近障碍/岸边的格心距离），右边是按等间距取出来的等值线。等间距是人工选的，不是数据的分布。</p>
+<div>
+<label>等值间距 <input id="spacing" type="range" min="0.5" max="3" step="0.25" value="1.25"></label>
+<label><input id="ref" type="checkbox"> 参考片配色（浅地白线）</label>
+<label><input id="fill" type="checkbox" checked> 显示地面</label>
+</div>
+<div id="stats"></div>
+<div class="row">
+<figure class="card"><canvas id="left" width="470" height="380"></canvas><figcaption>距离场（深 = 靠边，浅 = 岛心）</figcaption></figure>
+<figure class="card"><canvas id="right" width="470" height="380"></canvas><figcaption>等值线（虚线 = 开放段，实线 = 闭环）</figcaption></figure>
+</div>
+<p><a href="index.html?scene=terrain" target="_top">真实场景</a> · <a href="contour.html" target="_top">不规则网格等值线</a> · <a href="artifacts/coverage/902103473365417984-review.md">逐帧记录</a></p>
+<script type="module">
+import { distanceField, isoContours, evenLevels } from './src/core/distance-isolines.js';
+
+// 手搭一座跟片子里同构的岛：外圈岸线 + 两级台地 + 几栋占地的房子
+const W = 38, H = 30;
+const mask = new Array(W * H).fill(0);
+const inEllipse = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1;
+const blocks = [
+  { x0: 15, y0: 9, x1: 22, y1: 15 },   // 主堡
+  { x0: 8, y0: 14, x1: 12, y1: 19 },   // 西侧房
+  { x0: 24, y0: 16, x1: 28, y1: 20 },  // 东侧房
+  { x0: 13, y0: 21, x1: 16, y1: 23 },  // 南侧小屋
+];
+for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+  const land = inEllipse(x, y, 19, 15, 15, 11) || inEllipse(x, y, 9, 8, 6, 5) || inEllipse(x, y, 29, 22, 6, 5);
+  if (!land) continue;
+  if (blocks.some((b) => x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1)) continue;
+  mask[y * W + x] = 1;
+}
+const field = distanceField(mask, { w: W, h: H });
+const left = document.querySelector('#left'), right = document.querySelector('#right');
+const PAD = 14, cell = Math.min((left.width - PAD * 2) / W, (left.height - PAD * 2) / H);
+const ramp = (t) => {
+  // 深青 → 浅米：靠岸是深，岛心是浅（片子里地面本身就偏浅，深色留给接近障碍的地方）
+  const a = [42, 92, 96], b = [232, 228, 214];
+  return `rgb(${a.map((v, i) => Math.round(v + (b[i] - v) * t)).join(',')})`;
+};
+function draw() {
+  const spacing = Number(document.querySelector('#spacing').value);
+  const refStyle = document.querySelector('#ref').checked;
+  const showGround = document.querySelector('#fill').checked;
+  const levels = evenLevels(field.max, spacing);
+  const out = isoContours(field, { levels });
+  for (const [canvas, mode] of [[left, 'field'], [right, 'iso']]) {
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = refStyle ? '#cfd2cb' : '#c9d8d4';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (!mask[y * W + x]) continue;
+      const px = PAD + x * cell, py = PAD + y * cell;
+      if (!showGround) { ctx.fillStyle = '#f2f1ea'; }
+      else if (mode === 'field') ctx.fillStyle = ramp(Math.min(1, field.dist[y * W + x] / field.max));
+      else ctx.fillStyle = refStyle ? '#e6e4da' : '#dfe7e2';
+      ctx.fillRect(px, py, cell + 0.5, cell + 0.5);
+    }
+    if (mode === 'iso') {
+      for (const L of out) {
+        for (const path of L.paths) {
+          ctx.beginPath();
+          path.points.forEach((p, i) => i ? ctx.lineTo(PAD + p.x * cell + cell / 2, PAD + p.y * cell + cell / 2) : ctx.moveTo(PAD + p.x * cell + cell / 2, PAD + p.y * cell + cell / 2));
+          if (refStyle) { ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.lineWidth = 3.2; ctx.setLineDash(path.closed ? [] : [7, 5]); ctx.shadowColor = 'rgba(120,130,128,.55)'; ctx.shadowBlur = 4; }
+          else { ctx.strokeStyle = path.closed ? '#b4592a' : '#1f6b93'; ctx.lineWidth = 2.4; ctx.setLineDash(path.closed ? [] : [7, 5]); ctx.shadowBlur = 0; }
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+          ctx.setLineDash([]);
+        }
+      }
+    } else {
+      // 左图顺带标出阻塞格，方便对照等值线绕的是谁
+      ctx.strokeStyle = 'rgba(40,60,66,.28)';
+      ctx.lineWidth = 1;
+      for (const b of blocks) ctx.strokeRect(PAD + b.x0 * cell, PAD + b.y0 * cell, (b.x1 - b.x0 + 1) * cell, (b.y1 - b.y0 + 1) * cell);
+    }
+  }
+  const segs = out.reduce((s, L) => s + L.segments.length, 0);
+  const closed = out.reduce((s, L) => s + L.closed, 0);
+  document.querySelector('#stats').textContent =
+    `${W}×${H} 格 · 可走 ${mask.filter(Boolean).length} 格 · 最远距离 ${field.max.toFixed(2)} 格 · 间距 ${spacing.toFixed(2)} → ${levels.length} 层等值 · ${segs} 段 · 闭环 ${closed}`;
+  window.distanceReview = { field, levels, out, spacing, segs, closed, mask, w: W, h: H };
+}
+for (const id of ['spacing', 'ref', 'fill']) document.querySelector('#' + id).oninput = draw;
+draw();
+</script></html>

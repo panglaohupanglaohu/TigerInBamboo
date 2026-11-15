@@ -1,0 +1,842 @@
+[
+  {
+    "shotId": "p02-2",
+    "file": "p02-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -61.646821975131616,
+        -130.07246988105828,
+        -39.847849484966005
+      ],
+      "aim": [
+        -56.9443513011018,
+        -130.26632412778724,
+        -38.92560218032659
+      ],
+      "size": [
+        0.6832240175692874,
+        0.6389194229213047,
+        1.7942025944502689
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p04-2",
+    "file": "p04-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -59.46107853315365,
+        -130.90832747586117,
+        -41.50117836986133
+      ],
+      "aim": [
+        -57.11912717836982,
+        -131.1101769753073,
+        -39.91103824037603
+      ],
+      "size": [
+        0.978098043200518,
+        1.7029194727413994,
+        0.7594088242994275
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p06-2",
+    "file": "p06-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -58.94561854571163,
+        -130.32802541905693,
+        -42.071722447888945
+      ],
+      "aim": [
+        -57.09026858745797,
+        -131.1038448845224,
+        -39.965082780216036
+      ],
+      "size": [
+        0.9287992913114564,
+        1.7131605029138655,
+        0.8607769340446367
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p08-2",
+    "file": "p08-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -61.047909298925596,
+        -131.46581645009272,
+        -40.13163569900034
+      ],
+      "aim": [
+        -57.08877306962742,
+        -131.10500454505166,
+        -39.967684221302484
+      ],
+      "size": [
+        0.9261816015439948,
+        1.7165841211029544,
+        0.8655811073910087
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p10-2",
+    "file": "p10-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -60.41078239920824,
+        -130.54538928149273,
+        -41.337556404209494
+      ],
+      "aim": [
+        -57.08907617679677,
+        -131.10669758551848,
+        -39.96781162512664
+      ],
+      "size": [
+        0.9268060221736221,
+        1.7200242885348587,
+        0.8658162043754842
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p34-3",
+    "file": "p34-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.08157245868251,
+        -131.04348860975813,
+        -43.32125963212532
+      ],
+      "aim": [
+        -55.25956509193535,
+        -131.35473586262484,
+        -40.38537823642696
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p35-3",
+    "file": "p35-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.082676563796696,
+        -131.04555159625653,
+        -43.32222300301095
+      ],
+      "aim": [
+        -55.26066919704954,
+        -131.35679884912324,
+        -40.38634160731259
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p36-3",
+    "file": "p36-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.08286842849637,
+        -131.04591008955563,
+        -43.32239041176874
+      ],
+      "aim": [
+        -55.26086106174921,
+        -131.35715734242234,
+        -40.386509016070384
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p37-3",
+    "file": "p37-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.08290176958183,
+        -131.04597238634992,
+        -43.322419503048735
+      ],
+      "aim": [
+        -55.26089440283467,
+        -131.35721963921662,
+        -40.38653810735038
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p38-3",
+    "file": "p38-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.082907563393746,
+        -131.04598321190952,
+        -43.322424558355195
+      ],
+      "aim": [
+        -55.26090019664659,
+        -131.35723046477622,
+        -40.38654316265684
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p40-3",
+    "file": "p40-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.08290857020726,
+        -131.04598509310975,
+        -43.322425436835715
+      ],
+      "aim": [
+        -55.2609012034601,
+        -131.35723234597646,
+        -40.38654404113736
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p41-3",
+    "file": "p41-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.08290874516522,
+        -131.0459854200133,
+        -43.32242558949277
+      ],
+      "aim": [
+        -55.26090137841806,
+        -131.35723267288,
+        -40.386544193794414
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p42-3",
+    "file": "p42-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "captureClean": true,
+      "cameraFamily": "object-local",
+      "object": "moebius-cyber-ink-tiger",
+      "aimObject": null,
+      "stagedPlayer": false,
+      "holdingLetter": null,
+      "eye": [
+        -58.08290877556837,
+        -131.0459854768206,
+        -43.32242561602055
+      ],
+      "aim": [
+        -55.26090140882121,
+        -131.3572327296873,
+        -40.3865442203222
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p46-1",
+    "file": "p46-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "citadel-new-main-gate",
+      "eye": [
+        74.24354901258124,
+        135.25321990302834,
+        129.4304786735052
+      ],
+      "aim": [
+        73.64470705216675,
+        112.55285904761905,
+        133.93902881252225
+      ],
+      "size": [
+        16.103434248863053,
+        15.000099982605192,
+        12.252871338556986
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p48-2",
+    "file": "p48-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -58.37544287581542,
+        -130.64006682755968,
+        -41.8664307667533
+      ],
+      "aim": [
+        -57.08869579155938,
+        -131.10493470281227,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9260461865089695,
+        1.7165013008143717,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p50-2",
+    "file": "p50-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -62.01638231305081,
+        -130.93728133398056,
+        -40.48838665405247
+      ],
+      "aim": [
+        -57.08905649250223,
+        -131.10667351090044,
+        -39.96781816811272
+      ],
+      "size": [
+        0.926767588394668,
+        1.7199789169907262,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p52-2",
+    "file": "p52-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -59.64304555710457,
+        -130.96576769453296,
+        -41.054798374904365
+      ],
+      "aim": [
+        -57.08921641663841,
+        -131.1065893950945,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9270874366670228,
+        1.7198106853788033,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p53-1",
+    "file": "p53-1.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -62.40212998048724,
+        -129.74997948205203,
+        -44.99793923819751
+      ],
+      "aim": [
+        -57.08869579155938,
+        -131.10456397193133,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9260461865089695,
+        1.715759839052481,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p53-2",
+    "file": "p53-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -65.02298723421946,
+        -130.32701585594677,
+        -40.17208357149991
+      ],
+      "aim": [
+        -57.08869579155938,
+        -131.1034789573947,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9260461865089695,
+        1.713589809979311,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p53-3",
+    "file": "p53-3.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -63.58355249107182,
+        -131.3975925988379,
+        -42.808069426650164
+      ],
+      "aim": [
+        -57.08869579155938,
+        -131.10466045451966,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9260461865089695,
+        1.715952804229147,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  },
+  {
+    "shotId": "p54-2",
+    "file": "p54-2.png",
+    "ok": true,
+    "source": "canvas-todataurl",
+    "captureClean": true,
+    "hudCheck": {
+      "ok": true,
+      "captureMode": true,
+      "classClean": true,
+      "visibleBanned": []
+    },
+    "camera": {
+      "object": "player-courier-root",
+      "eye": [
+        -59.11060931466038,
+        -130.375895459766,
+        -41.68750305970529
+      ],
+      "aim": [
+        -57.08869579155938,
+        -131.10635735386424,
+        -39.96781816811272
+      ],
+      "size": [
+        0.9260461865089695,
+        1.7193466029183355,
+        0.8658282776161315
+      ]
+    },
+    "rescue": {
+      "version": 1,
+      "chapter": 5,
+      "rescuedFox": true,
+      "rescuedTiger": true,
+      "protection": 0,
+      "cooldown": 0,
+      "target": "citadel"
+    }
+  }
+]

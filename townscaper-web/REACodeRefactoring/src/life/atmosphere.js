@@ -18,7 +18,8 @@
  */
 
 import * as THREE from 'three';
-import { fogEnvelopeGLSL } from '../core/fog-envelope.js';
+import { fogEnvelopeGLSL, makeFogWisps } from '../core/fog-envelope.js';
+import { traceWind, flagRibbon, packWindField, windFieldGLSL, bakeSoftNormals, particleContactAlpha } from '../core/wind-flow.js';
 import { makeWorldProbes } from '../core/world-probes.js';
 import { pointInQuad } from '../core/spatial.js';
 
@@ -45,7 +46,21 @@ export class Atmosphere {
     const sg = new THREE.BufferGeometry();
     this.snowPos = new Float32Array(this.snowN * 3);
     sg.setAttribute('position', new THREE.BufferAttribute(this.snowPos, 3));
-    this.snow = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xffffff, size: 0.055, sizeAttenuation: true, transparent: true, opacity: 0.9, depthWrite: false }));
+    // 943230624369868800 + 823848950553780226 (REACode engine/snow.js): round soft flakes,
+    // per-flake size, contact AO from the actual World support below (not column tops).
+    this.snowAlpha = new Float32Array(this.snowN).fill(.6);
+    this.snowSize = Float32Array.from({ length: this.snowN }, (_, k) => .55 + .9 * ((k * .618034) % 1));
+    sg.setAttribute('aAlpha', new THREE.BufferAttribute(this.snowAlpha, 1));
+    sg.setAttribute('aSize', new THREE.BufferAttribute(this.snowSize, 1));
+    this.snow = new THREE.Points(sg, new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, uniforms: { uColor: { value: new THREE.Color(0xf7fbff) } },
+      vertexShader: /* glsl */ `attribute float aAlpha; attribute float aSize; varying float vAlpha;
+        void main() { vAlpha = aAlpha; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = aSize * 42.0 / max(.001, -mv.z); gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: /* glsl */ `uniform vec3 uColor; varying float vAlpha;
+        void main() { float r = length(gl_PointCoord - .5); if (r > .5) discard; gl_FragColor = vec4(uColor, vAlpha * smoothstep(.5, .28, r));
+          #include <colorspace_fragment>
+        }`,
+    }));
     this.snow.visible = false;
     this.snow.frustumCulled = false;
     this.group.add(this.snow);
@@ -92,11 +107,52 @@ export class Atmosphere {
     this.fog.frustumCulled = false;
     this.fog.visible = false;
     this.group.add(this.fog);
+
+    // 906207980802252801 / REACode engine/fog.js: wispy sheets near the water, advected by
+    // the shared wind and steered around World voxels; depthTest lets the island hide them.
+    this.fogWisps = makeFogWisps();
+    const wg = new THREE.InstancedBufferGeometry().copy(new THREE.PlaneGeometry(1, 1));
+    wg.instanceCount = this.fogWisps.wisps.length;
+    this.wispData = new Float32Array(this.fogWisps.wisps.length * 6);
+    this.wispAttr = new THREE.InstancedInterleavedBuffer(this.wispData, 6);
+    wg.setAttribute('aCenter', new THREE.InterleavedBufferAttribute(this.wispAttr, 3, 0));
+    wg.setAttribute('aShape', new THREE.InterleavedBufferAttribute(this.wispAttr, 3, 3));
+    this.fogSheets = new THREE.Mesh(wg, new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, depthTest: true, side: THREE.DoubleSide,
+      uniforms: { uTime, uColor: this.uFog, uOpacity: this.fogOpacity, uBand: { value: 1.35 } },
+      vertexShader: /* glsl */ `attribute vec3 aCenter; attribute vec3 aShape; varying vec2 vUv; varying vec3 vWorld; varying float vSeed;
+        void main() { vUv = uv; vSeed = aShape.z; vec3 to = cameraPosition - aCenter; vec2 f = normalize(to.xz + vec2(1e-5, 0.));
+          vec3 right = vec3(f.y, 0., -f.x); vec3 p = aCenter + right * position.x * aShape.x + vec3(0., position.y * aShape.y, 0.);
+          vWorld = p; gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.); }`,
+      fragmentShader: /* glsl */ `uniform float uTime; uniform vec3 uColor; uniform float uOpacity; uniform float uBand;
+        varying vec2 vUv; varying vec3 vWorld; varying float vSeed;
+        float h(vec2 p) { p = fract(p * vec2(123.34, 456.21) + vSeed); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+        float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
+        void main() { float soft = 1. - smoothstep(.55, 1., length(vUv - .5) * 2.);
+          vec2 p = vec2(vUv.x * 2.2 + uTime * .05, vUv.y * 4.5) + vSeed * 7.;
+          float wisp = smoothstep(.42, .78, n(p) * .55 + n(p * 2.07 + 11.3) * .3 + n(p * 4.13 + 27.7) * .15);
+          float band = 1. - smoothstep(uBand, uBand * 2.4, vWorld.y);
+          float near = smoothstep(3., 9., distance(cameraPosition, vWorld));
+          float a = soft * (.25 + .75 * wisp) * band * near * uOpacity * .12;
+          if (a < .002) discard; gl_FragColor = vec4(uColor, a);
+          #include <colorspace_fragment>
+        }`,
+    }));
+    this.fogSheets.frustumCulled = false;
+    this.fogSheets.visible = false;
+    this.fogSheets.renderOrder = 8;
+    this.group.add(this.fogSheets);
+    this.#writeWisps();
+  }
+
+  #writeWisps() {
+    this.fogWisps.wisps.forEach((m, k) => this.wispData.set([m.x, m.y, m.z, m.w, m.h, m.seed], k * 6));
+    this.wispAttr.needsUpdate = true;
   }
 
   set showArrows(on) { this.arrows.visible = on; }
   set showSnow(on) { this.snow.visible = on; if (on) this.#seedSnow(); }
-  set showFog(on) { this.fog.visible = on; }
+  set showFog(on) { this.fog.visible = on; this.fogSheets.visible = on; }
   setFogAppearance({opacity=this.fogOpacity.value,speed=this.fogSpeed.value}={}) {
     if(!Number.isFinite(opacity)||opacity<0||opacity>1||!Number.isFinite(speed)||speed<0||speed>2)throw new RangeError('Fog appearance');
     this.fogOpacity.value=opacity;this.fogSpeed.value=speed;
@@ -175,6 +231,11 @@ export class Atmosphere {
     this.#buildArrows();
     const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2, R = Math.max(maxX - minX, maxZ - minZ) / 2;
     this.fogParams.value.set(cx, cz, R + 2.5, R + 22);
+    this.fogWisps = makeFogWisps({ radius: R + 22, inner: R + 1, center: [cx, cz], seed: 5 });
+    for (const m of this.fogWisps.wisps) while (this.probes.occupied(m.x, m.y, m.z)) m.y += this.L;
+    this.#writeWisps();
+    this.windPacked?.texture.dispose();
+    this.windPacked = null;
     if (this.snow.visible) this.#seedSnow();
   }
 
@@ -194,6 +255,29 @@ export class Atmosphere {
       return at(l) * (1 - tl) + at(Math.min(f.LV - 1, l + 1)) * tl;
     };
     return out.set(g(f.vx), g(f.vy), g(f.vz));
+  }
+
+  /** 926890207298899969: virtual wind particle through the shared field and World voxels. */
+  trace(start, opts) { if (!this.probes) throw new Error('Atmosphere not built'); return traceWind((x, y, z) => this.sample(x, y, z), this.probes, start, opts); }
+  /** Flag cloth shape from the traced curve (geometry rows; Decor flags still use the shader wave). */
+  flagCurve(pole, opts = {}) { return flagRibbon(this.trace(pole, { steps: opts.steps ?? 10, dt: opts.dt ?? .06 }).points, opts); }
+  /** 926903893866541057 "used by all kinds of systems, including shaders": the same field as a texture. */
+  windTexture() {
+    if (!this.field) throw new Error('Atmosphere not built');
+    if (!this.windPacked || this.windPacked.version !== this.field) {
+      const p = packWindField(this.field), tex = new THREE.DataTexture(p.data, p.width, p.height, THREE.RGBAFormat, THREE.FloatType);
+      tex.magFilter = tex.minFilter = THREE.LinearFilter; tex.needsUpdate = true;
+      this.windPacked?.texture.dispose();
+      this.windPacked = { version: this.field, packed: p, texture: tex, uniforms: { uWindField: { value: tex }, uWindGrid: { value: new THREE.Vector4(p.x0, p.z0, RES, this.L) }, uWindDims: { value: new THREE.Vector3(p.W, p.H, p.LV) } } };
+    }
+    return { ...this.windPacked, glsl: windFieldGLSL };
+  }
+  /** 931196707236392960 soft normals: write World-occupancy normals into a non-indexed mesh, keeping hard edges. */
+  bakeSoftNormals(geometry, opts) {
+    if (!this.probes) throw new Error('Atmosphere not built');
+    const pos = geometry.getAttribute('position'), nrm = geometry.getAttribute('normal');
+    const r = bakeSoftNormals(pos.array, nrm.array, (x, y, z) => this.probes.normalAt(x, y, z), opts);
+    nrm.needsUpdate = true; return r;
   }
 
   groundAt(x, z) {
@@ -246,8 +330,12 @@ export class Atmosphere {
   #seedSnow() { for (let k = 0; k < this.snowN; k++) this.#spawn(k, true); }
 
   update(dt) {
-    if (!this.snow.visible || !this.field) return;
     if (!Number.isFinite(dt) || dt < 0) throw new RangeError('Snow timestep must be finite and nonnegative');
+    if (this.fogSheets.visible && this.field && dt > 0) {
+      this.fogWisps.step(Math.min(dt, .05), (x, y, z) => this.sample(x, y, z), (x, y, z) => this.probes.occupied(x, y, z), this.uTime.value);
+      this.#writeWisps();
+    }
+    if (!this.snow.visible || !this.field) return;
     if (dt === 0) return;
     dt = Math.min(dt, 0.05);
     const v = new THREE.Vector3(), f = this.field, P = this.snowPos, t = this.uTime.value;
@@ -260,7 +348,10 @@ export class Atmosphere {
       // Endpoint collision is a voxel approximation, not a swept deformed mesh.
       if (ny < 0.02 || nx < f.x0 || nz < f.z0 || nx > f.x0 + f.W * RES || nz > f.z0 + f.H * RES || this.probes.occupied(nx, ny, nz)) { this.#spawn(k, false); continue; }
       P[k * 3] = nx; P[k * 3 + 1] = ny; P[k * 3 + 2] = nz;
+      const sup = this.probes.supportBelow(nx, nz, ny), half = Math.max(f.W, f.H) * RES * .5;
+      this.snowAlpha[k] = particleContactAlpha(sup ? ny - sup.y : null, Math.hypot(nx - (f.x0 + f.W * RES / 2), nz - (f.z0 + f.H * RES / 2)) / half);
     }
     this.snow.geometry.attributes.position.needsUpdate = true;
+    this.snow.geometry.attributes.aAlpha.needsUpdate = true;
   }
 }

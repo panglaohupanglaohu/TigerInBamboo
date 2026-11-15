@@ -1,0 +1,47 @@
+{
+  "on": {
+    "crownOn": true,
+    "stats": {
+      "cards": 18,
+      "crown": 4,
+      "lifeCrown": 7.126,
+      "lifeShaft": 5.286,
+      "lifeRatio": 1.348,
+      "vyCrown": 0.7272,
+      "vyShaft": 0.6189,
+      "vyRatio": 1.175,
+      "lifeMulAvg": 1.45,
+      "vyMulAvg": 1.18,
+      "style": {
+        "scale": 1.24,
+        "lifeMul": 1.45,
+        "riseMul": 1.18
+      }
+    },
+    "cards": 18,
+    "crownCount": 4
+  },
+  "off": {
+    "crownOn": false,
+    "stats": {
+      "cards": 18,
+      "crown": 0,
+      "lifeCrown": 0,
+      "lifeShaft": 5.203,
+      "lifeRatio": 0,
+      "vyCrown": 0,
+      "vyShaft": 0.6183,
+      "vyRatio": 0,
+      "lifeMulAvg": 0,
+      "vyMulAvg": 0,
+      "style": {
+        "scale": 1.24,
+        "lifeMul": 1.45,
+        "riseMul": 1.18
+      }
+    },
+    "cards": 18,
+    "crownCount": 0
+  },
+  "errors": []
+}

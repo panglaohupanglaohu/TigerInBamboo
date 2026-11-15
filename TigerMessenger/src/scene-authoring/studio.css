@@ -169,3 +169,77 @@ body[data-scene-edit=view] .viewer-side .studio-docks{display:none}
 .section-title .cap-scan{margin-left:auto;font-size:12px;padding:3px 9px;border-radius:7px;border:1px solid rgba(232,180,107,.55);background:transparent;color:#e8b46b;cursor:pointer;white-space:nowrap}
 .section-title .cap-scan:disabled{opacity:.6;cursor:wait}
 .cap-scan-note{font-size:12px;line-height:1.5;margin:4px 0 8px;color:#bfe0c8}
+
+/* 执行进度：正在跑的能力高亮，跑完标 ✓ / ✗ */
+.run-progress{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:4px 0 8px;padding:7px 10px;border:1px solid rgba(232,180,107,.35);border-radius:10px;background:rgba(232,180,107,.06);font-size:12px}
+.run-step{padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14);color:#9fb1ad;white-space:nowrap}
+.run-step.stage{border-style:dashed}
+.run-step.active{border-color:#ffd36b;color:#1b1a12;background:#ffd36b;font-weight:600;animation:run-pulse 1s ease-in-out infinite}
+.run-step.done,.run-step.pass{border-color:rgba(127,214,160,.6);color:#9fe0b8}
+.run-step.warn{border-color:#e8b46b;color:#e8b46b}
+.run-step.fail{border-color:#ff7a7a;color:#ffb0b0;background:rgba(255,90,90,.12)}
+.run-phase{margin-left:6px;color:#ffd36b}.run-phase.pass{color:#9fe0b8}.run-phase.fail,.run-phase.error{color:#ff9a9a}
+.run-note{flex-basis:100%;color:#ffb0b0}
+.tier-node .run-badge{margin-left:auto;font-size:11px;white-space:nowrap;color:#9fb1ad}
+.tier-node .run-badge:empty{display:none}
+.tier-node.run-queued{opacity:.7}
+.tier-node.run-active{outline:2px solid #ffd36b;box-shadow:0 0 0 4px rgba(255,211,107,.18),0 0 18px rgba(255,211,107,.35);animation:run-pulse 1s ease-in-out infinite}
+.tier-node.run-active .run-badge{color:#ffd36b;font-weight:600}
+.tier-node.run-done,.tier-node.run-pass{outline:1px solid rgba(127,214,160,.65)}
+.tier-node.run-pass .run-badge,.tier-node.run-done .run-badge{color:#9fe0b8}
+.tier-node.run-warn{outline:1px solid #e8b46b}.tier-node.run-warn .run-badge{color:#e8b46b}
+.tier-node.run-fail{outline:2px solid #ff7a7a;box-shadow:0 0 0 4px rgba(255,90,90,.15)}
+.tier-node.run-fail .run-badge{color:#ff9a9a;font-weight:600}
+.tier-node .run-why{display:block;color:#ffb0b0;margin-top:4px;line-height:1.4}
+.tier-node .param-warn{display:block;color:#e8b46b;margin:2px 0 4px;line-height:1.4}
+.tier-lane.run-lane>header{color:#ffd36b}
+@keyframes run-pulse{50%{box-shadow:0 0 0 6px rgba(255,211,107,.08),0 0 26px rgba(255,211,107,.5)}}
+@media (prefers-reduced-motion:reduce){.tier-node.run-active,.run-step.active{animation:none}}
+/* 2026-11-08 建造编辑菜单重新规划：实景右侧只有 340px，「建造编辑」与「场景创作」两张卡片改为上下排（原来左右并排，建造菜单只剩 ~80px，字被挤成一列）。
+   菜单自上而下：① 构建对象 + 开始/结束建造（一行）② 快捷操作图标（一行）③ 建造工具（一行）④ 色板（8 格一行）⑤ 存档（「保存菜单」点开才显示）。 */
+.viewer-side .studio-docks{grid-template-columns:1fr!important}
+.viewer-side #editor-dock[open]>summary{margin-bottom:8px}
+#editor-controls #morris-townscaper-hud{gap:8px!important}
+#editor-controls #morris-townscaper{order:1;display:flex!important;flex-wrap:wrap;align-items:center;gap:6px!important;padding:10px!important}
+#editor-controls #morris-townscaper>label{flex:1 1 100%;display:flex!important;align-items:center;gap:8px;margin:0!important;white-space:nowrap;font-size:12px}
+#editor-controls #morris-townscaper>label select{flex:1 1 auto;min-width:0;max-width:none!important}
+#editor-controls #morris-townscaper>button{margin:0!important;white-space:nowrap;flex:0 0 auto;padding:6px 12px!important;border-radius:6px;background:#263b3c;color:#e4ece8;border:1px solid #3b4e50;font-size:12px;cursor:pointer}
+#editor-controls #morris-townscaper>button:first-of-type{flex:1 1 auto}
+#editor-controls #morris-townscaper>div{flex:1 1 100%;min-width:0;font-size:11.5px;line-height:1.5}
+#editor-controls #morris-townscaper>div button{white-space:nowrap}
+#editor-controls #morris-townscaper>div input[type=text]{width:100%!important}
+#editor-controls #morris-townscaper-fold{display:none!important}
+#editor-controls #morris-town-topright{order:2;display:flex!important;flex-direction:row!important;flex-wrap:wrap!important;justify-content:flex-start;align-self:stretch!important;gap:4px!important}
+#editor-controls #morris-town-tools{order:3;flex-wrap:wrap!important;align-self:stretch;justify-content:flex-start}
+#editor-controls #morris-town-palette{order:4;display:grid!important;grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:6px!important;justify-items:center}
+#editor-controls #morris-town-palette .swatch{width:26px!important;height:26px!important}
+#editor-controls #morris-town-toast,#editor-controls #morris-town-helpcard{order:9}
+.viewer-side #editor-controls #morris-town-topright{gap:2px!important;padding:6px!important}.viewer-side #editor-controls #morris-town-topright button{width:27px!important;height:27px!important;font-size:15px!important}
+/* Reviewed backlog: keep source prose and paths readable at desktop and phone widths. */
+#learning-workshop{overflow-wrap:anywhere;min-width:0}
+.learning-tabs{flex-wrap:wrap}
+#learning-progress .progress-folders>[data-progress-section=next][open]{grid-column:1/-1}
+#learning-progress [data-backlog-stage]{border-top:1px solid var(--line);padding:8px 0}
+#learning-progress [data-backlog-id]{margin:5px 0;padding:6px 10px;border-left:2px solid var(--line)}
+#learning-progress [data-backlog-state=closed]{border-left-color:var(--accent)}
+#learning-progress [data-backlog-id]>p{margin:6px 0}
+#learning-progress [data-backlog-id] a{display:inline-block;margin-right:8px;max-width:100%;overflow-wrap:anywhere}
+@media(max-width:700px){.learning-grid{grid-template-columns:minmax(0,1fr)}}
+.refactor-file-scroll{overflow:auto;max-height:72vh;border:1px solid var(--line);margin-top:12px}
+.refactor-file-table{width:100%;border-collapse:collapse;min-width:800px;font-size:12px}
+.refactor-file-table th{position:sticky;top:0;background:var(--panel);text-align:left;z-index:1}
+.refactor-file-table td,.refactor-file-table th{padding:10px;border:1px solid var(--line);vertical-align:top}
+.refactor-file-table a,.refactor-file-table small{display:block;overflow-wrap:anywhere;max-width:360px;margin-bottom:5px}
+.refactor-file-table th:first-child{min-width:180px}
+
+/* 能力库 · 能力线视图（lineage-r1）：按作者发布时间排成 A → A+ → … */
+.cap-view{margin-bottom:5px}.cap-view button.on{background:#8fd0c4;border-color:#8fd0c4;color:#12201f}
+.cap-lineage-note{font-size:11px;margin:2px 0 6px}.cap-lineage-open{width:100%;font-size:11px;padding:5px 8px;margin-bottom:8px;text-align:left;border-style:dashed}
+.cap-line{border-top:1px solid var(--line);padding:2px 0}.cap-line>summary{display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:6px;align-items:baseline;cursor:pointer;padding:6px 2px;list-style:none}.cap-line>summary::-webkit-details-marker{display:none}
+.cap-line>summary b{font-size:12.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cap-line>summary small{font-size:10.5px;color:var(--muted);white-space:nowrap}.cap-line-year{font-size:10.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.cap-line[open]>summary b{color:var(--accent)}.cap-line[open]{padding-bottom:10px}
+.cap-line-rail{display:flex;flex-wrap:wrap;gap:3px;margin:2px 0 6px}.cap-line-rail .gen{font-size:10px;line-height:1;padding:3px 5px;border-radius:3px;border:1px solid #3b4e50;color:var(--muted);cursor:help}
+.cap-line-rail .gen.state-complete{background:#255a63;border-color:#3f9ca9;color:#e4ece8}.cap-line-rail .gen.state-building{background:#4d4022;border-color:#d9a441;color:#f0dcae}
+.cap-line-rail .gen.here{box-shadow:0 2px 0 #e4ece8}.cap-line-rail .gen.next{outline:1.5px solid #e0603f;outline-offset:1px}
+.cap-line-direction{font-size:11px;line-height:1.5;color:var(--muted);margin:0 0 6px}.cap-line>small{display:block;font-size:10.5px;margin:4px 0}
+.cap-line-next{width:100%;font-size:11px;padding:5px 8px;margin-top:6px;text-align:left;border-color:#7a4a3a;color:#f1b9a2}.cap-line-next:hover{border-color:#e0603f}

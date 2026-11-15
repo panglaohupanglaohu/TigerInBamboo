@@ -1,89 +1,62 @@
-# CartonBook QA 清单（自测记录）
+# CartonBook QA · 书店镇《四盏灯，一封信》
 
-> 时区：Asia/Shanghai（UTC+8）  
-> 本轮执行时间：2026-11-04 09:17:39 Asia/Shanghai  
-> 静态服：`python3 -m http.server 8787 --bind 127.0.0.1`（CartonBook 根）  
-> 证明方式：`curl` HTTP 状态码；**未**凭肉眼声称图片可用
+验收时间：2026-11-07（Asia/Shanghai）  
+成品：http://127.0.0.1:8787/chapters/bookshop-letter/book.html  
+实景：http://localhost:8931/TigerMessenger/
 
-图例：`PASS` = 通过 · `FAIL` = 失败 · `SKIP` = 本轮不做 · `WARN` = 已知限制
+## A. 故事、物件与页面
 
----
-
-## A. 文档与契约
-
-| # | 检查项 | 结果 | 说明 |
-|---|---|---|---|
-| A1 | `docs/DESIGN.md` 存在且可 HTTP 打开 | PASS | `200 http://127.0.0.1:8787/docs/DESIGN.md` |
-| A2 | `docs/PLAN.md` 指向 DESIGN | PASS | PLAN 文首增加 DESIGN 链接 |
-| A3 | README 指向 DESIGN / PLAN / QA | PASS | 已更新 |
-| A4 | 硬约束写明：无 T2I/I2V；HUD-off 正式拍摄；fixtures 仅排版 | PASS | DESIGN §1.2 / §7 |
-
-## B. export 路径改写
-
-| # | 检查项 | 结果 | 说明 |
-|---|---|---|---|
-| B1 | `exportBook` 将 `(?:\.\./)+shots/` 改写为 `shots/` | PASS | `src/exportBook.mjs` |
-| B2 | 写盘前断言无残留 `../shots/` | PASS | 抛错保护已加 |
-| B3 | 重新 `node src/cli.mjs export --recipe recipes/bookshop-letter.sample.json` | PASS | 退出码 0 |
-| B4 | 生成的 `book.html` 含 `../shots/` 次数 | PASS | **0** |
-| B5 | 全部 `img src` 为 `shots/*.png` | PASS | cover + s01…s10 共 11 张 |
-
-## C. HTTP 200 证明（curl）
-
-| # | URL | 结果 |
+| 检查 | 结果 | 证据 |
 |---|---|---|
-| C1 | `http://127.0.0.1:8787/` | PASS 200 |
-| C2 | `http://127.0.0.1:8787/web/` | PASS 200 |
-| C3 | `http://127.0.0.1:8787/viewer/` | PASS 200 |
-| C4 | `http://127.0.0.1:8787/chapters/bookshop-letter/book.html` | PASS 200 |
-| C5 | `http://127.0.0.1:8787/layouts/edena.css` | PASS 200 |
-| C6 | `http://127.0.0.1:8787/chapters/bookshop-letter/shots/cover.png` | PASS 200 |
-| C7 | `…/shots/s01.png` … `s10.png`（10 张） | PASS 各 200 |
-| C8 | 从 served `book.html` 抽出的每个 `src="shots/…"` 再 curl | PASS 全 200 |
-| C9 | served `book.html` 不含 `../shots/` | PASS |
+| 舰队明确要求交出藏书 | PASS | 序页第二段与 s05 对白，第三次钟响为时限 |
+| 四家书店共同作出选择 | PASS | 《联藏约》四店联署；s06/s07/s08 对应三家工坊，Hard To Find 最后落印 |
+| 取信送信推动主冲突 | PASS | s09 取信 → s18 折返 → 三店联署 → s11 到港 → s23 DUKE 离岸 |
+| 可拍物件覆盖 | PASS | `BOOKSHOP-OBJECT-INVENTORY.md`；四店、三机器人、港、双货船、飞艇、廊灯、招牌、舰队均入场 |
+| 完整故事位于书内序页 | PASS | 第一内跨页左叶，无截断、无溢出 |
+| 双页封面 | PASS | 一张连续实景横跨两个 `.cover-leaf`，中央折缝可见 |
+| 每个书叶独立布局 | PASS | 序页 + 7 个故事叶；establish / vertical / reply / detail / assault / harbor / coda |
+| 全镜头进入正式书 | PASS | cover + s01–s23 共 24 张，无漏用、无重复占格 |
 
-**汇总：本轮列出的全部 URL = HTTP 200（`ALL_LISTED_URLS_HTTP_200`）。**
+## B. 实拍真实性与无 HUD
 
-## D. Viewer / Web 首页
+| 检查 | 结果 | 证据 |
+|---|---|---|
+| 正式图只来自 8931 | PASS | manifest `port=8931`、`via=direct`、每镜 `source=canvas-todataurl` |
+| 真实战斗触发 | PASS | 拍摄日志含 `batianFleet.start('bookshop')`、真实 ground assault 与 retreat |
+| 无菜单/任务栏/小地图/FPS/提示/遥控 | PASS | 每镜 `hudCheck.ok=true`、`visibleBanned=[]`；联系表和合成页肉眼复核 |
+| 无黑帧、空天空、主体缺失 | PASS | 24 张联系表逐张验收；s19/s23 初版不合格，已用补拍替换 |
+| 机器人肩后旗舰 | PASS | s19 使用 robot-b：维护长枪前景、旗舰中景、书店后景 |
+| DUKE 交付地点可读 | PASS | s23 使用 duke-b：船体、跳板、港灯清晰 |
+| 视觉验收签署 | PASS | `manifest.visualReview.status=approved`，`approvedShotIds` 覆盖 24 镜 |
 
-| # | 检查项 | 结果 | 说明 |
-|---|---|---|---|
-| D1 | `web/` 与 `viewer/` 导出时同步更新 | PASS | export 已写 |
-| D2 | 章节卡片显示 fixtures 徽章（非真截屏冒充） | PASS | manifest `realCapture=false` →「样章/fixtures（仅排版）」 |
-| D3 | 根 `index.html` 跳转 `web/` | PASS | meta refresh |
+联系表：`artifacts/bookshop-review/contact-final.png`  
+补拍对照：`artifacts/bookshop-review/pickup-probes/contact.png`
 
-## E. 捕获 / HUD（正式画面）
+## C. 流水线安全回归
 
-> 截屏无菜单说明见 [`CAPTURE-CLEAN.md`](./CAPTURE-CLEAN.md)：正式画面必须 `setCaptureMode`；fixtures 仅排版自测。
+| 检查 | 结果 | 说明 |
+|---|---|---|
+| Playwright 缺失不得回退 fixtures | PASS | 正式 capture 直接失败 |
+| 失败不得覆盖上一版正式图 | PASS | live 先写暂存区，全部通过后才提交；首轮采样误报时正式图保持不变 |
+| 黑帧检测采样时机 | PASS | 主动 render 后在 `toDataURL` 前采样；单镜 probe mean=159.62、deviation=49.34 |
+| `capture` 重新读取 recipe | PASS | 不再复用陈旧 plan |
+| `layout-only` 不覆盖正式章 | PASS | 实际写入 `artifacts/layout-only/bookshop-letter-preview/` |
+| 正式导出拦截未肉眼验收 | PASS | selfTest 断言 pending 状态抛错 |
+| 旧页面不得混入新书 | PASS | export 只按本次 plan 页面清单读取 |
+| 图片路径 | PASS | `book.html` 无 `../shots/`，24 个 `shots/*.png` 均存在且浏览器加载成功 |
+| 导航去重 | PASS | 上一跨页、下一跨页各 1 个按钮 |
+| 镜头族默认值 | PASS | macro dist=4.5；airshipPilot FOV=82 |
 
-| # | 检查项 | 结果 | 说明 |
-|---|---|---|---|
-| E1 | 样章 `manifest.realCapture` | WARN | `false`（fixtures；仅排版样章） |
-| E2 | fixtures 来源为本游戏验收图 | PASS | `chapters/_fixtures/` + manifest `source: fixture` |
-| E3 | 正式拍摄前隐藏 HUD | PASS | 策略 1：`__tm.setCaptureMode` + `?cartonCapture=1`（见 [`CAPTURE-CLEAN.md`](./CAPTURE-CLEAN.md)）；策略 2：screenshot clip 到 canvas |
-| E4 | 本轮真截屏重跑 | SKIP | 样章阶段允许 fixtures；下一里程碑 M3 |
+## D. 浏览器与命令结果
 
-## F. 回归命令备忘
+- `npm test`：PASS。24 镜、9 个书叶、5 个翻页 section，覆盖双页封面、视觉门禁、路径与导航。
+- `artifacts/bookshop-review/check-pipeline.mjs`：PASS。
+- `artifacts/bookshop-review/verify-book.mjs`：PASS。双页封面 + 4 个内跨页，24 张独立实拍全部加载，无 JS 错误。
+- 8931 游戏与 8787 成品：HTTP 200。
+- 最终合成页 `page-0.png` 至 `page-4.png` 已逐张查看：未见文字溢出、菜单残留或主体被排版裁掉。
 
-```bash
-export PATH="/Users/panglaohu/.workbuddy/binaries/node/versions/22.22.2-6/bin:$PATH"
-cd /Users/panglaohu/Downloads/TigerInBamboo/CartonBook
-node src/cli.mjs export --recipe recipes/bookshop-letter.sample.json
-python3 -m http.server 8787 --bind 127.0.0.1
-# 另开终端：
-curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8787/chapters/bookshop-letter/book.html
-curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8787/chapters/bookshop-letter/shots/cover.png
-```
+## E. 边界与诚实说明
 
----
-
-## 剩余缺口（诚实列表）
-
-1. **真截屏尚未稳定交付**：当前样章为 fixtures（`realCapture=false`）。  
-2. **正式分镜仍需真截屏重跑**：capture-clean 已接线（见 CAPTURE-CLEAN.md）；bookshop 样章仍为 fixtures，待 live 重拍。  
-3. **Web 控制台未做**：仅有静态首页 + CLI（DESIGN M4）。  
-4. **浏览器视觉回归未自动化**：本轮以 curl 200 为准，未截浏览器合成图。
-
----
-
-*QA 记录结束 · 无 curl 200 不得宣称图片可用*
+1. 《联藏约》、四店签署和船长对白是漫画叙事；游戏提供信使持信视觉、场景与真实舰队战斗，不声称新增了这些任务日志。
+2. 当前交付为 HTML 翻页书与打印 CSS，没有单独声称生成 PDF。
+3. 审查日志、补拍候选和独立 fixtures 预览保留在 `artifacts/`，不属于正式画面来源。

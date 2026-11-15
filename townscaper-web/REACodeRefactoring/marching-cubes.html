@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" href="data:," />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>不规则网格 marching cubes / squares · REACode 重构版（第 56 批 C06）</title>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; font: 13px/1.5 system-ui, "PingFang SC", sans-serif; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  #ui { position: fixed; left: 14px; top: 14px; width: 350px; background: rgba(255,255,255,.92); color: #1d2f36; border-radius: 12px; padding: 10px 12px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  #ui h1 { font-size: 15px; margin: 0 0 4px; } #ui p { margin: 3px 0; font-size: 12px; color: #4d6369; }
+  #ui .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 6px 0; }
+  #ui button, #ui select { font: inherit; font-size: 12px; border: 1px solid #c9d8d7; border-radius: 7px; background: #fff; padding: 3px 8px; cursor: pointer; }
+  #stat { font-size: 11.5px; color: #2f7f8a; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <h1>不规则网格上的等值面</h1>
+  <p><b>cubes</b>：1163836000688365571「Basic marching cubes on my funky grid」——每格 × 每层是不规则棱柱，角点标量逐个点亮，等值面只在格边交点上。<br><b>slab</b>：1120036868966502401「marching squares on irregular quadrilateral grids」——在画出的四边区域里铺不规则四边格，角点逐个变实，同一函数只开一层 = 挤出的 marching squares 厚板。</p>
+  <div class="row">模式 <select id="mode"><option value="cubes">cubes（三维）</option><option value="slab">slab（区域 + 厚板）</option></select> <button id="play">▶ 生长</button></div>
+  <div class="row">进度 <input id="t" type="range" min="0" max="1" step="0.001" value="1" style="width:210px" /></div>
+  <div id="stat"></div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { buildQuadGrid, relaxPolygons } from './src/core/grid.js';
+import { marchIrregular, meshVolume, growthOrder, quadRegionGrid } from './src/core/marching-cubes.js';
+
+const q = new URLSearchParams(location.search);
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(35, 1, .1, 200);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x555555, 1.3));
+const sun = new THREE.DirectionalLight(0xffffff, 1.7); sun.position.set(-5, 10, 6); scene.add(sun);
+const modeEl = document.getElementById('mode'), tEl = document.getElementById('t'), statEl = document.getElementById('stat');
+modeEl.value = q.get('mode') === 'slab' ? 'slab' : 'cubes';
+let cells, levels, order, wire, solid, t = Number(q.get('t') ?? 1), playing = !!q.get('play'), lastK = -1, cfg;
+
+function setup() {
+  for (const o of [wire, solid]) if (o) { scene.remove(o); o.geometry.dispose(); }
+  solid = null; lastK = -1;
+  if (modeEl.value === 'cubes') {
+    const g = buildQuadGrid({ radius: 7, hexSize: 1, seed: 11 });
+    cells = g.cells; levels = 5;
+    const start = g.verts.reduce((b, v) => Math.hypot(v.x - 1.5, v.z - 2) < Math.hypot(b.x - 1.5, b.z - 2) ? v : b);
+    order = growthOrder(cells, { levels, start: start.id, count: 420, seed: 9, upBias: .5 });
+    cfg = { levelHeight: .62, color: 0xe2332f, bg: 0x4a4a4a, wire: 0x2c2c2c, minLevel: 1 };
+    camera.position.set(9, 13, 15);
+  } else {
+    const g = quadRegionGrid([[-5, -4], [5, -4.5], [4.5, 4], [-4.5, 4.2]], { nu: 9, nv: 8, relaxPolygons, seed: 4 });
+    cells = g.cells; levels = 3;
+    // 区域内角点按确定性伪随机顺序变实（片中一格格冒出深色、最后连成整板，只剩几处切角的白三角）
+    let s = 12345; const rnd = () => { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    const rim = new Set(g.verts.filter((v) => v.pinned).map((v) => v.id));
+    order = g.verts.filter((v) => !rim.has(v.id)).map((v) => [v.id, 1, rnd()]).sort((a, b) => a[2] - b[2]).map(([v, l]) => [v, l]);
+    cfg = { levelHeight: .45, color: 0x4e5a6b, bg: 0xc8c8c8, wire: 0xffffff, minLevel: 1 };
+    camera.position.set(4, 13, 11);
+  }
+  camera.lookAt(0, 0, 0);
+  scene.background = new THREE.Color(cfg.bg);
+  const P = [];
+  for (const c of cells) for (let k = 0; k < c.pts.length; k++) { const a = c.pts[k], b = c.pts[(k + 1) % c.pts.length]; P.push(a.x, .002, a.z, b.x, .002, b.z); }
+  const wg = new THREE.BufferGeometry(); wg.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
+  wire = new THREE.LineSegments(wg, new THREE.LineBasicMaterial({ color: cfg.wire })); scene.add(wire);
+  apply();
+}
+function apply() {
+  const k = Math.round(t * order.length);
+  tEl.value = t;
+  if (k === lastK) return; lastK = k;
+  const on = new Set(order.slice(0, k).map(([v, l]) => v * 4096 + l));
+  // slab：角点层 0..3，1、2 两层取同一个 0/1 → 侧墙竖直（两环交点在同一平面位置）；0→1、2→3 两层压到 0.02 厚 → 顶/底是平的 marching squares 填充多边形
+  const slab = modeEl.value === 'slab';
+  const r = marchIrregular(cells, { levels, levelHeight: cfg.levelHeight, value: slab ? (v, l) => (l === 1 || l === 2) && on.has(v * 4096 + 1) ? 1 : 0 : (v, l) => on.has(v * 4096 + l) ? 1 : 0, yOf: slab ? (l) => [0, .02, cfg.levelHeight, cfg.levelHeight + .02][l] : null });
+  if (solid) { scene.remove(solid); solid.geometry.dispose(); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(r.positions, 3)); g.setIndex(new THREE.BufferAttribute(r.indices, 1));
+  solid = new THREE.Mesh(g.toNonIndexed(), new THREE.MeshStandardMaterial({ color: cfg.color, roughness: .8, flatShading: true }));
+  solid.geometry.computeVertexNormals();
+  scene.add(solid);
+  const vol = r.triangles ? meshVolume(r) : 0;
+  statEl.textContent = `${modeEl.value} · ${cells.length} 格 × ${levels} 层 · 实心角点 ${k}/${order.length}\n等值面 ${r.triangles} 三角 · 焊接顶点 ${r.vertices} · 涉及 ${r.cellsTouched} 个格层\n闭合 ${r.closed ? '是' : '否'}（边界边 ${r.boundaryEdges}、非流形 ${r.nonManifoldEdges}）· 体积 ${vol.toFixed(2)}（>0 法向朝外）`;
+  window.marchReview = { mode: modeEl.value, k, total: order.length, triangles: r.triangles, closed: r.closed, boundaryEdges: r.boundaryEdges, nonManifoldEdges: r.nonManifoldEdges, volume: vol, cells: cells.length, setProgress: (x) => { t = x; playing = false; apply(); } };
+}
+modeEl.onchange = () => setup();
+tEl.oninput = () => { t = +tEl.value; playing = false; apply(); };
+document.getElementById('play').onclick = () => { t = 0; playing = true; };
+function resize() { renderer.setSize(innerWidth, innerHeight, false); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+setup();
+let last = performance.now(), ang = 0;
+renderer.setAnimationLoop((now) => {
+  const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
+  if (playing) { t = Math.min(1, t + dt / 14); apply(); if (t >= 1) playing = false; }
+  if (!q.get('still')) { ang += dt * .08; const r = Math.hypot(camera.position.x, camera.position.z); camera.position.x = Math.sin(ang + .55) * r; camera.position.z = Math.cos(ang + .55) * r; camera.lookAt(0, 0, 0); }
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

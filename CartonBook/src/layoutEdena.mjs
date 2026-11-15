@@ -63,49 +63,32 @@ function renderPanel(shot, panel, opts = {}) {
 }
 
 function cssHrefFromPages() {
-  return "../../layouts/edena.css";
+  return "../../../layouts/edena.css";
 }
 
-function renderCover(plan, page, shots) {
-  const panel = page.panels[0];
-  const shot = shots.get(panel.shotId);
-  // 封面：整幅宽景 + 细题带；无对白气泡；气氛句不压在图上
-  return `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${esc(plan.title)} · 封面</title>
-<link rel="stylesheet" href="${cssHrefFromPages()}" />
-</head>
-<body>
-<article class="book-page cover">
-  <div class="cover-hero">
-    <div class="cover-frame">
-      ${imgOrMissing(panel.shotId, plan.title)}
-    </div>
-    <div class="cover-title-band">
-      <div class="band-left">
-        <h1>${esc(page.title || plan.title)}</h1>
-        ${plan.subtitle ? `<p class="subtitle">${esc(plan.subtitle)}</p>` : ""}
-      </div>
-      <div class="band-right">CartonBook · Edena</div>
-    </div>
-  </div>
-  <footer class="page-footer">
-    <span>画面来源：TigerMessenger 游戏截屏（禁止文生图）</span>
-    <span>${esc(plan.id)}</span>
-  </footer>
-</article>
-</body>
-</html>
-`;
+function renderCover(plan, page) {
+  const id = page.panels[0]?.shotId;
+  if (!id) throw new Error("封面必须引用一个 shotId");
+  const rawTitle = page.title || plan.title;
+  const shortTitle = String(rawTitle).replace(/^.*?·\s*/, "");
+  const titleHtml = esc(shortTitle).replace("，", "，<br>");
+  const place = String(plan.title).includes("·") ? String(plan.title).split("·")[0].trim() : plan.scene;
+  return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(plan.title)}</title><link rel="stylesheet" href="${cssHrefFromPages()}"></head><body>
+<article class="book-page cover cover-spread" aria-label="跨页封面，左右两页">
+ <div class="cover-continuous"><img src="../shots/${esc(id)}.png" alt="${esc(plan.title)}跨页全景"></div>
+ <div class="cover-leaf left-leaf"><span class="cover-series">${esc(plan.series || "信使纪事")}</span><p class="cover-line">${esc(plan.coverTagline || plan.subtitle)}</p></div>
+ <div class="cover-leaf right-leaf"><div class="cover-book-title"><span>${esc(plan.subtitle)}</span><h1>${titleHtml}</h1><p>${esc(place)}</p></div></div>
+ <div class="book-fold" aria-hidden="true"></div>
+</article></body></html>`;
+}
+function renderProse(plan, page) {
+ return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(plan.title)} · 序</title><link rel="stylesheet" href="${cssHrefFromPages()}"></head><body><article class="book-page prose"><div class="chapter-story"><small>${esc(plan.title.split("·")[0].trim())} / 序</small><h2>${esc(page.title || plan.title)}</h2>${plan.story.split("\n\n").map(p=>`<p>${esc(p)}</p>`).join("")}</div><footer class="page-footer"><span>序 · 完整故事</span><span>${esc(plan.subtitle)}</span></footer></article></body></html>`;
 }
 
 function gridClass(page) {
   const tpl = page.template || "edena-stack-3";
   let cls = `panel-grid tpl-${tpl}`;
-  if (page.rhythm === "depart" || tpl === "edena-banner-pair") {
+  if (page.rhythm === "depart") {
     cls += " journey-depart";
   }
   return cls;
@@ -155,21 +138,27 @@ export function layoutEdena(plan, opts) {
   const shots = shotById(plan);
   fs.mkdirSync(path.join(chapterDir, "shots"), { recursive: true });
 
-  const storyPages = plan.pages.filter((p) => p.kind !== "cover");
+  const storyPages = plan.pages.filter((p) => p.kind === "story");
   const storyCount = Math.max(storyPages.length, 1);
   const written = [];
 
+  let pageIdx = 0;
   let storyIdx = 0;
   for (const page of plan.pages) {
     let html;
     let filename;
     if (page.kind === "cover" || page.template === "cover") {
-      html = renderCover(plan, page, shots);
+      html = renderCover(plan, page);
       filename = "cover.html";
     } else {
-      storyIdx += 1;
-      html = renderStoryPage(plan, page, shots, storyIdx, storyCount);
-      filename = `page-${String(storyIdx).padStart(2, "0")}.html`;
+      pageIdx += 1;
+      filename = `page-${String(pageIdx).padStart(2, "0")}.html`;
+      if (page.kind === "prose") {
+        html = renderProse(plan, page);
+      } else {
+        storyIdx += 1;
+        html = renderStoryPage(plan, page, shots, storyIdx, storyCount);
+      }
     }
     const out = path.join(pagesDir, filename);
     fs.writeFileSync(out, html, "utf8");

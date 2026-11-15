@@ -1,0 +1,113 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>队旗血量槽 + 击杀飘字 · 逐帧覆盖实验页</title><link rel="icon" href="data:,"><style>
+body{margin:24px;background:#eef2ee;color:#22333a;font:15px/1.6 system-ui,"PingFang SC"}
+h1{font-size:20px;margin:0 0 6px}p.lead{margin:0 0 14px;color:#3c565e;max-width:1060px}
+.row{display:flex;gap:18px;flex-wrap:wrap}.card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 1px 3px rgba(34,51,58,.12)}
+figure{margin:0}figcaption{font-size:13px;color:#4a656e;margin-top:6px}
+canvas{display:block;background:#b9c9bd;border-radius:8px;max-width:100%}
+label{font:inherit;margin-right:16px}input[type=range]{vertical-align:middle}
+#stats{font-size:13px;color:#3c565e;margin:10px 0 14px;font-variant-numeric:tabular-nums}
+a{color:#276e86}button{font:inherit;padding:2px 10px;margin-right:8px}
+</style>
+<h1>队旗顶部的血量槽 + 击杀 "+10" 飘字</h1>
+<p class="lead">对照片子 839067977781768193（227 帧，白天岛三队 + 登陆船）：每面旗的布面上沿都压着一条细槽，满员时整条是绿的；掉人后绿条从右往左缩、空出来的那截是深色槽底；刚挨打的那一下左端闪一小块红。<br>
+击杀时尸体上方浮起白色 "+10"，约 1 秒内上升半格并淡出；同一个小队短窗口内连杀会并成一条 "+20"。下面左图是满员，右图是残队 + 受击，空格键或按钮可以手动触发一次击杀。</p>
+<div>
+<label>右侧小队血量 <input id="hp" type="range" min="0" max="3" step="0.1" value="1"></label>
+<label>旗面宽度 <input id="bw" type="range" min="18" max="40" step="1" value="30"></label>
+<button id="kill">击杀 +10</button>
+<button id="hit">受击闪红</button>
+</div>
+<div id="stats"></div>
+<div class="row">
+<figure class="card"><canvas id="full" width="420" height="330"></canvas><figcaption>满员 3/3：绿条铺满整条槽</figcaption></figure>
+<figure class="card"><canvas id="hurt" width="420" height="330"></canvas><figcaption>残队 + 受击闪红 + 飘字</figcaption></figure>
+</div>
+<p><a href="index.html?scene=badnorth" target="_top">Bad North 实景</a> · <a href="artifacts/coverage/839067977781768193-review.md">逐帧记录</a></p>
+<script type="module">
+import { bannerBar, addPopup, stepPopups } from './src/badnorth/squad-hud.js';
+
+const popups = [];
+let hitAge = Infinity, hp = 1, bw = 30, kills = 0;
+const $ = (id) => document.getElementById(id);
+
+// 极简等轴测地面 + 一面旗（不引 three：这一页只验槽和飘字的口径）
+function project([x, y, z]) { return [210 + (x - z) * 44, 250 - (x + z) * 22 - y * 60]; }
+function ground(ctx) {
+  ctx.fillStyle = '#b9c9bd'; ctx.fillRect(0, 0, 420, 330);
+  const q = [[-1.2, 0, -1.2], [1.2, 0, -1.2], [1.2, 0, 1.2], [-1.2, 0, 1.2]].map(project);
+  ctx.beginPath(); q.forEach((p, i) => i ? ctx.lineTo(...p) : ctx.moveTo(...p)); ctx.closePath();
+  ctx.fillStyle = '#cfdccf'; ctx.fill(); ctx.strokeStyle = '#e8f2ea'; ctx.lineWidth = 1.5; ctx.stroke();
+}
+function banner(ctx, cx, hpv, bar) {
+  // 旗杆
+  ctx.strokeStyle = '#e7eee9'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(cx - 10, 250); ctx.lineTo(cx - 10, 96); ctx.stroke();
+  // 布面（我方蓝）
+  ctx.fillStyle = '#2e7fb8';
+  ctx.beginPath(); ctx.moveTo(cx - 10, 96); ctx.lineTo(cx - 10 + bar.width * 2.6, 96);
+  ctx.lineTo(cx - 10 + bar.width * 2.6, 96 + bar.width * 2.9); ctx.lineTo(cx - 10, 96 + bar.width * 2.9); ctx.closePath(); ctx.fill();
+  // 白盾徽
+  ctx.fillStyle = '#f2f7f4'; ctx.beginPath();
+  ctx.moveTo(cx + bar.width * 0.30, 120); ctx.lineTo(cx + bar.width * 0.30 + 16, 120);
+  ctx.lineTo(cx + bar.width * 0.30 + 16, 146); ctx.lineTo(cx + bar.width * 0.30 + 8, 158);
+  ctx.lineTo(cx + bar.width * 0.30, 146); ctx.closePath(); ctx.fill();
+  // 槽：先槽底再绿条，再闪红
+  const k = 2.6;
+  ctx.fillStyle = `rgb(${bar.slot.color.join(',')})`;
+  ctx.fillRect(cx - 10, 96 - bar.height * 2.2, bar.width * k, bar.height * 2.2);
+  ctx.fillStyle = `rgb(${bar.fill.color.join(',')})`;
+  ctx.fillRect(cx - 10, 96 - bar.height * 2.2, bar.fill.w * k, bar.height * 2.2);
+  if (bar.flash) { ctx.fillStyle = `rgb(${bar.flash.color.join(',')})`; ctx.fillRect(cx - 10, 96 - bar.height * 2.2, bar.flash.w * k, bar.height * 2.2); }
+}
+function soldiers(ctx, cx, n) {
+  for (let i = 0; i < n; i++) {
+    const x = cx - 44 + (i % 4) * 26, y = 250 - Math.floor(i / 4) * 12;
+    ctx.fillStyle = '#22456b'; ctx.fillRect(x - 5, y - 30, 11, 30);
+    ctx.fillStyle = '#eef4ef'; ctx.beginPath(); ctx.moveTo(x, y - 42); ctx.lineTo(x + 7, y - 30); ctx.lineTo(x - 7, y - 30); ctx.closePath(); ctx.fill();
+  }
+}
+function popupText(ctx, list) {
+  for (const p of list) {
+    ctx.save(); ctx.globalAlpha = p.alpha;
+    ctx.font = `${Math.round(19 * p.scale)}px system-ui`; ctx.textAlign = 'center';
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(26,40,48,.85)'; ctx.strokeText(p.text, 210, 250 - p.y * 60);
+    ctx.fillStyle = '#fff'; ctx.fillText(p.text, 210, 250 - p.y * 60);
+    ctx.restore();
+  }
+}
+const fullCtx = $('full').getContext('2d'), hurtCtx = $('hurt').getContext('2d');
+
+function draw() {
+  const fb = bannerBar({ hp: 3, max: 3, width: bw });
+  ground(fullCtx); soldiers(fullCtx, 210, 8); banner(fullCtx, 210 + 40, 3, fb);
+  const hb = bannerBar({ hp, max: 3, width: bw, hitAge });
+  ground(hurtCtx); soldiers(hurtCtx, 210, Math.max(1, Math.round(8 * hp / 3))); banner(hurtCtx, 210 + 40, hp, hb);
+  popupText(hurtCtx, stepPopups(popups, 0));
+  $('stats').textContent = `满员条 ${fb.fill.w}/${fb.width}（${(fb.ratio * 100).toFixed(0)}%）· 残队条 ${hb.fill.w}/${hb.width}（${(hb.ratio * 100).toFixed(0)}%）· 槽高 ${hb.height}px · 飘字 ${popups.length} 条 · 累计击杀 ${kills}`;
+  window.__hud = { full: fb, hurt: hb, popups: popups.length, kills };
+  return { fb, hb };
+}
+
+let last = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  stepPopups(popups, dt);
+  if (hitAge !== Infinity) hitAge += dt;
+  draw(); requestAnimationFrame(frame);
+}
+
+function shoot() {
+  kills += 1;
+  addPopup(popups, { x: 0, y: 1.6 + Math.random() * 0.3, z: 0, value: 10 });
+  hitAge = 0;
+  draw();
+}
+$('kill').addEventListener('click', shoot);
+$('hit').addEventListener('click', () => { hitAge = 0; draw(); });
+$('hp').addEventListener('input', (e) => { hp = Number(e.target.value); draw(); });
+$('bw').addEventListener('input', (e) => { bw = Number(e.target.value); draw(); });
+addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); shoot(); } });
+draw(); requestAnimationFrame(frame);
+window.__hudReady = true;
+</script>
+</html>

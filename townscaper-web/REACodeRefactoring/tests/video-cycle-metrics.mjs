@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {analyzeVideoFrames,rgbaToGray} from '../src/core/video-cycle-metrics.js';
+const frames=Array.from({length:120},(_,i)=>({t:i/20,g:new Float32Array(16*16).fill(.5+.25*Math.sin(2*Math.PI*i/20))}));
+const result=analyzeVideoFrames(frames,{width:16,height:16});assert.equal(result.waterProbeDominantHz,1);assert.equal(result.waterProbePeriodSec,1);assert.ok(result.bestLoopPeriods.some(p=>Math.abs(p.sec-1)<.05));
+const constant=frames.map(f=>({...f,g:new Float32Array(256).fill(.25)}));assert.equal(analyzeVideoFrames(constant,{width:16,height:16}).waterProbePeriodSec,null);
+assert.deepEqual([...rgbaToGray(new Uint8Array([255,255,255,255,0,0,0,255]))],[1,0]);
+assert.throws(()=>analyzeVideoFrames([{t:0,g:new Float32Array(256)},{t:0,g:new Float32Array(256)}],{width:16,height:16}),/increasing/);
+assert.throws(()=>analyzeVideoFrames([{t:0,g:new Float32Array(256).fill(NaN)}],{width:16,height:16}),/finite/);
+const bounded=analyzeVideoFrames(frames,{width:16,height:16,maxWork:1000});assert.ok(bounded.pixelStride>3);assert.ok(Number.isFinite(bounded.curveSample[0].diff));
+console.log('PASS video metrics: known 1Hz/1s, constant, grayscale, timestamps, nonfinite, work bound');

@@ -8,6 +8,15 @@ float bn(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
 float bfbm(vec2 p) { float s = 0.0, a = 0.5; for (int i = 0; i < 4; i++) { s += a * bn(p); p = p * 2.03 + 7.1; a *= 0.5; } return s; }
 float blotchTone(vec3 w) {
   float level = floor(w.y / max(uBlotchLevel, 0.00001) + 0.01);
+  // 1480635131614355459 全片实测：色斑边界是 20–30px 的宽带渐变（4× 放大看不到硬台阶），
+  // 色阶连续而不是三档，所以大斑块才能"藏住多边形"而不留下色带棱线。这里是该口径的默认实现。
+  if (uBlotchStyleMode > 1.5) {
+    vec2 p0 = w.xz * .55 + vec2(level * 1.7, -level * 1.1);
+    vec2 q0 = vec2(bfbm(p0 * .7 + 3.1), bfbm(p0 * .7 - 2.4));
+    float b0 = bfbm(p0 + q0 * 1.6);
+    float t0 = smoothstep(.34, .66, b0);
+    return mix(1., mix(.84, 1.12, t0), uBlotchStyle.w);
+  }
   vec2 p = w.xz * (uBlotchStyleMode > .5 ? uBlotchStyle.z : .9);
   if(uBlotchStyleMode > .5) {
     float a = (bfbm(w.xz * .3 + 13.7) - .45) * 2.0 * uBlotchStyle.x;

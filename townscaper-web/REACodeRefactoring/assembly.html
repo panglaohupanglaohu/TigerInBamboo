@@ -1,0 +1,75 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>标签 tile 拼装动画（加权熵 WFC → World） · REACode重构版</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:10px 22px 4px}a{color:#26758a}canvas#view{display:block;width:100%;height:66vh}
+button{margin-right:8px;padding:3px 10px;border:1px solid #b9cdc6;background:#fff;border-radius:6px;cursor:pointer}#info{padding:4px 22px;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace}code{background:#e4efec;padding:0 4px;border-radius:4px}</style>
+<header><a href="index.html" target="_top">首页</a> · <a href="voxel-ghost.html">体素幽灵</a> · <a href="joint3d.html">3D 联合约束</a> ·
+<a href="?tileset=ruin">RUIN（默认）</a> · <a href="?tileset=fort&seed=2">FORT</a> · <a href="?weighted=0">关加权熵（对照）</a>
+<p style="margin:4px 0;max-width:1200px">784847588893814785「Content-agnostic algorithm for placing tiles … a Sudoku-solver on steroids」、784847933686575104「would work for squares or voxels too」、787319655648100352「Now in 3D」、784848286272327680「You can fill it with anything」。
+REACode <code>Placer</code> 的 tile 权重现在进了共享求解器：<code>solveWFC({weighted:true})</code> 用加权香农熵挑格、按权重无放回抽样定候选顺序。拼装动画按求解器<b>真实的定格顺序</b>（explain 记录里每格被决定 / 被传播到只剩 1 个候选的先后）逐块把实心块写进共享 World（<code>applyAssemblyPrefix</code>，View 走正常建筑管线重建），
+新放下的块从上方落下；黄色半透明体 = 仍未定、但候选里还有实心块的「幽灵」，越不透明 = 实心候选占比越高。原片的胶囊美术未迁，块由 World 建筑管线画。</p>
+<button id="play">▶ 播放</button><button id="pause">❚❚</button><label>步 <input id="step" type="range" min="0" value="0" style="width:420px"></label><output id="sv"></output>
+<label style="margin-left:10px"><input type="checkbox" id="cand">候选棋盘（读 wfc.js 的 traceLimit 快照）</label>
+<label style="margin-left:10px"><input type="checkbox" id="candLv">候选上建筑层（每层各自一块，原片 frame-0540）</label>
+<label style="margin-left:10px"><input type="checkbox" id="occ" checked>调试层吃遮挡（原片口径：frame-0445 彩线一进岛体就断）</label>
+<label style="margin-left:10px">trace 帧 <input id="tf" type="range" min="0" value="0" style="width:220px"></label><output id="tv"></output></header>
+<canvas id="view"></canvas><div id="info"></div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import*as THREE from'three';
+import{buildMixedGrid}from'./src/core/grid.js';import{decorateCells,buildCellIndex}from'./src/core/spatial.js';import{World}from'./src/core/world.js';import{PALETTES}from'./src/core/palette.js';
+import{generateTerrain}from'./src/terrain/generate.js';import{View}from'./src/world/view.js';
+import{TILESET_FORT,TILESET_RUIN,assemblySite,solveAssembly,applyAssemblyPrefix}from'./src/build/tile-assembly.js';
+const q=new URLSearchParams(location.search),tileset=q.get('tileset')==='fort'?TILESET_FORT:TILESET_RUIN,weighted=q.get('weighted')!=='0',seed=Number(q.get('seed')??4);
+const grid=decorateCells(buildMixedGrid({radius:22,hexSize:.62})),world=new World(grid);world.palette=PALETTES.town;generateTerrain(world,{seed:7});
+const site=assemblySite(world,{seed,size:24,height:3}),solved=solveAssembly(world,site,{tileset,seed,weighted});
+const L=.5,view=new View(document.querySelector('#view'),world,grid,buildCellIndex(grid),{levelHeight:L});
+const sc=site.cells.map(id=>world.cells[id]),mx=sc.reduce((s,c)=>s+c.cx,0)/sc.length,mz=sc.reduce((s,c)=>s+c.cz,0)/sc.length;
+view.target.set(mx,(site.ground+1.5)*L,mz);view.distance=7.5;view.pitch=.62;view.updateCamera();
+// ghost / falling prisms (overlay only — the committed pieces are real World voxels)
+const prism=(cell,y0,y1)=>{const s=new THREE.Shape(cell.pts.map(p=>new THREE.Vector2(p.x,-p.z)));const g=new THREE.ExtrudeGeometry(s,{depth:y1-y0,bevelEnabled:false});g.rotateX(-Math.PI/2);g.translate(0,y0,0);return g;};
+const shrink=(cell,f)=>({...cell,pts:cell.pts.map(p=>({x:cell.cx+(p.x-cell.cx)*f,z:cell.cz+(p.z-cell.cz)*f}))});
+const ghosts=new THREE.Group(),falling=new THREE.Group();view.scene.add(ghosts,falling);
+const ghostMat=a=>new THREE.MeshBasicMaterial({color:0xf2cf3b,transparent:true,opacity:.12+.45*a,depthWrite:false});
+const fallMat=new THREE.MeshLambertMaterial({color:0xe9e0cc});
+const slider=document.querySelector('#step'),P=solved.pieces;slider.max=P.length;
+const tf=document.querySelector('#tf'),candBox=document.querySelector('#cand'),candLv=document.querySelector('#candLv'),occBox=document.querySelector('#occ');
+// 第 74 轮：原片调试层吃遮挡（frame-0445 / 0470 / 0260），本仓原先全 depthTest:false。默认按原片打开。
+function applyOcclusion(){const on=view.contourOverlay.setDepthOcclusion(!!occBox.checked);window.__assemblyOcclusion=on;return on;}
+applyOcclusion();occBox.onchange=()=>{applyOcclusion();view.render(0.016);const el=document.querySelector('#tv');if(!candBox.checked)el.textContent=`调试层吃遮挡：${occBox.checked?'开':'关'}（${view.contourOverlay.occlusionLayers} 层）`;};
+tf.max=Math.max(0,(solved.trace?.length??1)-1);
+let k=0,playing=false,last=0,drop=null;
+// 第 69 轮：候选棋盘不另造数据 —— 直接读 solveAssembly 传给 solveWFC 的 traceLimit 快照，
+// 按地面层（level 1）的 domain 大小喂给 ContourOverlay.setCandidates（口径见 contour-overlay.js）。
+function showCandidates(i){
+  view.setDebug('contours',!!candBox.checked);
+  if(!candBox.checked){view.contourOverlay.setCandidates(null);document.querySelector('#tv').textContent='';return null;}
+  // 第 72 轮：candLv 勾上则每一层各自的 domain 都画（屋顶候选格，y 按 site.ground 折算真层高）。
+  const st=view.contourOverlay.setCandidatesFromTrace(solved,i,{layered:candLv.checked,ground:site.ground});
+  document.querySelector('#tv').textContent=st?`${st.traceStep+1}/${st.traceFrames} · ${st.stage} · 白${st.white}/黑${st.black} · 已定${st.converged}${st.layered?` · 层${st.levels}(地${st.ground}/屋${st.roof})`:''}`:'';
+  window.__assemblyCandidates=st;window.assemblyView=view;return st;
+}
+tf.oninput=()=>{showCandidates(Number(tf.value));view.render(0.016);};
+candBox.onchange=()=>{showCandidates(Number(tf.value));view.render(0.016);};
+candLv.onchange=()=>{showCandidates(Number(tf.value));view.render(0.016);};
+function show(n,{animate=false}={}){
+  k=Math.max(0,Math.min(P.length,n));
+  const res=applyAssemblyPrefix(world,site,solved,animate?k-1:k,{by:'piece'});view.changed();
+  for(const m of ghosts.children)m.geometry.dispose();ghosts.clear();
+  const placed=new Set(res.placed);const gc=(k?solved.steps[P[k-1].frame].ghostCells:solved.steps[0]?.ghostCells??[]).filter(([id])=>!placed.has(id));
+  for(const[id,share]of gc){const c=solved.lattice.cells[id],cell=world.cells[c.cell],lv=site.ground+c.level;ghosts.add(new THREE.Mesh(prism(shrink(cell,.82),(lv-1)*L+.02,lv*L-.02),ghostMat(share)));}
+  if(animate&&k>0){const pc=P[k-1],c=solved.lattice.cells[pc.id],cell=world.cells[c.cell],lv=site.ground+c.level,m=new THREE.Mesh(prism(shrink(cell,.96),(lv-1)*L,lv*L),fallMat);m.position.y=2*L;falling.add(m);drop={m,t0:performance.now()};}
+  slider.value=k;document.querySelector('#sv').textContent=`${k}/${P.length} 块`;
+  const counts={};for(const pc of P.slice(0,k))counts[pc.name]=(counts[pc.name]??0)+1;
+  window.__assembly={ok:solved.ok,weighted,tileset:tileset===TILESET_RUIN?'ruin':'fort',seed,cells:site.cells.length,lattice:solved.lattice.cells.length,pieces:P.length,piece:k,ghosts:gc.length,voxels:res.voxels+(animate&&k?1:0),conflicts:solved.conflicts.length,counts,decisions:solved.decisions,backtracks:solved.backtracks,traceFrames:solved.steps.length};
+  if(candBox.checked){const st=showCandidates(k?P[k-1].frame:0);window.__assembly.candidates=st?{white:st.white,black:st.black,converged:st.converged,traceStep:st.traceStep,traceFrames:st.traceFrames,stage:st.stage,layered:!!st.layered,levels:st.levels??1,ground:st.ground??0,roof:st.roof??0}:null;view.render(0.016);}
+  document.querySelector('#info').textContent=JSON.stringify(window.__assembly);
+}
+document.querySelector('#play').onclick=()=>{if(k>=P.length)show(0);playing=true;};document.querySelector('#pause').onclick=()=>{playing=false;};
+slider.oninput=()=>{playing=false;if(drop){falling.remove(drop.m);drop=null;}show(Number(slider.value));};
+let lastT=performance.now();
+function frame(t){
+  if(playing&&!drop&&t-last>380){last=t;if(k>=P.length)playing=false;else show(k+1,{animate:true});}
+  if(drop){const u=Math.min(1,(t-drop.t0)/320);drop.m.position.y=2*L*(1-u)*(1-u);if(u>=1){falling.remove(drop.m);drop.m.geometry.dispose();drop=null;applyAssemblyPrefix(world,site,solved,k,{by:'piece'});view.changed();}}
+  view.render(Math.max(0,Math.min((t-lastT)/1000,.05)));lastT=t;requestAnimationFrame(frame);}
+if(q.has('step')){show(Math.round(Number(q.get('step'))*P.length));if(q.has('drop')){show(k,{animate:true});drop.t0=performance.now()+1e9;drop.m.position.y=L*.9;}}else{show(0);playing=q.get('play')!=='0';}
+requestAnimationFrame(frame);
+</script></html>

@@ -1,0 +1,13 @@
+import fs from 'node:fs';import path from 'node:path';
+import {planChapter} from '../../src/planChapter.mjs';import {captureShots} from '../../src/captureShots.mjs';
+const root=path.resolve('CartonBook'),dir=path.join(root,'artifacts/bookshop-review/pickups');fs.mkdirSync(dir,{recursive:true});
+const recipe=JSON.parse(fs.readFileSync(path.join(root,'recipes/bookshop-letter.sample.json')));
+const {plan}=planChapter(recipe,{chapterDir:dir});const pickups=plan.shots.filter(s=>Number(s.id.slice(1))>=16);plan.shots=pickups;
+const manifest=await captureShots(plan,{chapterDir:dir,port:8931,noFixtures:true});
+if(!manifest.realCapture)throw new Error('Pickups incomplete; original chapter retained');
+const chapter=path.join(root,'chapters/bookshop-letter');const previous=JSON.parse(fs.readFileSync(path.join(chapter,'manifest.json')));
+fs.writeFileSync(path.join(root,'artifacts/bookshop-review/first-live-manifest.json'),JSON.stringify(previous,null,2));
+for(const shot of manifest.shots)fs.copyFileSync(path.join(dir,'shots',shot.file),path.join(chapter,'shots',shot.file));
+previous.shots=[...previous.shots.filter(s=>!pickups.some(p=>p.id===s.shotId)),...manifest.shots];previous.generatedAt=new Date().toISOString();previous.pickupsSource='artifacts/bookshop-review/pickups/manifest.json';
+fs.writeFileSync(path.join(chapter,'manifest.json'),JSON.stringify(previous,null,2));
+planChapter(recipe,{chapterDir:chapter});console.log('PICKUPS MERGED',previous.shots.length);

@@ -1,0 +1,6 @@
+{
+  "errors": [],
+  "grids": [],
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(await page.locator('[data-scene-control=\"flow\"]').isDisabled())\n\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/environment-menu-browser.mjs:17:10",
+  "passed": false
+}

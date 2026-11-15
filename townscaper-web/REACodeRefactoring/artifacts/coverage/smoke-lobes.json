@@ -1,0 +1,37 @@
+{
+  "report": {
+    "on": {
+      "lobes": true,
+      "particles": 69,
+      "drawn": 19681,
+      "bulges": 8,
+      "notches": 2,
+      "centroid": [
+        135,
+        182
+      ],
+      "bins": 48,
+      "axisDeg": 58
+    },
+    "off": {
+      "lobes": false,
+      "particles": 71,
+      "drawn": 14281,
+      "bulges": 1,
+      "notches": 0,
+      "centroid": [
+        139,
+        146
+      ],
+      "bins": 48,
+      "axisDeg": 47
+    },
+    "toggle": {
+      "w": true,
+      "flag": false,
+      "uniform": 0,
+      "box": false
+    }
+  },
+  "errors": []
+}

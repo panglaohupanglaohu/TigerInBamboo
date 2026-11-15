@@ -3,6 +3,7 @@
  * Shared triangle centroids and edge midpoints form one closed cell per vertex;
  * hull cells close at their source vertex rather than extrapolating to infinity.
  */
+import{pointInQuad}from'./spatial.js';
 export function vertexDual(points,triangles){
  if(!Array.isArray(points)||!Array.isArray(triangles)||points.length>10000||triangles.length>20000||points.some(p=>!p||![p.x,p.z].every(Number.isFinite)))throw new RangeError('invalid dual input');
  const cells=points.map((p,id)=>({id,source:p,wedges:[],boundary:false})),edgeUse=new Map(),midpoints=new Map(),centroids=[];let next=0;
@@ -21,4 +22,53 @@ export function vertexDual(points,triangles){
   if(c.pts.length!==adj.size)throw new RangeError('disconnected vertex fan');let area=0;for(let i=0;i<c.pts.length;i++){const a=c.pts[i],b=c.pts[(i+1)%c.pts.length];area+=a.x*b.z-b.x*a.z}if(area<0)c.pts.reverse();
  }
  return{cells,centroids,midpoints:[...midpoints.values()]};
+}
+
+/** The same barycentric dual on the shared polygon grid (quad/mixed/hex cells), not a fan
+ * triangulation: every cell corner contributes the wedge [vertex, mid(edge i), cell centre,
+ * mid(edge i-1)], so each dual cell keeps per-cell wedges (and therefore per-cell heights).
+ * Wedges tile every cell exactly; rim vertices close at the vertex itself.
+ */
+export function gridVertexDual(grid,{include=null}={}){
+ if(!grid?.cells||!grid?.verts)throw new TypeError('shared grid required');
+ const mids=new Map(),mid=(a,b)=>{const k=a.id<b.id?a.id+':'+b.id:b.id+':'+a.id;let m=mids.get(k);if(!m)mids.set(k,m={x:(a.x+b.x)/2,z:(a.z+b.z)/2});return m;};
+ const cells=new Map();
+ for(const c of grid.cells){
+  if(include&&!include(c))continue;
+  const center={x:c.cx,z:c.cz};
+  for(let i=0;i<c.n;i++){const v=c.pts[i],prev=c.pts[(i+c.n-1)%c.n],next=c.pts[(i+1)%c.n];
+   let d=cells.get(v.id);if(!d)cells.set(v.id,d={vertex:v.id,x:v.x,z:v.z,wedges:[]});
+   const poly=[{x:v.x,z:v.z},mid(v,next),center,mid(prev,v)];let a=0;for(let k=0;k<4;k++){const p=poly[k],q=poly[(k+1)%4];a+=p.x*q.z-q.x*p.z;}
+   d.wedges.push({cell:c.id,poly,area:Math.abs(a)/2});}
+ }
+ for(const d of cells.values()){d.area=d.wedges.reduce((s,w)=>s+w.area,0);d.cells=d.wedges.map(w=>w.cell);d.boundary=(grid.vertexCells?.get(d.vertex)?.length??d.wedges.length)!==d.wedges.length||d.wedges.some(w=>grid.cells[w.cell].edgeNeighbors.some((n,i)=>n<0&&(grid.cells[w.cell].pts[i].id===d.vertex||grid.cells[w.cell].pts[(i+1)%grid.cells[w.cell].n].id===d.vertex)));}
+ return{cells:[...cells.values()]};
+}
+
+/** 959752525867036672 "a suitable place to start with foliage placement": one site per vertex
+ * cell on the shared World. A vertex cell straddling a cliff keeps only the wedges on its highest
+ * terrace (sites follow the terraces instead of hanging on the wall); built/river/water cells are
+ * excluded. Spacing is a deterministic greedy pass, largest terrace area first.
+ * Read-only. Vertical cliff faces themselves are not covered by any site.
+ */
+export function dualFoliageSites(world,{minAreaRatio=.55,spacing=0,limit=Infinity,levelHeight=.5,skipRim=true}={}){
+ if(![minAreaRatio,spacing,levelHeight].every(Number.isFinite)||minAreaRatio<0||spacing<0||levelHeight<=0||!(limit>=0))throw new RangeError('invalid foliage site options');
+ const ground=c=>world.ground(c),ok=c=>ground(c)>0&&!world.topIsBuilt(c)&&!world.river[c.id];
+ const dual=gridVertexDual(world.grid),out=[];
+ for(const d of dual.cells){
+  if(skipRim&&d.boundary)continue;
+  const tops=d.wedges.map(w=>world.grid.cells[w.cell]),top=Math.max(...tops.map(ground));if(top<=0)continue;
+  const keep=d.wedges.filter(w=>{const c=world.grid.cells[w.cell];return ground(c)===top&&ok(c);});if(!keep.length)continue;
+  let A=0,X=0,Z=0;for(const w of keep){let a=0,cx=0,cz=0;for(let k=0;k<4;k++){const p=w.poly[k],q=w.poly[(k+1)%4],cr=p.x*q.z-q.x*p.z;a+=cr;cx+=(p.x+q.x)*cr;cz+=(p.z+q.z)*cr;}a/=2;X+=cx/6;Z+=cz/6;A+=a;}
+  let x=X/A,z=Z/A;
+  // A non-contiguous or concave terrace union can put the centroid outside: fall back to the largest wedge's centroid.
+  if(!keep.some(w=>pointInQuad(w.poly,x,z))){const big=keep.reduce((a,b)=>b.area>a.area?b:a);x=big.poly.reduce((s,p)=>s+p.x,0)/4;z=big.poly.reduce((s,p)=>s+p.z,0)/4;}
+  out.push({vertex:d.vertex,x,z,y:top*levelHeight,level:top,area:Math.abs(A),fullArea:d.area,clipped:keep.length!==d.wedges.length,cells:keep.map(w=>w.cell)});
+ }
+ const areas=out.map(s=>s.area).sort((a,b)=>a-b),median=areas[areas.length>>1]||0,chosen=[];
+ for(const s of out.sort((a,b)=>b.area-a.area||a.vertex-b.vertex)){
+  if(chosen.length>=limit)break;if(s.area<median*minAreaRatio)continue;
+  if(spacing>0&&chosen.some(c=>(c.x-s.x)**2+(c.z-s.z)**2<spacing*spacing))continue;chosen.push(s);
+ }
+ return{sites:chosen,candidates:out.length,medianArea:median,version:world.version};
 }

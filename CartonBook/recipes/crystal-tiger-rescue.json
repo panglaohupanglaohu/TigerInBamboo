@@ -1,0 +1,4031 @@
+{
+  "id": "crystal-tiger-rescue",
+  "title": "水晶城 · 把春天带回家",
+  "subtitle": "信使、红狐与湖沼之虎",
+  "physicalPages": 56,
+  "narrativePages": 54,
+  "sourceUrl": "http://localhost:8931/TigerMessenger/",
+  "study": "Edena: 尺度、视线、静默、重复中的变化；双页封面，54页逐页编排",
+  "shots": [
+    {
+      "id": "cover",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.55,
+          0.6,
+          1.25
+        ],
+        "scale": 1.1,
+        "fov": 55
+      }
+    },
+    {
+      "id": "p01-1",
+      "title": "水晶城的清晨",
+      "caption": "天亮时，水晶城先亮起的，是水里的倒影。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.32,
+          0.7,
+          1.28
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 1,
+      "purpose": "建立空间与行动方向",
+      "playerAt": "crystal-mother-port"
+    },
+    {
+      "id": "p01-2",
+      "title": "水晶城的清晨",
+      "caption": "母塔港的船等着第一封信。",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          -0.98,
+          0.45,
+          1.1300000000000001
+        ],
+        "scale": 0.69,
+        "fov": 50
+      },
+      "page": 1,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p01-3",
+      "title": "水晶城的清晨",
+      "caption": "今天的收件人，本该是一只虎。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.12,
+          0.25,
+          1.28
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 1,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p02-1",
+      "title": "没有回信的人",
+      "caption": "信使把寄给虎虎的信折好，旧折痕已经发白。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          0.43000000000000005,
+          0.7,
+          1.3599999999999999
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 2,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p02-2",
+      "title": "没有回信的人",
+      "caption": "三天了，湖沼没有回信。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          -0.25,
+          0.6499999999999999,
+          1.5
+        ],
+        "scale": 1.45,
+        "fov": 50
+      },
+      "page": 2,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p02-3",
+      "title": "没有回信的人",
+      "caption": "他仍在收件人一栏写下：家人。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          0.23,
+          0.25,
+          1.3599999999999999
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 2,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p03-1",
+      "title": "水位线",
+      "caption": "码头老人指向石壁上的旧水痕。",
+      "camera": {
+        "object": "crystal-v7-shores",
+        "auto": true,
+        "angle": [
+          0.54,
+          1.1,
+          1.44
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 3,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p03-2",
+      "title": "水位线",
+      "caption": "那一线水，昨日还在脚边。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          -0.76,
+          0.45,
+          1.29
+        ],
+        "scale": 0.8250000000000001,
+        "fov": 50
+      },
+      "page": 3,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p03-3",
+      "title": "水位线",
+      "caption": "母塔港的绳子垂得更低了。",
+      "camera": {
+        "object": "crystal-v7-shores",
+        "auto": true,
+        "angle": [
+          0.34,
+          0.65,
+          1.44
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 3,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p04-1",
+      "title": "玻璃里的花",
+      "caption": "温室里，花还按时开着。",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          0.65,
+          0.7,
+          1.2
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 4,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p04-2",
+      "title": "玻璃里的花",
+      "caption": "照料它们的人却说，湖沼的水已经带不来种子。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          0.25,
+          0.5,
+          1.1
+        ],
+        "scale": 1.15,
+        "fov": 50
+      },
+      "page": 4,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p04-3",
+      "title": "玻璃里的花",
+      "caption": "城的美，原来也靠远方活着。",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          0.45,
+          0.25,
+          1.2
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 4,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p05-1",
+      "title": "从湖沼来的信",
+      "caption": "苍竹的信夹在航线册里，纸上有潮气。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.76,
+          0.7,
+          1.28
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 5,
+      "purpose": "建立空间与行动方向",
+      "rescueThrough": 1
+    },
+    {
+      "id": "p05-2",
+      "title": "从湖沼来的信",
+      "caption": "女儿虎虎困在湖沼，母亲化作红狐，仍守着旧港的八音盒。",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          -0.54,
+          0.45,
+          1.1300000000000001
+        ],
+        "scale": 0.6224999999999999,
+        "fov": 50
+      },
+      "page": 5,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p05-3",
+      "title": "从湖沼来的信",
+      "caption": "最后一行写着：别让她一个人等。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.56,
+          0.25,
+          1.28
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 5,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p06-1",
+      "title": "一张航线图",
+      "caption": "最短的航路已经封锁。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          0.87,
+          0.7,
+          1.3599999999999999
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 6,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p06-2",
+      "title": "一张航线图",
+      "caption": "信使沿图上的裂缝，找出一条穿过叹息之门的旧路。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          0.75,
+          0.35,
+          1.5
+        ],
+        "scale": 0.85,
+        "fov": 50
+      },
+      "page": 6,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p06-3",
+      "title": "一张航线图",
+      "caption": "走那里，会晚；不走，就永远到不了。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          0.67,
+          0.25,
+          1.3599999999999999
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 6,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p07-1",
+      "title": "城里最后一船水",
+      "caption": "港务员说，只剩一船水够全城今夜用。",
+      "camera": {
+        "object": "crystal-v7-shores",
+        "auto": true,
+        "angle": [
+          0.98,
+          1.1,
+          1.44
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 7,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p07-2",
+      "title": "城里最后一船水",
+      "caption": "信使没有开口借船。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          -0.32,
+          0.45,
+          1.29
+        ],
+        "scale": 0.7575000000000001,
+        "fov": 50
+      },
+      "page": 7,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p07-3",
+      "title": "城里最后一船水",
+      "caption": "一个守花人先把自己的水桶放上了码头。",
+      "camera": {
+        "object": "crystal-v7-shores",
+        "auto": true,
+        "angle": [
+          0.78,
+          0.65,
+          1.44
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 7,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p08-1",
+      "title": "替我带句话",
+      "caption": "有人搬来空罐，有人带来干净的布。",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          1.09,
+          0.7,
+          1.2
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 8,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p08-2",
+      "title": "替我带句话",
+      "caption": "他们不能一起离城，便把能带走的东西交给他。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          -0.5,
+          0.6499999999999999,
+          1.1
+        ],
+        "scale": 1.45,
+        "fov": 50
+      },
+      "page": 8,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p08-3",
+      "title": "替我带句话",
+      "caption": "“告诉湖沼，我们还在等它的春天。”",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          0.89,
+          0.25,
+          1.2
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 8,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p09-1",
+      "title": "启航",
+      "caption": "船离岸时，没有人喊胜利。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          0.21000000000000002,
+          0.7,
+          1.28
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 9,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p09-2",
+      "title": "启航",
+      "caption": "岸上的灯只亮了一次，像有人点头。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          -1.09,
+          0.45,
+          1.1300000000000001
+        ],
+        "scale": 0.8925,
+        "fov": 50
+      },
+      "page": 9,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p09-3",
+      "title": "启航",
+      "caption": "信使第一次觉得，这封信不只属于他。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          0.010000000000000009,
+          0.25,
+          1.28
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 9,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p10-1",
+      "title": "远岸",
+      "caption": "水晶城渐渐缩成一片细光。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.32,
+          0.7,
+          1.3599999999999999
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 10,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p10-2",
+      "title": "远岸",
+      "caption": "信使摸了摸衣襟里的信。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          0.0,
+          0.5,
+          1.5
+        ],
+        "scale": 1.15,
+        "fov": 50
+      },
+      "page": 10,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p10-3",
+      "title": "远岸",
+      "caption": "风很大，那一小片纸却一直贴着心口。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.12,
+          0.25,
+          1.3599999999999999
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 10,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p11-1",
+      "title": "叹息之门",
+      "caption": "门立在路的尽头，像一道没有合拢的伤口。",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          0.43000000000000005,
+          1.1,
+          1.44
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 11,
+      "purpose": "建立空间与行动方向",
+      "rescueThrough": 2
+    },
+    {
+      "id": "p11-2",
+      "title": "叹息之门",
+      "caption": "石阶上等着两位守路的人。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          -0.87,
+          0.45,
+          1.29
+        ],
+        "scale": 0.69,
+        "fov": 50
+      },
+      "page": 11,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p11-3",
+      "title": "叹息之门",
+      "caption": "他们先看见信封，才看见信使。",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          0.23,
+          0.65,
+          1.44
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 11,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p12-1",
+      "title": "留在门外的人",
+      "caption": "阿喀琉斯问：你去接谁？",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          0.54,
+          0.7,
+          1.2
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 12,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p12-2",
+      "title": "留在门外的人",
+      "caption": "“一只虎。还有，等他回来的人。”",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          -0.76,
+          0.8500000000000001,
+          1.05
+        ],
+        "scale": 0.7575000000000001,
+        "fov": 50
+      },
+      "page": 12,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p12-3",
+      "title": "留在门外的人",
+      "caption": "英雄低头看了看自己没有遮住的脚踝。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          0.34,
+          0.25,
+          1.2
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 12,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p13-1",
+      "title": "奥德休斯的地图",
+      "caption": "奥德休斯把舰队的巡航线画在灰上。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          0.65,
+          0.7,
+          1.28
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 13,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p13-2",
+      "title": "奥德休斯的地图",
+      "caption": "“硬闯，只会让他们也看见你。”",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          -0.65,
+          0.8500000000000001,
+          1.1300000000000001
+        ],
+        "scale": 0.8250000000000001,
+        "fov": 50
+      },
+      "page": 13,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p13-3",
+      "title": "奥德休斯的地图",
+      "caption": "他把一条支线引向苔庭。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          0.45,
+          0.25,
+          1.28
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 13,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p14-1",
+      "title": "谁来争取时间",
+      "caption": "信使问，那你们怎么办？",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          0.76,
+          1.1,
+          1.3599999999999999
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 14,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p14-2",
+      "title": "谁来争取时间",
+      "caption": "门内没有立刻传来回答。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          -0.54,
+          0.45,
+          1.21
+        ],
+        "scale": 0.8925,
+        "fov": 50
+      },
+      "page": 14,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p14-3",
+      "title": "谁来争取时间",
+      "caption": "“我们留下。你去把人带回来。”",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          0.56,
+          0.65,
+          1.3599999999999999
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 14,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p15-1",
+      "title": "不要入城",
+      "caption": "信使把第二封信交给阿喀琉斯。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          0.87,
+          0.7,
+          1.44
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 15,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p15-2",
+      "title": "不要入城",
+      "caption": "“别追进城里。还有，留意你的脚踝。”",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          -0.43000000000000005,
+          0.8500000000000001,
+          1.29
+        ],
+        "scale": 0.6224999999999999,
+        "fov": 50
+      },
+      "page": 15,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p15-3",
+      "title": "不要入城",
+      "caption": "这一次，英雄认真点了头。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          0.67,
+          0.25,
+          1.44
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 15,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p16-1",
+      "title": "苔庭的信号",
+      "caption": "远处的苔庭伏在鲲背上，静得像一座山。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          1,
+          0.8,
+          1.5
+        ],
+        "scale": 1.2,
+        "fov": 58
+      },
+      "page": 16,
+      "purpose": "建立空间与行动方向",
+      "rescueThrough": 3
+    },
+    {
+      "id": "p16-2",
+      "title": "苔庭的信号",
+      "caption": "信使送出了约定的信号。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          1,
+          0.8,
+          1.5
+        ],
+        "scale": 0.85,
+        "fov": 58
+      },
+      "page": 16,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p16-3",
+      "title": "苔庭的信号",
+      "caption": "原本朝着湖沼的巡航灯，慢慢转向另一边。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          1,
+          0.8,
+          1.5
+        ],
+        "scale": 1.2,
+        "fov": 58
+      },
+      "page": 16,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p17-1",
+      "title": "短短的一段安静",
+      "caption": "没有炮声的片刻，也会让人害怕。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          1,
+          0.8,
+          1.5
+        ],
+        "scale": 1.2,
+        "fov": 58
+      },
+      "page": 17,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p17-2",
+      "title": "短短的一段安静",
+      "caption": "信使数过三次呼吸，才敢抬头。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          1,
+          0.8,
+          1.5
+        ],
+        "scale": 0.85,
+        "fov": 58
+      },
+      "page": 17,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p17-3",
+      "title": "短短的一段安静",
+      "caption": "英雄争来的时间，开始流逝。",
+      "camera": {
+        "object": "gate-heroes",
+        "auto": true,
+        "angle": [
+          1,
+          0.8,
+          1.5
+        ],
+        "scale": 1.2,
+        "fov": 58
+      },
+      "page": 17,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p18-1",
+      "title": "向绿处走",
+      "caption": "他沿湿路进入湖沼。",
+      "camera": {
+        "object": "moebius-swamp-placement",
+        "eye": [
+          30,
+          40,
+          37
+        ],
+        "aim": [
+          0,
+          1,
+          0
+        ],
+        "fov": 48,
+        "waitMs": 100
+      },
+      "page": 18,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p18-2",
+      "title": "向绿处走",
+      "caption": "林冠把天空缝得很窄，水声却从四面传来。",
+      "camera": {
+        "object": "swamp-repair-barge",
+        "auto": true,
+        "angle": [
+          0.6,
+          0.65,
+          1.4
+        ],
+        "scale": 1.1,
+        "fov": 55
+      },
+      "page": 18,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p18-3",
+      "title": "向绿处走",
+      "caption": "他轻声叫了第一遍：虎虎。",
+      "camera": {
+        "object": "moebius-swamp-placement",
+        "eye": [
+          30,
+          40,
+          37
+        ],
+        "aim": [
+          0,
+          1,
+          0
+        ],
+        "fov": 48,
+        "waitMs": 100
+      },
+      "page": 18,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p19-1",
+      "title": "根的城市",
+      "caption": "湖沼并非荒野，根与栈道之间有人生活。",
+      "camera": {
+        "object": "swamp-towering-tree",
+        "auto": true,
+        "angle": [
+          0.32,
+          1.1,
+          1.44
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 19,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p19-2",
+      "title": "根的城市",
+      "caption": "干燥的平台上，留着修过又修的工具。",
+      "camera": {
+        "object": "swamp-longtail-monkey",
+        "auto": true,
+        "angle": [
+          0.6,
+          0.65,
+          1.4
+        ],
+        "scale": 1.1,
+        "fov": 55
+      },
+      "page": 19,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p19-3",
+      "title": "根的城市",
+      "caption": "信使看见了另一种城市。",
+      "camera": {
+        "object": "swamp-towering-tree",
+        "auto": true,
+        "angle": [
+          0.12,
+          0.65,
+          1.44
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 19,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p20-1",
+      "title": "被抽走的颜色",
+      "caption": "舰队的影子掠过叶面。",
+      "camera": {
+        "object": "moebius-swamp-placement",
+        "eye": [
+          22,
+          48,
+          28
+        ],
+        "aim": [
+          0,
+          1,
+          0
+        ],
+        "fov": 48,
+        "waitMs": 100
+      },
+      "page": 20,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p20-2",
+      "title": "被抽走的颜色",
+      "caption": "水仍在流，花却像忘记了如何开放。",
+      "camera": {
+        "object": "swamp-giant-flower",
+        "auto": true,
+        "angle": [
+          0.6,
+          0.65,
+          1.4
+        ],
+        "scale": 1.1,
+        "fov": 55
+      },
+      "page": 20,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p20-3",
+      "title": "被抽走的颜色",
+      "caption": "这里的人说，他们抽走的不只是水。",
+      "camera": {
+        "object": "moebius-swamp-placement",
+        "eye": [
+          22,
+          48,
+          28
+        ],
+        "aim": [
+          0,
+          1,
+          0
+        ],
+        "fov": 48,
+        "waitMs": 100
+      },
+      "page": 20,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p21-1",
+      "title": "第一座桥",
+      "caption": "桥边的居民没有问他能带来多少援军。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.54,
+          1.1,
+          1.28
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 21,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p21-2",
+      "title": "第一座桥",
+      "caption": "他们问：那只虎，还在吗？",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          -0.3,
+          1,
+          1.2
+        ],
+        "scale": 1.0
+      },
+      "page": 21,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p21-3",
+      "title": "第一座桥",
+      "caption": "信使说，我就是来找他的。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.34,
+          0.65,
+          1.28
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 21,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p22-1",
+      "title": "不再交出种子",
+      "caption": "有人把最后一袋种子收回树根下。",
+      "camera": {
+        "object": "greg-swamp-rooted-ecology",
+        "auto": true,
+        "angle": [
+          0.65,
+          1.1,
+          1.3599999999999999
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 22,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p22-2",
+      "title": "不再交出种子",
+      "caption": "“我们不再把明年的春天交出去。”",
+      "camera": {
+        "object": "swamp-repair-barge",
+        "auto": true,
+        "angle": [
+          0.6,
+          0.65,
+          1.4
+        ],
+        "scale": 1.1,
+        "fov": 55
+      },
+      "page": 22,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p22-3",
+      "title": "不再交出种子",
+      "caption": "反抗从一只握紧的手开始。",
+      "camera": {
+        "object": "greg-swamp-rooted-ecology",
+        "auto": true,
+        "angle": [
+          0.45,
+          0.65,
+          1.3599999999999999
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 22,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p23-1",
+      "title": "把水留给活物",
+      "caption": "守水的人打开通往浅池的支渠。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          0.76,
+          0.7,
+          1.44
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 23,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p23-2",
+      "title": "把水留给活物",
+      "caption": "水绕过舰队能够看见的地方。",
+      "camera": {
+        "object": "greg-swamp-rooted-ecology",
+        "auto": true,
+        "angle": [
+          -0.54,
+          0.8500000000000001,
+          1.29
+        ],
+        "scale": 0.8250000000000001,
+        "fov": 50
+      },
+      "page": 23,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p23-3",
+      "title": "把水留给活物",
+      "caption": "鱼与幼兽先得到了一条活路。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          0.56,
+          0.25,
+          1.44
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 23,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p24-1",
+      "title": "栈道上的约定",
+      "caption": "居民把没有受伤的人排在桥的外侧。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.87,
+          1.1,
+          1.2
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 24,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p24-2",
+      "title": "栈道上的约定",
+      "caption": "老人与孩子走中间，慢慢走。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          -0.3,
+          1,
+          1.2
+        ],
+        "scale": 1.0
+      },
+      "page": 24,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p24-3",
+      "title": "栈道上的约定",
+      "caption": "没人被要求独自证明勇敢。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.67,
+          0.65,
+          1.2
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 24,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p25-1",
+      "title": "修补者",
+      "caption": "水晶城带来的布，在平台上拆成了一条条。",
+      "camera": {
+        "object": "greg-swamp-dry-service-shelf",
+        "auto": true,
+        "angle": [
+          0.98,
+          0.7,
+          1.28
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 25,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p25-2",
+      "title": "修补者",
+      "caption": "旧工具开始修桥，新布开始包扎伤口。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          -0.32,
+          0.8500000000000001,
+          1.1300000000000001
+        ],
+        "scale": 0.6224999999999999,
+        "fov": 50
+      },
+      "page": 25,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p25-3",
+      "title": "修补者",
+      "caption": "远方的礼物，终于找到了用处。",
+      "camera": {
+        "object": "greg-swamp-dry-service-shelf",
+        "auto": true,
+        "angle": [
+          0.78,
+          0.25,
+          1.28
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 25,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p26-1",
+      "title": "舰队又来了",
+      "caption": "林冠外，巡航机重新转向湖沼。",
+      "camera": {
+        "object": "moebius-swamp-placement",
+        "eye": [
+          30,
+          48,
+          31
+        ],
+        "aim": [
+          0,
+          1,
+          0
+        ],
+        "fov": 48,
+        "waitMs": 100
+      },
+      "page": 26,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p26-2",
+      "title": "舰队又来了",
+      "caption": "诱敌的时间快用完了。",
+      "camera": {
+        "object": "swamp-repair-barge",
+        "auto": true,
+        "angle": [
+          0.6,
+          0.65,
+          1.4
+        ],
+        "scale": 1.1,
+        "fov": 55
+      },
+      "page": 26,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p26-3",
+      "title": "舰队又来了",
+      "caption": "没有人再提投降，只把身边的人往里让了让。",
+      "camera": {
+        "object": "moebius-swamp-placement",
+        "eye": [
+          30,
+          48,
+          31
+        ],
+        "aim": [
+          0,
+          1,
+          0
+        ],
+        "fov": 48,
+        "waitMs": 100
+      },
+      "page": 26,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p27-1",
+      "title": "桥还在",
+      "caption": "第一阵震动之后，桥上的绳结松了一处。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.21000000000000002,
+          1.1,
+          1.44
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 27,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p27-2",
+      "title": "桥还在",
+      "caption": "守桥的人俯身重新系紧。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          -0.3,
+          1,
+          1.2
+        ],
+        "scale": 1.0
+      },
+      "page": 27,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p27-3",
+      "title": "桥还在",
+      "caption": "他对信使说：你继续。这里有人。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.010000000000000009,
+          0.65,
+          1.44
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 27,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p28-1",
+      "title": "八音盒的方向",
+      "caption": "旧港传来一段断断续续的曲子。",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          -2,
+          1.5,
+          2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 28,
+      "purpose": "建立空间与行动方向",
+      "rescueThrough": 4
+    },
+    {
+      "id": "p28-2",
+      "title": "八音盒的方向",
+      "caption": "信使在树影里看见红狐。",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          2,
+          1.8,
+          -2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 28,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p28-3",
+      "title": "八音盒的方向",
+      "caption": "她听得太专心，仿佛害怕漏掉某个人的脚步。",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          1.8,
+          1.2,
+          2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 28,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p29-1",
+      "title": "家书",
+      "caption": "他蹲下来，没有催她起身。",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          2,
+          1.8,
+          -2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 29,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p29-2",
+      "title": "家书",
+      "caption": "“我来找虎虎。也来接你。”",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          1.8,
+          1.2,
+          2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 29,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p29-3",
+      "title": "家书",
+      "caption": "红狐抬头，看着那封已经发软的信。",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          -2,
+          1.5,
+          2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 29,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p30-1",
+      "title": "没说完的话",
+      "caption": "“我们要好好说话。”信使说。",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          1.8,
+          1.2,
+          2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 30,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p30-2",
+      "title": "没说完的话",
+      "caption": "“这个家，得我们自己守护。”",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          -2,
+          1.5,
+          2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 30,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p30-3",
+      "title": "没说完的话",
+      "caption": "红狐走到他的身边，把沉默留给了八音盒。",
+      "camera": {
+        "object": "fox-ali",
+        "eye": [
+          2,
+          1.8,
+          -2
+        ],
+        "aim": [
+          0,
+          0.3,
+          0
+        ],
+        "fov": 55,
+        "waitMs": 100
+      },
+      "page": 30,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p31-1",
+      "title": "两种脚步",
+      "caption": "从这里起，湿路上有了两种脚步。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.65,
+          1.1,
+          1.44
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 31,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p31-2",
+      "title": "两种脚步",
+      "caption": "红狐总停下来，等信使绕过那些看不见的深水。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          -0.3,
+          1,
+          1.2
+        ],
+        "scale": 1.0
+      },
+      "page": 31,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p31-3",
+      "title": "两种脚步",
+      "caption": "他们开始一起找。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.45,
+          0.65,
+          1.44
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 31,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p32-1",
+      "title": "水面上的痕迹",
+      "caption": "浅水里，留着一道比船更宽的波纹。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          0.76,
+          0.7,
+          1.2
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 32,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p32-2",
+      "title": "水面上的痕迹",
+      "caption": "红狐没有追着波纹跑。",
+      "camera": {
+        "object": "greg-swamp-rooted-ecology",
+        "auto": true,
+        "angle": [
+          -0.54,
+          0.8500000000000001,
+          1.05
+        ],
+        "scale": 0.7575000000000001,
+        "fov": 50
+      },
+      "page": 32,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p32-3",
+      "title": "水面上的痕迹",
+      "caption": "她望向林冠深处，像在辨认一声呼吸。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          0.56,
+          0.25,
+          1.2
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 32,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p33-1",
+      "title": "第三次呼唤",
+      "caption": "第一遍没有回应，第二遍被瀑声盖住。",
+      "camera": {
+        "object": "swamp-towering-tree",
+        "auto": true,
+        "angle": [
+          0.87,
+          1.1,
+          1.28
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 33,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p33-2",
+      "title": "第三次呼唤",
+      "caption": "信使喊第三遍时，声音已经很小。",
+      "camera": {
+        "object": "swamp-native-doll",
+        "auto": true,
+        "angle": [
+          0.6,
+          0.65,
+          1.4
+        ],
+        "scale": 1.1,
+        "fov": 55
+      },
+      "page": 33,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p33-3",
+      "title": "第三次呼唤",
+      "caption": "“虎虎，我们来了。”",
+      "camera": {
+        "object": "swamp-towering-tree",
+        "auto": true,
+        "angle": [
+          0.67,
+          0.65,
+          1.28
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 33,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p34-1",
+      "title": "被守住的小池",
+      "caption": "他们终于看见虎虎。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          -10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 34,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p34-2",
+      "title": "被守住的小池",
+      "caption": "她停在水边，身后是一处没有干涸的小池。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          0,
+          8,
+          17
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 34,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p34-3",
+      "title": "被守住的小池",
+      "caption": "原来，她一直守着比自己更小的生命。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          8,
+          10,
+          18
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 34,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p35-1",
+      "title": "不是不肯回家",
+      "caption": "信使往前一步，虎虎却仍望着水。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          0,
+          8,
+          17
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 35,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p35-2",
+      "title": "不是不肯回家",
+      "caption": "“你是走不了，还是不肯走？”",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 35,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p35-3",
+      "title": "不是不肯回家",
+      "caption": "虎虎的影子落在池边，像一道安静的门。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          8,
+          10,
+          18
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 35,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p36-1",
+      "title": "旧暗号",
+      "caption": "信使想起那年窗前的雨。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 36,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p36-2",
+      "title": "旧暗号",
+      "caption": "雨落在荷叶，也落在芭蕉。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          -10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 36,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p36-3",
+      "title": "旧暗号",
+      "caption": "有些话，他们只在家里说过。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          8,
+          10,
+          18
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 36,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p37-1",
+      "title": "两家秋语一声",
+      "caption": "“两家秋雨一家声，你猜。”",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          -10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 37,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p37-2",
+      "title": "两家秋语一声",
+      "caption": "信使没有再靠近，等女儿自己认出来。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          0,
+          8,
+          17
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 37,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p37-3",
+      "title": "两家秋语一声",
+      "caption": "红狐站在旁边，一动不动。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          8,
+          10,
+          18
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 37,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p38-1",
+      "title": "荷与芭蕉",
+      "caption": "“芭蕉与荷。”",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          0,
+          8,
+          17
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 38,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p38-2",
+      "title": "荷与芭蕉",
+      "caption": "父亲说完，才发觉自己一直屏着气。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 38,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p38-3",
+      "title": "荷与芭蕉",
+      "caption": "虎虎终于把头转向了他们。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          8,
+          10,
+          18
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 38,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p39-1",
+      "title": "有人接替守水",
+      "caption": "守桥的人带着同伴走来。",
+      "camera": {
+        "object": "greg-swamp-dry-service-shelf",
+        "auto": true,
+        "angle": [
+          0.54,
+          0.7,
+          1.44
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 39,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p39-2",
+      "title": "有人接替守水",
+      "caption": "“小池交给我们。”",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          -0.76,
+          0.8500000000000001,
+          1.29
+        ],
+        "scale": 0.8925,
+        "fov": 50
+      },
+      "page": 39,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p39-3",
+      "title": "有人接替守水",
+      "caption": "这句普通的话，比任何命令都更能让她离开。",
+      "camera": {
+        "object": "greg-swamp-dry-service-shelf",
+        "auto": true,
+        "angle": [
+          0.34,
+          0.25,
+          1.44
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 39,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p40-1",
+      "title": "不是带走一只虎",
+      "caption": "信使终于明白，救援不是把虎虎从这里拿走。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          -10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 40,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p40-2",
+      "title": "不是带走一只虎",
+      "caption": "要先有人接住她不愿丢下的东西。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          0,
+          8,
+          17
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 40,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p40-3",
+      "title": "不是带走一只虎",
+      "caption": "他把水晶城的种子袋交给守水人。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          8,
+          10,
+          18
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 40,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p41-1",
+      "title": "认出你",
+      "caption": "“我是虎虎，你的虎虎，你的姑娘！”",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          0,
+          8,
+          17
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 41,
+      "purpose": "建立空间与行动方向",
+      "rescueThrough": 5
+    },
+    {
+      "id": "p41-2",
+      "title": "认出你",
+      "caption": "“你晒黑了，姑娘。”父亲说，声音忽然哑了。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 41,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p41-3",
+      "title": "认出你",
+      "caption": "红狐站在他们身旁，许久没有移开目光。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          8,
+          10,
+          18
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 41,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p42-1",
+      "title": "一起走",
+      "caption": "红狐先走过浅滩，虎虎跟在信使身侧。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 42,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p42-2",
+      "title": "一起走",
+      "caption": "他们不再互相寻找。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          -10,
+          7,
+          14
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 42,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p42-3",
+      "title": "一起走",
+      "caption": "现在要做的，是不要走散。",
+      "camera": {
+        "object": "moebius-cyber-ink-tiger",
+        "eye": [
+          8,
+          10,
+          18
+        ],
+        "aim": [
+          0,
+          2,
+          1
+        ],
+        "fov": 52,
+        "waitMs": 100
+      },
+      "page": 42,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p43-1",
+      "title": "撤离的桥",
+      "caption": "居民把最后一段窄桥让给他们。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.98,
+          1.1,
+          1.44
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 43,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p43-2",
+      "title": "撤离的桥",
+      "caption": "有人朝虎虎挥手，没有人把自己叫作英雄。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          -0.3,
+          1,
+          1.2
+        ],
+        "scale": 1.0
+      },
+      "page": 43,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p43-3",
+      "title": "撤离的桥",
+      "caption": "信使记住了每一张来不及询问名字的脸。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          0.78,
+          0.65,
+          1.44
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 43,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p44-1",
+      "title": "最后一盏引路灯",
+      "caption": "身后的平台还亮着。",
+      "camera": {
+        "object": "greg-swamp-dry-service-shelf",
+        "auto": true,
+        "angle": [
+          1.09,
+          0.7,
+          1.2
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 44,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p44-2",
+      "title": "最后一盏引路灯",
+      "caption": "那盏灯没有催他们快走。",
+      "camera": {
+        "object": "greg-swamp-three-bank-path",
+        "auto": true,
+        "angle": [
+          -0.21000000000000002,
+          0.8500000000000001,
+          1.05
+        ],
+        "scale": 0.8925,
+        "fov": 50
+      },
+      "page": 44,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p44-3",
+      "title": "最后一盏引路灯",
+      "caption": "它只是告诉后来的人：路还没有断。",
+      "camera": {
+        "object": "greg-swamp-dry-service-shelf",
+        "auto": true,
+        "angle": [
+          0.89,
+          0.25,
+          1.2
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 44,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p45-1",
+      "title": "越过水声",
+      "caption": "虎虎在深水前停了一下。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          0.21000000000000002,
+          0.7,
+          1.28
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 45,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p45-2",
+      "title": "越过水声",
+      "caption": "信使没有拉他，只说：我在这里。",
+      "camera": {
+        "object": "greg-swamp-rooted-ecology",
+        "auto": true,
+        "angle": [
+          -1.09,
+          0.8500000000000001,
+          1.1300000000000001
+        ],
+        "scale": 0.6224999999999999,
+        "fov": 50
+      },
+      "page": 45,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p45-3",
+      "title": "越过水声",
+      "caption": "他们一起等过那阵最急的水声，再出发。",
+      "camera": {
+        "object": "swamp-opposite-drinking-stair",
+        "auto": true,
+        "angle": [
+          0.010000000000000009,
+          0.25,
+          1.28
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 45,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p46-1",
+      "title": "仰望圣城",
+      "caption": "山上的圣城渐渐露出轮廓。",
+      "camera": {
+        "object": "citadel-new-main-gate",
+        "auto": true,
+        "angle": [
+          0.32,
+          0.7,
+          1.3599999999999999
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 46,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p46-2",
+      "title": "仰望圣城",
+      "caption": "那里仍有战斗留下的回声。",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          -0.98,
+          0.8500000000000001,
+          1.21
+        ],
+        "scale": 0.69,
+        "fov": 50
+      },
+      "page": 46,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p46-3",
+      "title": "仰望圣城",
+      "caption": "信使把家人护在身后，去找能够通行的路。",
+      "camera": {
+        "object": "citadel-new-main-gate",
+        "auto": true,
+        "angle": [
+          0.12,
+          0.25,
+          1.3599999999999999
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 46,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p47-1",
+      "title": "回望",
+      "caption": "他在山路上回望湖沼。",
+      "camera": {
+        "object": "citadel-new-main-gate",
+        "auto": true,
+        "angle": [
+          0.43000000000000005,
+          0.7,
+          1.44
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 47,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p47-2",
+      "title": "回望",
+      "caption": "阿喀琉斯仍在掩护，奥德休斯还没有离开。",
+      "camera": {
+        "object": "gate-seat-root",
+        "auto": true,
+        "angle": [
+          -0.87,
+          0.8500000000000001,
+          1.29
+        ],
+        "scale": 0.7575000000000001,
+        "fov": 50
+      },
+      "page": 47,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p47-3",
+      "title": "回望",
+      "caption": "信使把谢谢留在心里，把下一步踏稳。",
+      "camera": {
+        "object": "citadel-new-main-gate",
+        "auto": true,
+        "angle": [
+          0.23,
+          0.25,
+          1.44
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 47,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p48-1",
+      "title": "一封新的信",
+      "caption": "抵达返程码头时，天色变得柔软。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          0.54,
+          0.7,
+          1.2
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 48,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p48-2",
+      "title": "一封新的信",
+      "caption": "信使取出那张旧纸，在空白处写起了新的信。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          0.75,
+          0.35,
+          1.1
+        ],
+        "scale": 0.85,
+        "fov": 50
+      },
+      "page": 48,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p48-3",
+      "title": "一封新的信",
+      "caption": "这次，收件人是水晶城。",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          0.34,
+          0.25,
+          1.2
+        ],
+        "scale": 1.1,
+        "fov": 58
+      },
+      "page": 48,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p49-1",
+      "title": "灯没有熄",
+      "caption": "母塔港的灯，比他们出发时多亮了一盏。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.65,
+          0.7,
+          1.28
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 49,
+      "purpose": "建立空间与行动方向",
+      "playerAt": "crystal-mother-port"
+    },
+    {
+      "id": "p49-2",
+      "title": "灯没有熄",
+      "caption": "城里的人一直留着一处空位。",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          -0.65,
+          0.45,
+          1.1300000000000001
+        ],
+        "scale": 0.8925,
+        "fov": 50
+      },
+      "page": 49,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p49-3",
+      "title": "灯没有熄",
+      "caption": "船靠岸时，没人先去数带回多少东西。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.45,
+          0.25,
+          1.28
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 49,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p50-1",
+      "title": "给虎虎的地方",
+      "caption": "守花人挪开门边的花盆。",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          0.76,
+          0.7,
+          1.3599999999999999
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 50,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p50-2",
+      "title": "给虎虎的地方",
+      "caption": "虎虎走进去时，所有人都往后退了一点。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          -0.5,
+          0.6499999999999999,
+          1.5
+        ],
+        "scale": 1.45,
+        "fov": 50
+      },
+      "page": 50,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p50-3",
+      "title": "给虎虎的地方",
+      "caption": "他们给他的，不是围观，是可以安静待着的地方。",
+      "camera": {
+        "object": "v9-transparent-habitat",
+        "auto": true,
+        "angle": [
+          0.56,
+          0.25,
+          1.3599999999999999
+        ],
+        "scale": 0.83,
+        "fov": 58
+      },
+      "page": 50,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p51-1",
+      "title": "水从哪里来",
+      "caption": "信使把旧水位线指给孩子看。",
+      "camera": {
+        "object": "crystal-v7-shores",
+        "auto": true,
+        "angle": [
+          0.87,
+          1.1,
+          1.44
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 51,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p51-2",
+      "title": "水从哪里来",
+      "caption": "“这座城的水，来自你看不见的那片绿。”",
+      "camera": {
+        "object": "crystal-mother-port",
+        "auto": true,
+        "angle": [
+          -0.43000000000000005,
+          0.45,
+          1.29
+        ],
+        "scale": 0.69,
+        "fov": 50
+      },
+      "page": 51,
+      "purpose": "人物反应或物件细节"
+    },
+    {
+      "id": "p51-3",
+      "title": "水从哪里来",
+      "caption": "孩子把带回的种子种在水边。",
+      "camera": {
+        "object": "crystal-v7-shores",
+        "auto": true,
+        "angle": [
+          0.67,
+          0.65,
+          1.44
+        ],
+        "scale": 0.9199999999999999,
+        "fov": 58
+      },
+      "page": 51,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p52-1",
+      "title": "城与湖沼",
+      "caption": "水晶城送出第一船修桥的木料。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.98,
+          0.7,
+          1.2
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 52,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p52-2",
+      "title": "城与湖沼",
+      "caption": "湖沼送回一小袋仍然湿润的种子。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          0.0,
+          0.5,
+          1.1
+        ],
+        "scale": 1.15,
+        "fov": 50
+      },
+      "page": 52,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p52-3",
+      "title": "城与湖沼",
+      "caption": "反抗没有在一次脱险后结束，它变成了彼此照料。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.78,
+          0.25,
+          1.2
+        ],
+        "scale": 1.01,
+        "fov": 58
+      },
+      "page": 52,
+      "purpose": "回到场所并引出下一页"
+    },
+    {
+      "id": "p53-1",
+      "title": "未说完的那一句",
+      "caption": "“我爱她，也爱她的妈妈。我们是一家人。”",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          0.6,
+          0.5,
+          1.5
+        ],
+        "scale": 2.2,
+        "fov": 58
+      },
+      "page": 53,
+      "purpose": "建立空间与行动方向",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p53-2",
+      "title": "未说完的那一句",
+      "caption": "话说完以后，他们仍安静坐了一会儿。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          -0.65,
+          0.55,
+          1.6
+        ],
+        "scale": 2.2,
+        "fov": 58
+      },
+      "page": 53,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p53-3",
+      "title": "未说完的那一句",
+      "caption": "还有很多事要慢慢说，今天先一起回家。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          0,
+          0.8,
+          1.4
+        ],
+        "scale": 2.2,
+        "fov": 58
+      },
+      "page": 53,
+      "purpose": "回到场所并引出下一页",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p54-1",
+      "title": "回信",
+      "caption": "次日清晨，一封信抵达母塔港。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.21000000000000002,
+          0.7,
+          1.3599999999999999
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 54,
+      "purpose": "建立空间与行动方向"
+    },
+    {
+      "id": "p54-2",
+      "title": "回信",
+      "caption": "只有一行字：水还在，桥还在，等你们来。",
+      "camera": {
+        "object": "player-courier-root",
+        "auto": true,
+        "angle": [
+          0.5,
+          0.35,
+          1.5
+        ],
+        "scale": 0.85,
+        "fov": 50
+      },
+      "page": 54,
+      "purpose": "人物反应或物件细节",
+      "playerAt": "mother-port-tower-landing"
+    },
+    {
+      "id": "p54-3",
+      "title": "回信",
+      "caption": "水晶城的倒影，轻轻动了一下。",
+      "camera": {
+        "object": "crystal-v9-tower",
+        "auto": true,
+        "angle": [
+          0.010000000000000009,
+          0.25,
+          1.3599999999999999
+        ],
+        "scale": 1.19,
+        "fov": 58
+      },
+      "page": 54,
+      "purpose": "回到场所并引出下一页"
+    }
+  ],
+  "pages": [
+    {
+      "number": 3,
+      "storyPage": 1,
+      "title": "水晶城的清晨",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-establish",
+      "panels": [
+        "p01-1",
+        "p01-2",
+        "p01-3"
+      ],
+      "captions": [
+        "天亮时，水晶城先亮起的，是水里的倒影。",
+        "母塔港的船等着第一封信。",
+        "今天的收件人，本该是一只虎。"
+      ]
+    },
+    {
+      "number": 4,
+      "storyPage": 2,
+      "title": "没有回信的人",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-vertical",
+      "panels": [
+        "p02-1",
+        "p02-2",
+        "p02-3"
+      ],
+      "captions": [
+        "信使把寄给虎虎的信折好，旧折痕已经发白。",
+        "三天了，湖沼没有回信。",
+        "他仍在收件人一栏写下：家人。"
+      ]
+    },
+    {
+      "number": 5,
+      "storyPage": 3,
+      "title": "水位线",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-reply",
+      "panels": [
+        "p03-1",
+        "p03-2",
+        "p03-3"
+      ],
+      "captions": [
+        "码头老人指向石壁上的旧水痕。",
+        "那一线水，昨日还在脚边。",
+        "母塔港的绳子垂得更低了。"
+      ]
+    },
+    {
+      "number": 6,
+      "storyPage": 4,
+      "title": "玻璃里的花",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-detail",
+      "panels": [
+        "p04-1",
+        "p04-2",
+        "p04-3"
+      ],
+      "captions": [
+        "温室里，花还按时开着。",
+        "照料它们的人却说，湖沼的水已经带不来种子。",
+        "城的美，原来也靠远方活着。"
+      ]
+    },
+    {
+      "number": 7,
+      "storyPage": 5,
+      "title": "从湖沼来的信",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-battle",
+      "panels": [
+        "p05-1",
+        "p05-2",
+        "p05-3"
+      ],
+      "captions": [
+        "苍竹的信夹在航线册里，纸上有潮气。",
+        "女儿虎虎困在湖沼，母亲化作红狐，仍守着旧港的八音盒。",
+        "最后一行写着：别让她一个人等。"
+      ]
+    },
+    {
+      "number": 8,
+      "storyPage": 6,
+      "title": "一张航线图",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-quiet",
+      "panels": [
+        "p06-1",
+        "p06-2",
+        "p06-3"
+      ],
+      "captions": [
+        "最短的航路已经封锁。",
+        "信使沿图上的裂缝，找出一条穿过叹息之门的旧路。",
+        "走那里，会晚；不走，就永远到不了。"
+      ]
+    },
+    {
+      "number": 9,
+      "storyPage": 7,
+      "title": "城里最后一船水",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-establish",
+      "panels": [
+        "p07-1",
+        "p07-2",
+        "p07-3"
+      ],
+      "captions": [
+        "港务员说，只剩一船水够全城今夜用。",
+        "信使没有开口借船。",
+        "一个守花人先把自己的水桶放上了码头。"
+      ]
+    },
+    {
+      "number": 10,
+      "storyPage": 8,
+      "title": "替我带句话",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-vertical",
+      "panels": [
+        "p08-1",
+        "p08-2",
+        "p08-3"
+      ],
+      "captions": [
+        "有人搬来空罐，有人带来干净的布。",
+        "他们不能一起离城，便把能带走的东西交给他。",
+        "“告诉湖沼，我们还在等它的春天。”"
+      ]
+    },
+    {
+      "number": 11,
+      "storyPage": 9,
+      "title": "启航",
+      "chapter": "一 · 水晶城的来信",
+      "layout": "edena-reply",
+      "panels": [
+        "p09-1",
+        "p09-2",
+        "p09-3"
+      ],
+      "captions": [
+        "船离岸时，没有人喊胜利。",
+        "岸上的灯只亮了一次，像有人点头。",
+        "信使第一次觉得，这封信不只属于他。"
+      ]
+    },
+    {
+      "number": 12,
+      "storyPage": 10,
+      "title": "远岸",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-detail",
+      "panels": [
+        "p10-1",
+        "p10-2",
+        "p10-3"
+      ],
+      "captions": [
+        "水晶城渐渐缩成一片细光。",
+        "信使摸了摸衣襟里的信。",
+        "风很大，那一小片纸却一直贴着心口。"
+      ]
+    },
+    {
+      "number": 13,
+      "storyPage": 11,
+      "title": "叹息之门",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-battle",
+      "panels": [
+        "p11-1",
+        "p11-2",
+        "p11-3"
+      ],
+      "captions": [
+        "门立在路的尽头，像一道没有合拢的伤口。",
+        "石阶上等着两位守路的人。",
+        "他们先看见信封，才看见信使。"
+      ]
+    },
+    {
+      "number": 14,
+      "storyPage": 12,
+      "title": "留在门外的人",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-quiet",
+      "panels": [
+        "p12-1",
+        "p12-2",
+        "p12-3"
+      ],
+      "captions": [
+        "阿喀琉斯问：你去接谁？",
+        "“一只虎。还有，等他回来的人。”",
+        "英雄低头看了看自己没有遮住的脚踝。"
+      ]
+    },
+    {
+      "number": 15,
+      "storyPage": 13,
+      "title": "奥德休斯的地图",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-establish",
+      "panels": [
+        "p13-1",
+        "p13-2",
+        "p13-3"
+      ],
+      "captions": [
+        "奥德休斯把舰队的巡航线画在灰上。",
+        "“硬闯，只会让他们也看见你。”",
+        "他把一条支线引向苔庭。"
+      ]
+    },
+    {
+      "number": 16,
+      "storyPage": 14,
+      "title": "谁来争取时间",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-vertical",
+      "panels": [
+        "p14-1",
+        "p14-2",
+        "p14-3"
+      ],
+      "captions": [
+        "信使问，那你们怎么办？",
+        "门内没有立刻传来回答。",
+        "“我们留下。你去把人带回来。”"
+      ]
+    },
+    {
+      "number": 17,
+      "storyPage": 15,
+      "title": "不要入城",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-reply",
+      "panels": [
+        "p15-1",
+        "p15-2",
+        "p15-3"
+      ],
+      "captions": [
+        "信使把第二封信交给阿喀琉斯。",
+        "“别追进城里。还有，留意你的脚踝。”",
+        "这一次，英雄认真点了头。"
+      ]
+    },
+    {
+      "number": 18,
+      "storyPage": 16,
+      "title": "苔庭的信号",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-detail",
+      "panels": [
+        "p16-1",
+        "p16-2",
+        "p16-3"
+      ],
+      "captions": [
+        "奥德休斯望着苔庭的方向，等他送出信号。",
+        "信使送出了约定的信号。",
+        "原本朝着湖沼的巡航灯，慢慢转向另一边。"
+      ]
+    },
+    {
+      "number": 19,
+      "storyPage": 17,
+      "title": "短短的一段安静",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-battle",
+      "panels": [
+        "p17-1",
+        "p17-2",
+        "p17-3"
+      ],
+      "captions": [
+        "没有炮声的片刻，也会让人害怕。",
+        "信使数过三次呼吸，才敢抬头。",
+        "英雄争来的时间，开始流逝。"
+      ]
+    },
+    {
+      "number": 20,
+      "storyPage": 18,
+      "title": "向绿处走",
+      "chapter": "二 · 门外的约定",
+      "layout": "edena-quiet",
+      "panels": [
+        "p18-1",
+        "p18-2",
+        "p18-3"
+      ],
+      "captions": [
+        "他沿湿路进入湖沼。",
+        "林冠把天空缝得很窄，水声却从四面传来。",
+        "他轻声叫了第一遍：虎虎。"
+      ]
+    },
+    {
+      "number": 21,
+      "storyPage": 19,
+      "title": "根的城市",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-establish",
+      "panels": [
+        "p19-1",
+        "p19-2",
+        "p19-3"
+      ],
+      "captions": [
+        "湖沼并非荒野，根与栈道之间有人生活。",
+        "干燥的平台上，留着修过又修的工具。",
+        "信使看见了另一种城市。"
+      ]
+    },
+    {
+      "number": 22,
+      "storyPage": 20,
+      "title": "被抽走的颜色",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-vertical",
+      "panels": [
+        "p20-1",
+        "p20-2",
+        "p20-3"
+      ],
+      "captions": [
+        "舰队的影子掠过叶面。",
+        "水仍在流，花却像忘记了如何开放。",
+        "这里的人说，他们抽走的不只是水。"
+      ]
+    },
+    {
+      "number": 23,
+      "storyPage": 21,
+      "title": "第一座桥",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-reply",
+      "panels": [
+        "p21-1",
+        "p21-2",
+        "p21-3"
+      ],
+      "captions": [
+        "桥边的居民没有问他能带来多少援军。",
+        "他们问：那只虎，还在吗？",
+        "信使说，我就是来找他的。"
+      ]
+    },
+    {
+      "number": 24,
+      "storyPage": 22,
+      "title": "不再交出种子",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-detail",
+      "panels": [
+        "p22-1",
+        "p22-2",
+        "p22-3"
+      ],
+      "captions": [
+        "有人把最后一袋种子收回树根下。",
+        "“我们不再把明年的春天交出去。”",
+        "反抗从一只握紧的手开始。"
+      ]
+    },
+    {
+      "number": 25,
+      "storyPage": 23,
+      "title": "把水留给活物",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-battle",
+      "panels": [
+        "p23-1",
+        "p23-2",
+        "p23-3"
+      ],
+      "captions": [
+        "守水的人打开通往浅池的支渠。",
+        "水绕过舰队能够看见的地方。",
+        "鱼与幼兽先得到了一条活路。"
+      ]
+    },
+    {
+      "number": 26,
+      "storyPage": 24,
+      "title": "栈道上的约定",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-quiet",
+      "panels": [
+        "p24-1",
+        "p24-2",
+        "p24-3"
+      ],
+      "captions": [
+        "居民把没有受伤的人排在桥的外侧。",
+        "老人与孩子走中间，慢慢走。",
+        "没人被要求独自证明勇敢。"
+      ]
+    },
+    {
+      "number": 27,
+      "storyPage": 25,
+      "title": "修补者",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-establish",
+      "panels": [
+        "p25-1",
+        "p25-2",
+        "p25-3"
+      ],
+      "captions": [
+        "水晶城带来的布，在平台上拆成了一条条。",
+        "旧工具开始修桥，新布开始包扎伤口。",
+        "远方的礼物，终于找到了用处。"
+      ]
+    },
+    {
+      "number": 28,
+      "storyPage": 26,
+      "title": "舰队又来了",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-vertical",
+      "panels": [
+        "p26-1",
+        "p26-2",
+        "p26-3"
+      ],
+      "captions": [
+        "林冠外，巡航机重新转向湖沼。",
+        "诱敌的时间快用完了。",
+        "没有人再提投降，只把身边的人往里让了让。"
+      ]
+    },
+    {
+      "number": 29,
+      "storyPage": 27,
+      "title": "桥还在",
+      "chapter": "三 · 湖沼不再沉默",
+      "layout": "edena-reply",
+      "panels": [
+        "p27-1",
+        "p27-2",
+        "p27-3"
+      ],
+      "captions": [
+        "第一阵震动之后，桥上的绳结松了一处。",
+        "守桥的人俯身重新系紧。",
+        "他对信使说：你继续。这里有人。"
+      ]
+    },
+    {
+      "number": 30,
+      "storyPage": 28,
+      "title": "八音盒的方向",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-detail",
+      "panels": [
+        "p28-1",
+        "p28-2",
+        "p28-3"
+      ],
+      "captions": [
+        "旧港传来一段断断续续的曲子。",
+        "信使在树影里看见红狐。",
+        "她听得太专心，仿佛害怕漏掉某个人的脚步。"
+      ]
+    },
+    {
+      "number": 31,
+      "storyPage": 29,
+      "title": "家书",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-battle",
+      "panels": [
+        "p29-1",
+        "p29-2",
+        "p29-3"
+      ],
+      "captions": [
+        "他蹲下来，没有催她起身。",
+        "“我来找虎虎。也来接你。”",
+        "红狐抬头，看着那封已经发软的信。"
+      ]
+    },
+    {
+      "number": 32,
+      "storyPage": 30,
+      "title": "没说完的话",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-quiet",
+      "panels": [
+        "p30-1",
+        "p30-2",
+        "p30-3"
+      ],
+      "captions": [
+        "“我们要好好说话。”信使说。",
+        "“这个家，得我们自己守护。”",
+        "红狐走到他的身边，把沉默留给了八音盒。"
+      ]
+    },
+    {
+      "number": 33,
+      "storyPage": 31,
+      "title": "两种脚步",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-establish",
+      "panels": [
+        "p31-1",
+        "p31-2",
+        "p31-3"
+      ],
+      "captions": [
+        "从这里起，湿路上有了两种脚步。",
+        "红狐总停下来，等信使绕过那些看不见的深水。",
+        "他们开始一起找。"
+      ]
+    },
+    {
+      "number": 34,
+      "storyPage": 32,
+      "title": "水面上的痕迹",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-vertical",
+      "panels": [
+        "p32-1",
+        "p32-2",
+        "p32-3"
+      ],
+      "captions": [
+        "浅水里，留着一道比船更宽的波纹。",
+        "红狐没有追着波纹跑。",
+        "她望向林冠深处，像在辨认一声呼吸。"
+      ]
+    },
+    {
+      "number": 35,
+      "storyPage": 33,
+      "title": "第三次呼唤",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-reply",
+      "panels": [
+        "p33-1",
+        "p33-2",
+        "p33-3"
+      ],
+      "captions": [
+        "第一遍没有回应，第二遍被瀑声盖住。",
+        "信使喊第三遍时，声音已经很小。",
+        "“虎虎，我们来了。”"
+      ]
+    },
+    {
+      "number": 36,
+      "storyPage": 34,
+      "title": "被守住的小池",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-detail",
+      "panels": [
+        "p34-1",
+        "p34-2",
+        "p34-3"
+      ],
+      "captions": [
+        "他们终于看见虎虎。",
+        "她停在水边，身后是一处没有干涸的小池。",
+        "原来，她一直守着比自己更小的生命。"
+      ]
+    },
+    {
+      "number": 37,
+      "storyPage": 35,
+      "title": "不是不肯回家",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-battle",
+      "panels": [
+        "p35-1",
+        "p35-2",
+        "p35-3"
+      ],
+      "captions": [
+        "信使往前一步，虎虎却仍望着水。",
+        "“你是走不了，还是不肯走？”",
+        "虎虎的影子落在池边，像一道安静的门。"
+      ]
+    },
+    {
+      "number": 38,
+      "storyPage": 36,
+      "title": "旧暗号",
+      "chapter": "四 · 两家秋语",
+      "layout": "edena-quiet",
+      "panels": [
+        "p36-1",
+        "p36-2",
+        "p36-3"
+      ],
+      "captions": [
+        "信使想起那年窗前的雨。",
+        "雨落在荷叶，也落在芭蕉。",
+        "有些话，他们只在家里说过。"
+      ]
+    },
+    {
+      "number": 39,
+      "storyPage": 37,
+      "title": "两家秋语一声",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-establish",
+      "panels": [
+        "p37-1",
+        "p37-2",
+        "p37-3"
+      ],
+      "captions": [
+        "“两家秋雨一家声，你猜。”",
+        "信使没有再靠近，等女儿自己认出来。",
+        "红狐站在旁边，一动不动。"
+      ]
+    },
+    {
+      "number": 40,
+      "storyPage": 38,
+      "title": "荷与芭蕉",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-vertical",
+      "panels": [
+        "p38-1",
+        "p38-2",
+        "p38-3"
+      ],
+      "captions": [
+        "“芭蕉与荷。”",
+        "父亲说完，才发觉自己一直屏着气。",
+        "虎虎终于把头转向了他们。"
+      ]
+    },
+    {
+      "number": 41,
+      "storyPage": 39,
+      "title": "有人接替守水",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-reply",
+      "panels": [
+        "p39-1",
+        "p39-2",
+        "p39-3"
+      ],
+      "captions": [
+        "守桥的人带着同伴走来。",
+        "“小池交给我们。”",
+        "这句普通的话，比任何命令都更能让她离开。"
+      ]
+    },
+    {
+      "number": 42,
+      "storyPage": 40,
+      "title": "不是带走一只虎",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-detail",
+      "panels": [
+        "p40-1",
+        "p40-2",
+        "p40-3"
+      ],
+      "captions": [
+        "信使终于明白，救援不是把虎虎从这里拿走。",
+        "要先有人接住她不愿丢下的东西。",
+        "他把水晶城的种子袋交给守水人。"
+      ]
+    },
+    {
+      "number": 43,
+      "storyPage": 41,
+      "title": "认出你",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-battle",
+      "panels": [
+        "p41-1",
+        "p41-2",
+        "p41-3"
+      ],
+      "captions": [
+        "“我是虎虎，你的虎虎，你的姑娘！”",
+        "“你晒黑了，姑娘。”父亲说，声音忽然哑了。",
+        "红狐站在他们身旁，许久没有移开目光。"
+      ]
+    },
+    {
+      "number": 44,
+      "storyPage": 42,
+      "title": "一起走",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-quiet",
+      "panels": [
+        "p42-1",
+        "p42-2",
+        "p42-3"
+      ],
+      "captions": [
+        "红狐先走过浅滩，虎虎跟在信使身侧。",
+        "他们不再互相寻找。",
+        "现在要做的，是不要走散。"
+      ]
+    },
+    {
+      "number": 45,
+      "storyPage": 43,
+      "title": "撤离的桥",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-establish",
+      "panels": [
+        "p43-1",
+        "p43-2",
+        "p43-3"
+      ],
+      "captions": [
+        "居民把最后一段窄桥让给他们。",
+        "有人朝虎虎挥手，没有人把自己叫作英雄。",
+        "信使记住了每一张来不及询问名字的脸。"
+      ]
+    },
+    {
+      "number": 46,
+      "storyPage": 44,
+      "title": "最后一盏引路灯",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-vertical",
+      "panels": [
+        "p44-1",
+        "p44-2",
+        "p44-3"
+      ],
+      "captions": [
+        "身后的平台还亮着。",
+        "那盏灯没有催他们快走。",
+        "它只是告诉后来的人：路还没有断。"
+      ]
+    },
+    {
+      "number": 47,
+      "storyPage": 45,
+      "title": "越过水声",
+      "chapter": "五 · 谁也不落下",
+      "layout": "edena-reply",
+      "panels": [
+        "p45-1",
+        "p45-2",
+        "p45-3"
+      ],
+      "captions": [
+        "虎虎在深水前停了一下。",
+        "信使没有拉他，只说：我在这里。",
+        "他们一起等过那阵最急的水声，再出发。"
+      ]
+    },
+    {
+      "number": 48,
+      "storyPage": 46,
+      "title": "仰望圣城",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-detail",
+      "panels": [
+        "p46-1",
+        "p46-2",
+        "p46-3"
+      ],
+      "captions": [
+        "山上的圣城渐渐露出轮廓。",
+        "那里仍有战斗留下的回声。",
+        "信使把家人护在身后，去找能够通行的路。"
+      ]
+    },
+    {
+      "number": 49,
+      "storyPage": 47,
+      "title": "回望",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-battle",
+      "panels": [
+        "p47-1",
+        "p47-2",
+        "p47-3"
+      ],
+      "captions": [
+        "他在山路上回望湖沼。",
+        "阿喀琉斯仍在掩护，奥德休斯还没有离开。",
+        "信使把谢谢留在心里，把下一步踏稳。"
+      ]
+    },
+    {
+      "number": 50,
+      "storyPage": 48,
+      "title": "一封新的信",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-quiet",
+      "panels": [
+        "p48-1",
+        "p48-2",
+        "p48-3"
+      ],
+      "captions": [
+        "抵达返程码头时，天色变得柔软。",
+        "信使取出那张旧纸，在空白处写起了新的信。",
+        "这次，收件人是水晶城。"
+      ]
+    },
+    {
+      "number": 51,
+      "storyPage": 49,
+      "title": "灯没有熄",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-establish",
+      "panels": [
+        "p49-1",
+        "p49-2",
+        "p49-3"
+      ],
+      "captions": [
+        "母塔港的灯，比他们出发时多亮了一盏。",
+        "城里的人一直留着一处空位。",
+        "船靠岸时，没人先去数带回多少东西。"
+      ]
+    },
+    {
+      "number": 52,
+      "storyPage": 50,
+      "title": "给虎虎的地方",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-vertical",
+      "panels": [
+        "p50-1",
+        "p50-2",
+        "p50-3"
+      ],
+      "captions": [
+        "守花人挪开门边的花盆。",
+        "虎虎走进去时，所有人都往后退了一点。",
+        "他们给他的，不是围观，是可以安静待着的地方。"
+      ]
+    },
+    {
+      "number": 53,
+      "storyPage": 51,
+      "title": "水从哪里来",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-reply",
+      "panels": [
+        "p51-1",
+        "p51-2",
+        "p51-3"
+      ],
+      "captions": [
+        "信使把旧水位线指给孩子看。",
+        "“这座城的水，来自你看不见的那片绿。”",
+        "孩子把带回的种子种在水边。"
+      ]
+    },
+    {
+      "number": 54,
+      "storyPage": 52,
+      "title": "城与湖沼",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-detail",
+      "panels": [
+        "p52-1",
+        "p52-2",
+        "p52-3"
+      ],
+      "captions": [
+        "水晶城送出第一船修桥的木料。",
+        "湖沼送回一小袋仍然湿润的种子。",
+        "反抗没有在一次脱险后结束，它变成了彼此照料。"
+      ]
+    },
+    {
+      "number": 55,
+      "storyPage": 53,
+      "title": "未说完的那一句",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-battle",
+      "panels": [
+        "p53-1",
+        "p53-2",
+        "p53-3"
+      ],
+      "captions": [
+        "“我爱她，也爱她的妈妈。我们是一家人。”",
+        "话说完以后，他们仍安静坐了一会儿。",
+        "还有很多事要慢慢说，今天先一起回家。"
+      ]
+    },
+    {
+      "number": 56,
+      "storyPage": 54,
+      "title": "回信",
+      "chapter": "六 · 城与湖沼",
+      "layout": "edena-quiet",
+      "panels": [
+        "p54-1",
+        "p54-2",
+        "p54-3"
+      ],
+      "captions": [
+        "次日清晨，一封信抵达母塔港。",
+        "只有一行字：水还在，桥还在，等你们来。",
+        "水晶城的倒影，轻轻动了一下。"
+      ]
+    }
+  ]
+}

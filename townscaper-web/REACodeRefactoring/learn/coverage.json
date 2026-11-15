@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-07T14:46:07+08:00",
+  "updatedAt": "2026-11-10T19:06:30+08:00",
   "scope": "原版 src + engine 的全部 JS；vendor、页面内联脚本与工具另列后续范围。",
   "modules": [
     {
@@ -55,11 +55,10 @@
       "source": "src/archvoid.js",
       "targets": [
         "src/core/arch-profile.js",
-        "src/build/buildings.js",
-        "arches.html"
+        "src/build/buildings.js"
       ],
-      "status": "部分覆盖",
-      "gap": "123+292帧全核，806有水渠爱好者配文且中途换红楼，纠正原版无文字/单场景说明。保留既有拱，迁移解析净空与有界弦误差角采样，60组逻辑和双网格8/16段/体素不变/恢复通过。楔石/键石、桥面/拱脚及完整clearance/measure接口、形变空间误差仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）楔石 / 键石 / measureArch / 变形弦误差接进真实拱（开关默认关）；原水渠美术未复现。",
       "clips": [
         "806904557502464000",
         "802496920790777856"
@@ -77,10 +76,12 @@
         "ARCH_PRESETS"
       ],
       "idReferences": [
-        "refactoring-audit.html"
+        "src/core/arch-profile.js",
+        "refactoring-audit.html",
+        "building-kit-r55.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/arch-profile-review.md"
+      "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
     },
     {
       "source": "src/ballistic.js",
@@ -89,8 +90,8 @@
         "src/badnorth/battle.js",
         "ballistics.html"
       ],
-      "status": "部分覆盖",
-      "gap": "678帧全核，原Cost/Validity/半径实际变化，原注释24帧/静态参数不成立。保留现有无阻力游戏参数，提共享表/可调落角权重，修非格点目标垂直端点与越界夹取；1717例和双网格实际弓手通过。原表达式/独立Validity/drag及候选轨迹UI仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）Cost/Valid 表达式分开编译 + 带阻力烘表 + 候选轨迹；Battle 默认仍用无阻力表。",
       "clips": [
         "987267068495003648"
       ],
@@ -106,21 +107,20 @@
         "retune"
       ],
       "idReferences": [
+        "src/core/ballistic-table.js",
         "src/badnorth/battle.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/ballistic-table-review.md"
+      "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
     },
     {
       "source": "src/barycentric.js",
       "targets": [
-        "src/core/spatial.js",
-        "src/core/infinite.js",
-        "grids.html?t=infinite"
+        "src/core/spatial.js"
       ],
-      "status": "部分覆盖",
-      "gap": "815+478帧全核，原24帧/始终内部说明不成立。已有XZ预计算真正接入块/两簇缓存，修原点引用/退化传播；10264顶点漂移≤5.03e-15、24模式与真实页133预计算/5万查询通过。原3D任意平面、教学交互/完整参考接口及极瘦三角仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）baryPrep3 任意 3D 平面重心（投影权重 + 离面距离，极瘦三角稳定），XZ 上与 baryPrep 一致；教学 gizmo 页未做。",
       "clips": [
         "974579499802202113",
         "974564862729838592"
@@ -141,7 +141,7 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/bary-prep-review.md"
+      "evidence": "artifacts/coverage/r53-G1-grids.md"
     },
     {
       "source": "src/birds.js",
@@ -197,13 +197,11 @@
     {
       "source": "src/blobshadow.js",
       "targets": [
-        "src/core/unit-shadow.js",
         "src/life/unit-shadow-batch.js",
-        "src/badnorth/battle.js",
-        "unit-shadows.html"
+        "src/badnorth/battle-g3.js"
       ],
-      "status": "部分覆盖",
-      "gap": "新增水平凸格裁剪软盘与实际单位导航楼层接入，真实Battle双网格GPU/过滤/停止通过。原配文820是动画参考请求，非无文字软影教程；高度淡出是本地策略。光向偏移/坡向椭圆、形变斜坡贴合、跨格连续性及原measure接口仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）5 射线拟合平面贴形变斜坡（shadowFit 默认关），12° 斜面误差 .006。",
       "clips": [
         "820977247083528192",
         "821321422140309504",
@@ -220,17 +218,16 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/unit-shadow-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/borderpath.js",
       "targets": [
-        "src/core/frontier.js",
-        "src/campaign/campaign.js",
+        "src/campaign/frontier-overlay.js",
         "campaign.html"
       ],
-      "status": "部分覆盖",
-      "gap": "已学14帧续项：外围padding、避让节点的中点通路及自适应Bezier采样接入，96条逻辑/24项真实页面通过。原作精确拓扑未知；两侧场细分、同时多条前线/完整美术待补。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）campaign.html ?fields=1 画多条前线与两侧场；ear-clip 长扇三角保真度问题未改。",
       "clips": [
         "1097458505315946496"
       ],
@@ -242,21 +239,21 @@
       ],
       "idReferences": [
         "src/core/frontier.js",
-        "refactoring-audit.html"
+        "src/campaign/frontier-overlay.js",
+        "refactoring-audit.html",
+        "campaign.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/frontier-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/bouncegi.js",
       "targets": [
-        "src/light/lightvolume.js",
-        "src/core/voxel-distance.js",
-        "src/world/view.js",
-        "lightvolume.html"
+        "src/light/surface-bounce.js",
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "185帧复核，保留已有共享体素多次反弹/六向收集与运行成果；本次实际算法对照发现原版2.5D表面形因子gather、暴力参考/audit等接口未迁移，不能把同职责静态对应当等价，改列部分。视频本身不证明原作形因子/逆平方。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）split 模型与蒙特卡洛参考相关 0.53→0.82–0.91、总量比≈1、系数=1；两跳 gather 纹理接进 View 间接光。",
       "clips": [
         "1580835075629133825"
       ],
@@ -276,21 +273,21 @@
       ],
       "idReferences": [
         "src/world/view.js",
+        "src/light/surface-bounce.js",
         "src/light/lightvolume.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/distance-ao-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "src/boxtest.js",
       "targets": [
         "src/core/obb.js",
-        "src/badnorth/landing-plan.js",
-        "src/badnorth/battle.js"
+        "src/badnorth/landing-plan.js"
       ],
-      "status": "部分覆盖",
-      "gap": "已核504帧不重计。共享3D SAT接真实泊位及14单位固定朝向直线扫掠走廊预留，交叉/平行逻辑与双网格6船15对无交通过。地形岸礁碰撞、动态调度与原二维裁剪/深度和完整规划仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）穿透深度、俯视 2D、裁剪面积真值、航道避礁石陆地、换车道；无动态避让（原版同为静态）。",
       "clips": [
         "974325184525201409"
       ],
@@ -310,10 +307,11 @@
       ],
       "idReferences": [
         "src/core/obb.js",
+        "src/badnorth/landing-plan.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/landing-approach-review.md"
+      "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
     },
     {
       "source": "src/campaignmap.js",
@@ -342,8 +340,12 @@
       ],
       "idReferences": [
         "src/core/campaign-graph.js",
+        "src/world/navlayer.js",
+        "src/world/view.js",
         "src/badnorth/island.js",
+        "src/terrain/walk-reach.js",
         "src/campaign/campaign.js",
+        "nav-walk.html",
         "refactoring-audit.html",
         "campaign.html"
       ],
@@ -351,15 +353,47 @@
       "evidence": "artifacts/coverage/campaign-graph-review.md"
     },
     {
-      "source": "src/cheesenav.js",
+      "source": "src/cavepath.js",
       "targets": [
-        "src/world/layerednav.js",
         "src/world/battle-navigation.js",
-        "src/badnorth/battle.js",
+        "src/world/layerednav.js",
         "navigation.html"
       ],
-      "status": "部分覆盖",
-      "gap": "分层战斗/流场、基本水平身体半径及连续扫掠已接入；精细模块内部门户、形变侧壁和斜坡脚高插值待补齐。",
+      "status": "已合并/迁移（静态确认）",
+      "gap": "分层导航路线天然带层号，测试确认穿洞 / 翻越分层；未做弧长重采样与法向偏移的可视化。",
+      "clips": [
+        "906416813810049025",
+        "890611046435627008"
+      ],
+      "sourceExports": [
+        "CFG",
+        "inSlab",
+        "inTunnel",
+        "heightAt",
+        "archHead",
+        "surfaces",
+        "routeThrough",
+        "routeOver",
+        "resample",
+        "measure"
+      ],
+      "idReferences": [
+        "src/core/house-door-presence.js",
+        "src/capabilities/terrain.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
+    },
+    {
+      "source": "src/cheesenav.js",
+      "targets": [
+        "src/world/fine-portals.js",
+        "src/world/battle-navigation.js",
+        "navigation.html"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）格内精细门户 + 形变侧壁（共享 fine-portals.js）接进 BattleNavigation（finePortals，默认关）与 navigation.html。",
       "clips": [
         "906425294533394432",
         "797119718477991936",
@@ -375,28 +409,23 @@
       ],
       "idReferences": [
         "src/capabilities/terrain.js",
+        "src/world/fine-portals.js",
         "src/world/layerednav.js",
         "src/world/battle-navigation.js",
         "refactoring-audit.html",
         "navigation.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/battle-navigation-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/clouddeck.js",
       "targets": [
-        "src/core/cloud-depth.js",
-        "src/life/impostor.js",
-        "src/life/vegetation.js",
-        "clouds.html",
-        "src/core/cloud-motion.js",
-        "src/light/cloud-shadow.js",
-        "src/world/view.js",
-        "src/ui/environment-panel.js"
+        "src/world/cloud-deck-layer.js",
+        "src/core/cloud-depth.js"
       ],
-      "status": "部分覆盖",
-      "gap": "近云投影接入共享World主材质及首页环境开关：复用真实云图集/实例锚点/时钟，沿阳光方向投影到不同高度的建筑与地形。双网格GPU开关恢复、自然31云团、隐藏停止通过。复用489帧不重计，173/285；固定轮廓近似，远云影/模糊/水与植被接收仍缺。 原高耸云体/真正几何三层及完整接口未复现；近云40单位回绕仍存在。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=clouddeck 三圈高耸积云带视差 + 云影投到地形屋顶；水面不读云影。",
       "clips": [
         "1243228419162341379"
       ],
@@ -414,13 +443,15 @@
         "sweepRange"
       ],
       "idReferences": [
+        "src/core/cloud-depth.js",
+        "src/world/cloud-deck-layer.js",
         "src/life/vegetation.js",
         "src/life/atmosphere.js",
         "src/life/impostor.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/cloud-shadow-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/colorgamut.js",
@@ -445,6 +476,8 @@
         "audit"
       ],
       "idReferences": [
+        "src/ui/shading-panel.js",
+        "src/core/oklab.js",
         "src/core/color-volume.js",
         "textures.html",
         "refactoring-audit.html"
@@ -455,13 +488,11 @@
       "source": "src/colorvolume.js",
       "targets": [
         "src/core/color-volume.js",
-        "src/world/view.js",
-        "color-lab.html",
-        "src/core/palette-patch.js",
-        "palette-editor.html"
+        "src/world/view-shading.js",
+        "src/ui/shading-panel.js"
       ],
-      "status": "部分覆盖",
-      "gap": "515帧证实HSL范围/离散特征调色；新增共享范围采样与真实顶面shader，保留默认。原版八角点OKLab/统计、色带/terrain等API未全迁移，五特征/离散采样及视觉仍待补。 后续624帧补sRGB四角色盘实景取样；其他色彩空间/自由拖点/完整五特征仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）每格五特征栅格 + GPU 八角点 OKLab 三线性插值接进 View（?shade=colorvolume，默认关），面板角点取色器实时改；浏览器开关对照已看。",
       "clips": [
         "1710031224838771027",
         "1712088611934371876"
@@ -475,27 +506,24 @@
         "terrain"
       ],
       "idReferences": [
+        "src/ui/shading-panel.js",
+        "src/core/oklab.js",
         "src/core/color-volume.js",
         "textures.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/palette-editor-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "src/combatfx.js",
       "targets": [
-        "src/badnorth/battle.js",
-        "src/badnorth/flowfield.js",
-        "src/world/battle-navigation.js",
-        "src/core/platform-anchor.js",
-        "src/core/combat-state.js",
-        "src/core/spear-thrust.js",
-        "src/core/combat-profile.js",
-        "src/life/unit-sprites.js"
+        "src/core/melee-sweep.js",
+        "src/badnorth/battle-g3.js",
+        "src/badnorth/battle.js"
       ],
       "status": "部分覆盖",
-      "gap": "既有附着/中断/矛/精灵和大小兵配置保留，新增体型软分离及暂停冻结；完整动作/原作美术、复杂拥挤/体型路由、旋转武器/3D接触遮挡及盾格挡推力待补齐。",
+      "gap": "（第 55 批）旋转扫掠、刃碰墙遮挡、盾推力接进 Battle（meleeFx 默认关）；缺原作动作美术（只有程序化刃）。",
       "clips": [
         "870296307889573889",
         "903647529203634176",
@@ -518,14 +546,21 @@
         "gore"
       ],
       "idReferences": [
+        "src/core/melee-sweep.js",
+        "src/core/combat-state.js",
         "src/core/combat-profile.js",
+        "src/core/route-preview.js",
+        "src/core/distance-isolines.js",
+        "src/world/view.js",
         "src/life/vegetation.js",
         "src/badnorth/flowfield.js",
+        "src/badnorth/damage-numbers.js",
         "src/badnorth/battle.js",
+        "route-preview.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/body-separation-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/contrast.js",
@@ -542,6 +577,8 @@
         "bucketSpread"
       ],
       "idReferences": [
+        "src/core/oklab.js",
+        "src/core/contrast-field.js",
         "textures.html",
         "refactoring-audit.html"
       ],
@@ -551,10 +588,10 @@
       "source": "src/contrasttex.js",
       "targets": [
         "src/core/contrast-field.js",
-        "color-lab.html"
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "517帧复核；新增显式图边约束的确定性标量松弛/有界修复、实际网格三角诊断与违例统计。仅诊断，不是原作彩色纹理atlas/贴花、OKLab/色域投影或完整buildDecal/paint接口；实景表面接入待补。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）World 三角扇 OKLab 松弛（ΔE 13.75→0.10）画进 512² 世界图，顶面取色 + 对比边细线接进 View；浏览器对照已看。",
       "clips": [
         "1482346496460828674"
       ],
@@ -572,11 +609,13 @@
         "paint"
       ],
       "idReferences": [
+        "src/core/oklab.js",
+        "src/core/contrast-field.js",
         "textures.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/color-lab-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "src/coroutine.js",
@@ -633,11 +672,11 @@
       "targets": [
         "src/core/depression-fill.js",
         "src/terrain/drainage.js",
-        "src/terrain/generate.js",
-        "drainage.html"
+        "src/terrain/terrainmesh.js",
+        "terrain-r55.html"
       ],
-      "status": "部分覆盖",
-      "gap": "复用已核656帧不重计。Priority-Flood改接真实多边形邻接/堆/岩石体素，双网格29/25格、出口树、幂等/恢复通过，生成器可选接入。连续微坡、湖水、原规则网格统计/侵蚀与河道重算仍缺，未验收所有生成特征组合。 本批6组真实生成seed1/7/19双网格非上坡出口/幂等通过，失效河段清除逻辑通过（未重新生成河道）。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）水位填洼写 World.lakes，terrainmesh 画湖面多边形；整数 stream-power + 崩塌侵蚀。湖面为平面河色，非独立水 shader。",
       "clips": [
         "1447488323845509121",
         "1442695040888963407"
@@ -657,11 +696,15 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/depression-fill.js",
         "src/terrain/generate.js",
+        "src/terrain/drainage.js",
+        "src/terrain/terrainmesh.js",
+        "src/terrain/soft-tops.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/drainage-generated-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/dfgrow.js",
@@ -689,6 +732,7 @@
         "src/ui/ornament.js",
         "src/core/ornament-field.js",
         "textures.html",
+        "ornament.html",
         "refactoring-audit.html"
       ],
       "frameReview": false
@@ -754,13 +798,11 @@
     {
       "source": "src/dual.js",
       "targets": [
-        "src/core/vertex-dual.js",
-        "src/world/vertex-dual-overlay.js",
-        "gridpatch.html",
-        "grids.html"
+        "src/life/flora-species.js",
+        "src/core/vertex-dual.js"
       ],
-      "status": "部分覆盖",
-      "gap": "31帧核验；新增有界三角网重心对偶、边界闭合及共享World分层脉动/区域候选。640顶点格覆盖面积测试通过；局部扇形三角输入不是完整导航网，植被落点尚未统一使用对偶区域，悬崖垂直面贴合未覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=dualflora 地被落到顶点对偶点 + 崖壁竖面落点 dualWallSites。",
       "clips": [
         "959752525867036672"
       ],
@@ -771,12 +813,13 @@
       "idReferences": [
         "src/core/vertex-dual.js",
         "src/world/vertex-dual-overlay.js",
+        "src/life/flora-species.js",
         "src/life/vegetation.js",
         "grids.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/radial-dual-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/edgeplant.js",
@@ -809,8 +852,10 @@
       "idReferences": [
         "src/ui/walkthrough.js",
         "src/core/garden-paths.js",
+        "src/capabilities/layers-meta.js",
         "src/world/townDemo.js",
         "src/life/vegetation.js",
+        "src/terrain/shrub-texture.js",
         "refactoring-audit.html",
         "garden.html"
       ],
@@ -820,11 +865,11 @@
     {
       "source": "src/edgesmooth.js",
       "targets": [
-        "src/terrain/shape.js",
-        "hierarchy.html"
+        "src/terrain/edge-square-relax.js",
+        "edge-smooth.html"
       ],
-      "status": "部分覆盖",
-      "gap": "保留切面层级/Taubin/建筑钉点及面积回退；新增显式硬边全层钉点局部通过。原模块/材质三角网边界、完整3D语义和三模式/regularity等接口仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）方格目标松弛 + 边类层级复现 regularity 大降（26.9→14.1），硬线不动。",
       "clips": [
         "1670720537662836736",
         "1670725072540106755"
@@ -842,21 +887,23 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/terrain/edge-square-relax.js",
         "src/terrain/shape.js",
         "hierarchy.html",
-        "refactoring-audit.html"
+        "refactoring-audit.html",
+        "edge-smooth.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/hierarchy-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/floatprobe.js",
       "targets": [
-        "src/world/float-probe.js",
+        "src/world/float-advect-gpu.js",
         "float.html"
       ],
       "status": "部分覆盖",
-      "gap": "117帧复核，16F/32F可写、HDR/负值回读及线性过滤本环境实测通过；跨平台矩阵、平流质量/CPU误差及GPU流体接入待补。",
+      "gap": "（第 55 批）WebGL2 实测 32F/16F/8 位 ping-pong 平流与 CPU 仿真一致（16F 差 1.9e-6）；只有 SwiftShader 一个 GPU，跨平台矩阵测不了。",
       "clips": [
         "1664565063552847873"
       ],
@@ -864,41 +911,39 @@
         "probeFloat"
       ],
       "idReferences": [
+        "src/core/float-advect.js",
+        "src/world/float-advect-gpu.js",
         "src/world/float-probe.js",
         "float.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/float-probe-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/flowdemo.js",
       "targets": [
-        "src/core/world-probes.js",
-        "src/life/atmosphere.js",
-        "flow.html",
-        "src/ui/flow-markers.js"
+        "src/world/view-post-extras.js",
+        "src/life/atmosphere.js"
       ],
-      "status": "部分覆盖",
-      "gap": "共享World碰撞/下方支撑/梯度诊断和真实洞内风场已验收；体素梯度软化实际网格并约束硬边尚未完整迁移。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=softnormals 软法线写回 View 主网格（37296 软化/276 保硬边），关时逐值还原。",
       "clips": [
         "931196707236392960"
       ],
       "sourceExports": [],
       "idReferences": [],
       "frameReview": true,
-      "evidence": "artifacts/coverage/world-probes-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/flowfield.js",
       "targets": [
-        "src/badnorth/flowfield.js",
-        "src/world/battle-navigation.js",
-        "src/core/portal-aim.js",
-        "src/badnorth/battle.js"
+        "src/world/navmesh-flow.js",
+        "src/world/battle-navigation.js"
       ],
       "status": "部分覆盖",
-      "gap": "479帧全核复用。已有共享分层流场保留；本次通口前视/碰撞内前进回退接真实24单位，双网格6秒最少推进4.22/4.77，穿洞/封洞及分层战斗回归通过。完整连续三角导航面内插值、坡高与原群体流体行为仍缺。",
+      "gap": "（第 55 批）guardedFlowAt 解决鞍点（24/24 到达）；Battle 实测 quad 网格更慢，连续转向仍默认关。",
       "clips": [
         "816748103193817088"
       ],
@@ -907,20 +952,56 @@
         "flowCrowd"
       ],
       "idReferences": [
+        "src/world/navmesh-flow.js",
+        "src/world/battle-navigation.js",
+        "navmesh-flow.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/portal-group-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
+    },
+    {
+      "source": "src/foliageblob.js",
+      "targets": [
+        "src/core/canopy.js",
+        "src/life/vegetation.js"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "canopy kernel:metaball；植被默认仍用 union，未切换默认。",
+      "clips": [
+        "1580158269267406849"
+      ],
+      "sourceExports": [
+        "canopy",
+        "kernel",
+        "field",
+        "ISO",
+        "inside",
+        "radiusAt",
+        "profile",
+        "profileUnion",
+        "contour",
+        "scatterCards",
+        "compare",
+        "demo",
+        "measure"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/canopy.js",
+        "src/life/vegetation.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
     },
     {
       "source": "src/frontier.js",
       "targets": [
-        "src/core/frontier-candidates.js",
-        "wfc.html",
-        "src/world/navgraph.js"
+        "src/core/frontier-candidates.js"
       ],
-      "status": "部分覆盖",
-      "gap": "434帧复核；补真实半边坍缩周边候选枚举、预算不完整结果和WFC页入口，184候选域/双网格通过。只对直接固定邻居筛选，不等于全局可行性或视频中的增量放置/简化导航扩展互连；旧同高区域导航保留而不冒充此能力。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）expandFrontier 增量坍缩边放置 + 前向检查 + 导航互连并查集；一步前向检查不等于全局可行。",
       "clips": [
         "1582293326815862786"
       ],
@@ -936,7 +1017,7 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/wire-frontier-review.md"
+      "evidence": "artifacts/coverage/r53-G1-grids.md"
     },
     {
       "source": "src/fusion.js",
@@ -955,11 +1036,23 @@
       "sourceExports": [],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/world.js",
         "src/core/grid.js",
+        "src/core/wfc.js",
+        "src/core/halfedge.js",
+        "src/core/depression-fill.js",
         "src/capabilities/terrain.js",
+        "src/world/save.js",
+        "src/world/app.js",
         "src/world/scenes.js",
+        "src/sphere/planet-town.js",
         "src/terrain/generate.js",
+        "src/terrain/drainage.js",
+        "src/terrain/terrainmesh.js",
+        "src/terrain/soft-tops.js",
+        "src/build/splice.js",
         "src/build/multicell.js",
+        "prefab.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
@@ -991,9 +1084,13 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/smoke-order.js",
         "src/capabilities/layers-meta.js",
+        "src/life/effects.js",
         "src/life/vegetation.js",
         "src/life/smoke.js",
+        "src/life/impostor.js",
+        "src/terrain/shrub-texture.js",
         "leaf-surface.html",
         "refactoring-audit.html"
       ],
@@ -1024,12 +1121,11 @@
     {
       "source": "src/gridmodes.js",
       "targets": [
-        "src/core/grid.js",
-        "grids.html",
-        "wfc.html"
+        "src/core/wfc.js",
+        "joint3d.html"
       ],
-      "status": "部分覆盖",
-      "gap": "保留纯三角/混合/不规则四边，新增真正正交纯方格，旧mergeRate=1合并菱形保留且不误标。独立纯六边形World地形及完整格型/度数接口仍缺。 本轮新增四边形对角四分三角子格、父子映射和实际WFC接口，完整四子格联合3D模块约束仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）layerGrid + layeredJointCatalog：多层辐条联合插槽、重力规则、跨层塔模块。",
       "clips": [
         "1670790425232175108",
         "1447496205282549761",
@@ -1049,10 +1145,11 @@
         "src/world/view.js",
         "src/world/app.js",
         "grids.html",
-        "refactoring-audit.html"
+        "refactoring-audit.html",
+        "joint3d.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/tri-subtiles-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "src/gridpatch.js",
@@ -1060,8 +1157,8 @@
         "src/core/radial-patch.js",
         "gridpatch.html"
       ],
-      "status": "部分覆盖",
-      "gap": "324帧核验纠正为四边格/放射模板与环院；新增单个星形孔洞规则内环、原边界共享接缝、同World渲染。48组25通过/23拒绝不安全边界。不是原版蜂窝关闭抖动；多补丁/完整手工库、复杂孔洞及已有世界迁移未覆盖。 编辑中央塔的屋顶比例偏高，未通过原片视觉匹配，需模板质量/建筑屋顶适配。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）模板库（radial/block/rhombus/courtyard）+ 带洞边界 + fitTemplatePatch，全凸无折叠面积守恒。",
       "clips": [
         "1301816247479345152"
       ],
@@ -1075,7 +1172,7 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/radial-dual-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/gridwfc.js",
@@ -1132,11 +1229,11 @@
     {
       "source": "src/halfedge.js",
       "targets": [
-        "src/core/grid.js",
-        "src/core/adjacency.js"
+        "src/core/halfedge.js",
+        "src/core/grid.js"
       ],
-      "status": "部分覆盖",
-      "gap": "保留共享顶点/互反edgeTwins与几何审核。显式next/prev/twin遍历、边界环/顶点扇/Euler和分割编辑接口未完整迁移，本轮仅视频学习与静态比较。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "显式半边 next/prev/twin、边界环、顶点扇、Euler、方格切三角迁入并实测；grid.js 内部仍用 edgeNeighbors/edgeTwins。",
       "clips": [
         "1458921394855718917",
         "1584623053061099520",
@@ -1153,24 +1250,33 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/world.js",
         "src/core/grid.js",
+        "src/core/wfc.js",
+        "src/core/halfedge.js",
         "src/capabilities/terrain.js",
+        "src/world/save.js",
         "src/world/app.js",
         "src/world/scenes.js",
-        "refactoring-audit.html"
+        "src/sphere/planet-town.js",
+        "src/terrain/terrainmesh.js",
+        "src/build/splice.js",
+        "refactoring-audit.html",
+        "joint3d.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/trigraph-halfedge-review.md"
+      "evidence": "artifacts/coverage/r51-partial-batch1.md"
     },
     {
       "source": "src/hiproof.js",
       "targets": [
+        "src/core/straight-skeleton.js",
         "src/core/hip-roof.js",
         "src/build/buildings.js",
-        "hip-roofs.html"
+        "building-kit-r55.html"
       ],
-      "status": "部分覆盖",
-      "gap": "README群体寻路配文，非无文字六帧教程。矩形屋脊长短边差迁移到实际独立四边房屋可选四檐顶，双网格开关/恢复通过；不规则四边仅双线性解释，完整多格四坡/复杂凹屋顶/原接口及寻路球点仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）精确直骨架（含洞/凹屋顶谷线），多格块与带洞庭院全四坡。",
       "clips": [
         "807256278154301441"
       ],
@@ -1184,21 +1290,23 @@
         "audit"
       ],
       "idReferences": [
-        "refactoring-audit.html"
+        "src/core/hip-roof.js",
+        "src/core/straight-skeleton.js",
+        "refactoring-audit.html",
+        "building-kit-r55.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/hip-roof-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/holenav.js",
       "targets": [
-        "src/world/layerednav.js",
+        "src/world/fine-portals.js",
         "src/world/battle-navigation.js",
-        "src/badnorth/battle.js",
         "navigation.html"
       ],
-      "status": "部分覆盖",
-      "gap": "分层战斗/流场、基本水平身体半径及连续扫掠已接入；精细模块内部门户、形变侧壁和斜坡脚高插值待补齐。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）同 fine-portals：身高超拱顶封门，绕无顶缺口。",
       "clips": [
         "797119718477991936",
         "906425294533394432"
@@ -1215,23 +1323,24 @@
       ],
       "idReferences": [
         "src/capabilities/terrain.js",
+        "src/world/fine-portals.js",
         "src/world/layerednav.js",
         "src/world/battle-navigation.js",
         "refactoring-audit.html",
         "navigation.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/battle-navigation-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/housekit.js",
       "targets": [
-        "src/build/buildings.js",
-        "src/world/townDemo.js",
-        "src/badnorth/island.js"
+        "src/core/house-kit.js",
+        "src/build/village.js",
+        "building-kit-r55.html"
       ],
-      "status": "部分覆盖",
-      "gap": "本轮扫描发现其他会话新增原版housekit，静态职责对照现有共享World房屋/屋顶/门窗与北境小屋；保留既有成果，未修改原版。原makeHouse/buildVillage/toWorld/verify接口、离散层高/坡度池/屋面烟囱约束和原茅顶套件尚未迁移；781027725452648448未逐帧复核，不新增学习计数。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）8 档坡度池 + 程序化分层茅草 + scatterVillage 撒村写 World。",
       "clips": [
         "781027725452648448"
       ],
@@ -1249,18 +1358,22 @@
         "verify"
       ],
       "idReferences": [
-        "refactoring-audit.html"
+        "src/core/house-kit.js",
+        "src/build/village.js",
+        "refactoring-audit.html",
+        "building-kit-r55.html"
       ],
-      "frameReview": false,
-      "evidence": "artifacts/coverage/atlas-candidates-review.md"
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/infograph.js",
       "targets": [
+        "src/badnorth/info-graph.js",
         "src/badnorth/battle.js"
       ],
-      "status": "部分覆盖",
-      "gap": "战斗流场存在，单位知识的动态节点通信图未覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）动态节点图（距离 / 同层 / 视线，每跳 ×0.55、≤2 跳），真实 Battle 中按同伴转告追击。",
       "clips": [
         "883447205176238083"
       ],
@@ -1274,20 +1387,23 @@
         "simulateAB"
       ],
       "idReferences": [
+        "src/badnorth/battle.js",
+        "src/badnorth/squad-footprint.js",
+        "src/badnorth/info-graph.js",
+        "squad-footprint.html",
         "refactoring-audit.html"
       ],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
     },
     {
       "source": "src/islandpasses.js",
       "targets": [
         "src/core/terrace-edges.js",
-        "src/world/terrace-edges.js",
-        "src/world/view.js",
-        "terraces.html"
+        "src/world/terrace-edges.js"
       ],
-      "status": "部分覆盖",
-      "gap": "原版新增islandpasses局部迁入：台地层界/顶面线框/格边岸界共用真实World多边形端点和当前笼形变，双网格616/488层界段、2005/1454线框段、166/117岸界段，逐点投影/只读/编辑刷新通过。复用649帧不重计，175/285；完整环追踪/最终倒角一致性仍缺，木梯模块尚未迁移。 原注释日期/六帧不符实际2023/649帧；线框为叠加，完整traceRings/interpContour接口与软坡联合生成仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）finalSegments 与网格同一采样，台地边线与最终倒角零误差（3 模式×软坡×两网格）。",
       "clips": [
         "1669315384619540487"
       ],
@@ -1303,10 +1419,11 @@
         "measure"
       ],
       "idReferences": [
+        "src/core/terrace-edges.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/terrace-edges-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/learnpanel.js",
@@ -1325,12 +1442,11 @@
     {
       "source": "src/levelflora.js",
       "targets": [
-        "src/core/level-flora.js",
-        "src/life/vegetation.js",
-        "level-flora.html"
+        "src/life/flora-species.js",
+        "src/core/level-flora.js"
       ],
-      "status": "部分覆盖",
-      "gap": "迁移分层色组策略到共享World真实地被；保留落点、花树/风及默认外观。203帧实际两套生态，非原注释6帧；完整物种几何/生态密度/雨景和原buildFlora/measure接口未迁移。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）六种物种程序化几何，?fx=levelflora 每级台地形状可辨（无原素材）。",
       "clips": [
         "959530111187013632"
       ],
@@ -1348,25 +1464,23 @@
       ],
       "idReferences": [
         "src/core/level-flora.js",
+        "src/life/flora-species.js",
         "src/life/vegetation.js",
         "src/badnorth/battle.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/level-flora-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/lighting.js",
       "targets": [
+        "src/light/voxel-field.js",
         "src/light/bake.js",
-        "src/light/lightvolume.js",
-        "src/core/world-probes.js",
-        "src/world/view.js",
-        "src/core/voxel-distance.js",
-        "ao-stages.html"
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "共享体素烘焙与占用探针保留；213+41帧后补六方向体素RGB/法线采样与反弹指标，并实际运行。完整SDF/UV/mega-texture反馈、形变碰撞和体素软法线写回仍缺；不把局部近似称原作等价。 新增中心EDT和保守距离步进不等于形变表面SDF或软法线写回。 后续551帧全核，WorldMesh实际遮蔽/反弹分离对照通过；原GPU动态纹理重投影仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）分层场浮点纹理在 GPU 顶点着色器采样（已在 WebGL2 跑）+ 体素软法线写回主网格；与 G2 softnormals 勿同开。",
       "clips": [
         "931196707236392960",
         "1168571866405097472",
@@ -1393,15 +1507,17 @@
         "src/ui/flow-markers.js",
         "src/core/world-probes.js",
         "src/core/world.js",
+        "src/core/wind-flow.js",
         "src/core/meshwriter.js",
         "src/world/view.js",
         "src/life/atmosphere.js",
         "src/light/bake.js",
+        "src/light/voxel-field.js",
         "src/light/lightvolume.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/ao-stages-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "src/lightingcache.js",
@@ -1422,9 +1538,11 @@
         "src/ui/flow-markers.js",
         "src/core/world-probes.js",
         "src/core/world.js",
+        "src/core/wind-flow.js",
         "src/world/view.js",
         "src/life/atmosphere.js",
         "src/light/bake.js",
+        "src/light/voxel-field.js",
         "refactoring-audit.html"
       ],
       "frameReview": false
@@ -1446,6 +1564,8 @@
         "audit"
       ],
       "idReferences": [
+        "src/core/loop-lift.js",
+        "loop-lift.html",
         "refactoring-audit.html"
       ],
       "frameReview": false
@@ -1466,17 +1586,21 @@
         "drawMandala"
       ],
       "idReferences": [
-        "refactoring-audit.html"
+        "src/core/graph-layout.js",
+        "refactoring-audit.html",
+        "grid-graph.html"
       ],
       "frameReview": false
     },
     {
       "source": "src/march.js",
       "targets": [
+        "src/core/contour.js",
+        "contour.html",
         "grids.html"
       ],
-      "status": "部分覆盖",
-      "gap": "岸线绘制存在，marching squares 独立等值线与端点一致性未覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "不规则网格 marching squares 完整迁移并实测（跨格端点重合 / 无蝴蝶结 / 鞍点决断 / 多层级）；岸线绘制仍是另一套。",
       "clips": [
         "1120036868966502401"
       ],
@@ -1486,11 +1610,45 @@
         "marchGrid"
       ],
       "idReferences": [
+        "src/core/region-boundary.js",
         "src/core/contour.js",
         "src/world/contour-overlay.js",
+        "src/world/view.js",
         "refactoring-audit.html"
       ],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r51-partial-batch1.md"
+    },
+    {
+      "source": "src/megatex.js",
+      "targets": [
+        "src/light/texel-owner.js",
+        "src/core/atlas.js"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "owner 表反查 + 垫边防串色接共享 Atlas；未接 impostor 烘焙器 / SDF·AO 卷。",
+      "clips": [
+        "1481661852887265288"
+      ],
+      "sourceExports": [
+        "CFG",
+        "genFaces",
+        "shelfPack",
+        "bake",
+        "resolve",
+        "bilinear",
+        "measure",
+        "mipDown"
+      ],
+      "idReferences": [
+        "src/core/voxel-distance.js",
+        "src/core/paint-normal.js",
+        "src/light/texel-owner.js",
+        "src/light/lightvolume.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
     },
     {
       "source": "src/mesh.js",
@@ -1515,10 +1673,11 @@
     {
       "source": "src/mipcustom.js",
       "targets": [
+        "src/light/mip-chain.js",
         "textures.html"
       ],
-      "status": "部分覆盖",
-      "gap": "贴图实验未覆盖自定义 mipmap 的实际构建和采样。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "四档自定义 mip + 线性空间 + 三线性 / 各向异性采样迁入共享模块并实测；未接 impostor 图集与 textures 页。",
       "clips": [
         "777596437534240768"
       ],
@@ -1532,17 +1691,20 @@
         "selfCheck"
       ],
       "idReferences": [
+        "src/light/mip-chain.js",
         "refactoring-audit.html"
       ],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r51-partial-batch1.md"
     },
     {
       "source": "src/mipfilter.js",
       "targets": [
+        "src/light/mip-chain.js",
         "textures.html"
       ],
-      "status": "部分覆盖",
-      "gap": "贴图实验未覆盖自定义 mipmap 的实际构建和采样。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "同 mipcustom（两份实验合成 mip-chain.js）；原 renderGround/paint 可视化未迁。",
       "clips": [
         "777596437534240768"
       ],
@@ -1563,9 +1725,11 @@
         "shimmerReport"
       ],
       "idReferences": [
+        "src/light/mip-chain.js",
         "refactoring-audit.html"
       ],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r51-partial-batch1.md"
     },
     {
       "source": "src/mirrordecor.js",
@@ -1598,15 +1762,48 @@
       "evidence": "artifacts/coverage/mirror-overhang-review.md"
     },
     {
+      "source": "src/mixedwfc.js",
+      "targets": [
+        "src/core/wfc.js",
+        "src/core/grid.js",
+        "wfc.html"
+      ],
+      "status": "已合并/迁移（静态确认）",
+      "gap": "真实三角 / 四边形混合格直接求解；未做「方格 = 4 三角捆绑」的表示与 MODULES 对照。",
+      "clips": [
+        "1447494168448753667"
+      ],
+      "sourceExports": [
+        "CFG",
+        "grid",
+        "TILE_LABELS",
+        "TILES",
+        "MODULES",
+        "moduleQuad",
+        "solve",
+        "solveFaces",
+        "measure"
+      ],
+      "idReferences": [
+        "src/ui/walkthrough.js",
+        "src/core/grid.js",
+        "src/core/wfc.js",
+        "src/core/halfedge.js",
+        "src/world/app.js",
+        "refactoring-audit.html",
+        "joint3d.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
+    },
+    {
       "source": "src/mountainlight.js",
       "targets": [
         "src/core/mountain-bake.js",
-        "src/world/worldmesh.js",
-        "src/world/view.js",
-        "mountain-bake.html"
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "234帧全核验；保留已有World/材质，补实际顶点法线烘焙明度属性和岩壁原场景/底色/烘焙/实时法线对照，5000方向及双网格GPU通过。配文不确认具体烘焙方式；原山体纹理atlas/白斑沟槽/球面混合、buildMountain/normalAt/renderMountain完整接口及低端设备性能未覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）山体烘焙图集接进 View 岩壁，运行时 0 次法线采样；「球面混合」核实原模块没有（已过时）；真 GPU 性能未测。",
       "clips": [
         "1786014232594485497"
       ],
@@ -1619,22 +1816,21 @@
       ],
       "idReferences": [
         "src/core/mountain-bake.js",
+        "src/terrain/blotch-atlas.js",
         "mountain-bake.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/mountain-texture-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "src/navgraph.js",
       "targets": [
-        "src/world/navgraph.js",
-        "src/world/battle-navigation.js",
-        "river-nav.html",
-        "src/terrain/river-network.js"
+        "src/world/save.js",
+        "river-nav.html"
       ],
-      "status": "部分覆盖",
-      "gap": "有向费用已保留并修复上坡误判，Battle/分层流场共用；复杂汇流/原球面流向及完整接口仍缺。 新河网有效版本时平床读显式父链，编辑/读档后失效回退启发式；完整流向持久化缺口保留。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）riverFlow 写进存档可选尾段，旧码逐字节兼容，读档 91 段一致。",
       "clips": [
         "1795831296952041691",
         "1582293326815862786"
@@ -1644,13 +1840,14 @@
       ],
       "idReferences": [
         "src/core/frontier-candidates.js",
+        "src/world/save.js",
         "src/world/navgraph.js",
         "src/world/navlayer.js",
         "river-nav.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/river-nav-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/navgrid.js",
@@ -1671,8 +1868,11 @@
         "Squad"
       ],
       "idReferences": [
+        "src/world/fine-portals.js",
         "src/world/layerednav.js",
         "src/world/battle-navigation.js",
+        "src/badnorth/unit-batch-lod.js",
+        "src/badnorth/battle.js",
         "refactoring-audit.html",
         "navigation.html"
       ],
@@ -1682,10 +1882,11 @@
       "source": "src/navribbon.js",
       "targets": [
         "src/core/path-samples.js",
+        "src/world/battle-navigation.js",
         "src/badnorth/battle.js"
       ],
-      "status": "部分覆盖",
-      "gap": "827215是单位等级，823848是尘粒AO，均非弧长教程。工程迁移仅既有分层折线3D等距命令点，实际双网格通过；原CatmullRom/宽度带/贴地走廊和完整接口仍缺，尘粒AO本批仅学习。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）命令路径 Catmull-Rom（不出可站区）、弧长等距、贴地含楼梯、净距带状格；尘粒 AO 是另一片。",
       "clips": [
         "827215002448846848",
         "823848950553780226"
@@ -1699,27 +1900,26 @@
         "measure"
       ],
       "idReferences": [
+        "src/core/wind-flow.js",
         "src/core/unit-tier.js",
         "src/core/path-samples.js",
+        "src/world/battle-navigation.js",
+        "src/life/atmosphere.js",
+        "src/badnorth/battle.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/path-samples-review.md"
+      "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
     },
     {
       "source": "src/overhangterrain.js",
       "targets": [
-        "src/core/world.js",
-        "src/core/rock-topology.js",
-        "src/terrain/generate.js",
-        "src/terrain/features.js",
-        "src/terrain/shape.js",
-        "src/terrain/terrainmesh.js",
-        "overhang.html",
-        "src/core/deformation-guard.js"
+        "src/terrain/soft-tops.js",
+        "src/terrain/terrain-collide.js",
+        "src/terrain/terrainmesh.js"
       ],
-      "status": "部分覆盖",
-      "gap": "保留共享分层rock/空洞及诊断，新增切面面积/边长/扇形朝向回退防薄檐坍缩；双网格AB修复负面积。144748软坡视频656帧已学习，但完整heightField/连续软坡/侵蚀无局部极小保证及measure接口未迁移，3D侧壁相交/碰撞仍待补。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）terrainmesh 层连续软坡（world.softTops，无裂缝）+ 形变侧壁碰撞 pushOut/heightAt；Battle 单位尚未调用。",
       "clips": [
         "1671808851895627776",
         "1447488323845509121"
@@ -1736,25 +1936,29 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/rock-topology.js",
+        "src/core/depression-fill.js",
         "src/capabilities/terrain.js",
         "src/terrain/features.js",
         "src/terrain/generate.js",
+        "src/terrain/terrain-collide.js",
+        "src/terrain/drainage.js",
         "src/terrain/terrainmesh.js",
+        "src/terrain/soft-tops.js",
         "overhang.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/slope-cliff-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/paintnormal.js",
       "targets": [
-        "textures.html",
-        "src/core/voxel-distance.js",
-        "lightvolume.html"
+        "src/core/paint-normal.js",
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "425帧复核；已有纹理演示保留，新补中心距离EDT/六AO及占用梯度法线诊断，但梯度不是原作程序笔触。原版paintNormal/shadeWithNormals/audit和真正表面贴图接入仍未覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）大笔触法线图主轴投影、切线空间扰动接进 View；浏览器对照已看。",
       "clips": [
         "1481661852887265288"
       ],
@@ -1767,11 +1971,13 @@
       ],
       "idReferences": [
         "src/core/voxel-distance.js",
+        "src/core/paint-normal.js",
+        "src/light/texel-owner.js",
         "src/light/lightvolume.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/distance-ao-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "src/palette.js",
@@ -1836,11 +2042,11 @@
     {
       "source": "src/patchblend.js",
       "targets": [
-        "src/terrain/terrainmesh.js",
-        "textures.html"
+        "src/terrain/patch-blend.js",
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "219帧纠正为球面投影草/水+手工UV岸条与atlas；本地顶面颜色平均保留，但不等同patch纹理混合。原版patch样本/手工UV、seamStats/edgeJump/AB接口未迁移，代码与运行未验收；高度混合是原文后续设想。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）岸带手工 UV + 高度混合接进 View；贴图为程序化替身，只画陆侧（水侧是海面材质）。",
       "clips": [
         "1781405550061687016"
       ],
@@ -1854,20 +2060,21 @@
         "abModes"
       ],
       "idReferences": [
+        "src/terrain/surface-pattern.js",
+        "src/terrain/patch-blend.js",
         "src/terrain/terrainmesh.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/water-patch-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "src/patchcluster.js",
       "targets": [
-        "src/core/infinite.js",
-        "grids.html"
+        "src/core/infinite.js"
       ],
-      "status": "部分覆盖",
-      "gap": "保留已有三块簇/块与两簇插值，修实际每mode全部owner验缝和逐块绘制，24逻辑/4模式Canvas通过。只簇接缝约.376，blend约4e-15；本地patch外边钉住故patch无缝。原版二维替代/3对7性能证明、按需流式生成与完整对偶动作仍未等价。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）createInfiniteStream 按需流式（3/7 块簇均实跑，无缝）+ quadDual；原 consensus 对照未迁。",
       "clips": [
         "1332410042784641026",
         "1151770831619534848"
@@ -1887,19 +2094,16 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/infinite-verify-review.md"
+      "evidence": "artifacts/coverage/r53-G1-grids.md"
     },
     {
       "source": "src/penumbra.js",
       "targets": [
-        "src/core/penumbra.js",
-        "src/light/penumbra.js",
-        "src/world/penumbra-layer.js",
-        "src/world/view.js",
-        "penumbra.html"
+        "src/world/penumbra-terrain.js",
+        "src/light/penumbra.js"
       ],
-      "status": "部分覆盖",
-      "gap": "已补真实共享World顶面三场水面投影、世界尺度粗格、最高遮挡/内收合成及二维太阳方位高度控制；编辑/移动/释放通过。仅2.5D水面，洞/悬挑/形变表面及原版独立draw/距离指标接口未覆盖，视觉半影偏宽。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=penumbra3d 地形与悬挑接收面体素半影；开启时非 World 物体（树）不再投 PCF 影。",
       "clips": [
         "1305951750638231552",
         "1313840428685447170"
@@ -1920,22 +2124,24 @@
       "idReferences": [
         "src/ui/walkthrough.js",
         "src/ui/learnpanel.js",
+        "src/core/penumbra.js",
+        "src/world/penumbra-terrain.js",
         "src/world/view.js",
         "penumbra.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/penumbra-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/piercefloor.js",
       "targets": [
         "src/core/arch-floor-budget.js",
         "src/build/buildings.js",
-        "arches.html"
+        "src/world/navgraph.js"
       ],
-      "status": "部分覆盖",
-      "gap": "已学292帧不重计。保留原已有限高默认，楼板预算/可选厚度接真实拱底，1000组逻辑及双网格0.05/0.20、World不变与关闭恢复通过。原完整立面/过梁/挑檐连续率、穿层统计与碰撞仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）过梁几何 + 拱下精确净空 + buildNav underArches；Battle 运行时尚未接。",
       "clips": [
         "802496920790777856"
       ],
@@ -1951,10 +2157,12 @@
         "measure"
       ],
       "idReferences": [
-        "refactoring-audit.html"
+        "src/core/arch-profile.js",
+        "refactoring-audit.html",
+        "building-kit-r55.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/arch-floor-budget-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/piperepair.js",
@@ -1992,11 +2200,11 @@
     {
       "source": "src/portrait.js",
       "targets": [
-        "src/core/part-random.js",
+        "src/ui/slot-portrait.js",
         "ui.html"
       ],
-      "status": "部分覆盖",
-      "gap": "本批188帧全核验；保留层级头像/卡片绘制，补镜像分支同起点/单次消费和异常恢复、显式种子与固定槽ID，实际头像/共用旗帜重绘/切页/手机换列验证通过。24个不同画板仅为确定性检查，不替代剪影IoU；原SLOTS/spec完整数据接口、原素材/兜帽锁甲与角色接入仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）ui.html ?portrait=slots 按 PORTRAIT_SLOTS 画程序化头像，IoU 0.994（无原素材）。",
       "clips": [
         "958371606350454784",
         "1010979395719319552"
@@ -2008,22 +2216,23 @@
         "silhouetteDiversity"
       ],
       "idReferences": [
+        "src/ui/slot-portrait.js",
         "src/core/part-random.js",
         "ui.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/portraits-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/propanim.js",
       "targets": [
-        "src/life/effects.js",
-        "src/world/view.js",
+        "src/world/prop-anim-layer.js",
+        "src/core/prop-anim.js",
         "src/world/app.js"
       ],
-      "status": "部分覆盖",
-      "gap": "306帧核验后确认已有uPops只对柱顶增长局部缩放，删除只冒灰；稳定逐道具身份、消失几何保留/缩没、错峰及原springTrack/scaleAt/bakeProps/costBoth接口未接。保留已有反馈，不计完整生命周期运行验收。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）合并道具网格逐顶点 slot 属性 + shader 弹簧，只上传变化槽位；?propanim=1。",
       "clips": [
         "1246074663546916873"
       ],
@@ -2037,22 +2246,24 @@
         "audit"
       ],
       "idReferences": [
+        "src/core/prop-anim.js",
+        "src/world/prop-anim-layer.js",
         "src/world/view.js",
+        "src/world/app.js",
         "src/life/effects.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/courtyard-props-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/propframe.js",
       "targets": [
         "src/core/opening-footprint.js",
-        "src/build/buildings.js",
-        "index.html"
+        "src/build/buildings.js"
       ],
-      "status": "部分覆盖",
-      "gap": "既有门窗已使用归一墙边和竖直轴，本批修实际1.6倍窗台外缘未计入放置包围导致越角。原版独立2D贪心/标准框度量未全迁移，World庭院家具饱和摆放/原美术仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）贪心刚性框道具接进 World 后院（yardProps 开关），零重叠；道具是简单盒子。",
       "clips": [
         "1205416648397721601"
       ],
@@ -2067,7 +2278,7 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/opening-footprint-review.md"
+      "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
     },
     {
       "source": "src/quadgrid.js",
@@ -2098,6 +2309,34 @@
       "evidence": "artifacts/coverage/topoline-quad-review.md"
     },
     {
+      "source": "src/quadinf.js",
+      "targets": [
+        "src/core/infinite.js",
+        "grids.html"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "buildInfinite 支持 origin 任意块中心开窗口、windowSeam 实测重叠区 raw/patch/blend 逐位一致；页面里未加平移窗口的交互。",
+      "clips": [
+        "1151137783785771008"
+      ],
+      "sourceExports": [
+        "vertexPos",
+        "buildChunk",
+        "squareness",
+        "seamDiff",
+        "aperiodicity",
+        "measure",
+        "valenceReport"
+      ],
+      "idReferences": [
+        "src/core/infinite.js",
+        "grids.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
+    },
+    {
       "source": "src/quadtex.js",
       "targets": [
         "textures.html"
@@ -2118,7 +2357,9 @@
         "audit"
       ],
       "idReferences": [
+        "src/core/smoke-order.js",
         "src/capabilities/layers-meta.js",
+        "src/life/effects.js",
         "src/life/smoke.js",
         "src/badnorth/battle.js",
         "refactoring-audit.html"
@@ -2129,12 +2370,10 @@
       "source": "src/rayvis.js",
       "targets": [
         "src/core/space-visibility.js",
-        "src/world/space-visibility.js",
-        "src/world/view.js",
-        "space-visibility.html"
+        "src/world/space-visibility.js"
       ],
-      "status": "部分覆盖",
-      "gap": "64帧全核，固定步长/斐波那契方向接实际共享World室内开阔度，双网格开关/缓存通过。仍可漏薄墙；完整灰度场/整楼烘焙与原接口未迁，不等于导航门户视线。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）逐格穿行射线（薄墙不漏）+ 整楼明暗烘焙 + 灰点叠加层；未写入地形顶点色。",
       "clips": [
         "798580832906739712"
       ],
@@ -2150,19 +2389,19 @@
       ],
       "idReferences": [
         "src/core/space-visibility.js",
+        "src/world/space-visibility.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/space-visibility-review.md"
+      "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
     },
     {
       "source": "src/rectpack.js",
       "targets": [
-        "src/core/atlas.js",
-        "grids.html"
+        "src/core/atlas.js"
       ],
-      "status": "部分覆盖",
-      "gap": "本组累计1101帧全核验；保留first-fit，补整数跨叶候选/树剪枝、key/句柄安全释放、实际搜索轨迹。9000候选+24000既有增删/6000层通过，存活槽稳定。非最优、不旋转/自动压缩，原3D树/recursiveFill/shelfPack完整兼容接口仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）recursiveFill / 90° 旋转 / shelfPack 基线 / 手指数两口径；非最优、不自动压缩同原作。",
       "clips": [
         "1764958522398146667",
         "1593215065423245313",
@@ -2181,7 +2420,7 @@
         "atlas-live.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/atlas-candidates-review.md"
+      "evidence": "artifacts/coverage/r53-G1-grids.md"
     },
     {
       "source": "src/reflstreak.js",
@@ -2311,20 +2550,31 @@
         "src/core/world-probes.js",
         "src/core/world.js",
         "src/core/grid.js",
+        "src/core/wfc.js",
+        "src/core/halfedge.js",
+        "src/core/wind-flow.js",
         "src/core/meshwriter.js",
         "src/capabilities/terrain.js",
         "src/water/shore.js",
+        "src/world/save.js",
+        "src/world/penumbra-terrain.js",
         "src/world/view.js",
+        "src/world/view-post-extras.js",
         "src/world/app.js",
         "src/world/scenes.js",
+        "src/sphere/planet-town.js",
         "src/life/birds.js",
         "src/life/atmosphere.js",
+        "src/terrain/terrainmesh.js",
+        "src/light/voxel-field.js",
         "src/light/lightvolume.js",
+        "src/build/splice.js",
         "reflection.html",
         "grids.html",
         "penumbra.html",
         "waves.html",
-        "refactoring-audit.html"
+        "refactoring-audit.html",
+        "joint3d.html"
       ],
       "frameReview": false
     },
@@ -2367,10 +2617,10 @@
       "source": "src/shrubcard.js",
       "targets": [
         "src/life/vegetation.js",
-        "billboard-anchor.html"
+        "src/world/view-post-extras.js"
       ],
-      "status": "部分覆盖",
-      "gap": "静态对比确认既有地被四三角中心锚点/实际GPU对照已在此前316帧学习覆盖，本轮不重计；原版折卡深度侧看度量与真正墙根灌木卡片未迁移，当前墙根主体仍球团。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=wallcards 墙根 574 张折卡已目视。",
       "clips": [
         "1191990107785572352"
       ],
@@ -2385,21 +2635,21 @@
       "idReferences": [
         "src/core/anchored-billboard.js",
         "src/life/vegetation.js",
+        "src/life/impostor.js",
         "refactoring-audit.html",
         "billboard-anchor.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/anchored-plots-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/slotsolve.js",
       "targets": [
-        "src/core/wfc.js",
-        "wfc.html",
-        "wfc-trace.html"
+        "slots.html",
+        "src/core/wfc.js"
       ],
-      "status": "部分覆盖",
-      "gap": "复用既有半边WFC传播/回溯/局部修复，加最多256份不可变实际候选快照/显式截断与回看。908帧含收缩/冲突/重置，非原注释6帧静态。原图块/红色依赖链/自动时序动画及完整建筑模块接入未复现；独立原variants接口未迁移。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）槽位表 + 27 变体缩略池 + 按 trace 逐帧播放、依赖链与冲突示例。",
       "clips": [
         "865200072685912064"
       ],
@@ -2413,19 +2663,20 @@
       ],
       "idReferences": [
         "src/core/wfc.js",
-        "refactoring-audit.html"
+        "refactoring-audit.html",
+        "slots.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/wfc-trace-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "src/smear.js",
       "targets": [
-        "src/core/camera-motion.js",
-        "src/world/view.js"
+        "src/world/view-post-extras.js",
+        "src/core/camera-motion.js"
       ],
-      "status": "部分覆盖",
-      "gap": "两段337+303帧均全核验。历史叠加已有角度周界/关闭/resize修复，本批补30/60/120Hz留存一致性；原片强轮廓拖抹、速度场方向采样、CPU sharpness/audit接口未迁移。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=smear 解析切向拖影接进渲染循环，与历史叠加并存；转动时外圈 p95 梯度 17.2→9.7，静止不变。",
       "clips": [
         "1727315611959865407",
         "1727324352264474664"
@@ -2439,23 +2690,21 @@
         "audit"
       ],
       "idReferences": [
+        "src/core/camera-motion.js",
         "src/world/view.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/palette-transition-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/smokefx.js",
       "targets": [
-        "src/life/smoke.js",
         "src/core/smoke-order.js",
-        "src/life/effects.js",
-        "smoke.html",
-        "fire.html"
+        "src/life/effects.js"
       ],
-      "status": "部分覆盖",
-      "gap": "六段共2197帧复核，保留烟雾两遍/UV/mip及火焰Max/二次收缩；补排序、投影UV、真实mip和火焰生命周期/GPU验收。当前火焰仍为软圆Points，原quad/noise轮廓与动态火光未完整迁移，透明相交近似。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）火焰卡片噪声 / UV 滚动 / mip 随龄 / cutoff 亮边 + 随火量 PointLight；透明穿插近似。",
       "clips": [
         "1015140880666300416",
         "1015142746372366336",
@@ -2478,17 +2727,15 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/fire-review.md"
+      "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
     },
     {
       "source": "src/snapshot64.js",
       "targets": [
-        "src/world/island-snapshot.js",
-        "snapshot.html",
-        "src/campaign/campaign.js"
+        "src/world/island-snapshot.js"
       ],
-      "status": "部分覆盖",
-      "gap": "本次重扫发现原版新增模块。保留此前真实World 64² GPU快照/锐化验收；新增原版CPU合成岛及IoU/edgeEnergy/peakGradient/bandPixels/rmse对照接口未迁移。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）World 剪影真值 64² 存储、crisp 着色器 CPU 孪生、IoU/edgeEnergy/peakGradient/bandPixels/rmse 对照、GPU 读回接口。",
       "clips": [
         "911913981731885056"
       ],
@@ -2512,27 +2759,57 @@
         "campaign.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/snapshot-review.md"
+      "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+    },
+    {
+      "source": "src/socketrock.js",
+      "targets": [
+        "src/core/wfc.js",
+        "wfc.html"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "diagnoseTiles：多边形网格 AC 传播找死 tile 与无人接的接口；页面未显示诊断结果。",
+      "clips": [
+        "1164926304640229376"
+      ],
+      "sourceExports": [
+        "BASE_TILES",
+        "RIM_TILES",
+        "CAP_TILES",
+        "solveGrid",
+        "compare",
+        "rockSides",
+        "closure"
+      ],
+      "idReferences": [
+        "src/core/wfc.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
     },
     {
       "source": "src/spherefusion.js",
       "targets": [
-        "src/world/scenes.js"
+        "src/sphere/planet-town.js",
+        "planet.html"
       ],
-      "status": "部分覆盖",
-      "gap": "星球演示与平面 World 分离，球面建筑/地形融合尚未覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）planet.html ?fusion=1 星球作为共享 World 显示，页面验收零错误。",
       "clips": [],
       "sourceExports": [],
       "idReferences": [],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "src/spherehouse.js",
       "targets": [
-        "src/sphere/planet.js"
+        "src/sphere/planet-town.js",
+        "planet.html"
       ],
-      "status": "部分覆盖",
-      "gap": "缺少球面上的建筑形变与放置。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）1–3 层房子按各层松弛角点变形（?floors=mixed），程序化模块。",
       "clips": [
         "1768627849529893109",
         "1584623053061099520"
@@ -2543,24 +2820,30 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/world.js",
+        "src/core/halfedge.js",
         "src/capabilities/terrain.js",
+        "src/world/save.js",
+        "src/world/app.js",
         "src/world/scenes.js",
+        "src/sphere/planet-town.js",
         "src/sphere/planet.js",
+        "src/terrain/terrainmesh.js",
+        "src/build/splice.js",
         "planet.html",
         "refactoring-audit.html"
       ],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "src/spheretown.js",
       "targets": [
         "src/sphere/planet.js",
-        "planet.html",
-        "src/core/river-network.js",
-        "src/terrain/river-network.js"
+        "planet.html"
       ],
       "status": "部分覆盖",
-      "gap": "保留球面拓扑/足迹弹簧；显式模块选择和逐格尺寸诊断局部通过。多格约束仍冲突，完整模块目标形状、原海陆/河网/建筑及World接入未覆盖。 本次只迁移汇水累计策略至平面共享World出口树并通过双网格；原球面河网/海陆与完整World接入仍缺。",
+      "gap": "（第 55 批）solver:shape 让共享角点分歧 0.095→0.007、墙最大倾斜 45°→28°；宽高原蘑菇化有几何下界，原模块目标形状无出处。",
       "clips": [
         "1768627849529893109",
         "1338825080844021760",
@@ -2578,28 +2861,31 @@
         "carveRivers"
       ],
       "idReferences": [
+        "src/world/save.js",
         "src/world/navgraph.js",
         "src/world/navlayer.js",
+        "src/sphere/planet-town.js",
+        "src/sphere/sphere-stages.js",
         "src/sphere/planet.js",
         "src/terrain/generate.js",
+        "planet-rivers-r55.html",
         "river-nav.html",
         "planet.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/sphere-relax-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "src/splice.js",
       "targets": [
-        "src/world/scenes.js",
-        "src/build/multicell.js",
-        "src/build/buildings.js",
-        "multicell.html",
-        "src/ui/house-project.js"
+        "src/build/splice.js",
+        "src/core/world.js",
+        "src/world/save.js",
+        "src/world/app.js"
       ],
-      "status": "部分覆盖",
-      "gap": "显式双格/整体编辑及工程JSON身份与回执持久化已补，完整重载后可继续编辑；统一编辑器撤销/通用模块身份、完整轮廓socket/旋转及多格联合约束待补。 本批453帧复核和双网格各6栋回归；视频不能证明双线性算法，任意轮廓插入与地形周边重新网格化尚未覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）嵌入的房子进存档尾段、快照撤销、编辑器工具（?tool=splice / I 键）。",
       "clips": [
         "1584623053061099520"
       ],
@@ -2610,23 +2896,28 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/world.js",
+        "src/core/halfedge.js",
         "src/capabilities/terrain.js",
+        "src/world/save.js",
+        "src/world/app.js",
         "src/world/scenes.js",
+        "src/sphere/planet-town.js",
+        "src/terrain/terrainmesh.js",
+        "src/build/splice.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/house-point-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/squadbanner.js",
       "targets": [
-        "src/core/banner.js",
-        "src/life/banner.js",
-        "src/badnorth/battle.js",
-        "squad-banners.html"
+        "src/badnorth/squad-standard.js",
+        "src/badnorth/battle-g3.js"
       ],
-      "status": "部分覆盖",
-      "gap": "原文And another one，23帧非六帧；共享本地骷髅/剑/三叉戟掩码接实际三队Bezier材质，GPU白像素/alpha/开关通过。原三格atlas、金饰盾纹、竖旗横杆及完整队色系统未迁移。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）竖旗横杆金球、金边燕尾旗、金饰盾纹替换 Battle 旗（standards 默认关），程序化。",
       "clips": [
         "827216768783495168"
       ],
@@ -2655,19 +2946,19 @@
       ],
       "idReferences": [
         "src/core/banner.js",
+        "src/badnorth/squad-standard.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/squad-banners-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/squarehex.js",
       "targets": [
-        "src/core/corner-footprint.js",
-        "corner-cuts.html"
+        "src/core/corner-footprint.js"
       ],
-      "status": "部分覆盖",
-      "gap": "迁移切角策略为共享格只读绘制轮廓；1328四边格样例和49格Canvas通过。不改拓扑/World/导航；原片连续地形不证明切角算法，原测量接口和完整岩岛生成仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）cornerCutPlan 二分着色切角 + footprintMetrics（与原 runMetrics 一致）+ islandFootprints；只读未接 WorldMesh。",
       "clips": [
         "1471817524148940807"
       ],
@@ -2683,23 +2974,24 @@
       "idReferences": [
         "src/core/grid.js",
         "src/core/corner-footprint.js",
+        "src/core/stroke-reveal.js",
         "grids.html",
         "refactoring-audit.html",
-        "cage.html"
+        "cage.html",
+        "stroke-reveal.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/corner-cuts-review.md"
+      "evidence": "artifacts/coverage/r53-G1-grids.md"
     },
     {
       "source": "src/squigglefield.js",
       "targets": [
         "src/core/ornament-field.js",
         "src/ui/ornament.js",
-        "ornament.html",
-        "textures.html"
+        "ornament.html"
       ],
-      "status": "部分覆盖",
-      "gap": "本批静态发现原版新增模块；映射到已有单贴图/镜像/展开成果。110513的63帧已在ornament-flags批学过，原注释6帧/持续蠕动说法不沿用。原桶加速/CPU诊断接口、完整卷草画稿与分层时序仍缺，不重复计学习。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）ornament.html 换用卷草场：四折镜像、扭动动画、扫光（?squiggle=1）。",
       "clips": [
         "1105131621391495176"
       ],
@@ -2720,19 +3012,19 @@
         "src/ui/ornament.js",
         "src/core/ornament-field.js",
         "textures.html",
+        "ornament.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/ornament-flags-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "src/storydatum.js",
       "targets": [
-        "src/build/buildings.js",
-        "src/core/world.js"
+        "src/core/story-datum.js"
       ],
-      "status": "部分覆盖",
-      "gap": "静态新增映射：已有共享World整数层和lv×L立面/层间饰带；任意非整数塔基的全局标高对齐、截短楼顶、measureFacade/windowRows与原塔群视觉仍缺。两条2016视频未逐帧，不计学习。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）共享 World 整数层下楼层线偏差 0；非整数塔基 datum 规则与 measureFacade/windowRows 已迁并测。",
       "clips": [
         "803190517534248960",
         "806856212260278272"
@@ -2749,20 +3041,20 @@
         "windowRows"
       ],
       "idReferences": [
+        "src/core/story-datum.js",
         "refactoring-audit.html"
       ],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r53-G2-terrain-build.md"
     },
     {
       "source": "src/surfacedeco.js",
       "targets": [
         "src/core/surface-decoration.js",
-        "src/core/wfc.js",
-        "src/build/buildings.js",
-        "building-components.html"
+        "src/build/buildings.js"
       ],
-      "status": "部分覆盖",
-      "gap": "六类墙饰接实际建筑墙段：空/普通窗/长窗/门/装饰拱门/百叶，复用共享WFC并独立检查角色与邻窗规则；按墙宽用1–3槽，百叶只在相邻窗实际画出后绘制。双网格168/167墙段零求解失败，实绘217/300件，World不变与关闭恢复通过。旧505帧不重计，173/285；跨格整立面、真实拱洞及完整原接口仍缺。 候选碰撞拒绝23/43仍存在，旧模式保留；原六类规则非视频证明。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）门墙段并入长立面、立面绕拐角、archCutout 真挖拱洞。",
       "clips": [
         "1181464374839521280"
       ],
@@ -2777,20 +3069,21 @@
       "idReferences": [
         "src/world/navgraph.js",
         "src/world/navlayer.js",
-        "refactoring-audit.html"
+        "src/build/buildings.js",
+        "refactoring-audit.html",
+        "building-kit-r55.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/facade-decoration-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/surfaceshadow.js",
       "targets": [
         "src/light/surface-shadow.js",
-        "src/world/view.js",
-        "surface-shadows.html"
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "635帧全核验。已补共享World地表2.5D高度图/局部凸起投射资格与独立深度比较、版本/太阳缓存、GPU双网格验收。原版engine两高度实际合为阈值之和，未照搬；src版具备独立prominence筛选但人为UV缝不迁移。纹理浮凸、屋檐/墙面、洞内、形变精确贴附/接缝及全API仍待补。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）墙接收窄条、洞内地面射线阴影、贴形变顶面接进 View；洞内只有浏览器度量（205 纹素中 152 被挡）无清晰截图。",
       "clips": [
         "1704218784028905984",
         "1705195380457996629"
@@ -2804,20 +3097,20 @@
         "renderTop"
       ],
       "idReferences": [
+        "src/light/surface-shadow.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/surface-shadow-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "src/terracecliff.js",
       "targets": [
-        "src/terrain/generate.js",
         "src/core/terrace-profile.js",
-        "terraces.html"
+        "src/terrain/soft-tops.js"
       ],
-      "status": "部分覆盖",
-      "gap": "保留共享World已有噪声/量化；迁移classify诊断思想为不规则格同高连片/面积/逻辑阶差。双网格只读/修改检测/恢复通过；原片算法未知，原fieldSmooth/fieldTerrace对照未迁移，变形坡面/洞内/悬垂/薄平台面积及真正可走性不由此证明。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）softTops 提供连续场；meshSlopeProfile 在真实网格上量平/软/陡。",
       "clips": [
         "815236105079398400",
         "781957658597269506"
@@ -2835,18 +3128,16 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/terrace-profile-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "src/terraceladder.js",
       "targets": [
-        "src/core/ladder-profile.js",
-        "src/world/navlayer.js",
-        "src/world/view.js",
-        "terraces.html"
+        "src/world/battle-navigation.js",
+        "src/badnorth/battle-g3.js"
       ],
-      "status": "部分覆盖",
-      "gap": "跨层梯长策略接真实共享导航几何：梯脚/台沿来自当前笼形变，按3D锚点长度画双梁与等距踏棍，可切回旧台阶。1000逻辑例及双网格84/96把实际木梯、有限坐标/World和导航不变/关闭恢复通过。旧109帧不重计，175/285；原薄悬平台、端点体积接触和攀爬动作仍缺。 默认旧台阶保留；原模块完整接口、薄平台与碰撞/攀爬未复现。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）寻路避薄平台 + 按横档的攀爬动画。",
       "clips": [
         "781957658597269506",
         "1669315384619540487"
@@ -2859,10 +3150,11 @@
         "measure"
       ],
       "idReferences": [
+        "src/core/terrace-edges.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/wood-ladders-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/terrainmesh.js",
@@ -2881,8 +3173,12 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/depression-fill.js",
         "src/life/vegetation.js",
         "src/terrain/generate.js",
+        "src/terrain/drainage.js",
+        "src/terrain/terrainmesh.js",
+        "src/terrain/soft-tops.js",
         "refactoring-audit.html"
       ],
       "frameReview": false
@@ -2916,6 +3212,7 @@
         "src/core/leaf-atlas.js",
         "src/core/texel-skip.js",
         "src/life/vegetation.js",
+        "src/terrain/surface-pattern.js",
         "textures.html",
         "leaf-surface.html",
         "refactoring-audit.html"
@@ -2927,15 +3224,11 @@
       "source": "src/tileforce.js",
       "targets": [
         "src/core/module-patch.js",
-        "src/core/grid.js",
-        "patch.html",
-        "src/core/module-search.js",
-        "src/core/module-fit.js",
-        "src/core/module-audit.js",
-        "src/build/module-volume.js"
+        "src/core/wfc.js",
+        "prefab.html"
       ],
-      "status": "部分覆盖",
-      "gap": "显式patch/搜索/2D匹配/有限样本诊断及共享World原子体量放置、支撑占用预检与撤回已验收；完整prefab/socket、形变碰撞、周边补网/接缝及联合WFC待续。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）spliceModulePatch 缝进已有网格（Euler=1）+ 两层 3D prefab 带 W/D/R/S socket。",
       "clips": [
         "1751932427272909032",
         "1670794261669769217",
@@ -2955,6 +3248,7 @@
       ],
       "idReferences": [
         "src/core/grid.js",
+        "src/core/wfc.js",
         "src/core/module-search.js",
         "src/core/module-audit.js",
         "src/core/module-fit.js",
@@ -2964,18 +3258,21 @@
         "src/terrain/features.js",
         "src/build/module-volume.js",
         "src/build/multicell.js",
+        "prefab.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/module-volume-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "src/tileplace.js",
       "targets": [
-        "src/build/buildings.js"
+        "src/core/wfc.js",
+        "src/build/tile-assembly.js",
+        "assembly.html"
       ],
-      "status": "部分覆盖",
-      "gap": "本次新增67帧3D拼装全核，仅学习；既有通用共享WFC/建筑保留。原3D预制模块目录/联合空间约束、逐步拼装与待置零件动画未实现，其他所列片不据此声称全核。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）加权香农熵（默认关时逐字节一致）+ View 播放的拼装动画。",
       "clips": [
         "784847588893814785",
         "784847933686575104",
@@ -2998,10 +3295,17 @@
       ],
       "idReferences": [
         "src/core/wfc.js",
-        "refactoring-audit.html"
+        "src/world/voxel-ghost.js",
+        "src/sphere/planet.js",
+        "src/build/tile-assembly.js",
+        "planet.html",
+        "refactoring-audit.html",
+        "voxel-ghost.html",
+        "joint3d.html",
+        "assembly.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/space-visibility-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "src/tilerepair.js",
@@ -3113,14 +3417,17 @@
         "src/core/palette.js",
         "src/core/world-probes.js",
         "src/core/world.js",
+        "src/core/wind-flow.js",
         "src/core/courtyards.js",
         "src/core/meshwriter.js",
         "src/capabilities/terrain.js",
+        "src/world/penumbra-terrain.js",
         "src/world/view.js",
         "src/world/townDemo.js",
         "src/life/effects.js",
         "src/life/atmosphere.js",
         "src/light/bake.js",
+        "src/light/voxel-field.js",
         "src/light/lightvolume.js",
         "src/build/buildings.js",
         "shoreloops.html",
@@ -3156,11 +3463,11 @@
     {
       "source": "src/traffic.js",
       "targets": [
-        "src/world/traffic.js",
-        "src/badnorth/battle.js"
+        "src/world/battle-navigation.js",
+        "src/world/layerednav.js"
       ],
-      "status": "部分覆盖",
-      "gap": "左侧目标/常驻点线和64人直走廊保留；新增按半径和、dt/速度限幅的分离及车道身体余量，真实Battle暂停不漂移。弯道/多岔、体型重路由和复杂拥挤压力测试待续。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）L 弯 / T 岔 / 直廊对穿压测全到无死锁，体型重路由；分离仍软约束。",
       "clips": [
         "880853661936734211",
         "886199305522085890",
@@ -3176,11 +3483,12 @@
       "idReferences": [
         "src/core/adjacency.js",
         "src/world/traffic.js",
+        "src/world/battle-navigation.js",
         "src/badnorth/battle.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/body-separation-review.md"
+      "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
     },
     {
       "source": "src/triGraph.js",
@@ -3188,8 +3496,8 @@
         "src/core/trigraph.js",
         "trigraph.html"
       ],
-      "status": "部分覆盖",
-      "gap": "保留增量Bowyer–Watson；本轮输入拒绝/确定性全查局部通过。原版withSuper/locate/clone/edgeMap、局部翻边和改动记录未完整对应；浮点鲁棒谓词仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "locate / edgeMap / clone / flip / legalize 迁入并实测；浮点谓词无精确算术。",
       "clips": [
         "1677242779162877952"
       ],
@@ -3205,7 +3513,7 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/trigraph-halfedge-review.md"
+      "evidence": "artifacts/coverage/r51-partial-batch1.md"
     },
     {
       "source": "src/triflow.js",
@@ -3227,9 +3535,45 @@
         "Crowd"
       ],
       "idReferences": [
+        "src/world/navmesh-flow.js",
+        "navmesh-flow.html",
         "refactoring-audit.html"
       ],
       "frameReview": false
+    },
+    {
+      "source": "src/triflowfield.js",
+      "targets": [
+        "src/world/navmesh-flow.js",
+        "navmesh-flow.html"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "面级流场 + 通口 + 漏斗 + 视线捷径接到共享导航面；未接 battle.js，未做方格流场对照页。",
+      "clips": [
+        "972829402873716737"
+      ],
+      "sourceExports": [
+        "CFG",
+        "heightAt",
+        "buildMesh",
+        "buildField",
+        "triAt",
+        "tracePath",
+        "portals",
+        "funnel",
+        "squareField",
+        "traceSquarePath",
+        "streamlines",
+        "measure"
+      ],
+      "idReferences": [
+        "src/world/navmesh-flow.js",
+        "src/badnorth/flowfield.js",
+        "src/badnorth/battle.js",
+        "refactoring-audit.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
     },
     {
       "source": "src/triisland.js",
@@ -3255,21 +3599,59 @@
         "planHouses"
       ],
       "idReferences": [
-        "refactoring-audit.html"
+        "src/core/stroke-reveal.js",
+        "src/terrain/pipeline-stages.js",
+        "terrain-stages.html",
+        "refactoring-audit.html",
+        "stroke-reveal.html"
       ],
       "frameReview": false
     },
     {
-      "source": "src/uikit.js",
+      "source": "src/uidecor.js",
       "targets": [
-        "src/core/playful-layout.js",
-        "ui.html",
+        "src/ui/icon-ink.js",
+        "src/ui/icon-toolbar.js",
+        "ui.html"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "等墨量线宽接进共享工具栏；徽记只做折数闭合检查，未画徽记图形。",
+      "clips": [
+        "1201179450668441600",
+        "1024679338292256769"
+      ],
+      "sourceExports": [
+        "ICONS",
+        "ICON_NAMES",
+        "CFG",
+        "pathLen",
+        "bbox",
+        "iconWeights",
+        "chipLayout",
+        "EMB",
+        "emblem",
+        "emblemMetrics",
+        "measure"
+      ],
+      "idReferences": [
+        "src/ui/icon-ink.js",
         "src/ui/icon-toolbar.js",
         "src/core/ui-reveal.js",
-        "ornament.html"
+        "textures.html",
+        "ui.html",
+        "refactoring-audit.html"
       ],
-      "status": "部分覆盖",
-      "gap": "本批两段753帧复核，保留UI实验；补键/种子确定扰动、旋转AABB间距与稳定原生按钮槽，确认菜单纠正横排并补延时清理/键盘/移动端。原layoutList/色彩/图标完整接口、单Move目标/地面标记/实际游戏命令仍缺；续审UI flair100帧/Icons306帧后，补可复用工具条单选/键盘/销毁和共享纹饰标题/外纹两轨本地样例；原徽章/逐部件时序、图稿和游戏指令仍缺，不计游戏运行完成。",
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
+    },
+    {
+      "source": "src/uikit.js",
+      "targets": [
+        "src/badnorth/battle-g3.js",
+        "src/core/playful-layout.js"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）俏皮指令条 + 每队单 Move 目标 + 地面标记，hold/retreat 真改小队目标（commands 默认关）。",
       "clips": [
         "1242824460325052417",
         "1016680972610359298",
@@ -3285,6 +3667,7 @@
         "GLYPHS"
       ],
       "idReferences": [
+        "src/ui/icon-ink.js",
         "src/ui/icon-toolbar.js",
         "src/core/ui-reveal.js",
         "src/core/playful-layout.js",
@@ -3293,15 +3676,16 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/icons-flair-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/unitbatch.js",
       "targets": [
+        "src/badnorth/unit-batch-lod.js",
         "src/badnorth/battle.js"
       ],
-      "status": "部分覆盖",
-      "gap": "单位尚用独立对象，未覆盖批量实例化与剔除。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）原缺口过时（早已实例化）；补视锥剔除 + 小于 9px 简化显示（有渲染器时默认开）。",
       "clips": [
         "817323301357948928"
       ],
@@ -3316,20 +3700,22 @@
         "lodCost"
       ],
       "idReferences": [
+        "src/badnorth/unit-batch-lod.js",
+        "src/badnorth/battle.js",
         "refactoring-audit.html"
       ],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
     },
     {
       "source": "src/unitsnap.js",
       "targets": [
         "src/world/battle-navigation.js",
         "src/core/unit-ground-height.js",
-        "src/badnorth/battle.js",
-        "src/core/house-door-presence.js"
+        "src/badnorth/battle.js"
       ],
-      "status": "部分覆盖",
-      "gap": "保留已有逐人navFloor/分层导航；修层高缓动为时间步可组合的指数方式，实际双网格4/6层与30/60/120Hz通过。828准确配文为防维京，非无文字；890新增666帧全核；实际房屋攻击/守卫补门楼层过滤，排除船上/坠落/死亡。原standHeight方格演示未迁移，真正斜坡脚高/完整动画和火球仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）楼梯踏面脚高接进每帧缓动 + 逐人悬空 / 埋入统计（停下均为 0）。",
       "clips": [
         "828984794407170048",
         "890611046435627008"
@@ -3347,20 +3733,23 @@
       "idReferences": [
         "src/core/unit-ground-height.js",
         "src/core/house-door-presence.js",
+        "src/world/battle-navigation.js",
+        "src/badnorth/battle.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/house-door-review.md"
+      "evidence": "artifacts/coverage/r53-G5-battle-nav.md"
     },
     {
       "source": "src/voxelao.js",
       "targets": [
         "src/light/bake.js",
+        "src/light/voxel-ao.js",
         "src/world/worldmesh.js",
         "ao-stages.html"
       ],
-      "status": "部分覆盖",
-      "gap": "原文五阶段6解码帧全核，非四帧。保留本地分层烘焙，实际遮蔽/反弹分离、关闭与恢复通过；本地四选项不等于原flat/up/vertexAO/SSAO/directionalAO全流程，原六向算法与SSAO仍缺。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）flat/up/vertex/directional 四档 aoMode（六向遮蔽）；SSAO 原作已弃，不迁。",
       "clips": [
         "793557992931266561"
       ],
@@ -3368,20 +3757,21 @@
         "buildVoxelAO"
       ],
       "idReferences": [
+        "src/light/bake.js",
+        "src/light/voxel-ao.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/ao-stages-review.md"
+      "evidence": "artifacts/coverage/r53-G3-light-texture.md"
     },
     {
       "source": "src/voxelflow.js",
       "targets": [
-        "src/life/atmosphere.js",
-        "src/core/world-probes.js",
-        "flow.html"
+        "src/world/view-post-extras.js",
+        "src/core/wind-flow.js"
       ],
-      "status": "部分覆盖",
-      "gap": "保留实际World分层避障与三线性采样，本批834帧对应风/雪复核；雪碰撞同步实际层占用。完整fieldFlow接口、体素软法线写回与形变碰撞仍未覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）软法线对主网格调用；meshCollider 读实时形变网格（groundAt）。",
       "clips": [
         "931196707236392960",
         "926903893866541057",
@@ -3394,23 +3784,24 @@
         "src/ui/flow-markers.js",
         "src/core/world-probes.js",
         "src/core/world.js",
+        "src/core/wind-flow.js",
         "src/world/view.js",
         "src/life/atmosphere.js",
+        "src/light/voxel-field.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/wind-snow-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/voxelnav.js",
       "targets": [
+        "src/world/fine-portals.js",
         "src/world/layerednav.js",
-        "src/world/battle-navigation.js",
-        "src/badnorth/battle.js",
-        "navigation.html"
+        "src/world/battle-navigation.js"
       ],
-      "status": "部分覆盖",
-      "gap": "分层战斗/流场、基本水平身体半径及连续扫掠已接入；精细模块内部门户、形变侧壁和斜坡脚高插值待补齐。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）同 fine-portals：portal.width 让体型分档避开窄门。",
       "clips": [
         "906425294533394432",
         "797119718477991936"
@@ -3421,23 +3812,23 @@
       ],
       "idReferences": [
         "src/capabilities/terrain.js",
+        "src/world/fine-portals.js",
         "src/world/layerednav.js",
         "src/world/battle-navigation.js",
         "refactoring-audit.html",
         "navigation.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/battle-navigation-review.md"
+      "evidence": "artifacts/coverage/r55-G3-nav-battle.md"
     },
     {
       "source": "src/wake.js",
       "targets": [
-        "src/life/boats.js",
         "src/core/wake-sampling.js",
-        "wake-fog.html"
+        "src/life/boats.js"
       ],
-      "status": "部分覆盖",
-      "gap": "138帧复核，保留V形带状尾迹并补固定时间采样/相位保留/帧内插值，双网格30/60/120Hz计数年龄一致，旧轨迹留在世界空间；原Wake/Ship粒子、舷侧喷溅、KELVIN角度及靠岸行为/完整接口尚未迁移，不标原作完整验收。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）Wake/Ship 粒子：舷侧泡沫、淡雾、船头水花、Kelvin 角 19.39°，接进 Boats。",
       "clips": [
         "901469409579061248"
       ],
@@ -3448,23 +3839,58 @@
         "Wake"
       ],
       "idReferences": [
+        "src/core/wake-sampling.js",
         "src/world/view.js",
         "src/life/boats.js",
         "src/badnorth/battle.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/wake-fog-review.md"
+      "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
+    },
+    {
+      "source": "src/walkreach.js",
+      "targets": [
+        "src/terrain/walk-reach.js"
+      ],
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "共享 World 可走分量 + 沿路线补台阶 / 削台；加高可能切断低侧格与更低邻格的连接，个别图全岛可达比例下降；未接生成器默认流程。",
+      "clips": [
+        "917405214638006273"
+      ],
+      "sourceExports": [
+        "CFG",
+        "terrain",
+        "endpoints",
+        "quantH",
+        "graphRoute",
+        "effHeight",
+        "walkableComp",
+        "walkRoute",
+        "cliffCrossings",
+        "repairStairs",
+        "measure",
+        "demo"
+      ],
+      "idReferences": [
+        "src/world/navlayer.js",
+        "src/world/view.js",
+        "src/badnorth/island.js",
+        "src/terrain/walk-reach.js",
+        "nav-walk.html",
+        "refactoring-audit.html"
+      ],
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r50-reacode-unmapped-modules.md"
     },
     {
       "source": "src/wind.js",
       "targets": [
-        "src/life/atmosphere.js",
-        "src/core/world-probes.js",
-        "flow.html"
+        "src/world/view-post-extras.js",
+        "src/life/atmosphere.js"
       ],
-      "status": "部分覆盖",
-      "gap": "516帧全核验；保留按层避障/三线性风场与共享uWind，双网格通洞/封洞及改风向运行复核。原片矢量受空间障碍影响，不能据画面恢复精确解算器；完整makeWindField/trace/sampleCurve接口和局部场GPU采样未迁移。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）?fx=windflag 旗子 shader 采风场纹理，随风向转弯垂抖；小瑕疵：法线未随转。",
       "clips": [
         "926903893866541057",
         "926890207298899969"
@@ -3475,12 +3901,14 @@
         "windStats"
       ],
       "idReferences": [
+        "src/core/wind-flow.js",
+        "src/world/view-post-extras.js",
         "src/life/atmosphere.js",
         "src/badnorth/battle.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/wind-snow-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "src/wobbletex.js",
@@ -3508,6 +3936,7 @@
       ],
       "idReferences": [
         "src/core/sediment.js",
+        "src/terrain/surface-pattern.js",
         "src/terrain/terrainmesh.js",
         "sediment.html",
         "refactoring-audit.html"
@@ -3553,14 +3982,11 @@
     {
       "source": "engine/blotch.js",
       "targets": [
-        "src/terrain/blotch-pattern.js",
-        "src/world/view.js",
-        "src/terrain/terrainmesh.js",
-        "textures.html",
-        "blotches.html"
+        "src/terrain/blotch-atlas.js",
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "1052帧全核验，保留已有噪声/圆瓣草边成果并补地表标记，修复绿色屋顶误染、真实层高选层；实际View材质GPU双网格通过。原版createBlotchAtlas/createRimField、距离场受控bleed、完整swirl/density/streak/segments接口与反射同步未迁移，不以同职责当等价。 本批再核1156帧，补共享旋涡角度场、独立低频密度阈值/导数柔边及真实地形对照；原作细卷纹样与atlas、rim/反射接口仍未全迁移。 目视仍有偏强大环纹，未达到原片细密互卷边。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）斑块图集 + World 边缘场 + 受控渗漏接进 View 主材质；浏览器对照已看。",
       "clips": [
         "1696896119794479541",
         "1696864977171189980",
@@ -3578,28 +4004,31 @@
       "idReferences": [
         "src/core/mountain-bake.js",
         "src/world/view.js",
+        "src/terrain/blotch-atlas.js",
         "src/terrain/terrainmesh.js",
         "mountain-bake.html",
         "textures.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/blotch-style-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "engine/bnbrush.js",
       "targets": [
-        "src/life/vegetation.js"
+        "src/core/brush-atlas.js",
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "着色笔触存在，预烘笔触图与轮廓能量对照未完整迁移。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）划痕图集阈值化、沿口淡出接进 View；浏览器对照已看。",
       "clips": [],
       "sourceExports": [
         "buildBrushAtlas",
         "buildLedgeField"
       ],
       "idReferences": [],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "engine/bncanopy.js",
@@ -3632,6 +4061,7 @@
         "createButterflies"
       ],
       "idReferences": [
+        "src/world/view.js",
         "src/life/decor.js",
         "refactoring-audit.html"
       ],
@@ -3685,8 +4115,10 @@
         "createCoastContour"
       ],
       "idReferences": [
+        "src/core/region-boundary.js",
         "src/core/contour.js",
         "src/world/contour-overlay.js",
+        "src/world/view.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
@@ -3712,8 +4144,10 @@
         "createFlags"
       ],
       "idReferences": [
+        "src/core/wind-flow.js",
         "src/core/banner.js",
         "src/life/banner.js",
+        "src/life/atmosphere.js",
         "src/badnorth/battle.js",
         "ui.html",
         "refactoring-audit.html"
@@ -3724,13 +4158,11 @@
     {
       "source": "engine/fog.js",
       "targets": [
-        "src/life/atmosphere.js",
         "src/core/fog-envelope.js",
-        "src/ui/environment-panel.js",
-        "wake-fog.html"
+        "src/life/atmosphere.js"
       ],
-      "status": "部分覆盖",
-      "gap": "326帧核验，有限雾盘外边缘连续渐隐、默认浓度0.35及0..2相对漂移控制通过实际GPU验收；原createFogLayer软片、风场平流/高度场避障及体积遮挡未迁移，视频已加速，未推断原真实流速。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）贴水雾片随风、遇体素切向绕开、深度遮挡、出圈回卷；未 GPU 验收。",
       "clips": [
         "906207980802252801"
       ],
@@ -3739,25 +4171,21 @@
       ],
       "idReferences": [
         "src/ui/walkthrough.js",
+        "src/core/fog-envelope.js",
         "src/life/atmosphere.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/wake-fog-review.md"
+      "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
     },
     {
       "source": "engine/impostor.js",
       "targets": [
         "src/life/impostor.js",
-        "src/life/leaf-surface.js",
-        "leaf-surface.html",
-        "src/core/anchored-billboard.js",
-        "src/life/vegetation.js",
-        "billboard-anchor.html",
-        "clouds.html"
+        "src/world/view-post-extras.js"
       ],
-      "status": "部分覆盖",
-      "gap": "按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 本轮611帧复核仅补近景球冠/灌木纹理alpha；远景impostor/草卡片未接同一叶纹，原有实现保留，不升级为整模块运行通过。 本批316帧后补可选实例轴固定中心，实际共享草材质GPU读回四视角中心不动；默认旧模式保留。原片墙根灌木卡片/纹理、atlas统一采样/原接口及生命周期尚未接，局部草实验不等同完整impostor模块。 续审阴云489帧后修复远云时钟/连续环带运动和背景深度，双网格GPU及首页独立开关通过；原片高耸云体/层次、统一风采样未实现，仍部分覆盖。 164帧运行时图集续审后补Baker局部release/失败回滚与真实GPU纹理验收；完整游戏对象注册/解绑、统一材质/atlas生命周期仍待接。 本批569帧复核后纠正octagonal=八水平视图的过强说法；共享锚点/正交方向与父组方位已修，双网格GPU误差<1e-6、正交差0/64步周界及云层时钟遮挡回归通过。原球面卡片/多俯仰、原云形层次及完整原接口继续部分覆盖。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）3 行×8 方位多俯仰烘焙 + 球面卡片 + 原 makeBlobCloud 云材质；?fx=impostorpitch。",
       "clips": [
         "1849427564034498642",
         "1852334860137849222",
@@ -3773,7 +4201,9 @@
         "createImpostors"
       ],
       "idReferences": [
+        "src/core/wind-flow.js",
         "src/core/anchored-billboard.js",
+        "src/world/view-post-extras.js",
         "src/life/vegetation.js",
         "src/life/atmosphere.js",
         "src/life/impostor.js",
@@ -3783,7 +4213,7 @@
         "billboard-anchor.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/impostor-view-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "engine/islands.js",
@@ -3931,6 +4361,7 @@
       "idReferences": [
         "src/core/meshwriter.js",
         "src/world/view.js",
+        "src/light/voxel-field.js",
         "refactoring-audit.html"
       ],
       "frameReview": false
@@ -3968,13 +4399,11 @@
     {
       "source": "engine/outline.js",
       "targets": [
-        "src/world/outline.js",
-        "src/core/normal-contrast.js",
-        "src/world/view.js",
-        "normal-contrast.html"
+        "src/world/outline-pass.js",
+        "src/world/view-post-extras.js"
       ],
       "status": "部分覆盖",
-      "gap": "保留已有外壳描边；本批384帧复核程序化法线map反差线，新增解析Voronoi法线场对比/物理像素覆盖与共享地形材质可选叠线，双网格GPU通过。不是后续三角反差迭代，也不是原完整normal atlas/笔触、UV接缝或engine几何法线+深度Sobel全部接口，仍部分覆盖。",
+      "gap": "（第 55 批）屏幕空间描边接进渲染循环（?fx=outline），零报错、修掉云卡/水面假墨线；缺原片程序化笔触法线图 / 反差贴图作线源。",
       "clips": [
         "1482011744843223042",
         "1017355723171344385"
@@ -3984,13 +4413,14 @@
       ],
       "idReferences": [
         "src/core/normal-contrast.js",
+        "src/world/outline-pass.js",
         "src/world/outline.js",
         "textures.html",
         "normal-contrast.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/normal-radial-review.md"
+      "evidence": "artifacts/coverage/r55-G2-post-atmos.md"
     },
     {
       "source": "engine/props.js",
@@ -4012,7 +4442,9 @@
       ],
       "idReferences": [
         "src/core/opening-footprint.js",
+        "src/render/opening-punch.js",
         "src/build/buildings.js",
+        "opening-punch.html",
         "refactoring-audit.html"
       ],
       "frameReview": false
@@ -4051,6 +4483,7 @@
         "relaxCellAreas"
       ],
       "idReferences": [
+        "src/sphere/planet-town.js",
         "src/sphere/planet.js",
         "planet.html",
         "refactoring-audit.html"
@@ -4061,12 +4494,11 @@
       "source": "engine/rivers.js",
       "targets": [
         "src/terrain/generate.js",
-        "src/core/river-network.js",
-        "src/terrain/river-network.js",
-        "drainage.html"
+        "terrain-r55.html",
+        "planet-rivers-r55.html"
       ],
-      "status": "部分覆盖",
-      "gap": "河网重建局部接入：迁移原版汇水累计策略，改用Priority-Flood出口树处理洼地；重新开槽并替换真实World河标记，平床导航读有效下游。双网格3种子共6组河格106/313/333和99/267/298，出口连通/单调/恢复通过。旧片不重计，173/285；完整球面坍缩/BFS缓坡、湖水和洞穴联合重建仍缺。 边界出口/计格汇水非完整真实水文，连续岩柱限定。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）relaxRiverSlopes BFS 缓坡坍缩 + 湖洞联合重建（全入海、无环、不逆流），球面 World 同管线。",
       "clips": [
         "1769691526924292506"
       ],
@@ -4075,12 +4507,14 @@
         "paintRivers"
       ],
       "idReferences": [
+        "src/sphere/planet-town.js",
         "src/terrain/generate.js",
+        "planet-rivers-r55.html",
         "river-nav.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/river-network-review.md"
+      "evidence": "artifacts/coverage/r55-G4-terrain-build.md"
     },
     {
       "source": "engine/roofs.js",
@@ -4147,11 +4581,10 @@
       "source": "engine/snow.js",
       "targets": [
         "src/life/atmosphere.js",
-        "src/core/world-probes.js",
-        "flow.html"
+        "src/core/wind-flow.js"
       ],
-      "status": "部分覆盖",
-      "gap": "318帧全核验；修复屋顶下空洞误用柱顶碰撞，雪片改读共享World实际solid层，重生避实心、dt校验；双网格即时封洞/重开通过。现有表面混白保留，不是物理堆积；Points方点/统一大小与亮度，软片、接触AO/完整冬景仍未复现。 续审冬季全景306帧，210为船群/士兵/血烟剪辑切换；完整冬季美术与战斗组合仅学习完成，未验收。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）圆形软点、大小不一、World 支撑面接触 AO、远处淡出，接进 Atmosphere；未目视。",
       "clips": [
         "943230624369868800",
         "943230620242796544",
@@ -4161,23 +4594,24 @@
         "createSnow"
       ],
       "idReferences": [
+        "src/core/wind-flow.js",
         "src/core/path-samples.js",
         "src/world/view.js",
         "src/life/atmosphere.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/wind-snow-review.md"
+      "evidence": "artifacts/coverage/r53-G4-life-sphere-ui.md"
     },
     {
       "source": "engine/sphere.js",
       "targets": [
-        "src/core/trigraph.js",
+        "src/sphere/sphere-stages.js",
         "src/sphere/planet.js",
         "planet.html"
       ],
-      "status": "部分覆盖",
-      "gap": "保留随机/斥力/径向投影/重心松弛，补阶段独立快照、真实球面拓扑与平面抽样分离，局部逻辑/GPU通过。原project/unproject往返接口、动态重三角化/完整质量指标和原阶段动画仍缺，不以拓扑检查认证球面Delaunay。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）阶段动画用真实迭代快照（?stages=1 / ?stageT=）。",
       "clips": [
         "1338829205157646336",
         "1338825080844021760"
@@ -4194,12 +4628,14 @@
       ],
       "idReferences": [
         "src/core/trigraph.js",
+        "src/sphere/planet-town.js",
+        "src/sphere/sphere-stages.js",
         "src/sphere/planet.js",
         "planet.html",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/sphere-stages-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "engine/splash.js",
@@ -4224,12 +4660,12 @@
     {
       "source": "engine/spritepack.js",
       "targets": [
-        "src/core/atlas.js",
-        "src/life/impostor.js",
-        "atlas-live.html"
+        "src/core/uv-charts.js",
+        "src/core/uv-bake.js",
+        "uv-bake.html"
       ],
       "status": "部分覆盖",
-      "gap": "164帧全核验；保留共享稳定槽Atlas，补真实8视角烘焙整组预留、满板/异常回滚、release清padding及mip更新。GPU存活UV/像素不变、重复释放拒绝通过；原SpriteAtlas会整批重排，本地固定尺寸不自动扩容，原素材/单视角编号/残影、radialPack及完整兼容接口待补。 本批346帧纠正径向大小排序：原片三角UV样式图块/棋盘模型，矩形radialPack和旧圆盘螺旋不等于该流程。该片只完成学习/审核，UV分片/参数化/无重叠布局仍待实现验收。",
+      "gap": "（第 55 批）填充率 0.158→0.31/0.48、零重叠，bakeChartPage 进共享 Atlas 并贴回；仍 <0.5（需墙带展开/图块合并），未接主场景 View。",
       "clips": [
         "1593215065423245313",
         "1852334860137849222",
@@ -4241,31 +4677,27 @@
         "radialPack"
       ],
       "idReferences": [
+        "src/core/uv-charts.js",
+        "src/core/uv-bake.js",
         "src/life/vegetation.js",
         "src/life/impostor.js",
         "textures.html",
         "impostors.html",
         "refactoring-audit.html",
-        "atlas-live.html"
+        "atlas-live.html",
+        "uv-bake.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/normal-radial-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     },
     {
       "source": "engine/surface.js",
       "targets": [
-        "src/terrain/field-pattern.js",
-        "src/terrain/terrainmesh.js",
-        "src/world/worldmesh.js",
-        "src/world/view.js",
-        "src/core/texel-skip.js",
-        "textures.html",
-        "fields.html",
-        "src/core/sediment.js",
-        "sediment.html"
+        "src/terrain/surface-pattern.js",
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "新增共享World格块顶面方向田纹及放大线采样；原作手绘atlas/球面投射与岸带手工UV混合、完整surface API、缩小mipmap及接缝AB仍待补。已有笔触/顶面混色保留。 本轮补岩壁专用直/弯层理、坐标剪切与GPU三角剖分无缝；反射/阴影/轮廓不随新着色同步，原通用表面API/atlas混合仍待补。 本批补地形顶面笔触标记，避免屋顶/岩壁误染；完整atlas/rim采样仍待补。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）surface 层（格线/层理/砂砾）挂到 View 共享材质地形面；浏览器对照已看。",
       "clips": [
         "1241096929490149376",
         "1714613599035863191",
@@ -4282,7 +4714,9 @@
         "src/world/island-snapshot.js",
         "src/world/view.js",
         "src/life/vegetation.js",
+        "src/terrain/surface-pattern.js",
         "src/terrain/field-pattern.js",
+        "src/terrain/patch-blend.js",
         "src/terrain/terrainmesh.js",
         "textures.html",
         "sediment.html",
@@ -4290,17 +4724,16 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/sediment-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "engine/surfaceshadow.js",
       "targets": [
         "src/light/surface-shadow.js",
-        "src/world/view.js",
-        "surface-shadows.html"
+        "src/world/view-shading.js"
       ],
-      "status": "部分覆盖",
-      "gap": "635帧全核验。已补共享World地表2.5D高度图/局部凸起投射资格与独立深度比较、版本/太阳缓存、GPU双网格验收。原版engine两高度实际合为阈值之和，未照搬；src版具备独立prominence筛选但人为UV缝不迁移。纹理浮凸、屋檐/墙面、洞内、形变精确贴附/接缝及全API仍待补。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）竖面窄带（0.28 倍）在 View 着色器生效，屋顶排除；浏览器对照已看。",
       "clips": [
         "1704218784028905984",
         "1705195380457996629"
@@ -4310,10 +4743,11 @@
         "attachSurfaceShadow"
       ],
       "idReferences": [
+        "src/light/surface-shadow.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/surface-shadow-review.md"
+      "evidence": "artifacts/coverage/r55-G1-shading.md"
     },
     {
       "source": "engine/terrain.js",
@@ -4357,10 +4791,12 @@
     {
       "source": "engine/voxelshadow.js",
       "targets": [
-        "src/light/bake.js"
+        "src/light/bake.js",
+        "src/world/worldmesh.js",
+        "ao-stages.html"
       ],
-      "status": "部分覆盖",
-      "gap": "AO/阴影存在，逐顶点体素方向阴影未核实。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 53 批）逐顶点体素太阳阴影进 bakeLighting（与 AO 同一占用场），分块烘焙按影长加边；未接 View 太阳 UI、未目视。",
       "clips": [
         "1190191289922465793"
       ],
@@ -4369,9 +4805,11 @@
       ],
       "idReferences": [
         "src/world/view.js",
+        "src/light/bake.js",
         "refactoring-audit.html"
       ],
-      "frameReview": false
+      "frameReview": true,
+      "evidence": "artifacts/coverage/r53-G3-light-texture.md"
     },
     {
       "source": "engine/waterfall.js",
@@ -4449,10 +4887,12 @@
     {
       "source": "engine/worldmap.js",
       "targets": [
-        "src/sphere/planet.js"
+        "src/sphere/worldmap.js",
+        "src/sphere/worldmap-material.js",
+        "planet.html"
       ],
-      "status": "部分覆盖",
-      "gap": "242帧全核验，原片球面海陆全景转镜/拉近岸缘；保留planet既有球面网格。配文仅Texture test，不证每帧重生或3D噪声唯一算法。球面海陆纹理/沙岸暗坡/纹理混合与worldmap完整接口未实现验收，本批仅学习。",
+      "status": "已迁移/增强（本轮验证）",
+      "gap": "（第 55 批，浏览器验收）512×256 等距贴图四表面混合上星球，无经度接缝，与格子海陆一致 97%（?map=1）。",
       "clips": [
         "1783792917183606829"
       ],
@@ -4467,12 +4907,12 @@
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/mountain-texture-review.md"
+      "evidence": "artifacts/coverage/r55-G5-grid-sphere.md"
     }
   ],
   "counts": {
-    "已迁移/增强（本轮验证）": 34,
-    "部分覆盖": 88,
-    "已合并/迁移（静态确认）": 39
+    "已迁移/增强（本轮验证）": 123,
+    "已合并/迁移（静态确认）": 41,
+    "部分覆盖": 6
   }
 }

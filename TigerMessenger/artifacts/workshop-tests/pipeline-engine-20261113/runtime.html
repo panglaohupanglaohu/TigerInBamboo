@@ -1,0 +1,20 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>材质能力隔离实景验证</title>
+<style>body{margin:0;background:#17232b;color:#dde6e3;font:16px sans-serif}h1,p{margin:12px 24px}canvas{display:block}</style>
+<h1>材质能力 · 隔离实景验证</h1><p id="state">原始材质。此页使用真实编辑插件与 Worker，不是正式游戏画面。</p>
+<script type="importmap">{"imports":{"three":"/TigerMessenger/vendor/three.module.js"}}</script>
+<script type="module">
+import * as T from 'three';
+import {createGenericScene} from '/TigerMessenger/src/scene-authoring/generic-scene.js';
+const renderer=new T.WebGLRenderer({antialias:true});renderer.setSize(1100,620);renderer.setPixelRatio(1);document.body.append(renderer.domElement);
+const scene=new T.Scene();scene.background=new T.Color('#17232b');const camera=new T.PerspectiveCamera(42,1100/620,.1,100);camera.position.set(8,9,15);camera.lookAt(0,1,0);
+scene.add(new T.HemisphereLight('#ffffff','#778899',2.5));const sun=new T.DirectionalLight('#ffffff',2);sun.position.set(3,8,5);scene.add(sun);
+const root=new T.Group();scene.add(root);const colors=['#334466','#668899','#bc9765','#a15e77','#eeeecc','#428245'];
+for(let i=0;i<colors.length;i++){const mat=new T.MeshStandardMaterial({color:colors[i],roughness:.8});mat.name='验证材质 '+i;const mesh=new T.Mesh(new T.BoxGeometry(1.5,1.5+i*.25,1.5),mat);mesh.position.set((i%3-1)*2.3,(1.5+i*.25)/2,(Math.floor(i/3)-.5)*3);mesh.name='验证物件 '+i;root.add(mesh);}
+const outside=new T.Mesh(new T.BoxGeometry(1,1,1),root.children[1].material);outside.position.set(5,1,0);scene.add(outside);
+const storage={map:new Map(),deny:false,getItem(k){return this.map.get(k)||null},setItem(k,v){if(this.deny)throw Error('storage denied');this.map.set(k,v)},removeItem(k){this.map.delete(k)}};
+const plugin=createGenericScene({id:'TEST-perceptual',label:'隔离材质样例',root,camera,canvas:renderer.domElement,storage});
+function render(){renderer.render(scene,camera)}render();
+const worker=(path,message)=>new Promise((resolve,reject)=>{const w=new Worker(path,{type:'module'}),timer=setTimeout(()=>{w.terminate();reject(Error('Worker timeout'))},15000);w.onerror=e=>{clearTimeout(timer);w.terminate();reject(Error(e.message))};w.onmessage=({data})=>{if(data.heartbeat)return;clearTimeout(timer);w.terminate();data.ok?resolve(data.result):reject(Error(data.error))};w.postMessage({job:'isolated-preview',...message});});
+window.testScene={plugin,storage,root,outside,render,worker,geometry:()=>JSON.stringify(root.children.map(m=>({p:m.position.toArray(),q:m.quaternion.toArray(),s:m.scale.toArray(),geometry:m.geometry.uuid})))};
+window.ready=true;
+</script></html>

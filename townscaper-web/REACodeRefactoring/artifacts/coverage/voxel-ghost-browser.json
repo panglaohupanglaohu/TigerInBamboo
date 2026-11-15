@@ -1,0 +1,61 @@
+{
+  "total": 949,
+  "reports": [
+    {
+      "t": 0.13,
+      "hidden": 70,
+      "points": 879,
+      "ghost": 0,
+      "solid": 0,
+      "phase": "scatter",
+      "yellowPx": 2944,
+      "facePx": 0,
+      "inkPx": 7844
+    },
+    {
+      "t": 0.34,
+      "hidden": 0,
+      "points": 89,
+      "ghost": 780,
+      "solid": 80,
+      "phase": "fill",
+      "yellowPx": 32,
+      "facePx": 4751,
+      "inkPx": 165438
+    },
+    {
+      "t": 0.62,
+      "hidden": 0,
+      "points": 0,
+      "ghost": 500,
+      "solid": 449,
+      "phase": "fill",
+      "yellowPx": 0,
+      "facePx": 59009,
+      "inkPx": 172442
+    },
+    {
+      "t": 1,
+      "hidden": 0,
+      "points": 0,
+      "ghost": 0,
+      "solid": 949,
+      "phase": "done",
+      "yellowPx": 0,
+      "facePx": 213354,
+      "inkPx": 255276
+    }
+  ],
+  "modes": {
+    "same": true,
+    "differ": true,
+    "stable": true,
+    "scanUp": true
+  },
+  "pointOrder": {
+    "scatter": 344,
+    "ordered": 317,
+    "prefix": true
+  },
+  "errors": []
+}

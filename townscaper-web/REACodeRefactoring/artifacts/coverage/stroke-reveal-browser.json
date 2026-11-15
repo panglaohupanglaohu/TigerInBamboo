@@ -1,0 +1,95 @@
+{
+  "config": {
+    "seed": 7,
+    "duration": 3.2,
+    "stagger": 0.6,
+    "strokes": 42
+  },
+  "samples": [
+    {
+      "p": 0,
+      "time": 0,
+      "strokes": 42,
+      "started": 1,
+      "finished": 0,
+      "drawnLength": 0,
+      "totalLength": 12930.902865950105,
+      "ratio": 0,
+      "done": false,
+      "inkPixels": 0,
+      "strokeCount": 42,
+      "endTime": 3.2
+    },
+    {
+      "p": 0.15,
+      "time": 0.48,
+      "strokes": 42,
+      "started": 11,
+      "finished": 0,
+      "drawnLength": 331.915747900493,
+      "totalLength": 12930.902865950105,
+      "ratio": 0.025668412433481325,
+      "done": false,
+      "inkPixels": 367,
+      "strokeCount": 42,
+      "endTime": 3.2
+    },
+    {
+      "p": 0.35,
+      "time": 1.1199999999999999,
+      "strokes": 42,
+      "started": 24,
+      "finished": 10,
+      "drawnLength": 2476.933312083843,
+      "totalLength": 12930.902865950105,
+      "ratio": 0.19155145914877683,
+      "done": false,
+      "inkPixels": 3047,
+      "strokeCount": 42,
+      "endTime": 3.2
+    },
+    {
+      "p": 0.6,
+      "time": 1.92,
+      "strokes": 42,
+      "started": 42,
+      "finished": 25,
+      "drawnLength": 7945.1746768055655,
+      "totalLength": 12930.902865950105,
+      "ratio": 0.6144330955982159,
+      "done": false,
+      "inkPixels": 10187,
+      "strokeCount": 42,
+      "endTime": 3.2
+    },
+    {
+      "p": 0.85,
+      "time": 2.72,
+      "strokes": 42,
+      "started": 42,
+      "finished": 40,
+      "drawnLength": 12122.52200432988,
+      "totalLength": 12930.902865950105,
+      "ratio": 0.9374845770631477,
+      "done": false,
+      "inkPixels": 15379,
+      "strokeCount": 42,
+      "endTime": 3.2
+    },
+    {
+      "p": 1,
+      "time": 3.2,
+      "strokes": 42,
+      "started": 42,
+      "finished": 42,
+      "drawnLength": 12930.902865950105,
+      "totalLength": 12930.902865950105,
+      "ratio": 1,
+      "done": true,
+      "inkPixels": 16451,
+      "strokeCount": 42,
+      "endTime": 3.2
+    }
+  ],
+  "errors": []
+}

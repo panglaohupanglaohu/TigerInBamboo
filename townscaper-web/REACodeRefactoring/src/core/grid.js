@@ -234,6 +234,55 @@ export function buildSquareGrid({radius=9, cellSize=1}={}) {
   return finishGrid(polys,verts,{radius,hexSize:cellSize,kind:'square',triangles:0});
 }
 
+/** 1670790425232175108: "pure triangle/hex and square grids" — the pure hex control.
+ * Regular pointy-top hexagon cells (n = 6) in a hexagon of `radius` rings, built through
+ * the same finishGrid contract (shared vertices, half-edge twins), so World/terrain/shape
+ * run on it unchanged. A comparison grid only; the main game keeps its mixed/quad grids.
+ */
+export function buildHexGrid({radius=6, cellSize=1}={}) {
+  if(!Number.isInteger(radius)||radius<0||radius>64||!Number.isFinite(cellSize)||cellSize<=0) throw new RangeError('Invalid hex grid size');
+  const verts=[],key=new Map(),polys=[];
+  const vid=(x,z,rim)=>{const k=Math.round(x*1e6)+','+Math.round(z*1e6);let v=key.get(k);if(!v){v={id:verts.length,x,z,pinned:false,rimCount:0};verts.push(v);key.set(k,v);}if(rim)v.rimCount++;return v;};
+  for(let q=-radius;q<=radius;q++)for(let r=-radius;r<=radius;r++){
+    if(Math.abs(q+r)>radius)continue;
+    const cx=cellSize*SQRT3*(q+r/2),cz=cellSize*1.5*r,rim=Math.max(Math.abs(q),Math.abs(r),Math.abs(q+r))===radius;
+    polys.push(Array.from({length:6},(_,k)=>{const a=Math.PI/6+k*Math.PI/3;return vid(cx+Math.cos(a)*cellSize,cz+Math.sin(a)*cellSize,rim);}));
+  }
+  // Boundary vertices touch fewer than three hexagons: pin them like the other generators' rim.
+  const uses=new Map();for(const pg of polys)for(const v of pg)uses.set(v,(uses.get(v)||0)+1);
+  for(const v of verts){v.pinned=uses.get(v)<3;delete v.rimCount;}
+  return finishGrid(polys,verts,{radius,hexSize:cellSize,kind:'hex',triangles:0});
+}
+
+/** Grid-kind metrics on any shared grid (REACode gridmodes latticeStats + quadDegreeStats):
+ * major edge directions (15° bins holding >= 10% of edges), vertex valence (edges) and
+ * cell degree (cells per vertex) for interior vertices, interior-angle median/p05, face
+ * types, planar Euler V-E+F, and the 6-cells-per-vertex defect share for quad grids
+ * (1147881669350891521 "Heuristic to reduce (or eliminate) 6 quad verts").
+ */
+export function gridKindStats(grid) {
+  const edges=new Map(),bins=new Map(),angles=[],faceTypes={},cellsPer=new Map();
+  for(const c of grid.cells){
+    faceTypes[c.n]=(faceTypes[c.n]||0)+1;
+    for(let i=0;i<c.n;i++){
+      const a=c.pts[i],b=c.pts[(i+1)%c.n],d=c.pts[(i+2)%c.n],k=a.id<b.id?a.id+':'+b.id:b.id+':'+a.id;
+      cellsPer.set(a.id,(cellsPer.get(a.id)||0)+1);
+      if(!edges.has(k)){edges.set(k,[a.id,b.id,c.edgeNeighbors[i]<0]);const deg=((Math.atan2(b.z-a.z,b.x-a.x)*180/Math.PI)%180+180)%180,bin=Math.round(deg/15)%12;bins.set(bin,(bins.get(bin)||0)+1);}
+      const ux=a.x-b.x,uz=a.z-b.z,vx=d.x-b.x,vz=d.z-b.z;angles.push(Math.acos(Math.max(-1,Math.min(1,(ux*vx+uz*vz)/(Math.hypot(ux,uz)*Math.hypot(vx,vz)))))*180/Math.PI);
+    }
+  }
+  const boundary=new Set(),valence=new Map();
+  for(const [a,b,rim] of edges.values()){valence.set(a,(valence.get(a)||0)+1);valence.set(b,(valence.get(b)||0)+1);if(rim){boundary.add(a);boundary.add(b);}}
+  const valenceHist={},cellDegreeHist={};let interior=0,six=0;
+  for(const [id,v] of valence){if(boundary.has(id))continue;interior++;valenceHist[v]=(valenceHist[v]||0)+1;const d=cellsPer.get(id);cellDegreeHist[d]=(cellDegreeHist[d]||0)+1;if(d===6)six++;}
+  angles.sort((x,y)=>x-y);const total=edges.size;
+  return {kind:grid.kind,verts:valence.size,faces:grid.cells.length,edges:total,faceTypes,
+    majorDirs:[...bins.values()].filter(v=>v/total>=.1).length,valence:valenceHist,cellDegree:cellDegreeHist,interior,
+    sixPct:faceTypes[4]===grid.cells.length?+(six/Math.max(1,interior)*100).toFixed(2):null,
+    angleMedian:+angles[angles.length>>1].toFixed(2),angleP05:+angles[Math.floor(angles.length*.05)].toFixed(2),
+    euler:valence.size-total+grid.cells.length};
+}
+
 /** 1447494168448753667: quads cut on both diagonals into four triangles.
  * Derive a new shared-cell grid, retaining parent ownership. This supplies
  * geometry/adjacency; it does not impose a joint four-subtile WFC constraint.

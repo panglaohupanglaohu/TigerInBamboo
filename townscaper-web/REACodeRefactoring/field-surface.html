@@ -1,0 +1,201 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>占位场等值面 · 碎块崩解重组 · REACode重构版</title><link rel="icon" href="data:,"><style>
+body{margin:0;background:#eef1f2;color:#22333a;font:14px/1.6 system-ui}
+header{padding:12px 22px 6px}canvas{display:block;margin:0 auto 12px;background:#dfe6e7;border-radius:10px;box-shadow:0 1px 3px rgba(32,52,60,.12)}
+a{color:#26758a}code{background:#e2eaea;padding:0 4px;border-radius:4px}
+label{margin-right:16px}output,span.v{font-variant-numeric:tabular-nums}
+#hud{padding:0 22px 4px;font-size:13px;color:#345}
+button{margin-right:8px;padding:3px 10px;border:1px solid #b9cdc6;background:#fff;border-radius:6px;color:#20343c;cursor:pointer}
+button:hover{background:#e9f2ee}
+.legend{padding:0 22px 8px;font-size:13px;color:#456}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin:0 5px 0 14px;vertical-align:-1px}
+</style>
+<header><b>占位场 → 平滑等值面 + 碎块崩解/重组</b> · <a href="index.html" target="_top">首页</a> ·
+<a href="artifacts/coverage/818857408848130048-review.md">逐帧证据</a>
+<p>818857408848130048（302 帧 / 8.68 fps）与 832633189277409280（192 帧，同一工具第二次录屏）：
+白模黏土岛在 5–8 种形态间循环，每次切换先<strong>碎成悬浮小块</strong>（多数过渡帧只剩 1–3 块暗碎片），
+再重新拼合。成品表面<strong>没有一根方格边</strong>——柱顶是半球、崖棱是倒角、房子和地形熔化在一起。</p>
+<p>机制：格点占据场 → 3D 盒式模糊揉成圆角 → <code>iso=0.5</code> 抽等值面（naive surface nets，每格一顶点，
+每条跨面孔棱一个四边形）→ 按 2D 区块给每块一个时间窗，窗内先缩到消失、同时抬升，过中点后从零长出新形态。
+<code>src/core/field-surface.js</code>。</p>
+<label>进度 <input id="t" type="range" min="0" max="1" step="0.004" value="0"><output id="tv">0.000</output></label>
+<label>目标形态 <select id="shape"><option value="ab">A → B</option><option value="ba">B → A</option></select></label>
+<label>模糊半径 <select id="blur"><option value="1">1（棱较硬）</option><option value="2" selected>2（黏土）</option></select></label>
+<button id="play">播放</button><button id="a">形态 A</button><button id="b">形态 B</button>
+<span id="status">加载…</span></header>
+<div id="hud"></div>
+<div class="legend"><i style="background:#f4f6f7"></i>等值面（哑光白模）<i style="background:#dfe6e7"></i>水面
+<i style="background:#ffffff;border:1px solid #cfd8da"></i>水线轮廓（岛的落地边）</div>
+<canvas id="cv" width="1000" height="620"></canvas>
+<script type="module">
+import {
+  makeField, rasterizeBoxes, blurField, chunkPlan, morphField, surfaceNets,
+} from './src/core/field-surface.js';
+
+const $ = (s) => document.querySelector(s);
+const DPR = Math.min(2, window.devicePixelRatio || 1);
+const W = 1000, H = 620;
+const cv = $('#cv');
+cv.width = W * DPR; cv.height = H * DPR; cv.style.width = W + 'px'; cv.style.height = H + 'px';
+const g = cv.getContext('2d');
+g.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+const DIMS = [34, 22, 34];
+// 形态 A：台地 + 两座圆塔 + 两间白房子（和片子里第一段成品同构）
+const A = [
+  { x: 4, y: 0, z: 4, w: 16, h: 6, d: 16 },
+  { x: 7, y: 6, z: 7, w: 6, h: 3, d: 6 },
+  { x: 8, y: 9, z: 8, w: 4, h: 5, d: 4 },
+  { x: 15, y: 6, z: 9, w: 3, h: 4, d: 3 },
+  { x: 17, y: 6, z: 12, w: 5, h: 4, d: 5 },
+  { x: 18, y: 10, z: 13, w: 3, h: 3, d: 3 },
+  { x: 5, y: 6, z: 15, w: 5, h: 3, d: 4 },
+];
+// 形态 B：窄岛 + 一列高柱 + 长屋（片子里第二、四段的样子）
+const B = [
+  { x: 8, y: 0, z: 6, w: 14, h: 4, d: 9 },
+  { x: 11, y: 4, z: 8, w: 5, h: 7, d: 5 },
+  { x: 12, y: 11, z: 9, w: 3, h: 4, d: 3 },
+  { x: 17, y: 4, z: 7, w: 3, h: 8, d: 3 },
+  { x: 6, y: 4, z: 10, w: 4, h: 3, d: 4 },
+  { x: 18, y: 4, z: 12, w: 4, h: 2, d: 3 },
+];
+
+const plans = {
+  ab: chunkPlan(A, B, { chunk: 3, seed: 3, dur: 0.45, gap: 0.5 }),
+  ba: chunkPlan(B, A, { chunk: 3, seed: 3, dur: 0.45, gap: 0.5 }),
+};
+const field = makeField(DIMS);
+
+// 等轴测：scale 决定大小，tilt 决定俯角
+const PROJ = { scale: 12.6, tilt: 0.52, ox: W / 2, oy: H * 0.52 };
+function proj(x, y, z) {
+  return [PROJ.ox + (x - z) * 0.8660254 * PROJ.scale, PROJ.oy + ((x + z) * PROJ.tilt - y) * PROJ.scale];
+}
+const LIGHT = (() => { const v = [-0.42, 0.78, -0.46]; const l = Math.hypot(...v); return v.map((c) => c / l); })();
+const VIEW = (() => { const v = [1, 1.15, 1]; const l = Math.hypot(...v); return v.map((c) => c / l); })();
+
+let state = { t: 0, dir: 'ab', blur: 2, mesh: null, stats: null };
+
+function rebuild() {
+  const t0 = performance.now();
+  const plan = plans[state.dir];
+  const st = morphField(field, plan, state.t, { lift: 5 });
+  blurField(field, { passes: state.blur, radius: 1 });
+  const mesh = surfaceNets(field, { iso: 0.5 });
+  state.mesh = mesh;
+  state.stats = { ...st, verts: mesh.verts, faces: mesh.faces };
+  state.ms = performance.now() - t0;
+}
+
+function draw() {
+  g.clearRect(0, 0, W, H);
+  g.fillStyle = '#dfe6e7';
+  g.fillRect(0, 0, W, H);
+
+  // 水面：一片浅色椭圆（片子里水有倒影，这里只做底色 —— 差距写进证据）
+  g.save();
+  g.beginPath();
+  g.ellipse(W / 2, PROJ.oy + 40, W * 0.42, H * 0.20, 0, 0, Math.PI * 2);
+  g.fillStyle = 'rgba(206,216,218,0.55)';
+  g.fill();
+  g.restore();
+
+  // 水线轮廓：占据场在 y=1 那一层的落地边（片子基座外侧那圈白色细带）
+  g.strokeStyle = 'rgba(255,255,255,0.95)';
+  g.lineWidth = 1.6;
+  g.beginPath();
+  const nx = field.nx, ny = field.ny, nz = field.nz;
+  const at = (i, j, k) => field.data[(k * ny + j) * nx + i];
+  const push = ([a, b]) => {
+    const cx = W / 2, cy = PROJ.oy + 30;
+    const f = (pt) => {
+      const dx = pt[0] - cx, dy = pt[1] - cy, l = Math.hypot(dx, dy) || 1;
+      return [pt[0] + (dx / l) * 3, pt[1] + (dy / l) * 3];
+    };
+    return [f(a), f(b)];
+  };
+  for (let k = 1; k < nz - 1; k++) for (let i = 1; i < nx - 1; i++) {
+    if (at(i, 1, k) < 0.5) continue;
+    const x = i - 1, z = k - 1;
+    if (at(i - 1, 1, k) < 0.5) { const [a, b] = push([proj(x, 0.06, z), proj(x, 0.06, z + 1)]); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); }
+    if (at(i + 1, 1, k) < 0.5) { const [a, b] = push([proj(x + 1, 0.06, z), proj(x + 1, 0.06, z + 1)]); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); }
+    if (at(i, 1, k - 1) < 0.5) { const [a, b] = push([proj(x, 0.06, z), proj(x + 1, 0.06, z)]); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); }
+    if (at(i, 1, k + 1) < 0.5) { const [a, b] = push([proj(x, 0.06, z + 1), proj(x + 1, 0.06, z + 1)]); g.moveTo(a[0], a[1]); g.lineTo(b[0], b[1]); }
+  }
+  g.stroke();
+  const m = state.mesh;
+  const p = m.positions, q = m.quads, nm = m.normals;
+  const order = [];
+  for (let f = 0; f < q.length; f += 4) {
+    let cx = 0, cy = 0, cz = 0;
+    for (let e = 0; e < 4; e++) { const o = q[f + e] * 3; cx += p[o]; cy += p[o + 1]; cz += p[o + 2]; }
+    cx /= 4; cy /= 4; cz /= 4;
+    // 背面剔除：iso 相机从 +X+Y+Z 方向看
+    let nx = 0, ny = 0, nz = 0;
+    for (let e = 0; e < 4; e++) { const o = q[f + e] * 3; nx += nm[o]; ny += nm[o + 1]; nz += nm[o + 2]; }
+    if (nx * VIEW[0] + ny * VIEW[1] + nz * VIEW[2] <= 0) continue;
+    const l = Math.hypot(nx, ny, nz) || 1;
+    const lam = Math.max(0, (nx * LIGHT[0] + ny * LIGHT[1] + nz * LIGHT[2]) / l);
+    const shade = 0.74 + 0.26 * lam;
+    order.push({ f, depth: cx + cy + cz, shade });
+  }
+  order.sort((a, b) => a.depth - b.depth);
+  for (const o of order) {
+    const f = o.f;
+    g.beginPath();
+    for (let e = 0; e < 4; e++) {
+      const v = q[f + e] * 3;
+      const [sx, sy] = proj(p[v], p[v + 1], p[v + 2]);
+      if (e === 0) g.moveTo(sx, sy); else g.lineTo(sx, sy);
+    }
+    g.closePath();
+    const c = Math.round(244 * o.shade), c2 = Math.round(246 * o.shade), c3 = Math.round(247 * o.shade);
+    g.fillStyle = `rgb(${c},${c2},${c3})`;
+    g.fill();
+    g.strokeStyle = g.fillStyle;
+    g.lineWidth = 0.7;
+    g.stroke();
+  }
+
+
+  const s = state.stats;
+  $('#hud').textContent = `t=${state.t.toFixed(3)} · 形态 ${state.dir === 'ab' ? 'A→B' : 'B→A'} · 顶点 ${s.verts} · 四边形 ${s.faces} · 在场碎块 ${s.oldChunks + s.newChunks} · 空中 ${s.airborne} · 实心格 ${s.solid} · 重建 ${state.ms.toFixed(0)} ms`;
+  $('#tv').textContent = state.t.toFixed(3);
+}
+
+function apply(t) {
+  state.t = Math.max(0, Math.min(1, t));
+  $('#t').value = String(state.t);
+  rebuild(); draw();
+}
+
+// 页面 API（测试用）
+window.fsPage = {
+  set(t) { apply(t); return this.stats(); },
+  shape(dir) { state.dir = dir === 'ba' ? 'ba' : 'ab'; apply(state.t); return this.stats(); },
+  blur(r) { state.blur = r; apply(state.t); return this.stats(); },
+  stats() { return { t: state.t, dir: state.dir, blur: state.blur, ...state.stats, ms: state.ms }; },
+  ready: true,
+};
+
+$('#t').addEventListener('input', (e) => apply(parseFloat(e.target.value)));
+$('#shape').addEventListener('change', (e) => window.fsPage.shape(e.target.value));
+$('#blur').addEventListener('change', (e) => window.fsPage.blur(parseInt(e.target.value, 10)));
+$('#a').addEventListener('click', () => apply(0));
+$('#b').addEventListener('click', () => apply(1));
+let timer = null;
+$('#play').addEventListener('click', () => {
+  if (timer) { clearInterval(timer); timer = null; $('#play').textContent = '播放'; return; }
+  $('#play').textContent = '暂停';
+  let t = state.t >= 0.999 ? 0 : state.t;
+  timer = setInterval(() => {
+    t += 0.012;
+    if (t > 1) t = 0;
+    apply(t);
+  }, 100);
+});
+
+apply(0);
+$('#status').textContent = '就绪';
+</script>
+</html>

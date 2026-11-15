@@ -29,3 +29,13 @@ vegetation.js将它用于实际灌木和三类树冠材质；视角余弦与纹�
 累计70/285，剩215；本轮同步映射发现原版并行新增src/mirrordecor.js、src/overhangterrain.js，扫描总数增至136：23增强/74静态/37部分/2未覆盖。已加入下一批静态映射待审，未改动原版，未把新增模块提前标覆盖。文字理解、全帧学习、局部实现和局部运行通过分开记录；尚缺全场景共atlas、原作纹样、一般mipmap、透明阴影及远景impostor。下一批后院小径/草丛背景反差，两段仍未全帧计数。
 
 页面回归：tests/leaf-surface-pages.cjs通过，index/pipeline显示70/285，小镇/北境及地形shader无异常，地形fields开关与增量编辑属性仍正确。报告leaf-surface-pages.json。管线缺0段，素材/README匹配285，历史笔记243；git diff --check通过。静态映射新发现2个未覆盖模块如上，未虚报为已重构。
+
+## 第 56 批（C06）
+
+### 1205420678859632640
+- 做了什么：本轮不改代码，按要求在主场景复核：融合场景近景（无参数默认开）树冠是球面叶纹 × 视角 alpha 的叶形边，三类树冠与灌木都走同一材质；原作手绘叶纹无素材，用程序叶纹替代
+- 落点：src/core/leaf-atlas.js · src/life/leaf-surface.js · src/life/vegetation.js · index.html
+- 测试：tests/leaf-atlas.mjs（通过）
+- 截图：artifacts/coverage/shots-r56/C06-leaf-closeup.png（已看）
+- 对照：近景圆树冠边缘是锯齿叶形、内部有叶纹明暗，与 0200–0299 的盆栽树一致；树冠投影仍是整团圆影（片中看不出影子形状，不影响机制判定）
+- 判定：done

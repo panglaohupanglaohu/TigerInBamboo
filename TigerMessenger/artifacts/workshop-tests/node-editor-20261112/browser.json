@@ -1,0 +1,20 @@
+{
+  "errors": [],
+  "sourceHashes": {
+    "src/core/node-graph-runtime.js": "b2d1c5200a714065bbc1b2bcf7cfffa608f2f4d7e200bc10d33930b5f2e339ee",
+    "src/core/node-graph-editor.js": "33666574727f859d06ea9dcc57418ac0897cf5bd5b32292f3ae86b031c5790b5",
+    "src/ui/node-graph-editor.js": "ba76feba90939d8ec12da369531757d665c6618fb3aa88b09b4cf3b543891b21",
+    "node-editor.html": "d9c755ec47f600267bba518f18138a59141e98169ab6424d955dc3dec8e57750",
+    "node-graph.html": "365adf5c93d6094c35f09304d9121ae5a9c55c2fd0b046e4ce4d35a9ca6511f2",
+    "tests/node-graph-editor.mjs": "313407c361c64b25526f1b2fc98ba308f44e445de476b0e78e7a7fdd7510310a"
+  },
+  "passed": true,
+  "dragged": {
+    "x": 100,
+    "y": 95
+  },
+  "connectedValue": 40,
+  "nodeCount": 8,
+  "undoRedo": true,
+  "invalidImportAtomic": true
+}

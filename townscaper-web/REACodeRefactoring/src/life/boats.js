@@ -9,7 +9,7 @@
  */
 
 import * as THREE from 'three';
-import { advanceWake } from '../core/wake-sampling.js';
+import { advanceWake, makeWakeParticles } from '../core/wake-sampling.js';
 
 const TRAIL = 70;
 
@@ -31,6 +31,27 @@ export class Boats {
           #include <colorspace_fragment>
         }`,
     });
+    // REACode wake.js: broadside foam particles at the Kelvin angle + square bow spray, drawn
+    // over the existing V ribbons. Pixel-lab constants are rescaled to hull length/beam.
+    this.wakeFx = makeWakeParticles({ rate: 70, sprayRate: 6, life: 3.2 });
+    this.FX_MAX = 1600;
+    const mk = (square) => {
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(this.FX_MAX * 3), 3));
+      g.setAttribute('aA', new THREE.BufferAttribute(new Float32Array(this.FX_MAX), 1));
+      g.setAttribute('aS', new THREE.BufferAttribute(new Float32Array(this.FX_MAX), 1));
+      g.setDrawRange(0, 0);
+      const m = new THREE.Points(g, new THREE.ShaderMaterial({
+        transparent: true, depthWrite: false,
+        vertexShader: /* glsl */ `attribute float aA; attribute float aS; varying float vA; void main() { vA = aA; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = aS * 420.0 / max(.001, -mv.z); gl_Position = projectionMatrix * mv; }`,
+        fragmentShader: /* glsl */ `varying float vA; void main() { ${square ? '' : 'if (length(gl_PointCoord - .5) > .5) discard;'} gl_FragColor = vec4(1.0, 1.0, 1.0, vA);
+          #include <colorspace_fragment>
+        }`,
+      }));
+      m.frustumCulled = false; this.group.add(m); return m;
+    };
+    this.foamPoints = mk(false);
+    this.sprayPoints = mk(true);
   }
 
   set visible(on) { this.group.visible = on; }
@@ -55,6 +76,7 @@ export class Boats {
   refresh(isLand, span = 8, count = 2) {
     for (const b of this.boats) { this.group.remove(b.mesh, b.wake); b.wake.geometry.dispose(); b.mesh.traverse(o => o.geometry?.dispose()); }
     this.boats = [];
+    this.wakeFx.foam.length = this.wakeFx.spray.length = 0;
     let R = span * 0.6;
     for (; R < span * 2; R += 0.25) {
       let ok = true;
@@ -72,7 +94,7 @@ export class Boats {
   }
 
   update(dt) {
-    const t = this.uTime.value;
+    const t = this.uTime.value, ships = [];
     for (const b of this.boats) {
       const a = b.phase + t * b.speed;
       const R = b.R + Math.sin(t * 0.13 + b.phase) * 0.4;
@@ -101,6 +123,22 @@ export class Boats {
       const g = b.wake.geometry;
       g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
       g.setAttribute('aA', new THREE.Float32BufferAttribute(al, 1));
+      const v = b.speed * R;   // tangential speed along the circular course
+      ships.push({ id: this.boats.indexOf(b), x, z, dx, dz, speed: Math.abs(v), len: 1.1, beam: .16 });
     }
+    this.wakeFx.step(Math.min(dt, .1), ships);
+    this.#writeFx();
+  }
+
+  #writeFx() {
+    const put = (pts, list, alpha, size, y) => {
+      const P = pts.geometry.attributes.position.array, A = pts.geometry.attributes.aA.array, S = pts.geometry.attributes.aS.array;
+      const n = Math.min(this.FX_MAX, list.length);
+      for (let i = 0; i < n; i++) { const p = list[list.length - n + i]; P.set([p.x, y, p.z], i * 3); A[i] = alpha(p); S[i] = size(p); }
+      pts.geometry.setDrawRange(0, n);
+      for (const a of ['position', 'aA', 'aS']) pts.geometry.attributes[a].needsUpdate = true;
+    };
+    put(this.foamPoints, this.wakeFx.foam, (p) => this.wakeFx.alphaOf(p), (p) => p.size * .5, .032);
+    put(this.sprayPoints, this.wakeFx.spray, (p) => Math.pow(1 - p.age / p.life, 1.2) * .9, (p) => p.w * .5, .06);
   }
 }

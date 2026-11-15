@@ -1,0 +1,169 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>阻力弹道扇面 · 逐帧覆盖实验页</title><link rel="icon" href="data:,"><style>
+body{margin:24px;background:#eef3f6;color:#20323c;font:15px/1.6 system-ui,"PingFang SC"}
+h1{font-size:20px;margin:0 0 6px}p.lead{margin:0 0 14px;color:#3c5760;max-width:1080px}
+.row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 1px 3px rgba(32,50,60,.12)}
+figure{margin:0}figcaption{font-size:13px;color:#4a656e;margin-top:6px}
+canvas{display:block;border-radius:8px;max-width:100%}
+label{font:inherit;margin-right:16px;white-space:nowrap}input[type=range]{vertical-align:middle;width:180px}
+#stats{font-size:13px;color:#3c5760;margin:10px 0 12px;font-variant-numeric:tabular-nums}
+#stats b{color:#123}code{background:#e8eef2;padding:1px 5px;border-radius:4px}
+a{color:#276e86}
+</style>
+<h1>阻力弹道扇面 → 等弧长方向划线</h1>
+<p class="lead">对照片子 816332161036984320：Unity 里一个 <code>Trajectory Calculator</code> 脚本，Inspector 只有 <code>Start Speed</code> 与 <code>Drag</code> 两个标量，Scene 视图里从同一点按一整排发射角画出弹道，每条弧上每隔固定弧长插一段白色短划线指出该点的速度方向。拖动 Drag 时整片扇面一起收缩。</p>
+<p class="lead">本仓 <code>src/core/ballistic-table.js</code> 只做无阻力、按代价挑角度的定点射表（<a href="ballistics.html" target="_top">ballistics.html</a>），既没有阻力，也没有「一整片角度」的预览。这里补 <code>src/core/trajectory-fan.js</code>：线性阻尼解析解 + 等弧长切线采样。</p>
+<div>
+  <label>Start Speed <input id="speed" type="range" min="3" max="14" step="0.01" value="7.61"><span id="speedOut">7.61</span></label>
+  <label>Drag <input id="drag" type="range" min="0" max="2" step="0.01" value="0.83"><span id="dragOut">0.83</span></label>
+  <label>Gravity <input id="gravity" type="range" min="2" max="20" step="0.1" value="9.8"><span id="gravityOut">9.80</span></label>
+  <label><input id="grid" type="checkbox" checked> 查找表点阵（第 56 批：格点出射方向）</label>
+  <label><input id="tangent" type="checkbox"> 弧上切线划线（旧口径）</label>
+  <label>弧上划线间距 <input id="spacing" type="range" min="0.2" max="1.2" step="0.05" value="0.5"></label>
+</div>
+<div id="stats"></div>
+<div class="row">
+  <figure class="card">
+    <canvas id="fan" width="660" height="470"></canvas>
+    <figcaption>同一起点、23 条角度（−20°…90°）的扇面；青点是弧线，白划线是该点速度方向（等弧长 0.5 单位）</figcaption>
+  </figure>
+  <div class="card" style="max-width:300px">
+    <b>片子 vs 本页</b>
+    <ul style="padding-left:18px;font-size:14px;line-height:1.7;margin:8px 0">
+      <li>同：同一起点、同一 Speed/Drag、整排角度、等弧长白色方向划线、深底 + 白点阵背景</li>
+      <li>同：Drag 越大射程越短（片中 0.83 → 1.26 时扇面明显收缩）</li>
+      <li>第 56 批纠正：原尺寸 frame-0040 里白线落在<b>规则点阵</b>上，每格点一根 = 打中该格点的出射方向；右上够不着的格点只剩白点。这正是原文「把弹道作业做成查找表」——<code>launchGrid()</code> 逐格点解低弧出射角（线性阻力 + 二分），<code>lookup()</code> 双线性查表</li>
+      <li>第三行参数是 Gravity（frame-0040 露出半行），已加滑杆</li>
+      <li>旧口径「弧上等弧长切线」保留为可选开关</li>
+    </ul>
+    <p style="font-size:13px;color:#4a656e;margin:8px 0 0">落点用二分求 y(t)=0，arc 采样与划线都不受 dt 影响；<a href="artifacts/coverage/816332161036984320-review.md">逐帧记录</a></p>
+  </div>
+</div>
+<script type="module">
+import { trajectoryFan, analyticRange, launchGrid } from './src/core/trajectory-fan.js';
+
+const cv = document.querySelector('#fan');
+const ctx = cv.getContext('2d');
+const S = { speed: 7.61, drag: 0.83, spacing: 0.5, gravity: 9.8 };
+let G = 9.8;
+// 固定比例尺：不同 Drag 的截图能直接比（不跟着 maxRange 自适应）
+const UNIT = 95;
+const ORIGIN = { x: 52, y: 235 };   // 第 56 批：原点放到左侧中线（片中点阵上下都有）
+const CELL = 0.4;
+let grid = null;
+let last = null;
+let statsValue = null;
+
+const toPx = (x, y) => [ORIGIN.x + x * UNIT, ORIGIN.y - y * UNIT];
+
+function draw() {
+  G = S.gravity;
+  last = trajectoryFan({ speed: S.speed, drag: S.drag, spacing: S.spacing, gravity: G, groundY: -(cv.height - ORIGIN.y) / UNIT });
+  const gridOn = document.querySelector('#grid').checked, tangentOn = document.querySelector('#tangent').checked;
+  grid = launchGrid({ speed: S.speed, drag: S.drag, gravity: G, x0: 0, x1: Math.floor((cv.width - ORIGIN.x - 10) / UNIT / CELL) * CELL, y0: -Math.floor((cv.height - ORIGIN.y - 8) / UNIT / CELL) * CELL, y1: Math.floor((ORIGIN.y - 8) / UNIT / CELL) * CELL, cell: CELL });
+  const w = cv.width;
+  const h = cv.height;
+  ctx.fillStyle = '#3d5062';
+  ctx.fillRect(0, 0, w, h);
+  // 白点阵背景（同片子里 Unity 场景的网格点）
+  ctx.fillStyle = 'rgba(255,255,255,.42)';
+  if (!gridOn) for (let y = 24; y < h; y += 26) {
+    for (let x = 24; x < w; x += 26) {
+      ctx.fillRect(x, y, 2, 2);
+    }
+  }
+  // 地面
+  ctx.strokeStyle = 'rgba(255,255,255,.35)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(0, ORIGIN.y);
+  ctx.lineTo(w, ORIGIN.y);
+  ctx.stroke();
+
+  for (const arc of last.arcs) {
+    // 弧线：青点串（片中也是点状曲线，不是实线）
+    ctx.fillStyle = '#6fd0c6';
+    let acc = 0;
+    for (let i = 1; i < arc.points.length; i++) {
+      const [x0, y0] = arc.points[i - 1];
+      const [x1, y1] = arc.points[i];
+      const seg = Math.hypot(x1 - x0, y1 - y0);
+      const stepPx = 2.2 / UNIT;
+      for (let d = acc; d < seg; d += stepPx) {
+        const f = d / seg;
+        const [px, py] = toPx(x0 + (x1 - x0) * f, y0 + (y1 - y0) * f);
+        ctx.fillRect(px, py, 1.6, 1.6);
+      }
+      acc = 0;
+    }
+    if (!tangentOn) continue;
+    // 白色方向划线
+    ctx.strokeStyle = '#f2fbf8';
+    ctx.lineWidth = 1.6;
+    for (const t of arc.ticks) {
+      const [cx, cy] = toPx(t.x, t.y);
+      const half = 5.5;
+      ctx.beginPath();
+      ctx.moveTo(cx - t.dx * half, cy + t.dy * half);
+      ctx.lineTo(cx + t.dx * half, cy - t.dy * half);
+      ctx.stroke();
+    }
+  }
+  // 查找表点阵：每格点一个白点；有解的再从点出发画一根出射方向短线
+  if (gridOn) {
+    ctx.fillStyle = '#ffffff'; ctx.strokeStyle = '#f7fbfa'; ctx.lineWidth = 1.8;
+    for (const n of grid.nodes) {
+      const [px, py] = toPx(n.x, n.y);
+      ctx.fillRect(px - 1.5, py - 1.5, 3, 3);
+      if (!n.shot) continue;
+      ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(px + n.shot.dx * 15, py - n.shot.dy * 15); ctx.stroke();
+    }
+  }
+  // 起点
+  ctx.fillStyle = '#ffffff';
+  ctx.beginPath();
+  ctx.arc(ORIGIN.x, ORIGIN.y, 3, 0, Math.PI * 2);
+  ctx.fill();
+
+  const a45 = analyticRange(S.speed, 45, G);
+  document.querySelector('#stats').innerHTML =
+    `arcs ${last.arcs.length} · 划线 ${last.tickCount} 段 · 最大射程 <b>${last.maxRange.toFixed(2)}</b> 单位 · 最高 ${last.maxApex.toFixed(2)} 单位 · ` +
+    `无阻力 45° 解析射程 ${a45.toFixed(2)}（阻力把它压到 ${last.maxRange.toFixed(2)}）` + (gridOn ? ` · 查找表 ${grid.nodes.length} 格点，有解 <b>${grid.solved}</b>，够不着 ${grid.unreachable}` : '');
+  statsValue = {
+    arcs: last.arcs.length,
+    tickCount: last.tickCount,
+    maxRange: Number(last.maxRange.toFixed(4)),
+    maxApex: Number(last.maxApex.toFixed(4)),
+    analytic45: Number(a45.toFixed(4)),
+    speed: S.speed,
+    drag: S.drag,
+    gravity: G,
+    grid: grid ? { nodes: grid.nodes.length, solved: grid.solved, unreachable: grid.unreachable } : null,
+  };
+}
+
+const bind = (id, key, out) => {
+  const el = document.querySelector('#' + id);
+  el.oninput = () => {
+    S[key] = Number(el.value);
+    if (out) document.querySelector('#' + out).textContent = S[key].toFixed(2);
+    draw();
+  };
+};
+bind('speed', 'speed', 'speedOut');
+bind('drag', 'drag', 'dragOut');
+bind('spacing', 'spacing');
+bind('gravity', 'gravity', 'gravityOut');
+document.querySelector('#grid').onchange = draw; document.querySelector('#tangent').onchange = draw;
+draw();
+
+window.fanPage = {
+  S,
+  setSpeed(v) { S.speed = v; document.querySelector('#speed').value = v; document.querySelector('#speedOut').textContent = v.toFixed(2); draw(); },
+  setDrag(v) { S.drag = v; document.querySelector('#drag').value = v; document.querySelector('#dragOut').textContent = v.toFixed(2); draw(); },
+  stats() { return statsValue; },
+  grid() { return grid; },
+  setGravity(v) { S.gravity = v; document.querySelector('#gravity').value = v; document.querySelector('#gravityOut').textContent = v.toFixed(2); draw(); },
+  redraw: draw,
+};
+</script></html>

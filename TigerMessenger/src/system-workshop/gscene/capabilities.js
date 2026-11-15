@@ -1,3 +1,4 @@
+import {PERCEPTUAL_CAPABILITIES} from './perceptual-capabilities.js';
 /**
  * 通用场景管线的能力代码：作用在场景的「材质色表」上（generic-scene.js 登记的材质）。
  * 书店镇、湖沼、苔庭……这些场景不是体素世界，体素能力用不上；这一层先接入风格与氛围：
@@ -18,6 +19,7 @@ export const helpers = { hex2rgb, rgb2hex, rgb2hsl, hsl2rgb, dist };
 const PACKS = { morris: [...morris.town.walls, ...Object.values(morris.town.build)].filter((c) => /^#[0-9a-f]{6}$/i.test(c)) };
 
 export const GSCENE_CAPABILITIES = [
+  ...PERCEPTUAL_CAPABILITIES,
   { meta: { id: 'scene.palette-unify', domain: 'style', name: '风格统一（主色归并）', does: '把场景里散乱的颜色按使用次数聚成几个主色，每种材质向所属主色靠拢；数量越少风格越统一。',
       keywords: ['统一', '风格', '颜色', '杂乱', '协调', '主色', '调色板', 'palette'], params: { colors: { label: '主色数', min: 3, max: 12, step: 1, default: 6 }, strength: { label: '靠拢程度', min: 0.1, max: 1, step: 0.05, default: 0.6 } } },
     match: (M) => M.length >= 4 ? [{ id: 'materials', count: M.length, reason: `${M.length} 种材质，${new Set(M.map((m) => m.color)).size} 种颜色` }] : [],
@@ -43,14 +45,17 @@ export const GSCENE_CAPABILITIES = [
     match: (M) => M.length ? [{ id: 'materials', count: M.length, reason: `莫里斯色板 ${PACKS.morris.length} 色` }] : [],
     run(M, p) { const pal = PACKS.morris.map(hex2rgb), colors = {}; for (const m of M) { const c = hex2rgb(m.color); let best = pal[0], bd = 9; for (const q of pal) { const d = dist(c, q); if (d < bd) { bd = d; best = q; } } colors[m.id] = rgb2hex(mix(c, best, p.strength)); } return { colors }; } },
 ];
+for(const c of GSCENE_CAPABILITIES)c.meta.params.includeEdited={label:'包含已保存人工调色',type:'bool',default:false};
 export const describeGsceneCapabilities = () => GSCENE_CAPABILITIES.map((c) => ({ ...c.meta, tier: 'scene', kind2: 'style' }));
-const paramsFor = (cap, given = {}) => { const o = {}; for (const [k, d] of Object.entries(cap.meta.params)) o[k] = Math.max(d.min, Math.min(d.max, Number(given[k] ?? d.default))); return o; };
-export const matchGscene = (M) => GSCENE_CAPABILITIES.map((c) => { const t = c.match(M, paramsFor(c)); return { id: c.meta.id, count: t.reduce((a, x) => a + x.count, 0), targets: t }; });
-export function runGscenePlan(M, steps) {
+export const paramsFor = (cap, given = {}) => { const o = {}; for (const [k, d] of Object.entries(cap.meta.params)) {if(d.type==='bool'){const value=given[k]??d.default;if(typeof value!=='boolean')throw Error('无效开关：'+k);o[k]=value;continue;}const v=Number(given[k]??d.default);if(!Number.isFinite(v))throw Error('无效参数：'+k);o[k]=Math.max(d.min,Math.min(d.max,v));if(d.step===1)o[k]=Math.round(o[k]);}return o; };
+const editable=M=>M.filter(m=>!m.locked);
+export const matchGscene = (M) => GSCENE_CAPABILITIES.map((c) => { const t = c.match(editable(M), paramsFor(c)); return { id: c.meta.id, count: t.reduce((a, x) => a + x.count, 0), targets: t }; });
+export function runGscenePlan(M, steps, onStep) {
   let cur = M.map((m) => ({ ...m })); const report = [];
   for (const s of steps) {
+    onStep?.(s.id);
     const cap = GSCENE_CAPABILITIES.find((c) => c.meta.id === s.id); if (!cap) { report.push({ id: s.id, status: 'missing' }); continue; }
-    const params = paramsFor(cap, s.params), out = cap.run(cur, params);
+    const params = paramsFor(cap, s.params), out = cap.run(params.includeEdited?cur:editable(cur), params);
     let n = 0; cur = cur.map((m) => { const c = out.colors[m.id]; if (c && c !== m.color) { n++; return { ...m, color: c }; } return m; });
     report.push({ id: s.id, status: n ? 'applied' : 'no-target', params, count: n, changed: out.note ? [out.note] : [] });
   }

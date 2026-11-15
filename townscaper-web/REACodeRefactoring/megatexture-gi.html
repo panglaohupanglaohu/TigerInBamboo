@@ -1,0 +1,47 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>SDF(UV) · mega texture · 六向光体积 反弹 · REACode重构版</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#2f5158;color:#e8f1ee;font:14px/1.6 system-ui}header{padding:10px 18px}a{color:#bfe6f0}#maps{display:flex;gap:12px;align-items:flex-start;padding:0 18px}#maps figure{margin:0}#maps canvas{height:150px;image-rendering:pixelated;background:#000;border-radius:4px}figcaption{font-size:12px;opacity:.8}iframe{width:100%;height:68vh;border:0}button,input,select{font:inherit;margin:3px}#status{white-space:pre-wrap;font-size:12px}</style>
+<header><b>SDF(UV) → mega texture ↔ 六向光体积 · 往返反弹</b> · 1580845127207387137 / 1580846877855338497 / 1580835075629133825 · <a href="lightvolume.html" target="_top">旧体素光体积页</a> · <a href="pipeline.html" target="_top">管线</a>
+<p>上方三张贴图对应原片：① SDF 体积（y 切片平铺；R,G = 最近表面在 mega texture 的 UV，B = 距离，暗红 = 实心）；② 六向光体积（+X −X / +Y −Y / +Z −Z，射线对 SDF 步进、命中处按 RG 取 mega texture）；③ 被照亮的 mega texture（每个暴露体素面 1 纹素，按平面 chart 装箱）。下方是同一共享 World 的主场景（?c11=megagi 用光体积作间接光）。纹素 = 体素面、SDF = 体素中心 EDT，不是原作的三角网 UV 展开/连续 SDF。</p>
+<label>底网格 <select id="grid"><option value="mixed">三角+方格</option><option value="quad">四边形</option></select></label>
+<label>太阳方位 <input id="az" type="range" min="0" max="360" step="15" value="40"></label>
+<label>反弹 <input id="bounces" type="number" min="0" max="12" value="3" style="width:42px"></label>
+<button id="bake" disabled>重烘</button> <button id="play" disabled>慢放反弹序列</button> <button id="end" disabled>结束慢放</button>
+<label>贴图 <select id="megaField"><option value="exitance">出射光（lit）</option><option value="albedo">反照率</option><option value="direct">直射</option><option value="indirect">间接</option></select></label>
+<div id="status">加载中…</div></header>
+<div id="maps"><figure><canvas id="c-sdf"></canvas><figcaption>① SDF 体积：A 距离 / RG = mega texture UV</figcaption></figure><figure><canvas id="c-lv"></canvas><figcaption>② 六向光体积</figcaption></figure><figure><canvas id="c-mega"></canvas><figcaption>③ mega texture</figcaption></figure></div>
+<iframe id="scene" title="共享 World 主场景"></iframe>
+<script type="module">
+import { sdfImage, lightVolumeImage, megaTextureImage } from './src/light/megatexture-gi-debug.js';
+const $ = (s) => document.querySelector(s), frame = $('#scene');
+let view, gi, stage = null;
+const put = (id, img) => { const c = $(id); c.width = img.w; c.height = img.h; c.getContext('2d').putImageData(new ImageData(img.data, img.w, img.h), 0, 0); };
+function draw(snap) {
+  const r = view.megaGI; if (!r) return;
+  put('#c-sdf', sdfImage(r));
+  put('#c-lv', lightVolumeImage(r, snap ? snap.lv : r.lv));
+  const f = $('#megaField').value;
+  put('#c-mega', snap ? megaTextureImage(r, 'exitance', snap.exitance) : megaTextureImage(r, f));
+}
+function report(extra = '') {
+  const s = gi.stats(); window.megaReview = { stats: s, stage };
+  $('#status').textContent = `${s.voxels} 体素 · ${s.texels} 纹素（图集 ${s.atlas?.join('×')}，${s.charts} 片）· 光体积 ${s.lvEmpty}/${s.lvCells} 空格 × 6 lobe × ${s.raysPerLobe} 射线 · 球步进 ${s.sphereSteps} / DDA ${s.ddaSteps} · SDF-UV 命中纹素=精确穿越面 ${(100 * (s.uvMatchRate ?? 0)).toFixed(1)}% · ${s.ms} ms\n`
+    + (s.bounceStats || []).map((b) => `第${b.bounce}轮 相对变化 ${(100 * b.relativeChange).toFixed(2)}%`).join(' · ') + (extra ? '\n' + extra : '');
+}
+async function load() { stage = null; ['#bake', '#play', '#end'].forEach((s) => ($(s).disabled = true)); frame.src = 'index.html?scene=terrain&c11=megagi&grid=' + $('#grid').value; }
+frame.onload = async () => {
+  const w = frame.contentWindow; for (let i = 0; i < 200 && !w.rea?.view?.c11Ready; i++) await new Promise((r) => setTimeout(r, 50));
+  view = w.rea.view; await view.c11Ready; gi = await view.c11.load('megagi');
+  for (let i = 0; i < 200 && !view.megaGI; i++) await new Promise((r) => setTimeout(r, 50));
+  applySun(); ['#bake', '#play', '#end'].forEach((s) => ($(s).disabled = false));
+};
+function applySun() { const az = +$('#az').value; view.setSunPosition(az, 42); clearTimeout(view.giTimer); gi.options({ bounces: +$('#bounces').value, keepSnapshots: true }); draw(); report(); }
+async function play() {
+  const r = view.megaGI; if (!r.snapshots.length) { gi.options({ keepSnapshots: true }); }
+  const n = view.megaGI.snapshots.length;
+  for (let i = 0; i < n; i++) { stage = gi.showStage(i); draw(view.megaGI.snapshots[i]); report(`慢放：${stage.stage}${stage.bounce ? ' ' + stage.bounce : ''}（${i + 1}/${n}）`); await new Promise((res) => setTimeout(res, 900)); }
+}
+window.megaPage = { get view() { return view; }, get gi() { return gi; }, draw, applySun, show: (i) => { stage = gi.showStage(i); draw(view.megaGI.snapshots[i]); report(`慢放：${stage.stage}${stage.bounce ? ' ' + stage.bounce : ''}`); return stage; } };
+$('#az').onchange = applySun; $('#bake').onclick = applySun; $('#bounces').onchange = applySun; $('#megaField').onchange = () => draw();
+$('#play').onclick = play; $('#end').onclick = () => { gi.endStages(); stage = null; draw(); report(); };
+$('#grid').onchange = load; load();
+</script></html>

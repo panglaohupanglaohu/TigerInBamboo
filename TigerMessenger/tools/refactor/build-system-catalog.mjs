@@ -15,9 +15,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import {parseLearningDeclaration} from '../../src/scene-authoring/learning-declaration.js';
+import {scanCodeLibrary} from './scan-code-library.mjs';
+import {describeObjectCapabilities} from '../../src/system-workshop/object/capabilities.js';
+import {describeGsceneCapabilities} from '../../src/system-workshop/gscene/capabilities.js';
+import {buildCodeCatalog} from '../../src/system-workshop/code-library-catalog.js';
 
 const [origDir = '../townscaper-web/REACode', refDir = '../townscaper-web/REACodeRefactoring', out = 'src/scene-authoring/catalog/system-catalog.json'] = process.argv.slice(2);
-const load = (file) => { const w = {}; new Function('window', fs.readFileSync(file, 'utf8'))(w); return w; };
+const load = file => {const name=file.endsWith('refactoring-status.js')?'REFACTOR_STATUS':'LEARN';return {[name]:parseLearningDeclaration(fs.readFileSync(file,'utf8'),name)};};
 const orig = load(path.join(origDir, 'learn/data.js')).LEARN;
 const refW = load(path.join(refDir, 'learn/data.js'));
 const ref = refW.LEARN;
@@ -28,10 +33,12 @@ const codeCaps = describeCapabilities();
 
 import { WORKSHOPS, buildCatalog } from '../../src/system-workshop/catalog-build.js';
 export { WORKSHOPS };
-const catalog = buildCatalog({ orig, ref, refStatus, codeCaps });
+const manifest=await scanCodeLibrary();
+const catalog = buildCodeCatalog(manifest,{learningCatalog:buildCatalog({ orig, ref, refStatus, codeCaps }),codeCaps,executionAdapters:[...describeObjectCapabilities(),...describeGsceneCapabilities()]});
+fs.writeFileSync(path.join(path.dirname(out),'refactored-code-library.json'),JSON.stringify(manifest));
+fs.writeFileSync(path.join(refDir,'capability-library.json'),JSON.stringify({schemaVersion:2,generatedAt:manifest.generatedAt,snapshotId:manifest.snapshotId,counts:manifest.counts,modules:catalog.modules,combinations:catalog.combinations,evolution:catalog.evolution}));
 // 原版 REACode 的学习记录快照：浏览器里「扫描能力库」读不到 REACode 目录时用它（原版冻结不改，快照即可）
 fs.writeFileSync(path.join(path.dirname(out), 'reacode-learn.json'), JSON.stringify({ generatedAt: new Date().toISOString(), source: 'REACode/learn/data.js', LEARN: orig }));
 fs.mkdirSync(path.dirname(out), { recursive: true });
 fs.writeFileSync(out, JSON.stringify(catalog));
-for (const w of catalog.workshops) console.log(w.name, w.domains.map((d) => `${d.name}:${d.counts.total}(代码${d.counts.code}/重构${d.counts.refactored}/部分${d.counts.partial}/原版${d.counts.original})`).join('  '));
-console.log('共用工具', catalog.shared.length, '输出', out, (fs.statSync(out).size / 1024).toFixed(0) + 'KB');
+console.log(JSON.stringify({sourceModules:catalog.modules.length,combinations:catalog.combinations.length,counts:manifest.counts,out},null,2));

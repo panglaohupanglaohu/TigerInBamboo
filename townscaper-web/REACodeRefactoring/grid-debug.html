@@ -1,0 +1,202 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>网格调试层入口（贴面格线 / 等距方格 / 外缘回字 / 三角分组 / 区域三色） · REACode重构版</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:10px 22px 4px}a{color:#26758a}
+canvas#view{display:block;width:100%;height:66vh}
+label{display:inline-block;margin:2px 12px 2px 0}code{background:#e4efec;padding:0 4px;border-radius:4px}
+#info{padding:4px 22px;white-space:pre-wrap;font:12px/1.5 ui-monospace,monospace}</style>
+<header><a href="index.html" target="_top">首页</a> · <a href="assembly.html">tile 拼装</a> ·
+<p style="margin:4px 0;max-width:1200px">1120036868966502401「不规则的等值线 + 调试层」的网格层入口。片中这些层<b>没有 UI</b>（frame-0569 只看到鼠标指针，说明是面板外热键切出来的），
+本页把它们做成显式开关，方便逐层和原片对照：白/黑格线（贴面 or 平铺）、等距方格、外缘空心回字、黄色三角分组、区域三色边界，以及<b>调试层吃遮挡</b>（原片 frame-0445 彩线一进岛体就断）。</p>
+<label><input type="checkbox" id="cGrid" checked> 格线</label>
+<label><input type="checkbox" id="cSurface" checked> 贴面档（按 world.top 铺顶面）</label>
+<label><input type="checkbox" id="cRegular"> 等距方格（quad-regular）</label>
+<label><input type="checkbox" id="cDrape" checked> 等距格贴面裁剪</label>
+<label>外缘回字环 <input id="rimPx" type="range" min="2" max="10" step="1" value="6" style="width:90px"></label><output id="rimv">6px</output>
+<label><input type="checkbox" id="cTri"> 黄色三角层（两组色）</label>
+<label><input type="checkbox" id="cRegions"> 区域三色边界</label>
+<label><input type="checkbox" id="cOcc" checked> 调试层吃遮挡</label>
+<label><input type="checkbox" id="cWin"> 窗口补丁（原片只画一块矩形）</label>
+<label>窗口 X <input id="winX" type="range" min="-10" max="10" step="0.1" value="0" style="width:80px"></label><output id="winXv">0</output>
+<label>窗口 Z <input id="winZ" type="range" min="-10" max="10" step="0.1" value="0" style="width:80px"></label><output id="winZv">0</output>
+<label>半径 <input id="winR" type="range" min="0.5" max="8" step="0.25" value="5.5" style="width:80px"></label><output id="winRv">5.5</output>
+<label><input type="checkbox" id="cWinDrag" checked> 窗口可拖拽</label><output id="dragv">松手后补丁跟着鼠标走（原片 0620 的那块白格网就跟着编辑对象跑）</output>
+<label><input type="checkbox" id="cWinPick"> 点击选中对象（窗口跟选中态）</label><output id="pickv">点画面里的建筑：补丁自动套住那一片实心格（原片 0300/0445/0620）</output>
+</header><canvas id="view"></canvas><div id="info"></div>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+import { buildMixedGrid } from './src/core/grid.js';
+import { decorateCells, buildCellIndex } from './src/core/spatial.js';
+import { World } from './src/core/world.js';
+import { PALETTES } from './src/core/palette.js';
+import { generateTerrain } from './src/terrain/generate.js';
+import { View } from './src/world/view.js';
+
+const grid = decorateCells(buildMixedGrid({ radius: 20, hexSize: .85 }));
+const world = new World(grid); world.palette = PALETTES.town; generateTerrain(world, { seed: 7 });
+const L = .5;
+const view = new View(document.querySelector('#view'), world, grid, buildCellIndex(grid), { levelHeight: L });
+view.target.set(0, 2 * L, 0); view.distance = 24; view.yaw = 0; view.pitch = 1.28; view.updateCamera();
+
+const el = (id) => document.querySelector(id);
+// 第 85 轮：把 r80/r84 只在 window.rea 上手工调的三角分组做成页面入口。
+// 原片 frame-0300 同帧两组不同色（右深蓝 + 左下黄绿），各自覆盖连续若干格、互不接壤。
+function triGroups() {
+  const sp = view.gridStats?.lattice?.spacing?.median || 1.6;
+  return [
+    { region: { minX: -sp * 2.0, maxX: sp * 0.2, minZ: -sp * 2.0, maxZ: sp * 0.2 }, color: '#2e4ba7' },
+    { region: { minX: sp * 0.4, maxX: sp * 2.6, minZ: sp * 0.4, maxZ: sp * 2.6 }, color: '#dcdf66' },
+  ];
+}
+// 第 98 轮（r97 缺口 · 窗口接选中态）：原片补丁是「跟着正在编辑的对象」跑的，不是拖出来的。
+// 这里把选中态做成真交互：点画面 → 拾取格子 → 取它所在的整片实心建筑（同层连通）→ 选中态 → 自动窗口。
+// 选中态一旦建立，滑杆就不再说话（否则两套来源打架）；一动滑杆/拖拽就把选中态清掉。
+let pickSel = null;
+function apply() {
+  // 第 86 轮：**不再静默把等距档打开**。三角层只长在 quad-regular 的等距格上，
+  // 但「三角开 + 等距关」是一个必须能复现并锁住的状态（r85 遗留：两档组合只手工点过、没进回归）：
+  // 这一档的正确行为是三角层自动为空（triStats=null）且不报错，页面状态里标出 triNeedsRegular。
+  const triNeedsRegular = el('#cTri').checked && !el('#cRegular').checked;
+  view.setDebug('grid', el('#cGrid').checked);
+  view.setGridSurface(el('#cSurface').checked);
+  view.setGridRegular(el('#cRegular').checked);
+  view.setGridDrape(el('#cDrape').checked);
+  view.setGridRimSize(Number(el('#rimPx').value), 1);
+  el('#rimv').textContent = el('#rimPx').value + 'px';
+  view.contourOverlay.setDepthOcclusion(el('#cOcc').checked);
+  view.setDebug('contours', el('#cRegions').checked);
+  if (el('#cTri').checked) view.setGridTriangleGroups(triGroups()); else view.setGridTriangleGroups([]);
+  // 第 94 轮：窗口补丁。原片 frame-0300/0445/0620 的白格网都是**一块有界矩形**（边界硬切、位置逐段变），
+  // 本仓 regular 档默认铺满整个外接框 → 这里给窗口中心/半径，勾上就裁。
+  const winOn = el('#cWin').checked;
+  const winX = Number(el('#winX').value), winZ = Number(el('#winZ').value), winR = Number(el('#winR').value);
+  el('#winXv').textContent = winX; el('#winZv').textContent = winZ; el('#winRv').textContent = winR;
+  // 第 98 轮：选中态优先。有选中就按选中态算窗口（每边留 1 格、边长上限 8 格，与原片 7–8 格一致）；
+  // 没有选中才回到滑杆/拖拽那套手灌路径。
+  const useSel = !!(winOn && pickSel);
+  if (useSel) view.setGridWindowForSelection(pickSel, { pad: 1, maxCells: 8 });
+  else view.setGridWindow(winOn ? { minX: winX - winR, maxX: winX + winR, minZ: winZ - winR, maxZ: winZ + winR } : null);
+  view.render(0.016);
+  const g = view.gridStats || {};
+  const winRect = useSel ? (g.window ? { ...g.window.rect } : null)
+    : (winOn ? { minX: winX - winR, maxX: winX + winR, minZ: winZ - winR, maxZ: winZ + winR } : null);
+  window.__gridDebug = {
+    gridOn: el('#cGrid').checked, surface: el('#cSurface').checked, regular: el('#cRegular').checked,
+    drape: el('#cDrape').checked, rimPx: Number(el('#rimPx').value), tri: el('#cTri').checked,
+    regions: el('#cRegions').checked, occluded: el('#cOcc').checked,
+    triNeedsRegular,
+    segments: g.segments, vertical: g.vertical, cells: g.cells, maxY: g.maxY, flat: g.flat,
+    rims: g.rims, triStats: g.tri || null, lattice: g.lattice ? { cols: g.lattice.cols, rows: g.lattice.rows, spacing: g.lattice.spacing?.median } : null,
+    drapeStats: g.drape || null, px: g.px, occlusionLayers: view.contourOverlay.occlusionLayers ?? 0,
+    order: g.order || null, lineDepthWrite: g.lineDepthWrite ?? null, lineDepthTest: g.lineDepthTest ?? null,
+    rimCapable: !!g.rims, regionPalette: view.contourOverlay.regionPalette.slice(),
+    winOn, winRect,
+    window: g.window || null,
+    // 第 98 轮：选中态（点选出来的编辑对象）。winFrom = 'selection' 表示窗口是选中态的纯函数。
+    winFrom: useSel ? 'selection' : (winOn ? 'manual' : 'none'),
+    pick: pickSel ? { cells: pickSel.cells.length, bounds: pickSel.bounds, top: pickSel.top ?? null } : null,
+    selBounds: view.gridWindowSel || null,
+  };  el('#info').textContent = JSON.stringify(window.__gridDebug);
+  return window.__gridDebug;
+}
+for (const id of ['#cGrid', '#cSurface', '#cRegular', '#cDrape', '#cTri', '#cRegions', '#cOcc', '#cWin']) el(id).onchange = apply;
+el('#rimPx').oninput = apply;
+for (const id of ['#winX', '#winZ', '#winR']) el(id).oninput = () => { pickSel = null; apply(); };
+// 关掉点选 = 丢掉选中态，回到手灌滑杆（不然关掉开关窗口还赖在上一栋房子上）
+el('#cWinPick').onchange = () => { if (!el('#cWinPick').checked) pickSel = null; apply(); };
+
+// 第 95 轮（r94 缺口 ①）：窗口补丁跟鼠标拖拽。原片 frame-0300/0445/0620 的那块白格网是**跟着编辑对象跑**的，
+// 不是三根滑杆拨出来的。这里把「屏幕像素 → 世界 XZ」的映射用相机现算：把 target、target+(1,0,0)、
+// target+(0,0,1) 三个点投到屏幕，得到 2×2 线性映射再求逆（yaw≠0 也成立，不假设等轴测的固定比例）。
+const canvas = document.querySelector('#view');
+let drag = null;
+function worldPerPixel() {
+  const cam = view.camera;
+  if (!cam) return null;
+  const W = canvas.clientWidth / 2, H = canvas.clientHeight / 2;
+  const t = view.target.clone().project(cam);
+  const ux = view.target.clone().add(new THREE.Vector3(1, 0, 0)).project(cam);
+  const uz = view.target.clone().add(new THREE.Vector3(0, 0, 1)).project(cam);
+  const ax = (ux.x - t.x) * W, ay = -(ux.y - t.y) * H;   // 世界 +X 的屏幕位移（y 向下）
+  const bx = (uz.x - t.x) * W, by = -(uz.y - t.y) * H;   // 世界 +Z
+  const det = ax * by - bx * ay;
+  if (!det) return null;
+  return { ax, ay, bx, by, det };
+}
+function dragWindow(dxPx, dyPx) {
+  const m = worldPerPixel();
+  if (!m) return null;
+  const u = (dxPx * m.by - m.bx * dyPx) / m.det;
+  const w = (m.ax * dyPx - m.ay * dxPx) / m.det;
+  const clamp = (v) => Math.max(-10, Math.min(10, Math.round(v * 10) / 10));
+  el('#winX').value = String(clamp(Number(el('#winX').value) + u));
+  el('#winZ').value = String(clamp(Number(el('#winZ').value) + w));
+  return apply();
+}
+window.__gridDrag = { worldPerPixel, dragWindow };
+// 第 98 轮：屏幕 → 地面格子拾取。把 NDC 的近/远点反投影成拾取射线，落到 y=0 平面先取一格，
+// 再按该格顶面高度（town.top(c)*levelHeight）重投一次 —— 台地上的点会落到台面上而不是台脚。
+function pickCellAtScreen(clientX, clientY) {
+  const cam = view.camera; if (!cam) return null;
+  const r = canvas.getBoundingClientRect();
+  if (!r.width || !r.height) return null;
+  const ndcX = ((clientX - r.left) / r.width) * 2 - 1;
+  const ndcY = -(((clientY - r.top) / r.height) * 2 - 1);
+  const p = new THREE.Vector3(ndcX, ndcY, -1).unproject(cam);
+  const q = new THREE.Vector3(ndcX, ndcY, 1).unproject(cam);
+  const dir = q.clone().sub(p).normalize();
+  if (!Number.isFinite(dir.y) || Math.abs(dir.y) < 1e-6) return null;
+  let cell = null, planeY = 0;
+  for (let i = 0; i < 3; i++) {
+    const t = (planeY - p.y) / dir.y;
+    if (!Number.isFinite(t) || t <= 0) return null;
+    const x = p.x + dir.x * t, z = p.z + dir.z * t;
+    const c = view.index.cellAt(x, z);
+    if (!c) return cell;
+    cell = c;
+    const ny = (view.town.top(c) || 0) * L;
+    if (Math.abs(ny - planeY) < 1e-4) break;
+    planeY = ny;
+  }
+  return cell;
+}
+/** 点选：拾取格 → 该格所在的整片实心建筑（同层连通）→ 选中态 → 自动窗口。 */
+function pickAt(clientX, clientY) {
+  const c = pickCellAtScreen(clientX, clientY);
+  const cl = c ? view.builtCluster(c, { max: 64, levelTol: 0 }) : null;
+  if (!cl) { pickSel = null; apply(); return null; }
+  pickSel = { cells: cl.cells.map((id) => view.grid.cells[id]), bounds: cl.bounds, top: cl.top };
+  // 原片补丁只在等距档出现（三角/交点亮斑都长在 regular 格上）→ 点选时把这两档带起来
+  el('#cWin').checked = true; el('#cRegular').checked = true; el('#cWinPick').checked = true;
+  el('#pickv').textContent = `选中 ${cl.cells.length} 格 · y=${cl.top} · bbox x[${cl.bounds.minX.toFixed(2)},${cl.bounds.maxX.toFixed(2)}] z[${cl.bounds.minZ.toFixed(2)},${cl.bounds.maxZ.toFixed(2)}]`;
+  return apply();
+}
+window.__gridPick = { pickCellAtScreen, pickAt };
+canvas.addEventListener('pointerdown', (e) => {
+  if (!el('#cWin').checked) return;
+  if (!el('#cWinDrag').checked && !el('#cWinPick').checked) return;
+  if (!worldPerPixel()) return;
+  drag = { x: e.clientX, y: e.clientY, moved: 0, sx: e.clientX, sy: e.clientY };
+  canvas.setPointerCapture?.(e.pointerId);
+});
+canvas.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+  drag.x = e.clientX; drag.y = e.clientY;
+  drag.moved += Math.hypot(dx, dy);
+  if (el('#cWinDrag').checked) dragWindow(dx, dy);
+});
+// 第 98 轮：位移 < 4px 算「点选」——不拖窗口，改拾取编辑对象（原片补丁跟着选中对象跑）。
+canvas.addEventListener('pointerup', (e) => {
+  const d = drag; drag = null;
+  if (!d || d.moved >= 4) return;
+  if (!el('#cWinPick').checked || !el('#cWin').checked) return;
+  pickAt(e.clientX, e.clientY);
+});
+canvas.addEventListener('pointercancel', () => { drag = null; });
+window.gridDebugView = view;
+window.THREE = THREE;   // 第 86 轮：测试要投影外缘点做像素级核验（页面级调试导出，不影响渲染）
+apply();
+let last = performance.now();
+function frame(t) { view.render(Math.max(0, Math.min((t - last) / 1000, .05))); last = t; requestAnimationFrame(frame); }
+requestAnimationFrame(frame);
+</script></html>

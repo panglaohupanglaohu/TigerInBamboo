@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" href="data:," />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>球面三角格 WFC 拼装 · REACode 重构版（第 56 批 C06）</title>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; font: 13px/1.5 system-ui, "PingFang SC", sans-serif; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  #ui { position: fixed; left: 14px; top: 14px; width: 340px; background: rgba(255,255,255,.92); color: #1d2f36; border-radius: 12px; padding: 10px 12px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  #ui h1 { font-size: 15px; margin: 0 0 4px; } #ui p { margin: 3px 0; font-size: 12px; color: #4d6369; }
+  #ui .row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin: 6px 0; }
+  #ui button, #ui select { font: inherit; font-size: 12px; border: 1px solid #c9d8d7; border-radius: 7px; background: #fff; padding: 3px 8px; cursor: pointer; }
+  #ui button.on { background: #2f7f8a; color: #fff; }
+  #stat { font-size: 11.5px; color: #2f7f8a; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <h1>球面三角格 · 内容无关 WFC 拼装</h1>
+  <p>784847588893814785 / 784847933686575104 / 784848286272327680：求解器只看三角格三条边的插槽标签（共享 <code>core/wfc.js</code> 加权熵 + 传播），内容由瓷砖集自己生成。生长顺序 = 求解器真实落定顺序；<b>点球面任一格</b>把它设为起点重新求解。</p>
+  <div class="row">瓷砖集 <select id="set"><option value="tubes">管子（fill it with anything）</option><option value="plates">板 + 碎块（两级尺度）</option><option value="tech">板 + 沟槽 + 圆顶</option></select>
+    <button id="play">▶ 拼装</button></div>
+  <div class="row">进度 <input id="t" type="range" min="0" max="1" step="0.001" value="1" style="width:200px" /></div>
+  <div id="stat"></div>
+</div>
+<script type="module">
+import * as THREE from 'three';
+import { buildSphere } from './src/sphere/planet.js';
+import { sphereTriGrid, solvePlanetTiles, planetTileGeometry, tileConflicts, TILESETS } from './src/sphere/planet-wfc-c06.js';
+
+const q = new URLSearchParams(location.search);
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32, 1, .1, 100);
+camera.position.set(0, 4, 20); camera.lookAt(0, 0, 0);
+scene.add(new THREE.HemisphereLight(0xeef4ff, 0x404048, 1.4));
+const sun = new THREE.DirectionalLight(0xffffff, 1.6); sun.position.set(6, 9, 7); scene.add(sun);
+const pivot = new THREE.Group(); scene.add(pivot);
+const sphere = buildSphere({ n: Number(q.get('n')) || 500, seed: 3, spacing: 25, relax: 15 });
+const grid = sphereTriGrid(sphere);
+let mesh = null, solved = null, geo = null, t = Number(q.get('t') ?? 1), playing = !!q.get('play');
+const setEl = document.getElementById('set'), tEl = document.getElementById('t'), statEl = document.getElementById('stat');
+setEl.value = TILESETS[q.get('set')] ? q.get('set') : 'tubes';
+let root = Number.isInteger(+q.get('root')) && q.get('root') !== null ? +q.get('root') : 0;
+
+function rebuild() {
+  solved = solvePlanetTiles(grid, { set: setEl.value, root });
+  geo = planetTileGeometry(grid, solved);
+  if (mesh) { pivot.remove(mesh); mesh.geometry.dispose(); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(geo.position, 3));
+  g.setAttribute('normal', new THREE.Float32BufferAttribute(geo.normal, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(geo.color, 3));
+  mesh = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .75, metalness: 0, side: THREE.DoubleSide }));
+  pivot.add(mesh);
+  scene.background = new THREE.Color(TILESETS[setEl.value].bg);
+  apply();
+}
+function apply() {
+  const k = Math.round(t * solved.order.length);
+  mesh.geometry.setDrawRange(0, geo.offsets[k]);
+  tEl.value = t;
+  const s = solved.stats;
+  statEl.textContent = `${TILESETS[solved.set].name} · ${s.cells} 个三角格 · 已拼 ${k}/${s.cells}\n起点格 #${solved.root} · 决策 ${s.decisions} · 回溯 ${s.backtracks} · 求解 ${s.ms} ms\n每块落定时已有已拼邻居：${(s.frontierRatio * 100).toFixed(1)}% · 插槽冲突 ${tileConflicts(grid, solved.tiles)} · 用到 ${s.distinctTiles} 种瓷砖`;
+  window.planetWFC = { solved, stats: s, shown: k, vertices: geo.offsets[k], conflicts: tileConflicts(grid, solved.tiles), set: solved.set, root: solved.root, setProgress: (x) => { t = x; playing = false; apply(); }, setRoot: (r) => { root = r; rebuild(); } };
+}
+setEl.onchange = () => rebuild();
+tEl.oninput = () => { t = +tEl.value; playing = false; apply(); };
+document.getElementById('play').onclick = () => { t = 0; playing = true; };
+// 点一格设起点
+const ray = new THREE.Raycaster(), ball = new THREE.Mesh(new THREE.SphereGeometry(4.15, 48, 32), new THREE.MeshBasicMaterial({ visible: false }));
+pivot.add(ball);
+canvas.addEventListener('click', (e) => {
+  const r = canvas.getBoundingClientRect();
+  ray.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+  const hit = ray.intersectObject(ball)[0]; if (!hit) return;
+  const p = pivot.worldToLocal(hit.point.clone()).normalize();
+  let best = 0, bd = -2; for (const c of grid.cells) { const d = c.center[0] * p.x + c.center[1] * p.y + c.center[2] * p.z; if (d > bd) { bd = d; best = c.id; } }
+  root = best; t = 0; playing = true; rebuild();
+});
+function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
+addEventListener('resize', resize); resize();
+rebuild();
+pivot.rotation.set(.35, Number(q.get('yaw') ?? 0), 0);
+let last = performance.now();
+renderer.setAnimationLoop((now) => {
+  const dt = Math.min(.05, Math.max(0, (now - last) / 1000)); last = now;
+  if (!q.get('still')) pivot.rotation.y += dt * .25;
+  if (playing) { t = Math.min(1, t + dt / 18); apply(); if (t >= 1) playing = false; }
+  renderer.render(scene, camera);
+});
+</script>
+</body>
+</html>

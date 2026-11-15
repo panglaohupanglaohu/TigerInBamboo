@@ -1,0 +1,8 @@
+import assert from 'node:assert/strict';import {buildQuadGrid,buildMixedGrid,buildHexGrid} from '../src/core/grid.js';import {World} from '../src/core/world.js';import {buildNav} from '../src/world/navgraph.js';import {navDiagnosticGeometry} from '../src/core/nav-diagnostic-geometry.js';
+for(const build of [buildQuadGrid,buildMixedGrid,buildHexGrid])for(const seed of [3,19]){
+ const world=new World(build({radius:3,seed}));for(const c of world.cells)world.fill(c,c.id%3+1,{rock:true});const before=JSON.stringify({solid:[...world.solid],grid:world.grid,version:world.version}),nav=buildNav(world),plain=navDiagnosticGeometry(world,{nav}),shift=navDiagnosticGeometry(world,{nav,at:(p,h)=>[p.x+h*.1,p.z-.2]});
+ assert.equal(JSON.stringify({solid:[...world.solid],grid:world.grid,version:world.version}),before);assert.ok(plain.stats.corners>0);assert.equal(plain.typed.length,plain.colors.length);assert.ok(plain.typed.every(Number.isFinite));assert.ok(plain.stats.backgroundEdges>0);
+ assert.equal(plain.corners.length,shift.corners.length);for(let i=0;i<plain.corners.length;i+=3){const h=(plain.corners[i+1]-.075)/.5;assert.ok(Math.abs(shift.corners[i]-plain.corners[i]-h*.1)<1e-8);assert.ok(Math.abs(shift.corners[i+2]-plain.corners[i+2]+.2)<1e-8);}
+ assert.equal(new Set(Array.from({length:plain.corners.length/3},(_,i)=>plain.corners.slice(i*3,i*3+3).join(','))).size,plain.stats.corners);assert.ok(new Set(plain.typed.filter((_,i)=>i%3===1)).size>1,'retain actual cliff levels');
+}
+console.log('PASS quad/mixed/hex, per-level corner dedup, actual shape transform, cliff heights, immutable shared World');

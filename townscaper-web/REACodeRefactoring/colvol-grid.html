@@ -1,0 +1,33 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>重构 · 色体网格（Col Vol Test）</title>
+<style>:root{color-scheme:light}body{margin:0;background:#eef4f3;color:#20343c;font:14px system-ui}header{padding:10px 12px}main{display:flex;align-items:flex-start}#insp{width:560px;flex:none;background:#383838;color:#ccc;font:12px system-ui;padding:6px 0 10px}#insp .title{padding:4px 10px;background:#3e3e3e;color:#eee;font-weight:600}#insp .feat{padding:2px 10px}#insp .head{display:flex;align-items:center;gap:6px;cursor:pointer;height:20px}#insp .head .nm{width:84px}#insp .strip{flex:1;height:16px;display:flex}#insp .strip i{flex:1}#insp .ax{display:flex;align-items:center;gap:5px;margin:3px 0 3px 18px}#insp .ax input[type=number]{width:44px;background:#2a2a2a;color:#ddd;border:1px solid #222;font:11px monospace}#insp .ax input[type=range]{flex:1}#insp .blocks{display:flex;gap:14px;margin:8px 0 6px 92px;flex-wrap:wrap}#insp .blk{display:grid;gap:0;border:2px solid #222;background:#222}#insp .cell{width:16px;height:16px;cursor:pointer}#insp .cell.off{background:#383838!important;position:relative}#insp .cell.off:after{content:'';position:absolute;left:6px;top:6px;width:4px;height:4px;background:#111}iframe{flex:1;height:84vh;border:0}label{margin-right:12px}</style>
+<header><a href="pipeline.html" target="_top">← 管线</a> · <b>色体网格（1710031224838771027「define the whole color possibility space for each feature」）</b>
+<p>五特征各一组 H/S/L 范围 + 步数 → 离散色块（每个 H 一块 S×L 小格）；点格子禁用/启用（小黑点）；折叠时显示该特征全部启用色的一条色带。H 可跨 0、可整圈。色彩空间按片中色相位置推断为 OkHsl（可切 HSL 对照）。勾「应用到实景」后真实 World 每格按特征取最近的启用色（离散，不插值），岩壁用 Cliff 组。</p>
+<label>空间 <select id="space"><option value="okhsl">OkHsl</option><option value="hsl">HSL</option></select></label><label>网格 <select id="grid"><option value="mixed">三角＋方格</option><option value="quad">四边格</option></select></label><label><input id="apply" type="checkbox">应用到实景</label><span id="status"></span></header>
+<main><div id="insp"><div class="title"># Col Vol Test (Script)</div><div id="feats"></div></div><iframe id="scene" title="实景"></iframe></main>
+<script type="module">
+import*as VG from'./src/core/color-volume-grid.js';
+const $=s=>document.querySelector(s),Q=new URLSearchParams(location.search);let grids=VG.defaultVolumeGrids(),open=new Set([Q.get('open')||'Grass']),api=null,gpm=null;
+const css=c=>`rgb(${c.map(v=>Math.round(v*255)).join(',')})`;
+function render(){const box=$('#feats');box.innerHTML='';
+ for(const f of VG.VOLUME_FEATURES){const g=grids[f],d=document.createElement('div');d.className='feat';const h=document.createElement('div');h.className='head';h.innerHTML=`<span>${open.has(f)?'▼':'▶'}</span><span class="nm">${f}</span>`;
+  if(!open.has(f)){const st=document.createElement('div');st.className='strip';for(const c of VG.volumeStrip(g)){const i=document.createElement('i');i.style.background=css(c);st.append(i)}h.append(st)}
+  h.onclick=()=>{open.has(f)?open.delete(f):open.add(f);render()};d.append(h);
+  if(open.has(f)){['h','s','l'].forEach((ax,k)=>{const row=document.createElement('div');row.className='ax';const n=document.createElement('input');n.type='number';n.min=1;n.max=16;n.value=g.steps[k];const lo=document.createElement('input');lo.type='number';lo.step=.01;lo.min=0;lo.max=1;lo.value=g[ax][0];const r0=document.createElement('input');r0.type='range';r0.min=0;r0.max=1;r0.step=.01;r0.value=g[ax][0];const r1=r0.cloneNode();r1.value=g[ax][1];const hi=lo.cloneNode();hi.value=g[ax][1];
+    const set=(a,b,steps)=>{try{grids[f]=VG.setVolumeRange(grids[f],ax,[a,b],steps);render();applyWorld()}catch(e){$('#status').textContent=e.message}};
+    n.onchange=()=>set(+lo.value,+hi.value,Math.round(+n.value));lo.onchange=r0.oninput=e=>set(+e.target.value,+hi.value);hi.onchange=r1.oninput=e=>set(+lo.value,+e.target.value);
+    row.append(ax.toUpperCase(),n,lo,r0,r1,hi);d.append(row)});
+   const bl=document.createElement('div');bl.className='blocks';VG.volumeBlocks(g).forEach((blk,ih)=>{const b=document.createElement('div');b.className='blk';b.style.gridTemplateColumns=`repeat(${g.steps[1]},16px)`;
+    for(let il=g.steps[2]-1;il>=0;il--)for(let is=0;is<g.steps[1];is++){const idx=VG.cellIndex(g,ih,is,il),c=g.cells[idx],e=document.createElement('div');e.className='cell'+(c.on?'':' off');e.style.background=css(c.rgb);e.title=`H${c.hsl[0].toFixed(2)} S${c.hsl[1].toFixed(2)} L${c.hsl[2].toFixed(2)}`;e.dataset.idx=idx;e.onclick=()=>{grids[f]=VG.toggleCell(grids[f],idx);render();applyWorld()};b.append(e)}
+    bl.append(b)});d.append(bl)}
+  box.append(d)}
+ window.colVol={grids,VG,applyWorld,toggle:(f,idx)=>{grids[f]=VG.toggleCell(grids[f],idx);render();return applyWorld()},stats:()=>({strips:Object.fromEntries(VG.VOLUME_FEATURES.map(f=>[f,VG.volumeStrip(grids[f]).length])),gpm:gpm?.stats??null,last:window.colVol?.last??null})};}
+async function applyWorld(){if(!api)return null;const on=$('#apply').checked;
+ if(!gpm)gpm=(await $('#scene').contentWindow.Function('return import("./src/world/ground-palette-map.js")')()).attachGroundPaletteMap(api.view);
+ let r=null;if(on){r=VG.colorWorldByVolumeGrids(api.world,grids);gpm.setCellColors({top:r.top,wall:r.wall,feature:r.feature});window.colVol.last={used:r.used,cellsUsed:Object.fromEntries(Object.entries(r.cellsUsed).map(([k,v])=>[k,v.length]))};$('#status').textContent='World '+api.world.version+' · '+JSON.stringify(r.used)}
+ gpm.set(on);return window.colVol.last}
+$('#space').onchange=()=>{const sp=$('#space').value;for(const f of VG.VOLUME_FEATURES)grids[f]=VG.makeVolumeGrid({...grids[f],space:sp});render();applyWorld()};
+$('#apply').onchange=applyWorld;
+function load(){api=null;gpm=null;$('#scene').src='index.html?scene=terrain&grid='+$('#grid').value}
+$('#scene').onload=()=>{const ready=()=>{const r=$('#scene').contentWindow.rea;if(!r?.view.worldMesh.geometry.attributes.aField?.count){setTimeout(ready,100);return}api=r;applyWorld()};ready()};
+$('#grid').onchange=load;if(Q.get('apply')==='1')$('#apply').checked=true;render();load();
+</script></html>

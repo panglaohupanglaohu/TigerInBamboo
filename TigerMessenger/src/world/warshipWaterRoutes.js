@@ -75,8 +75,8 @@ export function createWarshipWaterRoutes(scene, radius) {
   const ray=new THREE.Raycaster(),cache=new Map(),Y=new THREE.Vector3(0,1,0);
   // Terrain/platform render layers must still participate in navigation support.
   ray.layers.enableAll();
-  function surface(direction){
-    if(!currentGeometry())return null;
+  function surface(direction,loose=false){
+    if(!loose&&!currentGeometry())return null;   // loose：远航规划用，岛 / 圣城 / 鲸鱼的小动画不让整份快照作废（只躲静态陆地）
     const d=direction.clone().normalize(),key=d.toArray().map(v=>v.toFixed(6)).join(',');if(cache.has(key))return cache.get(key);
     ray.set(d.clone().multiplyScalar(radius+90),d.clone().negate());ray.far=130;
     const wh=water&&visible(water)?waterQuery.firstHit(ray.ray,ray.far):null;
@@ -209,5 +209,5 @@ export function createWarshipWaterRoutes(scene, radius) {
     return placeSnapshot(boat,path,progress);
   }
 
-  return {surface,clear,berth,dock,route,place,position,obstacles,currentGeometry,validateSnapshot,stats:{envelope,minimumDepth,water:water?.name||null,obstacleRoots:obstacles.length,obstacleMeshes:seen.size}};
+  return {surface,surfaceLoose:d=>surface(d,true),clear,berth,dock,route,place,position,obstacles,currentGeometry,validateSnapshot,stats:{envelope,minimumDepth,water:water?.name||null,obstacleRoots:obstacles.length,obstacleMeshes:seen.size}};
 }

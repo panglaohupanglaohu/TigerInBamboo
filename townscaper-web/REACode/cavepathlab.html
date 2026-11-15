@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>洞穴厚板：同一平面格两个可行走面 —— 路线点必须带层号，不能只查一次 heightAt</title>
+<style>
+  :root { --ink:#1f2b28; --muted:#5f6f6a; --line:#dbe4e0; --gold:#a9791a; --bad:#b4402f; --good:#146c4a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f1; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { position:fixed; z-index:2; left:0; top:0; right:0; padding:9px 18px 7px;
+    background:linear-gradient(180deg, rgba(238,243,241,.99) 76%, rgba(238,243,241,0)); }
+  h1 { margin:0 0 2px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:158ch; }
+  header b { color:var(--gold); font-weight:650; }
+  #cv { position:fixed; left:0; top:0; width:1280px; height:800px; z-index:0; }
+  #stats { position:fixed; z-index:2; left:18px; right:18px; bottom:10px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.96); border:1px solid var(--line); border-radius:8px; padding:6px 12px;
+    font-variant-numeric:tabular-nums; display:flex; gap:14px; flex-wrap:nowrap; }
+  #stats b { color:var(--ink); }
+  .ok { color:var(--good); font-weight:650; } .no { color:var(--bad); font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>洞穴 tileset 的厚板：一个平面格两个可行走面 —— 点状路线必须带层号</h1>
+  <p>原片（906416813810049025 的 f00/f02/f04）里同一串白点从板顶翻过去再下到低层台面，洞里的空间也能穿过去；
+     两条路线在平面图上<b>完全重合</b>。左剖面切在洞心（i=11），右剖面切在实心板（i=14）——同一个
+     <b>heightAt(i,j)</b> 在两处都只返回板顶 2.70，于是穿洞的点被抬到板顶、翻越的点上坡飘在空中、下坡被按回地面。</p>
+</header>
+
+<canvas id="cv" width="1280" height="800"></canvas>
+<div id="stats"></div>
+
+<script type="module">
+import { CFG, measure, surfaces, routeThrough, routeOver, resample, archHead, inTunnel } from './src/cavepath.js';
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const INK = '#1f2b28', MUTED = '#5f6f6a', GOLD = '#a9791a', GOOD = '#146c4a', BAD = '#b4402f';
+const ROCK = '#cfc3d6', ROCK2 = '#b8a9c4', SAND = '#efe6d6', VOID = '#8e7f9e';
+
+const M = measure();
+const RA = resample(routeThrough());
+const RB = resample(routeOver());
+
+// ---------- 版面 ----------
+const PAD = 14, TOPIN = 48, BOTIN = 26;
+const PA = { x: 20, y: 110, w: 612, h: 448 };
+const PB = { x: 648, y: 110, w: 612, h: 448 };
+const PC = { x: 20, y: 570, w: 612, h: 178 };
+const PD = { x: 648, y: 570, w: 612, h: 178 };
+
+const J0 = 2, J1 = 12, ZL = -0.55, ZH = 3.25;
+const WJ = J1 - J0, WZ = ZH - ZL;
+const fit = (p) => Math.min((p.w - 2 * PAD) / WJ, (p.h - TOPIN - BOTIN) / WZ);
+const cam = (p) => { const s = fit(p);
+  return { s, ox: p.x + (p.w - WJ * s) / 2, oy: p.y + TOPIN + (p.h - TOPIN - BOTIN - WZ * s) / 2 }; };
+const CA = cam(PA), CB = cam(PB);
+const X = (c, j) => c.ox + (j - J0) * c.s;
+const Y = (c, z) => c.oy + (ZH - z) * c.s;
+
+// ---------- 小工具 ----------
+const txt = (s, x, y, color = INK, font = '600 12px -apple-system,system-ui,sans-serif', align = 'left') => {
+  ctx.fillStyle = color; ctx.font = font; ctx.textAlign = align; ctx.textBaseline = 'alphabetic'; ctx.fillText(s, x, y);
+};
+const panel = (p, title, sub) => {
+  ctx.save();
+  ctx.fillStyle = 'rgba(255,255,255,.97)';
+  ctx.strokeStyle = '#dbe4e0'; ctx.lineWidth = 1;
+  const r = 10;
+  ctx.beginPath(); ctx.moveTo(p.x + r, p.y);
+  ctx.arcTo(p.x + p.w, p.y, p.x + p.w, p.y + p.h, r);
+  ctx.arcTo(p.x + p.w, p.y + p.h, p.x, p.y + p.h, r);
+  ctx.arcTo(p.x, p.y + p.h, p.x, p.y, r);
+  ctx.arcTo(p.x, p.y, p.x + p.w, p.y, r);
+  ctx.closePath(); ctx.fill(); ctx.stroke();
+  txt(title, p.x + 14, p.y + 20, INK, '650 12.5px -apple-system,system-ui,sans-serif');
+  if (sub) txt(sub, p.x + 14, p.y + 37, MUTED, '11.5px -apple-system,system-ui,sans-serif');
+  ctx.restore();
+};
+const rect = (c, j0, z0, j1, z1, fill, stroke = null) => {
+  ctx.beginPath();
+  ctx.rect(X(c, j0), Y(c, z1), (j1 - j0) * c.s, (z1 - z0) * c.s);
+  if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
+};
+const hline = (c, j0, j1, z, color, w = 1, dash = null) => {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(X(c, j0), Y(c, z)); ctx.lineTo(X(c, j1), Y(c, z)); ctx.stroke(); ctx.restore();
+};
+const vline = (c, j, z0, z1, color, w = 1, dash = null) => {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w; if (dash) ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(X(c, j), Y(c, z0)); ctx.lineTo(X(c, j), Y(c, z1)); ctx.stroke(); ctx.restore();
+};
+// 竖向标注
+const vbrace = (c, j, z0, z1, label, color, side = 1) => {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 1.2;
+  const x = X(c, j) + side * 0;
+  ctx.beginPath(); ctx.moveTo(x, Y(c, z0)); ctx.lineTo(x, Y(c, z1)); ctx.stroke();
+  for (const z of [z0, z1]) { ctx.beginPath(); ctx.moveTo(x - 4, Y(c, z)); ctx.lineTo(x + 4, Y(c, z)); ctx.stroke(); }
+  ctx.restore();
+  txt(label, x + side * 7, (Y(c, z0) + Y(c, z1)) / 2 + 4, color, '600 11px -apple-system,sans-serif', side > 0 ? 'left' : 'right');
+};
+const hbrace = (c, j0, j1, z, label, color) => {
+  ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = 1.2;
+  const y = Y(c, z);
+  ctx.beginPath(); ctx.moveTo(X(c, j0), y); ctx.lineTo(X(c, j1), y); ctx.stroke();
+  for (const j of [j0, j1]) { ctx.beginPath(); ctx.moveTo(X(c, j), y - 4); ctx.lineTo(X(c, j), y + 4); ctx.stroke(); }
+  ctx.restore();
+  txt(label, (X(c, j0) + X(c, j1)) / 2, y - 6, color, '600 11px -apple-system,sans-serif', 'center');
+};
+const dotAt = (c, j, z, r, fill, ring) => {
+  ctx.beginPath(); ctx.arc(X(c, j), Y(c, z), r, 0, 7);
+  ctx.fillStyle = fill; ctx.fill();
+  if (ring) { ctx.strokeStyle = ring; ctx.lineWidth = 1.3; ctx.stroke(); }
+};
+
+// ---------- 背景 ----------
+ctx.fillStyle = '#eef3f1'; ctx.fillRect(0, 0, 1280, 800);
+
+// ================= 左：剖面 i=11（洞心）=================
+panel(PA, '剖面 A · i=11（洞心）：路线从洞里穿过去', `洞宽 ${M.archSpan} 格 × 深 ${M.thick} 格 · 净空 ${CFG.ZCROWN.toFixed(2)} = ${M.clearLevels.toFixed(0)} 层 · 板顶 2.70 可站人`);
+
+// 地面
+rect(CA, J0, -0.55, J1, 0, SAND);
+hline(CA, J0, J1, 0, '#b9ae9c', 1.4);
+// 洞体（空腔）：洞底 ~ 净空
+rect(CA, CFG.SLAB.j0, 0, CFG.SLAB.j1 + 1, CFG.ZCROWN, 'rgba(142,127,158,.22)');
+// 板（拱顶以上那段实体）
+rect(CA, CFG.SLAB.j0, CFG.ZCROWN, CFG.SLAB.j1 + 1, CFG.ZTOP, ROCK, ROCK2);
+// 洞的两端面（剖切到的墙）
+vline(CA, CFG.SLAB.j0, 0, CFG.ZCROWN, VOID, 2.2);
+vline(CA, CFG.SLAB.j1 + 1, 0, CFG.ZCROWN, VOID, 2.2);
+// 洞底
+hline(CA, CFG.SLAB.j0, CFG.SLAB.j1 + 1, 0, GOOD, 2);
+txt('洞底 = 第二个可行走面 z=0', X(CA, CFG.SLAB.j0) + 8, Y(CA, 0.62), GOOD, '600 10.5px -apple-system,sans-serif');
+hline(CA, CFG.SLAB.j0, CFG.SLAB.j1 + 1, CFG.ZCROWN, VOID, 1.2, [4, 3]);
+txt('拱顶 1.80（剖面切在洞心）', X(CA, CFG.SLAB.j0) + 6, Y(CA, CFG.ZCROWN) - 7, VOID, '600 10.5px -apple-system,sans-serif');
+
+// 标注
+vbrace(CA, 4.55, 0, CFG.ZCROWN, '净空 1.80', GOOD, -1);
+vbrace(CA, 9.6, CFG.ZCROWN, CFG.ZTOP, '', GOLD, 1);
+txt('拱顶余量 0.90 = 1 层', X(CA, 9.75), Y(CA, 2.30), GOLD, '600 11px -apple-system,sans-serif');
+hbrace(CA, CFG.SLAB.j0, CFG.SLAB.j1 + 1, 2.20, `板厚 ${M.thick} 格（贯穿）`, '#8a7a99');
+
+// 路线 A
+ctx.save(); ctx.strokeStyle = GOOD; ctx.lineWidth = 2; ctx.lineJoin = 'round';
+ctx.beginPath(); ctx.moveTo(X(CA, 3), Y(CA, CFG.DOT)); ctx.lineTo(X(CA, 11), Y(CA, CFG.DOT)); ctx.stroke(); ctx.restore();
+for (const d of RA.dots) {
+  dotAt(CA, d.pj, d.pz, 4.2, '#ffffff', INK);
+  if (Math.abs(d.err) > 0.15) {
+    ctx.save(); ctx.strokeStyle = 'rgba(180,64,47,.45)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(X(CA, d.pj), Y(CA, d.pz)); ctx.lineTo(X(CA, d.jz), Y(CA, d.naive + CFG.DOT)); ctx.stroke(); ctx.restore();
+    dotAt(CA, d.jz, d.naive + CFG.DOT, 4.2, 'rgba(255,255,255,.9)', BAD);
+  }
+}
+txt(`按 heightAt 摆放：${RA.missed}/${RA.dots.length} 个点被抬到板顶（+2.70）`, X(CA, 3), Y(CA, 3.05), BAD, '600 11px -apple-system,sans-serif');
+txt('白点 = 按面摆放（带层号）· 红圈 = 同一个点只查 heightAt 的结果', PA.x + 14, PA.y + PA.h - 9, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 右：剖面 i=14（实心板）=================
+panel(PB, '剖面 B · i=14（实心板）：路线从板顶翻过去', `同一个 heightAt 在这里也返回 2.70 · 上坡面 +2.18 … +0.50 / 下坡面 −2.16 … −0.48`);
+
+rect(CB, J0, -0.55, J1, 0, SAND);
+rect(CB, CFG.SLAB.j0, 0, CFG.SLAB.j1 + 1, CFG.ZTOP, ROCK, ROCK2);
+hline(CB, J0, J1, 0, '#b9ae9c', 1.4);
+// 板顶面加粗（可行走面）
+hline(CB, CFG.SLAB.j0, CFG.SLAB.j1 + 1, CFG.ZTOP, GOOD, 2);
+txt('板顶 = 可行走面 z=2.70', X(CB, CFG.SLAB.j0) + 10, Y(CB, CFG.ZTOP) + 18, GOOD, '600 10.5px -apple-system,sans-serif');
+
+// 路线 B
+const segs = routeOver();
+ctx.save(); ctx.strokeStyle = '#c0741c'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+ctx.beginPath();
+segs.forEach((s, i) => {
+  const a = [s.a[0] + s.n[0] * CFG.DOT, s.a[1] + s.n[1] * CFG.DOT];
+  const b = [s.b[0] + s.n[0] * CFG.DOT, s.b[1] + s.n[1] * CFG.DOT];
+  i ? ctx.lineTo(X(CB, a[0]), Y(CB, a[1])) : ctx.moveTo(X(CB, a[0]), Y(CB, a[1]));
+  ctx.lineTo(X(CB, b[0]), Y(CB, b[1]));
+});
+ctx.stroke(); ctx.restore();
+for (const d of RB.dots) {
+  dotAt(CB, d.pj, d.pz, 4.2, '#ffffff', INK);
+  if (Math.abs(d.err) > 0.15) {
+    ctx.save(); ctx.strokeStyle = 'rgba(180,64,47,.45)'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(X(CB, d.pj), Y(CB, d.pz)); ctx.lineTo(X(CB, d.jz), Y(CB, d.naive + CFG.DOT)); ctx.stroke(); ctx.restore();
+    dotAt(CB, d.jz, d.naive + CFG.DOT, 4.2, 'rgba(255,255,255,.9)', BAD);
+  }
+}
+vbrace(CB, CFG.SLAB.j0 - 0.45, 0, CFG.ZTOP, '2.70 = 3 层', '#c0741c', -1);
+txt(`上坡面 4 点 +2.18…+0.50（飘在空中）`, PB.x + 14, PB.y + 60, BAD, '600 11px -apple-system,sans-serif');
+txt(`下坡面 4 点 −2.16…−0.48（被按回地面）`, PB.x + 14, PB.y + 76, BAD, '600 11px -apple-system,sans-serif');
+txt(`垂直面上走了 ${RB.vertLen.toFixed(2)} = 总长 ${(RB.vertLen / RB.total * 100).toFixed(0)}%，平面图上只是一串等距点`, PB.x + 14, PB.y + PB.h - 9, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 左下：表格 =================
+panel(PC, '两条路线（平面起点 j=3、终点 j=11，完全一样）', '');
+const cx = [PC.x + 16, PC.x + 148, PC.x + 214, PC.x + 288, PC.x + 318, PC.x + 480];
+let ry = PC.y + 56;
+['路线', '面弧长', '/平面长', '点', '错位(heightAt)', '最大误差'].forEach((h, i) =>
+  txt(h, cx[i], ry, MUTED, '11.5px -apple-system,sans-serif'));
+ry += 24;
+const rows = [
+  ['A 穿洞（i=11）', RA.total.toFixed(2), RA.ratio.toFixed(3), String(RA.dots.length), `${RA.missed}（全在洞里）`, '+2.70', GOOD],
+  ['B 翻越（i=14）', RB.total.toFixed(2), RB.ratio.toFixed(3), String(RB.dots.length), `${RB.missed}（上飘下埋）`, '+2.18 / −2.16', '#c0741c'],
+];
+for (const [n, len, r, n2, miss, err, col] of rows) {
+  txt(n, cx[0], ry, col, '600 12px -apple-system,sans-serif');
+  txt(len, cx[1], ry, INK, '600 12px ui-monospace,monospace');
+  txt(r, cx[2], ry, INK, '600 12px ui-monospace,monospace');
+  txt(n2, cx[3], ry, INK, '600 12px ui-monospace,monospace');
+  txt(miss, cx[4], ry, BAD, '600 12px -apple-system,sans-serif');
+  txt(err, cx[5], ry, INK, '600 12px ui-monospace,monospace');
+  ry += 26;
+}
+txt(`可行走面 ${M.surfaces} 条 / 平面格 ${M.cells} 个：多出的 ${M.doubleCells} 条全在洞里（那 ${M.doubleCells} 格同时有洞底与板顶两个面）`,
+  PC.x + 16, PC.y + PC.h - 12, MUTED, '11px -apple-system,sans-serif');
+
+// ================= 右下：结论 =================
+panel(PD, '这一条钉住的是什么', '');
+const lines = [
+  [`洞内 ${M.doubleCells} 格有两个可行走面（0 / 2.70）；2.70−1.80=0.90 正好一层，板顶能站人。`, INK],
+  [`穿洞 ${RA.total.toFixed(2)} = ${RA.ratio.toFixed(3)}× 平面长：只查 heightAt 时 ${RA.missed} 点全被抬到板顶 +2.70。`, BAD],
+  [`翻越 ${RB.total.toFixed(2)} = ${RB.ratio.toFixed(3)}× 平面长：${(RB.total - RB.planLen).toFixed(2)} 全是立面爬升，${RB.vert.length} 点在垂直面上。`, '#c0741c'],
+  [`所以路线点 = (面 id, 弧长)：只带 (x,y) 会洞里消失 / 上坡飘 / 下坡埋。`, GOOD],
+];
+let ny = PD.y + 54;
+for (const [s, col] of lines) {
+  txt('·', PD.x + 15, ny, GOLD, '700 12px -apple-system,sans-serif');
+  txt(s, PD.x + 26, ny, col, '11.5px -apple-system,sans-serif');
+  ny += 25;
+}
+
+// ================= 底条 =================
+document.getElementById('stats').innerHTML = [
+  `平面格 <b>${M.cells}</b>`, `可行走面 <b>${M.surfaces}</b>`, `双面格 <b>${M.doubleCells}</b>`,
+  `净空 <b>${CFG.ZCROWN.toFixed(2)}</b> = <b>${M.clearLevels.toFixed(0)}</b> 层`,
+  `拱顶余量 <b>${M.band.toFixed(2)}</b>`,
+  `A 错位 <b class="no">${RA.missed}/${RA.dots.length}</b>`,
+  `B 错位 <b class="no">${RB.missed}/${RB.dots.length}</b>`,
+  `垂直面 <b>${RB.vert.length}</b> 点`,
+].join('<span style="opacity:.28">|</span>');
+
+window.__lab = { M, A: { len: RA.total, dots: RA.dots.length, missed: RA.missed }, B: { len: RB.total, dots: RB.dots.length, missed: RB.missed, vert: RB.vert.length } };
+</script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+{
+  "reports": [
+    {
+      "mode": "raw",
+      "report": {
+        "quads": 3946,
+        "flipped": 0,
+        "invalid": 0,
+        "border": 330,
+        "seam": 0,
+        "comparisons": 378,
+        "maxStretch": 1,
+        "minShrink": 1,
+        "maxEdgeStretch": 1,
+        "minEdgeShrink": 1,
+        "stretched": 0,
+        "shrunk": 0,
+        "stretchLimit": 2,
+        "worst": null
+      },
+      "barycentric": {
+        "prepared": 133,
+        "queries": 52931,
+        "degenerate": 0
+      },
+      "patches": 19,
+      "clusters": 24
+    },
+    {
+      "mode": "patch",
+      "report": {
+        "quads": 3946,
+        "flipped": 0,
+        "invalid": 0,
+        "border": 330,
+        "seam": 0,
+        "comparisons": 378,
+        "maxStretch": 1.7544462480710081,
+        "minShrink": 0.46018055194080454,
+        "maxEdgeStretch": 1.5492775762576882,
+        "minEdgeShrink": 0.543883335033447,
+        "stretched": 0,
+        "shrunk": 13,
+        "stretchLimit": 2,
+        "worst": {
+          "patch": 15,
+          "cell": [
+            909,
+            3353,
+            3387,
+            3370
+          ],
+          "ratio": 1.7544462480710081
+        }
+      },
+      "barycentric": {
+        "prepared": 133,
+        "queries": 52931,
+        "degenerate": 0
+      },
+      "patches": 19,
+      "clusters": 24
+    },
+    {
+      "mode": "cluster",
+      "report": {
+        "quads": 3946,
+        "flipped": 0,
+        "invalid": 0,
+        "border": 330,
+        "seam": 0.37595922813350574,
+        "comparisons": 378,
+        "maxStretch": 1.851094787686218,
+        "minShrink": 0.4598859972651125,
+        "maxEdgeStretch": 1.5354029399037508,
+        "minEdgeShrink": 0.5390323231931361,
+        "stretched": 0,
+        "shrunk": 13,
+        "stretchLimit": 2,
+        "worst": {
+          "patch": 12,
+          "cell": [
+            692,
+            2715,
+            2713,
+            2714
+          ],
+          "ratio": 1.851094787686218
+        }
+      },
+      "barycentric": {
+        "prepared": 133,
+        "queries": 52931,
+        "degenerate": 0
+      },
+      "patches": 19,
+      "clusters": 24
+    },
+    {
+      "mode": "blend",
+      "report": {
+        "quads": 3946,
+        "flipped": 0,
+        "invalid": 0,
+        "border": 330,
+        "seam": 3.66205343881779e-15,
+        "comparisons": 378,
+        "maxStretch": 1.8295058385506742,
+        "minShrink": 0.46109086457372517,
+        "maxEdgeStretch": 1.5354113623567762,
+        "minEdgeShrink": 0.5507144292963817,
+        "stretched": 0,
+        "shrunk": 14,
+        "stretchLimit": 2,
+        "worst": {
+          "patch": 12,
+          "cell": [
+            692,
+            2715,
+            2713,
+            2714
+          ],
+          "ratio": 1.8295058385506742
+        }
+      },
+      "barycentric": {
+        "prepared": 133,
+        "queries": 101795,
+        "degenerate": 0
+      },
+      "patches": 19,
+      "clusters": 24
+    }
+  ],
+  "errors": []
+}

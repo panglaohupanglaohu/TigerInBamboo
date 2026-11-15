@@ -1,10 +1,15 @@
+import {mountSceneEnhancement} from './scene-enhancement.js';
+import {mountEnvironmentDiscovery} from './environment-discovery.js';
+import {mountSceneCapabilityPanel} from './scene-capability-panel.js';
 import { applyBadNorthTheme, BN_PAL } from '../badnorth/theme.js';
+import { mountShadingPanel } from './shading-panel.js';   // 第 55 批 G1：着色实验分组 + 色体角点编辑
 
 /** Discoverable controls for the current shared View; experiments remain separate. */
 export function mountEnvironmentPanel(view, { getScene }) {
   const host = document.getElementById('environment-panel');
   if (!host) return;
-  const toggles = [['wind', '风场箭头'], ['snow', '飘雪与表面积雪'], ['fog', '岛周薄雾'], ['clouds', '流动云层'], ['cloudshadow', '近云投影'], ['moody', '远景阴云'], ['flags', '迎风旗帜'], ['waves', '岸浪'], ['waterfalls', '瀑布'], ['birds', '海鸥']];
+  host.querySelector('summary').textContent='场景能力 · 天气、水、生命与渲染';
+  const toggles = [['shrubtex', '纯纹理灌木'], ['wind', '风场箭头'], ['snow', '飘雪与表面积雪'], ['fog', '岛周薄雾'], ['clouds', '流动云层'], ['cloudshadow', '近云投影'], ['moody', '远景阴云'], ['shadows', '柔和投影'], ['lightonly', '只看光照'], ['textureonly', '只看贴图'], ['aomesh', 'AO 烘焙网格'], ['flags', '迎风旗帜'], ['waves', '岸浪'], ['waterfalls', '瀑布'], ['birds', '海鸥'], ['butterflies', '蝴蝶群'], ['modules', '模块签名配色']];
   host.insertAdjacentHTML('beforeend', `<div class="environment-body">
     <p class="environment-note">场景可用 · 控制当前岛屿，无需跳转实验页</p>
     <div class="environment-toggles">${toggles.map(([key, label]) => `<label><input type="checkbox" data-environment="${key}">${label}</label>`).join('')}</div>
@@ -17,13 +22,17 @@ export function mountEnvironmentPanel(view, { getScene }) {
       <label class="environment-row">雾流速 <input id="environment-fog-speed" type="range" min="0" max="2" step=".1" aria-label="雾流速"><output id="environment-fog-speed-value"></output></label>
     </details>
     <details><summary>更多能力实验 · 单独验收</summary><div class="environment-links">
-      <a href="clouds.html">远景阴云对照</a><a href="flow.html">洞内风场诊断</a><a href="wake-fog.html">船迹与背景雾</a><a href="qa-replay.html">建筑编辑压力回放</a><a href="save-mesh.html">分享存档与合并网格</a><a href="wall-palette.html">墙色编辑与过渡</a><a href="building-components.html">六类墙饰与窗型分组</a>
+      <a href="node-editor.html">可编辑节点图</a><a href="mip-ground.html">自定义 mip 过滤对照</a><a href="sprite-atlas.html">共享图集插入与释放</a><a href="outline-painted.html">笔触法线描边对照</a><a href="clouds.html">远景阴云对照</a><a href="flow.html">洞内风场诊断</a><a href="wake-fog.html">船迹与背景雾</a><a href="qa-replay.html">建筑编辑压力回放</a><a href="save-mesh.html">分享存档与合并网格</a><a href="wall-palette.html">墙色编辑与过渡</a><a href="building-components.html">六类墙饰与窗型分组</a>
       <a href="palette-editor.html">地表四角色盘</a><a href="surface-shadows.html">地表阴影实验</a><a href="drainage.html">填洼与河网重建</a>
-      <a href="sediment.html">沉积岩层实验</a><a href="blotches.html">地表笔触实验</a>
+      <a href="sediment.html">沉积岩层实验</a><a href="blotches.html">地表笔触实验</a><a href="multitile.html">多格 tile 三维 WFC + 体素 AO</a><a href="navmesh-flow.html">导航面内连续流场 · 百人</a>
       <a href="garden.html">庭院围合与小径</a><a href="navigation.html">导航实验</a><a href="space-visibility.html">三维空间射线</a><a href="leaf-surface.html">叶片材质实验</a><a href="billboard-anchor.html">中心锚点卡片实验</a>
     <button type="button" data-command="replay">回放 / 停止建造</button><button type="button" data-command="exportobj">导出主体 OBJ</button></div><p class="environment-note">体素历史回放：先建造，Esc 或再次点击停止；镜头和特效不录制。OBJ 不含水、植被和特效。</p></details>
     <div class="environment-footer"><button id="environment-learning" type="button">打开完整管线与视频</button><a href="pipeline.html">管线总览 ↗</a></div>
   </div>`);
+  mountSceneCapabilityPanel(view,host.querySelector('.environment-body'),{getScene});
+  mountShadingPanel(view, host.querySelector('.environment-body'));
+  mountSceneEnhancement(view,host.querySelector('.environment-body'),{getScene});
+  mountEnvironmentDiscovery(host);
   const learn = document.getElementById('learnpanel');
   learn.classList.add('collapsed');
   const show = () => { learn.hidden = host.open; };
@@ -48,7 +57,7 @@ export function mountEnvironmentPanel(view, { getScene }) {
   function sync() {
     for (const box of boxes) {
       const k = box.dataset.environment;
-      const actual = { wind: view.atmosphere.arrows.visible, snow: view.atmosphere.snow.visible, fog: view.atmosphere.fog.visible, clouds: view.vegetation.cloudField?.mesh.visible, moody: view.vegetation.backdrop?.mesh.visible, cloudshadow: view.cloudShadow.enabled, flags: view.decor.flags.visible, waves: view.waves.visible, waterfalls: view.waterfalls.group.visible, birds: view.birds.visible };
+      const actual = { wind: view.atmosphere.arrows.visible, snow: view.atmosphere.snow.visible, fog: view.atmosphere.fog.visible, clouds: view.vegetation.cloudField?.mesh.visible, moody: view.vegetation.backdrop?.mesh.visible, cloudshadow: view.cloudShadow.enabled, shadows: view.sun.castShadow, lightonly: view.lightOnlyOn, textureonly: !!view.textureOnlyOn.value, flags: view.decor.flags.visible, waves: view.waves.visible, waterfalls: view.waterfalls.group.visible, birds: view.birds.visible, butterflies: view.decor.butterflies.visible, modules: view.worldMesh.debugModules };
       box.checked = !!(actual[k] ?? view.debugState?.[k]);
     }
     time.value = view.timeOfDay;

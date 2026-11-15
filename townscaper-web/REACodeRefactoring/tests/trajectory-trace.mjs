@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';import {traceArc} from '../src/core/trajectory-trace.js';import {throwArc} from '../src/core/trajectory-fan.js';
+for(const drag of [0,.2,.83]){const a=throwArc({speed:10,angleDeg:45,drag}),b=traceArc({speed:10,angleDeg:45,drag});assert.ok(Math.abs(a.range-b.range)<.001);}
+const box={id:'thin-wall',min:[3,0,-1],max:[3.000001,10,1]},before=JSON.stringify(box);for(const dt of [1/30,1/60,1/120]){const r=traceArc({speed:10,angleDeg:45,drag:0,dt,boxes:[box]});assert.equal(r.reason,'box');assert.ok(Math.abs(r.hit.point[0]-3)<1e-8);assert.ok(r.points.every(p=>p[0]<=3+1e-8));}assert.equal(JSON.stringify(box),before);
+const q=traceArc({speed:10,angleDeg:45,drag:.1,dragModel:'quadratic'}),lin=traceArc({speed:10,angleDeg:45,drag:.1});assert.ok(q.range<lin.range);const at30=traceArc({speed:10,angleDeg:45,drag:.1,dragModel:'quadratic',dt:1/30});assert.ok(Math.abs(q.range-at30.range)<.01);
+assert.equal(traceArc({maxTime:.01,angleDeg:80}).reason,'timeout');assert.throws(()=>traceArc({segmentHit:()=>2}));assert.throws(()=>traceArc({dt:1e-12}));assert.throws(()=>traceArc({boxes:[{min:[1,1,1],max:[0,0,0]}]}));
+console.log('PASS analytic linear/no-drag parity, thin-scene collision without tunneling at30/60/120Hz, quadratic convergence, budget/input guards');

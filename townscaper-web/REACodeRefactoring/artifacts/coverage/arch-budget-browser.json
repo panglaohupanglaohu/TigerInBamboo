@@ -1,0 +1,127 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "fine": {
+        "stats": {
+          "decoPlacements": [],
+          "decoDrawn": {},
+          "decoDropped": 0,
+          "archBudgets": [
+            {
+              "cell": 136,
+              "level": 4,
+              "base": 1.5,
+              "floor": 0.5,
+              "crown": 1.45,
+              "rise": 0.4,
+              "spring": 1.0499999999999998,
+              "slab": 0.05
+            }
+          ],
+          "modules": 0,
+          "doors": 0,
+          "decorationGroups": 3,
+          "decoSolved": 0,
+          "decoFailures": 0,
+          "archCount": 1,
+          "archSegments": 16
+        },
+        "vertices": 1770,
+        "drawCalls": 52
+      },
+      "coarse": {
+        "stats": {
+          "decoPlacements": [],
+          "decoDrawn": {},
+          "decoDropped": 0,
+          "archBudgets": [
+            {
+              "cell": 136,
+              "level": 4,
+              "base": 1.5,
+              "floor": 0.5,
+              "crown": 1.3,
+              "rise": 0.4,
+              "spring": 0.9,
+              "slab": 0.2
+            }
+          ],
+          "modules": 0,
+          "doors": 0,
+          "decorationGroups": 3,
+          "decoSolved": 0,
+          "decoFailures": 0,
+          "archCount": 1,
+          "archSegments": 16
+        },
+        "vertices": 1770,
+        "drawCalls": 52
+      },
+      "sameWorld": true,
+      "restored": true
+    },
+    {
+      "kind": "mixed",
+      "fine": {
+        "stats": {
+          "decoPlacements": [],
+          "decoDrawn": {},
+          "decoDropped": 0,
+          "archBudgets": [
+            {
+              "cell": 88,
+              "level": 4,
+              "base": 1.5,
+              "floor": 0.5,
+              "crown": 1.45,
+              "rise": 0.4,
+              "spring": 1.0499999999999998,
+              "slab": 0.05
+            }
+          ],
+          "modules": 0,
+          "doors": 0,
+          "decorationGroups": 3,
+          "decoSolved": 0,
+          "decoFailures": 0,
+          "archCount": 1,
+          "archSegments": 16
+        },
+        "vertices": 1719,
+        "drawCalls": 52
+      },
+      "coarse": {
+        "stats": {
+          "decoPlacements": [],
+          "decoDrawn": {},
+          "decoDropped": 0,
+          "archBudgets": [
+            {
+              "cell": 88,
+              "level": 4,
+              "base": 1.5,
+              "floor": 0.5,
+              "crown": 1.3,
+              "rise": 0.4,
+              "spring": 0.9,
+              "slab": 0.2
+            }
+          ],
+          "modules": 0,
+          "doors": 0,
+          "decorationGroups": 3,
+          "decoSolved": 0,
+          "decoFailures": 0,
+          "archCount": 1,
+          "archSegments": 16
+        },
+        "vertices": 1719,
+        "drawCalls": 52
+      },
+      "sameWorld": true,
+      "restored": true
+    }
+  ],
+  "errors": []
+}

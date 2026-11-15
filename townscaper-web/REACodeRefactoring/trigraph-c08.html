@@ -1,0 +1,59 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><link rel="icon" href="data:,"><title>三角图 · 逐点插入/局部编辑（r56 C08）</title>
+<style>body{margin:0;background:#608783;color:#193c42;font:13px/1.5 system-ui,"PingFang SC",sans-serif;overflow:hidden}canvas{display:block;width:100vw;height:100vh}#ui{position:fixed;left:12px;top:12px;max-width:380px;background:rgba(255,255,255,.92);border-radius:12px;padding:10px 12px}#ui p{margin:3px 0;font-size:12px;color:#3e5a5e}button{border:1px solid #c9d8d7;background:#fff;border-radius:8px;padding:3px 8px;cursor:pointer;font:inherit}button.on{background:#2f7f8a;color:#fff}#stat{font-size:12px;color:#2f7f8a;white-space:pre-wrap}</style>
+<canvas id="c"></canvas>
+<div id="ui"><a href="index.html">← 首页</a> · <a href="trigraph.html">三角图全查页</a>
+<h3 style="margin:4px 0">通用三角图压力测试（1677242779162877952）</h3>
+<p>共享 core/trigraph.js（增量 Bowyer–Watson）+ src/core/trigraph-edit-c08.js（插点差分 / 删点耳切 + Lawson / 移点）。每一步新增的边按「刚改过」染成绿→黄→青并逐步淡回白色；每 10 步全图复检流形 + Delaunay。外轮廓按外接圆半径过滤超大三角（仅显示），所以不是凸包。</p>
+<button id="play" class="on">播放</button> <button id="del">删 5 点</button> <button id="move">移 5 点</button> <button id="reset">重置</button>
+<div id="stat"></div></div>
+<script type="module">
+import { TriGraph, addTracked, removeVertex, moveVertex, checkLive } from './src/core/trigraph-edit-c08.js';
+const Q = new URLSearchParams(location.search), cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let g, seed, step, heat, audit, playing = !Q.has('steps'), edits = { removed: 0, moved: 0 };
+const rnd = () => ((seed = Math.imul(seed, 1664525) + 1013904223 >>> 0) / 2 ** 32);
+const key = (u, v) => (u < v ? u + ',' + v : v + ',' + u);
+function reset() { g = new TriGraph(10); seed = 11; step = 0; heat = new Map(); audit = null; edits = { removed: 0, moved: 0 }; }
+function addOne() {
+  const r = .15 + 1.6 * Math.min(1, step / 260), a = rnd() * Math.PI * 2, d = Math.sqrt(rnd()) * r;
+  const t = addTracked(g, Math.cos(a) * d * 1.5 + .25 * Math.sin(step * .05), Math.sin(a) * d * .75);
+  for (const [k, v] of heat) heat.set(k, v - 1); for (const [k, v] of heat) if (v <= 0) heat.delete(k);
+  for (const [u, v] of t.added) heat.set(key(u, v), 8);
+  step++; if (step % 10 === 0) audit = checkLive(g);
+}
+const live = () => { const out = []; for (let i = 3; i < g.x.length; i++) if (!(g.removed && g.removed.has(i))) out.push(i); return out; };
+function edit(kind) {
+  for (let k = 0; k < 5; k++) {
+    const L = live(), id = L[Math.floor(rnd() * L.length)];
+    if (kind === 'del') { const r = removeVertex(g, id); for (const [u, v] of r.added) heat.set(key(u, v), 8); edits.removed++; }
+    else { const m = moveVertex(g, id, g.x[id] + (rnd() - .5) * .25, g.y[id] + (rnd() - .5) * .25); for (const [u, v] of m.added) heat.set(key(u, v), 8); edits.moved++; }
+  }
+  audit = checkLive(g); draw();
+}
+reset();
+const N = Q.has('steps') ? Math.min(2000, Number(Q.get('steps')) || 0) : 30; for (let i = 0; i < N; i++) addOne();
+if (Q.get('edit') === 'del') edit('del'); if (Q.get('edit') === 'move') edit('move');
+audit = checkLive(g);
+function draw() {
+  const dpr = Math.min(2, devicePixelRatio); cv.width = innerWidth * dpr; cv.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.fillStyle = '#608783'; ctx.fillRect(0, 0, innerWidth, innerHeight);
+  const S = Math.min(innerWidth - 420, innerHeight) / 5.6, ox = 420 + (innerWidth - 420) / 2, oy = innerHeight / 2;
+  const P = (i) => [ox + g.x[i] * S, oy - g.y[i] * S * 1.0 - g.x[i] * S * .25];
+  const shown = g.tris.filter((t, i) => t[0] > 2 && t[1] > 2 && t[2] > 2 && g.circ[i][2] < .55);
+  const hot = [], seen = new Set();
+  ctx.lineWidth = 1; ctx.strokeStyle = 'rgba(240,248,240,.75)'; ctx.beginPath();
+  for (const [a, b, c] of shown) for (const [u, v] of [[a, b], [b, c], [c, a]]) { const k = key(u, v); if (seen.has(k)) continue; seen.add(k); const h = heat.get(k); if (h) { hot.push([u, v, h]); continue; } ctx.moveTo(...P(u)); ctx.lineTo(...P(v)); }
+  ctx.stroke();
+  // shown triangles may hold each interior edge once in each direction; draw hot ones on top
+  const col = (h) => h > 6 ? '#7dff9a' : h > 4 ? '#f2f06a' : h > 2 ? '#58e0d8' : '#cfeee8';
+  ctx.lineWidth = 2; for (const [u, v, h] of hot) { ctx.strokeStyle = col(h); ctx.beginPath(); ctx.moveTo(...P(u)); ctx.lineTo(...P(v)); ctx.stroke(); }
+  document.getElementById('stat').textContent = `点 ${live().length}（已删 ${edits.removed}，已移 ${edits.moved}）· 三角 ${g.triangles().length} · 本步新边 ${[...heat.values()].filter((h) => h === 8).length}\n全查（${audit.checkedTriangles} 面）：流形 ${audit.manifold ? '✓' : '✗'} · Delaunay ${audit.delaunay ? '✓' : '✗'} · 退化 ${audit.degenerate}`;
+  window.trigraphC08 = { g, audit, step, edits, hot: hot.length };
+}
+document.getElementById('play').onclick = (e) => { playing = !playing; e.target.classList.toggle('on', playing); };
+document.getElementById('del').onclick = () => edit('del');
+document.getElementById('move').onclick = () => edit('move');
+document.getElementById('reset').onclick = () => { reset(); for (let i = 0; i < 30; i++) addOne(); audit = checkLive(g); draw(); };
+addEventListener('resize', draw);
+setInterval(() => { if (playing && step < 400) { addOne(); draw(); } }, 90);
+draw();
+</script></html>

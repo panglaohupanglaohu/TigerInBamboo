@@ -448,3 +448,9 @@ Greg目标：artifacts/pipeline/greg-swamp-target-20261010/target-v3-current-cou
 2026-10-26 Morris对象目标图与骑乘：`artifacts/pipeline/morris-object-targets-20261026/`两张基于实际布局/原对象身份的imagegen施工目标，非实景验收；Morris花叶转译沿用认可V3。用户指定Ghost of Tsushima骑乘节奏；已查PlayStation Blog2020-05-29问答与2018-06-19官方演示讲解索引（见PROJECT_HANDOFF原链接），仅作为公开参考，不声称观看完整马匹动作视频。本批使用原马+原创膝部程序步态/平滑起停、未提取第三方动画。
 
 2026-10-26 Morris目标实体迭代r35：依据用户认可`morris-object-targets-20261026`两张图调整真实几何，不再出替代目标图。Oskar方法顾问负责桥Details；主代理负责高树/道路/溪流，来源仍为本项目已存公开Oskar方法研究及认可Morris转译。细节和正式GPU观察见`morris-target-iteration-20261026/REVIEW.md`，不得把JEV文字概率当目标图匹配率。
+
+## 2026-11-13 苔庭海岸松树照片
+
+用户提供 `codex-clipboard-a85a07b7-aa7f-42db-9bcc-5b80255016c5.png`：灰暖树皮、细长主干、横伸不规则枝、分离深绿针叶簇与最高偏后稀疏枯树。参考用于 `src/assets/saihojiClusterPine.js`：平滑树干法线/纵裂纹、针叶簇轮廓与露枝；直接引用REACodeRefactoring `src/core/path-samples.js` 平滑与等弧长采样。保留6树、原根位/高度关系、50隐蔽点，不将雪景复制进苔庭地表。
+
+证据 `artifacts/pines-reference-20261113/{before,after}-{front,profile,far}.png` 为实际saihojiGarden SceneModule同机位/光照渲染，非完整正式游戏。6树2mesh/树、50点回归通过；正面calls190不变，三角26275→51697。第一候选只46槽已保留，最终50槽。用户照片是造型来源，不声称逐像素复现或完成长时性能验收。

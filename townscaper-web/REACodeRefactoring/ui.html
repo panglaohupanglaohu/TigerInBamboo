@@ -61,7 +61,7 @@
     <button data-t="menu">斜按钮</button>
     <button data-t="icons">图标</button>
   </div>
-  <div class="row"><button id="again">换一批</button><label id="part-seed-row" hidden>部件种子 <input id="part-seed" type="number" min="1" max="2147483646" step="1" value="7" style="width:110px"></label></div>
+  <div class="row"><button id="again">换一批</button><button id="face-mode" title="r55：改用 part-random.js 的 PORTRAIT_SLOTS 采样绘制（URL ?portrait=slots）">槽位表头像</button><label id="part-seed-row" hidden>部件种子 <input id="part-seed" type="number" min="1" max="2147483646" step="1" value="7" style="width:110px"></label></div>
   <p id="note"></p>
 </div>
 <div id="stage">
@@ -72,7 +72,8 @@
   <div class="pane" id="p-icons"><div id="icons"></div></div>
 <div id="ui-status" role="status" aria-live="polite"></div></div>
 <script type="module">
-import {withRandomState,mirroredRandom,partSeed} from "./src/core/part-random.js";
+import {withRandomState,mirroredRandom,partSeed,PORTRAIT_SLOTS,sampleSlots,portraitSilhouette,silhouetteDiversity} from "./src/core/part-random.js";
+import {drawSlotPortrait,drawSlotSilhouette} from "./src/ui/slot-portrait.js";
 import {playfulJitter} from "./src/core/playful-layout.js";
 import {mountIconToolbar} from "./src/ui/icon-toolbar.js";
 let iconToolbar=null, selectedTool="select";
@@ -253,7 +254,28 @@ const BANNER = { variants: bannerShapes, children: [
 
 /* ---------- 画布页 ---------- */
 function setupCanvas(cv, w, h) { const DPR = Math.min(2, devicePixelRatio); cv.width = w * DPR; cv.height = h * DPR; cv.style.width = w + 'px'; cv.style.height = h + 'px'; const c = cv.getContext('2d'); c.setTransform(DPR, 0, 0, DPR, 0, 0); return c; }
+/* r55 G3：?portrait=slots / 「槽位表头像」→ 每张脸 = sampleSlots(partSeed(base,id), PORTRAIT_SLOTS)，
+ * 由 src/ui/slot-portrait.js 按槽位顺序逐槽派发绘制（程序化矢量替身，原美术缺）。默认关，保留旧部件树作对比。 */
+let faceMode=new URLSearchParams(location.search).get('portrait')==='slots'?'slots':'tree', portraitStats=null;
+function slotStats(base){
+  const specs=Array.from({length:24},(_,i)=>sampleSlots(partSeed(base,i))),masks=specs.map(s=>portraitSilhouette(s,64)),d=silhouetteDiversity(masks);
+  // 画布实际画出的剪影 vs portraitSilhouette 掩码：同一几何 → IoU 应接近 1
+  const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d',{willReadFrequently:true});let iou=0;
+  specs.forEach((s,k)=>{g.clearRect(0,0,64,64);drawSlotSilhouette(g,s,64);const px=g.getImageData(0,0,64,64).data;let I=0,U=0;for(let i=0;i<4096;i++){const a=px[i*4+3]>127,b=masks[k][i]===1;I+=a&&b;U+=a||b;}iou+=I/Math.max(1,U);});
+  return{faces:24,diversity:+d.diversity.toFixed(3),meanIoU:+d.meanIoU.toFixed(3),canvasMaskIoU:+(iou/24).toFixed(3),hairVariants:[...new Set(specs.map(s=>s.parts.hair))],slotKeys:PORTRAIT_SLOTS.map(s=>s.key)};
+}
+function drawSlotFaces(){
+  const W=Math.min(760,innerWidth-40),cols=W>600?4:3,cell=W/cols;
+  const ctx=setupCanvas(document.getElementById('cface'),W,cell*2+10),base=seed,identities=[],specs=[];
+  for(let row=0;row<2;row++)for(let i=0;i<cols;i++){const id=row*4+i,localSeed=partSeed(base,id),spec=sampleSlots(localSeed);identities.push([id,localSeed]);specs.push(spec.parts);
+    const pad=cell*.06;drawSlotPortrait(ctx,spec,{x:cell*i+pad,y:cell*row+(row?10:0)+pad,w:cell-2*pad,h:cell-2*pad});}
+  const cv=document.getElementById('cface');cv.dataset.partSeeds=JSON.stringify(identities);cv.dataset.mode='slots';
+  portraitStats={mode:'slots',drawn:specs.length,specs,...slotStats(base)};
+  document.getElementById('note').textContent=NOTES.faceSlots+` 24 张剪影差异 ${portraitStats.diversity}（均 IoU ${portraitStats.meanIoU}）；画布剪影与 portraitSilhouette 掩码 IoU ${portraitStats.canvasMaskIoU}。`;
+}
 function drawFaces() {
+  if(faceMode==='slots')return drawSlotFaces();
+  portraitStats={mode:'tree'};document.getElementById('cface').dataset.mode='tree';
   const W = Math.min(760, innerWidth - 40), cols = W > 600 ? 4 : 3, cell = W / cols;
   const ctx = setupCanvas(document.getElementById('cface'), W, cell * 2 + 10);
   const base=seed,identities=[];
@@ -328,6 +350,7 @@ function buildIcons() {
 }
 
 const NOTES = {
+  faceSlots: '槽位表模式（r55）：part-random.js 的 PORTRAIT_SLOTS（bg→head→ear→hair→brow→eye→nose→mouth→marks，含兜帽）用 sampleSlots 采样，src/ui/slot-portrait.js 逐槽派发绘制；头/耳/发几何与剪影度量同源。原作素材缺，全部是程序化矢量替身。',
   face: '958371606350454784 头像生成器 + 1010979395719319552 游戏里的头像。一个"内容无关"的层级部件生成器：头 → 耳（镜像）/ 头发 / 眼（镜像）/ 胡子 / 嘴 / 鼻，每个槽随机挑变体并带一点尺寸抖动。下排保留本地切角相框/背景/盔甲样例；显式种子使重绘/缩放保持身份，mirror分支只在声明时共享随机选择。原作图稿/完整接口未复现。',
   banner: '958410200146497537 "versatile enough that I can use it for the ingame banners too"：同一个生成器换一棵部件树——旗形（尖、缺口、燕尾、方）→ 1–2 个大徽记（太阳 / 三叶 / 塔 / 小人 / 百合）+ 小点缀。',
   pop: '1016680972610359298 确认弹出：点一队 → 三个按钮（选择 / 移动 / 交换）横排依次弹出；切队/切页取消旧定时器，Esc关闭并还焦点。仅本地UI演示，未绑定游戏指令。',
@@ -338,6 +361,7 @@ let tab = 'face';
 function render() {
   disposePopup();iconToolbar?.dispose();iconToolbar=null;document.getElementById('ui-status').textContent='';
   document.getElementById('note').textContent = NOTES[tab];
+  document.getElementById('face-mode').hidden=tab!=='face';
   const seeded=tab==='face'||tab==='banner';document.getElementById('part-seed-row').hidden=!seeded;if(seeded)document.getElementById('part-seed').value=tab==='face'?faceSeed:bannerSeed;
   if(tab==='face')withRandomState(partRandom,faceSeed,drawFaces);else if(tab==='banner')withRandomState(partRandom,bannerSeed,drawBanners); else if (tab === 'pop') buildPop(); else if (tab === 'menu') buildMenu(); else buildIcons();
   document.getElementById('stage').style.paddingTop=innerWidth<=800?(document.getElementById('ui').getBoundingClientRect().bottom+18)+'px':'';
@@ -349,12 +373,15 @@ function setTab(t) {
   render();
 }
 document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => setTab(b.dataset.t)));
+const syncFaceMode=()=>document.getElementById('face-mode').classList.toggle('on',faceMode==='slots');
+function setFaceMode(m){faceMode=m==='slots'?'slots':'tree';syncFaceMode();if(tab==='face')render();}
+document.getElementById('face-mode').onclick=()=>setFaceMode(faceMode==='slots'?'tree':'slots');syncFaceMode();
 document.getElementById('again').onclick = () => { seed = (seed * 7 + 13) % 2147483647 || 1; if(tab==='face')faceSeed=seed;else if(tab==='banner')bannerSeed=seed;else if(tab==='menu')menuSeed=seed;render(); };
 addEventListener('resize', () => (tab === 'face' || tab === 'banner') && render());
 function setPartSeed(value){if(!Number.isSafeInteger(value)||value<1||value>2147483646)throw new RangeError('种子需为1至2147483646的整数');if(tab==='face')faceSeed=value;else if(tab==='banner')bannerSeed=value;else throw new Error('请选择头像或旗帜');render()}
 document.getElementById('part-seed').onchange=e=>{try{setPartSeed(+e.target.value);e.target.setCustomValidity('')}catch(error){e.target.setCustomValidity(error.message);e.target.reportValidity()}};
 setTab(new URLSearchParams(location.search).get('t') || 'face');
-window.uiLab = {setTab,setPartSeed, get toolbar(){return iconToolbar} };
+window.uiLab = {setTab,setPartSeed,setFaceMode, get toolbar(){return iconToolbar}, get portraitStats(){return portraitStats} };
 </script>
 </body>
 </html>

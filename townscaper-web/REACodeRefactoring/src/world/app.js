@@ -18,6 +18,7 @@ import { mountLearnPanel } from '../ui/learnpanel.js';
 import { replaySnapshots, replayDelay } from '../core/snapshot-replay.js';
 import { mountEnvironmentPanel } from '../ui/environment-panel.js';
 import { mountWalkthrough } from '../ui/walkthrough.js';
+import { toggleSplice } from '../build/splice.js';
 
 // 两种网格（共用全部管线）：
 //   quad   Townscaper：三角点阵 → 合并 → 细分 → 松弛，全是四边形（1147881669350891521）
@@ -36,6 +37,7 @@ const helpEl = document.getElementById('helpcard');
 const sceneEl = document.getElementById('scenes');
 
 const params0 = new URLSearchParams(location.search);
+if (['hex', 'square', 'tri'].includes(params0.get('grid'))) Object.assign(GRIDS, (await import('../core/grid-kinds-c08.js')).PURE_GRIDS);   // r56 C08: pure grid kinds (1670790425232175108), default off
 let gridKind = GRIDS[params0.get('grid')] ? params0.get('grid') : 'quad';
 // 分享链接里没写 ?grid= 时，按存档头里的网格半径判断
 if (!params0.get('grid') && location.hash.length > 1) {
@@ -44,11 +46,15 @@ if (!params0.get('grid') && location.hash.length > 1) {
     for (const [k, g] of Object.entries(GRIDS)) if (g.radius === r) gridKind = k;
   } catch (err) { console.warn('分享链接头读取失败：', err.message); }
 }
-const grid = decorateCells(GRIDS[gridKind].build());
+// r56 C06：1301816247479345152 在生成网格上随机撒手工模板补丁（?gems=N，默认关；core/grid-gems-c06.js）
+const grid = decorateCells(params0.get('gems') ? (await import('../core/grid-gems-c06.js')).sprinkleGems(GRIDS[gridKind].build(), { count: Math.min(12, Number(params0.get('gems')) || 4), seed: Number(params0.get('gemSeed')) || 11 }) : GRIDS[gridKind].build());
 const index = buildCellIndex(grid);
 const world = new World(grid);
 world.palette = PALETTES.town;
 const view = new View(canvas, world, grid, index, { levelHeight: LEVEL });
+// 逐帧覆盖验收入口：浏览器测试要能直接开关调试层（flow / flowunit 等）并读回统计，
+// 不用去点面板里的复选框。只读句柄，不改变任何默认行为。
+globalThis.reaView = view;
 
 let scene = 'town';
 let seed = 7;
@@ -152,7 +158,7 @@ async function replay() {
   button.textContent = '■'; button.title = '停止回放并恢复（Esc）';
   toast(`回放 ${frames.length - 1} 步 · 再次点击停止`);
   try {
-    await replaySnapshots(world, frames, { apply: () => view.changed(), wait: signal => replayDelay(380, signal), signal: replayAbort.signal });
+    await replaySnapshots(world, frames, { apply: () => view.changed(), wait: signal => replayDelay(+(params.get('replayMs') ?? 380) || 380, signal), signal: replayAbort.signal });
   } catch (err) { console.error('回放失败', err); toast('回放失败，已恢复当前岛'); }
   finally {
     replaying = false; replayAbort = null; button.textContent = '⟲';
@@ -187,6 +193,9 @@ function applyAt(hit, t) {
     if (!target) return;
     world.setSolid(cell, target, false);
     if (!world.ground(cell)) world.river[cell.id] = 0;
+  } else if (t === 'splice') {
+    // 1584623053061099520 嵌入房子工具（?tool=splice 或 I 键）：点裸露岩顶嵌入 / 再点移除；走同一快照撤销栈与存档尾段
+    if (!toggleSplice(world, cell)) return;
   } else {
     if (world.color[cell.id] === colorIndex) return;
     world.color[cell.id] = colorIndex;
@@ -294,6 +303,7 @@ addEventListener('keydown', (e) => {
   if (k === 'b') setTool('build');
   else if (k === 'e') setTool('erase');
   else if (k === 'p') setTool('paint');
+  else if (k === 'i') { setTool('splice'); toast('嵌入房子：点裸露岩顶嵌入 / 再点移除'); }
   else if (k === 'z') undo();
   else if (k === 'y') redo();
   else if (k === 'n') cycleTime();
@@ -346,7 +356,7 @@ view.frameTown();
 buildPalette();
 setTimeout(syncBadNorth, 50);
 buildSceneBar();
-setTool('build');
+setTool(params.get('tool') === 'splice' ? 'splice' : 'build');
 refreshUndo();
 
 document.getElementById('undo').onclick = undo;
@@ -395,6 +405,26 @@ const setWallPalette=(colors)=>{if(replaying)return;world.palette=withPaletteCol
 window.rea = { world, grid, gridKind, view, walk, setWallPalette, get battle() { return battle; }, loadScene: (s) => loadScene(s, true), get scene() { return scene; }, get replaying() { return replaying; }, encodeWorld, decodeWorld };
 
 mountEnvironmentPanel(view, { getScene: () => scene });
+// 第 56 批 C03 · 807256278154301441 便宜的群体寻路（紫色螃蟹点沿屋顶/台阶成群走）：默认关，?crabs=1 打开
+// 第 56 批 C03 · 793545297376972801 多格 WFC 解写进共享 World（外观交给共享建筑管线）：默认关，?multitile=<种子> 打开
+if (params.get('multitile')) import('../build/multitile-world.js').then((m) => { window.rea.multitile = m.buildMultitileTower(world, index, { seed: Number(params.get('multitile')) || 3, size: [5, Number(params.get('mth')) || 8, 5] }); view.changed(); });
+if (params.get('crabs')) import('../life/crab-swarm.js').then((m) => { window.rea.crabs = m.attachCrabSwarm(view, world); });
+// 1246074663546916873 道具出现/消失弹簧动画（world/prop-anim-layer.js）：默认关，?propanim=1 打开
+if (params.get('propanim')) import('./prop-anim-layer.js').then((m) => { window.rea.propAnim = m.attachPropAnim(view, world); });
+// r56 C05·C：1205422438437273601 门窗模板挖洞（?punch=1）；1275089608758484992 教堂高拱龛（?churchDoors=1）；806904557502464000 运河拱桥（?canalBridges=1）——默认全关
+if (params.get('punch')) import('../render/opening-punch-layer.js').then((m) => { window.rea.punch = m.attachOpeningPunch(view); });
+for (const f of ['churchDoors', 'canalBridges']) if (params.get(f)) { world[f] = true; world.touch(); view.worldMesh?.invalidate?.(); }
+// 1371460793032716290 Palette.png 热重载（world/palette-png.js，C05 r56）：默认关，?palettePng=[url] 打开，下行 = 墙色槽
+if (params.get('palettePng') !== null) import('./palette-png.js').then((m) => { window.rea.palettePng = m.watchPalettePng(params.get('palettePng') || 'palettes/Palette.png', (row) => setWallPalette(world.palette.colors.map((c, i) => row[i] ?? c)), { getColors: () => world.palette.colors, wallRow: +(params.get('paletteRow') ?? 1) }); });
+// r56 C05·D：1257213678056857600/1189902695303458816 钢架（?steelFrame=1）；1238474550511308800 后院矮墙拱门（?yardWalls=1）；1246074663546916873 后院真树出现/消失（?yardanim=1）——默认全关
+for (const f of ['steelFrame', 'yardWalls']) if (params.get(f)) { world[f] = true; world.touch(); view.worldMesh?.invalidate?.(); }
+if (params.get('yardanim')) import('./prop-anim-yard-r56.js').then((m) => { window.rea.yardAnim = m.attachYardPropAnim(view, world); });
+// r56 C06：图标工具条/倾斜菜单/实时存档串（?gameui=1）+ 拓扑直线手柄光标/连刷（?topoline=1）——ui/game-ui-c06.js，默认关
+if (params.get('gameui') || params.get('topoline')) import('../ui/game-ui-c06.js').then((m) => { window.rea.gameUI = m.mountGameUI({ world, grid, view, setTool, undo, redo, pushUndo, encodeWorld, decodeWorld, getScene: () => scene, scheduleHash }, { toolbar: !!params.get('gameui'), menu: !!params.get('gameui'), savestring: !!params.get('gameui'), topoline: !!params.get('topoline') }); });
+// r56 C06：1313837640366596096 完美环飞岛（?flying=1，默认关）：环内整列体素抬高 + 细腿 + 外沿小构件——world/flying-town-c06.js
+if (params.get('flying')) import('./flying-town-c06.js').then((m) => { window.rea.flying = m.attachFlyingTown(view, world, grid, { lift: Number(params.get('lift')) || 3, loop: Number(params.get('loop')) || 0 }); });
+// r56 C10：1849732997945110651 全局水面泡沫遮罩（?c10=foammask）+ 1664565063552847873 绕岛染料流（?c10=fluid）——world/view-c10.js，默认关
+if (params.get('c10')) import('./view-c10.js').then((m) => { window.rea.c10 = m.installC10(view, params.get('c10')); });
 
 // Keep HUD edits out of the read-only playback; the same button stops it.
 document.getElementById('hud').addEventListener('click', e => {

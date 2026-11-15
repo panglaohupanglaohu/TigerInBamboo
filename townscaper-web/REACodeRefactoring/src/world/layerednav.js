@@ -56,18 +56,28 @@ export function buildLayeredNav(world, { headroom = 1, maxStep = 1, canStep = ()
     const path=[]; for(let i=goal;i>=0;i=parent[i]) { path.push(i);if(i===start) break; }
     return {path:path.reverse(),distance:distance[goal]};
   }
-  function treeTo(goal) {
+  // allow(edge,fromId)：可选的边过滤（G5：体型重路由——窄于身体直径的通口不进这棵树）。
+  function treeTo(goal,{allow=null}={}) {
     const distance=new Float64Array(nodes.length).fill(Infinity),next=new Int32Array(nodes.length).fill(-1);
     if(!nodes[goal])return {distance,next};
     const reverse=nodes.map(()=>[]);
-    for(let from=0;from<adj.length;from++)for(const e of adj[from])reverse[e.to].push({from,cost:e.cost});
+    for(let from=0;from<adj.length;from++)for(const e of adj[from])if(!allow||allow(e,from))reverse[e.to].push({from,cost:e.cost});
     const heap=new MinHeap();distance[goal]=0;heap.push(0,goal);
     while(heap.length){const [d,id]=heap.pop();if(d!==distance[id])continue;
       for(const e of reverse[id]){const nd=d+e.cost;if(nd<distance[e.from]){distance[e.from]=nd;next[e.from]=id;heap.push(nd,e.from);}}
     }
     return {distance,next};
   }
-  return {nodes,layers,portals,adj,version:world.version,search,treeTo,
+  /** REACode voxelnav/cheesenav 的统计口径：连通块、最大块占比、被覆盖节点（同一柱子里有更高实心层 =
+   * 单值高度图表达不了的洞道/拱下节点）。 */
+  function stats() {
+    const comp=new Int32Array(nodes.length).fill(-1),sizes=[];
+    for(let i=0;i<nodes.length;i++){if(comp[i]>=0)continue;const q=[i];comp[i]=sizes.length;let k=0;
+      for(let h=0;h<q.length;h++){k++;for(const e of adj[q[h]])if(comp[e.to]<0){comp[e.to]=sizes.length;q.push(e.to);}}sizes.push(k);}
+    const covered=nodes.filter(n=>n.floor<world.top(n.cell)).length,largest=Math.max(0,...sizes);
+    return {nodes:nodes.length,portals:portals.length,components:sizes.length,largest,largestShare:nodes.length?largest/nodes.length:0,covered,coveredShare:nodes.length?covered/nodes.length:0,componentOf:id=>comp[id]};
+  }
+  return {nodes,layers,portals,adj,version:world.version,search,treeTo,stats,
     at(cell,floor) { return layers[cell.id].find(id=>nodes[id].floor===floor) ?? -1; },
     nearest(cell,floor) { return layers[cell.id].reduce((a,id)=>a<0 || Math.abs(nodes[id].floor-floor)<Math.abs(nodes[a].floor-floor)?id:a,-1); },
   };

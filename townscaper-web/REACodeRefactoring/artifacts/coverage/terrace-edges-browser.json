@@ -1,0 +1,53 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "modes": [
+        {
+          "mode": "steps",
+          "segments": 616,
+          "version": 781
+        },
+        {
+          "mode": "wire",
+          "segments": 2005,
+          "version": 781
+        },
+        {
+          "mode": "shore",
+          "segments": 166,
+          "version": 781
+        }
+      ],
+      "cache": {
+        "invalidated": true
+      },
+      "worldUnchanged": true
+    },
+    {
+      "grid": "mixed",
+      "modes": [
+        {
+          "mode": "steps",
+          "segments": 488,
+          "version": 672
+        },
+        {
+          "mode": "wire",
+          "segments": 1454,
+          "version": 672
+        },
+        {
+          "mode": "shore",
+          "segments": 117,
+          "version": 672
+        }
+      ],
+      "cache": {
+        "invalidated": true
+      },
+      "worldUnchanged": true
+    }
+  ],
+  "errors": []
+}

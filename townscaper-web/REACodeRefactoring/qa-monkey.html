@@ -1,0 +1,29 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>重构 · 猴子 QA（悬空建筑乱改压力测试）</title><link rel="icon" href="data:,">
+<style>body{margin:0;background:#eef4f3;color:#20343c;font:14px system-ui}header{padding:10px 12px}iframe{width:100%;height:78vh;border:0}#status{white-space:pre-wrap;font:12px ui-monospace,monospace}button,select,input{padding:5px;margin:3px}</style>
+<header><a href="qa-replay.html">← 16 步固定回放</a> · <b>1344290848180203523 · 猴子 QA</b>
+<p>片中在一团复杂悬空建筑上连续乱加、乱删、换色。这里用种子化随机操作（顶上加层 / 隔空加块 / 掏中间层 / 削顶 / 换色槽）直接改主场景同一个 World，每步审几何，每 N 步核对「增量重建 = 整体重建」，结束还原并核对零残留。不是原作 QA 工具。</p>
+<label>网格<select id="grid"><option value="quad">四边格</option><option value="mixed">三角＋方格</option></select></label>
+<label>种子<input id="seed" type="number" value="7" style="width:60px"></label><label>步数<input id="steps" type="number" value="120" style="width:60px"></label>
+<button id="run" disabled>开始乱改</button><span id="status">加载共享场景…</span></header>
+<iframe id="scene" title="QA 共享场景"></iframe>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import { runMonkeyQA } from './src/core/qa-monkey.js';
+import { WorldMesh } from './src/world/worldmesh.js';
+const $ = (s) => document.querySelector(s); let api = null, running = false;
+function fresh(world) { const live = api.view.worldMesh, m = new WorldMesh(world, { levelHeight: live.L }); m.smooth = live.smooth; m.shapeOptions = live.shapeOptions; m.debugModules = live.debugModules; m.bake = false; m.rebuild(); return m.geometry; }
+function load() { api = null; $('#run').disabled = true; $('#scene').src = 'index.html?scene=town&grid=' + $('#grid').value; }
+$('#scene').onload = () => { const ready = () => { const r = $('#scene').contentWindow.rea; if (!r?.view.worldMesh.geometry.attributes.color?.count) { setTimeout(ready, 100); return; } api = r; $('#run').disabled = false; $('#status').textContent = '就绪'; window.qaMonkey = { api, run }; }; ready(); };
+async function run() {
+  if (running || !api) return; running = true; $('#run').disabled = true; $('#scene').style.pointerEvents = 'none';
+  try {
+    const r = await runMonkeyQA(api, { seed: +$('#seed').value, steps: +$('#steps').value, freshGeometry: fresh,
+      afterStep: async ({ step, rec, audit }) => { $('#status').textContent = `第 ${step} 步 ${rec.op}${rec.fallback ? '(' + rec.fallback + '→)' : ''} 格 ${rec.cell} · 三角 ${audit.triangles} · 退化 ${audit.degenerateTriangles}`; await new Promise((res) => setTimeout(res, 60)); } });
+    window.qaMonkey.result = r;
+    $('#status').textContent = `通过：${r.steps} 步 ${JSON.stringify(r.counts)}；增量=整体 ${r.checks.length}/${r.checks.length}；结束悬空体块 ${r.endState.floating}；还原摘要一致 ${r.backDigest === r.startDigest}`;
+    return r;
+  } catch (e) { $('#status').textContent = '失败（已还原）：' + e.message; throw e; }
+  finally { running = false; $('#run').disabled = false; $('#scene').style.pointerEvents = ''; }
+}
+$('#run').onclick = () => run().catch(console.error); $('#grid').onchange = load; load();
+</script></html>
