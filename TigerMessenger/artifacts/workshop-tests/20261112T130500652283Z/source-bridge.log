@@ -1,0 +1,20 @@
+
+E
+======================================================================
+ERROR: setUpClass (__main__.BridgeTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/source_bridge_test.py", line 8, in setUpClass
+    cls.server=source_bridge.ThreadingHTTPServer(('127.0.0.1',0),source_bridge.Handler);cls.base='http://127.0.0.1:'+str(cls.server.server_port);cls.thread=threading.Thread(target=cls.server.serve_forever,daemon=True);cls.thread.start()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 452, in __init__
+    self.server_bind()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/http/server.py", line 138, in server_bind
+    socketserver.TCPServer.server_bind(self)
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/socketserver.py", line 466, in server_bind
+    self.socket.bind(self.server_address)
+PermissionError: [Errno 1] Operation not permitted
+
+----------------------------------------------------------------------
+Ran 0 tests in 0.001s
+
+FAILED (errors=1)

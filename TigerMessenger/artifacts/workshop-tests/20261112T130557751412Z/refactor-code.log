@@ -1,0 +1,37 @@
+PASS cross-leaf band reuse, stable survivors, key ownership, exact area and 9000 candidate operations
+✔ townscaper-web/REACodeRefactoring/tests/atlas-crossleaf.mjs (116.801333ms)
+PASS 24000 dynamic operations, stale/foreign handles, area conservation, disjoint stable slots, explicit fragmentation and 6000-depth traversal
+✔ townscaper-web/REACodeRefactoring/tests/atlas.mjs (1575.68075ms)
+PASS 自定义 mip：线性空间平均、远处收敛 / sharp 保中景、Kaiser、三线性、各向异性 {"box":{"mean1":0.214,"amp1":0,"amp4":0,"last":0.214},"linear":{"mean1":0.5,"amp1":0,"amp4":0,"last":0.5},"kaiser":{"mean1":0.5,"amp1":0.048,"amp4":0.001,"last":0.5},"sharp":{"mean1":0.5,"amp1":0,"amp4":0,"last":0.5},"stripesAmp2":{"linear":0.967,"sharp":1,"kaiser":0.695},"isoRange":0,"anisoRange":0.8}
+✔ townscaper-web/REACodeRefactoring/tests/mip-chain.mjs (59.213291ms)
+PASS migrated ground consumer: LOD active, reduced far energy/shimmer, repeat addressing, immutable source, bounded inputs [{"filter":"linear","mode":"none","meanAbsDelta":5.061217948717949},{"filter":"linear","mode":"trilinear","meanAbsDelta":0.0011217948717948717},{"filter":"linear","mode":"aniso","meanAbsDelta":0.023397435897435898}]
+✔ townscaper-web/REACodeRefactoring/tests/mip-ground.mjs (148.98775ms)
+PASS quad/mixed/hex, per-level corner dedup, actual shape transform, cliff heights, immutable shared World
+✔ townscaper-web/REACodeRefactoring/tests/nav-diagnostic-geometry.mjs (60.223292ms)
+PASS real graph edits, type/single-input/cycle/budget rejection atomicity, undo/redo, state/layout roundtrip,90-frame parity
+✔ townscaper-web/REACodeRefactoring/tests/node-graph-editor.mjs (41.124083ms)
+node-graph-runtime PASS · select/lerp/compose/sink 全部按 Unity 那条链的语义走
+✔ townscaper-web/REACodeRefactoring/tests/node-graph-runtime.mjs (36.991834ms)
+node-graph-serialize: 21 checks PASS
+✔ townscaper-web/REACodeRefactoring/tests/node-graph-serialize.mjs (39.625084ms)
+PASS mapped normal source and threshold toggles, exception-safe material/visibility/render-target restoration, texture ownership
+✔ townscaper-web/REACodeRefactoring/tests/outline-painted.mjs (130.911875ms)
+PASS CPU 参考：剪影/折痕/平面无线、depthMix=0 只留法线反差、外圈淡出、线宽×DPR；GPU 类 uniform 换算（未做浏览器渲染） {"width1":6,"width2":12}
+✔ townscaper-web/REACodeRefactoring/tests/outline-pass.mjs (146.321ms)
+PASS chunky painted normals: chunk-flat, tiling, mesh perturb w/o moving vertices, World top variation {"sameInChunk":0.937,"worldTopStd":0.105,"audit":[[9,0.101,17.9],[16,0.106,18.1],[25,0.134,18.5],[36,0.136,18.8]]}
+✔ townscaper-web/REACodeRefactoring/tests/paint-normal.mjs (114.78225ms)
+PASS SpriteAtlas bounded grow/update/free/padding/rollback; 15 differential radial layouts match original
+✔ townscaper-web/REACodeRefactoring/tests/sprite-atlas.mjs (74.472791ms)
+PASS analytic linear/no-drag parity, thin-scene collision without tunneling at30/60/120Hz, quadratic convergence, budget/input guards
+✔ townscaper-web/REACodeRefactoring/tests/trajectory-trace.mjs (37.776875ms)
+PASS view-post-extras: URL/开关默认关, 渲染接管(outline 3 遍/smear 合成/直通), GLSL 拖影 = CPU smearImage, 软法线写回与还原, 风旗链式着色器
+✔ townscaper-web/REACodeRefactoring/tests/view-post-extras.mjs (102.845417ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1582.353208
+

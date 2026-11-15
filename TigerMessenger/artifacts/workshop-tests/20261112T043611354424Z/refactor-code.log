@@ -1,0 +1,27 @@
+PASS cross-leaf band reuse, stable survivors, key ownership, exact area and 9000 candidate operations
+✔ townscaper-web/REACodeRefactoring/tests/atlas-crossleaf.mjs (102.800917ms)
+PASS 24000 dynamic operations, stale/foreign handles, area conservation, disjoint stable slots, explicit fragmentation and 6000-depth traversal
+✔ townscaper-web/REACodeRefactoring/tests/atlas.mjs (1617.34475ms)
+PASS 自定义 mip：线性空间平均、远处收敛 / sharp 保中景、Kaiser、三线性、各向异性 {"box":{"mean1":0.214,"amp1":0,"amp4":0,"last":0.214},"linear":{"mean1":0.5,"amp1":0,"amp4":0,"last":0.5},"kaiser":{"mean1":0.5,"amp1":0.048,"amp4":0.001,"last":0.5},"sharp":{"mean1":0.5,"amp1":0,"amp4":0,"last":0.5},"stripesAmp2":{"linear":0.967,"sharp":1,"kaiser":0.695},"isoRange":0,"anisoRange":0.8}
+✔ townscaper-web/REACodeRefactoring/tests/mip-chain.mjs (51.427667ms)
+PASS migrated ground consumer: LOD active, reduced far energy/shimmer, repeat addressing, immutable source, bounded inputs [{"filter":"linear","mode":"none","meanAbsDelta":5.061217948717949},{"filter":"linear","mode":"trilinear","meanAbsDelta":0.0011217948717948717},{"filter":"linear","mode":"aniso","meanAbsDelta":0.023397435897435898}]
+✔ townscaper-web/REACodeRefactoring/tests/mip-ground.mjs (133.015708ms)
+PASS mapped normal source and threshold toggles, exception-safe material/visibility/render-target restoration, texture ownership
+✔ townscaper-web/REACodeRefactoring/tests/outline-painted.mjs (109.042042ms)
+PASS CPU 参考：剪影/折痕/平面无线、depthMix=0 只留法线反差、外圈淡出、线宽×DPR；GPU 类 uniform 换算（未做浏览器渲染） {"width1":6,"width2":12}
+✔ townscaper-web/REACodeRefactoring/tests/outline-pass.mjs (123.944959ms)
+PASS chunky painted normals: chunk-flat, tiling, mesh perturb w/o moving vertices, World top variation {"sameInChunk":0.937,"worldTopStd":0.105,"audit":[[9,0.101,17.9],[16,0.106,18.1],[25,0.134,18.5],[36,0.136,18.8]]}
+✔ townscaper-web/REACodeRefactoring/tests/paint-normal.mjs (91.612667ms)
+PASS SpriteAtlas bounded grow/update/free/padding/rollback; 15 differential radial layouts match original
+✔ townscaper-web/REACodeRefactoring/tests/sprite-atlas.mjs (62.412833ms)
+PASS view-post-extras: URL/开关默认关, 渲染接管(outline 3 遍/smear 合成/直通), GLSL 拖影 = CPU smearImage, 软法线写回与还原, 风旗链式着色器
+✔ townscaper-web/REACodeRefactoring/tests/view-post-extras.mjs (86.864708ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1623.033625
+

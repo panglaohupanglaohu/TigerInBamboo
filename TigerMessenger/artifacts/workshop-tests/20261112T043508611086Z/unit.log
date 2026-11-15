@@ -1,0 +1,141 @@
+✔ scene taxonomy groups life effects vehicles without changing execution readiness (1.226417ms)
+✔ every real scanned record has one scene category; shared algorithms stay foundational (23.248708ms)
+✔ new capability inserts after its last scene-layer node without reordering existing recipe (0.143333ms)
+✔ scanner reads real library, preserves distinct entries, never enables live execution (22.525292ms)
+✔ invalid format rejected without executing JS; malicious controls stripped (0.237208ms)
+✔ experiment restores data actual parameters and recipe; stale state cannot finalize (3.851708ms)
+✔ restore failure rolls all state back; backup quota stops before mutation (1.839709ms)
+✔ invalid snapshot parameters and codec reject before backup or scene changes (0.139667ms)
+✔ game URL defaults clean despite remembered editor state; workshop explicitly opts in (4.083625ms)
+✔ two real source-backed adapters change materials on a copy, keep actual output within color budget (3.017791ms)
+✔ all material adapters preserve manual colors by default; explicit opt-in works (0.842459ms)
+✔ verifier rejects forged locked edits and perceptual budget excess independently (0.13375ms)
+✔ reordered inputs produce identical deterministic palette results (0.537667ms)
+✔ neutral gain is a no-op, malformed params and invalid output are rejected (0.245333ms)
+✔ gamut extremes are finite and quantized output obeys the tightest budget (12.559958ms)
+✖ all 113 records accounted, duplicate histories consolidated, closure evidence retained (22.652375ms)
+✔ reordering preserves reviewed identities and states (9.715625ms)
+✔ new or changed titles never inherit a closure from clip IDs (0.318417ms)
+✖ changed evidence reopens a historical closure (0.945875ms)
+✖ missing ledger keeps every entry visible and requires review (3.424834ms)
+✔ same clip with distinct deliverables is not collapsed (0.388708ms)
+✖ superseded DDA implementation is not scheduled twice (0.247917ms)
+✔ last successful learning cache survives new reader and revalidates hashes (47.968584ms)
+✔ quota and oversized learning payload preserve previous slot (39.351583ms)
+✔ corrupt cached data rejects instead of activating an unverified offline view (8.991541ms)
+✔ synchronous storage-open denial releases the deadline timer immediately (0.266792ms)
+✔ late storage-open result closes after timeout without starting a transaction (0.170084ms)
+✔ active storage transaction aborts and closes at deadline without publishing result (0.151875ms)
+✔ parses real ARCH single quotes comments trailing commas and real JSON declarations without execution (28.265917ms)
+✔ data escapes work; execution expressions prototypes duplicates and trailing programs are rejected (0.417666ms)
+✔ bounds malformed strings comments and nesting without accepting a partial result (0.148292ms)
+✔ reorder and rename preserve comparison identity; status or lane changes are explicit revisions (8.614667ms)
+✔ new duplicates never renumber old anchors; exact ambiguous anchors are quarantined (4.871625ms)
+✔ location edits become review conflicts; genuine additions and removals are explicit without mutating source (1.36325ms)
+✔ real library comparison is idempotent; every record is indexed or explicitly conflicted (38.704667ms)
+✔ decode real seven source files as one hash-checked data value without script execution (28.329709ms)
+✔ tamper version duplicate and missing core reject; incomplete value never commits globals (42.8485ms)
+✔ optional absence explicit and accepted; supported data grammar still checks structure (24.595417ms)
+✔ video card promotes readable content title and labels rather than a source ID (0.410291ms)
+✔ review frame prefixes are removed and long descriptions stay bounded (0.162792ms)
+✔ actual REA arc sampling redistributes interiors and passes existing verifier (1.305833ms)
+✔ manual anchors, hidden and out-of-scope objects remain untouched (0.166334ms)
+✔ over-budget or blocked segment produces no unsafe edits (0.356333ms)
+✔ source ordering does not affect stable layout results (0.129292ms)
+✔ missing/manual adapters cannot masquerade as complete execution (6.929833ms)
+✔ candidate preserves geometry and setting locks; manual drift and tampering reject (0.579792ms)
+✔ candidate reloads from isolated disk and preserves current snapshot (10.511833ms)
+✔ disabled and removed capabilities restore baseline; unrelated geometry never enters settings (0.57875ms)
+✔ duplicate capabilities and invalid parameters reject (0.165541ms)
+✔ saved experiment retains independent recipe and baseline (2.507375ms)
+✔ legacy life recipe stays valid; new defaults separate weather vegetation animals smoke and fire (0.171042ms)
+✔ whole directory has exactly one reviewed row per actual code file, including HTML and tools (0.788417ms)
+✔ source identities and all claimed target paths exist; pages cannot inherit core completion (11.12475ms)
+✔ verified deliveries are explicitly scoped with execution evidence and residual gaps (0.117333ms)
+✔ immutable experiments and explicit validated final survive reload (4.658834ms)
+✔ storage failure is surfaced and duplicate plugins rejected (0.207708ms)
+✔ exact runtime version is stable after a new final; missing versions reject (0.117417ms)
+✔ actual fixed REA source executes a detached reproducible candidate with exact source revision (19.372292ms)
+✔ node target binding remains fixed and refuses another selected object or stale revision (1.603916ms)
+✔ raw leaf cards, region input and session UUID cannot masquerade as compatible canopy targets (0.160875ms)
+✔ tampered payload, algorithm identity, writeSet or params reject before execution (1.782917ms)
+✔ invalid or overbudget algorithm inputs reject, and JSON roundtrip preserves execution (4.613125ms)
+ℹ tests 62
+ℹ suites 0
+ℹ pass 58
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 153.417625
+
+✖ failing tests:
+
+test at TigerMessenger/tests/learning-backlog.test.mjs:9:1
+✖ all 113 records accounted, duplicate histories consolidated, closure evidence retained (22.652375ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  111 !== 113
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/learning-backlog.test.mjs:11:9)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 111,
+    expected: 113,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/learning-backlog.test.mjs:24:1
+✖ changed evidence reopens a historical closure (0.945875ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  0 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/learning-backlog.test.mjs:27:41)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 0,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/learning-backlog.test.mjs:29:1
+✖ missing ledger keeps every entry visible and requires review (3.424834ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  111 !== 113
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/learning-backlog.test.mjs:30:96)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 111,
+    expected: 113,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/learning-backlog.test.mjs:35:1
+✖ superseded DDA implementation is not scheduled twice (0.247917ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  2 !== 1
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/learning-backlog.test.mjs:36:102)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 2,
+    expected: 1,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
