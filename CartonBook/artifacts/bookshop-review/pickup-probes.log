@@ -1,0 +1,96 @@
+[capture] goto http://127.0.0.1:8931/TigerMessenger/?scene=messenger&autostart=1&dev=1&cartonCapture=1&timeOfDay=0.38 (via=direct, headed=false)
+[boot] { ready: false, startup: null }
+[boot] {
+  ready: false,
+  startup: {
+    version: 1,
+    status: 'loading',
+    stages: [
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object]
+    ],
+    current: '正在安排云层绕山路线…'
+  }
+}
+[capture] duke-a OK (canvas-todataurl) [object-local]
+[capture] duke-b OK (canvas-todataurl) [object-local]
+[capture] duke-c OK (canvas-todataurl) [object-local]
+[battle] {"action":"start","ok":true,"snapshot":{"saihojiLandingHold":false,"coverBombing":{"allowed":false,"passes":0,"timedOut":false},"groundAssault":{"tactics":{"shieldBlocks":0,"shieldBreaks":0,"swordSwings":0,"swordHits":0,"gunBursts":0,"friendlyFireHeld":0,"formationReplacements":0,"units":[]},"medical":{"rescued":0,"healed":0,"returned":0,"medic":{"id":"99c946ae-8c9c-475b-9252-e5697ff78fd4","visible":true,"owned":false,"phase":"dive","position":[2.2681598763370134,22.786958642562027,-0.4564211026442564],"target":null,"visibleMeshes":10},"patients":0,"carriers":[]},"ready":18,"active":true,"stage":"suppression","objective":"suppress-town-defenses-and-assault-plaza","assigned":18,"controllers":0,"heldFor":0,"deployed":0,"trooperShots":0,"trooperRobotHits":0,"residentShots":0,"residentHits":0,"residentsDown":0,"troopersDown":0,"robotKills":0,"friendlyBlastHits":0,"blastResidentHits":0,"recovered":0,"aboard":21,"rappelling":0,"ground":0,"liveProjectiles":0,"renderBatch":{"sourceMeshes":1215,"batches":45,"instances":0}},"bombRelease":null,"bombingRun":null,"phase":"assemble","age":0,"energy":100,"shield":false,"wingNodes":2,"heat":0,"target":"bookshop","cycle":1,"shots":0,"retreatReason":null,"arrival":{"distance":269.07577664975014,"altitude":40,"visible":true,"inRange":false},"safeRadius":186.84177479814247,"flagshipPosition":[-63.63542122775341,-142.20717122199832,-125.40994226218129],"members":14,"roles":["attack","attack","attack","attack","attack","guard","jammer","guard","scout","scout","scout","transport","transport","transport"],"wingDamage":0,"events":[{"phase":"assemble","time":77.80209999990464,"energy":100,"shots":0}],"blockedHits":0,"unitShots":0,"fireLog":[],"flight":{"bankDegrees":0,"attackSpeed":9,"turnLimit":0.11},"bay":{"openness":0},"arsenal":{"cannon":0,"rain":0,"ion":0,"traction":0,"robotHits":0,"robotsShattered":0,"shieldImpacts":0,"shieldAudioPlayed":0,"shieldAudioSkipped":0,"lastImpact":null,"smokeStyle":"soft-steam-sprite","activeSoftSmoke":0,"activeSteamJets":0,"factoriesStopped":0,"robotsBlinking":0,"activeIon":false,"activeEffects":0,"pendingProjectiles":0},"beamActive":false,"types":["moebius-aircraft","moebius-aircraft","moebius-aircraft","moebius-aircraft","moebius-aircraft","gate-pod-escort-pod-55-2","gate-pod-escort-pod-41-7","gate-pod-escort-pod-08-9","triple-gate-scout-aircraft","triple-gate-scout-aircraft","triple-gate-scout-aircraft","vanguard-hauler-0","vanguard-hauler-1","vanguard-hauler-2"],"route":[{"id":"bookshop","label":"书店镇"},{"id":"apostles","label":"十二门徒"},{"id":"citadel","label":"高山圣城"},{"id":"old-port","label":"旧港湾"},{"id":"swamp","label":"湖沼"},{"id":"moon-lake","label":"月湖"},{"id":"gate","label":"叹息之门"}],"completedTargets":[],"campaignFinished":false,"objectsReused":["036b92d8-f123-4ffc-80b3-86a5ba16fbaf","106fe785-0cf7-474f-a08d-a941dc7cf776","faa01699-7b4d-4001-a5f7-b4edcffd3729","4a250e0d-2d83-4ba4-a916-3d328d54b816","728a1469-89c2-4191-8efc-cfe29029fd95","638638ea-ce7b-4092-8d53-ff5af4d9e4a6","b9ee0cc2-5850-49fb-95c4-d9f4a38cf4d5","04f1969e-a485-4cfe-b4ea-b0d3dc0ce0c9","3d6efb5f-5e56-4f66-8ee9-e822e9ae3ecd","b1d350fc-b923-4824-9cdf-d315660cb90f","ad057b95-1c53-4f43-bea9-64678661b8a9","2b68b22e-a416-4acc-9ff9-e7f3a5e6b97b","4da3fe31-fb16-44f2-9cd0-f91b5bdb96aa","a77d8d51-054e-439f-8e43-7639d67e5f9b"]}}
+[capture] robot-a OK (canvas-todataurl) [object-local]
+[capture] robot-b OK (canvas-todataurl) [object-local]
+{
+  "mode": "live",
+  "realCapture": true,
+  "shots": [
+    {
+      "id": "duke-a",
+      "ok": true,
+      "quality": {
+        "ok": true,
+        "blank": false,
+        "mean": 142.6,
+        "deviation": 33.29,
+        "darkRatio": 0
+      }
+    },
+    {
+      "id": "duke-b",
+      "ok": true,
+      "quality": {
+        "ok": true,
+        "blank": false,
+        "mean": 166.39,
+        "deviation": 42.2,
+        "darkRatio": 0
+      }
+    },
+    {
+      "id": "duke-c",
+      "ok": true,
+      "quality": {
+        "ok": true,
+        "blank": false,
+        "mean": 138.78,
+        "deviation": 38.45,
+        "darkRatio": 0
+      }
+    },
+    {
+      "id": "robot-a",
+      "ok": true,
+      "quality": {
+        "ok": true,
+        "blank": false,
+        "mean": 143.61,
+        "deviation": 65.06,
+        "darkRatio": 0
+      }
+    },
+    {
+      "id": "robot-b",
+      "ok": true,
+      "quality": {
+        "ok": true,
+        "blank": false,
+        "mean": 153.63,
+        "deviation": 61.57,
+        "darkRatio": 0
+      }
+    }
+  ]
+}

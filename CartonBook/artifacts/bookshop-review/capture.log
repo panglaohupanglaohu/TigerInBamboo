@@ -1,0 +1,86 @@
+[cartonbook] recipe=/Users/panglaohu/Downloads/TigerInBamboo/CartonBook/recipes/bookshop-letter.sample.json
+[cartonbook] chapterDir=/Users/panglaohu/Downloads/TigerInBamboo/CartonBook/chapters/bookshop-letter
+[cartonbook] command=run
+[ok] plan → /Users/panglaohu/Downloads/TigerInBamboo/CartonBook/chapters/bookshop-letter/plan.json
+[capture] goto http://127.0.0.1:8931/TigerMessenger/?scene=messenger&autostart=1&dev=1&cartonCapture=1&timeOfDay=0.38 (via=direct, headed=false)
+[boot] { ready: false, startup: null }
+[boot] {
+  ready: false,
+  startup: {
+    version: 1,
+    status: 'loading',
+    stages: [
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object],
+      [Object]
+    ],
+    current: '正在安排云层绕山路线…'
+  }
+}
+[boot] {
+  ready: true,
+  startup: {
+    version: 1,
+    status: 'ready',
+    stages: [
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object], [Object], [Object],
+      [Object], [Object], [Object], [Object],
+      ... 26 more items
+    ],
+    current: null
+  }
+}
+[capture] cover OK (canvas-todataurl) [object-local]
+[capture] s01 OK (canvas-todataurl) [object-local]
+[capture] s02 OK (canvas-todataurl) [object-local]
+[capture] s03 OK (canvas-todataurl) [object-local]
+[capture] s04 OK (canvas-todataurl) [object-local]
+[battle] {"action":"start","ok":true,"snapshot":{"saihojiLandingHold":false,"coverBombing":{"allowed":false,"passes":0,"timedOut":false},"groundAssault":{"tactics":{"shieldBlocks":0,"shieldBreaks":0,"swordSwings":0,"swordHits":0,"gunBursts":0,"friendlyFireHeld":0,"formationReplacements":0,"units":[]},"medical":{"rescued":0,"healed":0,"returned":0,"medic":{"id":"e9a223ac-39a6-490a-b883-c9d3064b67ac","visible":true,"owned":false,"phase":"surface","position":[12.877890581939521,24.130387610727016,1.2250401252006062],"target":null,"visibleMeshes":10},"patients":0,"carriers":[]},"ready":18,"active":true,"stage":"suppression","objective":"suppress-town-defenses-and-assault-plaza","assigned":18,"controllers":0,"heldFor":0,"deployed":0,"trooperShots":0,"trooperRobotHits":0,"residentShots":0,"residentHits":0,"residentsDown":0,"troopersDown":0,"robotKills":0,"friendlyBlastHits":0,"blastResidentHits":0,"recovered":0,"aboard":21,"rappelling":0,"ground":0,"liveProjectiles":0,"renderBatch":{"sourceMeshes":1215,"batches":45,"instances":0}},"bombRelease":null,"bombingRun":null,"phase":"assemble","age":0,"energy":100,"shield":false,"wingNodes":2,"heat":0,"target":"bookshop","cycle":1,"shots":0,"retreatReason":null,"arrival":{"distance":273.64946406109306,"altitude":40,"visible":true,"inRange":false},"safeRadius":187.1177644896641,"flagshipPosition":[-58.00068604351859,-141.25796733505535,-129.15923150456425],"members":14,"roles":["attack","attack","attack","attack","attack","guard","jammer","guard","scout","scout","scout","transport","transport","transport"],"wingDamage":0,"events":[{"phase":"assemble","time":97.25290000009537,"energy":100,"shots":0}],"blockedHits":0,"unitShots":0,"fireLog":[],"flight":{"bankDegrees":0,"attackSpeed":9,"turnLimit":0.11},"bay":{"openness":0},"arsenal":{"cannon":0,"rain":0,"ion":0,"traction":0,"robotHits":0,"robotsShattered":0,"shieldImpacts":0,"shieldAudioPlayed":0,"shieldAudioSkipped":0,"lastImpact":null,"smokeStyle":"soft-steam-sprite","activeSoftSmoke":0,"activeSteamJets":0,"factoriesStopped":0,"robotsBlinking":0,"activeIon":false,"activeEffects":0,"pendingProjectiles":0},"beamActive":false,"types":["moebius-aircraft","moebius-aircraft","moebius-aircraft","moebius-aircraft","moebius-aircraft","gate-pod-escort-pod-55-2","gate-pod-escort-pod-41-7","gate-pod-escort-pod-08-9","triple-gate-scout-aircraft","triple-gate-scout-aircraft","triple-gate-scout-aircraft","vanguard-hauler-0","vanguard-hauler-1","vanguard-hauler-2"],"route":[{"id":"bookshop","label":"书店镇"},{"id":"apostles","label":"十二门徒"},{"id":"citadel","label":"高山圣城"},{"id":"old-port","label":"旧港湾"},{"id":"swamp","label":"湖沼"},{"id":"moon-lake","label":"月湖"},{"id":"gate","label":"叹息之门"}],"completedTargets":[],"campaignFinished":false,"objectsReused":["541f1bc7-c9f3-4522-8ea9-08846ec0fa84","043a3c2a-ecf7-4ae3-a920-6fb5a7efa1ce","c46ef3a1-f5c1-4477-b2e4-d96e105469fa","cace5eca-425b-417e-a1bf-ab4a93335bae","8905e275-02fe-4600-b5c5-d2c3055c15ba","15ea9d1c-ace1-424a-ac3f-ec1e983f4dc0","b34fa140-e6b4-46c0-bd59-442959bf5fe4","457b18df-c2eb-432e-aecf-fbaf22f7bf20","bccf971f-2483-410c-b6a2-d60d0208b383","af7766d9-d2c4-45ad-a3e0-9f0b3f1c300e","5dbf1f35-2e2f-4e80-b009-159eed4439c5","89f2e096-b290-4be5-980e-dc1566b1638a","274889d6-f361-44a7-aa6f-1aeed0092141","9d63b687-c60a-4461-b22b-acc630060911"]}}
+[capture] s05 OK (canvas-todataurl) [object-local]
+[capture] s06 OK (canvas-todataurl) [object-local]
+[capture] s07 OK (canvas-todataurl) [object-local]
+[capture] s08 OK (canvas-todataurl) [object-local]
+[capture] s09 OK (canvas-todataurl) [object-local]
+[capture] s10 OK (canvas-todataurl) [object-local]
+[capture] s11 OK (canvas-todataurl) [object-local]
+[capture] s12 OK (canvas-todataurl) [object-local]
+[capture] s13 OK (canvas-todataurl) [object-local]
+[battle] {"action":"retreat","ok":true,"snapshot":{"saihojiLandingHold":false,"coverBombing":{"allowed":false,"passes":0,"timedOut":false},"groundAssault":{"tactics":{"shieldBlocks":0,"shieldBreaks":0,"swordSwings":0,"swordHits":0,"gunBursts":0,"friendlyFireHeld":0,"formationReplacements":0,"units":[]},"medical":{"rescued":0,"healed":0,"returned":0,"medic":{"id":"e9a223ac-39a6-490a-b883-c9d3064b67ac","visible":true,"owned":false,"phase":"dive","position":[0.5555096665971,22.645749888204154,4.847669949140924],"target":null,"visibleMeshes":10},"patients":0,"carriers":[]},"ready":18,"active":true,"stage":"suppression","objective":"suppress-town-defenses-and-assault-plaza","assigned":18,"controllers":0,"heldFor":0,"deployed":0,"trooperShots":0,"trooperRobotHits":0,"residentShots":0,"residentHits":0,"residentsDown":0,"troopersDown":0,"robotKills":0,"friendlyBlastHits":0,"blastResidentHits":0,"recovered":0,"aboard":21,"rappelling":0,"ground":0,"liveProjectiles":0,"renderBatch":{"sourceMeshes":1215,"batches":45,"instances":0}},"bombRelease":{"time":128.85440000009538,"miss":9.9310380334755,"flightTime":2.8429215088042383,"leadDistance":26.525706992864492,"predicted":[-30.826723565241764,-113.28758968988618,117.4164945930664],"stripCentre":[-24.197956241066585,-92.34528437222681,135.68204512008205],"releaseTarget":[-28.60150961002591,-106.30202818966329,124.11544001771746],"position":[-45.978592207800716,-165.22739625569102,127.48106951933785]},"bombingRun":null,"phase":"withdraw","age":0,"energy":83.2666779999399,"shield":true,"wingNodes":2,"heat":3.808279999923706,"target":"bookshop","cycle":1,"shots":5,"retreatReason":"command","arrival":{"distance":61.65488988384669,"altitude":46.71398473357755,"visible":true,"inRange":true},"safeRadius":187.1177644896641,"flagshipPosition":[-39.56159986781417,-144.72149632312983,142.2014057677596],"members":14,"roles":["attack","attack","attack","attack","attack","guard","jammer","guard","scout","scout","scout","transport","transport","transport"],"wingDamage":0,"events":[{"phase":"assemble","time":97.25290000009537,"energy":100,"shots":0},{"phase":"transit","time":110.37330000019074,"energy":100,"shots":0},{"phase":"blockade","time":120.76640000009537,"energy":99.12,"shots":0},{"phase":"withdraw","time":131.77180000019075,"energy":83.27,"shots":5}],"blockedHits":7,"unitShots":3,"fireLog":[{"time":120.8515,"type":"ion","role":"scout","source":"triple-gate-scout-aircraft","point":[-24.776295057487975,-94.18998400485191,134.3118450858843]},{"time":125.7432000000477,"type":"ion","role":"flagship","source":"crystal-city-colossus","point":[-24.776295057487975,-94.18998400485191,134.3118450858843]},{"time":125.7432000000477,"type":"ion","role":"scout","source":"triple-gate-scout-aircraft","point":[-24.776295057487975,-94.18998400485191,134.3118450858843]},{"time":128.85440000009538,"type":"rain","role":"flagship","source":"crystal-city-colossus","point":[-24.197956241066585,-92.34528437222681,135.68204512008205]},{"time":129.04030000019074,"type":"ion","role":"scout","source":"triple-gate-scout-aircraft","point":[-57.89797332507566,-111.14832622982806,108.70229371137847]}],"flight":{"bankDegrees":1.3701699632082502e-12,"attackSpeed":9,"turnLimit":0.11},"bay":{"openness":1},"arsenal":{"cannon":0,"rain":1,"ion":4,"traction":0,"robotHits":4,"robotsShattered":0,"shieldImpacts":7,"shieldAudioPlayed":0,"shieldAudioSkipped":7,"lastImpact":{"point":[-57.89797332507566,-111.14832622982806,108.70229371137847],"type":"ion","age":2.606500000238419},"smokeStyle":"soft-steam-sprite","activeSoftSmoke":9,"activeSteamJets":14,"factoriesStopped":3,"robotsBlinking":2,"activeIon":true,"activeEffects":154,"pendingProjectiles":5},"beamActive":true,"types":["moebius-aircraft","moebius-aircraft","moebius-aircraft","moebius-aircraft","moebius-aircraft","gate-pod-escort-pod-55-2","gate-pod-escort-pod-41-7","gate-pod-escort-pod-08-9","triple-gate-scout-aircraft","triple-gate-scout-aircraft","triple-gate-scout-aircraft","vanguard-hauler-0","vanguard-hauler-1","vanguard-hauler-2"],"route":[{"id":"bookshop","label":"书店镇"},{"id":"apostles","label":"十二门徒"},{"id":"citadel","label":"高山圣城"},{"id":"old-port","label":"旧港湾"},{"id":"swamp","label":"湖沼"},{"id":"moon-lake","label":"月湖"},{"id":"gate","label":"叹息之门"}],"completedTargets":[],"campaignFinished":false,"objectsReused":["541f1bc7-c9f3-4522-8ea9-08846ec0fa84","043a3c2a-ecf7-4ae3-a920-6fb5a7efa1ce","c46ef3a1-f5c1-4477-b2e4-d96e105469fa","cace5eca-425b-417e-a1bf-ab4a93335bae","8905e275-02fe-4600-b5c5-d2c3055c15ba","15ea9d1c-ace1-424a-ac3f-ec1e983f4dc0","b34fa140-e6b4-46c0-bd59-442959bf5fe4","457b18df-c2eb-432e-aecf-fbaf22f7bf20","bccf971f-2483-410c-b6a2-d60d0208b383","af7766d9-d2c4-45ad-a3e0-9f0b3f1c300e","5dbf1f35-2e2f-4e80-b009-159eed4439c5","89f2e096-b290-4be5-980e-dc1566b1638a","274889d6-f361-44a7-aa6f-1aeed0092141","9d63b687-c60a-4461-b22b-acc630060911"]}}
+[capture] s14 OK (canvas-todataurl) [object-local]
+[capture] s15 OK (canvas-todataurl) [object-local]
+[ok] capture realCapture=true mode=live
+[ok] layout: cover.html, page-01.html, page-02.html, page-03.html, page-04.html, page-05.html
+[ok] book → /Users/panglaohu/Downloads/TigerInBamboo/CartonBook/chapters/bookshop-letter/book.html
+
+打开: /Users/panglaohu/Downloads/TigerInBamboo/CartonBook/chapters/bookshop-letter/book.html 
+viewer: /Users/panglaohu/Downloads/TigerInBamboo/CartonBook/viewer/index.html
+
+截屏真实性: realCapture=true mode=live
