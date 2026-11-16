@@ -247,10 +247,10 @@ window.LEARN = {
       "topic": "fx",
       "project": "badnorth",
       "status": "partial",
-      "where": "src/badnorth/ground-stain.js · battle-c01.js#stainStep · tests/stain-joint-curve-browser.cjs",
-      "note": "514帧全核（sheet-00 0000-0099）；地面斑并入同一时间轴，新增 stain-joint-curve-browser 12/12：685帧采样、台阶 0.05s→0.25/3.56s→0.44/11.4s→1.00 零回落、渲染乘性特征 R 差0/G−13/B−9、地面(r−g) 5→15 单调；缺 badnorth 火光探针，火先起断言暂跳过",
+      "where": "src/badnorth/battle-c01.js#fireGlow · tests/stain-joint-curve-browser.cjs · src/badnorth/ground-stain.js",
+      "note": "514帧全核（sheet-00）+ 本轮接通火光探针：battle-c01#fireGlow 末尾暴露 fireStats（只读 glows，不改渲染），stain-joint 联合曲线 13/13（火光 max 2.993、火光 0s 起而地面 0.017s 起，时差≤0.02s 同帧）；回归 battle-c01 PASS / ground-stain 12/12；仅剩爆燃三层高度在曲线上测不到",
       "decodedFrames": 514,
-      "reviewEvidence": "artifacts/coverage/837027901853810688-review-r101.md",
+      "reviewEvidence": "artifacts/coverage/837027901853810688-review-r102.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -263,9 +263,9 @@ window.LEARN = {
           83,
           99
         ],
-        "implementationVerified": false,
+        "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "地面红棕斑 × 火光联合曲线"
+        "acceptanceScope": "地面红棕斑 × 火光联合曲线（含探针）"
       }
     },
     {
@@ -1514,12 +1514,12 @@ window.LEARN = {
       "date": "2023-11-14",
       "text": "Ok, here's a small example. The button toggles a ScriptableObject bool. The FloatSelectNode component listens to that ScriptableObject, and then a series of node-like components end up moving a piece of UI",
       "topic": "tools",
-      "status": "partial",
-      "where": "src/core/node-graph-runtime.js · node-graph.html",
-      "note": "134帧全核（sheet-00/01 两页）；本轮补齐序列化：serialize/fromJSON/NODE_REGISTRY，导出含节点type+params+连线+lerp当前值（往返后位置-202.9不跳回、90帧轨迹逐帧一致差<1e-9）；sink 上次值移入 state 避免载入误触发；页面新增只读连线图（7框6线、框内实时值）与导出/载入；仍缺可拖拽的真实节点编辑器；【卡点·A 机制未做】仍缺可拖拽的真实节点编辑器 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "src/core/node-graph-editor.js · src/ui/node-graph-editor.js · node-editor.html（对照 node-graph.html）",
+      "note": "134帧全核（sheet-00/01 两页）；缺口清空——可拖拽节点编辑器（node-editor.html + src/core/node-graph-editor.js + src/ui/node-graph-editor.js）此前只验过序列化与只读连线图，本轮补出真鼠标运行验收：拖 compose (480,240)→(520,300) 且过程跟手、undo/redo 回位；点连线 6→5、拖 compose:out→sink:in 接回 6 边；bool→number 被拒且快照逐字节不变；speed 20→40 后 tick(0.25) 走 10、tick(100) 停在 -33.8；导出/载入含布局回放；7 节点 6 边 13 端口，页面 0 console 错误",
       "project": "next",
       "decodedFrames": 134,
-      "reviewEvidence": "artifacts/coverage/1724449858369568780-review-r61.md",
+      "reviewEvidence": "artifacts/coverage/1724449858369568780-review-r111.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -1529,14 +1529,13 @@ window.LEARN = {
         ],
         "nativeRevisits": [
           1,
-          20,
-          50,
-          90,
+          30,
+          72,
           133
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "节点图序列化往返 + 只读连线图"
+        "acceptanceScope": "可拖拽节点编辑器：拖动/拖线接线/点线删除/参数驱动运行图/撤销重做/导出载入含布局"
       }
     },
     {
@@ -1655,12 +1654,12 @@ window.LEARN = {
       "date": "2023-09-28",
       "text": "And here's a couple more being generated",
       "topic": "show",
-      "status": "partial",
-      "where": "src/terrain/shrub-band.js · meshwriter.bandTri · terrainmesh.js:236 · shrub-band-peredge-browser.cjs",
-      "note": "600帧全核（sheet-00 0000-0099 + 4× 裁切）；逐三角带宽机制在位，本轮同口径重测：P50 4px 对上原片 4-6px，P90 10px vs 原片 14-18px 差一档→SHRUB_BAND.max 上沿偏低但机位不可比未改常数；splitCells 边缘带走向仍未对照",
+      "status": "done",
+      "where": "src/terrain/shrub-band.js · src/terrain/terrainmesh.js:236 · src/core/meshwriter.js:216 · terrain 场景 640×640 同机位（tests/shrub-band-scale-browser.cjs）",
+      "note": "600帧全核（sheet-00…05 本轮 6/6 全看）；逐三角带宽机制在位；同机位标定与 1707490932017279035 同源（本仓 P90/apothem 0.154 vs 原片 0.138，差 11% 且本仓偏厚）→ SHRUB_BAND.max 维持 1.36 不改；splitCells 为过期名词（全仓零命中），真实 triC 扇 + edgeTri 已用线框截图核对，带子外沿落在外圈顶点",
       "project": "next",
       "decodedFrames": 600,
-      "reviewEvidence": "artifacts/coverage/1707497006640365880-review-r101.md",
+      "reviewEvidence": "artifacts/coverage/1707497006640365880-review-r105.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -1669,11 +1668,15 @@ window.LEARN = {
           599
         ],
         "nativeRevisits": [
-          0
+          1,
+          100,
+          300,
+          450,
+          599
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "灌木逐三角带宽（per-triangle aBand）"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "灌木逐三角带宽（per-triangle aBand）+ 同机位 P90 标定"
       }
     },
     {
@@ -1681,12 +1684,12 @@ window.LEARN = {
       "date": "2023-09-28",
       "text": "They are of course 100% texture, painted onto a fairly low, poly mesh. I keep thinking I'm gonna need to give em some volume with billboard sprites, but now I'm not so sure anymore. Especially with the lil' shadows, they look quite volumetric as they are.",
       "topic": "light",
-      "status": "partial",
-      "where": "src/terrain/shrub-band.js · meshwriter.bandTri · terrainmesh.js:236",
-      "note": "257帧全核（sheet-00 0000-0099）；特写里橙斑在相邻三角上 22/12/7px 依次换档、边界两侧各自恒定，机制确认；本片 salmon 13.17%/P90 22px 是更近特写，不能直推倍率上沿",
+      "status": "done",
+      "where": "src/terrain/shrub-band.js · src/terrain/shrub-texture.js:41 · terrain 场景 640×640 同机位（tests/shrub-band-scale-browser.cjs）",
+      "note": "257帧全核（sheet-00/01/02 本轮重看 + frame-0150 6× 裁切）；逐三角带宽机制在位；同机位标定完成：本仓 apothem 130.09px 下 P90 20px / 原片 frame-0150 apothem≈130px 下 P90 18px，比值 0.154 vs 0.138（差 11%、本仓偏厚），SHRUB_BAND.max 维持 1.36；splitCells 全仓零命中（过期名词），真实三角化已用线框核过",
       "project": "next",
       "decodedFrames": 257,
-      "reviewEvidence": "artifacts/coverage/1707490932017279035-review-r101.md",
+      "reviewEvidence": "artifacts/coverage/1707490932017279035-review-r105.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -1695,11 +1698,15 @@ window.LEARN = {
           256
         ],
         "nativeRevisits": [
-          0
+          1,
+          120,
+          150,
+          205,
+          256
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "灌木逐三角带宽（per-triangle aBand）"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "灌木逐三角带宽（per-triangle aBand）+ 同机位 P90 标定"
       }
     },
     {
@@ -1973,12 +1980,12 @@ window.LEARN = {
       "date": "2023-06-22",
       "text": "Hmm.. I thought it was gonna be too wacky but maybe it's kinda cool",
       "topic": "show",
-      "status": "partial",
+      "status": "done",
       "where": "src/core/terrain-burial.js · terrain-stages.html",
-      "note": "246帧全核（原判na有误）；抬地面吞建筑的体素规则已落地（terrain-burial.js + terrain-stages.html 掩埋栏），peeking 3/吞12层；缺墙裙残留与悬檐联动；【卡点·A 机制未做】缺墙裙残留与悬檐联动 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "note": "246帧全核；抬地面吞建筑的规则之外补齐了剩余两条缺口：崖面墙裙残留（cliffSkirt：台账×只剩屋顶×崖面，ground-0.34 内缩 0.08）与悬檐联动（每面配一个 ground..ground+0.45、再缩进 0.17 的檐下暗带，bands 与 notches 一一对应）；页面 #bury 按深度顺序画墙裙+暗带并暴露 skirt()；无剩余缺口",
       "project": "next",
       "decodedFrames": 246,
-      "reviewEvidence": "artifacts/coverage/1671840905957978113-review.md",
+      "reviewEvidence": "artifacts/coverage/1671840905957978113-review-r106.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -1993,7 +2000,7 @@ window.LEARN = {
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "地表抬升掩埋建筑"
+        "acceptanceScope": "地表掩埋 + 崖面墙裙残留 + 悬檐联动（World 体素 + 页面像素验收）"
       }
     },
     {
@@ -2292,12 +2299,12 @@ window.LEARN = {
       "date": "2023-05-05",
       "text": "An quaint island being procedurally generated",
       "topic": "terrain",
-      "status": "partial",
-      "where": "src/terrain/pipeline-stages.js · terrain-stages.html",
-      "note": "343帧全核；增量Delaunay三角化+抬升+灰模+上色四段已落地（pipeline-stages.js + terrain-stages.html）；缺AO软阴与生成后地形微调，非视觉等价；【卡点·A 机制未做】缺AO软阴与生成后地形微调，非视觉等价 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "src/terrain/pipeline-stages.js · src/terrain/clay-ao.js · terrain-stages.html",
+      "note": "343帧全核；两条剩余缺口补齐：灰模AO与软阴（新模块 src/terrain/clay-ao.js：vertexAO 半径2.6距离加权、sunShadow 沿太阳方向步进返回被挡比例→渐变压暗、shadeFactor 合成 + 下限0.34；页面可A/B，AO 0.612–1.000/97档）与生成后地形微调（tweakTerrain 余弦falloff 只改高度不重铺拓扑 + terraceArea，台地 202.1→210.1、两次微调单调）；无剩余缺口，表现层差异（Unity实时拾取 vs canvas等距）不计为机制缺口",
       "project": "next",
       "decodedFrames": 343,
-      "reviewEvidence": "artifacts/coverage/1654401054828638214-review.md",
+      "reviewEvidence": "artifacts/coverage/1654401054828638214-review-r106.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -2307,13 +2314,13 @@ window.LEARN = {
         ],
         "nativeRevisits": [
           1,
-          90,
-          229,
-          343
+          150,
+          200,
+          260
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "岛屿生成分阶段"
+        "acceptanceScope": "灰模 AO+软阴（顶点遮蔽场 + 太阳方向软阴影）与生成后台地微调（含页面 A/B 与像素验收）"
       }
     },
     {
@@ -3051,12 +3058,12 @@ window.LEARN = {
       "date": "2021-10-12",
       "text": "Imma talk about my new island generator at Sweden Game Conference (@SwedenGameArena) on Friday (no idea if its gonna be recorded). Naturally, I'm preparing by implementing some nice timing and visualization.",
       "topic": "terrain",
-      "status": "partial",
-      "where": "src/core/stroke-reveal.js · stroke-reveal.html · src/ui/walkthrough.js",
-      "note": "952帧全核；4轮循环=管线各阶段错峰逐笔画：三角剖分帐篷(顶点竖棒)→密集顶点阵→逐笔线稿→三角共享边线网→等高线→着色岛；本轮新增stroke-reveal.js(错峰+弧长裁剪)与stroke-reveal.html并跑通两测；仍缺顶点竖棒层、线网层、walkthrough自动计时推进、每轮换岛；【卡点·A 机制未做】仍缺顶点竖棒层、线网层、walkthrough自动计时推进、每轮换岛 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "island-stages-c09.html?mode=talk · src/terrain/island-viz-c09.js · src/core/stroke-reveal-c09.js(createLayerTimeline/roundSeed) · src/terrain/pipeline-stages.js",
+      "note": "952帧全核；核实为「已实现缺验收」（第五次过期缺口标签）：r56 C09 的 island-stages-c09.html?mode=talk 六层 tent→lattice→strokes→net→contour→color 全在——帐篷层超级三角形竖棒边 29/25/24/27、共享边线网 114 笔由稀到密（墨迹 4083→32758）、逐笔线稿墨迹 395→33217 单调、createLayerTimeline 自动推进（4.4s 内 lattice→strokes）、roundSeed 每轮换岛（55447/60185/64923/69661）；walkthrough 的自动计时推进在 src/ui/walkthrough.js 的 auto() 早已有；新测 tests/island-stages-talk-browser.cjs 全通过",
       "project": "next",
       "decodedFrames": 952,
-      "reviewEvidence": "artifacts/coverage/1448039167057879048-review.md",
+      "reviewEvidence": "artifacts/coverage/1448039167057879048-review-r108.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -3065,11 +3072,14 @@ window.LEARN = {
           951
         ],
         "nativeRevisits": [
+          1,
+          10,
+          410,
           910
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "逐笔描出+错峰计时（顶点竖棒与线网层未实现）"
+        "acceptanceScope": "六层错峰计时（帐篷竖棒/顶点阵/逐笔线稿/共享边线网/等高线/着色）+ 4 轮换岛 + 自动推进"
       }
     },
     {
@@ -3164,12 +3174,12 @@ window.LEARN = {
       "date": "2021-10-11",
       "text": "I regret to inform you that I've relapsed into procedural island generation",
       "topic": "terrain",
-      "status": "partial",
-      "where": "src/terrain/generate.js · src/core/contour.js",
-      "note": "565帧全核；44s循环showreel：彩色岛（暗岩块+蓝河网+岩柱）↔切黑后白线逐笔累积成岛轮廓，每轮岛形态不同=连续程序化生成；本仓generate.js只单次生成、无连续换岛演示页，线稿层stroke-reveal.js已落地但未接地形管线；【卡点·A 机制未做】本仓generate.js只单次生成、无连续换岛演示页，线稿层stroke-reveal.js已落地但未接地形管线 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "island-build-c09.html?mode=reel · src/world/build-reel-c09.js(REEL_PRESETS.reel) · src/terrain/terrain-strokes-c09.js(surfaceSegments) · src/core/stroke-reveal-c09.js(createStrokeReveal3D) · src/world/scenes.js(buildScene 换种子)",
+      "note": "565帧全核；核实为「已实现缺验收」：r56 C09 的 island-build-c09.html?mode=reel + src/world/build-reel-c09.js 的 REEL_PRESETS.reel（colorFirst 先彩色岛再切黑画线、seeds 5/9/17/31 四轮各出不同岛——线段数 4513/3634/3940/2850 全不同、着色段 worldVisible 且 drawn=0、线稿段 47→3634 段逐笔累积、第 5 轮回卷到 seed 5、自动播放自己跨阶段）；新测 tests/island-build-reel-browser.cjs 全通过",
       "project": "next",
       "decodedFrames": 565,
-      "reviewEvidence": "artifacts/coverage/1447483550257799171-review.md",
+      "reviewEvidence": "artifacts/coverage/1447483550257799171-review-r108.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -3178,11 +3188,14 @@ window.LEARN = {
           564
         ],
         "nativeRevisits": [
-          405
+          1,
+          405,
+          258,
+          273
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "岛生成与线稿描出判读，未改代码"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "连续换岛 showreel：着色岛↔黑底白线逐笔累积，4 轮 4 岛循环，自动播放"
       }
     },
     {
@@ -3190,12 +3203,12 @@ window.LEARN = {
       "date": "2021-08-24",
       "text": "Plus you can change the in-game textures now! So I guess the game is now (in the most liberal use of the word) \"moddable\"",
       "topic": "texture",
-      "status": "partial",
-      "where": "src/core/palette.js · src/build/buildings.js（无 surface 图集）",
-      "note": "279帧全核；判出真机制：全城建筑共用一张总贴图 TownColor.png（PS 标题栏 200% Layer0 RGB/8 证实），改这张图即整城换肤（0207后墙面屋顶全变蓝涂鸦）；本仓建筑走逐面调色板顶点色，无共享 surface 图集与运行时热替换；【卡点·B 美术资产】本仓建筑走逐面调色板顶点色，无共享 surface 图集与运行时热替换 → 卡在原片美术资产（贴图/模型/动画/UI 稿），没有源素材，程序化只能近似",
+      "status": "done",
+      "where": "src/core/town-skin.js · src/world/town-skin-layer.js · src/world/view-c07.js（townskin）· index.html?c07=townskin",
+      "note": "279帧全核；核实为已实现缺验收：src/core/town-skin.js（128² 总图集/60 色格/格均色=底板/scribble）+ src/world/town-skin-layer.js（aC07Cell+aC07Ratio 顶点属性、scribble/paint/loadImage/toPNG 热替换、植物 leafSurface 同图）+ view-c07 townskin 开关；本轮补运行验收 tests/c07-skin-decal-browser.cjs —— 36555 顶点全 skinned/26 色格/mismatch 0，写一笔差分 12184px，热替换整张 PNG 差分 58909px 且平均色转向洋红[69.2,58.9,89.3]，植物读同图 true，toPNG 可导出",
       "project": "townscaper",
       "decodedFrames": 279,
-      "reviewEvidence": "artifacts/coverage/1430227487376781317-review.md",
+      "reviewEvidence": "artifacts/coverage/1430227487376781317-review-r107.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -3204,11 +3217,14 @@ window.LEARN = {
           278
         ],
         "nativeRevisits": [
-          150
+          1,
+          150,
+          207,
+          278
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "共享总贴图/热替换判读，未改代码"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "全城共用总贴图 + 运行时热替换（涂鸦/任意paint/PNG载入/导出往返）；非 PS 编辑器 UI 本身"
       }
     },
     {
@@ -3248,12 +3264,12 @@ window.LEARN = {
       "date": "2021-08-17",
       "text": "Here's a very quick technical test. Though this one is continuously adding decals, so it looks a bit like claymation or line boil. Might be softer than what I'd be going for, but it was an easy style to throw together. And obviously you'd need some padding for the seams.",
       "topic": "texture",
-      "status": "partial",
-      "where": "src/terrain/blotch-pattern.js（斑块/贴花）",
-      "note": "188帧全核；判出真机制：每帧累加方块贴花导致 line boil（贴花密集处相邻帧差分 mean 5.4→7.3），且需图集 padding；本仓斑块是逐像素 fbm 噪声、不随帧变，无贴花累加与图集 bleed，画风表达不了；【卡点·A 机制未做】本仓斑块是逐像素 fbm 噪声、不随帧变，无贴花累加与图集 bleed，画风表达不了 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "src/core/decal-accum.js（DecalAtlas/stamp/fillPadding/seamBleed）· src/world/view-c07.js（DecalBoil）· index.html?c07=decalboil",
+      "note": "188帧全核；核实为已实现缺验收：src/core/decal-accum.js 的 DecalAtlas 每帧 stamp 轴对齐方块（草顶/岩壁两张 chart，环面绕回）+ fillPadding 边距复制，src/world/view-c07.js 的 DecalBoil 每帧注入着色器并调 step；本轮补运行验收 tests/c07-skin-decal-browser.cjs —— 关贴花两帧差分 0，开贴花相邻帧 changed 20395/31149，每帧改图 499px，黄绿覆盖 3717→11862→18706 单调铺开，pad=2 且 seamBleed(0/1)=0",
       "project": "townscaper",
       "decodedFrames": 188,
-      "reviewEvidence": "artifacts/coverage/1427721874490933250-review.md",
+      "reviewEvidence": "artifacts/coverage/1427721874490933250-review-r107.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -3262,12 +3278,14 @@ window.LEARN = {
           187
         ],
         "nativeRevisits": [
-          0,
-          90
+          1,
+          40,
+          120,
+          187
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "贴花累加画风判读，未改代码"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "逐帧贴花累加(line boil)与图集 padding 接缝；非原片方块形状/密度的逐像素等价"
       }
     },
     {
@@ -4133,12 +4151,12 @@ window.LEARN = {
       "date": "2020-05-04",
       "text": "Alrighty. First 20 people to reply gets a b e t a k e y *steam on windows for now",
       "topic": "build",
-      "status": "partial",
-      "where": "src/build/buildings.js（legs 段） · architecture.html",
-      "note": "296帧全核；9秒内同一座水中建筑被反复加高/削平，露出悬空体块的钢腿支撑：竖腿+腿脚横梁与短三角撑仓内已有(buildings.js legs段)，但片中红屋右下角那根斜接到下方白屋屋脊的长斜杆本仓没有，腿也不会随下方支撑点水平偏移而内倾，高脚塔的通长腿还缺分段/接头表现；本轮未改代码；【卡点·A 机制未做】9秒内同一座水中建筑被反复加高/削平，露出悬空体块的钢腿支撑：竖腿+腿脚横梁与短三角撑仓内已有(buildings.js legs段)，但片… → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "src/build/steel-r56.js · build-r56.html?scene=steel&flags=steelFrame",
+      "note": "296帧全核；三条缺口均落地：①落点=共享角格最高实心层（不穿邻栋）②曲柄内倾腿（脚点水平内收 0.1037 到支撑格心、脚点 y=land·L、膝点+红垫块）③高腿分段（8 道系杆按簇约束求解、间隔≥2 不连层、18 个接头、Y 形短斜撑）。node tests/steel-frame-r56.mjs PASS（identical 8 / cranks 12 / ties 13）+ 新增 tests/steel-frame-browser.cjs 全过；build-r56.html?scene=steel 两视角截图已 ViewImage 核过。残差：原版 378 模块 WFC 驱动落点，本仓为本地离散规则（等价，不逐模块复原）。旧 where 的 architecture.html 是文档页、不承载钢架，已改指 steel-r56.js",
       "project": "townscaper",
       "decodedFrames": 296,
-      "reviewEvidence": "artifacts/coverage/1257213678056857600-review.md",
+      "reviewEvidence": "artifacts/coverage/1257213678056857600-review-r103.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4147,13 +4165,15 @@ window.LEARN = {
           295
         ],
         "nativeRevisits": [
+          1,
           80,
           130,
-          185
+          185,
+          295
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "悬空体块支撑腿：竖腿/腿脚三角撑已实现，长斜撑与偏移支撑缺失"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "悬空体块钢架：落点/曲柄内倾腿/系杆分段+接头；浏览器逐腿断言 + 关档消失"
       }
     },
     {
@@ -4224,12 +4244,12 @@ window.LEARN = {
       "date": "2020-03-26",
       "text": "Some moody clouds",
       "topic": "life",
-      "status": "partial",
-      "where": "src/life/vegetation.js · src/life/impostor.js · clouds.html · src/light/cloud-shadow.js",
-      "note": "489帧全核验；修复远云固定时钟，连续环带/远平面深度避免盖建筑；首页独立开关。双网格GPU/三场局部通过，原片高耸云体/层次、真实风平流仍缺。 后续迁移：可选三组逆深度角速度接实际远云，GPU读回/开关通过；云影/模糊/完整三层仍缺，不重计489帧。 本次共享近云同图集世界高度投影/首页开关GPU局部通过；水/植被/远云影/模糊未完成。；【卡点·A 机制未做】水/植被/远云影/模糊未完成。 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "src/light/cloud-shadow.js · src/world/cloud-deck-layer.js · src/world/view.js(#setupWater/reflectMaterial) · src/water/reflection.js · src/life/vegetation.js(swayMaterial) · clouds.html",
+      "note": "489帧全核（r55 全片 + r109/r112 复看）；云影四个接收端全在位：地形/建筑主材质、水面、植被（本轮补证：压顶夹具 y=+6/w=80 → quad 11838/11919px、mixed 12300/12470px 变暗，tone 0.333/0.327）、倒影（本轮新接 reflection.js 注入 CLOUD_SHADOW_GLSL + -w.y 还原取样高度 → 19223/20158px，tone 0.175）；三处 restore 均 0，反向对照（云片放回 deck 高度 y=30/w=90）变暗 0，证明 r109 的「植被差分 0」是夹具口径错不是机制缺；单位影子属遮挡贴片且本片无单位，不作缺口；原作逐层烘焙 vs 本仓射线求交为已声明近似。",
       "project": "townscaper",
       "decodedFrames": 489,
-      "reviewEvidence": "artifacts/coverage/cloud-shadow-review.md",
+      "reviewEvidence": "artifacts/coverage/1243228419162341379-review-r112.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4239,14 +4259,12 @@ window.LEARN = {
         ],
         "nativeRevisits": [
           0,
-          230,
           240,
-          250,
           488
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "近云固定轮廓投影及既有远云差速局部验收，非原作完整云景等价"
+        "acceptanceScope": "四类接收端（主材质/水面/植被/倒影）+ 远层弱档 + 开关恢复，非体积散射与逐层烘焙等价"
       }
     },
     {
@@ -4600,11 +4618,11 @@ window.LEARN = {
       "text": "For doors and windows, I use som stencil buffer shenanigans to punch holes in the zbuffer. I admit it was a bit fiddly to figure out.",
       "topic": "build",
       "status": "partial",
-      "where": "src/render/opening-punch.js · opening-punch.html",
-      "note": "390帧全核；确有机制（非贴片）：洞口写 stencil 让墙体拒绘、z-buffer 少一块，隔层空间透出且随镜头有视差；已做独立原型+三栏对照，缺墙体厚度/洞口侧壁与主管线接入；【卡点·D 需接主管线】已做独立原型+三栏对照，缺墙体厚度/洞口侧壁与主管线接入 → 卡在需要接主管线（battle.js / 共享 World 状态），单页实验验收不了",
+      "where": "src/render/opening-punch.js · opening-punch.html · tests/opening-punch-arch-browser.cjs",
+      "note": "390帧全核（本轮复看 sheet-00/01/03）；确为模板挖洞不是贴片——洞口区墙体拒绘、室内橙球透出且随镜头有视差；本轮补跨两层高拱龛的页面入口与 GPU 断言（龛高=2×楼层 1.0、rise.30、下层透出 1.0000/上层 0.9999、拱肩 2838px 泄漏 0、面积误差 0.1%、方洞那排回归 11洞口/2门不破）；仍缺 墙体厚度与洞口侧壁（墙是无限薄的面，近景无洞深）、接 buildings.js 主管线（门窗仍走 archedEntry 贴片）",
       "project": "townscaper",
       "decodedFrames": 390,
-      "reviewEvidence": "artifacts/coverage/1205422438437273601-review.md",
+      "reviewEvidence": "artifacts/coverage/1205422438437273601-review-r104.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4614,12 +4632,13 @@ window.LEARN = {
         ],
         "nativeRevisits": [
           1,
-          140,
-          300
+          60,
+          200,
+          340
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "模板挖洞 vs 贴片：11 洞口逐像素对照、洞外墙体不变、重复渲染零漂移；未接入 buildings.js，无厚度侧壁"
+        "acceptanceScope": "跨两层高拱龛：上下两层各自透出室内、拱肩（轮廓外矩形内）仍是墙；未接建筑管线、无墙厚侧壁"
       }
     },
     {
@@ -4687,11 +4706,11 @@ window.LEARN = {
       "text": "Icons!",
       "topic": "tools",
       "status": "partial",
-      "where": "src/ui/icon-toolbar.js · ui.html",
-      "note": "306帧全核验。上部四工具反复选中、白三角指示移动；原生工具条/aria单选、循环方向键跳过禁用项、跨页保持及dispose通过。下三项因本地未接命令禁用，不推断原作永久禁用；游戏语义/图稿仍缺。；【卡点·D 需接主管线】游戏语义/图稿仍缺。 → 卡在需要接主管线（battle.js / 共享 World 状态），单页实验验收不了",
+      "where": "src/ui/icon-toolbar.js + src/ui/icon-ink.js · ui.html（图标页签的等墨量对照行）",
+      "note": "306帧全核；本轮补页面入口+运行验收：ui.html 图标页签新增「等墨量对照」，DEFAULT_ICONS 的 8 个描边路径经共享工具条反解线宽，浏览器读回 8/8 内联 SVG、线宽1.55–2.45（逐个不同）、墨量离散度0.296→0.199→0.037，零 pageerror；仍缺：原作图稿与撤销/重做/退出三项的游戏语义（需接主管线）",
       "project": "townscaper",
       "decodedFrames": 306,
-      "reviewEvidence": "artifacts/coverage/icons-flair-review.md",
+      "reviewEvidence": "artifacts/coverage/1201179450668441600-review-r103.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4707,7 +4726,7 @@ window.LEARN = {
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "本地工具条交互/生命周期或共享纹饰两轨时序局部通过；非原作完整美术/游戏指令"
+        "acceptanceScope": "图标工具条选中态/禁用项 + 等墨量描边（路径集经工具条反解线宽）；不含游戏指令"
       }
     },
     {
@@ -4973,12 +4992,12 @@ window.LEARN = {
       "date": "2019-10-08",
       "text": "I made some stairs, plus an additional smaller WFC for surface decorations like windows and doors (who's awkward placement otherwise explodes the permutation count) I'll give my first talk on this at Indicade in Paris on the 19th. Hope to see you there! https:// indiecade-europe.eu/en/programme/c onferences …",
       "topic": "build",
-      "status": "partial",
-      "where": "src/core/building-components.js · src/build/buildings.js · building-components.html",
-      "note": "全帧核验；悬空/跨层组件独立身份已接实际窗型，双网格通过；独立装饰WFC仍缺 旧片续作：六类1–3槽墙段WFC/实绘百叶与装饰圆拱接实际建筑，双网格局部验收；跨格整墙/真正洞口仍缺。；【卡点·A 机制未做】跨格整墙/真正洞口仍缺。 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "src/build/buildings.js · src/core/building-components.js · building-components.html · building-kit-r55.html",
+      "note": "505帧全核；跨格整墙/真洞口两条缺口核实为「r55 已实现、只缺页面入口与量具」：facadeRuns 把共线共顶点墙段串成一条 run（163 条全多跨、跨边界违例 51→0）、archCutout+wallStrip 真的不画拱形墙条并补洞壁/拱腹/内立面（洞深0.07）。本轮补 archCuts 面积账（墙面缺失面积=拱形折线面积0.024790，最差相对误差1.98e-5）+ building-components.html 两个开关 + 新测 tests/facade-arch-cutout-browser.cjs（同机位关闭挖洞 changed 33488px、噪声0、洞内亮度39.0→26.5）。同机位 A/B 截图核过：开=凹洞可见洞壁与门槛，关=平贴门板。",
       "project": "townscaper",
       "decodedFrames": 505,
-      "reviewEvidence": "artifacts/coverage/facade-decoration-review.md",
+      "reviewEvidence": "artifacts/coverage/1181464374839521280-review-r113.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4987,13 +5006,11 @@ window.LEARN = {
           504
         ],
         "nativeRevisits": [
-          128,
-          292,
-          504
+          0
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "六类局部墙段与实绘邻窗约束局部验收，非完整立面/物理洞口"
+        "acceptanceScope": "跨格整立面 run（68 段/50 格）+ 拱门真洞口面积账与同机位 A/B 像素验收，双网格；钢架 WFC 不在本片口径内"
       }
     },
     {
@@ -5262,11 +5279,11 @@ window.LEARN = {
       "text": "As promised: an aperiodic infinite deterministic irregular relaxed quadrilateral grid.",
       "topic": "grid",
       "status": "partial",
-      "where": "src/core/infinite.js · grids.html（无限网格页签）",
-      "note": "449帧全核；六边块拼贴+块/簇各自松弛+三表示重心插值已实现，19块378对表示差3.7e-15；新增环数1/7/19三档对照片中一块块外长；仍缺真无限流式（页面最多19块）与块内疏密均匀度；【卡点·A 机制未做】仍缺真无限流式（页面最多19块）与块内疏密均匀度 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "where": "src/core/infinite.js · grids.html?t=infinite（平移窗口 + windowSeam 读数）",
+      "note": "449帧全核；本轮补页面入口+运行验收：grids.html?t=infinite 新增 origin 平移（6 方向 patchStep）+ 回原点，每次平移用 windowSeam 量重叠顶点，三次同向+一次反向 compared 781/771/771、最大差 ≤7.9e-15、翻折0/非法0（浏览器断言已跑）；仍缺：真流式加载（页面一次最多19块）与块内疏密均匀度指标",
       "project": "townscaper",
       "decodedFrames": 449,
-      "reviewEvidence": "artifacts/coverage/1151137783785771008-review.md",
+      "reviewEvidence": "artifacts/coverage/1151137783785771008-review-r103.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -5282,7 +5299,7 @@ window.LEARN = {
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "无限四边形网格"
+        "acceptanceScope": "无限四边形网格：任意块中心开窗口、平移后重叠顶点逐位一致、无翻折/非法格"
       }
     },
     {
@@ -7312,12 +7329,12 @@ window.LEARN = {
       "date": "2017-09-01",
       "text": "Spears are so weird to implement. I can see why most games don't use them",
       "topic": "fx",
-      "status": "partial",
-      "where": "src/badnorth/damage-numbers.js · src/badnorth/battle.js",
-      "note": "654帧全核（7张联系表）；击杀金色+10并入伤害数字同池（kind=kill、同字号/上浮/遮挡、贴图键 kill|+10），新增同帧横向错位 sx 防叠；仍缺按受击方向抖动与 +10 独立上浮速度；【卡点·A 机制未做】仍缺按受击方向抖动与 +10 独立上浮速度 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "src/badnorth/battle.js · src/core/spear-thrust.js · tests/spear-hit-popup-browser.cjs · tests/spear-tilt-browser.cjs · tests/spear-brace.mjs",
+      "note": "654帧全核（本轮复看 sheet-01 + crop-0120/crop-0300）；三项缺口全闭：①待机斜举 40° / 刺出压平 / 收矛线性抬回（spear-tilt 40.00→0.00→20.00）；②所谓「粉红放射命中线」复看确认是整排压平的偏粉矛杆 + 白锥矛头（braced，杆长前探 0.38），不是独立特效；③伤害飘字与刺击命中集已同源——thrust 分支先拿 stepSpearThrust 的 hits 再逐个 #hit，本轮补联动度量（hitSet/thrustFrames/lastThrust*）与验收：一刺穿两人 totalHits 2 = hitSet 2 = popups 2、两敌各只掉 1 血、每帧 popups==hits、致命刺 popups = hits+kills 且 damage:4 与 kill:10 各一条",
       "project": "badnorth",
       "decodedFrames": 654,
-      "reviewEvidence": "artifacts/coverage/903647529203634176-review-r60.md",
+      "reviewEvidence": "artifacts/coverage/903647529203634176-review-r104.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -7326,11 +7343,13 @@ window.LEARN = {
           653
         ],
         "nativeRevisits": [
-          0
+          120,
+          300,
+          460
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "伤害数字 / 击杀数字 同池 + 错位"
+        "acceptanceScope": "长矛姿态三态（40°斜举/0°刺出/收矛抬回）+ 架矛指向 + 命中集驱动掉血与飘字（同源对数）"
       }
     },
     {
@@ -7367,12 +7386,12 @@ window.LEARN = {
       "date": "2017-08-28",
       "text": "Just for fun: visualization of data inheritance in my flow/distance/influence fields",
       "topic": "fx",
-      "status": "partial",
-      "where": "src/motion 流场 · navmesh-flow.html",
-      "note": "389帧全核（4张联系表）；原片只有格边骨架线+色块，无箭头/流线/图例→continuousFlow 接 battle 无原片依据；LOD第12次不可测，降级为本仓扩展不再排队",
+      "status": "done",
+      "where": "src/badnorth/flowfield.js(buildLayeredFlowField) · src/badnorth/battle.js(#drawFlow/update 流场重建/start 默认连续流) · src/badnorth/battle-g3.js · index.html?scene=badnorth&shade=flow,flowunit",
+      "note": "389帧全核（sheet-00…03，本轮重看 sheet-00）；三项数据继承逐节点对账闭合：真实导航图 386 节点中「继承到最近源」386/386（三源独立 BFS 对账）、继承兵种 386/386、继承方向 382/386=98.96%、dist 全有限；可视化 395 格格网/3160 格边/按兵种上色 flowTypeColors=3（场景步兵8/矛兵8/弓手8，图例逐兵种计数）；LOD 维持不适用（r75 实景三档量测已否证）。曾挂 next 的最后一条 continuousFlow 未接 battle 本轮闭合：battle.js start() 默认传 true、g3 缺省继承 nav 并支持 ?continuousFlow=0，新测 tests/flow-battle-rates-browser.cjs 跑 30/60/120Hz（arrived 7/7/6，逐面常量对照 7，steer 1650/3349/8179，关档 steer 0）。battle-navigation-browser 隧道段为既有红（关连续流同样红），与本轮无关。",
       "project": "badnorth",
       "decodedFrames": 389,
-      "reviewEvidence": "artifacts/coverage/902069261304287232-review.md",
+      "reviewEvidence": "artifacts/coverage/902069261304287232-review-r115.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -7381,13 +7400,13 @@ window.LEARN = {
           388
         ],
         "nativeRevisits": [
-          0,
+          1,
           200,
-          380
+          388
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "流场可视化层"
+        "acceptanceScope": "数据继承（距离/方向/兵种）+ 流场调试可视化（格网/格面/流线/散须/压暗/图例）+ 三档速率运行验收"
       }
     },
     {
@@ -7395,12 +7414,12 @@ window.LEARN = {
       "date": "2017-08-27",
       "text": "Made my flow/influence fields even smarter: In addition to distance and direction to nearest unit, it can now tell you what type they are",
       "topic": "fx",
-      "status": "partial",
-      "where": "src/world/view.js · flow.html",
-      "note": "571帧全核(并案389)；同机位整岛入画、远端未见稀疏化 → LOD 永久不适用；continuousFlow 仍未接 battle.js，须单独一轮",
+      "status": "done",
+      "where": "src/badnorth/flowfield.js(buildLayeredFlowField 的 src 继承) · src/badnorth/battle.js(#drawFlow palette byType/源 type) · src/badnorth/battle-g3.js · index.html?scene=badnorth&shade=flow,flowunit",
+      "note": "571帧全核（sheet-00…05，本轮重看 sheet-03）；「除了距离和方向，还能告诉你最近单位是什么兵种」这条本轮量出来：386 节点里继承源=最近源 386/386、继承兵种=最近源兵种 386/386、方向 382/386；flowColorBy=type 下 flowTypeColors=3（步兵8/矛兵8/弓手8 三支守军同屏），r70 的「表外兵种并成第一种色」不复现。LOD 第三次否证维持不适用（固定等轴整岛入画，无近远差）。唯一硬条目 continuousFlow 未接 battle.js 已闭合：battle.js start() 默认传 continuousFlow:true，battle-g3 缺省继承 nav 且支持 ?continuousFlow=0；新测 tests/flow-battle-rates-browser.cjs 三档 30/60/120Hz 全 PASS（arrived 7/7/6 vs 逐面 7、steer 1650/3349/8179、关档 0）。回归 layered-continuous-flow/navmesh-battle-flow/battle-navigation/battle-g3 全 PASS。battle-navigation-browser 隧道段是既有红（关连续流同红），留待下轮。",
       "project": "badnorth",
       "decodedFrames": 571,
-      "reviewEvidence": "artifacts/coverage/901842167508992000-review-r85.md",
+      "reviewEvidence": "artifacts/coverage/901842167508992000-review-r115.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -7409,12 +7428,13 @@ window.LEARN = {
           570
         ],
         "nativeRevisits": [
-          60,
-          300
+          1,
+          300,
+          570
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "流场 LOD（不适用）"
+        "acceptanceScope": "兵种继承（第三项继承）+ 按兵种上色 + 主战斗连续流接线与三档速率"
       }
     },
     {
@@ -7729,11 +7749,11 @@ window.LEARN = {
       "text": "Any tips on resources and references for 2D animation? Maybe a site with gifs of good walks, deaths, attacks etc?",
       "topic": "fx",
       "project": "badnorth",
-      "status": "partial",
-      "where": "src/core/unit-shadow.js · unit-shadows.html",
-      "note": "先按准确配文理解动画参考请求；25帧全核验，可选单位接触软盘局部GPU通过，原动画/坡面/参数待补。；【卡点·A 机制未做】25帧全核验，可选单位接触软盘局部GPU通过，原动画/坡面/参数待补。 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "status": "done",
+      "where": "src/core/unit-shadow.js · src/life/unit-shadow-batch.js · src/badnorth/battle-g3.js(#sampler) · src/badnorth/battle-c02.js(swingArc) · unit-shadows.html",
+      "note": "25帧全核；原片=Unity网格姿态循环+脚下接触软盘+竖直白色月牙扫掠面（0000/0023/0024），非手绘2D。旧note三项「仍缺」（坡面/参数/原动画）核实为过期：unit-shadow.js 的 slope+groundAt+measure() 与 g3 shadowFit 射线拟合均在（53批G5/55批G3），本轮补页面入口+运行验收：软盘关开 raster 差分95px（噪声0）、pieces52/multiCell19（跨格拼片）、抬0.4光偏0.14400=0.36h、12°斜面拟合12.00°/逐顶点误差0.0061、measure表 h=0/0.2/0.5→r .12/.1305/.14625 α .30/.225/.1125 off 0/0.072/0.18、26°拉长1.112602压短0.898794面积比1.000000。原角色动画口径：原片Unity网格演示，本仓刚体+程序化姿态，不追求帧原画肌理（同r111不冒充面板复刻）",
       "decodedFrames": 25,
-      "reviewEvidence": "artifacts/coverage/unit-shadow-review.md",
+      "reviewEvidence": "artifacts/coverage/820977247083528192-review-r114.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -7742,13 +7762,14 @@ window.LEARN = {
           24
         ],
         "nativeRevisits": [
+          1,
           0,
           12,
           24
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "水平凸格单位软盘/Battle GPU局部通过，非原动画/完整软影算法"
+        "acceptanceScope": "接触软盘/跨格连续/光向偏移/坡面拟合/原版参数表 measure()，页面入口+真GPU差分"
       }
     },
     {
@@ -8205,9 +8226,9 @@ window.LEARN = {
       "topic": "nav",
       "project": "badnorth",
       "decodedFrames": 479,
-      "reviewEvidence": "artifacts/coverage/816748103193817088-review-r48.md",
-      "status": "partial",
-      "note": "479帧全核（5张联系表+frame-0128原尺寸）；本轮把「逐面常量流向→过面换向」改成共边带混合：352条共面边 p90 22.50°→0.000°、max 90°→0°（浏览器实测同值），百人 9.6s 全到/出面0/换面抖动 1732→1513；顶点梯度+均值坐标虽也做到0°但抹平崖壁切向导致崖脚卡人40s，已弃用；还缺接进 battle.js、通口前视、共享World自动生成导航面；【卡点·A 机制未做】还缺接进 battle.js、通口前视、共享World自动生成导航面 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "reviewEvidence": "artifacts/coverage/816748103193817088-review-r110.md",
+      "status": "done",
+      "note": "479帧全核（本轮重看 sheet-00/02，余三张沿用 r48 全核记录）；三条「仍缺」本轮核实全是「已实现缺验收」：① 导航面由共享 World 分层图自动生成（navMeshFromLayeredGraph，poly 395 = graphNode 395 / 682 顶点 / 92 links），c02 调试层实画 navPolys 395 / navEdges 1447；② continuousFlow 真接进 battle.js（steerTarget → flowAim），真实 Battle 8 人 16 跳实测 steer 4941 / used 2205 / rejected 2736（adopted 0.446，回退的是通口前视）；③ 通口前视 portalAim 一直是默认路径。新测 tests/navmesh-battle-flow-browser.cjs（A/B 到达 7/8 vs 7/8、跨格 5 vs 5、0 console error）+ 回归 tests/layered-continuous-flow.mjs（过边连续 p90 0.283 rad vs 逐面常量 1.189，24 人 22 到）。1 人在起点不动是既有 move()/sep 瓶颈，关掉连续流卡的是同一个人，不构成本片机制缺口。",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -8216,13 +8237,15 @@ window.LEARN = {
           478
         ],
         "nativeRevisits": [
-          128
+          1,
+          128,
+          247
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "导航面内连续流向（共边带混合）"
+        "acceptanceScope": "导航面自动生成 + 面内连续流向接进真实 Battle（含通口前视回退与鞍点守卫）"
       },
-      "where": "src/world/navmesh-flow.js · navmesh-flow.html"
+      "where": "src/world/navmesh-flow.js · src/world/battle-navigation.js(#steerTarget/#flowAim/#flowSummary) · src/badnorth/battle-c02.js(#navmesh) · navmesh-flow.html · index.html?scene=badnorth&continuousFlow=1&c02=navmesh"
     },
     {
       "id": "798580832906739712",

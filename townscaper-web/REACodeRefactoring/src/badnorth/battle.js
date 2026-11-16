@@ -175,7 +175,7 @@ export class Battle {
     this.showPassages=true;
     // 903647529203634176：挨打时被真正打到的那个单位头顶跳「+4」（白色带阴影、屏幕正立、不同单位不合并）
     this.damageNumbers=[];this.damageSprites=[];this.damageTexCache=new Map();
-    this.damageStats={spawned:0,live:0,lastValue:0,lastUnit:-1,hitSet:0,merged:0,kills:0,lastKind:'damage'};
+    this.damageStats={spawned:0,live:0,lastValue:0,lastUnit:-1,hitSet:0,merged:0,kills:0,lastKind:'damage',thrustFrames:0,lastThrustHits:0,lastThrustPopups:0,lastThrustKills:0};
     this.running = false;
     this.g3 = new BattleG3(this);
     this.c01 = new BattleC01(this);
@@ -187,7 +187,10 @@ export class Battle {
   start(world) {
     this.stop();
     this.world = world;
-    this.navigation = new BattleNavigation(world,this.view.index,{levelHeight:this.L});
+    // 902069261304287232 / 901842167508992000（第 115 轮）：主战斗默认走「导航面内连续流向」——
+    // 原片里人群是在导航面内连续地流，不是排成一列走格心；逐面常量只剩 fallback。
+    // 关掉仍可用 battle.g3.set('continuousFlow', false) 或 URL `?continuousFlow=0`。
+    this.navigation = new BattleNavigation(world,this.view.index,{levelHeight:this.L,continuousFlow:true});
     this.running = true;
     this.t = 0; this.scale = 1; this.paused = false; this.wave = 0; this.nextWave = 3; this.selected = null;
     this.units = []; this.squads = []; this.boats = []; this.arrows = []; this.houses = [];
@@ -196,7 +199,7 @@ export class Battle {
     this.drops = []; this.dropPoints.geometry.setDrawRange(0, 0);
     this.damageNumbers = [];
     for (const sp of this.damageSprites) sp.visible = false;
-    this.damageStats = { spawned: 0, live: 0, lastValue: 0, lastUnit: -1, hitSet: 0, merged: 0, kills: 0, lastKind: 'damage' };
+    this.damageStats = { spawned: 0, live: 0, lastValue: 0, lastUnit: -1, hitSet: 0, merged: 0, kills: 0, lastKind: 'damage', thrustFrames: 0, lastThrustHits: 0, lastThrustPopups: 0, lastThrustKills: 0 };
     this.navCache = new Map();
     this._trafficVersion = -1;
     this.refreshPassages();
@@ -735,8 +738,18 @@ export class Battle {
       u.cd -= dt;
       if (u.sweep) { this.g3.stepSweep(u, alive, dt); continue; }
       if (u.thrust) {
-        for (const target of stepSpearThrust(u.thrust, alive, dt, {canHit: v =>
-          v.team !== u.team && !v.onBoat && !v.fall && this.navigation.canMelee(u, v)})) this.#hit(target, u);
+        // 903647529203634176：一次刺击的命中集是**唯一事实源** —— 掉血、飘字、命中计数都从这一个数组派生，
+        // 不许另写一套「按角度找敌人」的旁路（第 44 轮记的「两处实现未联动」就是那种旁路）。
+        const hits = stepSpearThrust(u.thrust, alive, dt, {canHit: v =>
+          v.team !== u.team && !v.onBoat && !v.fall && this.navigation.canMelee(u, v)});
+        const popupsBefore = this.damageStats.spawned, killsBefore = this.damageStats.kills;
+        for (const target of hits) this.#hit(target, u);
+        // 联动度量：每一帧都写 lastThrust*（没命中就是 0），验收里逐帧对数；
+        // hitSet 只累加真命中，thrustFrames 记「这一刺有几帧打到了人」。
+        this.damageStats.lastThrustHits = hits.length;
+        this.damageStats.lastThrustPopups = this.damageStats.spawned - popupsBefore;
+        this.damageStats.lastThrustKills = this.damageStats.kills - killsBefore;
+        if (hits.length) { this.damageStats.hitSet += hits.length; this.damageStats.thrustFrames += 1; }
         if (u.thrust.done) {
           u.spearRecovery = {remaining: .12, duration: .12, dx: u.thrust.dx, dz: u.thrust.dz, length: u.thrust.length};
           u.thrust = null;

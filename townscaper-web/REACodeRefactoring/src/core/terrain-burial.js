@@ -18,6 +18,34 @@
  *   - blanketed 地面已经高过整根建筑柱 = 整栋被埋，只剩邻格的崖壁阴影。
  */
 
+/**
+ * 墙裙残留 / 悬檐联动（第 106 轮补）。
+ *
+ * 片子里被地面吞掉的墙**不是干净的一条切线**：崖面上留下了一圈比岩石深的薄带
+ * （墙裙/勒脚），而且它只出现在**屋顶还悬在头顶**的那些面上 —— 屋顶挑出去了，
+ * 檐下那一圈墙皮才躲过了刷地。被整栋埋掉的柱子没有屋顶，崖面上就什么都没有。
+ *
+ * 规则（两个量必须联动，不许各画各的）：
+ *   - skirt：`ground` 层往下 SKIRT_DEPTH 的一条带，内缩 SKIRT_INSET —— 内缩是因为
+ *     墙皮本来就在格内、不在格边，刷地只吃掉格心那一坨；
+ *   - eave ：同一张面在 `ground..ground+1` 之间被屋檐**再压进去** EAVE_SETBACK，
+ *     所以檐下的墙裙看得见、檐口的投影落得下来。
+ *   两张表一一对应（每个 skirt 面必有一个 eave 缺口），这就是"联动"的可检验形式。
+ */
+export const SKIRT_DEPTH = 0.34;
+export const SKIRT_INSET = 0.08;
+export const EAVE_SETBACK = 0.17;
+/** 檐口在墙头上压出来的高度（层）。 */
+export const EAVE_SHADOW = 0.45;
+
+/** 每份 World 一份掩埋台账：cellId → {height, swallowed[], kept[], wall}。 */
+const LEDGER = new WeakMap();
+function ledgerOf(world) {
+  let m = LEDGER.get(world);
+  if (!m) { m = new Map(); LEDGER.set(world, m); }
+  return m;
+}
+
 /** 这一列在 1..MAX 里哪些层是建筑。 */
 function builtLevels(world, cell) {
   const out = [];
@@ -40,6 +68,18 @@ export function buryColumn(world, cell, height) {
   const restoreTo = Math.max(h, kept.length ? kept[kept.length - 1] : 0);
   world.fill(cell, restoreTo, { rock: true });
   for (const lv of kept) world.setSolid(cell, lv, true);
+  // 台账：墙裙要知道"这一列的墙是被刷掉的"，以及原来用的是哪一版墙色
+  if (swallowed.length) {
+    const led = ledgerOf(world);
+    const prev = led.get(cell.id);
+    const wall = swallowed.map((lv) => world.color[cell.id]).find((v) => v >= 0);
+    led.set(cell.id, {
+      height: h,
+      swallowed: [...(prev?.swallowed || []), ...swallowed],
+      kept,
+      wall: wall ?? prev?.wall ?? -1,
+    });
+  }
   return { cell: cell.id, rockTo: h, swallowed, kept };
 }
 
@@ -106,3 +146,67 @@ export function neighborShade(world, cell) {
   }
   return best;
 }
+
+/**
+ * 崖面上的墙裙残留 + 檐下缺口（一一对应 → 联动）。
+ *
+ * 一张面要同时满足两条才出墙裙：
+ *   1. **露在崖上**：邻格地面低于本格地面（或这一面就是网格边界）；
+ *   2. **头顶还有屋顶**：本列 `top > ground` 且顶上仍是建筑 —— 屋面挑出格边，
+ *      檐下那圈墙皮才没被刷地吃掉；被整栋埋掉的列没有屋顶，什么都不留。
+ *
+ * @returns {{bands:Array, notches:Array, faces:number, cells:number, buriedCells:number}}
+ *   band  = {cell, level, face, y0, y1, inset, wall}（y 以层为单位，relative to 该层底）
+ *   notch = {cell, face, y0, y1, setback, skirt:boolean}
+ */
+export function cliffSkirt(world, {
+  depth = SKIRT_DEPTH, inset = SKIRT_INSET, eave = EAVE_SETBACK,
+} = {}) {
+  const led = ledgerOf(world);
+  const bands = [], notches = [];
+  let faces = 0;
+  const cellIds = new Set();
+  for (const [id, rec] of led) {
+    const cell = world.cells[id];
+    if (!cell) continue;
+    const ground = world.ground(cell);
+    const top = world.top(cell);
+    if (!(ground > 0)) continue;
+    cellIds.add(id);
+    // 只剩屋顶那些列才留墙裙；整栋被埋（顶上不是建筑）什么都没留
+    if (!(top > ground && world.topIsBuilt(cell))) continue;
+    for (let i = 0; i < cell.n; i++) {
+      const nb = world.neighbor(cell, i);
+      const exposed = !nb || world.ground(nb) < ground;
+      if (!exposed) continue;
+      faces++;
+      bands.push({
+        cell: id, level: ground, face: i,
+        y0: Math.max(0, ground - depth), y1: ground,
+        inset, wall: rec.wall,
+      });
+      // 檐口在同一条面上：从 cut 层往上压出一段（挑出格边的屋顶/上覆台地把墙头压暗）
+      notches.push({
+        cell: id, face: i,
+        y0: ground, y1: Math.min(top, ground + EAVE_SHADOW),
+        setback: inset + eave, skirt: true,
+      });
+    }
+  }
+  return { bands, notches, faces, cells: cellIds.size, buriedCells: led.size };
+}
+
+/** 一面墙裙/缺口在 xz 平面上的两个端点（世界坐标，已内缩）。测试与页面共用。 */
+export function skirtSegment(cell, face, inset) {
+  const pts = cell.pts;
+  const p0 = pts[face], p1 = pts[(face + 1) % pts.length];
+  const cx = cell.cx, cz = cell.cz;
+  const shrink = (p) => {
+    const dx = p.x - cx, dz = p.z - cz;
+    const len = Math.hypot(dx, dz) || 1;
+    const k = Math.max(0, 1 - inset / len);
+    return { x: cx + dx * k, z: cz + dz * k };
+  };
+  return [shrink(p0), shrink(p1)];
+}
+

@@ -240,6 +240,45 @@ export function revealedPoints(state, total, { seed = 91 } = {}) {
   return Math.max(0, Math.min(total, Math.round(seg * total)));
 }
 
+/**
+ * 生成**之后**的地形微调（1654401054828638214 第 0229 帧之后那段）。
+ *
+ * 片子里颜色上完之后形状并没有停：中间那块台地被一点点抬高、加宽，右侧多出一段崖面
+ * （0229→0260 台地面积肉眼可见地变大）。这不是"换种子重铺"，是**在已生成的网格上
+ * 按笔刷半径改高度**，所以高度改了、拓扑不动、颜色也不重新随机。
+ *
+ * 落点：只在半径内按余弦 falloff 改高度，整数层、夹在 0..levels；
+ * 返回改了哪些点、台地面积前后（面积 = 顶面高于水面的三角形面积和）。
+ */
+export function tweakTerrain(points, heights, {
+  cx = 0, cz = 0, radius = 4.5, delta = 1, levels = 6,
+} = {}) {
+  const out = Array.from(heights);
+  const touched = [];
+  const r = Math.max(1e-6, radius);
+  for (let i = 0; i < points.length; i++) {
+    const d = Math.hypot(points[i].x - cx, points[i].z - cz);
+    if (d > r) continue;
+    const fall = 0.5 * (1 + Math.cos(Math.PI * (d / r)));   // 1 → 0 的平滑笔刷
+    const step = Math.sign(delta) * Math.round(Math.abs(delta) * fall);
+    if (!step) continue;
+    const next = Math.max(0, Math.min(levels, out[i] + step));
+    if (next !== out[i]) { out[i] = next; touched.push(i); }
+  }
+  return { heights: out, touched, count: touched.length };
+}
+
+/** 台地面积：三个顶点都在水面以上的三角形面积和（上色后的"陆地"footprint）。 */
+export function terraceArea(points, tris, heights) {
+  let area = 0;
+  for (const t of tris) {
+    if (heights[t[0]] <= 0 || heights[t[1]] <= 0 || heights[t[2]] <= 0) continue;
+    const [a, b, c] = t.map((i) => points[i]);
+    area += Math.abs((b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z)) / 2;
+  }
+  return area;
+}
+
 /** 供页面/测试用的一步到位装配。 */
 export function buildIsland({ count = 160, radius = 10, seed = 7 } = {}) {
   const points = islandPoints({ count, radius, seed });

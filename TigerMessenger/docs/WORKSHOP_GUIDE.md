@@ -130,3 +130,8 @@ pipeline.html 顶部四个标签：**球系统工坊 · 场景工坊 · 物件�
 新能力要排进能力线：meta 里写来源帖子 ID（场景 `sources`、球系统 `learn`、物件 `related`）或 `modules`；都没有的会落到「未关联能力线」。
 上游学习任务会改 learn/data.js：partial 记录的 note / where 变化后其批注变「待复核」，capability-evolution.test.mjs 会失败，需要按新记录重评那几条（learn/pipeline.js.evolution.completionReviews），不能只改 sourceEvidence 让测试通过。
 代际、到达位置和队列是导航，不是验收；不得据此把 partial 写成完成，或把推断归线的模块说成实现了该能力。
+
+## 能力网与场景诊断（2026-11-15）
+场景 import 变化或 vendor / 库更新后重跑 `node tools/refactor/scan-scene-consumers.mjs`，再跑 build-capability-lineage.mjs。新场景入口在该脚本的 SCENES 里归组。诊断里的「旧副本」只是字节不同：换库之前必须同机位对照，并把结论写进 tools/refactor/scene-consumer-notes.json；十二门徒的教训是最新库不一定更好看。直达：`pipeline.html?learningView=lineage&lineageScene=apostles#learning`。
+十二门徒候选开关见 src/world/apostlesLook.js（默认关闭，不改认可画面与存档）；对照脚本 tests/apostles-look-browser.mjs。
+学习工坊默认页是「能力地图」（`?learningView=map`，可带 `&lineageScene=apostles&lineageLine=terrain`）；长明细在「队列与闭环」（`?learningView=lineage`）。地图只放结论和下一步，新增内容先考虑放抽屉或明细页，不往首屏加文字。

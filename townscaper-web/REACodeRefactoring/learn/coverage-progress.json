@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-14T18:40:00+08:00",
+  "updatedAt": "2026-11-16T23:13:37.891Z",
   "completed": [
     "建立原版 128 个 JS 模块逐项清单、导出接口、职责落点与已知差距。",
     "配置每30分钟承接学习任务并更新首页/管线进度。",
@@ -194,14 +194,14 @@
   ],
   "next": [
     {
-      "title": "缺口（第 101 轮 · 灌木 600+257）：同口径重测后 **P50 对上（本仓 4px vs 原片 4–6px），P90 只有原片 ~60%（本仓 10px vs 原片 14–18px）** → `SHRUB_BAND.max`（1.36）上沿偏低。但两边机位/缩放不可比（本仓 1100×760 全景 vs 原片 460 见方特写），**不许直接改常数**。步骤：① 把本仓渲染固定到原片的等轴特写机位（镜头高度/俯角/画幅先对齐）；② 同机位取 P50/P90；③ 按 P90 反推 max，再跑三条回归；④ `splitCells` 三角化边缘那一圈带子的走向仍未逐帧对照。",
+      "title": "已收口（第 105 轮）：同机位标定完成 —— 本仓 R=P90/apothem=0.154 vs 原片 frame-0150 0.138（差 11%，本仓偏厚），SHRUB_BAND.max 维持 1.36 不改；r101「P90 只有 60%」是「全景绝对像素 vs 特写绝对像素」的口径错。splitCells 经全仓 grep 零命中，实为过期名词（真实三角化 = triC 扇 + edgeTri，线框截图已核）。新测 tests/shrub-band-scale-browser.cjs 可复用：任何「像素厚度」类标定都先换成无量纲比值。",
       "clips": [
         "1707497006640365880",
         "1707490932017279035"
       ]
     },
     {
-      "title": "缺口（第 101 轮 · 837）：`tests/stain-joint-curve-browser.cjs` 已把地面斑接进同一条时间轴（12/12），但 badnorth 场景里 `view.smoke.fireAt` 不可用 → 「火先起 / 地面后跟」的先后断言被**跳过**（不是通过）。要真联：把 c01 的火光强度（`#fireGlow` 那条）暴露成 `rea.battle.c01.fireStats` 之类的探针，再补该断言；爆燃三层高度在曲线上仍测不到（沿用 r100）。",
+      "title": "已收口（第 102 轮 · 837 火光探针）：`battle-c01#fireGlow` 末尾暴露 `fireStats={t,houses,lit,intensity,discOpacity}`，`tests/stain-joint-curve-browser.cjs` 13/13 —— 火光 max intensity 2.993、火光首次 >0.05 在 0s、地面开染 0.017s（时差 ≤0.02s）。该片**只剩一项**缺口：爆燃三层高度在联合曲线上测不到（整屏计数，需按高度带分别取像素）。",
       "clips": [
         "837027901853810688"
       ]
@@ -232,33 +232,33 @@
       ]
     },
     {
-      "title": "纪律（第 93 轮·流场）：389 帧只有格边骨架线 + 色块，无箭头/流线/图例 → `continuousFlow` 接 battle.js 无原片依据，维持「本仓扩展、不排队」。LOD 永久不适用。",
+      "title": "纪律（第 93 轮·流场）：389 帧只有格边骨架线 + 色块，无箭头/流线/图例 → `continuousFlow` 接 battle.js 无原片依据，维持「本仓扩展、不排队」。LOD 永久不适用。两条片已在第 115 轮转 done（[007]），本条只留纪律，不再排期。",
       "clips": [
         "902069261304287232",
         "901842167508992000"
       ]
     },
     {
-      "title": "缺口（第 83 轮结论·流场）：LOD 第 9 次测不出 → 永久维持「不适用」（两条片子都是固定等轴 + 整岛入画 + 无图例，r75 已在 badnorth 实景页给出透视解释）。唯一剩余硬缺口：`battle.js:190` 未传 `continuousFlow`，改默认会动移动行为，需 30/60/120Hz + 分层回归成套跑 → **必须单独一轮**。",
+      "title": "已收口（第 115 轮）：流场/影响场的数据继承可视化 + 主战斗连续流。两条片子共 960 帧，三项继承（距离/方向/兵种）逐节点对账 nearest 386/386、type 386/386、dir 382/386；可视化 395 格格网 / 3160 格边 / 按兵种 3 色（步兵8·矛兵8·弓手8）；continuousFlow 进主战斗默认并用 30/60/120Hz 成套验收（arrived 7/7/6 vs 逐面 7、关档 steer 0）。LOD 仍为不适用（固定等轴整岛入画，第三次否证）。**仍剩（不在本组内）**：tests/battle-navigation-browser.cjs 隧道段既是既有红（maxY 1.4999 / tunnelSamples 0，关连续流同红），下一轮先查。",
       "clips": [
         "902069261304287232",
         "901842167508992000"
       ]
     },
     {
-      "title": "缺口（第 61 轮收敛·节点图）：serialize/fromJSON/NODE_REGISTRY + 只读连线图已落地（往返后位置不跳、90 帧轨迹一致）；仍缺可拖拽的真节点编辑器（拖节点/拖线/增删）与 ScriptableObject 资产面板的字段分组（1724449858369568780）",
+      "title": "已收口（第 111 轮 · 拖拽编辑器）：serialize/fromJSON/NODE_REGISTRY + 只读连线图（第 61 轮）之后，可拖拽真编辑器（`node-editor.html` + `src/ui/node-graph-editor.js`）本轮补出运行验收 `tests/node-editor-drag-browser.cjs`（拖节点/拖线接线/点线删除/类型拒绝/参数驱动运行图/撤销重做/导出载入含布局）。1724449858369568780 已 done，本组无剩余 partial。",
       "clips": [
         "1724449858369568780"
       ]
     },
     {
-      "title": "缺口（第 60 轮实测·伤害数字）：+10 已并入同池（kind=kill），仍缺 ① 受击方向抖动（现只是同帧横向错位 sx）；② +10 的上浮速度与 +4 共用常量，原片略快（903647529203634176）",
+      "title": "已收口（第 102 轮 · 伤害飘字 903647529203634176）：r60 记成「机制未做」的两项其实 56 批 C02 已实现，本轮补验收 `tests/damage-numbers-kick.mjs` 19/19 + `tests/damage-kick-browser.cjs` 9/9。该片**仍剩**「长矛待机斜向上 40°、刺出才转平 + 粉红放射命中细线」（见 next[014]），所以状态还是 partial。",
       "clips": [
         "903647529203634176"
       ]
     },
     {
-      "title": "第 50 轮迁入的 9 个模块大多只有 node 验收：页面入口（grids.html 平移窗口、wfc.html 诊断面板、navmesh-flow.html 漏斗路径、ui.html 等墨量图标）未做；navmesh 漏斗 / 流场未接 battle.js；walk-reach 未接生成器默认流程；texel-owner 未接 impostor 烘焙",
+      "title": "A 部分已收口（第 103 轮）· 仍有 B：四条页面入口都补完并出运行验收——grids.html?t=infinite 平移窗口（origin 6 方向 + windowSeam：781/771/771 顶点，最大差 ≤7.9e-15，翻折 0/非法 0）；wfc.html tile 存活诊断（147 格 · 活 24/24 · 死 0 · 无人接 0；窄册对照把唯一 tile 判死）；navmesh-flow.html 漏斗路径（走廊 20 通口，逐边中点 14.84→漏斗 13.37→捷径 13.10，折角 7→3→2，全在面内）；ui.html 等墨量图标（8 个 DEFAULT_ICONS 路径经工具条反解，线宽 1.55–2.45，墨量离散度 0.296→0.199→0.037）。**仍缺（B，别再当 A 排期）**：① 1151 真流式加载（页面最多 19 块）+ 块内疏密均匀度指标；② navmesh 漏斗/流场接 battle.js（要 30/60/120Hz 成套回归）；③ walk-reach 接生成器默认流程（会降个别图可达比例）；④ texel-owner 接 impostor 烘焙；⑤ 1201 原图稿与撤销/重做/退出三项游戏语义（需接主管线）。",
       "clips": [
         "1151137783785771008",
         "972829402873716737",
@@ -269,7 +269,7 @@
       ]
     },
     {
-      "title": "缺口（第 48 轮实测·导航面流场）：共边带混合已把跨面差压到 0°，但流向仍是「面内线性」，面上到崖边那一格方向仍偏直（沿 z=2.2 直线 0.02 步长最大跳 4.77°）；且 navmesh-flow 仍未接进 battle.js（主场景是格心流场）、缺通口前视，导航面还是规则地形手搓、未由共享 World 分层导航自动生成（816748103193817088）",
+      "title": "已收口（第 110 轮）：导航面由共享 World 分层图自动生成 + continuousFlow 接进真实 Battle 已量出（poly 395=node 395、steer 4941/used 2205/adopted 0.446、到达 7/8 与逐面常量同档），通口前视 portalAim 一直在默认路径上。剩余一条既有瓶颈（本岛地面层 1 人从起点不动，开关两种模式同样卡）已写进证据，不再算本片缺口。",
       "clips": [
         "816748103193817088"
       ]
@@ -288,7 +288,7 @@
       ]
     },
     {
-      "title": "缺口（第 44 轮新发现·长矛）：本仓矛只绕 Y 轴 → 永远水平，原片待机是斜向上约 40°、刺出才转平；原片还有粉红放射状命中/方向细线；伤害数字与每次刺击的命中集是两处实现，未联动（903647529203634176）",
+      "title": "已收口（第 104 轮 · 903647529203634176）：三项全闭 —— ①待机斜举 40°/刺出压平/收矛线性抬回（`battle.js` 矛矩阵 `e.set(-pitch, angle, 0, 'YXZ')`，`tests/spear-tilt-browser.cjs` 40.00→0.00→20.00）；②所谓「粉红放射命中线」复看确认是整排压平的偏粉矛杆 + 白锥矛头（`u.brace`，杆长前探 0.38，`tests/spear-brace.mjs`）；③伤害飘字与刺击命中集同源 —— thrust 分支先取 `stepSpearThrust` 的 hits 再逐个 `#hit`，本轮补联动度量 `damageStats.{hitSet,thrustFrames,lastThrustHits,lastThrustPopups,lastThrustKills}` 与 `tests/spear-hit-popup-browser.cjs`（一刺穿两人 totalHits=hitSet=popups=2、两敌各掉 1 血、每帧 popups==hits、致命刺 popups=hits+kills 且 damage:4 与 kill:10 各一条）。**该片已转 done**。",
       "clips": [
         "903647529203634176"
       ]
@@ -453,7 +453,7 @@
       ]
     },
     {
-      "title": "第 20 轮缺口：灰模阶段的 AO 与软阴、生成后地形微调、真 job 线程与四轮循环节奏、被吞墙面的墙裙残留与悬檐联动、节点图缺可视化连线编辑器与 ScriptableObject 式序列化",
+      "title": "已收口 3/4（第 111 轮）：[040] 里 1654401054828638214（灰模 AO+软阴、生成后台地微调）、1671840905957978113（崖面墙裙残留+悬檐联动）、1724449858369568780（可拖拽节点编辑器，第 111 轮 → done，真鼠标拖动/接线/类型拒绝/参数→运行图/导出含布局）均已收；**仍剩**：1670064751181791233 的真 job 线程与四轮循环节奏（本机无 Burst/Job 环境，建议降 C，只做慢放等价已验收）。",
       "clips": [
         "1654401054828638214",
         "1670064751181791233",
@@ -471,7 +471,7 @@
       ]
     },
     {
-      "title": "第 18 轮缺口：三角剖分顶点竖棒层与共享边稀疏线网层没有；walkthrough.js 仍是手点切换；缺「连续换岛 + 先线稿后着色」循环页；贴花累加与图集 padding 未实现",
+      "title": "已收口（第 108 轮）：[042] 全 4 条 done —— 1447483550257799171（连续换岛 showreel）与 1448039167057879048（六层分阶段计时 + 4 轮换岛 + 自动推进）都是「r56 C09 已实现、只缺运行验收」，本轮各补一支浏览器测试（tests/island-build-reel-browser.cjs / tests/island-stages-talk-browser.cjs）。组内**无剩余缺口**。",
       "clips": [
         "1427721874490933250",
         "1430227487376781317",
@@ -498,7 +498,7 @@
       ]
     },
     {
-      "title": "第 15 轮缺口：悬空体块缺斜撑/偏移支撑/腿分段（architecture.html 未出运行验收）",
+      "title": "已收口（第 103 轮 · 1257213678056857600）：r56 的 src/build/steel-r56.js 已把三条缺口全做了——落点取共享角格最高实心层（不穿邻栋）、曲柄内倾腿（crank.foot=mix(p,支撑格心,.24)+膝点+红垫块）、高腿分段（solveTieLevels 簇内约束系杆+joint 接头+Y 形短斜撑）。补 tests/steel-frame-browser.cjs：legs 14 / cranks 6 / joints 18、脚点内收 0.1037、脚点 y=land·L、系杆不连层、关档 steel=null、零报错；页面 build-r56.html?scene=steel 两视角截图核过。**旧 where 的 architecture.html 是文档页、不承载钢架**。该片已 done，本组不再排期。",
       "clips": [
         "1209519206233968641",
         "1210969316071477248",
@@ -516,7 +516,7 @@
       ]
     },
     {
-      "title": "第 14 轮缺口（由 CHANGELOG 重建）：做到哪：新增 `src/render/opening-punch.js`（`planFacade` 校验洞口并给解析面积；`createFacadeScene` 按 interior→mask→wall(NotEqual)→decal 四通道搭建，mask 只写 stencil 不落色不写深度）+ 实验页 `opening-punch.html`（贴片/挖洞",
+      "title": "已收口（第 104 轮 · A 部分）：跨两层高拱龛的页面入口与 GPU 断言补齐 —— `opening-punch.html` 加第二排立面（龛高 1.0 = 2×楼层高 0.5、`rise=.30`），洞内/洞外掩码从「矩形近似」换成模块的 `isInsideOpening`（拱顶按半椭圆），`tests/opening-punch-arch-browser.cjs`：下层透出 1.0000 / 上层 0.9999 / 拱肩 2838px 泄漏 0 / 面积误差 0.1%，方洞那排回归不破。**仍缺 B/D**：①墙体厚度与洞口侧壁（墙是无限薄的面，近景没有洞深）；②接 `buildings.js` 主管线（门窗仍走 `archedEntry` 贴片）—— 所以 1205422438437273601 维持 partial，只提高 acceptanceScope。",
       "clips": [
         "1174406613031170049",
         "1189109278361165825",
@@ -525,7 +525,7 @@
       ]
     },
     {
-      "title": "到期交接暂停；后续继续连续面内导航/坡高、跨格整墙、云影软化/水植被接收与球面联合河网",
+      "title": "已部分收口（第 109–113 轮 · 4/4 片里 3 条 done）：云影四类接收端齐全 —— 水面（第 109 轮 dark 8057/18033）、deck 远层弱档（uCloudPuffsFar 24 / farRatio 0.42）、植被（第 112 轮补证：r109「差分恒 0」是夹具口径错，云片 y=30/w=90 时取样点跑出云片 uv；压顶 y=+6/w=80 后 quad 11838/11919px、tone 0.333）、倒影（第 112 轮新接 reflection.js，dark 19223/20158px，tone 0.175）；110 轮 8167 导航面接真实 Battle；113 轮 1181 跨格整墙/真洞口 → done（facadeRuns 全多跨 + archCuts 面积账误差 1.98e-5 + 同机位 A/B 截图）。剩 1 条：1769691526924292506 球面 WFC/BFS 河网（整条管线级，先做球面河网约束坍缩再谈 done）。",
       "clips": [
         "816748103193817088",
         "1181464374839521280",
@@ -548,7 +548,7 @@
       ]
     },
     {
-      "title": "新增原版模块：单位软影blobshadow与弧长走廊navribbon；当前未覆盖，须先逐帧再实现",
+      "title": "已收口（第 114 轮 · 5 片里 1 done）：820977247083528192 → done。旧 note 的「坡面/参数/原动画」全核实为过期 —— unit-shadow.js 的 slope+groundAt+measure()（53 批 G5）与 g3 shadowFit 射线拟合（55 批 G3）都在，缺的只是页面入口与运行验收；本轮补 unit-shadows.html 两个开关 + 台账，新测 tests/unit-shadow-contact-disc-browser.cjs（软盘 raster 差分 95px/噪声 0、pieces 52/multiCell 19、抬 0.4 光偏 0.14400=0.36h、12° 斜面拟合 12.00°/顶点误差 0.0061、measure 26° 拉长 1.112602 压短 0.898794 面积比 1.000000）。仍剩 4 条：821321422140309504 与 821680056514781186 卡「原片算法未公开」（暗斑与几何阴影混合，不能反推），827215002448846848 / 823848950553780226 的 navribbon 弧长走廊**模块仍不存在**（要新建模块，整条一轮）；下一轮优先 827215002448846848 或 823848950553780226 二选一。",
       "clips": [
         "820977247083528192",
         "821321422140309504",
@@ -672,7 +672,7 @@
       ]
     },
     {
-      "title": "云/冬景续项：高耸云体/灰蓝层次、统一风采样与完整冬季美术/船群战斗组合；795帧已学不重复计数",
+      "title": "云/冬景续项：高耸云体/灰蓝层次、统一风采样与完整冬季美术/船群战斗组合；795帧已学不重复计数。（云影部分见 [048]：水面+远层弱档第 109 轮、植被+倒影第 112 轮均已量出，该片云影侧已收口）",
       "clips": [
         "1243228419162341379",
         "943230620242796544"
@@ -955,7 +955,7 @@
     "newClipsThisHeartbeat": 0,
     "implementationAcceptedClipsThisHeartbeat": 0
   },
-  "latest": "第 101 轮：天光柱峰值 **α=1.00 被推翻** —— r100 的 1.00 来自 `beam-alpha-slope.py` 的 `cal_alpha=1.0`（标定假设，循环论证）；新 `tools/beam-transmission.py` 用柱后残余对比度反解，自检 0.442 判不可用于绝对 α，实拍 0288 残余 11.98 / 柱外 44.55 / 噪声 5.12 → α≈0.83，4× 目视岩边仍透出 → 峰值改记 **0.7–0.85**，素材（400×400/JPEG）已到上限。837 新增 `tests/stain-joint-curve-browser.cjs`（12/12）：685 帧、台阶 0.05s→0.25 / 3.56s→0.44 / 11.4s→1.00 零回落、渲染乘性特征 R 差 0 / G −13 / B −9、地面 (r−g) 5→15 单调。纪律项落地 `tests/worldmesh-setter-guard.mjs`（8/8 + 突变测试：删 `set bandTri` 立刻红）。灌木 600/257 同口径重测：P50 对上（4 vs 4–6px），P90 只有原片 ~60%（10 vs 14–18px）→ `SHRUB_BAND.max` 上沿偏低但机位不可比，未改常数。总账仍 285/285；done 71 / partial 177 / ref 15 / na 22。",
+  "latest": "第 115 轮：[007] 整组 2 条（902069261304287232 389 帧 / 901842167508992000 571 帧，流场数据继承可视化）→ 都 done。核实：where 指向的 src/motion 目录不存在，真实落点 src/badnorth/flowfield.js + battle.js#drawFlow；note 三条仍缺里两条是 r68/r70 撤销的误读、一条 r78 否证，真缺口只剩 continuousFlow 未进主战斗默认（r76 判法成立）。接线：battle.js start() 默认 continuousFlow:true，battle-g3 缺省继承 nav 现值并支持 ?continuousFlow=0。新测 tests/flow-battle-rates-browser.cjs：30/60/120Hz 同 18s、8 人 14 跳，arrived 7/7/6（逐面 7）、steer 1650/3349/8179、关档 0；三项继承 386 节点对账 nearest 386/386、type 386/386、dir 382/386；viz 395 格格网/3160 边/按兵种 3 色（步兵8·矛兵8·弓手8）。回归 layered-continuous-flow / navmesh-battle-flow / battle-navigation / battle-g3 全 PASS。既有红：battle-navigation-browser 隧道段（关连续流同样红，与本轮无关）。done 86→88 / partial 162→160。",
   "learningPace": {
     "targetClipsPerHour": 4,
     "goalHours": 78,
@@ -967,8 +967,8 @@
     "reviewedClips": 285,
     "remainingClips": 0,
     "countBasis": "独立视频ID、对应全帧记录和学习证据；不等同全部代码验收通过",
-    "actualClipsPerHour": 1.01,
-    "measuredAt": "2026-11-14T18:32:00.158336+08:00"
+    "actualClipsPerHour": 0.81,
+    "measuredAt": "2026-11-17T07:13:01.300674+08:00"
   },
   "session": {
     "status": "paused",

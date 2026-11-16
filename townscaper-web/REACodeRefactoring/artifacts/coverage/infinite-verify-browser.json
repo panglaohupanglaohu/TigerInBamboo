@@ -24,7 +24,12 @@
         "degenerate": 0
       },
       "patches": 19,
-      "clusters": 24
+      "clusters": 24,
+      "origin": [
+        0,
+        0
+      ],
+      "seam": null
     },
     {
       "mode": "patch",
@@ -59,7 +64,12 @@
         "degenerate": 0
       },
       "patches": 19,
-      "clusters": 24
+      "clusters": 24,
+      "origin": [
+        0,
+        0
+      ],
+      "seam": null
     },
     {
       "mode": "cluster",
@@ -94,7 +104,12 @@
         "degenerate": 0
       },
       "patches": 19,
-      "clusters": 24
+      "clusters": 24,
+      "origin": [
+        0,
+        0
+      ],
+      "seam": null
     },
     {
       "mode": "blend",
@@ -129,7 +144,12 @@
         "degenerate": 0
       },
       "patches": 19,
-      "clusters": 24
+      "clusters": 24,
+      "origin": [
+        0,
+        0
+      ],
+      "seam": null
     }
   ],
   "errors": []

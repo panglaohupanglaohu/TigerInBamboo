@@ -61,7 +61,8 @@
   <h1>REACode 重构版 · 管线与学习进度</h1>
   <p class="sub">先看每条能力线学到了哪一代、下一步补什么，再按作者发布时间追踪问题、改进、复用和分支，最后查看本地实现步骤。与 TigerMessenger 学习工坊共用同一演进数据及呈现代码；时间较新不自动代表代码已实现或场景已验收。</p>
 
-  <section id="capability-lineage"></section>
+  <section id="capability-map"></section>
+  <details id="capability-lineage-fold"><summary style="cursor:pointer;font-weight:600;margin:18px 0">队列、闭环与执行经验的全部明细</summary><section id="capability-lineage"></section></details>
   <section id="capability-evolution"></section>
   <section id="latest-progress" style="background:#fff;border:1px solid #b9cdce;border-radius:12px;padding:18px;margin:20px 0;scroll-margin-top:18px">读取最新学习与重构记录…</section>
   <details id="legacy-implementation-map"><summary>按实现步骤查看原学习路线与完整管线图</summary>
@@ -151,6 +152,9 @@ const evolutionView=renderCapabilityEvolution(document.getElementById('capabilit
  const {renderCapabilityLineage}=await import('./src/ui/capability-lineage.js');
  const [library,registry]=await Promise.all([fetch('capability-library.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null),import('./src/capabilities/registry.js').catch(()=>null)]);
  const executables=(registry?.describeCapabilities()||[]).map(c=>({...c,tier:'scene'}));
+ const focusClip=id=>{evolutionView.focus(id);document.getElementById('capability-evolution').scrollIntoView({block:'start',behavior:'smooth'});};
+ const {renderCapabilityMap}=await import('./src/ui/capability-map.js');
+ renderCapabilityMap(document.getElementById('capability-map'),{evolution:evolutionView.model,modules:library?.modules||[],executables,line:params.get('lineageLine'),onFocus:focusClip,onDetail:()=>{const d=document.getElementById('capability-lineage-fold');d.open=true;d.scrollIntoView({block:'start',behavior:'smooth'});}});
  renderCapabilityLineage(document.getElementById('capability-lineage'),{evolution:evolutionView.model,modules:library?.modules||[],executables,line:params.get('lineageLine'),
   experienceNote:'这里只列能力库 registry 中登记的能力代码。球系统 / 物件 / 通用场景的执行适配，以及预览、验证失败、采用的本机记录，在 TigerMessenger 系统工坊与学习工坊查看。',
   onFocus:id=>{evolutionView.focus(id);document.getElementById('capability-evolution').scrollIntoView({block:'start',behavior:'smooth'});}});

@@ -57,7 +57,7 @@ function sample(t) {
  *   refs.publishOnly=true 时只推进时钟并发布 sample（V5 光照导演接管所有写入），
  *   不再直接修改 sun/ambient/hemi/fill/天空/雾。
  */
-export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds, fill, publishOnly = false }) {
+export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds, fill, moon = null, publishOnly = false }) {
   let phase = P.timeOfDay ?? 0.5;
   let lastWritten = phase;
   let current = null; // 最近一帧采样（供莫比斯结界二次调色）
@@ -84,6 +84,15 @@ export function createDayNight({ scene, skyMat, sun, ambient, hemi, clouds, fill
 
     const s = sample(phase);
     current = s;
+    // 月光补光：从太阳反向斜上方照背光半球，权重随环境光下降（深夜最大，白天为 0）。
+    // 深夜表 ambientI=0.08 时 Toon 色块会掉成纯黑，整片城市只剩窗户灯点；这一盏只补轮廓，
+    // 不改 sun/ambient/hemi，因此 V5 与非 V5 都适用，日景逐位不变。
+    if (moon && sun) {
+      const night = Math.max(0, Math.min(1, 1 - s.ambientI / 0.9));
+      moon.intensity = 0.42 * night;
+      moon.position.set(-sun.position.x, Math.abs(sun.position.y) * 0.7 + 6, -sun.position.z);
+      moon.visible = night > 0.02;
+    }
     if (publishOnly) return; // V5：只发布时钟与 sample，灯光/天空由 LightingDirector 提交
     if (skyMat) {
       skyMat.uniforms.topColor.value.copy(s.skyTop);

@@ -15,7 +15,7 @@ const NODES=[
  {id:'vehicles.boats',kind:'船',group:'载具',icon:'≋',color:'#89bfc2',name:'载具层 · 船',description:'库中有Bad North长船与V形航迹；游戏驾驶接口另属boatRide，工坊尚未连接。',mode:'recipe',checks:'浮力/水面约束 / 航迹 / 上下船'},
  {id:'vehicles.aircraft',kind:'飞行器',group:'载具',icon:'✧',color:'#a5bbd1',name:'载具层 · 飞行器',description:'游戏已有飞行与飞艇接口；未在当前REA能力记录中找到对应实现，不能冒称来自REA库。',mode:'recipe',checks:'起降 / 高度 / 碰撞 / 上下机'},
  {id:'vehicles.cars',kind:'车',group:'载具',icon:'▰',color:'#c9b48e',name:'载具层 · 车',description:'游戏已有电车搭乘接口；当前REA能力记录未登记通用车辆执行器。',mode:'recipe',checks:'轨道/道路 / 站点 / 上下车'},
- {id:'combat.encounter',kind:'战斗',icon:'⚑',color:'#d997a6',name:'遭遇与交互',description:'场景战斗执行适配尚未接入；配方中保留目标。',mode:'recipe',source:'REACodeRefactoring/src/badnorth/battle.js',checks:'伤害 / 寻路 / 性能'}
+ {id:'combat.encounter',kind:'战斗',icon:'⚑',color:'#d997a6',name:'遭遇与交互',description:'Bad North 玩法层已能作用到任意已注册场景（十二门徒 / 苔庭 / 圣城）：src/world/rea/sceneBattle.js，入口 ?battleAt=<场景id>&tour=<场景id>-battle。配方里的这一节尚未接执行器，不能当成管线内已能执行。',mode:'recipe',source:'REACodeRefactoring/src/badnorth/battle.js',checks:'伤害 / 寻路 / 性能'}
 ];
 export const CAPABILITIES=NODES.map(c=>({...c,source:CAPABILITY_SOURCES[c.id].modules.map(m=>'REACodeRefactoring/'+m.path).concat((CAPABILITY_SOURCES[c.id].gameModules||[]).map(m=>'TigerMessenger/'+m.path)).join(' · '),provenance:CAPABILITY_SOURCES[c.id]}));
 export const DEFAULT_SETTINGS={waves:true,reflection:true,time:'day',outline:true,grid:false,vegetation:true,birds:true,fog:false,snow:false,fire:true};

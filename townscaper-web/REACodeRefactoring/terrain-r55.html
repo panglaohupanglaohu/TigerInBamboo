@@ -1,7 +1,7 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>地形 r55 · 湖面 / 侵蚀 / 缓坡坍缩 / 连续软坡 / 变形侧壁碰撞</title><link rel="icon" href="data:,">
 <style>body{margin:0;background:#edf4f3;color:#20343c;font:14px/1.5 system-ui}header{padding:8px 14px}iframe{border:0;width:100%;height:calc(100vh - 150px)}a{color:#26758a}#stats{font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;max-height:64px;overflow:auto;background:#f8fbfa;padding:4px 8px}label{margin-right:10px}</style>
 <header><b>地形 r55</b> · 主场景 index.html?scene=terrain 里的同一个 World / WorldMesh · <a href="index.html" target="_top">首页</a><br>
-<label><input type="checkbox" id="lakes">湖面（填洼水位）+ 湖洞联合重建</label><label><input type="checkbox" id="erosion">侵蚀</label><label><input type="checkbox" id="relax">河道 BFS 缓坡坍缩</label><label><input type="checkbox" id="soft">连续软坡（softSlopes + softTops）</label><label><input type="checkbox" id="edges">台地边线（最终倒角）</label><label><input type="checkbox" id="collide">变形侧壁碰撞探针</label>
+<label><input type="checkbox" id="lakes">湖面（填洼水位）+ 湖洞联合重建</label><label><input type="checkbox" id="erosion">侵蚀</label><label><input type="checkbox" id="relax">河道 BFS 缓坡坍缩</label><label><input type="checkbox" id="soft">连续软坡（softSlopes + softTops）</label><label><input type="checkbox" id="softrelax">缓坡连续化（相邻缓坡格 ≤1 层）</label><label><input type="checkbox" id="edges">台地边线（最终倒角）</label><label><input type="checkbox" id="collide">变形侧壁碰撞探针</label>
 <div id="stats">加载中…</div></header>
 <iframe id="scene"></iframe>
 <script type="module">
@@ -11,10 +11,10 @@ import{generateTerrain}from'./src/terrain/generate.js';
 import{terrainCollider}from'./src/terrain/terrain-collide.js';
 import{meshSlopeProfile}from'./src/core/terrace-profile.js';
 const q=new URLSearchParams(location.search),grid=q.get('grid')==='mixed'?'mixed':'quad',seed=+(q.get('seed')||7);
-const keys=['lakes','erosion','relax','soft','edges','collide'];for(const k of keys)document.querySelector('#'+k).checked=q.get(k)==='1';
+const keys=['lakes','erosion','relax','soft','softrelax','edges','collide'];for(const k of keys)document.querySelector('#'+k).checked=q.get(k)==='1';
 const f=document.querySelector('#scene');f.src='index.html?scene=terrain&grid='+grid;
 let probe=null;
-function opts(){const on=k=>document.querySelector('#'+k).checked;return{seed,riverRelax:on('relax'),lakes:on('lakes'),basins:on('lakes')?1:0,erosion:on('erosion')?{passes:2}:null,softSlopes:on('soft')};}
+function opts(){const on=k=>document.querySelector('#'+k).checked;return{seed,riverRelax:on('relax'),lakes:on('lakes'),basins:on('lakes')?1:0,erosion:on('erosion')?{passes:2}:null,softSlopes:on('soft'),softRelax:on('soft')&&on('softrelax')};}
 async function apply(){const r=f.contentWindow.rea,THREE=await f.contentWindow.eval("import('three')");const on=k=>document.querySelector('#'+k).checked;
  const w=r.world,res=generateTerrain(w,opts());w.softTops=on('soft')&&q.get('tops')!=='0';w.terrainCollide=true;r.view.changed();r.view.worldMesh.invalidate();
  r.view.setDebug('terraceedges',on('edges'));

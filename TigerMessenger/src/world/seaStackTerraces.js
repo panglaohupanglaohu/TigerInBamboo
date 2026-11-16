@@ -1,6 +1,6 @@
 import {connectedSeaStackLandscapeEnabled,planConnectedSeaStackBanks,buildConnectedSeaStackBank} from './seaStackConnectedLandscape.js';
 import {twelveApostlesTargetEnabled,buildTwelveApostlesTarget} from './twelveApostlesTarget.js?v=shell-coral-20261024';
-import {apostlesReacodeEnabled,buildTwelveApostlesReacodeSteps} from './apostlesReacode.js?v=apostles-r4b';
+import {apostlesReacodeEnabled,buildTwelveApostlesReacodeSteps} from './apostlesReacode.js?v=apostles-r5';
 import {morrisViewer} from './morrisViewer.js';
 import {plantConnectedSeaStackMeadow} from './seaStackMeadowVegetation.js';
 import {createCoastalMaterial} from './seaStackLighting.js';

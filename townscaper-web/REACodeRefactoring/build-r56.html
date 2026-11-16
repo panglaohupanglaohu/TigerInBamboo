@@ -16,7 +16,10 @@ const FLAGS={steelFrame:'钢架：落点/曲柄/系杆',yardWalls:'后院矮墙+
 for(const f of(q.get('flags')||'').split(',').filter(Boolean))world[f]=true;
 const view=new View(document.querySelector('#view'),world,grid,buildCellIndex(grid),{levelHeight:L});view.changed();view.frameTown();
 let layer=null;if(q.get('propanim')){layer=attachYardPropAnim(view,world,{spread:+(q.get('spread')||.35)});if(q.get('freeze')){let T=0;layer.clock=()=>T;window.r56setT=t=>{T=t;layer.update(T);};}}
-function stats(){const m=new MeshWriter(),r=buildBuildings(m,world,{L});const st=r.steel;return{kind,scene:sceneName,flags:Object.keys(FLAGS).filter(f=>world[f]),propAnimYard:!!world.propAnimYard,verts:m.pos.length/3,steel:st&&{legs:st.legs.length,cranks:st.cranks,ties:st.ties,joints:st.joints,bays:st.bays,clusters:st.clusters.map(c=>({bays:c.bays,ties:c.ties.join('/'),solutions:c.solutions}))},yards:r.yards,yardWalls:r.yardWalls,anim:layer&&{...layer.stats}};}
+function stats(){const m=new MeshWriter(),r=buildBuildings(m,world,{L});const st=r.steel;return{kind,scene:sceneName,flags:Object.keys(FLAGS).filter(f=>world[f]),propAnimYard:!!world.propAnimYard,verts:m.pos.length/3,steel:st&&{legs:st.legs.length,cranks:st.cranks,ties:st.ties,joints:st.joints,bays:st.bays,ladders:st.ladders.length,clusters:st.clusters.map(c=>({bays:c.bays,ties:c.ties.join('/'),solutions:c.solutions})),
+      /* 逐腿明细（r103 页面入口：只读已有 legs 记录，给浏览器验收算「曲柄内倾量 / 落点层 / 垫块」）*/
+      legDetail:st.legs.map(l=>({lv:l.lv,land:l.landLevel,flat:l.flat,crank:l.crank?{knee:+l.crank.knee.toFixed(4),foot:l.crank.foot.map(v=>+v.toFixed(4)),top:l.top.map(v=>+v.toFixed(4))}:null})),
+      tieLevels:st.clusters.map(c=>c.ties)},yards:r.yards,yardWalls:r.yardWalls,anim:layer&&{...layer.stats}};}
 function focus(){const f=q.get('focus');if(!f||!S)return;let ids=f==='a'?[S.a,S.b]:f==='tower'?[...S.tower,S.low,S.mid]:f==='yard'?[S.start]:[];if(!ids.length)return;const cs=ids.map(i=>grid.cells[i]),x=cs.reduce((s,c)=>s+c.cx,0)/cs.length,z=cs.reduce((s,c)=>s+c.cz,0)/cs.length;
  view.target.set(x,+(q.get('ty')||(f==='yard'?.5:1.8)),z);view.distance=+(q.get('dist')||7);if(q.get('yaw'))view.yaw=+q.get('yaw');if(q.get('pitch'))view.pitch=+q.get('pitch');view.updateCamera();}
 focus();

@@ -382,3 +382,72 @@ JEV本轮使用无项目数据的通用设计规则（不含路径、原文、�
 没有做：没有新增视频观看；没有新增或验收任何能力代码，177 partial 不变；经验未统一回写、队列未落盘；球系统 / 物件管线的待完成节点未进需求；Worker 回执未带能力线；未改 PipeLineEngine / 验证 / 采纳；未触用户场景存档；未提交发布。JEV 本轮未调用（改动是确定性计算与界面，无分类筛选批次）。
 
 下一动作：WORKSHOP_LOOP_PLAN.md §6，先经验统一回写，再按适配队列封装网格线。
+
+## 2026-11-15 能力网、场景诊断、网格线第一项能力、十二门徒地形对照
+
+用户要求：继续落地；能力库要构成一张能力网，差在哪里、怎么补都给出引导；并指出十二门徒下方地形不美观、与原片柔和边缘不一致、配色与 Townscaper 不同，「地形没有学到位」。本轮读取了 oskar-world-advisor 技能说明（未派生子代理，由主代理直接处理）。
+
+实现：
+- 能力网：capability-lineage.js 增加 net（能力线节点、前置边、按主要前置的最长链分层）与 consumers 场景诊断；界面新增「能力网」段，可选对照场景，给出 ① 对照后同步 ② 接入 ③ 补学 三组引导。
+- tools/refactor/scan-scene-consumers.mjs → catalog/scene-consumers.json（静态 import + 字节比较，不执行代码）；scene-consumer-notes.json 记录人工对照结论；CAPABILITY_LINEAGE.md 增「场景诊断」。
+- 网格线第一项可执行能力 grid.contours（REACodeRefactoring/src/capabilities/layers-meta.js、layers.js）：复用 world/contour-overlay.js，在没有 top() 的宿主 World 上按体素位图取顶层；tests/capability-grid-contours.mjs 通过（659 段、10 个高度层、体素变化后刷新、dispose）。网格线退出适配队列（剩 5 条）。
+- 十二门徒：apostlesReacode.js / apostlesTerrain.js 的库来源可切换（src/world/apostlesLook.js，默认关闭）；tests/apostles-look-browser.mjs 同机位对照。
+
+十二门徒对照结果（run-1794746305986，截图已实际查看）：
+- approved（改动后的默认路径）正常渲染、无页面错误。
+- latest：崖壁折面更硬，崖顶出现橙色灌木带——不如现状柔和。
+- soft：与 latest 几乎相同，台地顶面无可见缓坡，右侧出现半透明破面，远景山体外观也变了，原因未查。
+- soft+palette：两次均为空白画面、无报错，原因未查；该选项已从代码删除。
+- 结论与补全顺序见 APOSTLES_TERRAIN_DIAGNOSIS.md。这是一次失败的候选：没有得到更柔和的地形，默认画面未改。
+
+验证：TigerMessenger/tests/*.test.mjs 102/102；capability-lineage-browser.mjs PASS（artifacts/capability-lineage-20261115/run-1794746860287，含能力网与十二门徒诊断截图）；统一入口非浏览器五组见本条之后的运行。
+
+没有做 / 未验证：grid.contours 没有在真实游戏里生成候选验收；对照只有一块岩体一个机位，且是无存档生成岩体（不含用户建筑）；「高度场是主因」「色系来源不同」来自读代码，未做单独对照；经验统一回写、队列落盘、球系统 / 物件需求回流、回执带能力线仍未做；workshops-browser 旧套件未更新。未触用户存档，未提交发布。JEV 未调用。
+
+下一动作：库里先做对地形 A+++ 软坡（队列 #20）并修软坡破面 → 十二门徒缓坡高度场候选给用户看 → 配色单独候选。
+
+## 2026-11-15（续）能力地图：学习工坊清爽化；库软坡第一步
+
+用户反馈：没有看到创新、对知识能力的组织，以及开发界面上的清爽。核对：页面无缓存问题（no-cache），问题在界面本身——九个页签、一页长滚动、文字密。
+
+改动：
+- 新默认页「能力地图」（REACodeRefactoring/src/ui/capability-map.js/.css，8769 与 8931 共用）：一句话目标栏「我想改善 [场景] 的 [能力线]」；左侧能力网（节点 = 能力线，节点里一串圆点 = 各代，箭头 = 前置，独立能力线单排）；右侧抽屉——未选时三个数字 + 已做过的对照结论 +「先做这三件事」，选中后是竖排代际、下一步、该场景在这条线上的旧副本 / 未接代际、可执行能力、相邻能力。
+- 学习工坊头部收成一行；常用页签三个（能力地图 / 队列与闭环 / 时间线），其余六个进「更多资料」下拉；地图页隐藏缓存提示、统计行和进度卡。原长页面保留为「队列与闭环」。左栏「下一步 → 学习工坊」改为落到地图并选中该线。
+- 8769 pipeline.html 顶部同一张地图，原明细折叠。
+- 库：terrain/generate.js 增 limitSoftSlopes / softRelax（缓坡省相邻格 ≤1 层，只降不升，海岸与陡崖省不动，塔柱保持陡崖），terrain-r55.html 加开关，tests/soft-continuous.mjs 通过并入统一入口。
+
+如实记录：软坡第一步的目标「演示岛出现可见的连续坡面」**没有达到**。坡度上限成立（缓坡省 ≥2 层小崖从 37/9/25/3 处降为 0），但 soft-tops 连成坡面的格角数几乎不变（54→77、23→29、38→37、12→12），成面条件（格角周围全是裸岩顶、不临地图边等）仍然太窄；软坡破面也还没定位。十二门徒缓坡候选与配色候选未开始。
+
+验证：capability-lineage-browser.mjs PASS（artifacts/capability-lineage-20261115/run-1794818841988，地图总览 / 十二门徒 / 十二门徒×地形截图已实际查看）；单元与统一入口见下。8769 页面 390px 下旧的 #latest-progress、#lanes 两个区块本身横向溢出（与本轮无关），测试改为只判定地图 / 明细 / 时间线三段。
+
+下一动作：放宽并修正 soft-tops 成面条件（连同破面），用 terrain-r55 同机位截图确认可见后，再做十二门徒缓坡候选。
+- 上游 learn/data.js 在 11-16 又更新，4 条批注失效（837027901853810688、1151137783785771008、1201179450668441600、1205422438437273601）；已按新记录重评写回，partial 总数现为 167。
+  capability-evolution.test.mjs 里写死的 177/31/119/27 改为一致性断言（数量随上游变化）。
+
+## 2026-11-16 夜半球纯黑修复 + 十二门徒 Bad North 战场跑通
+
+用户反馈：星球夜半球纯黑（截图确认：右半整块黑只剩窗户灯点）；并要求拿十二门徒跑一遍流程，直到 Bad North 在十二门徒实现。
+
+发现与实现（光照）：
+- 根因：`src/world/dayNight.js` 的 KEYS 深夜帧 `ambientI=0.08`、`sunI=0.14`，背光半球只剩 3% 环境光；`hemi` 与 `fill` 都按 ambientI 衰减，Toon 色块直接掉成纯黑。不是 V5 专属问题，默认旧四灯同样。
+- 修复：`environment.js` 新增月光补光 `moon`（0x8fa8d8，初始 0）；`dayNight.update` 按夜晚权重 `1 - ambientI/0.9` 点亮，强度上限 0.42，位置放在太阳反向斜上方并保持抬升。V5（publishOnly）与非 V5 都写这盏灯，白天权重为 0、`visible=false`，日景不变。
+- 证据：`artifacts/apostles-battle-20261116/lighting-night-after.png` 与 `lighting-noon-after.png`（同机位，`?timeOfDay=0.9` / `0.5`，本地 8931）。
+
+发现与实现（十二门徒 × Bad North）：
+- 新入口 `src/world/rea/sceneBattle.js`：复用 `reaBattleStage.js`，`?battleAt=<场景id>` 起战场，`?tour=<场景id>-battle` 接管俯视机位，`?battleScale` / `?battleRadius` 调尺度。`main.js` 只在带参数时触发，零副作用。
+- `reaBattleStage.js`：`bnHouses` 在场景没有可识别建筑时退回最高台地。十二门徒是纯海蚀岩群，之前 `bnHouses` 恒空，HUD 一直「小屋 0/0」，Bad North 的防守目标根本不存在。
+- 实测（`?autostart=1&battleAt=apostles&tour=apostles-battle&timeOfDay=0.5`）：
+  - 舞台：4170 格、陆地 239 格、最高 8 层、4 个小屋、采样 9 ms、0 报错；
+  - 第 1 波 t=12.4：`landing=reserved`、长船 1、维京人 8、守军 24；
+  - 第 2 波 t=45.4：守军 24 → 16（接战产生伤亡）、小屋 4/4、长船靠岸。
+- 证据：`artifacts/apostles-battle-20261116/battle-wave1-landing.png`、`battle-wave2-melee.png`（台地上可见红色维京人与蓝色守军对峙）。
+- 测试环境注意：headless + swiftshader 在本场景约 0.5 fps，`dt` 被 `min(dt,0.1)` 截断，45 秒真实时间只推进 2.4 秒战斗时间（第一次误判为「波次不触发」）。验证时用 `battle.update(0.05)` × 900 直接推进逻辑；GPU 浏览器不受影响。
+
+未做（如实记录）：
+- 工坊配方执行器仍未接 `combat.encounter`：`pipeline-execution.js` 只有 16 行，仅支持 morris-lake 参数预览。本轮只把 `pipeline-model.js` 里该节点的描述改成真实状态，没有加 UI 按钮，不能算「管线内可执行」。
+- 十二门徒场景里的玩家指挥（选小队 / 移动 / 驻守）未验证；胜负条件、小屋失守判定未实测。
+- 未触用户存档，未提交/发布。
+
+验证：仓库根 `node --test TigerMessenger/tests/*.test.mjs` 102/102 通过。注意在 `TigerMessenger/` 目录下跑会有 12 项因相对路径 `TigerMessenger/src/...` 变成 ENOENT 而失败，属既有用法问题，不是回归。
+
+下一动作：给 `combat.encounter` 加配方执行器与工坊入口（先做「选中十二门徒 → 起战场 → 看实景 → 记经验」这一条）；再做守军指挥与胜负条件。

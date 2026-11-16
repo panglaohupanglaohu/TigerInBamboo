@@ -50,6 +50,7 @@ const OUT = 'artifacts/coverage';
         return g.getImageData(0, 0, W, H).data;
       };
       c.set('groundTint', true);
+      c.set('fireGlow', true);              // 火光探针（r102 新增 c01.fireStats）要开这个档才有值
       b.update(1 / 60);
       if (!c.stain) return { error: 'stain 层没建起来（groundTint 开关没生效）' };
 
@@ -71,19 +72,22 @@ const OUT = 'artifacts/coverage';
       const med0 = medOver(A), med1 = medOver(B);
 
       // ---- 自动档逐帧曲线：把起点钉在「第一次受伤」，然后 1/60 步进 ----
+      // 「一开始就有一所房子失守」= 同一次伤害事件：染色起点与火光起点必须是同一帧
+      if (b.houses[0]) { b.houses[0].lost = true; }
       c.setStainProgress(null);
       c.stainT0 = b.t;                       // 与生产一致：#stainStep 用 b.t - stainT0
       b.update(1 / 1000);                    // 走一步让 stats 从「强制 1」回到真实 0（否则第一条是脏值）
       const t0 = b.t, step = 1 / 60, span = 11.4;
       const marks = [0.05, 0.5, 3.56, 8.43, 10.86];
-      const curve = [{ t: 0, p: c.stats.stainProgress, color: c.stats.stainColor, fire: 0, smoke: 0 }];
+      const curve = [{ t: 0, p: c.stats.stainProgress, color: c.stats.stainColor,
+        fire: c.fireStats?.intensity ?? 0, glow: c.fireStats?.houses ?? 0, smoke: 0 }];
       let mi = 0;
       for (let i = 1; i <= Math.round(span / step); i++) {
         b.update(step);
         const t = +(b.t - t0).toFixed(3);
         const smoke = REA.view.smoke;
         curve.push({ t, p: c.stats.stainProgress, color: c.stats.stainColor,
-          fire: +(smoke?.fireAt?.(0)?.light ?? 0).toFixed(3), smoke: smoke?.p?.length ?? 0 });
+          fire: +(c.fireStats?.intensity ?? 0), glow: c.fireStats?.houses ?? 0, smoke: smoke?.p?.length ?? 0 });
         if (mi < marks.length && t >= marks[mi]) {
           const px = grab(), m = medOver(px);
           curve[curve.length - 1].gnd = m;
@@ -129,9 +133,9 @@ const OUT = 'artifacts/coverage';
   ok(gnd.length >= 4 && mono >= gnd.length - 2, `地面 (r−g) 随 p 单调同向 ${mono}/${gnd.length - 1} 段（${gnd.map((r) => `${r.t}s:${r.rmg}`).join(' / ')}）`);
   const firstFire = C.find((r) => r.fire > 0.05), firstStain = C.find((r) => r.p > 0.01);
   const hasFire = C.some((r) => r.fire > 0.05);
-  ok(!hasFire || (firstStain?.t ?? 0) >= (firstFire?.t ?? 0) - 0.02,
-    hasFire ? `火先起：火光 >0.05 在 ${firstFire?.t}s，地面开染在 ${firstStain?.t}s`
-            : `本场景该时刻无火光（smoke.fireAt 不可用），跳过先后断言；地面开染在 ${firstStain?.t}s`);
+  ok(hasFire, `火光探针有值：max intensity=${Math.max(...C.map((r) => r.fire), 0).toFixed(3)}（c01.fireStats，r102 新增）`);
+  ok(hasFire && Math.abs((firstFire?.t ?? 9) - (firstStain?.t ?? 0)) <= 0.02,
+    `同帧耦合：火光首次 >0.05 在 ${firstFire?.t}s，地面开染在 ${firstStain?.t}s（时差 ≤0.02s = 同一帧伤害事件）`);
 
   if (problems.length) console.log('页面报错：\n' + problems.map((p) => '  ! ' + p).join('\n'));
   console.log(rows.map((r) => `  ${r.ok ? '✓' : '✗'} ${r.m}`).join('\n'));

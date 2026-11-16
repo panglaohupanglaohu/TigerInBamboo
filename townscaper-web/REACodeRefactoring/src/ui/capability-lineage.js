@@ -13,8 +13,8 @@ const LEVEL_COLOR = ['#7d8f94', '#8fa3a8', '#d9a441', '#3f9ca9', '#6fbf73', '#e8
 const STATE = { complete: '完成 · 无缺口', building: '部分实现', learning: '已学习 · 无完成代码' };
 const TIER = { planet: '球系统', scene: '场景', object: '物件' };
 
-export function renderCapabilityLineage(host, { evolution, modules = [], executables = [], experience = {}, demand = [], alignment = [], line: initialLine, onFocus, onUse, onStage, onState, experienceNote } = {}) {
-  const lineage = buildCapabilityLineage(evolution, { modules, executables, experience, demand, alignment });
+export function renderCapabilityLineage(host, { evolution, modules = [], executables = [], experience = {}, demand = [], alignment = [], consumers = [], consumer: initialConsumer, line: initialLine, onFocus, onUse, onStage, onState, experienceNote } = {}) {
+  const lineage = buildCapabilityLineage(evolution, { modules, executables, experience, demand, alignment, consumers });
   const lines = lineage.lines.filter((l) => l.kind === 'line'), byLine = new Map(lineage.lines.map((l) => [l.id, l])), execById = new Map(lineage.executables.map((x) => [x.id, x]));
   const queueById = new Map(lineage.queue.map((q) => [q.id, q]));
   let selected = byLine.get(initialLine)?.kind === 'line' ? initialLine : (lineage.queue[0]?.line || lines[0]?.id), queueLimit = 8, queueLine = false;
@@ -74,6 +74,50 @@ export function renderCapabilityLineage(host, { evolution, modules = [], executa
   });
   scroller.append(chart);
 
+  // ── 能力网 + 场景诊断 ─────────────────────────────────────────────────────────
+  // 节点 = 能力线（内含各代的小色条），边 = 前置；选一个场景后，色条改为「这个场景用到了哪一代、用的是不是旧副本」
+  const netBox = el('section', undefined, 'lineage-block'); sections.net = netBox; shell.append(netBox);
+  const SCENE_STATE = { 'in-scene': ['场景在用 · 与库一致', '#6fbf73'], stale: ['场景在用 · 旧副本', '#e0603f'], 'not-wired': ['库里有 · 场景没接', '#d9a441'], 'no-code': ['库里还没有代码', '#55666b'] };
+  const CODE_STATE = { complete: '#3f9ca9', building: '#d9a441', learning: '#55666b' };
+  let consumerId = lineage.consumers.some((c) => c.id === initialConsumer) ? initialConsumer : '';
+  function drawNet() {
+    netBox.replaceChildren(); const diag = lineage.consumers.find((c) => c.id === consumerId) || null, rowOf = new Map((diag?.lines || []).map((r) => [r.line, r]));
+    const head = el('div', undefined, 'lineage-line-head'); head.append(el('h3', '能力网'));
+    if (lineage.consumers.length) { const pick = el('select'); pick.setAttribute('aria-label', '对照场景'); const o0 = el('option', '整个能力库（不对照场景）'); o0.value = ''; pick.append(o0); for (const c of lineage.consumers) { const o = el('option', `场景：${c.name} · ${c.counts.modules} 个库模块${c.counts.different ? ' · ' + c.counts.different + ' 个旧副本' : ''}`); o.value = c.id; pick.append(o); } pick.value = consumerId; pick.onchange = () => { consumerId = pick.value; drawNet(); onState?.({ line: selected, consumer: consumerId }); }; head.append(pick); }
+    netBox.append(head, el('p', diag ? `「${diag.name}」实际 import 的能力库模块，对到每条能力线的每一代：绿色在用且与库一致，红色在用但是分叉的旧副本，黄色是库里已有而这个场景没接，灰色是库里也还没有代码。没用到的能力线变淡。` : '一个节点一条能力线，色条是它的各代（青 = 完成，黄 = 部分实现，灰 = 只学习）；箭头从前置指向依赖它的能力线。选一个场景，可以看它在这张网上差在哪里。', 'lineage-dim'));
+    const leg = el('div', undefined, 'lineage-legend'); for (const [name, color] of diag ? Object.values(SCENE_STATE) : [['完成 · 无缺口', CODE_STATE.complete], ['部分实现', CODE_STATE.building], ['只学习', CODE_STATE.learning]]) { const i = el('span'), d = el('i'); d.style.background = color; d.style.borderRadius = '2px'; i.append(d, name); leg.append(i); } netBox.append(leg);
+    const NW = 172, NH = 46, CG = 214, RG = 56, PAD = 14, nodes = lineage.net.nodes, cols = new Map();
+    const maxLayer = Math.max(0, ...nodes.filter((n) => !n.isolated).map((n) => n.layer));
+    for (const n of [...nodes].sort((a, b) => (a.from || '').localeCompare(b.from || ''))) { const col = n.isolated ? maxLayer + 1 + (((cols.get('iso') || 0) / 7) | 0) : n.layer; if (n.isolated) cols.set('iso', (cols.get('iso') || 0) + 1); const list = cols.get(col) || []; if (!cols.has(col)) cols.set(col, list); list.push(n); }
+    cols.delete('iso'); const pos = new Map(); let rowsMax = 0;
+    for (const [col, list] of cols) { rowsMax = Math.max(rowsMax, list.length); list.forEach((n, i) => pos.set(n.id, { x: PAD + col * CG, y: 30 + i * RG })); }
+    const colCount = Math.max(...cols.keys()) + 1, width = PAD * 2 + (colCount - 1) * CG + NW, height = 38 + rowsMax * RG;
+    const g = svg('svg', { viewBox: `0 0 ${width} ${height}`, class: 'lineage-net', role: 'img', 'aria-label': '能力网' });
+    g.append(svg('defs')); g.firstChild.append(svg('marker', { id: 'lineage-arrow', viewBox: '0 0 8 8', refX: 7, refY: 4, markerWidth: 6, markerHeight: 6, orient: 'auto' })); g.firstChild.firstChild.append(svg('path', { d: 'M0 0L8 4L0 8Z', class: 'arrowhead' }));
+    for (let c = 0; c <= maxLayer; c++) g.append(svg('text', { x: PAD + c * CG, y: 14, class: 'year' }, c === 0 ? '基础' : '前置深度 ' + c)); if (colCount > maxLayer + 1) g.append(svg('text', { x: PAD + (maxLayer + 1) * CG, y: 14, class: 'year' }, '与其他线没有前置关系'));
+    for (const e of lineage.net.edges) { const a = pos.get(e.from), b = pos.get(e.to); if (!a || !b) continue; const x1 = a.x + NW, y1 = a.y + NH / 2, x2 = b.x, y2 = b.y + NH / 2, back = x2 <= x1, dx = back ? 60 : Math.max(40, (x2 - x1) / 2);
+      const path = svg('path', { d: `M${x1} ${y1}C${x1 + dx} ${y1},${x2 - dx} ${y2},${x2 - 2} ${y2}`, class: 'edge' + (e.main ? ' main' : '') + (e.from === selected || e.to === selected ? ' on' : ''), 'stroke-width': Math.min(3.2, 0.8 + e.weight * 0.3), 'marker-end': 'url(#lineage-arrow)' }); path.append(svg('title', {}, `${short(byLine.get(e.from).name)} → ${short(byLine.get(e.to).name)} · 依赖权重 ${e.weight}`)); g.append(path); }
+    for (const n of nodes) { const p = pos.get(n.id), row = rowOf.get(n.id), node = svg('g', { class: 'node' + (n.id === selected ? ' selected' : '') + (diag && !row ? ' unused' : ''), transform: `translate(${p.x} ${p.y})`, tabindex: 0, role: 'button', 'data-net-line': n.id, 'aria-label': n.name });
+      node.append(svg('rect', { width: NW, height: NH, rx: 7, class: 'box' }), svg('text', { x: 9, y: 17, class: 'label' }, short(n.name)), svg('text', { x: NW - 8, y: 17, class: 'count', 'text-anchor': 'end' }, row ? `用到 ${row.modules} 模块` : `${n.executables ? '⚙' + n.executables + ' · ' : ''}缺口 ${n.gaps}`));
+      const gens = row ? row.generations : n.generations, w = (NW - 18) / Math.max(1, gens.length);
+      gens.forEach((gen, i) => { const seg = svg('rect', { x: 9 + i * w, y: 26, width: Math.max(2, w - 2), height: 11, rx: 2, fill: row ? SCENE_STATE[gen.state][1] : CODE_STATE[gen.state], class: 'seg' + (!row && i === n.frontier ? ' here' : '') + (!row && i === n.target ? ' next' : '') }); seg.append(svg('title', {}, `${gen.label} · ${row ? SCENE_STATE[gen.state][0] : STATE[gen.state]}${row ? '\n' + gen.title : ''}`)); node.append(seg); });
+      node.append(svg('title', {}, describeDirection(byLine.get(n.id), lineage))); node.onclick = () => select(n.id); node.onkeydown = (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(n.id); } }; g.append(node); }
+    const wrap = el('div', undefined, 'lineage-chart'); wrap.append(g); netBox.append(wrap);
+    if (!diag) return;
+    // 诊断与引导
+    const c = diag.counts, copied = [...new Set(diag.lines.flatMap((r) => r.stale.map((m) => m.copiedAt)).filter(Boolean))].sort();
+    const sum = el('p', `${diag.name}：实际用到 ${c.modules} 个能力库模块，${c.different || 0} 个与最新库不同${copied.length ? `（副本日期 ${copied[0]}${copied.length > 1 ? ' – ' + copied.at(-1) : ''}）` : ''}，涉及 ${c.lines} 条能力线。`, 'lineage-direction'); sum.dataset.consumerSummary = diag.id; netBox.append(sum);
+    for (const n of diag.notes) { const note = el('aside', undefined, 'lineage-target'); note.dataset.consumerNote = diag.id; note.append(el('b', `对照结论 · ${n.date}`), el('p', n.text), el('small', '证据：' + n.evidence + (n.doc ? ' · 详见 ' + n.doc : ''))); netBox.append(note); }
+    netBox.append(el('p', '查的顺序：① 旧副本与库的现行版本有什么不同（同机位对照后再决定换不换，新版本不一定更好看）→ ② 库里已有、这个场景没用的代际 → ③ 库里也没学到位的缺口。字节不同只说明版本分叉，不单独证明画面退化。', 'lineage-dim'));
+    const groups = el('div', undefined, 'lineage-guide');
+    for (const [kind, title] of [['sync', '① 对照后同步：场景在用旧副本'], ['wire', '② 接入：库里有，场景没接'], ['learn', '③ 补学：库里也没学到位']]) {
+      const items = diag.guide.filter((x) => x.kind === kind), col = el('section', undefined, 'guide-' + kind); col.dataset.guideKind = kind; col.append(el('h4', `${title} · ${items.length}`));
+      const draw = (limit) => { for (const it of items.slice(col.querySelectorAll('article').length, limit)) { const a = el('article'); a.append(el('b', it.title)); if (it.why) a.append(el('p', it.why)); if (it.detail?.length) a.append(el('code', it.detail.join('  '))); const row = el('div', undefined, 'lineage-actions'); const b1 = el('button', '看这条线'); b1.type = 'button'; b1.onclick = () => { select(it.line); ladderBox.scrollIntoView({ block: 'start', behavior: 'smooth' }); }; row.append(b1); if (it.clip && onFocus) { const b2 = el('button', '来源与差距 →'); b2.type = 'button'; b2.onclick = () => onFocus(it.clip); row.append(b2); } a.append(row); col.append(a); } };
+      draw(5); if (items.length > 5) { const more = el('button', `显示全部 ${items.length} 项`); more.type = 'button'; more.onclick = () => { more.remove(); draw(items.length); }; col.append(more); } if (!items.length) col.append(el('p', '没有。', 'lineage-dim')); groups.append(col);
+    }
+    netBox.append(groups);
+  }
+
   // ── 代际阶梯 + 组合 ──────────────────────────────────────────────────────────
   const ladderBox = el('section', undefined, 'lineage-block'); sections.ladder = ladderBox; shell.append(ladderBox);
   const comboBox = el('section', undefined, 'lineage-block'); sections.combo = comboBox; shell.append(comboBox);
@@ -130,9 +174,9 @@ export function renderCapabilityLineage(host, { evolution, modules = [], executa
     const cross = lineage.crossRelations.filter((r) => r.from === l.id || r.to === l.id);
     if (cross.length) { const d = el('details'); d.append(el('summary', `有依据的跨线关系 ${cross.length} 条`)); for (const r of cross) { const p = el('p'); p.append(el('b', `${short(byLine.get(r.from).name)} → ${short(byLine.get(r.to).name)} · ${r.label}`), ' ' + r.reason); d.append(p); } comboBox.append(d); }
     for (const [id, g] of rowNodes) g.classList.toggle('selected', id === l.id);
-    shell.dataset.lineageLine = l.id; onState?.({ line: l.id });
+    shell.dataset.lineageLine = l.id; onState?.({ line: l.id, consumer: consumerId });
   }
-  function select(id) { if (byLine.get(id)?.kind !== 'line') return; selected = id; drawLadder(); drawQueue(); }
+  function select(id) { if (byLine.get(id)?.kind !== 'line') return; selected = id; drawLadder(); drawQueue(); drawNet(); }
 
   // ── 补学队列 ────────────────────────────────────────────────────────────────
   const queueBox = el('section', undefined, 'lineage-block'); sections.queue = queueBox; shell.append(queueBox);
@@ -172,6 +216,6 @@ export function renderCapabilityLineage(host, { evolution, modules = [], executa
   for (const x of lineage.executables) { const e = x.experience || {}, row = el('div', undefined, e.failed ? 'failed' : ''); row.dataset.executable = x.id; row.append(el('b', '⚙ ' + x.name), el('span', TIER[x.tier] || x.tier), el('span', x.lines.length ? x.lines.map((id) => short(byLine.get(id).name)).join('、') : '未关联能力线'), el('span', e.runs ? `执行 ${e.runs} · 通过 ${e.passed || 0} · 失败 ${e.failed || 0} · 采用 ${e.committed || 0}` : '未执行')); if (e.lastFailure) row.append(el('small', '最近失败：' + e.lastFailure)); (e.runs || e.committed ? table : idle).append(row); }
   idleBox.append(el('summary', `还没执行过的可执行能力 · ${idle.children.length}`), idle); expBox.append(table, idleBox);
 
-  drawLadder(); drawQueue();
+  drawLadder(); drawQueue(); drawNet();
   return { lineage, select };
 }

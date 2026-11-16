@@ -773,6 +773,11 @@ export class BattleC01 {
       const f = 0.75 + 0.15 * Math.sin(b.t * 13 + g.seed) + 0.1 * Math.sin(b.t * 31 + g.seed * 2);
       g.light.intensity = 3 * f; g.disc.material.opacity = 0.36 * f; g.light.visible = g.disc.visible = true;
     }
+    // 第 102 轮：把火光状态暴露成探针，供 tests/stain-joint-curve-browser.cjs 判「火先起 / 地面后跟」。
+    // 不新增渲染行为，只读已有 glows（r101 的缺口：badnorth 拿不到 view.smoke.fireAt）。
+    let li = 0, lo = 0;
+    for (const g of this.glows.values()) { if (g.light.visible) { li = Math.max(li, g.light.intensity); lo = Math.max(lo, g.disc.material.opacity); } }
+    this.fireStats = { t: +b.t.toFixed(3), houses: this.glows.size, lit: li > 0 ? this.glows.size : 0, intensity: +li.toFixed(4), discOpacity: +lo.toFixed(4) };
   }
 
   /* ---------------------------------------------- 816743289500106752：成列行军 + 方块集结 */

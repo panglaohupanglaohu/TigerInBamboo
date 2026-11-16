@@ -20,8 +20,13 @@ const COMMANDS = [{ key: 'move', label: '移动', glyph: 'wand' }, { key: 'hold'
 export class BattleG3 {
   constructor(battle) {
     this.b = battle; this.on = Object.fromEntries(G3_FLAGS.map((k) => [k, false]));
+    // continuousFlow 自第 115 轮起是主战斗的默认（battle.js 构造 BattleNavigation 时传 true）：
+    // 这里继承 nav 的现值 —— g3 在 battle 构造期就建好（那时还没有 navigation），所以缺省按 true，
+    // 否则 G3 一 start() 就把默认冲成 false（旧行为）。URL `?continuousFlow=0` 可强制关。
+    this.on.continuousFlow = battle.navigation ? !!battle.navigation.continuousFlow : true;
     const q = new URLSearchParams(globalThis.location?.search ?? '');
     for (const k of G3_FLAGS) if (q.get(k) === '1') this.on[k] = true;
+    if (q.get('continuousFlow') === '0') this.on.continuousFlow = false;
     this.group = new THREE.Group(); battle.group.add(this.group);
     this.shieldFaces = new ShieldFaces(260); this.group.add(this.shieldFaces.group);
     this.standards = new Map(); this.markers = new Map();

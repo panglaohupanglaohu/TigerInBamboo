@@ -16,17 +16,20 @@
 // Each mass lives in its own tangent frame on the planet (local +Y = sea normal); geometry, waves and
 // plants are bent onto the sphere (y -= r^2 / 2R) and wall feet are carried below the waterline.
 import * as THREE from 'three';
-import {buildQuadGrid} from '../vendor/townscaper-rea-refactoring/src/core/grid.js';
-import {decorateCells,buildCellIndex,pointInQuad} from '../vendor/townscaper-rea-refactoring/src/core/spatial.js';
-import {World,MAX_LEVEL} from '../vendor/townscaper-rea-refactoring/src/core/world.js';
-import {TERRAIN,PALETTES} from '../vendor/townscaper-rea-refactoring/src/core/palette.js';
-import {fbm,makeRng} from '../vendor/townscaper-rea-refactoring/src/core/noise.js';
-import {addFeatures} from '../vendor/townscaper-rea-refactoring/src/terrain/features.js';
-import {encodeWorld,decodeWorld} from '../vendor/townscaper-rea-refactoring/src/world/save.js';
-import {generateApostleTerrain} from './apostlesTerrain.js?v=apostles-terrain-r1';
-import {WorldMesh} from '../vendor/townscaper-rea-refactoring/src/world/worldmesh.js';
-import {buildShore,makeSkirtMaterial,makeWaveMaterial} from '../vendor/townscaper-rea-refactoring/src/water/shore.js';
-import {Vegetation} from '../vendor/townscaper-rea-refactoring/src/life/vegetation.js';
+import * as vGrid from '../vendor/townscaper-rea-refactoring/src/core/grid.js';
+import * as vSpatial from '../vendor/townscaper-rea-refactoring/src/core/spatial.js';
+import * as vWorld from '../vendor/townscaper-rea-refactoring/src/core/world.js';
+import * as vPalette from '../vendor/townscaper-rea-refactoring/src/core/palette.js';
+import * as vNoise from '../vendor/townscaper-rea-refactoring/src/core/noise.js';
+import * as vFeatures from '../vendor/townscaper-rea-refactoring/src/terrain/features.js';
+import * as vSave from '../vendor/townscaper-rea-refactoring/src/world/save.js';
+import {generateApostleTerrain} from './apostlesTerrain.js?v=apostles-terrain-r2';
+import * as vWorldmesh from '../vendor/townscaper-rea-refactoring/src/world/worldmesh.js';
+import * as vShore from '../vendor/townscaper-rea-refactoring/src/water/shore.js';
+import * as vVegetation from '../vendor/townscaper-rea-refactoring/src/life/vegetation.js';
+import {APOSTLES_LOOK,LATEST} from './apostlesLook.js';
+// 默认用 vendor 副本（认可画面）；?apostlesLook=… 候选时整套换成最新能力库的同名模块（见 apostlesLook.js）
+const {buildQuadGrid}=LATEST?.grid??vGrid,{decorateCells,buildCellIndex,pointInQuad}=LATEST?.spatial??vSpatial,{World,MAX_LEVEL}=LATEST?.world??vWorld,{TERRAIN,PALETTES}=LATEST?.palette??vPalette,{fbm,makeRng}=LATEST?.noise??vNoise,{addFeatures}=LATEST?.features??vFeatures,{encodeWorld,decodeWorld}=LATEST?.save??vSave,{WorldMesh}=LATEST?.worldmesh??vWorldmesh,{buildShore,makeSkirtMaterial,makeWaveMaterial}=LATEST?.shore??vShore,{Vegetation}=LATEST?.vegetation??vVegetation;
 import {APOSTLE_MASSES,LEVEL_Y,sampleApostleLobes} from './twelveApostlesTarget.js?v=shell-coral-20261024';
 
 export const APOSTLES_REACODE_REVISION='apostles-reacode-r3';
@@ -112,13 +115,13 @@ export function* buildTwelveApostlesReacodeSteps({parent,radius=160,railCurves,r
   // ---- grid + world (deterministic per mass: the same grid comes back for saved edits)
   const ext=Math.max(...footprint.map(([cx,cz,rx,rz])=>Math.hypot(cx,cz)+Math.max(rx,rz)*1.25))+4;
   const grid=decorateCells(buildQuadGrid({radius:Math.ceil(ext/S)+3,hexSize:1,seed:strHash(id)%100000}));
-  const index=buildCellIndex(grid),world=new World(grid);world.palette=PALETTES.town;
+  const index=buildCellIndex(grid),world=new World(grid);world.palette=PALETTES.town;if(APOSTLES_LOOK.soft)world.softTops=true;
   // clearance cap per cell (lazy): the highest level a column may reach without touching rail / town / protected sites
   const cap=new Int8Array(grid.cells.length).fill(-1),drop={rail:0,protected:0,town:0};
   const maxLevelAt=c=>{if(cap[c.id]>=0)return cap[c.id];const x=c.cx*S,z=c.cz*S;let hm=MAX_LEVEL;while(hm>0){const why=blockedAt(x,z,hm*LEVEL_M);if(!why)break;hm--;}return cap[c.id]=hm;};
   // terrain: REACodeRefactoring terrain pipeline (apostlesTerrain.js) inside the approved composition
   const shrunk=footprint.map(l=>[l[0],l[1],l[2]*.78,l[3]*.78,l[4],l[5]]);
-  const generate=()=>{const r=generateApostleTerrain(world,{seed,spire,
+  const generate=()=>{const r=generateApostleTerrain(world,{seed,spire,soft:APOSTLES_LOOK.soft,lib:LATEST,
     mask:c=>{const x=c.cx*S,z=c.cz*S;return!lobeHeight(footprint,metres,x,z,seed+3,...edgeNoise)?0:lobeHeight(shrunk,metres,x,z,seed+3,...edgeNoise)?1:.62;},
     cap:c=>Math.max(1,Math.round(lobeHeight(lobes,metres,c.cx*S,c.cz*S,seed,...edgeNoise)/LEVEL_M)),limit:maxLevelAt,
     towers:spire?0:1,canyons:!spire,rivers:spire?0:1,caves:spire?1:2,overhangs:spire?0:3,arches:spire?0:1,stacks:0});

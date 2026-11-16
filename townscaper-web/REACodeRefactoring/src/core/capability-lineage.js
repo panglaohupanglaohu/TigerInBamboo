@@ -8,6 +8,7 @@
  *   experience  { 能力ID: { runs, passed, failed, committed, lastFailure } }，系统工坊本机执行经验
  *   demand      [{ id, name, clips, reason }]：管线里已经放了、但还不能执行的节点（系统需要而能力库没有）
  *   alignment   原版 REACode 文件 → 重构落点（扫描结果），用于把原版文件归到能力线
+ *   consumers   场景消费清单（scan-scene-consumers.mjs）：每个场景实际 import 的模块及其与最新库的差异
  *
  * 输出只是排序与归类，不提升任何验收状态：代码完成 ≠ 可执行 ≠ 已采用。
  */
@@ -27,7 +28,7 @@ export const SCORE_FORMULA = '得分 = 优先级(高30/中20/低10) + 本线向�
 const genLabel = (k) => (k === 0 ? 'A' : k <= 3 ? 'A' + '+'.repeat(k) : 'A+' + k);
 const clipIdsOf = (x) => [...new Set([...(x.learn || []), ...(x.related || []), ...(x.sources || []), ...(x.sourceVideos || []), ...(x.clips || [])].map(String))];
 
-export function buildCapabilityLineage(evolution, { modules = [], executables = [], experience = {}, demand = [], alignment = [] } = {}) {
+export function buildCapabilityLineage(evolution, { modules = [], executables = [], experience = {}, demand = [], alignment = [], consumers = [] } = {}) {
   if (!Array.isArray(evolution?.events) || !Array.isArray(evolution?.families) || !Array.isArray(evolution?.relations)) throw Error('能力谱系需要演进模型');
   const byId = new Map(evolution.events.map((e) => [e.id, e]));
   const edges = new Map(evolution.relations.map((r) => [r.id, r]));
@@ -213,7 +214,47 @@ export function buildCapabilityLineage(evolution, { modules = [], executables = 
   // 管线需要、但来源已是「代码完成」的条目：缺的是执行适配而不是学习
   const demandRows = demand.map((d) => { const clips = (d.clips || []).map(String).filter((id) => byId.has(id)); return { ...d, clips, lines: [...new Set(clips.flatMap((id) => byId.get(id).families.filter((f) => lineById.get(f)?.kind === 'line')))], needs: clips.some((id) => byId.get(id).status === 'partial') ? 'learning' : clips.length ? 'adapter' : 'source' }; });
 
+  // ── 9. 能力网：能力线为节点、前置为边，按前置深度分层 ──────────────────────────────────
   const real = lines.filter((l) => l.kind === 'line');
+  // 层 = 最长前置链；只沿主要前置（权重 ≥2 且占该线最大权重的四成以上）走，遇到环跳过回边
+  const layer = new Map(), walking = new Set();
+  const main = (l) => { const top = Math.max(0, ...l.requires.map((r) => r.weight)); return l.requires.filter((r) => r.weight >= Math.max(2, top * 0.4)); };
+  const depth = (id) => { if (layer.has(id)) return layer.get(id); if (walking.has(id)) return -1; walking.add(id); let d = 0; for (const r of main(lineById.get(id))) { const k = depth(r.id); if (k >= 0) d = Math.max(d, k + 1); } walking.delete(id); layer.set(id, d); return d; };
+  for (const l of [...real].sort((a, b) => (a.from || '').localeCompare(b.from || ''))) depth(l.id);
+  const net = { nodes: real.map((l) => ({ id: l.id, name: l.name, layer: layer.get(l.id), isolated: !l.requires.length && !l.requiredBy.length, from: l.from, generations: l.generations.map((g) => ({ label: g.label, state: g.state, gaps: g.gaps.length })), frontier: l.frontier, target: l.target?.generation ?? null, executables: l.executables.length, gaps: l.counts.gaps })),
+    edges: real.flatMap((l) => { const m = new Set(main(l).map((r) => r.id)); return l.requires.map((r) => ({ from: r.id, to: l.id, weight: r.weight, main: m.has(r.id) })); }) };
+
+  // ── 10. 场景诊断：场景 → 模块 → 能力线 / 代际 → 差在哪里、怎么补 ─────────────────────────
+  const genModules = (g) => [...new Set(g.members.flatMap((m) => m.modules))].filter((p) => !modByPath.size || modByPath.has(p));
+  const diagnoses = consumers.map((c) => {
+    const used = new Map((c.modules || []).map((m) => [m.path, m]));
+    const rows = [];
+    for (const l of real) {
+      const mine = l.modules.filter((p) => used.has(p)); if (!mine.length) continue;
+      const stale = mine.filter((p) => used.get(p).state === 'different').map((p) => ({ path: p, bytes: used.get(p).bytes, libraryBytes: used.get(p).libraryBytes, copiedAt: used.get(p).copiedAt, direct: used.get(p).direct }));
+      const inGen = new Set();
+      const gens = l.generations.map((g) => {
+        const mods = genModules(g); mods.forEach((p) => inGen.add(p));
+        const hit = mods.filter((p) => used.has(p)), fresh = hit.filter((p) => used.get(p).state !== 'different');
+        const state = !mods.length ? 'no-code' : fresh.length ? 'in-scene' : hit.length ? 'stale' : 'not-wired';
+        return { index: g.index, label: g.label, from: g.from, title: g.title, headId: g.headId, codeState: g.state, state, used: hit, missing: mods.filter((p) => !used.has(p)) };
+      });
+      const reached = gens.filter((g) => g.state === 'in-scene' || g.state === 'stale').at(-1) || null;
+      const other = l.modules.filter((p) => !used.has(p) && !inGen.has(p));
+      rows.push({ line: l.id, name: l.name, modules: mine.length, stale, generations: gens, reached: reached?.label || null, libraryReached: l.frontier >= 0 ? l.generations[l.frontier].label : null, otherUnwired: other,
+        learn: queue.filter((q) => q.line === l.id || q.alsoIn.includes(l.id)).slice(0, 3).map((q) => ({ id: q.id, rank: q.rank, generation: q.generation, title: q.title, gap: q.gap, nextAction: q.nextAction })) });
+    }
+    rows.sort((a, b) => b.modules - a.modules);
+    // 引导：先把旧副本同步到库 → 再接库里已有、场景没用的代际 → 最后才是库里也没学到位的缺口
+    const guide = [];
+    for (const r of rows) if (r.stale.length) guide.push({ kind: 'sync', line: r.line, title: `${r.name.split(/[：:]/)[0]}：${r.stale.length} 个模块是旧副本`, detail: r.stale.map((m) => `${m.path}（${m.bytes} → 库 ${m.libraryBytes} 字节）`), why: '场景用的是分叉的旧版本，库里后来的改动没有进到这个场景。换之前先做同机位对照：新版本不一定更好看。' });
+    for (const r of rows) for (const g of r.generations) if (g.state === 'not-wired' && g.codeState !== 'learning') guide.push({ kind: 'wire', line: r.line, generation: g.label, clip: g.headId, title: `${r.name.split(/[：:]/)[0]} ${g.label}（${(g.from || '').slice(0, 4)}）库里有代码，场景没接`, detail: g.missing, why: g.title });
+    for (const r of rows) if (r.otherUnwired.length && r.modules >= 2) guide.push({ kind: 'wire', line: r.line, title: `${r.name.split(/[：:]/)[0]}：本线另有 ${r.otherUnwired.length} 个库模块场景没用到`, detail: r.otherUnwired.slice(0, 12), why: '这些模块归在同一条能力线，但没有登记到具体代际；按需要接入。' });
+    for (const r of rows) for (const q of r.learn) guide.push({ kind: 'learn', line: r.line, generation: q.generation, clip: q.id, title: `${r.name.split(/[：:]/)[0]} ${q.generation}：库里也还没学到位（队列 #${q.rank}）`, detail: [q.gap || q.title], why: q.nextAction });
+    const usedOwned = (c.modules || []).filter((m) => owner.has(m.path)).length;
+    return { id: c.id, name: c.name, entries: c.entries || [], notes: c.notes || [], counts: { ...(c.counts || {}), lines: rows.length, ownedModules: usedOwned, sync: guide.filter((g) => g.kind === 'sync').length, wire: guide.filter((g) => g.kind === 'wire').length, learn: guide.filter((g) => g.kind === 'learn').length }, lines: rows, guide };
+  });
+
   const expRows = execRows.filter((x) => x.experience?.runs || x.experience?.committed);
   const loop = {
     sources: evolution.events.length, lines: real.length, generations: real.reduce((n, l) => n + l.generations.length, 0),
@@ -224,7 +265,7 @@ export function buildCapabilityLineage(evolution, { modules = [], executables = 
     demand: demandRows.length, experienceCaps: expRows.length, runs: expRows.reduce((n, x) => n + (x.experience.runs || 0), 0), failed: expRows.reduce((n, x) => n + (x.experience.failed || 0), 0), committed: expRows.reduce((n, x) => n + (x.experience.committed || 0), 0),
     originals: originals.total, originalsClassified: originals.classified,
   };
-  return { schemaVersion: 1, evolutionFingerprint: evolution.fingerprint || null, levels: LEVELS, formula: SCORE_FORMULA, lines, combinations, crossRelations, queue, adaptQueue, demand: demandRows, executables: execRows,
+  return { schemaVersion: 1, evolutionFingerprint: evolution.fingerprint || null, levels: LEVELS, formula: SCORE_FORMULA, lines, net, consumers: diagnoses, combinations, crossRelations, queue, adaptQueue, demand: demandRows, executables: execRows,
     moduleOwners: Object.fromEntries([...owner].map(([p, o]) => [p, { line: o, basis: ownerBasis.get(p) }])), unownedModules: modules.filter((m) => !owner.has(m.path)).map((m) => m.path), originals, loop,
     limits: ['代际按发布时间、阶段变化与已有依据的关系切分，是学习导航，不是作者唯一的思考路线。', '模块归线来自来源记录或 import 推断；推断归线只用于归类，不代表该模块实现了这条能力线。', '到达位置按原库 done / partial 状态计算；不重新验收，也不因日期更新自动升级。', '组合前置来自源码 import 方向与已有关系，仍需各自的执行适配与独立验证。'] };
 }

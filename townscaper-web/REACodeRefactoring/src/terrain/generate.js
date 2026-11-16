@@ -22,7 +22,7 @@ import { fbm, ridged, clamp01, smoothstep, makeRng } from '../core/noise.js';
 
 export function generateTerrain(world, {
   seed = 7, maxLevels = 8, towers = 3, canyons = true, rivers = 2, caves = 2, beach = true, features = true, drainage = false, riverNetwork = false, softSlopes = false,
-  riverRelax = false, lakes = false, erosion = null, basins = 0,
+  riverRelax = false, lakes = false, erosion = null, basins = 0, softRelax = false,
 } = {}) {
   // r55: riverRelax = BFS gentle-slope collapse around carved rivers; lakes = joint lake/hole rebuild
   // (water-mode fill + every dangling river and every lake spill re-linked to the sea); erosion = stream power.
@@ -71,7 +71,7 @@ export function generateTerrain(world, {
     const ang = rng() * Math.PI * 2, dist = (0.15 + rng() * 0.45) * span;
     const tx = Math.cos(ang) * dist, tz = Math.sin(ang) * dist, rad = 0.7 + rng() * 1.3;
     const top = Math.min(maxLevels + 2, maxLevels + (rng() < 0.5 ? 2 : 0));
-    for (const c of cells) if (level[c.id] >= 2 && Math.hypot(c.cx - tx, c.cz - tz) < rad) level[c.id] = Math.max(level[c.id], top);
+    for (const c of cells) if (level[c.id] >= 2 && Math.hypot(c.cx - tx, c.cz - tz) < rad) { level[c.id] = Math.max(level[c.id], top); if (sharp && softRelax) sharp[c.id] = 1; }   // 塔柱永远是陡崖
   }
 
   // 4) 去毛刺
@@ -98,9 +98,13 @@ export function generateTerrain(world, {
     }
   }
 
+  // 5b) 缓坡连续化（softRelax，需 softSlopes）：缓坡省里相邻两格最多差 1 层，world.softTops 才能把它们连成连续坡面
+  const softLimit = sharp && softRelax ? limitSoftSlopes(cells, level, sharp, softRelax === true ? {} : softRelax) : null;
+
   world.reset();
   world.lakes = null;
   world.slopeMask = sharp;
+  world.softLimit = softLimit;
   for (const c of cells) if (level[c.id]) world.fill(c, level[c.id], { rock: true });
 
   // 6) 河流
@@ -218,6 +222,32 @@ export function carveRivers(world, { seed = 1, count = 2, maxSteps = 220, wiggle
   world.touch();
   world.riverFlow = { flowTo, paths, mouths, version: world.version };
   return [...riverCells];
+}
+
+/**
+ * 缓坡连续化 —— 1447488323845509121 "Properly combine seamless soft slopes with distinct sharp cliffs"。
+ * softSlopes 只把缓坡省量化成逐层台阶，但噪声一格就能跳 2 层以上，结果缓坡省里仍然满是小崖，
+ * soft-tops 没有可以连成坡面的 1 层台阶。这里给缓坡省加坡度上限：相邻两个缓坡格最多差 `step` 层。
+ * 从低处往高处传播（桶队列，只降不升）：低格 h，缓坡邻格高于 h+step 的降到 h+step。
+ * 陡崖省（sharp ≥ 0.5）的格不参与，也不被拉低，所以崖仍是崖；缓坡省与陡崖省之间的落差原样保留。
+ * 海（level 0）不是源：临海的缓坡格不会被压成滩，海岸轮廓不变；pinned(c) 为真的格也保持原高。
+ * 只改 level 数组（整数层），不建网格；返回降了多少格、多少层。
+ */
+export function limitSoftSlopes(cells, level, sharp, { step = 1, pinned = null } = {}) {
+  if (!(step >= 1)) throw new RangeError('step must be >= 1');
+  const soft = (id) => level[id] > 0 && sharp[id] < 0.5 && !(pinned && pinned(cells[id]));
+  let top = 0; for (const c of cells) top = Math.max(top, level[c.id]);
+  const buckets = Array.from({ length: top + 1 }, () => []);
+  for (const c of cells) if (soft(c.id)) buckets[level[c.id]].push(c.id);
+  let lowered = 0, volume = 0;
+  for (let h = 1; h <= top; h++) for (let i = 0; i < buckets[h].length; i++) {
+    const id = buckets[h][i]; if (level[id] !== h) continue;                 // 已被降到更低的桶
+    for (const o of cells[id].edgeNeighbors) {
+      if (o < 0 || !soft(o) || level[o] <= h + step) continue;
+      volume += level[o] - (h + step); lowered++; level[o] = h + step; buckets[h + step].push(o);
+    }
+  }
+  return { lowered, volume, step };
 }
 
 /** 0 = 缓坡省，1 = 陡崖省；阈值取本场分位数（REACode/overhangterrain p30/p58）。 */

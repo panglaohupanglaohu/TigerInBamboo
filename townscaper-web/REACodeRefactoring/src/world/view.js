@@ -186,6 +186,8 @@ export class View {
     this.colorVolumeMax={value:new THREE.Vector3(.35,.5,.65)};
     this.groundSurfaceShadow = new GroundSurfaceShadow(this);
     this.cloudShadow = new CloudShadow(this);
+    // 1243228419162341379：水与植被也接同一份云影 uniform（ShaderMaterial 的 uniforms 是同一对象，后加键即可）
+    Object.assign(this.waterUniforms, this.cloudShadow.uniforms);
     this.blotchLevel = { value: levelHeight };
     this.blotchStyleMode = { value: 0 };
     this.blotchStyle = { value: new THREE.Vector4(2.3,.55,.9,1) };
@@ -254,7 +256,7 @@ export class View {
     // 海鸥（1244892370392489989）：停在屋脊上、只有停着有描边、挪动、扇翅 / 滑翔绕镇飞、有倒影
     this.birds = new Birds({ scene: this.scene, town, grid, index, levelHeight, water: this.waterUniforms.uShallow });
     // 植被管线：草丛、崖边 / 墙根灌木、树林（src/life/vegetation.js）
-    this.vegetation = new Vegetation({ scene: this.scene, levelHeight, uTime: this.waterUniforms.uTime });
+    this.vegetation = new Vegetation({ scene: this.scene, levelHeight, uTime: this.waterUniforms.uTime, cloud: this.cloudShadow.uniforms });
     this.vegetation.initImpostors(this.renderer);   // 八方位 impostor + 云（启动时烘一次）
     // 环境（风场、雪、雾）、建造反馈（水花、出现动画、火）、小镇装饰（旗子、彩旗绳、蝴蝶）
     this.atmosphere = new Atmosphere({ scene: this.scene, levelHeight, uTime: this.waterUniforms.uTime });
@@ -272,7 +274,7 @@ export class View {
     // colour halfway between itself and the sea (1215644531221311488: "the
     // bright colors wouldn't let me get away with a monochrome reflection, so
     // I had to figure out this somewhat abstract flat colored mid point").
-    this.reflectMaterial = makeReflectionMaterial({time:this.waterUniforms.uTime,water:this.waterUniforms.uShallow,night:this.nightUniform});
+    this.reflectMaterial = makeReflectionMaterial({time:this.waterUniforms.uTime,water:this.waterUniforms.uShallow,night:this.nightUniform,cloud:this.cloudShadow.uniforms});
     this.reflection = new THREE.Mesh(this.worldMesh.geometry, this.reflectMaterial);
     this.reflection.scale.y = -1;
     this.reflection.renderOrder = 1;
@@ -375,6 +377,7 @@ export class View {
         uniform vec3 uSky;
         uniform vec2 uFar;
         varying vec3 vWorld;
+        ${CLOUD_SHADOW_GLSL}
         void main() {
           // Local background color treatment. Clip 1991103578011029507 shows
           // restrained coastal motion; it does not establish this drift formula.
@@ -384,6 +387,8 @@ export class View {
           vec3 col = mix(uDeep, uShallow, 0.55 + 0.08 * n);
           float far = smoothstep(uFar.x, uFar.y, length(vWorld.xz - cameraPosition.xz));
           col = mix(col, uSky, far);
+          // 1243228419162341379：水面也接同一份云影（原来只有合并地形/建筑主材质接收）
+          col *= cloudShadowTone(vWorld);
           gl_FragColor = vec4(col, 1.0);
           #include <colorspace_fragment>
         }`,

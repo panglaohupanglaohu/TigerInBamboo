@@ -243,3 +243,11 @@ body[data-scene-edit=view] .viewer-side .studio-docks{display:none}
 .cap-line-rail .gen.here{box-shadow:0 2px 0 #e4ece8}.cap-line-rail .gen.next{outline:1.5px solid #e0603f;outline-offset:1px}
 .cap-line-direction{font-size:11px;line-height:1.5;color:var(--muted);margin:0 0 6px}.cap-line>small{display:block;font-size:10.5px;margin:4px 0}
 .cap-line-next{width:100%;font-size:11px;padding:5px 8px;margin-top:6px;text-align:left;border-color:#7a4a3a;color:#f1b9a2}.cap-line-next:hover{border-color:#e0603f}
+
+/* 学习工坊 · 清爽版头部与能力地图（lineage-r3） */
+.learning-heading{display:flex;align-items:center;justify-content:space-between;gap:14px}.learning-heading small{font-size:12px;letter-spacing:.14em;color:var(--muted)}.learning-heading button{font-size:12px;padding:5px 11px}
+#learning-workshop .learning-tabs{margin:14px 0 18px;align-items:center;gap:6px;border-bottom:1px solid var(--line)}
+#learning-workshop .learning-tabs button{background:none;border:0;border-bottom:2px solid transparent;border-radius:0;padding:9px 14px;color:var(--muted);font-size:14px}
+#learning-workshop .learning-tabs button:hover{color:var(--ink);background:none}#learning-workshop .learning-tabs button.primary{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
+#learning-workshop .learning-tabs select{margin-left:auto;background:none;border:0;color:var(--muted);font-size:13px;padding:6px 4px;cursor:pointer}#learning-workshop .learning-tabs select.primary{color:var(--accent)}
+#learning-workshop.learning-map-mode{max-width:1680px;padding:18px 26px 28px}

@@ -57,3 +57,15 @@
 .lineage-exp{display:grid;gap:6px;margin-top:10px}.lineage-exp>div{display:grid;grid-template-columns:minmax(150px,1.3fr) 70px minmax(110px,1fr) minmax(170px,1.4fr);gap:10px;align-items:baseline;font-size:13px;padding:7px 10px;border:1px solid var(--lg-line);border-radius:6px;background:var(--lg-card)}.lineage-exp .failed{border-color:var(--lg-warn)}.lineage-exp small{grid-column:1/-1;color:var(--lg-warn)}.lineage-exp span{color:var(--lg-dim)}
 @media(max-width:1100px){.lineage-loop{grid-template-columns:repeat(4,minmax(0,1fr))}.lineage-stage:nth-child(4)::after{display:none}}
 @media(max-width:700px){.lineage-loop{grid-template-columns:1fr 1fr;gap:10px}.lineage-stage::after{display:none}.lineage-stage{min-height:0}.lineage-queue{grid-template-columns:1fr}.lineage-gen{flex-basis:220px}.capability-lineage h2{font-size:22px}.lineage-exp>div{grid-template-columns:1fr 1fr}}
+
+/* 能力网 + 场景诊断 */
+.lineage-net{display:block;width:100%;min-width:980px;height:auto}
+.lineage-net .box{fill:var(--lg-soft);stroke:var(--lg-line);stroke-width:1.2}.lineage-net .node{cursor:pointer;outline:none}.lineage-net .node:hover .box,.lineage-net .node:focus-visible .box{stroke:var(--lg-accent)}
+.lineage-net .node.selected .box{stroke:var(--lg-accent);stroke-width:2.4}.lineage-net .node.unused{opacity:.32}
+.lineage-net .label{fill:var(--lg-ink);font-size:12.5px;font-weight:600}.lineage-net .count{fill:var(--lg-dim);font-size:10px}.lineage-net .year{fill:var(--lg-dim);font-size:11px}
+.lineage-net .seg.here{stroke:var(--lg-ink);stroke-width:1.6}.lineage-net .seg.next{stroke:#e0603f;stroke-width:1.6}
+.lineage-net .edge{fill:none;stroke:var(--lg-dim);opacity:.16}.lineage-net .edge.main{opacity:.5}.lineage-net .edge.on{stroke:var(--lg-accent);opacity:1}.lineage-net .arrowhead{fill:var(--lg-dim)}
+.lineage-guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:14px}.lineage-guide section{border:1px solid var(--lg-line);border-top:4px solid #e0603f;border-radius:10px;background:var(--lg-card);padding:4px 14px 14px;min-width:0}
+.lineage-guide .guide-wire{border-top-color:#d9a441}.lineage-guide .guide-learn{border-top-color:#55808a}.lineage-guide h4{margin:10px 0}
+.lineage-guide article{border-top:1px solid var(--lg-line);padding:10px 0;font-size:13px}.lineage-guide article p{color:var(--lg-dim);font-size:12.5px}
+@media(max-width:900px){.lineage-guide{grid-template-columns:1fr}}

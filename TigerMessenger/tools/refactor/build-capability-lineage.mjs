@@ -9,6 +9,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { scanCodeLibrary } from './scan-code-library.mjs';
+import { scanSceneConsumers } from './scan-scene-consumers.mjs';
 import { buildCapabilityLineage, describeDirection, LEVELS } from '../../../townscaper-web/REACodeRefactoring/src/core/capability-lineage.js';
 import { describeCapabilities } from '../../../townscaper-web/REACodeRefactoring/src/capabilities/registry.js';
 import { describeObjectCapabilities } from '../../src/system-workshop/object/capabilities.js';
@@ -19,7 +20,7 @@ const workspace = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..
 export async function computeLineage({ root = workspace } = {}) {
   const manifest = await scanCodeLibrary({ root });
   const executables = [...describeCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describeGsceneCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describePlanetCapabilities().map((c) => ({ ...c, tier: 'planet' })), ...describeObjectCapabilities().map((c) => ({ ...c, tier: 'object' }))];
-  return { manifest, lineage: buildCapabilityLineage(manifest.evolution, { modules: manifest.modules, alignment: manifest.alignment, executables }) };
+  return { manifest, lineage: buildCapabilityLineage(manifest.evolution, { modules: manifest.modules, alignment: manifest.alignment, executables, consumers: scanSceneConsumers({ root }).consumers }) };
 }
 const short = (n) => n.split(/[：:]/)[0], cell = (t) => String(t ?? '').replace(/\|/g, '／').replace(/\s+/g, ' ').trim();
 export function renderLineageDoc({ manifest, lineage }) {
@@ -59,7 +60,13 @@ export function renderLineageDoc({ manifest, lineage }) {
   for (const a of lineage.adaptQueue) out.push(`| ${cell(a.name)} | ${a.generation} | ${a.doneClips} | ${a.requiredBy} | ${a.modules.slice(0, 4).join('、')} |`);
   out.push('', '## 组合：能力线的前置顺序', '', '| 组合 | 顺序 | 状态 | 已可执行的步骤 |', '|---|---|---|---|');
   for (const c of lineage.combinations.filter((c) => c.prerequisites.length)) out.push(`| ${short(byLine.get(c.line).name)} | ${c.order.map((id) => short(byLine.get(id).name)).join(' → ')} | ${({ runnable: '可排入管线', 'needs-adapter': '待封装', learning: '待补学' })[c.readiness]} | ${c.steps.map((s) => s.id).join('、') || '—'} |`);
-  out.push('', '## 尚未归线', '', `源码模块 ${lineage.unownedModules.length} 个、原版 REACode 文件 ${lineage.originals.unclassified.length} 个没有来源记录，也没有被已归线模块 import。`, '',
+  out.push('', '## 场景诊断：每个场景在能力网上差在哪里', '', '来自 `scan-scene-consumers.mjs` 的静态 import 清单。「旧副本」= 场景用的模块与最新库字节不同（版本分叉），不单独证明画面退化。查的顺序：① 旧副本与库现行版本的差异（同机位对照后再决定换不换）→ ② 库里已有而场景没用的代际 → ③ 库里也没学到位的缺口。', '');
+  for (const c of lineage.consumers) {
+    out.push(`### ${c.name}`, '', `入口 ${c.entries.map((e) => '`' + e + '`').join('、')}；用到 ${c.counts.modules} 个库模块，${c.counts.different || 0} 个是旧副本，涉及 ${c.counts.lines} 条能力线。引导：同步 ${c.counts.sync} · 接入 ${c.counts.wire} · 补学 ${c.counts.learn}。`, '', ...c.notes.flatMap((n) => [`> 对照结论 ${n.date}：${n.text}（证据 \`${n.evidence}\`）`, '']), '| 能力线 | 用到模块 | 旧副本 | 各代在场景里的状态（✓一致 ✗旧副本 ○未接 ·无代码） |', '|---|---|---|---|');
+    for (const r of c.lines) out.push(`| ${short(r.name)} | ${r.modules} | ${r.stale.map((m) => m.path.replace('src/', '')).join('、') || '—'} | ${r.generations.map((g) => g.label + ({ 'in-scene': '✓', stale: '✗', 'not-wired': '○', 'no-code': '·' })[g.state]).join(' ')} |`);
+    out.push('');
+  }
+  out.push('## 尚未归线', '', `源码模块 ${lineage.unownedModules.length} 个、原版 REACode 文件 ${lineage.originals.unclassified.length} 个没有来源记录，也没有被已归线模块 import。`, '',
     '<details><summary>源码模块</summary>', '', lineage.unownedModules.map((p) => '`' + p + '`').join(' '), '', '</details>', '', '<details><summary>原版 REACode 文件</summary>', '', lineage.originals.unclassified.map((o) => '`' + o.source + '`').join(' '), '', '</details>', '',
     '## 边界', '', ...lineage.limits.map((t) => '- ' + t), '');
   return out.join('\n');

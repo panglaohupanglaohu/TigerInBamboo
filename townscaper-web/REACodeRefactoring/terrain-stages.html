@@ -28,7 +28,8 @@ a{color:#16626f}
   <label>种子 <input id="seed" type="number" value="1337" min="1" max="99999"></label>
   <label>每 tick 预算(ms) <input id="budget" type="number" value="16" min="1" max="200" style="width:70px"></label>
   <label>慢放倍率 <select id="slow"><option value="1">×1</option><option value="4" selected>×4</option><option value="12">×12</option></select></label>
-  <div><button id="play">播放</button><button id="reset">重来</button><button id="reroll">换一座岛</button></div>
+  <div><button id="play">播放</button><button id="reset">重来</button><button id="reroll">换一座岛</button><button id="tweak">生成后微调（抬台地）</button></div>
+  <label><input id="ao" type="checkbox" checked> 灰模 AO 软阴</label>
   <div id="stats" role="status">…</div>
   <small>三角化 <code>src/terrain/pipeline-stages.js</code>（Bowyer–Watson）· 掩埋 <code>src/core/terrain-burial.js</code>（World 体素实算）</small>
 </aside>
@@ -51,19 +52,32 @@ a{color:#16626f}
 </section>
 </main>
 <script type="module">
-import { buildIsland, stagePlan, StageRunner, STAGES } from './src/terrain/pipeline-stages.js';
+import { buildIsland, stagePlan, StageRunner, STAGES, tweakTerrain, terraceArea } from './src/terrain/pipeline-stages.js';
+import { bakeClayField, triShade } from './src/terrain/clay-ao.js';
 import { World } from './src/core/world.js';
 import { buildSquareGrid } from './src/core/grid.js';
-import { raiseGround, burialReport } from './src/core/terrain-burial.js';
+import { raiseGround, burialReport, cliffSkirt, skirtSegment, SKIRT_DEPTH, SKIRT_INSET, EAVE_SETBACK } from './src/core/terrain-burial.js';
 import { TERRAIN } from './src/core/palette.js';
 
 const $ = (s) => document.querySelector(s);
 const LEVEL_H = 0.52;
-let island = null, runner = null, playing = false, raf = 0, last = 0;
+let island = null, runner = null, playing = false, raf = 0, last = 0, useAO = true;
+let cliffArea = 0, tweakLog = [];
 
 function make(seed) {
   island = buildIsland({ count: 150, radius: 10, seed });
   runner = new StageRunner({ plan: stagePlan(), budget: Number($('#budget').value) || 16 });
+  bakeClay();
+  cliffArea = terraceArea(island.points, island.tris, island.heights);
+  tweakLog = [];
+}
+
+/** 灰模 AO + 软阴：按顶点算一遍，三角形取三点均值（sorted 里还是同一批数组对象，用 WeakMap 取回）。 */
+function bakeClay() {
+  island.clay = bakeClayField(island.points, island.heights);
+  const tri = triShade(island.tris, island.clay.factor);
+  island.shadeMap = new WeakMap();
+  island.tris.forEach((t, i) => island.shadeMap.set(t, tri[i]));
 }
 
 /* ---------- 等距投影 ---------- */
@@ -152,7 +166,8 @@ function paint(canvas, stage, prog = 1) {
       g.fillStyle = conf.biome ? biome(Math.min(...ys), slope) : conf.fill;
       g.beginPath(); g.moveTo(p[0][0], p[0][1]); g.lineTo(p[1][0], p[1][1]); g.lineTo(p[2][0], p[2][1]); g.closePath(); g.fill();
       if (conf.shade) {
-        g.fillStyle = `rgba(20,30,30,${0.04 + slope * 0.03})`;
+        const sh = useAO && island.shadeMap ? (island.shadeMap.get(t) ?? 1) : 1;
+        g.fillStyle = `rgba(20,30,30,${Math.min(0.72, 0.04 + slope * 0.02 + (1 - sh) * 0.62).toFixed(3)})`;
         g.fill();
       }
       g.strokeStyle = conf.edge; g.lineWidth = 0.6; g.stroke();
@@ -184,6 +199,7 @@ function buildBury() {
   }
   raiseGround(world, raised);
   buryWorld = { world, grid, houses, report: burialReport(world) };
+  buryWorld.skirt = cliffSkirt(world);
   return buryWorld;
 }
 
@@ -214,20 +230,47 @@ function paintBury() {
     g.strokeStyle = 'rgba(0,0,0,.25)'; g.lineWidth = 0.6; g.stroke();
   };
   const cells = grid.cells.slice().sort((a, b) => (a.cx + a.cz) - (b.cx + b.cz));
+  // 墙裙残留 + 檐下缺口：按格子归堆，跟岩石盒一起按深度顺序画（否则背面的墙裙会盖住前面的格子）
+  const sk = buryWorld.skirt;
+  const skirtByCell = new Map();
+  for (const b of sk.bands) {
+    const rec = skirtByCell.get(b.cell) || { bands: [], notches: [] };
+    rec.bands.push(b); skirtByCell.set(b.cell, rec);
+  }
+  for (const n of sk.notches) {
+    const rec = skirtByCell.get(n.cell) || { bands: [], notches: [] };
+    rec.notches.push(n); skirtByCell.set(n.cell, rec);
+  }
+  const quad = (cell, face, inset, y0, y1, fill) => {
+    const [s0, s1] = skirtSegment(cell, face, inset);
+    const q = [P(s0.x, s0.z, y0), P(s1.x, s1.z, y0), P(s1.x, s1.z, y1), P(s0.x, s0.z, y1)];
+    g.fillStyle = fill;
+    g.beginPath(); g.moveTo(q[0][0], q[0][1]);
+    for (let i = 1; i < 4; i++) g.lineTo(q[i][0], q[i][1]);
+    g.closePath(); g.fill();
+  };
+  let skirtFaces = 0;
   // 第一遍：抬起来的地面（岩石）
   for (const c of cells) {
     const ground = world.ground(c);
     if (ground > 0) box(c.cx, c.cz, 0, ground, '#b9b1a2', ground >= 4 ? '#e3dccb' : '#d3cabb');
+    const rec = skirtByCell.get(c.id);
+    if (!rec) continue;
+    for (const b of rec.bands) { quad(c, b.face, b.inset, b.y0, b.y1, '#7a705f'); skirtFaces++; }
   }
-  // 第二遍：还露出地面的建筑（地面以下的部分已经被吞了）
+  // 第二遍：还露出地面的建筑（地面以下的部分已经被吞了）+ 檐口在墙头上压出的暗带
   let roofs = 0;
   for (const c of cells) {
     if (!world.topIsBuilt(c)) continue;
     const ground = world.ground(c);
     box(c.cx, c.cz, ground, world.top(c), '#e8c46a', '#f0d06a');
+    const rec = skirtByCell.get(c.id);
+    if (rec) for (const n of rec.notches) quad(c, n.face, n.setback, n.y0, n.y1, 'rgba(0,0,0,.24)');
     roofs++;
   }
-  return { roofs };
+  const out = { roofs, skirtFaces, eaveNotches: sk.notches.length };
+  buryWorld.painted = out;   // 画了几个面 vs 规则算出的面数，浏览器验收要对这两个数
+  return out;
 }
 
 /* ---------- 主循环 ---------- */
@@ -237,11 +280,14 @@ function render() {
   const stageForPaint = st.stage === 'done' || st.stage === 'bury' ? 'color' : st.stage;
   paint($('#stage'), stageForPaint, st.stage === 'triangulate' || st.stage === 'seed' ? prog : 1);
   const s = runner.state;
+  const ao = island.clay.stats;
   $('#stats').textContent = [
     `阶段 ${s.stage} (${Math.min(STAGES.length, s.index + 1)}/${STAGES.length}) · 段内 ${(s.stageProgress * 100).toFixed(0)}%`,
     `管线时间 ${(s.elapsed / 1000).toFixed(2)}s / ${(s.total / 1000).toFixed(2)}s · ticks ${runner.ticks} · budget ${runner.budget}ms`,
     `已完成 ${s.completed.join(' → ') || '—'}`,
     `三角 ${island.report.tris} · 边 ${island.report.edges}（边界 ${island.report.boundaryEdges}）· 面积 ${island.report.area.toFixed(1)}`,
+    `灰模 AO ${ao.ao.min.toFixed(3)}–${ao.ao.max.toFixed(3)}（${ao.ao.distinct} 档，${useAO ? '开' : '关'}）· 软阴均值 ${(ao.shadow.mean * 100).toFixed(0)}%`,
+    `台地面积 ${terraceArea(island.points, island.tris, island.heights).toFixed(1)} · 微调 ${tweakLog.length} 次`,
   ].join('\n');
   return s;
 }
@@ -265,14 +311,16 @@ function reset(seed) {
     paint($('#thumb-' + st), st, 1);
   }
   const b = buildBury();
-  paintBury();
+  const painted = paintBury();
   const rep = b.report;
   $('#buryStats').innerHTML = `<b>地表抬升后的体检</b><br>`
     + `只露屋顶（地面切进建筑柱）<b>${rep.peeking}</b> 座<br>`
     + `整栋压在台地下 ${rep.blanketed} 座<br>`
     + `被吞掉的楼层合计 ${rep.swallowedLevels} 层<br>`
     + `最高地面 level ${rep.ceiling}<br>`
-    + `<small>屋顶保留、地面以下的层换成岩石：<code>buryColumn()</code>。用 World.fill 整列覆盖会把屋顶一起抹掉。</small>`;
+    + `崖面墙裙 ${painted.skirtFaces} 面 · 檐下缺口 ${painted.eaveNotches} 处（联动）<br>`
+    + `<small>屋顶保留、地面以下的层换成岩石：<code>buryColumn()</code>。用 World.fill 整列覆盖会把屋顶一起抹掉。</small>`
+    + `<small>墙裙只出在「露在崖上的面」×「头顶还有屋顶的列」的交集上，檐口比墙裙再缩进 ${(SKIRT_INSET + EAVE_SETBACK).toFixed(2)} 层宽：<code>cliffSkirt()</code>。</small>`;
   render();
 }
 
@@ -289,6 +337,22 @@ $('#reroll').onclick = () => {
 };
 $('#budget').onchange = () => { runner.budget = Number($('#budget').value) || 16; render(); };
 
+/** 生成后微调：在已生成的网上抬中心台地（不换种子、不重铺拓扑、不重新随机颜色）。 */
+function applyTweak() {
+  const before = terraceArea(island.points, island.tris, island.heights);
+  const tw = tweakTerrain(island.points, island.heights, { cx: 0, cz: 0, radius: 5, delta: 1, levels: 6 });
+  island.heights = tw.heights;
+  bakeClay();
+  const after = terraceArea(island.points, island.tris, island.heights);
+  tweakLog.push({ before, after, changed: tw.count });
+  paint($('#thumb-color'), 'color', 1);
+  render();
+  return { before, after, changed: tw.count, steps: tweakLog.length, log: tweakLog.slice(-1)[0] };
+}
+
+$('#ao').onchange = () => { useAO = $('#ao').checked; render(); };
+$('#tweak').onclick = () => { playing = false; cancelAnimationFrame(raf); applyTweak(); };
+
 window.terrainStages = {
   ready: true,
   state: () => ({ ...runner.state, ticks: runner.ticks, budget: runner.budget }),
@@ -301,7 +365,29 @@ window.terrainStages = {
     swallowedLevels: buryWorld.report.swallowedLevels,
     ceiling: buryWorld.report.ceiling,
   }),
+  skirt: () => {
+    const sk = buryWorld.skirt;
+    return {
+      faces: sk.faces, bands: sk.bands.length, notches: sk.notches.length,
+      buriedCells: sk.buriedCells, exposedCells: sk.cells,
+      depth: SKIRT_DEPTH, inset: SKIRT_INSET, setback: SKIRT_INSET + EAVE_SETBACK,
+      wallColors: [...new Set(sk.bands.map((b) => b.wall))],
+      painted: buryWorld.painted ? { ...buryWorld.painted } : null,
+      // 联动判据：每个墙裙面必须能配到同 cell/同 face 的缺口
+      linked: sk.bands.every((b) => sk.notches.some((n) => n.cell === b.cell && n.face === b.face)),
+    };
+  },
   reroll: (seed) => { playing = false; cancelAnimationFrame(raf); $('#seed').value = String(seed); reset(); return island.report; },
+  ao: () => ({
+    useAO,
+    ao: island.clay.stats.ao,
+    shadow: island.clay.stats.shadow,
+    factor: island.clay.stats.factor,
+    heights: { min: Math.min(...island.heights), max: Math.max(...island.heights) },
+  }),
+  setAO: (v) => { useAO = !!v; $('#ao').checked = useAO; render(); return useAO; },
+  terrace: () => terraceArea(island.points, island.tris, island.heights),
+  tweak: () => { playing = false; cancelAnimationFrame(raf); return applyTweak(); },
 };
 
 reset(1337);

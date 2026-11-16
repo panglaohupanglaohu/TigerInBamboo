@@ -164,29 +164,32 @@ export class CloudDeckLayer {
     const v = this.view, t = v.waterUniforms.uTime.value;
     if (!this.deck || this.version !== v.town.version) this.rebuild();
     for (const r of this.rings) r.mesh.material.uniforms.uShift.value = t * r.layer.vx * .8;
-    // 云影：近层 + 中层团块（与 deck.density 同位置、同漂移），只取覆盖岛的
+    // 云影：近层 + 中层团块（与 deck.density 同位置、同漂移），只取覆盖岛的；远层单独喂弱档数组
     const u = v.cloudShadow.uniforms, [cx, cz] = this.center, span = this.deck.span;
     const wrap = (x) => ((x % span) + span * 1.5) % span - span * .5;
-    let n = 0;
-    for (const li of [2, 1]) {
+    const feed = (li, arr, cap, grow, start = 0) => {
+      let n = start;
       const L = this.deck.layers[li];
       for (const p of L.puffs) {
         const x = cx + wrap(p.x + t * L.vx), z = cz + wrap(p.z + t * L.vz);
         if (Math.abs(x - cx) > this.radius + p.rx + 4 || Math.abs(z - cz) > this.radius + p.rz + 4) continue;
         // deck 的椭圆（rx × rz，沿风向拉长）拆成一串直径 2·rz 的圆，排在长轴上
         const k = Math.max(1, Math.round(p.rx / p.rz));
-        for (let j = 0; j < k && n < 64; j++) {
+        for (let j = 0; j < k && n < cap; j++) {
           const f = k === 1 ? 0 : (j / (k - 1) - .5) * 2 * (p.rx - p.rz);
-          u.uCloudPuffs.value[n++].set(x + f, L.height, z, 2 * p.rz * Math.min(1.1, p.k + .2));
+          arr[n++].set(x + f, L.height, z, 2 * p.rz * Math.min(1.1, p.k + .2) * grow);
         }
       }
-    }
+      return n;
+    };
+    const n = feed(1, u.uCloudPuffs.value, 64, 1, feed(2, u.uCloudPuffs.value, 64, 1));
+    u.uCloudCount.value = n;
+    u.uCloudCountFar.value = feed(0, u.uCloudPuffsFar.value, 24, 1.6);
     u.uCloudAtlas.value = this.atlas;
     u.uCloudRect.value.set(0, 0, 1, 1);
     u.uCloudSun.value.copy(v.sunDir);
-    u.uCloudCount.value = n;
     u.uCloudStrength.value = this.shadowStrength;
-    this.stats = { shadowPuffs: n, rings: this.rings.length, layers: CLOUD_DECK_LAYERS.map((l) => l.depth) };
+    this.stats = { shadowPuffs: n, farPuffs: u.uCloudCountFar.value, rings: this.rings.length, layers: CLOUD_DECK_LAYERS.map((l) => l.depth) };
   }
 
   dispose() {

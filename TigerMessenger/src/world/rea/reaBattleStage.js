@@ -186,10 +186,19 @@ export class ReaBattleStage {
       if (raise.length) maxLv = 2;
       this.plateauRaised = raise.length;
     }
-    // 小屋：命中建筑的格子里挑最高的几个（彼此不相邻）当 REA 小屋（失守判定用）；没有建筑就挑最高的台地
+    // 小屋：命中建筑的格子里挑最高的几个（彼此不相邻）当 REA 小屋（失守判定用）；
+    // 场景里没有可识别建筑（例如十二门徒这种纯海蚀岩群）时退回最高台地，否则 bnHouses 为空、
+    // HUD 显示「小屋 0/0」，Bad North 的防守目标就不存在。
     houses.sort((a, b) => b.lv - a.lv);
     const picked = [];
     for (const h of houses) { if (picked.length >= 4) break; if (picked.every((p) => Math.hypot(p.cx - h.c.cx, p.cz - h.c.cz) > 2.5)) picked.push(h.c); }
+    if (!picked.length) {
+      const cand = [];
+      for (const c of this.grid.cells) { const lv = this.world.top(c); if (lv) cand.push({ c, lv }); }
+      cand.sort((a, b) => b.lv - a.lv);
+      for (const h of cand) { if (picked.length >= 4) break; if (picked.every((p) => Math.hypot(p.cx - h.c.cx, p.cz - h.c.cz) > 3)) picked.push(h.c); }
+      if (picked.length) this.housesFromPlateau = picked.length;
+    }
     this.world.bnHouses = picked;
     this.world.touch();
     return { tris: this.sampleTris, rays, plateauRaised: this.plateauRaised || 0, ms: Math.round(performance.now() - t0), meshes: meshes.length, cells: this.grid.cells.length, land, maxLevel: maxLv, houses: picked.length };

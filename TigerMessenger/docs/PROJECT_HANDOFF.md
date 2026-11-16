@@ -4294,3 +4294,10 @@ morrisTownscaper.js统一场景选择：莫西斯湖、十二门徒、高山圣�
 ## 2026-11-14 学习工坊 ⇄ 能力库闭环（能力谱系，lineage-r1）
 入口：docs/WORKSHOP_LOOP_PLAN.md（规划、规则、后续顺序）与生成文件 docs/CAPABILITY_LINEAGE.md。同一计算 REACodeRefactoring/src/core/capability-lineage.js 供 8769 学习管线、8931 学习工坊默认页签「能力成长与闭环」、系统工坊左栏默认视图「能力线 · 时间」和 CLI 使用：能力线按发布时间切代际，标代码到达与向前的下一步，import 方向给出组合前置，缺口按公开公式排成补学队列；可执行能力、本机执行经验、场景管线里不能执行的节点回流加权。
 当前 27 线 / 104 代、缺口 166（高 30）、6 条线待封装；本轮只归类排序和接通页面，没有新增或验收能力代码。上游 data.js 更新导致的 4 条批注已重评。workshops-browser 旧套件 25 例失败待单独更新。详见 WORKSHOP_LOG.md 同日条目；证据 artifacts/capability-lineage-20261114。
+
+
+## 2026-11-15 能力网与十二门徒地形诊断
+学习工坊「能力成长与闭环」新增能力网：能力线为节点、前置为边，可选场景对照（scan-scene-consumers.mjs 的静态清单），按 对照后同步 → 接入 → 补学 给引导。网格线有了第一项可执行能力 grid.contours（Node 用例通过，真实游戏未验收）。
+十二门徒：18 个库模块里 17 个是旧 vendor 副本；但同机位对照表明直接换最新库更硬、打开软坡无可见改善并有破面，候选失败，默认画面未改。诊断与补全顺序在 docs/APOSTLES_TERRAIN_DIAGNOSIS.md；实验开关 src/world/apostlesLook.js 默认关闭。详见 WORKSHOP_LOG.md 同日条目。
+
+2026-11-15 续：学习工坊默认页改为「能力地图」（capability-map.js，一屏：目标栏 + 能力网 + 抽屉），常用页签收为三个，其余进「更多资料」。库加了缓坡坡度上限 limitSoftSlopes，但演示岛上可见的连续坡面尚未做到（soft-tops 成面条件太窄），十二门徒缓坡 / 配色候选未开始。见 WORKSHOP_LOG.md。

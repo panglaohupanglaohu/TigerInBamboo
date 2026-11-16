@@ -1,5 +1,6 @@
 import {renderCapabilityEvolution} from '../../../townscaper-web/REACodeRefactoring/src/ui/capability-evolution.js';
 import {renderCapabilityLineage} from '../../../townscaper-web/REACodeRefactoring/src/ui/capability-lineage.js';
+import {renderCapabilityMap} from '../../../townscaper-web/REACodeRefactoring/src/ui/capability-map.js';
 import {buildCapabilityEvolution} from '../../../townscaper-web/REACodeRefactoring/src/core/capability-evolution.js';
 import {onCatalogChange,loadCatalog} from '../system-workshop/catalog-view.js?v=code-r2';
 import {renderCodeLibrary} from './code-library-view.js';
@@ -13,12 +14,13 @@ import {mountLearningProgress} from './learning-progress.js';
 import {scanPipelineText} from './capability-scanner.js';
 // Reuse current REACodeRefactoring data; never copy the stale sidebar snapshot.
 export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}),onAddCapability=()=>{},onLocateCapability=()=>{},onAddCode=null,getCapabilities=()=>[],onUseCombination=()=>{},getExecutables=()=>[],getExperience=()=>({}),getDemand=()=>[],onUseExecutable=null}={}){
- const host=document.getElementById('learning-workshop'),root=new URL('../townscaper-web/REACodeRefactoring/',location.href);const VIEWS=[['lineage','能力成长与闭环'],['evolution','时间线与能力演进'],['code','重构代码能力库'],['files','全目录重构状态'],['roadmap','需求与能力组合'],['inventory','源码归类与差距'],['architecture','系统与模块'],['pipeline','管线与能力'],['videos','视频与笔记']];
- // 默认先看「能力成长与闭环」：每条能力线到了哪一代、下一步补什么；其余页签是它的明细
- let loaded=false,mode=VIEWS.some(v=>v[0]===new URLSearchParams(location.search).get('learningView'))?new URLSearchParams(location.search).get('learningView'):'lineage',catalog=[],data=null,lastUpdate=0,codeCatalog=null,lineageLine=new URLSearchParams(location.search).get('lineageLine');
+ const host=document.getElementById('learning-workshop'),root=new URL('../townscaper-web/REACodeRefactoring/',location.href);const VIEWS=[['map','能力地图'],['lineage','队列与闭环'],['evolution','时间线与能力演进'],['code','重构代码能力库'],['files','全目录重构状态'],['roadmap','需求与能力组合'],['inventory','源码归类与差距'],['architecture','系统与模块'],['pipeline','管线与能力'],['videos','视频与笔记']];
+ // 默认是「能力地图」：一屏看能力网、场景差距和下一步。常用页签只有三个，其余资料收在「更多资料」里
+ const PRIMARY=new Set(['map','lineage','evolution']);
+ let loaded=false,mode=VIEWS.some(v=>v[0]===new URLSearchParams(location.search).get('learningView'))?new URLSearchParams(location.search).get('learningView'):'map',catalog=[],data=null,lastUpdate=0,codeCatalog=null,lineageLine=new URLSearchParams(location.search).get('lineageLine'),lineageConsumer=new URLSearchParams(location.search).get('lineageScene'),sceneConsumers=[];
  const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
  const link=(text,path)=>{const a=el('a',text);a.href=new URL(path,root).href;a.target='_blank';a.rel='noopener';return a;};
- const title=el('div',undefined,'learning-heading');title.append(el('small','LEARNING WORKSHOP / REACodeRefactoring'),el('h1','理解系统，再组合世界。'),el('p','按作者发布时间看每项能力从 A 走到 A+ 的过程：系统学到了哪一代、哪一代已能执行、下一步补什么。补好的能力回到系统工坊的能力库与管线。'));const back=el('button','返回当前场景管线 →');back.onclick=()=>activate(false);title.append(back);host.append(title);
+ const title=el('div',undefined,'learning-heading');title.append(el('small','学习工坊'));const back=el('button','返回系统工坊 →');back.onclick=()=>activate(false);title.append(back);host.append(title);
  const cache=createLearningCache(),cacheStatus=el('p','','muted');cacheStatus.id='learning-cache-status';host.append(cacheStatus);
  const progress=mountLearningProgress(host,root,{load:async()=>{
   let raw,next,cachedAt=null,stale=false;const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
@@ -39,7 +41,8 @@ export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}
  const nav=el('nav',undefined,'learning-tabs'),search=el('input');search.type='search';search.placeholder='搜索模块、方法、笔记或帖子 ID';search.setAttribute('aria-label','搜索学习工坊');const stats=el('span','正在读取能力库…','muted'),content=el('div',undefined,'learning-content');host.append(nav,search,stats,content);
  const progressSection=host.querySelector('#learning-progress');for(const node of [nav,search,stats,content])host.insertBefore(node,progressSection);
  let fileRender=null,evolutionState=null;
- const tabs=[];for(const [id,name]of VIEWS){const b=el('button',name);b.onclick=()=>{mode=id;render();};tabs.push([id,b]);nav.append(b);}
+ const tabs=[];for(const [id,name]of VIEWS.filter(v=>PRIMARY.has(v[0]))){const b=el('button',name);b.onclick=()=>{mode=id;render();};tabs.push([id,b]);nav.append(b);}
+ const more=el('select');more.setAttribute('aria-label','更多资料');more.append(new Option('更多资料…',''));for(const [id,name]of VIEWS.filter(v=>!PRIMARY.has(v[0])))more.append(new Option(name,id));more.onchange=()=>{if(more.value){mode=more.value;render();}};nav.append(more);
  const dialog=document.createElement('dialog'),close=el('button','关闭视频'),video=el('video'),caption=el('p');video.controls=true;video.loop=true;video.playsInline=true;close.onclick=()=>dialog.close();dialog.onclose=()=>{video.pause();video.removeAttribute('src');video.load();};dialog.append(close,video,caption);host.append(dialog);
  function play(id){caption.textContent='原始来源 / '+id;video.src=new URL('../REA-agent/gifs/'+id+'.mp4',location.href).href;video.onerror=()=>caption.textContent='本地视频未找到：'+id+'。请在原素材目录恢复文件；此状态不计为已观看。';dialog.showModal();video.play().catch(()=>{});}
  function actions(row,entry){
@@ -50,13 +53,17 @@ export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}
   for(const code of usage.code||[]){const x=code.exp,b=el('button',(code.present?'⚙ 定位能力代码：':'⚙ 加入能力代码：')+code.name);b.onclick=()=>{code.present?onLocateCapability(code.id):onAddCode?.(code.id);activate(false);};row.append(b,el('small',x.runs?`场景经验：执行 ${x.runs} 次 · 验证通过 ${x.passed} · 不通过 ${x.failed} · 写入 ${x.committed}${x.lastFailure?' · 最近失败：'+x.lastFailure:''}`:'场景经验：尚未执行','muted'));}
  }
  function render(){
-  if(!loaded&&mode!=='code')return;fileRender?.abort();fileRender=null;for(const [id,b]of tabs){b.classList.toggle('primary',mode===id);b.setAttribute('aria-pressed',String(mode===id));}content.replaceChildren();content.classList.toggle('learning-video-grid',mode==='videos');search.hidden=mode==='evolution'||mode==='lineage';const q=search.value.trim().toLowerCase(),match=value=>JSON.stringify(value).toLowerCase().includes(q);
+  if(!loaded&&mode!=='code')return;fileRender?.abort();fileRender=null;for(const [id,b]of tabs){b.classList.toggle('primary',mode===id);b.setAttribute('aria-pressed',String(mode===id));}more.value=PRIMARY.has(mode)?'':mode;more.classList.toggle('primary',!PRIMARY.has(mode));host.classList.toggle('learning-map-mode',mode==='map');for(const n of [cacheStatus,stats,progressSection])if(n)n.hidden=mode==='map';content.replaceChildren();content.classList.toggle('learning-video-grid',mode==='videos');search.hidden=['evolution','lineage','map'].includes(mode);const q=search.value.trim().toLowerCase(),match=value=>JSON.stringify(value).toLowerCase().includes(q);
   if(mode==='code'){stats.textContent='实际源码、导出接口、依赖组合与迁移差异';fileRender=new AbortController();renderCodeLibrary(content,{query:q,signal:fileRender.signal,onUse:async d=>{if(await onUseCombination(d)===false)throw Error('当前场景尚未提供这组执行接口；请先返回系统工坊选择适用场景。');activate(false);}});return;}
   stats.textContent=data.arch.layers.reduce((n,l)=>n+l.modules.length,0)+' 条模块职责 · '+data.learn.items.length+' 条学习记录（登记不等于验收）';
-  if(mode==='lineage'){
+  const focusClip=id=>{mode='evolution';evolutionState={family:'all',phase:'all',priority:'all',query:id};render();host.querySelector('.learning-tabs')?.scrollIntoView({block:'start'});};
+  if(mode==='map'){
+   renderCapabilityMap(content,{evolution:buildCapabilityEvolution(data.learn,data.pipeline),modules:codeCatalog?.modules||[],alignment:codeCatalog?.alignment||[],executables:getExecutables(),experience:getExperience(),demand:getDemand(),consumers:sceneConsumers,consumer:lineageConsumer,line:lineageLine,
+    onState:s=>{lineageLine=s.line;lineageConsumer=s.consumer;},onFocus:focusClip,onUse:onUseExecutable?x=>{onUseExecutable(x);}:null,onDetail:()=>{mode='lineage';render();}});
+  }else if(mode==='lineage'){
    stats.textContent='由作者时间线、源码依赖、可执行能力与本机执行经验计算；原库 done / partial 状态不因此改变';
    const focus=id=>{mode='evolution';evolutionState={family:'all',phase:'all',priority:'all',query:id};render();host.querySelector('.learning-tabs')?.scrollIntoView({block:'start'});};
-   renderCapabilityLineage(content,{evolution:buildCapabilityEvolution(data.learn,data.pipeline),modules:codeCatalog?.modules||[],alignment:codeCatalog?.alignment||[],executables:getExecutables(),experience:getExperience(),demand:getDemand(),line:lineageLine,onState:s=>{lineageLine=s.line;},onFocus:focus,
+   renderCapabilityLineage(content,{evolution:buildCapabilityEvolution(data.learn,data.pipeline),modules:codeCatalog?.modules||[],alignment:codeCatalog?.alignment||[],executables:getExecutables(),experience:getExperience(),demand:getDemand(),consumers:sceneConsumers,consumer:lineageConsumer,line:lineageLine,onState:s=>{lineageLine=s.line;lineageConsumer=s.consumer??lineageConsumer;},onFocus:focus,
     onUse:onUseExecutable?x=>{onUseExecutable(x);}:null,onStage:id=>{if(id==='pipeline'&&!getDemand().length){activate(false);return true;}return false;}});
   }else if(mode==='evolution'){
    const params=new URLSearchParams(location.search);
@@ -83,10 +90,12 @@ export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}
   if(!content.textContent)content.append(el('p','没有匹配记录。'));
  }
  search.oninput=render;
- onCatalogChange(c=>{codeCatalog=c;if(['code','lineage'].includes(mode)&&!host.hidden)render();});
- loadCatalog().then(c=>{codeCatalog=c;if(mode==='lineage'&&loaded&&!host.hidden)render();}).catch(()=>{});
+ onCatalogChange(c=>{codeCatalog=c;if(['code','lineage','map'].includes(mode)&&!host.hidden)render();});
+ // 场景消费清单（tools/refactor/scan-scene-consumers.mjs 生成）：能力网的场景诊断用
+ fetch(new URL('./catalog/scene-consumers.json',import.meta.url),{cache:'no-store'}).then(r=>r.ok?r.json():null).then(d=>{if(d?.schemaVersion===1){sceneConsumers=d.consumers;if(['lineage','map'].includes(mode)&&loaded&&!host.hidden)render();}}).catch(()=>{});
+ loadCatalog().then(c=>{codeCatalog=c;if(['lineage','map'].includes(mode)&&loaded&&!host.hidden)render();}).catch(()=>{});
  // 系统工坊左栏「下一步 → 学习工坊」：直接打开那条能力线
- window.addEventListener('tm.learning.lineage',e=>{mode='lineage';if(e.detail?.line)lineageLine=e.detail.line;activate(true);});
+ window.addEventListener('tm.learning.lineage',e=>{mode='map';if(e.detail?.line)lineageLine=e.detail.line;if(e.detail?.consumer)lineageConsumer=e.detail.consumer;activate(true);});
  async function ensure(){if(loaded&&Date.now()-lastUpdate<60000)return;return progress.refresh();}
  const sceneTab=document.getElementById('scene-workshop-tab'),learnTab=document.getElementById('learning-workshop-tab');
  function activate(learning){for(const id of ['save-recipe','export','connection'])document.getElementById(id).hidden=learning;host.hidden=!learning;for(const node of document.querySelectorAll('#system-workshop,body>.intro,body>main'))node.hidden=learning;document.getElementById('system-tab')?.setAttribute('aria-pressed',String(!learning));learnTab.setAttribute('aria-pressed',String(learning));sceneTab.setAttribute('aria-selected',String(!learning));learnTab.setAttribute('aria-selected',String(learning));document.title=learning?'学习工坊 · 学习管线':'系统工坊 · 编辑管线';history.replaceState(null,'',learning?'#learning':'#scene');if(learning){render();ensure();}}

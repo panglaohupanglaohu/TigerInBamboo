@@ -12,7 +12,15 @@
     "meanLumaDecal": 65.22,
     "openings": 11,
     "doors": 2,
-    "coverage": 16.88
+    "arches": 0,
+    "coverage": 16.88,
+    "archFloors": 0,
+    "archRise": 0,
+    "archLowerShare": null,
+    "archUpperShare": null,
+    "archBBoxPixels": 44032,
+    "archShoulderPixels": 0,
+    "archShoulderLeak": 0
   },
   "shown": {
     "mode": "interior→mask→wall→decal",
@@ -27,7 +35,15 @@
     "meanLumaDecal": 65.22,
     "openings": 11,
     "doors": 2,
-    "coverage": 16.88
+    "arches": 0,
+    "coverage": 16.88,
+    "archFloors": 0,
+    "archRise": 0,
+    "archLowerShare": null,
+    "archUpperShare": null,
+    "archBBoxPixels": 44032,
+    "archShoulderPixels": 0,
+    "archShoulderLeak": 0
   },
   "errors": []
 }

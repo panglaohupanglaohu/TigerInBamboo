@@ -17,6 +17,7 @@ canvas{display:block;background:#000;image-rendering:pixelated;border:1px solid 
 <header>
   <h2>1205422438437273601 · 用模板缓冲给门窗挖洞</h2>
   <p>原文：「For doors and windows, I use som stencil buffer shenanigans to punch holes in the zbuffer.」左边是本仓现状（门窗贴在墙面外侧的玻璃片），中间是原作做法（洞口写 stencil，墙用 NotEqual 拒绘，室内几何透出），右边是关掉墙的参照，用来确认洞里看到的确实是室内。</p>
+  <p>第二排是<strong>跨两层高拱龛</strong>（龛高 1.0 = 2×楼层高 0.5、rise .30）：判据是上下两层各自都有室内透出，且外包矩形内、半椭圆外的那圈「拱肩」像素仍然是墙 —— 挡模板用的是轮廓，不是矩形。</p>
   <button data-mode="decal">贴片（现状）</button><button data-mode="punch" class="on">模板挖洞</button><button data-mode="wallsOff">关墙参照</button>
   <button id="run">重跑像素对照</button>
 </header>
@@ -24,10 +25,10 @@ canvas{display:block;background:#000;image-rendering:pixelated;border:1px solid 
 <div id="status">加载…</div>
 <script type="module">
 import * as THREE from 'three';
-import { planFacade, createFacadeScene, holePixelStats, passOrder } from './src/render/opening-punch.js';
+import { planFacade, createFacadeScene, holePixelStats, passOrder, isInsideOpening } from './src/render/opening-punch.js';
 
 const $ = (s) => document.querySelector(s);
-const W = 2.4, H = 1.6, N = 512;
+const W = 2.4, H = 1.6, N = 512, FLOOR = 0.5;
 const plan = planFacade({
   width: W, height: H,
   openings: [
@@ -36,96 +37,148 @@ const plan = planFacade({
     { u: 0.72, v: -0.6, w: 0.3, h: 0.36, door: true },
   ],
 });
-const pixels = holePixelStats(plan, N);
+// 跨两层高拱龛：龛高 1.0 = 2 × 楼层高 0.5，rise .30 的拱顶完整落在第二层里。
+// 判据不是「拱形好看」，而是 ①两层各自都有室内透出（说明是一次挖穿两层，不是两层各挖一个方洞）
+// ②拱肩矩形内、椭圆外的像素仍然是墙（说明挡模板用的是轮廓而不是外包矩形）。
+const archPlan = planFacade({
+  width: 1.6, height: 1.6,
+  openings: [
+    { u: 0, v: 0, w: 0.44, h: 1.0, rise: 0.30 },
+    { u: -0.56, v: 0.28, w: 0.18, h: 0.22 },
+    { u: 0.56, v: 0.28, w: 0.18, h: 0.22 },
+    { u: -0.56, v: -0.28, w: 0.18, h: 0.22 },
+    { u: 0.56, v: -0.28, w: 0.18, h: 0.22 },
+  ],
+});
 const renderer = new THREE.WebGLRenderer({ antialias: false, stencil: true, preserveDrawingBuffer: true });
 renderer.setPixelRatio(1);
 renderer.setSize(N, N, false);
 renderer.setClearColor(0x0b1620, 1);
-const facade = createFacadeScene(THREE, plan);
-const target = new THREE.WebGLRenderTarget(N, N, { stencilBuffer: true, depthBuffer: true, samples: 0 });
-
-const shoot = (mode) => {
-  facade.setMode(mode);
-  renderer.setRenderTarget(target);
-  renderer.clear();
-  renderer.render(facade.scene, facade.camera);
-  const buf = new Uint8Array(N * N * 4);
-  renderer.readRenderTargetPixels(target, 0, 0, N, N, buf);
-  renderer.setRenderTarget(null);
-  return buf;
-};
-
-// readRenderTargetPixels 给的是自下而上的行序，判定必须用同一套坐标，否则洞口掩码会整体上下翻
-const insideHole = (x, yBottom) => {
-  const u = (x + 0.5) / pixels.sx - plan.width / 2;
-  const v = (yBottom + 0.5) / pixels.sy - plan.height / 2;
-  return plan.openings.some((o) => Math.abs(u - o.u) <= o.w / 2 && Math.abs(v - o.v) <= o.h / 2);
-};
 const eq = (a, b, i) => a[i] === b[i] && a[i + 1] === b[i + 1] && a[i + 2] === b[i + 2];
 
-function metrics() {
-  const decal = shoot('decal'), punch = shoot('punch'), punch2 = shoot('punch'), off = shoot('wallsOff');
-  let hole = 0, visiblePunch = 0, visibleDecal = 0, driftWall = 0, driftRepeat = 0, punchMass = 0, decalMass = 0;
-  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
-    const i = (y * N + x) * 4;
-    const inHole = insideHole(x, y);
-    if (inHole) {
-      hole++;
-      if (eq(punch, off, i)) visiblePunch++;
-      if (eq(decal, off, i)) visibleDecal++;
-    } else if (!eq(punch, decal, i)) driftWall++;
-    if (!eq(punch, punch2, i)) driftRepeat++;
-    punchMass += (punch[i] + punch[i + 1] + punch[i + 2]) / 3;
-    decalMass += (decal[i] + decal[i + 1] + decal[i + 2]) / 3;
-  }
-  return {
-    mode: passOrder().join('→'),
-    analyticHolePixels: +pixels.holePixels.toFixed(1),
-    measuredHolePixels: hole,
-    holePixelsError: +((hole - pixels.holePixels) / pixels.holePixels * 100).toFixed(2),
-    interiorVisibleSharePunch: +(visiblePunch / hole).toFixed(4),
-    interiorVisibleShareDecal: +(visibleDecal / hole).toFixed(4),
-    wallDriftPixels: driftWall,
-    repeatDriftPixels: driftRepeat,
-    meanLumaPunch: +(punchMass / (N * N)).toFixed(2),
-    meanLumaDecal: +(decalMass / (N * N)).toFixed(2),
-    openings: plan.openings.length,
-    doors: plan.doorCount,
-    coverage: +(plan.coverage * 100).toFixed(2),
+function makeRig(p, prefix) {
+  const pixels = holePixelStats(p, N);
+  const facade = createFacadeScene(THREE, p);
+  const target = new THREE.WebGLRenderTarget(N, N, { stencilBuffer: true, depthBuffer: true, samples: 0 });
+  const shoot = (mode) => {
+    facade.setMode(mode);
+    renderer.setRenderTarget(target);
+    renderer.clear();
+    renderer.render(facade.scene, facade.camera);
+    const buf = new Uint8Array(N * N * 4);
+    renderer.readRenderTargetPixels(target, 0, 0, N, N, buf);
+    renderer.setRenderTarget(null);
+    return buf;
   };
-}
+  // readRenderTargetPixels 给的是自下而上的行序，判定必须用同一套坐标，否则洞口掩码会整体上下翻。
+  // 掩码走模块自己的 isInsideOpening：拱顶按半椭圆算，方洞退化成矩形，与解析面积同一套边界。
+  const uvOf = (x, yBottom) => [(x + 0.5) / pixels.sx - p.width / 2, (yBottom + 0.5) / pixels.sy - p.height / 2];
 
-function paint(id, label, buf) {
-  let fig = document.getElementById('fig-' + id);
-  if (!fig) {
-    fig = document.createElement('figure');
-    fig.id = 'fig-' + id;
-    const c = document.createElement('canvas');
-    c.width = c.height = N;
-    const cap = document.createElement('figcaption');
-    fig.append(c, cap);
-    $('#strip').append(fig);
+  function metrics() {
+    const decal = shoot('decal'), punch = shoot('punch'), punch2 = shoot('punch'), off = shoot('wallsOff');
+    let hole = 0, visiblePunch = 0, visibleDecal = 0, driftWall = 0, driftRepeat = 0, punchMass = 0, decalMass = 0;
+    let cornerPixels = 0, cornerLeak = 0;
+    const arches = p.openings.filter((o) => (o.rise ?? 0) > 0);
+    const bands = arches.map(() => ({ lower: { n: 0, vis: 0 }, upper: { n: 0, vis: 0 } }));
+    const bandAt = (o, v) => (v < o.v ? 'lower' : 'upper');
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const i = (y * N + x) * 4;
+      const [u, v] = uvOf(x, y);
+      const inHole = isInsideOpening(p, u, v);
+      if (inHole) {
+        hole++;
+        if (eq(punch, off, i)) visiblePunch++;
+        if (eq(decal, off, i)) visibleDecal++;
+      } else if (!eq(punch, decal, i)) driftWall++;
+      if (!eq(punch, punch2, i)) driftRepeat++;
+      punchMass += (punch[i] + punch[i + 1] + punch[i + 2]) / 3;
+      decalMass += (decal[i] + decal[i + 1] + decal[i + 2]) / 3;
+      // 拱龛诊断：带宽只统计「真在龛内」的像素（拱肩是墙，不能算进透出率），
+      // 落在外包矩形内但不在轮廓内的像素则单独记成拱肩泄漏。
+      arches.forEach((o, k) => {
+        if (Math.abs(u - o.u) > o.w / 2 || Math.abs(v - o.v) > o.h / 2) return;
+        if (isInsideOpening({ openings: [o] }, u, v)) {
+          const b = bandAt(o, v);
+          bands[k][b].n++;
+          if (eq(punch, off, i)) bands[k][b].vis++;
+        } else {
+          cornerPixels++;
+          if (eq(punch, off, i)) cornerLeak++;
+        }
+      });
+    }
+    const arch = arches[0];
+    const b0 = bands[0];
+    return {
+      mode: passOrder().join('→'),
+      analyticHolePixels: +pixels.holePixels.toFixed(1),
+      measuredHolePixels: hole,
+      holePixelsError: +((hole - pixels.holePixels) / pixels.holePixels * 100).toFixed(2),
+      interiorVisibleSharePunch: +(visiblePunch / hole).toFixed(4),
+      interiorVisibleShareDecal: +(visibleDecal / hole).toFixed(4),
+      wallDriftPixels: driftWall,
+      repeatDriftPixels: driftRepeat,
+      meanLumaPunch: +(punchMass / (N * N)).toFixed(2),
+      meanLumaDecal: +(decalMass / (N * N)).toFixed(2),
+      openings: p.openings.length,
+      doors: p.doorCount,
+      arches: p.archCount,
+      coverage: +(p.coverage * 100).toFixed(2),
+      // 拱龛专属
+      archFloors: arch ? +(arch.h / FLOOR).toFixed(2) : 0,
+      archRise: arch ? arch.rise : 0,
+      archLowerShare: b0 && b0.lower.n ? +(b0.lower.vis / b0.lower.n).toFixed(4) : null,
+      archUpperShare: b0 && b0.upper.n ? +(b0.upper.vis / b0.upper.n).toFixed(4) : null,
+      archBBoxPixels: cornerPixels + hole,
+      archShoulderPixels: cornerPixels,
+      archShoulderLeak: cornerLeak,
+    };
   }
-  const ctx = fig.querySelector('canvas').getContext('2d');
-  const raw = new Uint8ClampedArray(buf.length);
-  for (let y = 0; y < N; y++) raw.set(buf.subarray(y * N * 4, (y + 1) * N * 4), (N - 1 - y) * N * 4);
-  ctx.putImageData(new ImageData(raw, N, N), 0, 0);
-  fig.querySelector('figcaption').textContent = label;
+
+  function paint(id, label, buf) {
+    let fig = document.getElementById('fig-' + id);
+    if (!fig) {
+      fig = document.createElement('figure');
+      fig.id = 'fig-' + id;
+      const c = document.createElement('canvas');
+      c.width = c.height = N;
+      const cap = document.createElement('figcaption');
+      fig.append(c, cap);
+      $('#strip').append(fig);
+    }
+    const ctx = fig.querySelector('canvas').getContext('2d');
+    const raw = new Uint8ClampedArray(buf.length);
+    for (let y = 0; y < N; y++) raw.set(buf.subarray(y * N * 4, (y + 1) * N * 4), (N - 1 - y) * N * 4);
+    ctx.putImageData(new ImageData(raw, N, N), 0, 0);
+    fig.querySelector('figcaption').textContent = label;
+  }
+
+  function redraw(mode) {
+    const tag = prefix ? prefix + '-' : '';
+    paint(tag + (mode === 'wallsOff' ? 'off' : mode),
+      (prefix ? '高拱龛 · ' : '') + ({ decal: '贴片（本仓现状）：洞口被玻璃片盖住，看不到室内', punch: '模板挖洞（原作）：洞口区域墙体被拒绘，室内可见', wallsOff: '参照：关掉墙体与贴片，只有室内' })[mode],
+      shoot(mode));
+  }
+  return { plan: p, pixels, facade, shoot, metrics, redraw };
 }
 
-function redraw(mode) {
-  document.querySelectorAll('header button[data-mode]').forEach((b) => b.classList.toggle('on', b.dataset.mode === mode));
-  paint('decal', '贴片（本仓现状）：洞口被玻璃片盖住，看不到室内', shoot('decal'));
-  paint('punch', '模板挖洞（原作）：洞口区域墙体被拒绘，室内可见', shoot('punch'));
-  paint('off', '参照：关掉墙体与贴片，只有室内', shoot('wallsOff'));
-}
+const main = makeRig(plan, '');
+const arch = makeRig(archPlan, 'arch');
 
-window.openingPunch = { ready: true, plan, pixels, metrics, redraw, passOrder };
-document.querySelectorAll('header button[data-mode]').forEach((b) => (b.onclick = () => redraw(b.dataset.mode)));
-$('#run').onclick = () => { const m = metrics(); $('#status').textContent = JSON.stringify(m, null, 2); window.openingPunch.last = m; redraw('punch'); };
-redraw('punch');
-const m = metrics();
-window.openingPunch.last = m;
-$('#status').textContent = JSON.stringify(m, null, 2);
+window.openingPunch = {
+  ready: true, plan, archPlan, pixels: main.pixels, passOrder,
+  metrics: main.metrics, redraw: main.redraw,
+  last: null,
+  archRig: { plan: archPlan, metrics: arch.metrics, redraw: arch.redraw, pixels: arch.pixels },
+};
+document.querySelectorAll('header button[data-mode]').forEach((b) => (b.onclick = () => { main.redraw(b.dataset.mode); arch.redraw(b.dataset.mode); }));
+const runAll = () => {
+  const m = main.metrics(), a = arch.metrics();
+  window.openingPunch.last = m; window.openingPunch.lastArch = a;
+  $('#status').textContent = JSON.stringify({ windows: m, archNiche: a }, null, 2);
+  main.redraw('punch'); arch.redraw('punch');
+};
+$('#run').onclick = runAll;
+runAll();
 </script>
 </html>

@@ -42,6 +42,9 @@ export class BattleNavigation {
     for(const s of surface.stairs){if(!this.stairByLow.has(s.low.id))this.stairByLow.set(s.low.id,[]);this.stairByLow.get(s.low.id).push(s);}
     this.minPortalWidth=Math.min(Infinity,...this.graph.portals.map(p=>p.width));
     this.flowMesh=null;this.flowFields=new Map();
+    // 816748103193817088：连续流向的可观测量。steer = 走过 flowAim 分支的次数；used = 流向前视被采纳；
+    // rejected = 与图的下一步偏差过大 / 扫掠放不下（回退通口前视）；mesh = 自动生成的导航面规模。
+    this.flowStats={steer:0,used:0,rejected:0};
   }
   pick(cell,y,{tolerance=.22}={}){
     this.refresh();if(!cell||!Number.isFinite(y))return null;
@@ -77,7 +80,7 @@ export class BattleNavigation {
     const fa=this.fine?.aperture(plan.from.id,edge),pa=fa?.p?fa.p:pts[edge],pb=fa?.p?fa.q:pts[(edge+1)%pts.length];
     let base=portalAim(unit,pa,pb,next,following,{radius:unit.radius??this.radius})??(fa?.p?{x:(pa.x+pb.x)/2,z:(pa.z+pb.z)/2}:next);
     if(fa?.p&&(fa.t0>1e-9||fa.t1<1-1e-9))base=this.#throughAperture(unit,pa,pb,base);
-    if(this.continuousFlow){const aim=this.flowAim(unit,plan,base);if(aim)return aim;}
+    if(this.continuousFlow){this.flowStats.steer++;const aim=this.flowAim(unit,plan,base);if(aim){this.flowStats.used++;return aim;}this.flowStats.rejected++;}
     return base;
   }
   /** 精细门户：从 unit 到 aim 的直线若不在收窄后的门户（两端各让出半径）里穿过，先对准门户上离自己最近的可穿点。 */
@@ -206,6 +209,16 @@ export class BattleNavigation {
       if(!pc||(pc.id!==plan.from.cell.id&&pc.id!==plan.next.cell.id))return null;
       if(!this.discFits(pc.id===plan.next.cell.id?plan.next:plan.from,px,pz,r))return null;}
     return {x,z};
+  }
+  /** 816748103193817088 验收口径：一次读齐「导航面是否自动生成 / 连续流被采纳多少 / 与图的偏差多少」。
+   *  导航面来自共享 World 的分层图（navMeshFromLayeredGraph(this.graph)），不是手搓的规则地形。 */
+  flowSummary(){
+    const mesh=this.flowMesh,poly=mesh?.polys?.length??0,vert=mesh?.verts?.length??0;
+    const s=this.flowStats??{steer:0,used:0,rejected:0};
+    return {continuousFlow:!!this.continuousFlow,flowAgree:this.flowAgree,polys:poly,verts:vert,
+      links:mesh?.links?.length??0,goals:this.flowFields?.size??0,graphNodes:this.graph?.nodes?.length??0,
+      portals:this.graph?.portals?.length??0,steer:s.steer,used:s.used,rejected:s.rejected,
+      adopted:s.steer?s.used/s.steer:null};
   }
   /** 827215002448846848 / REACode navribbon：命令路径 = 分层折线 → Catmull-Rom（落到不可站处的样本退回折线）
    * → 弧长等距 → 每点贴实际地面（含楼梯踏面）→ 两侧按格内净宽出带状格子（首尾共享边）。 */

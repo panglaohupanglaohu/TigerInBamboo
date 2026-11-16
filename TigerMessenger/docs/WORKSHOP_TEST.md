@@ -116,3 +116,5 @@ S20实际画布点选：从辅助目录先定位桥边树，按几何边界投�
 
 2026-11-14 能力谱系：capability-lineage.test.mjs 纳入统一单元（合成来源验证代际切分 / 方向 / 组合 / 得分 / 经验与管线需求回流 / 替代不排队，真实资料验证全量入线、队列覆盖与确定性）。capability-lineage-browser.mjs 用新 context 验 8769 与 8931 同线数、同缺口数、同代际，学习→演进定位、左栏→学习工坊、学习工坊→场景管线、两种左栏视图、390px 不溢出；加入管线只在测试上下文，不保存配方。证据目录 artifacts/capability-lineage-20261114/run-*。
 workshops-browser.mjs（36 例）上次带浏览器运行是 11-05；11-14 运行 11 通过 / 25 失败（20261114T115043544670Z）。失败项含已隐藏的旧左栏选择器、旧顶部页签、旧节点数与上游进度数据形状等，属系统工坊改版后未同步的用例；本轮没有改版前基线，不能逐条排除本轮影响，需单独一轮更新该套件。
+
+2026-11-15：capability-lineage.test.mjs 增能力网分层与场景诊断用例（含真实场景清单）；REACodeRefactoring/tests/capability-grid-contours.mjs 纳入统一入口 refactor-code 组；capability-lineage-browser.mjs 增能力网 27 节点、十二门徒诊断与引导、节点点选。apostles-look-browser.mjs 是同机位对照取证脚本，不是通过 / 失败用例；每种候选一个新 context，约 85 秒。

@@ -69,13 +69,16 @@
   <div class="pane" id="p-banner"><canvas id="cbanner"></canvas></div>
   <div class="pane" id="p-pop"><div id="pop" aria-label="本地确认菜单演示"></div></div>
   <div class="pane" id="p-menu"><div id="menu"></div></div>
-  <div class="pane" id="p-icons"><div id="icons"></div></div>
+  <div class="pane" id="p-icons"><div id="icons"></div>
+    <p class="ink-cap">等墨量对照（<code>src/ui/icon-ink.js</code> 的描边路径集 <code>DEFAULT_ICONS</code>）：同一组图标按「路径长 × 线宽」反解线宽，压平墨量；上面那排是原片式内联 SVG，下面这排是同一工具栏吃 <code>item.paths</code> 的结果。</p>
+    <div id="ink-row"></div><div id="ink-stat" class="ink-stat"></div></div>
 <div id="ui-status" role="status" aria-live="polite"></div></div>
 <script type="module">
 import {withRandomState,mirroredRandom,partSeed,PORTRAIT_SLOTS,sampleSlots,portraitSilhouette,silhouetteDiversity} from "./src/core/part-random.js";
 import {drawSlotPortrait,drawSlotSilhouette} from "./src/ui/slot-portrait.js";
 import {playfulJitter} from "./src/core/playful-layout.js";
 import {mountIconToolbar} from "./src/ui/icon-toolbar.js";
+import {DEFAULT_ICONS,inkBalance} from "./src/ui/icon-ink.js";
 let iconToolbar=null, selectedTool="select";
 let disposePopup=()=>{}, menuSeed=7;
 
@@ -347,6 +350,17 @@ function buildIcons() {
   box.setAttribute('aria-label','本地图标工具示例');
   const keys=['select','shape','paint','palette','undo','redo','quit'],labels=['选择','改形','涂色','配色','撤销（未接入）','重做（未接入）','退出（未接入）'];
   iconToolbar=mountIconToolbar(box,TOOL_ICONS.map(([color,svg],i)=>({key:keys[i],label:labels[i],color,disabled:i>=4,render:b=>{b.innerHTML=svg;}})),{value:selectedTool,onChange:key=>{selectedTool=key;document.getElementById('ui-status').textContent=`本地工具：${labels[keys.indexOf(key)]}，未发送游戏指令`;}});
+  buildInk();
+}
+/* 1201179450668441600 的第二条路：真正的描边路径（icon-ink DEFAULT_ICONS）→ 同一工具栏按整组墨量统一线宽。
+   第 103 轮补的页面入口：把「等墨量」从 node 测试搬到页面上，并把按钮实际线宽读回来做断言。 */
+let inkToolbar=null,inkKey='cursor';const inkState={buttons:0,widths:[],cvRaw:null,cvFit:null,cvEq:null,svgs:0};
+function buildInk() {
+  const host=document.getElementById('ink-row');host.innerHTML='';host.setAttribute('aria-label','等墨量图标对照');
+  inkToolbar=mountIconToolbar(host,Object.entries(DEFAULT_ICONS).map(([key,paths])=>({key,label:key,paths})),{value:inkKey,onChange:k=>{inkKey=k;document.getElementById('ui-status').textContent=`等墨量图标：${k}（路径集，非位图）`;}});
+  const btns=[...host.querySelectorAll('button')],widths=btns.map(b=>+b.dataset.inkWidth),W=inkBalance(DEFAULT_ICONS);
+  Object.assign(inkState,{buttons:btns.length,widths,cvRaw:+W.cvRaw.toFixed(4),cvFit:+W.cvFit.toFixed(4),cvEq:+W.cvEq.toFixed(4),svgs:btns.filter(b=>b.querySelector('svg')).length});window.inkReview=inkState;
+  document.getElementById('ink-stat').textContent=`等墨量 ${btns.length} 个：线宽 ${Math.min(...widths).toFixed(2)}–${Math.max(...widths).toFixed(2)} · 墨量离散度 ${W.cvRaw.toFixed(3)} → ${W.cvFit.toFixed(3)} → ${W.cvEq.toFixed(3)}（原始 → 统一光学框 → 等墨量）`;
 }
 
 const NOTES = {
@@ -359,7 +373,7 @@ const NOTES = {
 };
 let tab = 'face';
 function render() {
-  disposePopup();iconToolbar?.dispose();iconToolbar=null;document.getElementById('ui-status').textContent='';
+  disposePopup();iconToolbar?.dispose();iconToolbar=null;inkToolbar?.dispose();inkToolbar=null;document.getElementById('ui-status').textContent='';
   document.getElementById('note').textContent = NOTES[tab];
   document.getElementById('face-mode').hidden=tab!=='face';
   const seeded=tab==='face'||tab==='banner';document.getElementById('part-seed-row').hidden=!seeded;if(seeded)document.getElementById('part-seed').value=tab==='face'?faceSeed:bannerSeed;
@@ -381,7 +395,7 @@ addEventListener('resize', () => (tab === 'face' || tab === 'banner') && render(
 function setPartSeed(value){if(!Number.isSafeInteger(value)||value<1||value>2147483646)throw new RangeError('种子需为1至2147483646的整数');if(tab==='face')faceSeed=value;else if(tab==='banner')bannerSeed=value;else throw new Error('请选择头像或旗帜');render()}
 document.getElementById('part-seed').onchange=e=>{try{setPartSeed(+e.target.value);e.target.setCustomValidity('')}catch(error){e.target.setCustomValidity(error.message);e.target.reportValidity()}};
 setTab(new URLSearchParams(location.search).get('t') || 'face');
-window.uiLab = {setTab,setPartSeed,setFaceMode, get toolbar(){return iconToolbar}, get portraitStats(){return portraitStats} };
+window.uiLab = {setTab,setPartSeed,setFaceMode, get toolbar(){return iconToolbar}, get inkToolbar(){return inkToolbar}, get inkReview(){return inkState}, get portraitStats(){return portraitStats} };
 </script>
 </body>
 </html>

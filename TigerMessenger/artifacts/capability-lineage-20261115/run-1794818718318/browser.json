@@ -1,0 +1,29 @@
+{
+  "errors": [],
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/capability-lineage-20261115/run-1794818718318",
+  "source": {
+    "lines": 27,
+    "queue": 158,
+    "order": [
+      "1579483114178768898",
+      "1447494168448753667",
+      "816748103193817088",
+      "1751932427272909032",
+      "1795831296952041691",
+      "797119718477991936",
+      "1163836000688365571",
+      "1181464374839521280"
+    ],
+    "shore": [
+      "A",
+      "A+",
+      "A++",
+      "A+++",
+      "A+4"
+    ],
+    "focus": "1215642481162887168",
+    "mobileOverflow": true
+  },
+  "pass": false,
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\ntrue !== false\n\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/capability-lineage-browser.mjs:19:162"
+}

@@ -9,6 +9,9 @@ uniform vec4 uCloudPuffs[64];
 uniform int uCloudCount;
 uniform float uCloudStrength;
 uniform vec3 uCloudSun;
+uniform vec4 uCloudPuffsFar[24];
+uniform int uCloudCountFar;
+uniform float uCloudFarRatio;
 float cloudShadowTone(vec3 p){
  if(uCloudStrength<=0. || uCloudSun.y<=.001) return 1.;
  float cover=0.;
@@ -22,12 +25,26 @@ float cloudShadowTone(vec3 p){
   float a=texture2D(uCloudAtlas,uCloudRect.xy+uv*uCloudRect.zw).a;
   cover=max(cover,smoothstep(.05,.55,a));
  }
- return 1.-uCloudStrength*cover;
+ // 远层（deck 第 0 层）：更高更远 → 影子更淡、边更散（宽 ramp + 单独弱档），与近/中层相乘独立退化。
+ float farCover=0.;
+ for(int i=0;i<24;i++){
+  if(i>=uCloudCountFar)break;
+  vec4 c=uCloudPuffsFar[i];
+  if(c.y<=p.y || c.w<=0.)continue;
+  vec2 hit=p.xz+uCloudSun.xz*((c.y-p.y)/uCloudSun.y);
+  vec2 uv=(hit-c.xz)/c.w+.5;
+  if(uv.x<=0. || uv.y<=0. || uv.x>=1. || uv.y>=1.)continue;
+  float a=texture2D(uCloudAtlas,uCloudRect.xy+uv*uCloudRect.zw).a;
+  farCover=max(farCover,smoothstep(.02,.92,a));
+ }
+ return (1.-uCloudStrength*cover)*(1.-uCloudStrength*uCloudFarRatio*farCover);
 }`;
 export class CloudShadow {
- constructor(view){
+  constructor(view){
   this.view=view;this.enabled=false;this.strength=.35;
-  this.uniforms={uCloudAtlas:{value:null},uCloudRect:{value:new THREE.Vector4()},uCloudPuffs:{value:Array.from({length:64},()=>new THREE.Vector4())},uCloudCount:{value:0},uCloudStrength:{value:0},uCloudSun:{value:new THREE.Vector3()}};
+  this.farRatio=.42;   // 远层单独弱档（近/中层 0.35 → 远层 ≈0.147），云越高影子越淡
+  this.uniforms={uCloudAtlas:{value:null},uCloudRect:{value:new THREE.Vector4()},uCloudPuffs:{value:Array.from({length:64},()=>new THREE.Vector4())},uCloudCount:{value:0},uCloudStrength:{value:0},uCloudSun:{value:new THREE.Vector3()},
+   uCloudPuffsFar:{value:Array.from({length:24},()=>new THREE.Vector4())},uCloudCountFar:{value:0},uCloudFarRatio:{value:this.farRatio}};
   this.matrix=new THREE.Matrix4();this.center=new THREE.Vector3();this.scale=new THREE.Vector3();
  }
  setEnabled(on){if(typeof on!=='boolean')throw new TypeError('cloud shadow toggle');this.enabled=on;this.update();}
@@ -35,7 +52,7 @@ export class CloudShadow {
   const v=this.view,f=v.vegetation?.cloudField,u=this.uniforms;
   let visible=!!f;for(let node=f?.mesh;node;node=node.parent)visible=visible&&node.visible;
   u.uCloudStrength.value=this.enabled&&visible?this.strength:0;
-  u.uCloudCount.value=0;if(!f)return;
+  u.uCloudCount.value=0;u.uCloudCountFar.value=0;if(!f)return;
   u.uCloudAtlas.value=f.material.uniforms.uTex.value;
   u.uCloudRect.value.copy(f.material.uniforms.uFrames.value[0]);
   u.uCloudSun.value.copy(v.sunDir);

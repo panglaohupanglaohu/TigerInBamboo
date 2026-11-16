@@ -1,5 +1,14 @@
 import { cloudDepth } from '../core/cloud-depth.js';
 import { levelFloraSpecies, levelFloraRanks } from '../core/level-flora.js';
+import { CLOUD_SHADOW_GLSL } from '../light/cloud-shadow.js';
+
+/**
+ * 1243228419162341379：植被（灌木 / 树冠 / 树干）也接收云影。
+ * View 构造时把 cloudShadow.uniforms 传进来（同一批 uniform 对象，每帧由 CloudShadow 写值）；
+ * 没传就退化成原来的「只吃光照」，不影响其它页面。
+ */
+let CLOUD_UNIFORMS = null;
+export function setCloudShadowUniforms(u) { CLOUD_UNIFORMS = u ?? null; return !!CLOUD_UNIFORMS; }
 /**
  * vegetation.js — 植被管线：落点 → 地被（草丛）→ 边缘灌木 → 树林 → 风 + 描边。
  *
@@ -218,7 +227,7 @@ const LEAF_GLSL = /* glsl */ `
 function swayMaterial(uTime, amount, uLeafy = null, leafScale = 60, surface = null, center = new THREE.Vector3()) {
   const m = new THREE.MeshLambertMaterial({ color: 0xffffff });
   m.alphaToCoverage = !!surface;
-  m.customProgramCacheKey = () => `leaf-surface-${amount}-${leafScale}-${!!surface}`;
+  m.customProgramCacheKey = () => `leaf-surface-${amount}-${leafScale}-${!!surface}-${!!CLOUD_UNIFORMS}`;
   m.onBeforeCompile = (shader) => {
     shader.uniforms.uTime = uTime;
     shader.uniforms.uLeafy = uLeafy ?? { value: 0 };
@@ -262,6 +271,16 @@ function swayMaterial(uTime, amount, uLeafy = null, leafScale = 60, surface = nu
     shader.vertexShader = shader.vertexShader
       .replace('#include <common>', '#include <common>\nvarying float vTip;')
       .replace('#include <begin_vertex>', '#include <begin_vertex>\nvTip = aTip;');
+    // 1243228419162341379：云影接收（和主材质/水面同一份 uniform，关掉云影时 uCloudStrength=0 自动退化为 1.0）
+    if (CLOUD_UNIFORMS) {
+      Object.assign(shader.uniforms, CLOUD_UNIFORMS);
+      shader.vertexShader = shader.vertexShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vCldW;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\n        vCldW = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;');
+      shader.fragmentShader = shader.fragmentShader
+        .replace('#include <common>', '#include <common>\nvarying vec3 vCldW;\n' + CLOUD_SHADOW_GLSL)
+        .replace('#include <dithering_fragment>', '#include <dithering_fragment>\ngl_FragColor.rgb *= cloudShadowTone(vCldW);');
+    }
   };
   return m;
 }
@@ -380,9 +399,10 @@ const COLORS = {
 };
 
 export class Vegetation {
-  constructor({ scene, levelHeight = 0.5, uTime, max = { tufts: 5000, shrubs: 1200, crowns: 400 } } = {}) {
+  constructor({ scene, levelHeight = 0.5, uTime, cloud = null, max = { tufts: 5000, shrubs: 1200, crowns: 400 } } = {}) {
     this.L = levelHeight;
     this.uTime = uTime ?? { value: 0 };
+    setCloudShadowUniforms(cloud);
     this.uLight = { value: 1 };
     this.max = max;
     this.group = new THREE.Group();

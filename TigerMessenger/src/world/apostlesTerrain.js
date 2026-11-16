@@ -17,7 +17,7 @@ import {carveRivers} from '../vendor/townscaper-rea-refactoring/src/terrain/gene
 import {addFeatures} from '../vendor/townscaper-rea-refactoring/src/terrain/features.js';
 import {fbm,ridged,clamp01,smoothstep,makeRng} from '../vendor/townscaper-rea-refactoring/src/core/noise.js';
 
-export const APOSTLES_TERRAIN_REVISION='apostles-terrain-pipeline-r1';
+export const APOSTLES_TERRAIN_REVISION='apostles-terrain-pipeline-r1';   // 候选开关不改这个默认修订号
 
 /**
  * @param {import('../vendor/townscaper-rea-refactoring/src/core/world.js').World} world  the mass's own grid
@@ -26,7 +26,9 @@ export const APOSTLES_TERRAIN_REVISION='apostles-terrain-pipeline-r1';
  * @param {(cell)=>number} o.cap       approved height at the cell, in levels (lobe hierarchy)
  * @param {(cell)=>number} o.limit     clearance cap (rail / town / protected), in levels
  */
-export function generateApostleTerrain(world,{seed=7,mask,cap,limit,spire=false,towers=1,canyons=true,rivers=1,caves=2,overhangs=3,arches=1,stacks=0,beach=true}={}){
+export function generateApostleTerrain(world,{seed=7,mask,cap,limit,spire=false,towers=1,canyons=true,rivers=1,caves=2,overhangs=3,arches=1,stacks=0,beach=true,soft=false,lib=null}={}){
+ // 候选（apostlesLook.js）：lib = 最新能力库的同名模块；soft = 库 generate.js 的「缓坡省 / 陡崖省」量化（1447488323845509121）
+ const carveRiversX=lib?.generate?.carveRivers??carveRivers,addFeaturesX=lib?.features?.addFeatures??addFeatures,sharp=soft&&lib?.generate?.slopeMask?lib.generate.slopeMask(world.cells,seed):null;
  const cells=world.cells,rng=makeRng(seed),nb=(c,i)=>(c.edgeNeighbors[i]>=0?cells[c.edgeNeighbors[i]]:null);
  let span=0;for(const c of cells)span=Math.max(span,Math.hypot(c.cx,c.cz));
  // 1) height field: generate.js noise (same warp / octaves / ridge mix), composition mask instead of radial falloff
@@ -43,6 +45,7 @@ export function generateApostleTerrain(world,{seed=7,mask,cap,limit,spire=false,
  for(const c of cells){const t=raw[c.id];if(t<.3)continue;const top=Math.max(2,cap(c));
   if(beach&&t<.35){level[c.id]=1;continue;}
   const k=clamp01((t-.35)/.6);let lv=Math.max(2,Math.round(Math.pow(k,.62)*(top/2))*2);
+  if(sharp){const gentle=Math.max(2,Math.round(Math.pow(k,.62)*top));lv=Math.round(gentle+(lv-gentle)*sharp[c.id]);}   // 缓坡省逐层 1 级台阶，陡崖省仍是偶数层崖
   level[c.id]=Math.min(lv,top%2?top+1:top);}
  // 3) towers: pillars off the platforms (two levels above the local cap)
  for(let n=0;n<towers;n++){const ang=rng()*Math.PI*2,dist=(.15+rng()*.45)*span*.6,tx=Math.cos(ang)*dist,tz=Math.sin(ang)*dist,rad=.9+rng()*1.3;
@@ -58,8 +61,9 @@ export function generateApostleTerrain(world,{seed=7,mask,cap,limit,spire=false,
  // clearance before any carving so rivers and caves follow the final ground
  for(const c of cells)if(level[c.id])level[c.id]=Math.min(level[c.id],limit(c));
  world.reset();for(const c of cells)if(level[c.id]>0)world.fill(c,level[c.id],{rock:true});
+ if(sharp)world.slopeMask=sharp;
  // 6) rivers (vendor carveRivers)
- const riverCells=rivers>0?carveRivers(world,{seed:seed+5,count:rivers}):[];
+ const riverCells=rivers>0?carveRiversX(world,{seed:seed+5,count:rivers}):[];
  // 7) sea caves (generate.js step 7)
  let caveCount=0;const rim=cells.filter(c=>world.top(c)>=4&&c.edgeNeighbors.some((_,i)=>{const o=nb(c,i);return!o||world.top(o)===0;}));
  for(let n=0;n<caves&&rim.length;n++){let cur=rim[(rng()*rim.length)|0];const carved=new Set();
@@ -67,7 +71,7 @@ export function generateApostleTerrain(world,{seed=7,mask,cap,limit,spire=false,
    let best=null,score=-1;for(let i=0;i<cur.n;i++){const o=nb(cur,i);if(!o||carved.has(o.id)||world.top(o)<4)continue;if(world.top(o)>score){score=world.top(o);best=o;}}cur=best;}
   caveCount++;}
  // 8) features (vendor addFeatures)
- const features=addFeatures(world,{seed,overhangs,arches,stacks});
+ const features=addFeaturesX(world,{seed,overhangs,arches,stacks});
  world.touch();
  return{revision:APOSTLES_TERRAIN_REVISION,rivers:riverCells.length,caves:caveCount,features,levels:[...new Set(level)].sort((a,b)=>a-b)};
 }

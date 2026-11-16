@@ -33,6 +33,13 @@ export function setupEnvironment(scene) {
   fill.position.set(-10, 6, -8);
   scene.add(fill);
 
+  // 月光补光：夜间照到背光半球。昼夜表深夜 ambientI 只有 0.08，
+  // Toon 色块在背光面会掉成纯黑（整片城市看不见），由 dayNight 按夜晚权重点亮，白天为 0。
+  const moon = new THREE.DirectionalLight(0x8fa8d8, 0);
+  moon.name = "moon-fill";
+  moon.position.set(-20, 22, -16);
+  scene.add(moon);
+
   // ---------- 天空球：参考图4的青蓝/薄荷双色，并加入漫画式大块云带 ----------
   let skyMat = null; // 昼夜循环要改 uniforms，提到函数作用域
   {
@@ -294,7 +301,7 @@ export function setupEnvironment(scene) {
     }
   }
 
-  return { lanterns, ambient, sun: dir, skyMat, hemi, fill };
+  return { lanterns, ambient, sun: dir, skyMat, hemi, fill, moon };
 }
 
 /** 白天飞鸟 / 光尘动画 */

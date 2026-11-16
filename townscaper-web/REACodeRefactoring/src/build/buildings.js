@@ -43,7 +43,7 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
   let archCount=0,archSegments=0,archWedges=0,decoSolved=0,decoFailures=0;
   const archBudgets=[],archVoussoirLog=[],decoDrawn={},decoPlacements=[];
   let decoDropped=0;
-  const lintels=[],archHoles=[];
+  const lintels=[],archHoles=[],archCuts=[];
   const canalBridges=[],churchDoorLog=[],openingLog=[];   // r56 C05·C
   const cells = world.cells;
   const grid = world.grid;
@@ -242,14 +242,19 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
   /* Wall strip with an optional arch-shaped hole (hole: {t, y, width, height}); without a hole
    * it is exactly wallBody. Rectangles left/right of the hole, below its sill, and a fan of strips
    * between the semicircle (12 chords, same as the frame ring) and the strip top. */
+  /* r113 真洞口账本：墙面原本 (yB-yA)*len，挖洞后实画面积逐块累加，差额必须等于拱形面积
+   * 2r*(h-r)+πr²/2（拱洞=矩形+半圆）。这是「真洞口」区别于贴片拱门的唯一硬证据。 */
   const wallStrip=(c,i,yA,yB,col,shade,hole)=>{
     if(!hole){wallBody(c,i,yA,yB,col,shade);return;}
     const a=c.pts[i],b=c.pts[(i+1)%c.n],len=Math.hypot(b.x-a.x,b.z-a.z),[nx,nz]=edgeOut(c,i),out=[nx,0,nz],Q=(s,y)=>[a.x+(b.x-a.x)*s/len,y,a.z+(b.z-a.z)*s/len];
-    const rect=(s0,s1,y0,y1)=>{if(s1-s0>1e-9&&y1-y0>1e-9)w.quad(Q(s0,y0),Q(s1,y0),Q(s1,y1),Q(s0,y1),out,col,shade);};
+    let drawn=0;
+    const rect=(s0,s1,y0,y1)=>{if(s1-s0>1e-9&&y1-y0>1e-9){w.quad(Q(s0,y0),Q(s1,y0),Q(s1,y1),Q(s0,y1),out,col,shade);drawn+=(s1-s0)*(y1-y0);}};
     const r=hole.width/2,sc=hole.t*len,xl=sc-r,xr=sc+r,spring=hole.y+hole.height-r,cl=y=>Math.max(yA,Math.min(yB,y));
     rect(0,xl,yA,yB);rect(xr,len,yA,yB);rect(xl,xr,yA,Math.min(yB,hole.y));
     for(let k=0;k<12;k++){const t0=Math.PI-k*Math.PI/12,t1=Math.PI-(k+1)*Math.PI/12,x0=sc+r*Math.cos(t0),x1=sc+r*Math.cos(t1),y0=cl(spring+r*Math.sin(t0)),y1=cl(spring+r*Math.sin(t1));
-      if(y0>=yB-1e-12&&y1>=yB-1e-12)continue;w.quad(Q(x0,y0),Q(x1,y1),Q(x1,yB),Q(x0,yB),out,col,shade);}
+      if(y0>=yB-1e-12&&y1>=yB-1e-12)continue;w.quad(Q(x0,y0),Q(x1,y1),Q(x1,yB),Q(x0,yB),out,col,shade);drawn+=(x1-x0)*((yB-y0)+(yB-y1))/2;}
+    const wallArea=(yB-yA)*len,missing=Math.max(0,wallArea-drawn);
+    archCuts.push({cell:c.id,edge:i,level:Math.round(yA/L),len:+len.toFixed(4),wallArea:+wallArea.toFixed(6),drawn:+drawn.toFixed(6),missing:+missing.toFixed(6),depth:world.archCutDepth??.07});
   };
 
   const wallBody = (c, i, y0, y1, color, shade) => {
@@ -613,7 +618,7 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
   const yardWalls = world.yardWalls ? drawYardWalls(w, world, planYardWalls(world, { components: yardComps, path }), { L, K }) : null;
   const yardCells = new Set(), pathCells = new Set();
   for (let i = 0; i < n; i++) { if (yard[i]) yardCells.add(i); if (path[i]) pathCells.add(i); }
-  return { canalBridges, churchDoors: churchDoorLog, openings: openingLog, steel, yardWalls, lintels, archHoles, facadeRuns: facadeRunList,yardProps,roofStats,archBudgets,archWedges,archVoussoirLog,decoPlacements,decoDrawn,decoDropped,decoSolved,decoFailures,archCount,archSegments,decorationGroups: decoration.components.length, posts, yards, yardCells, pathCells, yardOpenings: courtyard.openComponents, chimneys, modules: moduleSigs.size, doors: door.size };
+  return { canalBridges, churchDoors: churchDoorLog, openings: openingLog, steel, yardWalls, lintels, archHoles, archCuts, facadeRuns: facadeRunList,yardProps,roofStats,archBudgets,archWedges,archVoussoirLog,decoPlacements,decoDrawn,decoDropped,decoSolved,decoFailures,archCount,archSegments,decorationGroups: decoration.components.length, posts, yards, yardCells, pathCells, yardOpenings: courtyard.openComponents, chimneys, modules: moduleSigs.size, doors: door.size };
 }
 
 /**

@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-16T15:20:00Z",
+  "scope": "night hemisphere lighting + Bad North battle on Twelve Apostles",
+  "changes": [
+    "src/world/environment.js: add moon fill light (0x8fa8d8), returned as `moon`",
+    "src/world/dayNight.js: drive moon intensity/position by night weight (0.42 * night), independent of V5",
+    "src/main.js: pass moon into createDayNight; add ?battleAt= hook and ?tour=<id>-battle over-shoulder camera",
+    "src/world/rea/reaBattleStage.js: bnHouses falls back to highest plateau cells when scene has no recognisable buildings",
+    "src/world/rea/sceneBattle.js: new generic entry, reuses ReaBattleStage, own rAF driver",
+    "src/scene-authoring/pipeline-model.js: combat.encounter description reflects real state"
+  ],
+  "lighting": {
+    "symptom": "planet night hemisphere rendered pure black, only window lights visible",
+    "cause": "dayNight KEYS night frame ambientI=0.08, sunI=0.14; back-lit hemisphere had no fill",
+    "fix": "moon fill light, weight = 1 - ambientI/0.9, intensity 0.42 max, direction opposite sun from above",
+    "evidence": ["lighting-night-after.png", "lighting-noon-after.png"],
+    "noon_unchanged": true,
+    "verified": "same camera, ?timeOfDay=0.9 vs 0.5, local 8931"
+  },
+  "battle": {
+    "entry": "http://localhost:8931/TigerMessenger/?autostart=1&battleAt=apostles&tour=apostles-battle&battleFocus=0&timeOfDay=0.5",
+    "stage_report": { "tris": 12760, "rays": 4170, "cells": 4170, "land": 239, "maxLevel": 8, "houses": 4, "ms": 9 },
+    "wave1": { "t": 12.4, "wave": 1, "landing": "reserved", "boats": 1, "vikings": 8, "defenders": 24 },
+    "wave2": { "t": 45.4, "wave": 2, "boats": 1, "vikings": 9, "defenders": 16, "houses": "4/4" },
+    "evidence": ["battle-wave1-landing.png", "battle-wave2-melee.png"],
+    "notes": [
+      "defenders dropped 24 -> 16, so melee damage is running",
+      "houses fallback was required: sea-stack scene has no buildings, HUD was 0/0 before",
+      "headless swiftshader renders ~0.5 fps here, so battle clock was advanced by direct battle.update(0.05) calls; on a GPU browser dt advances normally"
+    ]
+  },
+  "not_done": [
+    "workshop recipe executor for combat.encounter (pipeline-execution.js only supports morris-lake parameter preview)",
+    "workshop UI button to launch a scene battle",
+    "player-side command of squads in this scene (Bad North RTS control) not verified",
+    "no user save touched, nothing committed or published"
+  ]
+}

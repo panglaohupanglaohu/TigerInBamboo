@@ -245,7 +245,7 @@ let nightBloom = P.nightBloomV1
 initQuestPanelCollapse();
 
 // ---------- 环境光 / 天空（跨场景共享） ----------
-const { lanterns, ambient, sun, skyMat, hemi, fill } = setupEnvironment(scene);
+const { lanterns, ambient, sun, skyMat, hemi, fill, moon } = setupEnvironment(scene);
 
 // ---------- V5 光照导演（?oskLightingV1=1）：rig 默认隐藏，旧四灯不受影响 ----------
 const lightingV5 = isOskLightingV1();
@@ -851,6 +851,7 @@ const dayNight = createDayNight({
   ambient,
   hemi,
   fill,
+  moon,
   publishOnly: lightingV5,
   // 赤道云墙（MeshToonMaterial 近白基色）也要入夜染色，否则深夜仍亮着白天云带
   clouds: [...(messenger?.clouds || []), ...(equatorialClouds ? [equatorialClouds] : [])],
@@ -2293,6 +2294,9 @@ try{const ink=installCitadelInkOutline({scene,castle:messenger?.landmarks?.odyss
   vikingBoarding?.update(dt);
   vikingCargoRide?.update(dt);
   vikingCampaign?.update(dt);
+  // 场景战役（?battleAt=apostles）：把 Bad North 玩法层接到任意已注册场景，只在该参数下生效
+  if(globalThis.__tmBattleAt===undefined)globalThis.__tmBattleAt=new URLSearchParams(location.search).get('battleAt');
+  if(globalThis.__tmBattleAt&&!globalThis.__tmBattleStarted&&globalThis.__tmStartup?.status==='ready'){globalThis.__tmBattleStarted=true;import('./world/rea/sceneBattle.js').then(m=>{const r=m.startSceneBattle({scene,camera,id:globalThis.__tmBattleAt,scale:new URLSearchParams(location.search).get('battleScale'),gridRadius:new URLSearchParams(location.search).get('battleRadius')});if(r?.ok&&r.focus&&!player.riding&&new URLSearchParams(location.search).get('battleFocus')!=='0'){const bp=new THREE.Vector3().fromArray(r.focus);player.position.copy(bp);player.velocity.set(0,0,0);player.onGround=true;player.groundR=bp.length();player.checkpoint?.copy(bp);playerGroup.position.copy(bp);}}).catch(e=>console.warn('[sceneBattle]',e));}
   frameCpuMark("robotsAndGuardian");
   robotGreeting.update();
   const kunRollActive=bgmWhale?.userData?.victoryRoll?.active===true;
@@ -2456,6 +2460,18 @@ try{const ink=installCitadelInkOutline({scene,castle:messenger?.landmarks?.odyss
     const forward=new THREE.Vector3().crossVectors(up,side).normalize();
     camera.up.copy(up);camera.position.copy(c).addScaledVector(up,75).addScaledVector(forward,100).addScaledVector(side,60);
     camera.lookAt(c.clone().addScaledVector(up,18));camera.updateMatrixWorld(true);
+  }
+  // 场景战役俯视机位（?battleAt=…&tour=<id>-battle）：Bad North 是俯视战场，跟随玩家的第三人称看不到，
+  // 这里只在显式参数下把相机压到舞台上方向下看，不改玩家与场景。
+  if(entryParams.get('tour')===`${globalThis.__tmBattleAt||''}-battle`&&globalThis.__tmBattleStage){
+    const st=globalThis.__tmBattleStage;
+    const fb=globalThis.__tmBattleStart?.focus;
+    const base=fb?new THREE.Vector3().fromArray(fb):st.anchor.position.clone().addScaledVector(st.up,(st.report.maxLevel||4)*st.L*st.scale*.5);
+    const up=base.clone().normalize();
+    const side=new THREE.Vector3(0,1,0).cross(up);if(side.lengthSq()<.1)side.set(1,0,0);side.normalize();
+    const fwd=new THREE.Vector3().crossVectors(up,side).normalize();
+    camera.up.copy(up);camera.position.copy(base).addScaledVector(up,46).addScaledVector(fwd,64).addScaledVector(side,40);
+    camera.lookAt(base);camera.updateMatrixWorld(true);
   }
   if(batianFollowCamera&&crystalColossus){
     const craft=crystalColossus.aircraft,c=craft.getWorldPosition(new THREE.Vector3()),up=c.clone().normalize(),f=new THREE.Vector3(0,0,1).applyQuaternion(craft.quaternion),side=new THREE.Vector3(1,0,0).applyQuaternion(craft.quaternion);

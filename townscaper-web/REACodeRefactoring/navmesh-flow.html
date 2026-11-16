@@ -3,11 +3,11 @@
 <header><b>导航面内连续流场 · 百人群体</b>（<a href="gifs/816748103193817088.mp4">816748103193817088</a>「I'm flowing right on the nav mesh, so it depends」· 同日 <a href="gifs/816743289500106752.mp4">816743289500106752</a>「3 groups of 100 soldiers…」）
 · <a href="pipeline.html">管线</a> · <a href="navigation.html">格心导航对照</a><br>
 <label>小队 <select id="group"><option value="0">蓝队</option><option value="1">橙队</option><option value="2">绿队</option></select></label>
-点地面给该队下目标（白圈）。<button id="reset">重置</button> <label><input type="checkbox" id="blend" checked> 共边带混合（过面连续）</label> <span id="info"></span><br>
+点地面给该队下目标（白圈）。<button id="reset">重置</button> <label><input type="checkbox" id="blend" checked> 共边带混合（过面连续）</label> <label><input type="checkbox" id="funnel" checked> 漏斗路径（逐边中点 vs 拉直 + 视线捷径）</label> <span id="info"></span><br>
 <small>距离场在导航面顶点上（面内两两顶点连边），任意点流向 = 所在面顶点距离平面梯度的反方向，面内 / 过边连续；群体 = 流向 × 速度 + 邻居分离，约束回导航面，高度取面上插值 → 坡道上下连续。灰度 = 高度（三层台地 + 两条坡道）。</small></header>
 <canvas id="c" width="720" height="480"></canvas>
 <script type="module">
-import { navMeshFromTerraces, buildVertexField, buildFaceDirs, flowAt, stepCrowd, locate, heightAt } from './src/world/navmesh-flow.js';
+import { navMeshFromTerraces, buildVertexField, buildFaceDirs, buildPolyField, flowAt, stepCrowd, locate, heightAt, portalsAlong, funnelPath, midpointPath, shortcutPath, pathStats } from './src/world/navmesh-flow.js';
 const nx = 18, nz = 12, S = 40;
 const levelAt = (i, j) => { if (i <= 6) return 1; if (i === 7) return j === 5 || j === 6 ? 1 : null; if (j >= 8 && i >= 12) return j === 8 ? (i === 14 || i === 15 ? 2 : null) : 3; return 2; };
 const rampAt = (i, j) => (i === 7 && (j === 5 || j === 6) ? 'x+' : j === 8 && (i === 14 || i === 15) ? 'z+' : false);
@@ -21,8 +21,36 @@ let groups;
 function reset() {
   groups = [{ x: .5, z: 1 }, { x: .5, z: 7.5 }, { x: 9, z: 1 }].map((s, g) => ({ goal: null, field: null, agents: Array.from({ length: 100 }, (_, k) => { const x = s.x + (k % 10) * .32 + .1, z = s.z + Math.floor(k / 10) * .32 + .1, poly = locate(mesh, x, z); return { x, z, poly, y: heightAt(mesh, poly, x, z) }; }) }));
 }
-c.onclick = (e) => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / S, z = (e.clientY - r.top) / S; if (locate(mesh, x, z) < 0) return; const g = groups[Number($('#group').value)]; g.goal = { x, z, r: 1.1 }; g.field = buildVertexField(mesh, { goal: g.goal }); g.dirs = buildFaceDirs(mesh, g.field); };
-$('#reset').onclick = reset;
+c.onclick = (e) => { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / S, z = (e.clientY - r.top) / S; if (locate(mesh, x, z) < 0) return; const g = groups[Number($('#group').value)]; g.goal = { x, z, r: 1.1 }; g.field = buildVertexField(mesh, { goal: g.goal }); g.dirs = buildFaceDirs(mesh, g.field); if (g === groups[0]) computeFunnel(); };
+$('#reset').onclick = () => { reset(); groups[0].goal = { x: 12, z: 3, r: 1.2 }; groups[0].field = buildVertexField(mesh, { goal: groups[0].goal }); groups[0].dirs = buildFaceDirs(mesh, groups[0].field); computeFunnel(); };
+$('#funnel').onchange = computeFunnel;
+
+/** 972829402873737：三角导航面上的漏斗路径验收入口 —— 逐边中点（走廊中线）→ funnelPath 拉直 → shortcutPath 视线去折角。
+ *  三条都在同一份 buildVertexField 走廊上算，长度/折角/是否全在面内都从 pathStats + locate 得到。 */
+let funnel = null;
+function computeFunnel() {
+  const g = groups[0];
+  if (!g.field || !g.goal) { funnel = null; return null; }
+  const start = [g.agents[0].x, g.agents[0].z], goal = [g.goal.x, g.goal.z];
+  // 漏斗要的是「面级 Dijkstra」的走廊（exitEdge/exitTo）；buildVertexField 只给顶点距离场（流场用），两者分开。
+  const goalPoly = locate(mesh, goal[0], goal[1]);
+  if (goalPoly < 0) { funnel = null; return null; }
+  const pf = buildPolyField(mesh, goalPoly, goal);
+  const corridor = portalsAlong(mesh, pf, start, goal);
+  if (!corridor) { funnel = null; return null; }
+  const midPath = midpointPath(corridor);
+  const raw = funnelPath(corridor), short = shortcutPath(mesh, raw);
+  funnel = {
+    start, goal, corridor: corridor.length,
+    mid: pathStats(midPath), funnel: pathStats(raw), shortcut: pathStats(short),
+    inMesh: short.every((p) => locate(mesh, p[0], p[1]) >= 0),
+    heights: short.map((p) => { const i = locate(mesh, p[0], p[1]); return i < 0 ? null : +heightAt(mesh, i, p[0], p[1]).toFixed(3); }),
+    drop: (() => { const h = short.map((p) => { const i = locate(mesh, p[0], p[1]); return i < 0 ? null : heightAt(mesh, i, p[0], p[1]); }).filter((v) => v !== null); return h.length ? +(Math.max(...h) - Math.min(...h)).toFixed(3) : 0; })(),
+    raw, short, midPts: midPath,
+  };
+  window.navmeshFlowFunnelReview = funnel;
+  return funnel;
+}
 function frame() {
   if (bg) ctx.putImageData(bg, 0, 0);
   let left = 0;
@@ -32,7 +60,15 @@ function frame() {
     if (g.goal) { ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(g.goal.x * S, g.goal.z * S, g.goal.r * S, 0, 7); ctx.stroke(); }
   });
   const g0 = groups[0];
-  $('#info').textContent = `导航面 ${mesh.polys.length} 面 · 3 × 100 人 · 出面 ${left} · 共边带 ${blendOn() ? '开' : '关'}${g0.field ? ` · 蓝队平均距离 ${(g0.agents.reduce((s, a) => s + Math.hypot(a.x - g0.goal.x, a.z - g0.goal.z), 0) / g0.agents.length).toFixed(2)}` : ''}`;
+  if (funnel && $('#funnel').checked) {
+    ctx.save(); ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(255,235,140,.9)';
+    ctx.beginPath(); funnel.midPts.forEach(([x, z], i) => (i ? ctx.lineTo(x * S, z * S) : ctx.moveTo(x * S, z * S))); ctx.stroke();
+    ctx.setLineDash([]); ctx.lineWidth = 2.6; ctx.strokeStyle = '#ffffff';
+    ctx.beginPath(); funnel.short.forEach(([x, z], i) => (i ? ctx.lineTo(x * S, z * S) : ctx.moveTo(x * S, z * S))); ctx.stroke();
+    for (const [x, z] of funnel.short) { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x * S, z * S, 2.6, 0, 7); ctx.fill(); }
+    ctx.restore();
+  }
+  $('#info').textContent = `导航面 ${mesh.polys.length} 面 · 3 × 100 人 · 出面 ${left} · 共边带 ${blendOn() ? '开' : '关'}${g0.field ? ` · 蓝队平均距离 ${(g0.agents.reduce((s, a) => s + Math.hypot(a.x - g0.goal.x, a.z - g0.goal.z), 0) / g0.agents.length).toFixed(2)}` : ''}${funnel ? ` · 漏斗 ${funnel.shortcut.points} 点 ${(funnel.mid.length).toFixed(2)}→${(funnel.funnel.length).toFixed(2)}→${(funnel.shortcut.length).toFixed(2)}（逐边中点→漏斗→捷径）` : ''}`;
   window.navmeshFlowReview = { polys: mesh.polys.length, verts: mesh.verts.length, agents: groups.reduce((n, g) => n + g.agents.length, 0), left, goals: groups.filter((g) => g.goal).length, blend: blendOn() };
   window.navmeshFlowEdgeGap = (on = true) => {
     const g0 = groups[0]; if (!g0.field) return null;
@@ -51,9 +87,11 @@ function frame() {
   };
   window.navmeshFlowStep = (steps = 60, dt = 1 / 30) => { for (let i = 0; i < steps; i++) for (const g of groups) if (g.field) stepCrowd(mesh, g.field, g.agents, dt, { speed: 1.4, faceDirs: blendOn() ? g.dirs : null }); const g0 = groups[0]; return g0.field ? +((g0.agents.reduce((s, a) => s + Math.hypot(a.x - g0.goal.x, a.z - g0.goal.z), 0)) / g0.agents.length).toFixed(3) : null; };
   window.navmeshFlowProbe = (x, z, on) => { const p = locate(mesh, x, z); return p < 0 ? null : flowAt(mesh, groups[0].field, p, x, z, on ? groups[0].dirs : null); };
+  window.navmeshFlowFunnel = () => computeFunnel();
   if (!window.__noLoop) requestAnimationFrame(frame);
 }
 reset();
 groups[0].goal = { x: 12, z: 3, r: 1.2 }; groups[0].field = buildVertexField(mesh, { goal: groups[0].goal }); groups[0].dirs = buildFaceDirs(mesh, groups[0].field);
+computeFunnel();
 frame();
 </script></html>

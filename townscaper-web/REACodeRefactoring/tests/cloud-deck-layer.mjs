@@ -12,7 +12,7 @@ const { CloudDeckLayer, towerPuffs, towerDensity, TOWER_PUFFS } = await import('
 const { makeCloudDeck } = await import('../src/core/cloud-depth.js');
 const cells = []; for (let i = 0; i < 9; i++) for (let j = 0; j < 9; j++) cells.push({ id: cells.length, cx: i - 4, cz: j - 4, minX: i - 4.5, maxX: i - 3.5, minZ: j - 4.5, maxZ: j - 3.5 });
 const town = { version: 3, cells, top: (c) => (Math.hypot(c.cx, c.cz) < 3.5 ? 2 : 0) };
-const uniforms = { uCloudAtlas: { value: null }, uCloudRect: { value: new THREE.Vector4() }, uCloudPuffs: { value: Array.from({ length: 64 }, () => new THREE.Vector4()) }, uCloudCount: { value: 0 }, uCloudStrength: { value: 0 }, uCloudSun: { value: new THREE.Vector3() } };
+const uniforms = { uCloudAtlas: { value: null }, uCloudRect: { value: new THREE.Vector4() }, uCloudPuffs: { value: Array.from({ length: 64 }, () => new THREE.Vector4()) }, uCloudCount: { value: 0 }, uCloudStrength: { value: 0 }, uCloudSun: { value: new THREE.Vector3() }, uCloudPuffsFar: { value: Array.from({ length: 24 }, () => new THREE.Vector4()) }, uCloudCountFar: { value: 0 }, uCloudFarRatio: { value: .42 } };
 const view = { scene: new THREE.Scene(), town, distance: 30, sunDir: new THREE.Vector3(-.3, .8, .5).normalize(), waterUniforms: { uTime: { value: 0 } }, cloudShadow: { uniforms } };
 const layer = new CloudDeckLayer(view);
 assert.equal(layer.group.visible, false, '默认关'); layer.update(); assert.equal(uniforms.uCloudCount.value, 0, '关时不碰云影');

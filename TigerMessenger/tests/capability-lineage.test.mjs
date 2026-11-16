@@ -88,3 +88,25 @@ test('真实资料：全部来源入线，队列覆盖全部未被替代的缺�
   assert.ok(L.loop.ownedModules > L.loop.modules / 2);
   assert.deepEqual(JSON.stringify(buildCapabilityLineage(evolution, options)), JSON.stringify(L));
 });
+
+test('能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学', async () => {
+  const consumers = [{ id: 'cove', name: '海湾', entries: ['src/world/cove.js'], counts: { modules: 2, different: 1 }, modules: [
+    { path: 'src/water/a.js', via: 'vendor', direct: true, state: 'different', bytes: 100, libraryBytes: 300, copiedAt: '2026-10-31' }, { path: 'src/core/grid.js', via: 'library', direct: true, state: 'identical', bytes: 50, libraryBytes: 50, copiedAt: null }] }];
+  const L = buildCapabilityLineage(buildCapabilityEvolution(learn, pipeline), { modules, consumers });
+  assert.deepEqual(L.net.nodes.map((n) => [n.id, n.layer, n.isolated]), [['shore', 1, false], ['grid', 0, false]]);
+  assert.deepEqual(L.net.edges, [{ from: 'grid', to: 'shore', weight: 3, main: true }]);
+  const d = L.consumers[0], shore = d.lines.find((r) => r.line === 'shore'), grid = d.lines.find((r) => r.line === 'grid');
+  assert.deepEqual(shore.generations.map((g) => g.state), ['stale', 'stale', 'no-code'], 'a.js 是旧副本；A+ 的 a-plus.js 没接但同代有在用模块；A++ 没有代码');
+  assert.deepEqual(shore.generations[1].missing, ['src/water/a-plus.js']);
+  assert.deepEqual(grid.generations.map((g) => g.state), ['in-scene']);
+  assert.deepEqual(d.guide.map((g) => g.kind), ['sync', 'learn', 'learn'], '先同步，后补学');
+  assert.match(d.guide[0].detail[0], /src\/water\/a\.js（100 → 库 300 字节）/);
+  // 整代都没接：换一个只用网格的场景
+  const only = buildCapabilityLineage(buildCapabilityEvolution(learn, pipeline), { modules, consumers: [{ id: 'x', name: 'x', modules: [{ path: 'src/core/grid.js', state: 'identical' }] }] }).consumers[0];
+  assert.equal(only.lines.length, 1, '没用到岸线模块就不列岸线');
+  // 真实清单：十二门徒确实在用分叉的旧地形模块
+  const { scanSceneConsumers } = await import('../tools/refactor/scan-scene-consumers.mjs');
+  const real = scanSceneConsumers(); const apostles = real.consumers.find((c) => c.id === 'apostles');
+  assert.ok(apostles.entries.includes('src/world/apostlesReacode.js') && apostles.modules.some((m) => m.path === 'src/terrain/shape.js' && m.via === 'vendor'));
+  assert.ok(real.consumers.every((c) => c.modules.every((m) => ['identical', 'different', 'absent-in-library'].includes(m.state))));
+});

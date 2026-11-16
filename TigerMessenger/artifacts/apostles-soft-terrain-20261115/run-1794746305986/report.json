@@ -1,0 +1,89 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-soft-terrain-20261115/run-1794746305986",
+  "looks": {
+    "approved": {
+      "errors": [],
+      "state": {
+        "look": {
+          "soft": false,
+          "latest": false,
+          "libraryPalette": false,
+          "id": "approved"
+        },
+        "meshes": 0,
+        "triangles": 0,
+        "camera": [
+          51.9,
+          102.7,
+          -189.09
+        ],
+        "softTops": []
+      },
+      "seconds": 83,
+      "pass": true
+    },
+    "latest": {
+      "errors": [],
+      "state": {
+        "look": {
+          "soft": false,
+          "latest": true,
+          "libraryPalette": false,
+          "id": "latest"
+        },
+        "meshes": 0,
+        "triangles": 0,
+        "camera": [
+          51.87,
+          102.85,
+          -189.33
+        ],
+        "softTops": []
+      },
+      "seconds": 83,
+      "pass": true
+    },
+    "soft": {
+      "errors": [],
+      "state": {
+        "look": {
+          "soft": true,
+          "latest": true,
+          "libraryPalette": false,
+          "id": "soft"
+        },
+        "meshes": 0,
+        "triangles": 0,
+        "camera": [
+          51.87,
+          102.85,
+          -189.33
+        ],
+        "softTops": []
+      },
+      "seconds": 86,
+      "pass": true
+    },
+    "soft+palette": {
+      "errors": [],
+      "state": {
+        "look": {
+          "soft": true,
+          "latest": true,
+          "libraryPalette": true,
+          "id": "palette+soft"
+        },
+        "meshes": 0,
+        "triangles": 0,
+        "camera": [
+          51.87,
+          102.85,
+          -189.33
+        ],
+        "softTops": []
+      },
+      "seconds": 94,
+      "pass": true
+    }
+  }
+}

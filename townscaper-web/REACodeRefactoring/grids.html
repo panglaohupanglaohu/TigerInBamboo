@@ -38,7 +38,7 @@
 </div>
 <script type="module">
 import { buildMixedGrid, buildQuadGrid, buildSquareGrid, traceStraightReport } from './src/core/grid.js';
-import { buildInfinite, verify } from './src/core/infinite.js';
+import { buildInfinite, verify, windowSeam, patchStep } from './src/core/infinite.js';
 import { baryPrep } from './src/core/spatial.js';
 import { Atlas } from './src/core/atlas.js';
 
@@ -67,6 +67,9 @@ const get = (k) => cache[k] || (cache[k] = grids[k]());
 let inf = null, infStats = null, infRings = 2;
 // 1332410042784641026 片中的调试视图：点阵（顶点圆点）+ 单块高亮 + 一处红色标记
 let infDots = false, infHighlight = -1;
+// 1151137783785771008「拖到哪就长到哪」：窗口中心可在块点阵上任意平移（origin），
+// 平移后与上一窗口的重叠顶点必须逐位相同，才叫"真无限、无缝"（第 103 轮补的页面入口）。
+let infOrigin = [0, 0], infSeam = null;
 
 function setTab(t) {
   tab = t; picked = null;
@@ -78,10 +81,14 @@ function setTab(t) {
   if (t === 'infinite') {
     // 1151137783785771008：片中区域是一块块往外长的（1 块 → 7 块 → 19 块），先给定环数再比模式
     for (const k of [0, 1, 2]) add(k === 0 ? '1 块' : `环 ${k}（${1 + 3 * k * (k + 1)} 块）`, infRings === k, () => { if (infRings !== k) { infRings = k; inf = null; } });
-    if (!inf) { const t0 = performance.now(); inf = buildInfinite({ N: 4, L: 1, rings: infRings }); infStats = { ms: performance.now() - t0 }; }
+    if (!inf) { const t0 = performance.now(); inf = buildInfinite({ N: 4, L: 1, rings: infRings, origin: infOrigin }); infStats = { ms: performance.now() - t0 }; }
     for (const [k, l] of [['raw', '未松弛'], ['patch', '只按块'], ['cluster', '只按簇'], ['blend', '块 + 两簇插值']]) add(l, infMode === k, () => (infMode = k));
     add('顶点圆点', infDots, () => (infDots = !infDots));
     add(infHighlight < 0 ? '高亮 1 块' : '取消高亮', infHighlight >= 0, () => (infHighlight = infHighlight < 0 ? 0 : -1));
+    // 平移窗口（1151137783785771008「拖到哪就长到哪」）：origin 沿 6 个块方向各走一步，
+    // 每次都与上一窗口量重叠顶点的位置差 —— 差 ~0 才叫同一个无限网格。
+    for (let k = 0; k < 6; k++) add(`平移 → 方向 ${k}`, false, () => panInfinite(k));
+    add(`回原点${infOrigin[0] || infOrigin[1] ? `（现 ${infOrigin[0]},${infOrigin[1]}）` : ''}`, !(infOrigin[0] || infOrigin[1]), () => { if (infOrigin[0] || infOrigin[1]) { infOrigin = [0, 0]; inf = null; infSeam = null; } });
   }
   if (t === 'lines' || t === 'bary') sub = t === 'lines' ? 'townscaper' : 'mixed';
   if (t === 'atlas') {
@@ -99,6 +106,16 @@ function setTab(t) {
   draw();
 }
 document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => setTab(b.dataset.t)));
+
+/** 平移窗口：origin += 一个块方向步长；新窗口与上一窗口的重叠顶点必须逐位一致（windowSeam）。 */
+function panInfinite(k) {
+  const [dq, dr] = patchStep(4, k);
+  const prev = inf, from = infOrigin.slice(), to = [infOrigin[0] + dq, infOrigin[1] + dr];
+  const next = buildInfinite({ N: 4, L: 1, rings: infRings, origin: to });
+  infSeam = prev ? { dir: k, from, to, ...windowSeam(prev, next, 'blend') } : null;
+  infOrigin = to; inf = next; infStats = { ms: infStats?.ms ?? 0 };
+  if (tab === 'infinite') draw();   // 平移后必须重画：状态行里的 origin / 接缝要跟着变，否则页面只是模型动了
+}
 
 function view(bounds) {
   const [x0, z0, x1, z1] = bounds;
@@ -168,7 +185,7 @@ function draw() {
     for (const C of inf.clusters) poly(C.patches.map((i) => V.P(...inf.patches[i].center)), null, 'rgba(255,255,255,.6)', 1.2);
     ctx.setLineDash([]);
     const vr = verify(inf, infMode);
-    st.textContent = `${inf.patches.length} 块 · ${inf.clusters.length} 簇 · ${vr.quads} 格 · 翻折 ${vr.flipped} / 非法 ${vr.invalid} · 拉伸最大 ${vr.maxStretch.toFixed(2)}× 最小 ${vr.minShrink.toFixed(2)}×（相对原始点阵，超 ${vr.stretchLimit}× 的 ${vr.stretched} 格）· 高亮 ${infHighlight < 0 ? '关' : '块 ' + infHighlight} · 点阵 ${infDots ? '开' : '关'} · 块边界点 ${vr.border} 个，全部${vr.comparisons}对表示最大差 ${vr.seam.toExponential(1)} · 重心预计算 ${inf.barycentricStats.prepared} / 查询 ${inf.barycentricStats.queries} · ${infStats.ms.toFixed(0)} ms`;
+    st.textContent = `${inf.patches.length} 块 · ${inf.clusters.length} 簇 · ${vr.quads} 格 · 翻折 ${vr.flipped} / 非法 ${vr.invalid} · 拉伸最大 ${vr.maxStretch.toFixed(2)}× 最小 ${vr.minShrink.toFixed(2)}×（相对原始点阵，超 ${vr.stretchLimit}× 的 ${vr.stretched} 格）· 高亮 ${infHighlight < 0 ? '关' : '块 ' + infHighlight} · 点阵 ${infDots ? '开' : '关'} · 块边界点 ${vr.border} 个，全部${vr.comparisons}对表示最大差 ${vr.seam.toExponential(1)} · 重心预计算 ${inf.barycentricStats.prepared} / 查询 ${inf.barycentricStats.queries} · ${infStats.ms.toFixed(0)} ms · 窗口 origin (${infOrigin[0]},${infOrigin[1]}) · 平移接缝 ${infSeam ? `${infSeam.compared} 顶点最大差 ${infSeam.max.toExponential(1)}` : '未平移'}`;
   } else if (tab === 'lines') {
     const g = get('townscaper');
     const hl = new Map();
@@ -253,7 +270,7 @@ function startAtlas(){if(atlasState.timer)return;atlasState.timer=setInterval(()
 function stopAtlas(){clearInterval(atlasState.timer);atlasState.timer=null;}
 addEventListener('pagehide',stopAtlas);
 resize(); setTab(new URLSearchParams(location.search).get('t') || 'kinds');
-window.gridLab = { get infiniteReview(){return inf?{mode:infMode,report:verify(inf,infMode),barycentric:{...inf.barycentricStats},patches:inf.patches.length,clusters:inf.clusters.length}:null}, selectLineCell(id){if(tab!=='lines')setTab('lines');const g=get('townscaper');picked=g.cells.find(c=>c.id===id);draw();}, setTab, atlasStep, resetAtlas, pauseAtlas(){atlasState.running=false;stopAtlas();if(tab==='atlas')setTab('atlas')}, get selectedGrid(){return tab==='kinds'?get(sub):null}, get gridKind(){return sub}, get atlas(){return atlasState.atlas}, get atlasLive(){return atlasState.live.slice()} };
+window.gridLab = { get infiniteReview(){return inf?{mode:infMode,report:verify(inf,infMode),barycentric:{...inf.barycentricStats},patches:inf.patches.length,clusters:inf.clusters.length,origin:infOrigin.slice(),seam:infSeam}:null}, panInfinite, selectLineCell(id){if(tab!=='lines')setTab('lines');const g=get('townscaper');picked=g.cells.find(c=>c.id===id);draw();}, setTab, atlasStep, resetAtlas, pauseAtlas(){atlasState.running=false;stopAtlas();if(tab==='atlas')setTab('atlas')}, get selectedGrid(){return tab==='kinds'?get(sub):null}, get gridKind(){return sub}, get atlas(){return atlasState.atlas}, get atlasLive(){return atlasState.live.slice()} };
 </script>
 </body>
 </html>
