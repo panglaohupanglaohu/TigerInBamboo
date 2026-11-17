@@ -1,0 +1,427 @@
+{
+  "a": {
+    "kind": "quad",
+    "scene": "steel",
+    "flags": [
+      "steelFrame"
+    ],
+    "propAnimYard": false,
+    "verts": 12309,
+    "steel": {
+      "legs": 14,
+      "cranks": 6,
+      "ties": 8,
+      "joints": 18,
+      "bays": 16,
+      "ladders": 3,
+      "clusters": [
+        {
+          "bays": 3,
+          "ties": "3/5",
+          "solutions": 1
+        },
+        {
+          "bays": 1,
+          "ties": "3",
+          "solutions": 1
+        },
+        {
+          "bays": 1,
+          "ties": "3",
+          "solutions": 1
+        }
+      ],
+      "legDetail": [
+        {
+          "lv": 8,
+          "land": 3,
+          "flat": false,
+          "crank": {
+            "knee": 1.675,
+            "foot": [
+              5.8712,
+              1.5,
+              0.7897
+            ],
+            "top": [
+              5.9563,
+              3.5,
+              0.8345
+            ]
+          }
+        },
+        {
+          "lv": 8,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 8,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 8,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 8,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 8,
+          "land": 6,
+          "flat": false,
+          "crank": {
+            "knee": 3.175,
+            "foot": [
+              5.4447,
+              3,
+              0.8819
+            ],
+            "top": [
+              5.5337,
+              3.5,
+              0.9352
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 3,
+          "flat": false,
+          "crank": {
+            "knee": 1.675,
+            "foot": [
+              5.4476,
+              1.5,
+              0.5405
+            ],
+            "top": [
+              5.3717,
+              2.5,
+              0.5133
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 6,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 6,
+          "land": 3,
+          "flat": false,
+          "crank": {
+            "knee": 1.675,
+            "foot": [
+              5.5498,
+              1.5,
+              0.8647
+            ],
+            "top": [
+              5.498,
+              2.5,
+              0.9142
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 4,
+          "flat": false,
+          "crank": {
+            "knee": 2.175,
+            "foot": [
+              0.3163,
+              2,
+              -0.291
+            ],
+            "top": [
+              0.3191,
+              2.5,
+              -0.2167
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 4,
+          "flat": false,
+          "crank": {
+            "knee": 2.175,
+            "foot": [
+              0.0983,
+              2,
+              -0.403
+            ],
+            "top": [
+              0.0495,
+              2.5,
+              -0.3552
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 6,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        }
+      ],
+      "tieLevels": [
+        [
+          3,
+          5
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "yards": 0,
+    "yardWalls": null,
+    "anim": null
+  },
+  "tower": {
+    "kind": "quad",
+    "scene": "steel",
+    "flags": [
+      "steelFrame"
+    ],
+    "propAnimYard": false,
+    "verts": 12309,
+    "steel": {
+      "legs": 14,
+      "cranks": 6,
+      "ties": 8,
+      "joints": 18,
+      "bays": 16,
+      "ladders": 3,
+      "clusters": [
+        {
+          "bays": 3,
+          "ties": "3/5",
+          "solutions": 1
+        },
+        {
+          "bays": 1,
+          "ties": "3",
+          "solutions": 1
+        },
+        {
+          "bays": 1,
+          "ties": "3",
+          "solutions": 1
+        }
+      ],
+      "legDetail": [
+        {
+          "lv": 8,
+          "land": 3,
+          "flat": false,
+          "crank": {
+            "knee": 1.675,
+            "foot": [
+              5.8712,
+              1.5,
+              0.7897
+            ],
+            "top": [
+              5.9563,
+              3.5,
+              0.8345
+            ]
+          }
+        },
+        {
+          "lv": 8,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 8,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 8,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 8,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 8,
+          "land": 6,
+          "flat": false,
+          "crank": {
+            "knee": 3.175,
+            "foot": [
+              5.4447,
+              3,
+              0.8819
+            ],
+            "top": [
+              5.5337,
+              3.5,
+              0.9352
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 3,
+          "flat": false,
+          "crank": {
+            "knee": 1.675,
+            "foot": [
+              5.4476,
+              1.5,
+              0.5405
+            ],
+            "top": [
+              5.3717,
+              2.5,
+              0.5133
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 6,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 6,
+          "land": 3,
+          "flat": false,
+          "crank": {
+            "knee": 1.675,
+            "foot": [
+              5.5498,
+              1.5,
+              0.8647
+            ],
+            "top": [
+              5.498,
+              2.5,
+              0.9142
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 4,
+          "flat": false,
+          "crank": {
+            "knee": 2.175,
+            "foot": [
+              0.3163,
+              2,
+              -0.291
+            ],
+            "top": [
+              0.3191,
+              2.5,
+              -0.2167
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 4,
+          "flat": false,
+          "crank": {
+            "knee": 2.175,
+            "foot": [
+              0.0983,
+              2,
+              -0.403
+            ],
+            "top": [
+              0.0495,
+              2.5,
+              -0.3552
+            ]
+          }
+        },
+        {
+          "lv": 6,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        },
+        {
+          "lv": 6,
+          "land": 1,
+          "flat": true,
+          "crank": null
+        }
+      ],
+      "tieLevels": [
+        [
+          3,
+          5
+        ],
+        [
+          3
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "yards": 0,
+    "yardWalls": null,
+    "anim": null
+  },
+  "off": {
+    "kind": "quad",
+    "scene": "steel",
+    "flags": [],
+    "propAnimYard": false,
+    "verts": 8709,
+    "steel": null,
+    "yards": 0,
+    "yardWalls": null,
+    "anim": null
+  }
+}

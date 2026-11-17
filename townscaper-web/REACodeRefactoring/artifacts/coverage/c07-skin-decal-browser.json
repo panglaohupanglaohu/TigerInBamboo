@@ -1,0 +1,100 @@
+{
+  "decal": {
+    "control": {
+      "changed": 0,
+      "mean": 0
+    },
+    "boilA": {
+      "changed": 20395,
+      "mean": 11.54
+    },
+    "boilB": {
+      "changed": 31149,
+      "mean": 15.36
+    },
+    "changed": [
+      499,
+      499,
+      499,
+      499
+    ],
+    "frames": 44,
+    "stampedBefore": 880,
+    "cover": {
+      "f0": 3717,
+      "f10": 11862,
+      "f40": 18706
+    },
+    "atlas": {
+      "size": 64,
+      "pad": 2,
+      "stride": 68,
+      "width": 136,
+      "seam": [
+        0,
+        0
+      ],
+      "before": 162.76,
+      "after": 163.36,
+      "changedPx": 449
+    }
+  },
+  "skin": {
+    "painted": 4605,
+    "stats": {
+      "base": {
+        "n": 134663,
+        "mean": [
+          47.9,
+          70.6,
+          73.1
+        ],
+        "top": "0,2,2",
+        "topShare": 0.625
+      },
+      "scribble": {
+        "n": 136096,
+        "mean": [
+          42.1,
+          69.8,
+          81.7
+        ],
+        "top": "0,2,2",
+        "topShare": 0.618
+      },
+      "hot": {
+        "n": 151357,
+        "mean": [
+          69.2,
+          58.9,
+          89.3
+        ],
+        "top": "0,2,2",
+        "topShare": 0.556
+      }
+    },
+    "diff": {
+      "scribble": {
+        "changed": 12195,
+        "mean": 14.22
+      },
+      "hot": {
+        "changed": 58914,
+        "mean": 58.27
+      }
+    },
+    "layer": {
+      "vertices": 36555,
+      "skinned": 36555,
+      "slots": 26,
+      "overflow": 0,
+      "mismatch": 0,
+      "ms": 15
+    },
+    "skinOn": 1,
+    "sharedLeafTexture": true,
+    "pngLen": 1186,
+    "pngOk": true
+  },
+  "errors": []
+}

@@ -1,0 +1,38 @@
+{
+ "target": 130,
+ "pick": {
+  "found": true,
+  "cell": 1056,
+  "cx": -0.9751319627825765,
+  "cz": -2.359600744947511,
+  "y": 3,
+  "ap": 0.32947956114042154,
+  "drop": 2,
+  "dropI": 0,
+  "n": 4,
+  "distance": 2.0044167705890916,
+  "apothemPx": 130.0895789061704,
+  "p0": [
+   319.9999999999998,
+   320
+  ],
+  "p1": [
+   237.80935857763868,
+   420.836486464799
+  ],
+  "W": 640,
+  "H": 640,
+  "widthU": 0.12
+ },
+ "bands": {
+  "tris": 16616,
+  "tiers": 2336,
+  "min": 0.7005632519721985,
+  "max": 1.3599098920822144
+ },
+ "problems": [],
+ "shots": [
+  "artifacts/coverage/shrub-band-scale-on.png",
+  "artifacts/coverage/shrub-band-scale-off.png"
+ ]
+}

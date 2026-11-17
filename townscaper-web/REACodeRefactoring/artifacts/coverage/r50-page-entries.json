@@ -1,0 +1,82 @@
+{
+  "grids": {
+    "start": [
+      0,
+      0
+    ],
+    "seams": [
+      {
+        "origin": [
+          8,
+          -4
+        ],
+        "compared": 781,
+        "max": 1.9860273225978185e-15
+      },
+      {
+        "origin": [
+          16,
+          -8
+        ],
+        "compared": 771,
+        "max": 3.66205343881779e-15
+      },
+      {
+        "origin": [
+          24,
+          -12
+        ],
+        "compared": 771,
+        "max": 7.944109290391274e-15
+      }
+    ],
+    "back": {
+      "origin": [
+        16,
+        -8
+      ],
+      "max": 7.944109290391274e-15,
+      "compared": 771
+    }
+  },
+  "wfc": {
+    "cells": 147,
+    "alive": 24,
+    "dead": 0,
+    "unpaired": 0,
+    "lockedAlive": 24,
+    "lockedDead": 0,
+    "narrowDead": 1,
+    "narrowAlive": 0
+  },
+  "funnel": {
+    "corridor": 20,
+    "mid": 14.844,
+    "funnel": 13.365,
+    "shortcut": 13.1,
+    "turns": [
+      7,
+      3,
+      2
+    ],
+    "drop": 0.6,
+    "points": 4
+  },
+  "ink": {
+    "buttons": 8,
+    "widths": [
+      1.858,
+      2.45,
+      1.55,
+      1.859,
+      2.45,
+      2.45,
+      1.933,
+      1.789
+    ],
+    "cvRaw": 0.2956,
+    "cvFit": 0.1987,
+    "cvEq": 0.0369,
+    "svgs": 8
+  }
+}

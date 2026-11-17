@@ -1,0 +1,59 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "sun": [
+        -0.329,
+        0.768,
+        0.549
+      ],
+      "vegetation": {
+        "dark": 11838,
+        "px": 11919,
+        "tone": 0.3332,
+        "restore": 0,
+        "mask": 11919,
+        "highCloudDark": 0
+      },
+      "reflection": {
+        "dark": 19223,
+        "px": 19223,
+        "tone": 0.1753,
+        "restore": 0,
+        "mask": 19223,
+        "cam": {
+          "pitch": 0.3,
+          "distance": 18
+        }
+      }
+    },
+    {
+      "grid": "mixed",
+      "sun": [
+        -0.329,
+        0.768,
+        0.549
+      ],
+      "vegetation": {
+        "dark": 12300,
+        "px": 12470,
+        "tone": 0.3272,
+        "restore": 0,
+        "mask": 12470,
+        "highCloudDark": 0
+      },
+      "reflection": {
+        "dark": 20158,
+        "px": 20158,
+        "tone": 0.1771,
+        "restore": 0,
+        "mask": 20158,
+        "cam": {
+          "pitch": 0.3,
+          "distance": 18
+        }
+      }
+    }
+  ],
+  "errors": []
+}

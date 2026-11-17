@@ -1,0 +1,92 @@
+{
+  "stats": {
+    "mode": "patch",
+    "cells": 707,
+    "quads": 469,
+    "tris": 238,
+    "edges": 1337,
+    "counts": {
+      "quad": 643,
+      "tri": 74,
+      "seam": 536,
+      "rim": 84,
+      "other": 0,
+      "nonmanifold": 0
+    },
+    "manifold": true,
+    "bands": 65,
+    "bandLongest": 40,
+    "bandEdges": 536,
+    "patchCount": 153,
+    "largestPatch": 34,
+    "maxSpreadDeg": 14.989061767507053,
+    "families": [
+      {
+        "family": 60,
+        "cells": 185
+      },
+      {
+        "family": 30,
+        "cells": 154
+      },
+      {
+        "family": 0,
+        "cells": 130
+      }
+    ],
+    "patchEdgeKinds": {
+      "inner": 355,
+      "patchRim": 288,
+      "seam": 536,
+      "tri": 74,
+      "rim": 84,
+      "other": 0
+    },
+    "triangleCells": 238,
+    "diagonals": 938,
+    "nodes": 707,
+    "rings": 26,
+    "maxDepth": 25,
+    "branches": 4,
+    "edgeKinds": {
+      "same": 249,
+      "adjacent": 1004,
+      "long": 0
+    },
+    "components": 1,
+    "root": 0
+  },
+  "errors": [],
+  "pix": {
+    "total": 409600,
+    "ink": 107088,
+    "tri": 5251,
+    "magenta": 7698,
+    "green": 2636,
+    "hueBuckets": 157
+  },
+  "rerolled": {
+    "patchCount": 178,
+    "largestPatch": 28,
+    "maxSpreadDeg": 14.874629447250612,
+    "families": [
+      {
+        "family": 30,
+        "cells": 173
+      },
+      {
+        "family": 0,
+        "cells": 157
+      },
+      {
+        "family": 60,
+        "cells": 152
+      }
+    ]
+  },
+  "rerollPix": 104889,
+  "typePix": {
+    "orange": 9685,
+    "cyan": 2943
+  }
+}

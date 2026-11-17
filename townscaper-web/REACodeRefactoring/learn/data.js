@@ -3002,11 +3002,11 @@ window.LEARN = {
       "text": "And another",
       "topic": "show",
       "status": "partial",
-      "where": "src/core/grid-wireframe.js · grid-graph.html（左栏线框）",
-      "note": "609帧全核（7张联系表全看+原尺寸回看340/500）；判出真机制=不规则四边格+保留三角形的混合网，三角带横穿成条、每40-60帧整片清空重铺；新增classifyWireframe/seamBands与grid-graph.html左栏，四边/三角/带轮廓/岛缘分类与长带串接已验；缺格心彩色小块语义、3D透视视角、接world实景；【卡点·A 机制未做】缺格心彩色小块语义、3D透视视角、接world实景 → 还差一层没写的机制（本仓无对应实现，属于可做但没做的活）",
+      "where": "src/core/grid-wireframe.js（patchLayout/cellAxisDeg）· grid-graph.html?mode=patch · buildMixedGrid 逐格松弛",
+      "note": "609帧全核（r19 七张联系表 + r116 重看 sheet-00 与原尺寸 0150/0200/0420 含 3× 放大）；纠正 r19 三条误读：格心没有彩色小块（是补丁缝折线与三角带小三角边，格心只有对角线 X — 本轮补画）、全片无透视（各格尺寸一致，平面正视、补丁各转 0/30/60°）、无 world 实景（609 帧只有格子调试视图）；机理补齐：新增 patchLayout 三族吸附 + 补丁连通块 + 补丁缝，grid-graph.html 加 ?mode=patch（同片同色/品红缝/绿填三角格/格内对角线），新测 tests/grid-patch-families-browser.cjs 全 PASS；仍缺 补丁级刚性：本仓 153 块（最大 34 格）vs 原片约 8 块（每块几十格），逐格轴向抖动 max 14.99° vs 原片 0°，根因=hex-merge 三族按格交错 + 逐格松弛（试过族向约束反而 45°，已回退）",
       "project": "next",
       "decodedFrames": 609,
-      "reviewEvidence": "artifacts/coverage/1459169210752507904-review.md",
+      "reviewEvidence": "artifacts/coverage/1459169210752507904-review-r116.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -3015,13 +3015,15 @@ window.LEARN = {
           608
         ],
         "nativeRevisits": [
-          340,
-          500,
+          0,
+          150,
+          200,
+          420,
           608
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "面型分类与三角过渡带"
+        "acceptanceScope": "补丁着色（三族/补丁划分/补丁缝/三角格/对角线）运行验收；补丁级刚性未做"
       }
     },
     {

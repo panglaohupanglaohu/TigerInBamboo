@@ -1,0 +1,66 @@
+{
+  "disc": {
+    "units": 24,
+    "count": 24,
+    "vertices": 1077,
+    "changed": 95,
+    "noise": 0,
+    "stats": {
+      "pieces": 52,
+      "multiCell": 19,
+      "onStairs": 0,
+      "fitted": 0
+    },
+    "offset": {
+      "off": 0.09553025289233447,
+      "along": 0.09410847776533833,
+      "model": 0.14399999999999996,
+      "want": 0.144,
+      "lightDir": [
+        0.62,
+        0.78
+      ]
+    },
+    "measure": {
+      "rows": [
+        {
+          "h": 0,
+          "r": 0.12,
+          "alpha": 0.3,
+          "off": 0
+        },
+        {
+          "h": 0.2,
+          "r": 0.13049999999999998,
+          "alpha": 0.22499999999999998,
+          "off": 0.07199999999999998
+        },
+        {
+          "h": 0.5,
+          "r": 0.14625,
+          "alpha": 0.11249999999999999,
+          "off": 0.17999999999999997
+        }
+      ],
+      "stretch": 1.1126019404751888,
+      "squash": 0.898794046299167,
+      "areaRatio": 1
+    }
+  },
+  "fit": {
+    "fit": true,
+    "slopeDeg": 11.99999938000044,
+    "maxErr": 0.00607661070760146,
+    "tilt": 12,
+    "onHeightSpread": 0.04607659578323364,
+    "offHeightSpread": 0,
+    "offFit": false,
+    "floor": 2
+  },
+  "arcEntry": {
+    "exists": true,
+    "type": "checkbox",
+    "label": "挥砍弧形拖影（swingArc）"
+  },
+  "errors": []
+}

@@ -1,0 +1,130 @@
+{
+  "setup": {
+    "start": {
+      "id": 133,
+      "node": 9,
+      "x": 1.6270346137520981,
+      "z": 3.1634038341060626,
+      "floor": 1
+    },
+    "goal": {
+      "id": 647,
+      "node": 89,
+      "x": -3.5924504432463347,
+      "z": 3.225229163092585,
+      "floor": 1
+    },
+    "span": 5.22,
+    "hops": 16,
+    "components": 7,
+    "mainNodes": 78,
+    "units": 8
+  },
+  "off": {
+    "on": false,
+    "units": 8,
+    "steps": 2898,
+    "turnSamples": 2890,
+    "turn": {
+      "median": 0.294,
+      "p90": 3.22,
+      "p99": 46.551,
+      "max": 103.518
+    },
+    "arrived": 7,
+    "maxRemain": 4.928,
+    "cells": 17,
+    "floorStable": false,
+    "planned": true,
+    "team": 0,
+    "flow": {
+      "continuousFlow": false,
+      "flowAgree": 0.5,
+      "polys": 395,
+      "verts": 682,
+      "links": 92,
+      "goals": 2,
+      "graphNodes": 395,
+      "portals": 1102,
+      "steer": 0,
+      "used": 0,
+      "rejected": 0,
+      "adopted": null
+    }
+  },
+  "on": {
+    "on": true,
+    "units": 8,
+    "steps": 2921,
+    "turnSamples": 2913,
+    "turn": {
+      "median": 0.393,
+      "p90": 4.423,
+      "p99": 41.73,
+      "max": 106.97
+    },
+    "arrived": 7,
+    "maxRemain": 4.928,
+    "cells": 17,
+    "floorStable": false,
+    "planned": true,
+    "team": 0,
+    "flow": {
+      "continuousFlow": true,
+      "flowAgree": 0.5,
+      "polys": 395,
+      "verts": 682,
+      "links": 92,
+      "goals": 3,
+      "graphNodes": 395,
+      "portals": 1102,
+      "steer": 4941,
+      "used": 2205,
+      "rejected": 2736,
+      "adopted": 0.44626593806921677
+    }
+  },
+  "layer": {
+    "satellites": 0,
+    "scorched": 0,
+    "embers": 0,
+    "kicks": 0,
+    "killFast": 0,
+    "gridSegs": 0,
+    "faces": 0,
+    "tumbling": 0,
+    "maxTumbleDeg": 0,
+    "dust": 0,
+    "splashes": 0,
+    "gettingUp": 0,
+    "foam": 0,
+    "spray": 0,
+    "navEdges": 1447,
+    "navVerts": 682,
+    "rainDrops": 0,
+    "splats": 0,
+    "clouds": 0,
+    "arcs": 0,
+    "footprints": 0,
+    "passagePx": 0,
+    "navPolys": 395,
+    "navLinks": 92,
+    "arcsNow": 0,
+    "visible": true,
+    "flow": {
+      "continuousFlow": true,
+      "flowAgree": 0.5,
+      "polys": 395,
+      "verts": 682,
+      "links": 92,
+      "goals": 3,
+      "graphNodes": 395,
+      "portals": 1102,
+      "steer": 4942,
+      "used": 2205,
+      "rejected": 2737,
+      "adopted": 0.4461756373937677
+    }
+  },
+  "errors": []
+}

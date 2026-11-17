@@ -1,0 +1,192 @@
+{
+  "frames": [
+    {
+      "t": 0.05,
+      "hits": 0,
+      "popups": 0,
+      "kills": 0,
+      "hitSet": 0,
+      "thrustFrames": 0,
+      "hpA": 5,
+      "hpB": 5,
+      "recs": []
+    },
+    {
+      "t": 0.1,
+      "hits": 1,
+      "popups": 1,
+      "kills": 0,
+      "hitSet": 1,
+      "thrustFrames": 1,
+      "hpA": 4,
+      "hpB": 5,
+      "recs": [
+        {
+          "unitId": 9001,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.006,
+          "z": -0.821
+        }
+      ]
+    },
+    {
+      "t": 0.15,
+      "hits": 1,
+      "popups": 1,
+      "kills": 0,
+      "hitSet": 2,
+      "thrustFrames": 2,
+      "hpA": 4,
+      "hpB": 4,
+      "recs": [
+        {
+          "unitId": 9001,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.006,
+          "z": -0.821
+        },
+        {
+          "unitId": 9002,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.126,
+          "z": -0.821
+        }
+      ]
+    },
+    {
+      "t": 0.2,
+      "hits": 0,
+      "popups": 0,
+      "kills": 0,
+      "hitSet": 2,
+      "thrustFrames": 2,
+      "hpA": 4,
+      "hpB": 4,
+      "recs": [
+        {
+          "unitId": 9001,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.006,
+          "z": -0.821
+        },
+        {
+          "unitId": 9002,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.126,
+          "z": -0.821
+        }
+      ]
+    },
+    {
+      "t": 0.25,
+      "hits": 0,
+      "popups": 0,
+      "kills": 0,
+      "hitSet": 2,
+      "thrustFrames": 2,
+      "hpA": 4,
+      "hpB": 4,
+      "recs": [
+        {
+          "unitId": 9001,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.006,
+          "z": -0.821
+        },
+        {
+          "unitId": 9002,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.126,
+          "z": -0.821
+        }
+      ]
+    },
+    {
+      "t": 0.3,
+      "hits": 0,
+      "popups": 0,
+      "kills": 0,
+      "hitSet": 2,
+      "thrustFrames": 2,
+      "hpA": 4,
+      "hpB": 4,
+      "recs": [
+        {
+          "unitId": 9001,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.006,
+          "z": -0.821
+        },
+        {
+          "unitId": 9002,
+          "value": 4,
+          "kind": "damage",
+          "x": 0.126,
+          "z": -0.821
+        }
+      ]
+    }
+  ],
+  "after": {
+    "hpA": 4,
+    "hpB": 4,
+    "spawned": 2,
+    "hitSet": 2,
+    "thrustFrames": 2,
+    "kills": 0
+  },
+  "lethal": {
+    "hits": 1,
+    "popups": 2,
+    "kills": 1,
+    "hp": 0,
+    "dead": true,
+    "recs": [
+      {
+        "unitId": 9003,
+        "value": 4,
+        "kind": "damage"
+      },
+      {
+        "unitId": 9003,
+        "value": 10,
+        "kind": "kill"
+      }
+    ]
+  },
+  "shot": {
+    "hpEnemy": 4,
+    "popups": [
+      {
+        "unitId": 9004,
+        "value": 4,
+        "kind": "damage"
+      }
+    ]
+  },
+  "summary": {
+    "totalHits": 2,
+    "hitSet": 2,
+    "popups": 2,
+    "hpAfterA": 4,
+    "hpAfterB": 4,
+    "lethal": {
+      "hits": 1,
+      "popups": 2,
+      "kills": 1,
+      "kinds": [
+        "damage:4",
+        "kill:10"
+      ]
+    }
+  },
+  "errors": []
+}

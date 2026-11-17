@@ -1,0 +1,59 @@
+{
+  "reports": [
+    {
+      "grid": "quad",
+      "deckStats": {
+        "shadowPuffs": 64,
+        "farPuffs": 24
+      },
+      "farRatio": 0.42,
+      "water": {
+        "dark": 8062,
+        "lit": 269966,
+        "tone": 0.01,
+        "restore": 0
+      },
+      "waterFar": {
+        "dark": 7884,
+        "lit": 269966,
+        "tone": 0.004,
+        "restore": 0
+      },
+      "vegetation": {
+        "dark": 0,
+        "mask": 134,
+        "tone": 0,
+        "restore": 0,
+        "proven": false
+      }
+    },
+    {
+      "grid": "mixed",
+      "deckStats": {
+        "shadowPuffs": 64,
+        "farPuffs": 24
+      },
+      "farRatio": 0.42,
+      "water": {
+        "dark": 18033,
+        "lit": 269961,
+        "tone": 0.0228,
+        "restore": 0
+      },
+      "waterFar": {
+        "dark": 17823,
+        "lit": 269961,
+        "tone": 0.0094,
+        "restore": 0
+      },
+      "vegetation": {
+        "dark": 0,
+        "mask": 43,
+        "tone": 0,
+        "restore": 0,
+        "proven": false
+      }
+    }
+  ],
+  "errors": []
+}

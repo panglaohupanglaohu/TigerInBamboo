@@ -60,7 +60,12 @@ backend/runtime.json
 **/.server.log
 
 # 渲染帧序列（coverage 帧截图海量小文件，单目录 6GB，不入库）
-townscaper-web/REACodeRefactoring/artifacts/coverage/
+# 但评审报告（*.md）与浏览器回执（*.json）必须入库：学习工坊会把它们直接链到页面上，
+# 只忽略目录不忽略这两类文件，否则每批新证据都会被静默丢弃，线上就是 404 与「证据已变化」。
+townscaper-web/REACodeRefactoring/artifacts/coverage/**
+!townscaper-web/REACodeRefactoring/artifacts/coverage/**/
+!townscaper-web/REACodeRefactoring/artifacts/coverage/**/*.md
+!townscaper-web/REACodeRefactoring/artifacts/coverage/**/*.json
 townscaper-web/REACodeRefactoring/gifs/
 
 # 临时删除暂存区（含 108MB 打包文件，超过 GitHub 100MB 硬限）

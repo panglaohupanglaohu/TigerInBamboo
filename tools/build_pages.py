@@ -144,6 +144,17 @@ if missing_evidence:
         print('  missing learning evidence: ' + p)
     raise SystemExit(f'{len(missing_evidence)} learning-workshop evidence files referenced by {deliveries_rel} are not published')
 
+# 评审证据守护：learn/data.js 里每条能力的 reviewEvidence 都会被页面直接打开，
+# 而 artifacts/coverage 默认整棵忽略（6 GiB 帧图），新一批证据很容易被静默漏掉。
+learn_data_rel = 'townscaper-web/REACodeRefactoring/learn/data.js'
+learn_data = (out / learn_data_rel).read_text(encoding='utf-8', errors='ignore')
+review_refs = set(re.findall(r'"reviewEvidence":\s*"([^"]+)"', learn_data))
+missing_review = sorted(r for r in review_refs if not (out / 'townscaper-web/REACodeRefactoring' / r).is_file())
+if missing_review:
+    for r in missing_review:
+        print('  missing review evidence: ' + r)
+    raise SystemExit(f'{len(missing_review)} reviewEvidence files in learn/data.js are not published; check .gitignore and add them')
+
 # 构建期守护：打包产物里所有可加载资源引用都必须存在于发布目录，否则线上必然 404
 ref_pat = re.compile(r"""["'`(]((?:\.\./)*(?:\./)?(?:assets|music|artifacts|data|vendor)/[^"'`()\s]+?\.(?:png|jpg|jpeg|webp|gif|glb|gltf|bin|wasm|json|mp3|ogg|wav|svg|glsl|frag|vert))["'`)]""")
 js_text = (out / runtime_current).read_text(encoding='utf-8', errors='ignore')

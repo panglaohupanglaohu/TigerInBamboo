@@ -6,6 +6,7 @@
     "root": 0
   },
   "stats": {
+    "mode": "type",
     "cells": 707,
     "quads": 469,
     "tris": 238,
@@ -22,6 +23,33 @@
     "bands": 65,
     "bandLongest": 40,
     "bandEdges": 536,
+    "patchCount": 153,
+    "largestPatch": 34,
+    "maxSpreadDeg": 14.989061767507053,
+    "families": [
+      {
+        "family": 60,
+        "cells": 185
+      },
+      {
+        "family": 30,
+        "cells": 154
+      },
+      {
+        "family": 0,
+        "cells": 130
+      }
+    ],
+    "patchEdgeKinds": {
+      "inner": 355,
+      "patchRim": 288,
+      "seam": 536,
+      "tri": 74,
+      "rim": 84,
+      "other": 0
+    },
+    "triangleCells": 238,
+    "diagonals": 938,
     "nodes": 707,
     "rings": 26,
     "maxDepth": 25,
@@ -37,9 +65,9 @@
   "errors": [],
   "wirePix": {
     "total": 409600,
-    "ink": 55660,
-    "orange": 9565,
-    "cyan": 1306,
+    "ink": 83538,
+    "orange": 10480,
+    "cyan": 1297,
     "bright": 0
   },
   "radialPix": {
@@ -50,6 +78,7 @@
     "bright": 21
   },
   "rerolled": {
+    "mode": "type",
     "cells": 694,
     "quads": 482,
     "tris": 212,
@@ -66,6 +95,33 @@
     "bands": 60,
     "bandLongest": 49,
     "bandEdges": 467,
+    "patchCount": 178,
+    "largestPatch": 28,
+    "maxSpreadDeg": 14.874629447250612,
+    "families": [
+      {
+        "family": 30,
+        "cells": 173
+      },
+      {
+        "family": 0,
+        "cells": 157
+      },
+      {
+        "family": 60,
+        "cells": 152
+      }
+    ],
+    "patchEdgeKinds": {
+      "inner": 342,
+      "patchRim": 356,
+      "seam": 467,
+      "tri": 75,
+      "rim": 84,
+      "other": 0
+    },
+    "triangleCells": 212,
+    "diagonals": 964,
     "nodes": 694,
     "rings": 27,
     "maxDepth": 26,
@@ -79,6 +135,7 @@
     "root": 0
   },
   "reRooted": {
+    "mode": "type",
     "cells": 694,
     "quads": 482,
     "tris": 212,
@@ -95,6 +152,33 @@
     "bands": 60,
     "bandLongest": 49,
     "bandEdges": 467,
+    "patchCount": 178,
+    "largestPatch": 28,
+    "maxSpreadDeg": 14.874629447250612,
+    "families": [
+      {
+        "family": 30,
+        "cells": 173
+      },
+      {
+        "family": 0,
+        "cells": 157
+      },
+      {
+        "family": 60,
+        "cells": 152
+      }
+    ],
+    "patchEdgeKinds": {
+      "inner": 342,
+      "patchRim": 356,
+      "seam": 467,
+      "tri": 75,
+      "rim": 84,
+      "other": 0
+    },
+    "triangleCells": 212,
+    "diagonals": 964,
     "nodes": 694,
     "rings": 35,
     "maxDepth": 34,

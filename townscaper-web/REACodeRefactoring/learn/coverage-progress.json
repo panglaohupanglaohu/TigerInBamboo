@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-16T23:13:37.891Z",
+  "updatedAt": "2026-11-17T09:36+08:00",
   "completed": [
     "建立原版 128 个 JS 模块逐项清单、导出接口、职责落点与已知差距。",
     "配置每30分钟承接学习任务并更新首页/管线进度。",
@@ -462,7 +462,7 @@
       ]
     },
     {
-      "title": "第 19 轮缺口：格心彩色小块语义不可证；线框只有俯视伪倾斜，未接 world.js 实景与 3D 透视；radialLayout 还没拿去查连通分量/补丁分组；极坐标底网十字与刻度未复刻",
+      "title": "第 116 轮复核：`1490068909042642944` 邻接图极坐标布局已验（radialLayout/26 环/4 分支），剩「节点半径语义、颜色=根分支还是连通分量不可证、极坐标刻度」——3× 放大看帧仍无法区分分支/分量 → 属 C 性质，建议标定案、别再排期（同组 1459 才是可做的 B）。",
       "clips": [
         "1459169210752507904",
         "1466059785703460870",
@@ -955,7 +955,7 @@
     "newClipsThisHeartbeat": 0,
     "implementationAcceptedClipsThisHeartbeat": 0
   },
-  "latest": "第 115 轮：[007] 整组 2 条（902069261304287232 389 帧 / 901842167508992000 571 帧，流场数据继承可视化）→ 都 done。核实：where 指向的 src/motion 目录不存在，真实落点 src/badnorth/flowfield.js + battle.js#drawFlow；note 三条仍缺里两条是 r68/r70 撤销的误读、一条 r78 否证，真缺口只剩 continuousFlow 未进主战斗默认（r76 判法成立）。接线：battle.js start() 默认 continuousFlow:true，battle-g3 缺省继承 nav 现值并支持 ?continuousFlow=0。新测 tests/flow-battle-rates-browser.cjs：30/60/120Hz 同 18s、8 人 14 跳，arrived 7/7/6（逐面 7）、steer 1650/3349/8179、关档 0；三项继承 386 节点对账 nearest 386/386、type 386/386、dir 382/386；viz 395 格格网/3160 边/按兵种 3 色（步兵8·矛兵8·弓手8）。回归 layered-continuous-flow / navmesh-battle-flow / battle-navigation / battle-g3 全 PASS。既有红：battle-navigation-browser 隧道段（关连续流同样红，与本轮无关）。done 86→88 / partial 162→160。",
+  "latest": "第 116 轮：[041] 取 B（A 类仍空）。`1459169210752507904`（609 帧）仍 partial，但缺口清单被重写：r19 挂了三轮的三条「缺口」经 3× 放大看帧全部推翻 —— 格心没有彩色小块（那些紫/蓝/黄是补丁缝折线与三角带小三角边）、全片无透视（平面正视，补丁各转 0/30/60°）、无 world 实景；真缺口是第四件小事：每格内部的两条对角线 X（已补画）。新增 `grid-wireframe.js#patchLayout`（三族吸附 + 补丁连通块 + 补丁缝）与 `grid-graph.html?mode=patch`（同片同色/品红缝/绿填三角格/对角线），新测 `tests/grid-patch-families-browser.cjs` 全 PASS（469 四边格 = 60°:185+30°:154+0°:130、补丁 153 块/最大 34、缝 288 边、换种子 178 块）。仍缺 补丁级刚性：153 块 vs 原片约 8 块、逐格轴向抖动 14.99° vs 0°，根因=hex-merge 三族按格交错 + 逐格松弛（试过族向约束反升 45°，已回退）。回归 grid-wireframe / graph-layout / grid-graph-browser 全 PASS。done 88→88 / partial 160（本轮 0 条翻 done）。",
   "learningPace": {
     "targetClipsPerHour": 4,
     "goalHours": 78,
@@ -968,7 +968,7 @@
     "remainingClips": 0,
     "countBasis": "独立视频ID、对应全帧记录和学习证据；不等同全部代码验收通过",
     "actualClipsPerHour": 0.81,
-    "measuredAt": "2026-11-17T07:13:01.300674+08:00"
+    "measuredAt": "2026-11-17T09:27:51.754437+08:00"
   },
   "session": {
     "status": "paused",

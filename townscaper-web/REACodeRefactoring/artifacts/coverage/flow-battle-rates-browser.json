@@ -1,0 +1,193 @@
+{
+  "url": "http://localhost:8769/index.html?scene=badnorth&flow=1&flowunit=1",
+  "setup": {
+    "start": {
+      "id": 133,
+      "node": 9,
+      "x": 1.6270346137520981,
+      "z": 3.1634038341060626,
+      "floor": 1
+    },
+    "goal": {
+      "id": 1327,
+      "node": 203,
+      "x": 5.109882865019745,
+      "z": -0.15255749761564757,
+      "floor": 1
+    },
+    "span": 4.809,
+    "hops": 14,
+    "units": 8,
+    "defaultFlow": true,
+    "polys": 395,
+    "squadTypes": [
+      "步兵",
+      "矛兵",
+      "弓手"
+    ],
+    "squads": 3
+  },
+  "sweep": [
+    {
+      "dt": 0.03333,
+      "hz": 30,
+      "steps": 540,
+      "simSeconds": 18,
+      "ms": 36,
+      "arrived": 7,
+      "onGraph": 8,
+      "maxRemain": 1.94,
+      "offGoalFloor": 1,
+      "cells": 15,
+      "planned": true,
+      "flow": {
+        "continuousFlow": true,
+        "flowAgree": 0.5,
+        "polys": 395,
+        "verts": 682,
+        "links": 92,
+        "goals": 3,
+        "graphNodes": 395,
+        "portals": 1102,
+        "steer": 1650,
+        "used": 1167,
+        "rejected": 483,
+        "adopted": 0.7072727272727273
+      }
+    },
+    {
+      "dt": 0.01667,
+      "hz": 60,
+      "steps": 1080,
+      "simSeconds": 18,
+      "ms": 48,
+      "arrived": 7,
+      "onGraph": 8,
+      "maxRemain": 1.948,
+      "offGoalFloor": 1,
+      "cells": 15,
+      "planned": true,
+      "flow": {
+        "continuousFlow": true,
+        "flowAgree": 0.5,
+        "polys": 395,
+        "verts": 682,
+        "links": 92,
+        "goals": 3,
+        "graphNodes": 395,
+        "portals": 1102,
+        "steer": 3349,
+        "used": 2349,
+        "rejected": 1000,
+        "adopted": 0.7014034040011944
+      }
+    },
+    {
+      "dt": 0.00833,
+      "hz": 120,
+      "steps": 2160,
+      "simSeconds": 18,
+      "ms": 87,
+      "arrived": 6,
+      "onGraph": 8,
+      "maxRemain": 1.933,
+      "offGoalFloor": 2,
+      "cells": 15,
+      "planned": true,
+      "flow": {
+        "continuousFlow": true,
+        "flowAgree": 0.5,
+        "polys": 395,
+        "verts": 682,
+        "links": 92,
+        "goals": 3,
+        "graphNodes": 395,
+        "portals": 1102,
+        "steer": 8179,
+        "used": 4562,
+        "rejected": 3617,
+        "adopted": 0.5577698985206015
+      }
+    }
+  ],
+  "perFace": {
+    "dt": 0.01667,
+    "hz": 60,
+    "steps": 1080,
+    "simSeconds": 18,
+    "ms": 40,
+    "arrived": 7,
+    "onGraph": 8,
+    "maxRemain": 1.916,
+    "offGoalFloor": 1,
+    "cells": 15,
+    "planned": true,
+    "flow": {
+      "continuousFlow": false,
+      "flowAgree": 0.5,
+      "polys": 395,
+      "verts": 682,
+      "links": 92,
+      "goals": 3,
+      "graphNodes": 395,
+      "portals": 1102,
+      "steer": 0,
+      "used": 0,
+      "rejected": 0,
+      "adopted": null
+    }
+  },
+  "inherit": {
+    "sources": [
+      {
+        "node": 9,
+        "type": "步兵"
+      },
+      {
+        "node": 320,
+        "type": "矛兵"
+      },
+      {
+        "node": 104,
+        "type": "弓手"
+      }
+    ],
+    "checked": 386,
+    "typeOk": 386,
+    "dirOk": 382,
+    "distOk": 386,
+    "nearestOk": 386,
+    "nearestChecked": 386,
+    "types": [
+      "步兵",
+      "矛兵",
+      "弓手"
+    ],
+    "perType": {
+      "步兵": 271,
+      "矛兵": 71,
+      "弓手": 44
+    }
+  },
+  "viz": {
+    "byType": "type",
+    "cellsDrawn": 395,
+    "gridEdges": 3160,
+    "legendRows": "流场配色 · 按兵种步兵 · 8矛兵 · 8弓手 · 8",
+    "flowTypeColors": 3,
+    "sourceTypes": [
+      "步兵",
+      "矛兵",
+      "弓手"
+    ],
+    "sources": 24,
+    "wisp": {
+      "near": 0.273,
+      "far": 0.52,
+      "nearN": 29,
+      "farN": 63,
+      "distRef": 5.6
+    }
+  },
+  "errors": []
+}

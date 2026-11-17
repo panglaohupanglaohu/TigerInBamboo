@@ -145,3 +145,91 @@ export function seamBands(wireframe, { grid = null, minLength = 1 } = {}) {
     .filter((b) => b.length >= minLength)
     .sort((p, q) => q.length - p.length || p.corners[0] - q.corners[0]);
 }
+
+/** 四边格自己的轴向（第一条边的方向，折到 0–90°）。 */
+export function cellAxisDeg(cell) {
+  const a = cell.pts[0], b = cell.pts[1];
+  let ang = (Math.atan2(b.z - a.z, b.x - a.x) * 180) / Math.PI;
+  return ((ang % 90) + 90) % 90;
+}
+
+/** 两个轴向的环面距离（周期 90°）。 */
+export const axisDelta = (a, b) => {
+  const d = Math.abs(a - b) % 90;
+  return Math.min(d, 90 - d);
+};
+
+/**
+ * 补丁层（1459169210752507904「And another」）：片子里的四边格**不是逐格各转一个角度**，
+ * 而是按整片共用一套轴向 —— 同一块补丁里所有方格朝向完全一致，补丁之间才出现缝与三角过渡带。
+ *
+ *   patchLayout(grid) → { patches, cellPatch, families, edgeKinds, edges, maxSpreadDeg, triangleCells }
+ *
+ * 族向优先取 `buildMixedGrid({constraintFamilies:true})` 记在 `cell.family` 上的生成期族向；
+ * 没有就按当前几何吸附到最近族（这时 spread 会很大，正好用来说明"没钉族向就聚不出补丁"）。
+ * 补丁 = 同族 + 共边的四边格连通块。
+ */
+export function patchLayout(grid, { wireframe = null } = {}) {
+  if (!grid || !Array.isArray(grid.cells)) throw new RangeError('grid.cells must be an array');
+  const wire = wireframe || classifyWireframe(grid);
+  const quads = grid.cells.filter((c) => c.n === 4);
+  const axis = new Map(quads.map((c) => [c.id, cellAxisDeg(c)]));
+  const family = new Map(quads.map((c) => {
+    const own = c.family;
+    if (own != null) return [c.id, own];
+    const a = axis.get(c.id);
+    const cand = [0, 30, 60, 90].map((k) => ({ k: k % 90, d: axisDelta(a, k) })).sort((p, q) => p.d - q.d)[0];
+    return [c.id, cand.k];
+  }));
+  const parent = new Map(quads.map((c) => [c.id, c.id]));
+  const find = (x) => { while (parent.get(x) !== x) { parent.set(x, parent.get(parent.get(x))); x = parent.get(x); } return x; };
+  for (const c of quads) {
+    for (const nb of c.edgeNeighbors) {
+      if (nb < 0 || !family.has(nb)) continue;
+      if (family.get(nb) !== family.get(c.id)) continue;
+      const ra = find(c.id), rb = find(nb);
+      if (ra !== rb) parent.set(rb, ra);
+    }
+  }
+  const groups = new Map();
+  for (const c of quads) {
+    const r = find(c.id);
+    if (!groups.has(r)) groups.set(r, []);
+    groups.get(r).push(c.id);
+  }
+  const patches = [...groups.entries()]
+    .map(([root, cells]) => {
+      const fam = family.get(cells[0]);
+      const spread = cells.reduce((m, id) => Math.max(m, axisDelta(axis.get(id), fam)), 0);
+      return { id: root, family: fam, cells, size: cells.length, spreadDeg: spread };
+    })
+    .sort((p, q) => q.size - p.size || p.family - q.family);
+  const cellPatch = new Map();
+  patches.forEach((p, i) => { p.index = i; for (const id of p.cells) cellPatch.set(id, i); });
+  // 边：同补丁 = inner；两块补丁之间 = patchRim（片子里那圈紫/品红）；四边格↔三角格 = seam；只有一面 = rim
+  const edges = wire.edges.map((e) => {
+    const pa = cellPatch.has(e.faces[0]) ? cellPatch.get(e.faces[0]) : null;
+    const pb = e.faces.length > 1 && cellPatch.has(e.faces[1]) ? cellPatch.get(e.faces[1]) : null;
+    let kind;
+    if (e.faces.length === 1) kind = 'rim';
+    else if (pa != null && pb != null) kind = pa === pb ? 'inner' : 'patchRim';
+    else if (pa == null && pb == null) kind = 'tri';
+    else kind = 'seam';
+    return { a: e.a, b: e.b, kind, faces: e.faces };
+  });
+  const edgeKinds = { inner: 0, patchRim: 0, seam: 0, tri: 0, rim: 0, other: 0 };
+  for (const e of edges) edgeKinds[e.kind] = (edgeKinds[e.kind] || 0) + 1;
+  const famCount = new Map();
+  for (const v of family.values()) famCount.set(v, (famCount.get(v) || 0) + 1);
+  return {
+    patches,
+    cellPatch,
+    families: [...famCount.entries()].map(([family, cells]) => ({ family, cells })).sort((p, q) => q.cells - p.cells || p.family - q.family),
+    edgeKinds,
+    edges,
+    maxSpreadDeg: patches.reduce((m, p) => Math.max(m, p.spreadDeg), 0),
+    triangleCells: grid.cells.filter((c) => c.n === 3).map((c) => c.id),
+    patchCount: patches.length,
+    largest: patches[0] ? patches[0].size : 0,
+  };
+}

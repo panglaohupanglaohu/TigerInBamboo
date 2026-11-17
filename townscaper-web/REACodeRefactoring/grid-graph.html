@@ -26,6 +26,7 @@ figcaption{font-size:12px;color:#41565e;margin-top:4px}
   <label>半径 <input id="radius" type="number" value="14" min="6" max="26" style="width:70px"></label>
   <label>合并率 <input id="merge" type="number" value="0.85" min="0.1" max="1" step="0.05" style="width:70px"></label>
   <div><button id="reroll">换一座岛</button><button id="rootNext">换根节点</button></div>
+  <label>着色 <select id="mode"><option value="type">按面型（四边/三角/缝/缘）</option><option value="patch">按补丁（同片同色 + 品红补丁缝）</option></select></label>
   <div><span class="sw" style="background:#e8843a"></span>四边格边 <span class="sw" style="background:#35c9c2"></span>三角边 <span class="sw" style="background:#8df2a8"></span>三角带轮廓 <span class="sw" style="background:#2f8f6a"></span>岛缘</div>
   <div id="stats" role="status">…</div>
   <small>面型分类与三角带串接在 <code>src/core/grid-wireframe.js</code>；BFS 同心环 + 分支分段在 <code>src/core/graph-layout.js</code>。格子来自 <code>src/core/grid.js</code> 的 buildMixedGrid。</small>
@@ -37,13 +38,16 @@ figcaption{font-size:12px;color:#41565e;margin-top:4px}
 </main>
 <script type="module">
 import { buildMixedGrid } from './src/core/grid.js';
-import { classifyWireframe, seamBands } from './src/core/grid-wireframe.js';
+import { classifyWireframe, seamBands, patchLayout, cellAxisDeg } from './src/core/grid-wireframe.js';
 import { radialLayout } from './src/core/graph-layout.js';
 
 const BG = '#12161a';
 const PALETTE = ['#7fb3ff', '#c58bff', '#7de3a4', '#ffd166', '#ff9f6e', '#6ee7f0', '#f78fb3', '#b9d86a'];
+// 补丁着色：同一块补丁一种色，相邻补丁尽量不同（真片子是整片同色 + 品红缝）
+const PATCH_PALETTE = ['#e8843a', '#c86bff', '#35c9c2', '#c0d94a', '#ff7b9c', '#7fa8ff', '#f7a35c'];
 const state = {};
 let rootIndex = 0;
+let mode = new URLSearchParams(location.search).get('mode') === 'patch' ? 'patch' : 'type';
 
 const $ = (id) => document.getElementById(id);
 
@@ -86,17 +90,61 @@ function drawWire() {
     c.stroke();
   };
   const by = (k) => wire.edges.filter((e) => e.kind === k);
-  stroke(by('quad'), 'rgba(232,132,58,0.85)', 1.1);
-  stroke(by('tri'), 'rgba(53,201,194,0.8)', 1.0);
-  stroke(by('rim'), '#2f8f6a', 1.8);
-  stroke(by('seam'), '#8df2a8', 1.7);
-  // 面心小点：四边格橙、三角青（片子里格子中间那层点）
-  for (const cell of cells) {
-    const p = project({ x: cell.cx, z: cell.cz });
-    c.fillStyle = cell.n === 4 ? 'rgba(255,150,80,0.55)' : 'rgba(120,240,230,0.6)';
-    c.beginPath(); c.arc(p[0], p[1], cell.n === 4 ? 1.1 : 1.5, 0, 6.283); c.fill();
+  if (mode === 'patch') {
+    // 补丁着色（1459169210752507904 原片的真实着色）：同一块补丁一种色，补丁之间用品红缝分开，
+    // 三角格填绿（片子里三角带里那些孤立绿格）。这层比"按面型"多出的信息是：补丁到底有几块、多大。
+    const { patch } = state;
+    const triSet = new Set(patch.triangleCells);
+    for (const cell of cells) {
+      if (!triSet.has(cell.id)) continue;
+      c.beginPath();
+      cell.pts.forEach((p, i) => { const q = project(p); if (i) c.lineTo(q[0], q[1]); else c.moveTo(q[0], q[1]); });
+      c.closePath();
+      c.fillStyle = 'rgba(90,220,130,0.20)'; c.fill();
+      c.strokeStyle = '#5ee08a'; c.lineWidth = 1.0; c.stroke();
+    }
+    const colorOfPatch = (i) => PATCH_PALETTE[i % PATCH_PALETTE.length];
+    for (const e of patch.edges) {
+      if (e.kind === 'rim') continue;
+      let col;
+      if (e.kind === 'patchRim') col = 'rgba(200,107,255,0.95)';
+      else {
+        const f = e.faces.find((id) => patch.cellPatch.has(id));
+        col = f == null ? 'rgba(53,201,194,0.55)' : colorOfPatch(patch.cellPatch.get(f));
+      }
+      const p = project(V.get(e.a)), q = project(V.get(e.b));
+      c.strokeStyle = col;
+      c.lineWidth = e.kind === 'patchRim' ? 1.6 : e.kind === 'seam' ? 1.25 : 1.0;
+      c.beginPath(); c.moveTo(p[0], p[1]); c.lineTo(q[0], q[1]); c.stroke();
+    }
+    stroke(by('rim'), '#2f8f6a', 1.8);
+  } else {
+    stroke(by('quad'), 'rgba(232,132,58,0.85)', 1.1);
+    stroke(by('tri'), 'rgba(53,201,194,0.8)', 1.0);
+    stroke(by('rim'), '#2f8f6a', 1.8);
+    stroke(by('seam'), '#8df2a8', 1.7);
+    // 面心小点：四边格橙、三角青（片子里格子中间那层点）
+    for (const cell of cells) {
+      const p = project({ x: cell.cx, z: cell.cz });
+      c.fillStyle = cell.n === 4 ? 'rgba(255,150,80,0.55)' : 'rgba(120,240,230,0.6)';
+      c.beginPath(); c.arc(p[0], p[1], cell.n === 4 ? 1.1 : 1.5, 0, 6.283); c.fill();
+    }
   }
-  $('wireCap').textContent = `${cells.length} 格（${wire.faces.quads} 四边 / ${wire.faces.tris} 三角）· 三角带 ${state.bands.length} 条，最长 ${state.bands[0] ? state.bands[0].length : 0} 条边`;
+  $('wireCap').textContent = mode === 'patch'
+    ? `${cells.length} 格（${wire.faces.quads} 四边 / ${wire.faces.tris} 三角）· 补丁 ${state.patch.patchCount} 块（最大 ${state.patch.largest} 格）· 轴向抖动 ${state.patch.maxSpreadDeg.toFixed(1)}° · 补丁缝 ${state.patch.edgeKinds.patchRim} 边`
+    : `${cells.length} 格（${wire.faces.quads} 四边 / ${wire.faces.tris} 三角）· 三角带 ${state.bands.length} 条，最长 ${state.bands[0] ? state.bands[0].length : 0} 条边`;
+  // 四边格的对角线（X）：原尺寸回看 0200 帧，每个方格里都画了两条对角线，之前一直漏了
+  c.strokeStyle = mode === 'patch' ? 'rgba(232,132,58,0.30)' : 'rgba(232,132,58,0.34)';
+  c.lineWidth = 0.7; c.beginPath();
+  for (const cell of cells) {
+    if (cell.n !== 4) continue;
+    const p0 = project(cell.pts[0]), p2 = project(cell.pts[2]);
+    const p1 = project(cell.pts[1]), p3 = project(cell.pts[3]);
+    c.moveTo(p0[0], p0[1]); c.lineTo(p2[0], p2[1]);
+    c.moveTo(p1[0], p1[1]); c.lineTo(p3[0], p3[1]);
+  }
+  c.stroke();
+  state.diagonals = cells.filter((x) => x.n === 4).length * 2;
 }
 
 function drawRadial() {
@@ -155,11 +203,12 @@ function build(seed, radius, mergeRate) {
   const grid = buildMixedGrid({ radius, hexSize: 0.62, seed, mergeRate, relaxPasses: 70 });
   const wire = classifyWireframe(grid);
   const bands = seamBands(wire, { grid });
+  const patch = patchLayout(grid, { wireframe: wire });
   const ids = grid.cells.map((c) => c.id);
   const neighbors = grid.cells.map((c) => [...new Set(c.edgeNeighbors.filter((x) => x >= 0))].sort((a, b) => a - b));
   const root = ids[Math.abs(rootIndex) % ids.length];
   const layout = radialLayout({ ids, neighbors, root, ringGap: 1, minArc: 0.02 });
-  Object.assign(state, { grid, wire, bands, layout, seed, radius, mergeRate, root, cells: grid.cells, verts: grid.verts, neighbors });
+  Object.assign(state, { grid, wire, bands, patch, layout, seed, radius, mergeRate, root, cells: grid.cells, verts: grid.verts, neighbors });
   drawWire();
   drawRadial();
   const bandSum = bands.reduce((s, b) => s + b.length, 0);
@@ -170,7 +219,9 @@ function build(seed, radius, mergeRate) {
     `流形 ${wire.manifold ? '是' : '否（有 >2 面共边）'} · 三角带 ${bands.length} 条 / 共 ${bandSum} 边\n` +
     `邻接图：${layout.nodes.length} 节点 · ${layout.rings.length} 环 · 最深 ${layout.maxDepth}\n` +
     `分支 ${layout.branches.length} 段 · 同环边 ${layout.edgeKinds.same} · 跨环边 ${layout.edgeKinds.adjacent} · 跳环边 ${layout.edgeKinds.long}\n` +
-    `连通分量 ${layout.components.sizes.length}（最大 ${layout.components.sizes[0]}）`;
+    `连通分量 ${layout.components.sizes.length}（最大 ${layout.components.sizes[0]}）\n` +
+    `补丁 ${patch.patchCount} 块（最大 ${patch.largest} 格）· 族 ${patch.families.map((f) => `${f.family}°:${f.cells}`).join(' ')}\n` +
+    `补丁轴向抖动 max ${patch.maxSpreadDeg.toFixed(2)}° · 补丁缝 ${patch.edgeKinds.patchRim} 边 · 三角格 ${patch.triangleCells.length}`;
 }
 
 function apply(keepRoot = false) {
@@ -184,6 +235,8 @@ $('reroll').onclick = () => {
 };
 $('rootNext').onclick = () => { rootIndex += 1; apply(true); };
 for (const id of ['seed', 'radius', 'merge']) $(id).onchange = () => apply(false);
+$('mode').value = mode;
+$('mode').onchange = () => { mode = $('mode').value === 'patch' ? 'patch' : 'type'; drawWire(); };
 
 apply();
 
@@ -191,6 +244,7 @@ window.gridGraph = {
   ready: true,
   config: () => ({ seed: state.seed, radius: state.radius, mergeRate: state.mergeRate, root: state.root }),
   stats: () => ({
+    mode,
     cells: state.grid.cellCount,
     quads: state.wire.faces.quads,
     tris: state.wire.faces.tris,
@@ -200,6 +254,13 @@ window.gridGraph = {
     bands: state.bands.length,
     bandLongest: state.bands[0] ? state.bands[0].length : 0,
     bandEdges: state.bands.reduce((s, b) => s + b.length, 0),
+    patchCount: state.patch.patchCount,
+    largestPatch: state.patch.largest,
+    maxSpreadDeg: state.patch.maxSpreadDeg,
+    families: state.patch.families.map((f) => ({ ...f })),
+    patchEdgeKinds: { ...state.patch.edgeKinds },
+    triangleCells: state.patch.triangleCells.length,
+    diagonals: state.diagonals || 0,
     nodes: state.layout.nodes.length,
     rings: state.layout.rings.length,
     maxDepth: state.layout.maxDepth,
@@ -209,6 +270,8 @@ window.gridGraph = {
     root: state.layout.root,
   }),
   reroll: (seed) => { if (seed != null) $('seed').value = String(seed); apply(false); return window.gridGraph.stats(); },
+  setMode: (m) => { mode = m === 'patch' ? 'patch' : 'type'; $('mode').value = mode; drawWire(); return window.gridGraph.stats(); },
+  patchOf: (cellId) => state.patch.cellPatch.get(cellId) ?? null,
   setRoot: (id) => {
     const i = state.grid.cells.findIndex((c) => c.id === id);
     if (i >= 0) { rootIndex = i; apply(true); }
