@@ -13,7 +13,7 @@ roots = {'api', 'frontend', 'TigerMessenger', 'CartonBook', 'townscaper-web'}
 exclude_any = {'artifacts', 'tests', 'node_modules', 'optimized', 'godot', 'godot-web', 'tmp', '_to_delete', 'originals'}
 # 仅顶层排除：仓库根的构建脚本与文档；TigerMessenger/src/tools 是运行时源码，必须发布
 exclude_top = {'tools', 'docs'}
-exts = {'.html','.css','.js','.mjs','.json','.png','.jpg','.jpeg','.webp','.gif','.svg','.ico','.glb','.gltf','.bin','.wasm','.woff','.woff2','.ttf','.ogg','.mp3','.wav','.glsl','.vert','.frag','.pdf'}
+exts = {'.html','.css','.js','.mjs','.cjs','.json','.png','.jpg','.jpeg','.webp','.gif','.svg','.ico','.glb','.gltf','.bin','.wasm','.woff','.woff2','.ttf','.ogg','.mp3','.wav','.glsl','.vert','.frag','.pdf'}
 
 # 概念设计图：仅在源码注释与离线资产队列中被提及，打包产物里零引用，运行时不会请求
 exclude_paths = ('TigerMessenger/assets/concepts/',)
@@ -43,7 +43,7 @@ static_allow = {
 evidence_subtrees = {
     'TigerMessenger/artifacts/workshop-tests/': ({'.json'}, {'browser.json'}),
     'townscaper-web/REACodeRefactoring/artifacts/coverage/': ({'.md', '.json'}, None),
-    'townscaper-web/REACodeRefactoring/tests/': ({'.mjs', '.js', '.md', '.json'}, None),
+    'townscaper-web/REACodeRefactoring/tests/': ({'.mjs', '.js', '.cjs', '.md', '.json'}, None),
 }
 
 
