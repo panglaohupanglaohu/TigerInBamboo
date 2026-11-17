@@ -61,7 +61,7 @@ import { Timer } from "three/addons/misc/Timer.js";
 import * as THREE from "three";
 import { createStage } from "./core/stage.js";
 import { createPerfProbe } from "./tools/perfProbe.js?v=remote-clearance-20261025";
-import { installUiLayers, setCaptureMode, isCaptureMode, onUiLayersChange } from "./ui/uiLayers.js?v=ui-layers-r3-local-edit";
+import { installUiLayers, setCaptureMode, isCaptureMode, onUiLayersChange } from "./ui/uiLayers.js?v=ui-layers-r4-release-edit";
 import { createSceneCensus } from "./tools/sceneCensus.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js?v=airship-down15-20261025";

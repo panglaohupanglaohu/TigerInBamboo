@@ -23,7 +23,7 @@ import {mountMorrisTownMenu} from './morrisTownscaperMenu.js?v=viewport-r1';
 import {createMorrisTownLighting} from './morrisTownscaperLighting.js?v=reacode-refactor-r2';
 import {migrateLegacyTown} from './morrisTownscaperLegacy.js?v=reacode-refactor-r1';
 import {morrisViewer} from './morrisViewer.js';
-import {onUiLayersChange} from '../ui/uiLayers.js?v=ui-layers-r3-local-edit';
+import {onUiLayersChange} from '../ui/uiLayers.js?v=ui-layers-r4-release-edit';
 import {P} from '../core/params.js';
 const STORAGE='morris-townscaper-refactor-v1',SAVES='morris-townscaper-refactor-saves-v1';
 const LEGACY_STORAGE='morris-townscaper-rea-v1',LEGACY_SAVES='morris-townscaper-saves-v1';

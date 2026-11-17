@@ -1,5 +1,5 @@
 import {listSceneObjects,getSceneObject,describeSceneObject} from './scene-objects.js';
-import {setGroup,setCaptureMode,isCaptureMode} from '../ui/uiLayers.js?v=ui-layers-r3-local-edit';
+import {setGroup,setCaptureMode,isCaptureMode} from '../ui/uiLayers.js?v=ui-layers-r4-release-edit';
 import {validateRecipe,effectiveSettings} from './pipeline-model.js';
 import {createVersionStore} from './store.js';
 import {playtestSceneId} from './playtest-target.js?v=playtest-r1';

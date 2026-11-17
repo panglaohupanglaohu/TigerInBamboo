@@ -7,8 +7,9 @@
 //            Development only. One group open at a time from the dock (bottom-right) or F1; closed by default.
 //   monitor  监控：帧率探针、体素 AO 探针、湖区 / 城区实时审计、WFC 失败面板。Development only, F2.
 //
-// Release (published Pages / any non-local host, or ?release=1): edit + monitor are hidden and the dock is not mounted
-// (like a shipping build stripping dev UI). ?dev=1 forces the dev tools on a public host for a review session.
+// Published builds (Pages / any public host) keep the same edit dock as localhost: the owner reviews the
+// live site and needs the editor there (2026-11-17 request). Opt out per URL with ?dev=0 (or the older
+// ?release=1), which hides edit + monitor and skips mounting the dock — used by play-only links.
 // Panels are classified by id when they appear (MutationObserver), so their own modules stay unchanged.
 
 export const EDIT_GROUPS=[
@@ -32,10 +33,8 @@ export const CAPTURE_HIDE_SELECTORS=[
 
 const STORE='tm-ui-layers-v1';
 const q=new URLSearchParams(globalThis.location?.search||'');
-const host=globalThis.location?.hostname||'';
-const localHost=['localhost','127.0.0.1','::1','[::1]',''].includes(host)||host.endsWith('.local');
-// Local game pages retain the original editing dock; explicit play/release URLs still hide it.
-export const UI_DEV=q.get('dev')==='1'||(localHost&&q.get('release')!=='1'&&q.get('dev')!=='0');
+// Local and published game pages both carry the editing dock; ?dev=0 / ?release=1 are explicit opt-outs.
+export const UI_DEV=q.get('dev')!=='0'&&q.get('release')!=='1';
 
 const state={group:null,monitor:false};
 try{const s=JSON.parse(localStorage.getItem(STORE)||'{}');if(EDIT_GROUPS.some(g=>g.id===s.group))state.group=s.group;state.monitor=!!s.monitor;}catch{}

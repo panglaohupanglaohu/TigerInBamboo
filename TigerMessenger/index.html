@@ -1831,7 +1831,7 @@
           const localHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
           const authoring = new URLSearchParams(location.search).get("authoringEmbed") === "1";
           const release = !authoring && (!localHost || new URLSearchParams(location.search).has("bundle"));
-          const entry = release ? "./runtime/game-1852e0683829.js" : "./src/main.js?v=authoring-entry-r1";
+          const entry = release ? "./runtime/game-3cba052e234a.js" : "./src/main.js?v=authoring-entry-r1";
           console.info("[TigerMessenger] entry:", entry);
           await import(entry);
         }
