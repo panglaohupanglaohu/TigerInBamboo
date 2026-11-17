@@ -1827,10 +1827,13 @@
             "[TigerMessenger] three.js source: local vendor" +
               (wantCdn ? "（已忽略 ?cdn=1，默认本地更稳）" : "")
           );
-          // Public Pages uses a compact release; localhost keeps source iteration.
+          // Public Pages uses a compact release for every entry, including the authoring
+          // iframe: the bundle inlines the optimized geometry modules, while the site
+          // deliberately does not publish those 137 MiB of src-graph data modules.
+          // Loading src/main.js there fails with "Failed to fetch dynamically imported module".
+          // localhost keeps source iteration unless ?bundle is asked for.
           const localHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
-          const authoring = new URLSearchParams(location.search).get("authoringEmbed") === "1";
-          const release = !authoring && (!localHost || new URLSearchParams(location.search).has("bundle"));
+          const release = !localHost || new URLSearchParams(location.search).has("bundle");
           const entry = release ? "./runtime/game-3cba052e234a.js" : "./src/main.js?v=authoring-entry-r1";
           console.info("[TigerMessenger] entry:", entry);
           await import(entry);

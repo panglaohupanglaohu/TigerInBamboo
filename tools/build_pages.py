@@ -1,6 +1,6 @@
 """Build the public website from tracked runtime files, never local archive links."""
 from pathlib import Path
-import json, re, subprocess, shutil, sys
+import hashlib, json, re, subprocess, shutil, sys
 
 root = Path(__file__).resolve().parents[1]
 out = Path(sys.argv[1] if len(sys.argv) > 1 else '/tmp/tiger-pages-site').resolve()
@@ -8,8 +8,11 @@ if out == root or root in out.parents:
     raise SystemExit('Output must be outside the working tree')
 out.mkdir(parents=True, exist_ok=True)
 
-roots = {'frontend', 'TigerMessenger', 'CartonBook', 'townscaper-web'}
-exclude = {'artifacts', 'tests', 'tools', 'node_modules', 'docs', '.git', 'originals', 'optimized', 'godot', 'godot-web', 'tmp', '_to_delete'}
+roots = {'api', 'frontend', 'TigerMessenger', 'CartonBook', 'townscaper-web'}
+# 任意层级都排除的采集/临时/依赖目录
+exclude_any = {'artifacts', 'tests', 'node_modules', 'optimized', 'godot', 'godot-web', 'tmp', '_to_delete', 'originals'}
+# 仅顶层排除：仓库根的构建脚本与文档；TigerMessenger/src/tools 是运行时源码，必须发布
+exclude_top = {'tools', 'docs'}
 exts = {'.html','.css','.js','.mjs','.json','.png','.jpg','.jpeg','.webp','.gif','.svg','.ico','.glb','.gltf','.bin','.wasm','.woff','.woff2','.ttf','.ogg','.mp3','.wav','.glsl','.vert','.frag','.pdf'}
 
 # 概念设计图：仅在源码注释与离线资产队列中被提及，打包产物里零引用，运行时不会请求
@@ -27,6 +30,12 @@ artifact_allow = {
     'TigerMessenger/assets/models/optimized/citadel-boarding-r04/berth.json',
 }
 
+# 学习工坊运行时 fetch 的工坊快照：本地由 backend/main.py 提供，Pages 上没有后端，
+# 因此把同一路径的内容作为静态文件发布（无扩展名，靠 static_allow 放行）。
+static_allow = {
+    'api/workshop/learning-snapshot',
+}
+
 # 只发布 build.json 当前指向的运行时包；其余历史 game-*.js 每个约 7MiB，页面从不加载
 runtime_dir = 'TigerMessenger/runtime/'
 runtime_current = runtime_dir + json.loads((root / 'TigerMessenger/runtime/build.json').read_text())['file']
@@ -40,9 +49,9 @@ for name in tracked:
     rel = Path(name)
     if len(rel.parts) == 1:
         allowed = name in {'index.html', '.nojekyll'}
-    elif name in artifact_allow:
+    elif name in artifact_allow or name in static_allow:
         allowed = True
-    elif any(p in exclude or p.startswith('_backup') for p in rel.parts) or rel.parts[0] not in roots or rel.suffix.lower() not in exts:
+    elif any(p in exclude_any or p.startswith('_backup') for p in rel.parts) or rel.parts[0] in exclude_top or rel.parts[0] not in roots or rel.suffix.lower() not in exts:
         allowed = False
     elif name.startswith(exclude_paths):
         allowed = False
@@ -65,6 +74,22 @@ for name in ['frontend/home.html','TigerMessenger/pipeline.html','CartonBook/ind
     if not (out/name).is_file(): raise SystemExit('Missing public entry: '+name)
 for name in artifact_allow:
     if not (out/name).is_file(): raise SystemExit('Missing startup artifact: '+name)
+
+# 学习快照守护：静态快照必须与 learn/ 源文件逐字节一致，否则学习工坊会展示旧资料
+snapshot_rel = 'api/workshop/learning-snapshot'
+if not (out/snapshot_rel).is_file():
+    raise SystemExit('Missing static learning snapshot; run tools/build_learning_snapshot.py')
+snapshot = json.loads((out/snapshot_rel).read_text(encoding='utf-8'))
+learn_root = root / 'townscaper-web' / 'REACodeRefactoring'
+stale = [f['path'] for f in snapshot.get('files', [])
+         if not (learn_root / f['path']).is_file()
+         or hashlib.sha256((learn_root / f['path']).read_bytes()).hexdigest() != f['sha256']]
+present = {f['path'] for f in snapshot.get('files', [])} | set(snapshot.get('missing', []))
+declared = {'learn/architecture.js','learn/pipeline.js','learn/data.js','learn/coverage.json','learn/coverage-progress.json','learn/refactoring-status.js','learn/coverage-overrides.json'}
+if set(present) != declared:
+    stale.append('file set ' + ','.join(sorted(set(present) ^ declared)))
+if stale:
+    raise SystemExit('Static learning snapshot is stale (' + ', '.join(sorted(stale)) + '); run tools/build_learning_snapshot.py')
 
 # 构建期守护：打包产物里所有可加载资源引用都必须存在于发布目录，否则线上必然 404
 ref_pat = re.compile(r"""["'`(]((?:\.\./)*(?:\./)?(?:assets|music|artifacts|data|vendor)/[^"'`()\s]+?\.(?:png|jpg|jpeg|webp|gif|glb|gltf|bin|wasm|json|mp3|ogg|wav|svg|glsl|frag|vert))["'`)]""")
