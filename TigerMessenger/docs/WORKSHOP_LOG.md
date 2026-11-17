@@ -451,3 +451,16 @@ JEV本轮使用无项目数据的通用设计规则（不含路径、原文、�
 验证：仓库根 `node --test TigerMessenger/tests/*.test.mjs` 102/102 通过。注意在 `TigerMessenger/` 目录下跑会有 12 项因相对路径 `TigerMessenger/src/...` 变成 ENOENT 而失败，属既有用法问题，不是回归。
 
 下一动作：给 `combat.encounter` 加配方执行器与工坊入口（先做「选中十二门徒 → 起战场 → 看实景 → 记经验」这一条）；再做守军指挥与胜负条件。
+
+## 2026-11-17 发布版学习工坊：证据与源码必须一起上站
+
+- 症状：线上 `TigerMessenger/pipeline#scene` 弹「资源加载失败 · Failed to fetch dynamically imported module …/src/main.js?v=authoring-entry-r1」。
+- 根因一（缓存）：`studio.js` 给实景 iframe 拼的地址恒定（`?dev=1&authoringEmbed=1&authoringRevision=edit-r1…`），
+  Pages 的 HTML 有缓存窗口，浏览器会继续用部署前的 `index.html`；旧副本里发布版仍走 `src/main.js`，而站点按设计不发布 137 MiB 的 optimized 源码图。
+  修法：`authoringRevision` 提升到 `edit-r2`，`pipeline.html`/`studio.js` 导入版本提到 `lineage-r4`，凡是改 `index.html` 必须同步 bump。
+- 根因二（缺文件）：学习工坊会在浏览器里 `fetch` 交付回执做 sha256 校验，并把「查看源码」链到 `tests/`、`artifacts/coverage/`。
+  这些目录默认在 `exclude_any` 里（`artifacts` 本体 6 GiB 不可整棵发布），线上于是出现 404 与「证据或代码已变化」。
+  修法：`tools/build_pages.py` 增加 `evidence_subtrees` 精确放行
+  （`workshop-tests/**/browser.json`、`REACodeRefactoring/tests/**`、`REACodeRefactoring/artifacts/coverage/**` 的 md/json），
+  并在构建期把 `learning-backlog-deliveries.json` 里的回执路径当作发布契约：缺一个就构建失败。
+- 实测：站点 825.7 MiB / 6028 文件 / 1600 个证据文件（22.2 MiB）；`node --test TigerMessenger/tests/*.test.mjs` 102/102。

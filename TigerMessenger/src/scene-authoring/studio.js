@@ -1,7 +1,7 @@
 import {mountObjectBrowser} from './object-browser.js?v=sys-r15';
 import {mountCapabilityLibrary,classifyCapability,LAYERS,layerInsertionIndex} from './capability-library.js?v=cap-r1';
 import {mountSourceService} from './source-service.js';
-import {mountLearningWorkshop} from './learning-workshop.js?v=lineage-r3';
+import {mountLearningWorkshop} from './learning-workshop.js?v=lineage-r4';
 import {scanPipelineText,registerScannedCapabilities} from './capability-scanner.js';
 import {CAPABILITIES,makeRecipe,validateRecipe,registerCodeCapabilities,codeMetaOf} from './pipeline-model.js';
 import {mountAgentPanel} from './agent-panel.js?v=cap-r1';
@@ -75,7 +75,10 @@ const objectBrowser=mountObjectBrowser({request});
 let probing=false,probe=null;const onConnect=[];
 // 一个实景窗口三个工坊共用；球系统候选预览需要带参数重载游戏，重载后重新握手
 function startProbe(){clearInterval(probe);probe=setInterval(async()=>{if(connected||probing)return;probing=true;try{const info=await request('connect');connected=true;clearInterval(probe);objectBrowser.load();$('connection').textContent=info.capabilities?.length?'● 游戏已连接 · 能力 Worker 就绪':'● 游戏已连接 / 能力接口缺失';status(codeLibraryError?'真实场景已连接；能力代码库加载失败：'+codeLibraryError:'真实场景已连接。扫描场景能力后，按改造方向生成候选。');if(info.capabilities?.length)agentPanel.scan();for(const f of onConnect){try{f(info);}catch(e){console.warn(e);}}}catch{}finally{probing=false;}},1500);}
-function gameUrl(extra={}){const url=new URL('index.html',location.href);url.searchParams.set('dev','1');url.searchParams.set('authoringEmbed','1');url.searchParams.set('authoringRevision','edit-r1');url.searchParams.set('citadelRuntime','1');for(const [k,v] of Object.entries(extra))url.searchParams.set(k,v);return url.href;}
+// 实景 iframe 的 URL 必须带上会随发布变化的版本号：Pages 的 HTML 有缓存，
+// 若 index.html 的地址恒定不变，浏览器会一直用旧副本（旧副本里发布版仍会去 fetch
+// 未发布的 src/main.js，页面就报「资源加载失败」）。改 index.html 后同步 bump 这里。
+function gameUrl(extra={}){const url=new URL('index.html',location.href);url.searchParams.set('dev','1');url.searchParams.set('authoringEmbed','1');url.searchParams.set('authoringRevision','edit-r2');url.searchParams.set('citadelRuntime','1');for(const [k,v] of Object.entries(extra))url.searchParams.set(k,v);return url.href;}
 function reloadGame(extra={}){connected=false;for(const [,p] of pending){clearTimeout(p.timer);p.reject(Error('游戏重新加载'));}pending.clear();$('connection').textContent='○ 游戏重新加载中…';$('game').src=gameUrl(extra);startProbe();}
 $('game').src=gameUrl();startProbe();window.addEventListener('beforeunload',()=>clearInterval(probe));render();
 
