@@ -1,0 +1,39 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "boats": 2,
+      "berths": 64,
+      "lanes": 192,
+      "laneBoxes": 39,
+      "ok": 114,
+      "rejected": 78,
+      "angleCount": 3,
+      "verts": 5640,
+      "paletteSize": 126,
+      "expectVerts": 5640,
+      "pairs": 1,
+      "overlap": 0,
+      "visible": true,
+      "offVisible": false
+    },
+    {
+      "kind": "mixed",
+      "boats": 2,
+      "berths": 58,
+      "lanes": 174,
+      "laneBoxes": 37,
+      "ok": 110,
+      "rejected": 64,
+      "angleCount": 3,
+      "verts": 5160,
+      "paletteSize": 120,
+      "expectVerts": 5160,
+      "pairs": 1,
+      "overlap": 0,
+      "visible": true,
+      "offVisible": false
+    }
+  ],
+  "errors": []
+}

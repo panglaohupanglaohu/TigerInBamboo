@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-25T23:40+08:00",
+  "updatedAt": "2026-11-26T07:18:59+08:00",
   "completed": [
     "建立原版 128 个 JS 模块逐项清单、导出接口、职责落点与已知差距。",
     "配置每30分钟承接学习任务并更新首页/管线进度。",
@@ -245,7 +245,7 @@
     "newClipsThisHeartbeat": 0,
     "implementationAcceptedClipsThisHeartbeat": 4
   },
-  "latest": "第 241 轮（A 类仍空 → 收 r240 的 next[0]：`906416813810049025` 洞内光照的**面朝向判据**）→ **done，done 212→213 / partial 36→35**。先核实：r240 的「148839 px 是整面朝外岩壁」被射线分类部分推翻（37 条命中里 17 条三顶点全在洞内、18 条跨洞口、仅 2 条全在洞外）；真缺口是柱体判据把 **y=(floor+2)·L 的洞顶上表面**（法线朝上）一起压暗 —— 开/关比顶点色实测：修前 230 个被压暗、24 个在洞体格之外。改法：`insideTunnel(…,y)` + `facesCave()` 沿三维法线探 0.12 格（侧壁/地板/洞顶内表面命中，洞顶上表面与外立面落空），`worldmesh` 把乘色挪到算法线之后并传法线。读数：被压暗 230→157、格外 24→0、挡掉 73、f 0.540–0.949、maxGap 0.078、再开逐位一致；像素 99974 px（32.5%）/ mean|Δ| 7.65 / 回位 0；外立面射线点 0 changed。新测 15/15 PASS，回归 cave-light 四座真岛 PASS、默认场景冒烟零影响。残留（非机制）：压暗边缘因顶点着色外溢约一格；洞身 0.39–1.14 格长，最暗段在拐弯后拍不到全景。",
+  "latest": "第 242 轮（A 类仍空 → 表外一组 `974325184525201409` 维京登陆规划盒子）→ **done，done 213→214 / partial 35→34**。全片 6 张联系表 + frame-0250 原尺寸：全片唯一运动是相机，岛周一圈短泊位盒、每个泊位牵一条贯到远处的长车道盒、按泊位分色、一次性算完，**没有船体**。核实：旧 note 的「按到达时间的动态避让仍没做」是 r56 过期账（`steerBoat` 已做让行/侧让 + 侧偏表 + 全堵 hold），片内无船故不记缺口。真形制差=候选只画泊位小盒、没有长车道盒 → 屏上读不出「一个泊位→一条车道」。改法（只动调试视图）：`battle-c01#raidBoxes` 给候选补 `seawayBox` 长盒（只给首选且可用的，否则 192 条 + depthTest:false 糊成一片）、配色改按泊位哈希分色（被拒压暗 42%）、出 `stats.raidBerths/raidLanes/raidLaneBoxes`。读数：quad 船2/泊位64/车道192/可用114/被拒78/长盒39，mixed 2/58/174/110/64/37；顶点数 ==(船×2+车道+长盒)×24 逐项相等；颜色 126/120 种；可用泊位相交 0；同状态噪声 **0 px**；开→关差分 427945 px（29.7%）/ 397925 px（27.6%）；关档不可见；0 error。新测 `raid-boxes-c01-browser.cjs`，回归 raid-planner-terrain / battle-c01 / landing-plan / landing-traffic / obb-policy 全 PASS。残留仅形制（非机制）：编辑器俯视 vs 游戏相机、raid 层 depthTest:false 透出、调色板非原色。",
   "learningPace": {
     "targetClipsPerHour": 4,
     "goalHours": 78,
@@ -257,8 +257,8 @@
     "reviewedClips": 285,
     "remainingClips": 0,
     "countBasis": "独立视频ID、对应全帧记录和学习证据；不等同全部代码验收通过",
-    "actualClipsPerHour": 0.49,
-    "measuredAt": "2026-11-26T05:18:01.902667+08:00"
+    "actualClipsPerHour": 0.48,
+    "measuredAt": "2026-11-26T07:20:19.918623+08:00"
   },
   "session": {
     "status": "paused",

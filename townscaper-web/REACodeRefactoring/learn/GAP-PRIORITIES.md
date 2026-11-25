@@ -391,6 +391,28 @@
 > 新测 `tests/whip-smear-long-browser.cjs`：上限 32/60.38/280 单调、GPU 拖尾 **31→199px**、**GPU==CPU maxDiff 0**、实景 maxPx 280 vs 32、停转 0、开关 alpha 0；
 > r220 回归逐位不变。残差=切片质感比片内软一档（单历史纹理 4-tap vs 几何级子帧）。证据 `artifacts/coverage/1727324352264474664-review-r228.md`。该条自成一组，**无剩余机制缺口**。
 
+## 三·242、第 242 轮（A 类仍空 → 表外一组 `974325184525201409` 维京登陆规划盒子：候选车道盒补长盒 + 分色，出运行验收）→ **✔ 已收口（done 213 → 214）**
+
+**一组、一条转 done**：`974325184525201409`（504 帧 / 30.601fps / 16.47s，"…making our own box-box test… Behold, our beautiful viking raid planner"）。
+证据 `artifacts/coverage/974325184525201409-review-r242.md`；新测 `tests/raid-boxes-c01-browser.cjs`（quad+mixed 全 PASS）；
+回归 `raid-planner-terrain.mjs` / `battle-c01.mjs` / `landing-plan.mjs` / `landing-traffic.mjs` / `obb-policy.mjs` 全 PASS。
+不在 TOP 18 内，**表内无行可改**（TOP 18 路径列仍全 ✔；附录该条在 [051] 之外、无独立行）。
+
+- **全片核**（6 张联系表 + frame-0250 原尺寸）：全片唯一运动是相机；岛周一圈**短泊位盒**，每个泊位牵一条**贯到远处的长车道盒**，按泊位分色，
+  盒子一次性算完（不逐帧求解、不出现消失），**没有船体**。
+- **核实先于动手**：旧 note 的「按到达时间的动态避让仍没做」是 **r56 口径**的过期账 —— `steerBoat` 已做让行/侧让（unload > out > in 障碍序 + 侧偏表 + 全堵 hold）；
+  且片内无船，按本仓纪律（片中没拍到的机制不记缺口）不计。
+- **真形制差**：候选只画泊位小盒，**没有长车道盒** → 屏上读不出「一个泊位 → 一条车道」的成对关系（这是片内画面的主体）。
+- 改法（只动调试视图，不动规划/判定）：候选补 `seawayBox` 长车道盒，**只给首选（正对岸）且判定可用**的那些（192 条全画 + `depthTest:false` 会糊成一片）；
+  配色由「可用白 / 被拒暗红」改成**按泊位哈希分色**、被拒压暗 42%；出 `stats.raidBerths/raidLanes/raidLaneBoxes`。
+- 读数：quad 船 2 / 泊位 64 / 车道 192（=64×3）/ 可用 114 / 被拒 78 / 长盒 39；mixed 2 / 58 / 174 / 110 / 64 / 37；
+  顶点数 == (船×2 + 车道 + 长盒)×24（5640 / 5160 逐项相等）、颜色种数 126 / 120、可用泊位相交 0、
+  **同状态噪声 0 px**、开→关差分 427945 px（29.7%）/ 397925 px（27.6%）、关档 raid 层不可见、0 console error。
+- 残留（非机制）：片内是 Unity 编辑器俯视 + 棋盘格地面，本仓是游戏相机；raid 层 `depthTest:false` 会把岛后车道透出来；调色板是哈希非原片固定色。
+- 坑（第 89 条）：**模块里一处 `let` 与既有 `const` 重名，整页静默死** —— 报错只见 `Private field '#x' must be declared in an enclosing class`
+  （类体解析失败 → 所有私有字段“未声明”），playwright 侧只表现为 `waitForFunction` 超时；改完模块先看 `pageerror` 第一条，别先怀疑环境。
+- 坑（第 90 条）：调试层 `depthTest:false` 时，「盒子穿岛」是投影错觉不是几何错 —— 判「车道压陆地」要用 SAT/射线，别看截图。
+
 ## 三·241、第 241 轮（A 类仍空 → 收 r240 的 `next[0]`：`906416813810049025` 洞内光照的**面朝向判据**）→ **✔ 已收口（done 212 → 213）**
 
 **一组、一条转 done**：`906416813810049025`（725 帧）。证据 `artifacts/coverage/906416813810049025-review-r241.md`；

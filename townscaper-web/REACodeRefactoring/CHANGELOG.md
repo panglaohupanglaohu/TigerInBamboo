@@ -1,3 +1,22 @@
+## 2026-11-26T07:18+08:00 · 第 242 轮：登陆规划盒子把「泊位 → 长车道」画成对（候选车道盒补长盒 + 按泊位分色），出运行验收
+
+- 一组、1 条转 done。总账：done **213 → 214** / partial **35 → 34** / ref 15 / na 22（285/285）。
+  A 类仍空（TOP 18 路径列全 ✔）→ 表外一组 `974325184525201409`（504 帧 · 30.601fps · 16.47s，"…our own box-box test… our beautiful viking raid planner"）。
+- **核实**：旧 note 的「按到达时间的动态避让仍没做」是 r56 口径的过期账（`steerBoat` 已做让行/侧让：unload > out > in 障碍序、
+  侧偏表 0/±0.55/±1.1、全堵 hold）；且**片内没有船**，按「片中没拍到的机制不记缺口」不计。
+  全片 6 张联系表 + frame-0250 原尺寸：唯一运动是相机；岛周一圈短泊位盒，每个泊位牵一条贯到远处的长车道盒，按泊位分色，一次性算完。
+- 真形制差：候选只画泊位小盒、**没有长车道盒** → 读不出「一个泊位 → 一条车道」。改法（只动调试视图，不碰规划/判定）：
+  `battle-c01.js#raidBoxes` 给候选补 `seawayBox` 长车道盒（只给首选且可用的那些；192 条全画 + `depthTest:false` 会糊成一片）、
+  配色改成按泊位哈希分色（被拒压暗 42%）、出 `stats.raidBerths/raidLanes/raidLaneBoxes`。
+- 新测 `tests/raid-boxes-c01-browser.cjs`（quad + mixed）：船 2/2、泊位 64/58、车道 192/174（=泊位×3 档角）、可用 114/110、被拒 78/64、
+  长盒 39/37、顶点数 == (船×2+车道+长盒)×24（5640/5160 逐项相等）、颜色 126/120 种、可用泊位相交 0、
+  **同状态噪声 0 px**、开→关差分 427945 px（29.7%）/397925 px（27.6%）、关档不可见、0 console error。
+- 回归：`raid-planner-terrain.mjs`（2 万对 SAT ⇔ 裁剪面积逐一对齐）/ `battle-c01.mjs` / `landing-plan.mjs` / `landing-traffic.mjs` / `obb-policy.mjs` 全 PASS。
+- 如实：仍存形制差（非机制）——编辑器俯视 + 棋盘格 vs 游戏相机；raid 层 `depthTest:false` 会把岛后车道透出来；调色板是哈希非原片固定色。
+- 坑（第 89 条）：模块里一处 `let` 与既有 `const` 重名会让**整页静默死**，报错只显示 `Private field '#x' must be declared in an enclosing class`，
+  playwright 侧只是 `waitForFunction` 超时 —— 先看 `pageerror` 第一条，别先怀疑环境。
+- 证据 `artifacts/coverage/974325184525201409-review-r242.md`。
+
 ## 2026-11-26T05:20+08:00 · 第 241 轮：洞内光照补**面朝向判据**（沿三维法线探 0.12 格），洞顶之上那块岩体不再被压暗
 
 - 一组、1 条转 done。总账：done **212 → 213** / partial **36 → 35** / ref 15 / na 22（285/285）。

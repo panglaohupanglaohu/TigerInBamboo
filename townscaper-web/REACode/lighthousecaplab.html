@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>灯塔顶冠 — 柱高决定顶冠 + 只重算受影响柱</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:104px; right:340px; bottom:8px;
+    display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; object-fit:contain; border-radius:9px;
+    border:1px solid var(--line); background:#8fb8ba; }
+  #panel { position:fixed; right:12px; top:104px; width:316px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:4px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>灯塔顶冠：柱高 → 顶冠种类；改一格要把整柱重解（顶冠 1.50W、箍环 1.18W）</h1>
+  <p>原文 <b>1331905048801144836</b>（2020-11-26）："Townscaper now has lighthouses! This <b>pattern</b> required
+  more code <b>rewrite</b> than seems reasonable." —— 两句都是架构信息：灯塔是**模式**（柱形配置匹配），
+  而原来"放下一格就定终身"的流程必须改成可重算。数值全部来自 f110 逐像素剖面（柱身 W=88px）：
+  顶冠总高 <b>1.50W</b>、瞭望台盘 <b>1.19W</b>、玻璃带 <b>0.76W</b>、锥屋顶底 <b>1.00W</b>、柱脚箍环 <b>1.18W × 0.14W</b>。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>① 正确</b> 柱高 1/2/3 各按 capFor() 取顶冠（h=3 灯笼、h=2 炮塔、h=1 普通屋顶）</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span><b>② 正确·低柱</b> 只有 h=1/h=2：h=2 是<b>炮塔</b>（锥顶+尖），不该有灯笼 —— 对 f045</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>③ 错法：顶冠种类不随柱高重解</b> 三层柱仍挂着两层的炮塔 —— 灯笼根本不出现（对 f110）</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span><b>④ 错法：不画柱脚箍环</b> 塔身变直筒，与片子差最明显的一处</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · ① 渲染后重量的比值（÷ 柱身宽）</h2>
+  <div class="row" id="pDeck"><span>瞭望台盘宽（片中 1.19）</span><b>—</b></div>
+  <div class="row" id="pDrum"><span>灯笼鼓宽（片中 0.91）</span><b>—</b></div>
+  <div class="row" id="pGlass"><span>玻璃带宽（片中 0.76）</span><b>—</b></div>
+  <div class="row" id="pCone"><span>锥屋顶底宽（片中 1.00）</span><b>—</b></div>
+  <div class="row" id="pCap"><span>顶冠总高（片中 1.50）</span><b>—</b></div>
+  <hr />
+  <h2>同机位 A/B（同一座岛、同一相机）</h2>
+  <div class="row" id="dAB"><span>① 正确 / ② 低柱</span><b>—</b></div>
+  <div class="row" id="dAC"><span>① 正确 / ③ 顶冠不重解</span><b>—</b></div>
+  <div class="row" id="dAD"><span>① 正确 / ④ 无箍环</span><b>—</b></div>
+  <hr />
+  <h2>脏传播（原文明说的"slight optimization"）</h2>
+  <div class="row" id="pOne"><span>改 1 格 → 重解柱数</span><b>—</b></div>
+  <div class="row" id="pAll"><span>整岛重解 → 柱数</span><b>—</b></div>
+  <div class="row" id="pRatio"><span>节省比</span><b>—</b></div>
+  <hr />
+  <p style="margin:0;font-size:11px;color:var(--muted)">③ 的错法是真实的：柱底插一层后，柱顶那格的
+  <code>kind</code> 还停在旧值（<code>capAt</code> 若也停在旧值，顶冠会**埋进柱身**——第一版就是这么画的，
+  格子间互相遮挡，反而看不出错）。这就是原文"Why it needed a rewrite"：顶冠身份必须整柱冒泡。</p>
+</div>
+
+<script type="module">
+import { drawColumn, probeCap, capFor, resolveCaps, onEdit, MEASURED, ISO } from './src/lightcap.js';
+
+const TAU = Math.PI * 2;
+const BG_TOP = [133, 176, 178], BG_BOT = [104, 150, 154];
+const STONE = [150, 152, 148];
+
+function mkCam(cx, cy, p) {
+  const k = p;
+  return { p: k, pt: (u, v) => [cx + (u - v) * 0.866 * k, cy + (u + v) * 0.5 * k] };
+}
+
+function bg(ctx, W, H) {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, `rgb(${BG_TOP})`);
+  g.addColorStop(1, `rgb(${BG_BOT})`);
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+}
+
+/** 岛：一块等距圆角台 + 侧壁 + 水线下倒影，让柱脚有落处（不是悬在纯色里） */
+function island(ctx, cam, baseY) {
+  // ⚠ 第一版把岛画在"格坐标的 y"上，而格坐标的 y 是**柱顶**（drawColumn 的 topY = cy），
+  //   于是岛台横在塔身半腰。岛必须锚在柱脚：baseY = cy + stories*pitch。
+  const x0 = cam.pt(0, 0)[0] - cam.p * 0.95, x1 = cam.pt(0, 0)[0] + cam.p * 0.95;
+  const yTop = baseY - cam.p * 0.16, yBot = baseY + cam.p * 0.30;
+  const cx = (x0 + x1) / 2, rx = (x1 - x0) / 2;
+  // 侧壁
+  ctx.fillStyle = `rgb(${STONE})`;
+  ctx.beginPath();
+  ctx.moveTo(x0, (yTop + yBot) / 2);
+  ctx.lineTo(x0, yBot);
+  ctx.ellipse(cx, yBot, rx, rx * ISO * 0.9, 0, Math.PI, 0, true);
+  ctx.lineTo(x1, (yTop + yBot) / 2);
+  ctx.ellipse(cx, (yTop + yBot) / 2, rx, rx * ISO * 0.9, 0, 0, Math.PI, true);
+  ctx.closePath();
+  ctx.fill();
+  // 台面
+  ctx.fillStyle = 'rgb(198,190,172)';
+  ctx.beginPath();
+  ctx.ellipse(cx, (yTop + yBot) / 2 - cam.p * 0.06, rx, rx * ISO * 0.9, 0, 0, TAU);
+  ctx.fill();
+  // 水线白圈
+  ctx.strokeStyle = 'rgba(240,248,246,.55)';
+  ctx.lineWidth = cam.p * 0.03;
+  ctx.beginPath();
+  ctx.ellipse(cx, yBot - cam.p * 0.02, rx * 1.03, rx * ISO * 0.95, 0, 0, TAU);
+  ctx.stroke();
+}
+
+const SCENES = {
+  // 每格一根柱。⚠ 第一版每格放 4 根柱（h=1/2/3 + 一根后排），三层那根正好在最后排，
+  //   被前面的柱子全挡住 —— 四个格子里看到的其实是同一批柱子，A/B 也测不出意思。
+  A: { cells: [[0, 0, 3]], mode: 'correct' },     // ① h=3 → 灯笼
+  B: { cells: [[0, 0, 2]], mode: 'correct' },     // ② h=2 → 炮塔（对 f045）
+  C: { cells: [[0, 0, 3]], mode: 'stale' },       // ③ 顶冠停在 h-1
+  D: { cells: [[0, 0, 3]], mode: 'noCollar' },    // ④ 无柱脚箍环
+};
+
+const PALS = [
+  { wall: [236, 239, 241], accent: [203, 71, 76], roof: [224, 146, 68] },
+  { wall: [214, 178, 132], accent: [140, 86, 62], roof: [196, 120, 72] },
+  { wall: [186, 204, 214], accent: [86, 108, 140], roof: [150, 96, 74] },
+  { wall: [208, 198, 176], accent: [120, 132, 104], roof: [178, 132, 84] },
+];
+
+function render(cv, scene) {
+  const dpr = Math.min(2, devicePixelRatio || 1);
+  const W = cv.clientWidth, H = cv.clientHeight;
+  cv.width = W * dpr; cv.height = H * dpr;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  bg(ctx, W, H);
+
+  // 一根 3 层柱 + 顶冠 = 3 + 1.52 ≈ 4.5W 高，上下各留 0.3W 余量
+  const p = Math.min(W / 1.75, H / 5.1);
+  // 柱顶 y 要留出顶冠 1.52W + 余量，否则锥屋顶顶出画布（第一版就被切掉了）
+  const cam = mkCam(W * 0.5, 1.52 * p + H * 0.03, p);
+  island(ctx, cam, cam.pt(0, 0)[1] + 3 * p);
+
+  // 远的先画（u+v 小的先画会反过来，这里按屏幕 y 排序）
+  const sorted = [...scene.cells].sort((a, b) => (a[1] + a[0]) - (b[1] + b[0]));
+  let probeTarget = null;
+  sorted.forEach(([u, v, h], i) => {
+    const pal = PALS[i % PALS.length];
+    const kind = scene.mode === 'stale'
+      ? capFor({ stories: Math.max(1, h - 1), waterAdjacent: true })
+      : capFor({ stories: h, waterAdjacent: true });
+    const r = drawColumn(ctx, cam, u, v, {
+      stories: h, kind, palette: pal,
+      // ③ 只让"种类"停在旧值（capAt 仍按实际层数）—— 这是最贴近"只重画被改格"的真实错法：
+      //    柱底加了一层，顶部那格的身份没重算，于是三层柱还挂着两层的炮塔，灯笼根本不出现。
+      capAt: h,
+      noCollar: scene.mode === 'noCollar',
+    });
+    if (h === 3) probeTarget = { cx: cam.pt(u, v)[0], topY: r.topY, W: r.W };
+  });
+  return { ctx, probeTarget, cam, W, H };
+}
+
+const cvA = document.getElementById('cvA');
+const cvB = document.getElementById('cvB');
+const cvC = document.getElementById('cvC');
+const cvD = document.getElementById('cvD');
+const out = { A: null, B: null, C: null, D: null };
+
+function setRow(id, text, cls) {
+  const el = document.getElementById(id);
+  el.querySelector('b').textContent = text;
+  el.className = 'row' + (cls ? ' ' + cls : '');
+}
+
+function diffPct(a, b) {
+  const da = a.getContext('2d').getImageData(0, 0, a.width, a.height).data;
+  const db = b.getContext('2d').getImageData(0, 0, b.width, b.height).data;
+  let n = 0;
+  for (let i = 0; i < da.length; i += 4) {
+    if (Math.abs(da[i] - db[i]) + Math.abs(da[i + 1] - db[i + 1]) + Math.abs(da[i + 2] - db[i + 2]) > 12) n++;
+  }
+  return (n / (da.length / 4) * 100).toFixed(2) + '%';
+}
+
+function run() {
+  out.A = render(cvA, SCENES.A);
+  out.B = render(cvB, SCENES.B);
+  out.C = render(cvC, SCENES.C);
+  out.D = render(cvD, SCENES.D);
+
+  if (out.A.probeTarget) {
+    // ⚠ 必须在**透明的单独画布**上重画这一根柱再量：合成图里柱身两侧是岛台侧壁，
+    //   "非背景"判据会把岛台算进柱身宽（134 vs 真值 106），所有比值缩小到 0.79×。
+    const P = out.A.probeTarget;
+    const off = document.createElement('canvas');
+    off.width = P.W * 4; off.height = P.W * 4;
+    const octx = off.getContext('2d', { willReadFrequently: true });
+    const ol = P.W * 2, ocy = P.W * 3.2;
+    drawColumn(octx, { p: P.W, pt: () => [ol, ocy] }, 0, 0, {
+      stories: 3, kind: 'lantern', palette: PALS[0],
+    });
+    const pr = probeCap(octx, ol, ocy, P.W, MEASURED, true);
+    const ok = (v, t, tol = 0.06) => (Math.abs(v - t) <= tol ? 'good' : 'bad');
+    setRow('pDeck', pr.deckW + ' / ' + pr.want.deckW, ok(pr.deckW, pr.want.deckW));
+    setRow('pDrum', pr.drumW + ' / ' + pr.want.drumW, ok(pr.drumW, pr.want.drumW));
+    setRow('pGlass', pr.glassW + ' / ' + pr.want.glassW, ok(pr.glassW, pr.want.glassW));
+    setRow('pCone', pr.coneW + ' / ' + pr.want.coneW, ok(pr.coneW, pr.want.coneW, 0.08));
+    setRow('pCap', pr.capH + ' / ' + pr.want.capH, ok(pr.capH, pr.want.capH, 0.10));
+    window.__probe = pr;
+  }
+
+  setRow('dAB', diffPct(cvA, cvB));
+  setRow('dAC', diffPct(cvA, cvC));
+  setRow('dAD', diffPct(cvA, cvD));
+
+  // 脏传播：造一座 24 柱的岛，改一格，看 resolveCaps 走了几柱
+  const store = new Map();
+  for (let x = 0; x < 6; x++) for (let z = 0; z < 4; z++) store.set(x + ',' + z, { stories: 1 + ((x * 3 + z * 5) % 3) });
+  const one = onEdit(store, '2,2', { waterAround: () => true });
+  const all = resolveCaps(store, { waterAround: () => true });
+  setRow('pOne', one.touched.length + ' 柱');
+  setRow('pAll', all.stats.columns + ' 柱');
+  setRow('pRatio', (all.stats.columns / one.touched.length).toFixed(1) + ' ×', 'good');
+
+  window.__ok = true;
+}
+
+let t = 0;
+addEventListener('resize', () => { clearTimeout(t); t = setTimeout(run, 120); });
+requestAnimationFrame(run);
+</script>
+</body>
+</html>

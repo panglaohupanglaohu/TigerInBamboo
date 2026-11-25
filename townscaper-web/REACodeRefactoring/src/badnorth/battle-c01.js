@@ -31,7 +31,10 @@
  *   waterBlood   946660607008403456  落在水面的血 → 粉红血雾，6s 内铺开、随流漂、14s 淡出
  *   windTraces   926903893866541057  风矢量之外的红色风粒子轨迹：岛周一圈 + 台地上方播种，用 atmosphere.trace（共享风场 + World 体素滑移）积分画出
  *   raidBoxes    974325184525201409  维京登陆规划的 3D 盒子：每条船的泊位盒 + 整条进场走廊盒（按船着色的线框），
- *                                    下一波的候选（同一套 berthBox/approachBox/SAT/礁石判定）里被拒的画成暗红，可用的画白
+ *                                    下一波的候选（同一套 berthBox/approachBox/SAT/礁石判定）里被拒的画成暗红，可用的画白。
+ *                                    r242 按片内形制补齐：候选也画**整条长车道盒**（seawayBox，从泊位贯到 19.94 远处），
+ *                                    并按**泊位**分色（同泊位三档车道角同色），被拒的压暗到 42% —— 片 frame-0250 是
+ *                                    「岛周一圈短泊位盒、每个泊位牵一条长车道、按泊位分色」，扫掠规模出 stats.raidBerths/raidLanes
  *   portraits    1010979395719319552 / 958371606350454784  每支守军一张游戏内头像卡（切角框 + 盔 / 护鼻 / 锁甲 / 兜帽 + 背景队友，
  *                                    ui/game-portrait-c01.js：同一 sampleSlots 走表器换表），卡下是该队血量条，全灭变灰
  *   smokeShape   1015142746372366336 / 837027901853810688  烧屋黑烟：大瓣 + 顶端断开的独立烟团 + 弥散薄雾
@@ -41,7 +44,7 @@
 import * as THREE from 'three';
 import { bannerBar } from './squad-hud.js';
 import { buildRoutePreview } from '../core/route-preview.js';
-import { berthBox, approachBox, seawayBlocked, LANE_ANGLES } from './landing-plan.js';
+import { berthBox, approachBox, seawayBox, seawayBlocked, LANE_ANGLES } from './landing-plan.js';
 import { obbOverlap } from '../core/obb.js';
 import { drawGamePortrait, squadPortraitIdentity } from '../ui/game-portrait-c01.js';
 import { stainProgress, stainHex } from './ground-stain.js';
@@ -385,7 +388,11 @@ export class BattleC01 {
       for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) k.push([0, 1, 2].map((i) => B.c[i] + sx * B.e[0] * B.u[0][i] + sy * B.e[1] * B.u[1][i] + sz * B.e[2] * B.u[2][i] + (i === 1 ? lift : 0)));
       for (const [i, j] of [[0, 1], [2, 3], [4, 5], [6, 7], [0, 2], [1, 3], [4, 6], [5, 7], [0, 4], [1, 5], [2, 6], [3, 7]]) { pos.push(...k[i], ...k[j]); col.push(...c, ...c); }
     };
-    let ok = 0, rejected = 0;
+    let ok = 0, rejected = 0, berths = 0, laneN = 0, laneBoxN = 0;
+    /* 片内形制（frame-0250）：岛周一圈**短泊位盒**，每个泊位再牵出一条**贯到远处的长车道盒**，按泊位分色，
+       所以一眼能看出「哪条车道属于哪个泊位、哪些互相压」。r242 补齐长车道盒：原来候选只画泊位小盒，
+       车道只画已发船那 6 条，扫掠视图看不出「泊位 → 车道」的成对关系。 */
+    const hue = (k) => { const h = (k * 0.61803) % 1, s = 0.85, v = 0.95, i = Math.floor(h * 6), f = h * 6 - i, p = v * (1 - s), q = v * (1 - f * s), t = v * (1 - (1 - f) * s); return [[v, t, p], [q, v, p], [p, v, t], [p, q, v], [t, p, v], [v, p, q]][i % 6]; };
     b.boats.forEach((boat, i) => { const c = PAL[i % PAL.length]; box(berthBox(boat.stop, boat.dir), c, 0.2); box(approachBox(boat.stop, boat.dir), c.map((x) => x * 0.75), 0.2); });
     // 下一波候选：与 planLanding 同一套判定（泊位盒 SAT、走廊盒 SAT、航道压礁），只画不发船
     const reserved = b.boats.map((x) => berthBox(x.stop, x.dir)), lanes = b.boats.map((x) => approachBox(x.stop, x.dir));
@@ -393,17 +400,24 @@ export class BattleC01 {
     for (const land of landings.slice(0, 40)) for (const id of land.edgeNeighbors) {
       if (id < 0 || w.top(w.cells[id]) !== 0) continue;
       const sea = w.cells[id], dx = sea.cx - land.cx, dz = sea.cz - land.cz, len = Math.hypot(dx, dz); if (len < 1e-9) continue;
-      for (const da of LANE_ANGLES) {
+      const c = hue(berths++);
+      for (const [ai, da] of LANE_ANGLES.entries()) {
         const cs = Math.cos(da), sn = Math.sin(da), dir = [(dx * cs - dz * sn) / len, (dx * sn + dz * cs) / len], stop = [sea.cx + dir[0] * .25, sea.cz + dir[1] * .25], bb = berthBox(stop, dir);
         const bad = reserved.some((o) => obbOverlap(bb, o)) || lanes.some((o) => obbOverlap(approachBox(stop, dir), o)) || seawayBlocked(w, stop, dir, { except: [land] });
         if (bad) rejected++; else ok++;
-        box(bb, bad ? [.55, .12, .14] : [.92, .92, .92], 0.2);
+        // 被占/压礁的候选压暗一档（同色系），可用的是满亮度——分色仍按泊位，才能对上片里「一圈泊位各牵一条长车道」
+        const k = bad ? 0.42 : 1;
+        box(bb, c.map((x) => x * k), 0.2); laneN++;
+        // 长车道盒只画**首选（正对岸）且可用**的那一条：片里每个泊位牵一条长车道，被判死的泊位只剩短盒
+        // （192 条全画、depthTest 又关着，屏上会糊成一片；只画可走的才读得出「哪些泊位真能用」）
+        if (ai === 0 && !bad) { box(seawayBox(stop, dir), c.map((x) => x * k * 0.8), 0.2); laneBoxN++; }
       }
     }
     if (!this.raid) { this.raid = new THREE.LineSegments(new THREE.BufferGeometry(), new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.95, depthTest: false, toneMapped: false })); this.raid.renderOrder = 27; this.raid.frustumCulled = false; this.group.add(this.raid); }
     this.raid.geometry.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
     this.raid.geometry.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
     this.stats.raidBoats = b.boats.length; this.stats.raidOk = ok; this.stats.raidRejected = rejected;
+    this.stats.raidBerths = berths; this.stats.raidLanes = laneN; this.stats.raidLaneBoxes = laneBoxN;   // r242：扫掠规模（泊位数 / 车道盒数）= 片里那圈泊位 × 车道角档
   }
 
   /* ---------------------------------------------- 926903893866541057：风粒子轨迹（红线） */

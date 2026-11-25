@@ -6572,12 +6572,12 @@ window.LEARN = {
       "date": "2018-03-15",
       "text": "We were having strange crashes when using Unity's Physics.OverlapBox. We solved it (hopefully) by making our own box-box test in two incredibly stressful hours. Behold, our beautiful viking raid planner:",
       "topic": "fx",
-      "status": "partial",
-      "where": "src/core/obb.js · src/badnorth/landing-plan.js · src/badnorth/battle.js",
-      "note": "504帧全核；本轮补齐岸礁后两段与动态避让：seawayBox 航道地形检测延伸 0.8→19.94 覆盖离港全程，corridorBlocked 母船航线检测（origin→泊位外沿压陆地则退回标准走廊并计 originBlocked），steerBoat 动态避让（在航船把高优先级船当障碍，先试直线再按 ±0.55/±1.1 侧偏找干净走廊、全堵停船等让）已每帧接入 battle.js in/out 两态；残差=原 raid planner 多站位成串排布与真实避让机制未公开（侧让/停船是本地近似）。；【卡点·C 算法未公开】原 raid planner 多站位成串排布与真实避让机制未公开（侧让/停船是本地近似） → 永久卡点，需新证据再立项",
+      "status": "done",
+      "where": "src/core/obb.js · src/badnorth/landing-plan.js · src/badnorth/battle-c01.js#raidBoxes · index.html?scene=badnorth&c01=raidBoxes · tests/raid-boxes-c01-browser.cjs",
+      "note": "504帧全核（6 联系表 + frame-0250 原尺寸）：片内是自写 box-box(SAT) 测试的候选集可视化——岛周一圈短泊位盒、每个泊位牵一条贯到远处的长车道盒、按泊位分色，全片只有相机在动（无船体/无时间扫掠）。机制早已在（obb.js 15 轴 SAT + landing-plan.js 的 berthBox/approachBox/seawayBox/planLanding/corridorBlocked/steerBoat + battle-c01#raidBoxes），旧 note 的「动态避让没做」是 r56 过期账（steerBoat 已做让行/侧让），且片内无船不记缺口。本轮补真形制差：候选也画长车道盒（只给首选且可用的 39/37 条）+ 按泊位哈希分色（被拒压暗 42%）+ 出 raidBerths/raidLanes/raidLaneBoxes；新测 raid-boxes-c01-browser.cjs 双网格（64/192/114/78、58/174/110/64、顶点 5640==5640、颜色 126/120、泊位相交 0、同状态噪声 0px、开→关 427945/397925px、关档不可见）；回归 raid-planner-terrain/battle-c01/landing-plan/landing-traffic/obb-policy 全 PASS。仍存形制差（非机制）：编辑器俯视 vs 游戏相机、raid 层 depthTest:false 会透出、调色板为哈希非原色。",
       "project": "badnorth",
       "decodedFrames": 504,
-      "reviewEvidence": "artifacts/coverage/landing-approach-review.md",
+      "reviewEvidence": "artifacts/coverage/974325184525201409-review-r242.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -6586,13 +6586,11 @@ window.LEARN = {
           503
         ],
         "nativeRevisits": [
-          60,
-          180,
-          503
+          250
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "3D SAT策略及实际泊位/直线进场走廊/岸礁三段（进场·母船航线·离港）/动态让行侧让局部验收，非完整原规划器与真实避让机制"
+        "acceptanceScope": "登陆规划盒子（box-box SAT + 候选泊位/车道扫掠视图）"
       },
       "supplementaryReviewEvidence": "artifacts/coverage/landing-plan-review.md"
     },
