@@ -1,0 +1,9 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/fx-apostles-e2e/run-1795443837189",
+  "steps": {},
+  "errors": [
+    "pageerror: Unexpected identifier '且同目录至少一张'"
+  ],
+  "pass": false,
+  "failure": "page.waitForFunction: Target page, context or browser has been closed\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-apostles-browser.mjs:17:13"
+}

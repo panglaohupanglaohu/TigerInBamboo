@@ -1,0 +1,31 @@
+{
+ "capability": "planet.sea-tint",
+ "line": "planet",
+ "schemaVersion": 1,
+ "pass": true,
+ "basis": "本能力在固定 SUMMARY 考场（planet.json）真实跑过 match→runPlanetPlan 单步，成绩见共享表——判定规则写在表头，不手改。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/arena/planet.json#planet.sea-tint",
+ "runner": "TigerMessenger/tools/refactor/record-planet-arena.mjs（实算）",
+ "test": "TigerMessenger/tests/planet-caps.test.mjs",
+ "arena": {
+  "fixture": "SUMMARY+DEFAULT_PLANET_RECIPE"
+ },
+ "result": {
+  "verdict": "擂过",
+  "targets": 1,
+  "status": "applied",
+  "changed": {
+   "recipe": [],
+   "sea": [
+    "field",
+    "tint",
+    "foam",
+    "waves",
+    "reflection"
+   ],
+   "weather": []
+  },
+  "ms": 0
+ },
+ "recordedAt": "2026-11-25"
+}

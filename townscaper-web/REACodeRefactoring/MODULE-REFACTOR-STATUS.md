@@ -87,7 +87,7 @@
 | `src/propanim.js` | `src/world/prop-anim-layer.js`<br>`src/core/prop-anim.js`<br>`src/world/app.js` | 0.037 | （第 55 批，浏览器验收）合并道具网格逐顶点 slot 属性 + shader 弹簧，只上传变化槽位；?propanim=1。 |
 | `src/propframe.js` | `src/core/opening-footprint.js`<br>`src/build/buildings.js` | 0.013 | （第 53 批）贪心刚性框道具接进 World 后院（yardProps 开关），零重叠；道具是简单盒子。 |
 | `src/quadinf.js` | `src/core/infinite.js`<br>`grids.html` | 0.01 | buildInfinite 支持 origin 任意块中心开窗口、windowSeam 实测重叠区 raw/patch/blend 逐位一致；页面里未加平移窗口的交互。 |
-| `src/rayvis.js` | `src/core/space-visibility.js`<br>`src/world/space-visibility.js` | 0.086 | （第 53 批）逐格穿行射线（薄墙不漏）+ 整楼明暗烘焙 + 灰点叠加层；未写入地形顶点色。 |
+| `src/rayvis.js` | `src/core/space-visibility.js`<br>`src/core/vertex-openness.js`<br>`src/world/space-visibility.js` | 0.086 | （第 53 批）逐格穿行射线（薄墙不漏）+ 整楼明暗烘焙 + 灰点叠加层；（56 批）逐顶点烘 + c04 灰度材质；（57 批）三角网格光学 LOS + indoorAt 谓词 + 能力库 world.openness 层。 |
 | `src/rectpack.js` | `src/core/atlas.js` | 0.013 | （第 53 批）recursiveFill / 90° 旋转 / shelfPack 基线 / 手指数两口径；非最优、不自动压缩同原作。 |
 | `src/save.js` | `src/world/save.js`<br>`src/world/app.js`<br>`save-mesh.html` | 0.153 | 321帧复核后修复坏输入原子拒绝、游程越界/尾随垃圾与空列元数据，北境场景身份可往返；兼容旧v5合法串。原作位格式、跨平台拓扑身份、自定义配色及天气/玩法状态仍未覆盖。 |
 | `src/savestring.js` | `src/world/save.js`<br>`src/world/app.js`<br>`save-mesh.html` | 0.049 | 321帧复核后修复坏输入原子拒绝、游程越界/尾随垃圾与空列元数据，北境场景身份可往返；兼容旧v5合法串。原作位格式、跨平台拓扑身份、自定义配色及天气/玩法状态仍未覆盖。 |
@@ -148,7 +148,7 @@
 | `engine/backlit.js` | `src/world/outline.js` | 0.048 | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |
 | `engine/birds.js` | `src/life/birds.js` | 0.073 | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |
 | `engine/butterflies.js` | `src/life/decor.js` | 0.054 | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |
-| `engine/islands.js` | `src/badnorth/island.js` | 0.036 | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |
+| `engine/islands.js` | `src/badnorth/island.js`, `src/terrain/bn-island-field.js` | 0.036 | 第 215 批：方格高度场管线逐式迁到 bn-island-field.js，h/mat/slope/walkable/findPath/几何与裁判逐位对拍（tests/bn-island-referee.mjs 5/5）；badnorth/island.js 保留为共享 World 近似。 |
 | `engine/mesa.js` | `src/terrain/generate.js` | 0.286 | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |
 | `engine/meshcheck.js` | `grids.html` | 0 | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |
 | `engine/noise.js` | `src/core/noise.js` | 0.825 | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |

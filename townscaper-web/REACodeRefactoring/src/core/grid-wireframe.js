@@ -197,11 +197,24 @@ export function patchLayout(grid, { wireframe = null } = {}) {
     if (!groups.has(r)) groups.set(r, []);
     groups.get(r).push(c.id);
   }
+  /* 第 233 轮：族向存根 vs 几何轴 —— `cell.family` 记的是**换基前**的点阵轴向（0/30/60），
+   * 补丁被搬到自己的正交点阵后真实朝向已经变了，拿旧族向去比当前轴线，`spreadDeg` 会把
+   * 「换基」读成「抖动」（页读 42.68°，而补丁内实测角偏差 p50 0.00°）。这只是读数失真，不是补丁不齐。
+   * 这里加一路**只读**口径：以补丁自身几何轴的圆均值（轴角是 0–90 折叠量，周期 90°）为基准，
+   * `spreadGeomDeg` 才是真读数。族向与补丁划分一字不动 → 既有读数与页面断言全不变。 */
+  const meanAxis90 = (degs) => {
+    let cx = 0, cy = 0;
+    for (const d of degs) { const t = (d * Math.PI) / 45; cx += Math.cos(t); cy += Math.sin(t); }
+    const m = (Math.atan2(cy, cx) * 45) / Math.PI;
+    return ((m % 90) + 90) % 90;
+  };
   const patches = [...groups.entries()]
     .map(([root, cells]) => {
       const fam = family.get(cells[0]);
       const spread = cells.reduce((m, id) => Math.max(m, axisDelta(axis.get(id), fam)), 0);
-      return { id: root, family: fam, cells, size: cells.length, spreadDeg: spread };
+      const gAxis = meanAxis90(cells.map((id) => axis.get(id)));
+      const gSpread = cells.reduce((m, id) => Math.max(m, axisDelta(axis.get(id), gAxis)), 0);
+      return { id: root, family: fam, cells, size: cells.length, spreadDeg: spread, geomAxisDeg: +gAxis.toFixed(3), spreadGeomDeg: +gSpread.toFixed(3) };
     })
     .sort((p, q) => q.size - p.size || p.family - q.family);
   const cellPatch = new Map();
@@ -228,6 +241,7 @@ export function patchLayout(grid, { wireframe = null } = {}) {
     edgeKinds,
     edges,
     maxSpreadDeg: patches.reduce((m, p) => Math.max(m, p.spreadDeg), 0),
+    maxSpreadGeomDeg: patches.reduce((m, p) => Math.max(m, p.spreadGeomDeg), 0),
     triangleCells: grid.cells.filter((c) => c.n === 3).map((c) => c.id),
     patchCount: patches.length,
     largest: patches[0] ? patches[0].size : 0,

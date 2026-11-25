@@ -122,7 +122,10 @@ assert.deepEqual(GP.insetPolygon([[0, 0], [0, 1], [1, 1], [1, 0]], [0.1, 0.1, 0.
   const seen = new Set([yardDoor.id]), q = [world.cells[yardDoor.id]];
   while (q.length) { const c = q.pop(); for (const i of plan.links.get(c.id) || []) { const b = nbr(c, i); if (b && path[b.id] && !seen.has(b.id)) { seen.add(b.id); q.push(b); } } }
   assert.ok(seen.has(hub), 'door path reaches the hub');
-  assert.ok(plan.plots.length >= 4 && plan.plots.every((p) => p.cells.length <= 5), 'lawn split into ≤5-cell plots');
+  // r194：草格够 2×bigMin 时先切一块大田（片 0095 的「一块大田 + 若干小块」），余下仍 ≤5 格
+  const over = plan.plots.filter((p) => p.cells.length > 5);
+  assert.ok(plan.plots.length >= 4 && plan.plots.filter((p) => p.cells.length <= 5).length >= 2, 'lawn split into ≤5-cell plots (+ one big field)');
+  assert.ok(over.length <= 1 && (over.length === 0 || (over[0].big && over[0].cells.length >= 9 && over[0].cells.length <= 16)), 'at most one big field, [9,16] cells: ' + JSON.stringify(plan.stats.plotSizes));
   assert.ok(inner.every((c) => path[c.id] || plan.plotOf.has(c.id)), 'every courtyard cell is path or plot');
   // 加一扇门 → 多一条路（片子 0141–0143）
   const other = world.cells.find((c) => world.top(c) === 3 && c.id !== doorCell.id && c.cz > 2.9 && Math.abs(c.cx) < 1 && Array.from({ length: c.n }, (_, i) => nbr(c, i)).some((b) => b && byId.has(b.id)));
@@ -148,5 +151,5 @@ assert.deepEqual(GP.insetPolygon([[0, 0], [0, 1], [1, 1], [1, 0]], [0.1, 0.1, 0.
 
 /* ---------- ⑥ 开关 ---------- */
 assert.deepEqual([...parseC07('?c07=townskin,splash,nope')], ['townskin', 'splash']);
-assert.equal(parseC07('').size, 0); assert.equal(C07_KEYS.length, 7);
+assert.equal(parseC07('').size, 0); assert.equal(C07_KEYS.length, 8);   // r194 修历史遗留：sungizmo 早在 C07_KEYS 里，这里是旧计数
 console.log('c07-look ok', { slots: skinA.colors.length, vertices: rec.vertices });

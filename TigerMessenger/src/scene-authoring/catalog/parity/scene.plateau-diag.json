@@ -1,0 +1,59 @@
+{
+ "capability": "scene.plateau-diag",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "scene",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/terracecliff.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/terrace-profile.js"
+ ],
+ "inputs": {
+  "field": "24×24 台地场",
+  "water": 0
+ },
+ "metrics": [
+  {
+   "id": "land",
+   "name": "陆地格数",
+   "original": 195,
+   "refactored": 188
+  },
+  {
+   "id": "flat",
+   "name": "平缓格",
+   "refactored": 30
+  },
+  {
+   "id": "cliff",
+   "name": "崖格",
+   "refactored": 52
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "land",
+   "original": 195,
+   "refactored": 188,
+   "note": "land 口径（原版水面排除 vs 本侧 heights>0）"
+  },
+  {
+   "kind": "value",
+   "id": "slope split",
+   "original": {},
+   "refactored": {
+    "flat": 30,
+    "soft": 106,
+    "cliff": 52
+   },
+   "note": "原版按梯度角分档，本侧按相邻层差 0/1/≥2 分档"
+  }
+ ],
+ "basis": "terrace-profile 自述「inspired by classify」：同一高度场喂原版 classify 与本侧 terraceProfile，land/flat/cliff 分档口径差异如实登记。"
+}

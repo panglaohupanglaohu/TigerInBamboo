@@ -1,0 +1,51 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/battle-apostles-e2e/run-1795519565162",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描完成：6 / 6 个能力能作用。 已按「十二门徒」自动预装 6 个能力（部署战斗舞台、守军布防、登陆波次、拱洞精细门户 等），点 ▶ 执行管线一键跑完整条。",
+    "siteInfo": "舞台格网 239 格 · 最高 8 层 · 小屋 4",
+    "pipelineNodes": 6,
+    "candidate": "候选 · 验证通过",
+    "checks": [
+      "✓ 战场可用陆地 239 格 · 最高 8 层 · 小屋 4",
+      "✓ 防守目标4 个小屋 / 台地目标",
+      "✓ 舞台尺度5 米/格 · 半径 18 格",
+      "✓ 舞台覆盖采样命中陆地 239/4170 格",
+      "✓ 守军规模增援 1 队 × 8 人 = 8 人（装备 1 级）",
+      "✓ 波次节奏首波 3s · 间隔 26s",
+      "✓ 精细门户开关已开 · 身高 0.34",
+      "✓ 门户身高身高 0.34（舞台单位）",
+      "✓ 拱脚不穿墙拱下节点 1 · 拱脚探针 0 处 · 放得下身体（穿墙）0 处",
+      "✓ 门户报告复算复算一致：收窄 0 · 穿拱 0/0",
+      "✓ 会车报告复算复算一致：窄道 37 · 弯道 23 · 岔口 38",
+      "✓ 体型参数大个子半径 0.12 · 比例 0.25",
+      "✓ 对向会车8/8 到达 · 45 帧 · 最长原地 0 帧 · 最大挤压 0.092",
+      "✓ 脚高报告复算复算一致",
+      "✓ 洞里脚贴洞底洞道节点 1 · 脚不在洞底 0",
+      "✓ 楼梯踏面插值踏面最大一步 0.167 · 不插值 1"
+    ],
+    "liveBattle": {
+      "stage": true,
+      "running": true,
+      "battle": {
+        "units": 40,
+        "wave": 1,
+        "houses": 4,
+        "groupVisible": true
+      }
+    },
+    "compareHidden": true,
+    "adoptedNote": "扫描完成：6 / 6 个能力能作用。",
+    "adoptedFlag": true
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true
+}

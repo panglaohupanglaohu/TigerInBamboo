@@ -16,7 +16,7 @@
 <script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
 </head>
 <body>
-<div style="position:fixed;left:16px;bottom:8px;z-index:100;background:#20343c;color:white;padding:7px 12px;border-radius:7px;font:13px system-ui">REACode 重构版 · <a style="color:#ffe6a6" href="pipeline.html#latest-progress">最新进度</a> · <a style="color:#ffe6a6" href="coverage.html">模块映射</a> · <span data-progress-badge>加载进度…</span></div>
+<div style="position:fixed;left:16px;bottom:8px;z-index:100;background:#20343c;color:white;padding:7px 12px;border-radius:7px;font:13px system-ui;pointer-events:none">REACode 重构版 · <a style="color:#ffe6a6;pointer-events:auto" href="pipeline.html#latest-progress">最新进度</a> · <a style="color:#ffe6a6;pointer-events:auto" href="coverage.html">模块映射</a> · <span data-progress-badge>加载进度…</span></div>
 <canvas id="view"></canvas>
 <div id="hud">
   <div id="scenes" class="panel" aria-label="场景"></div>
@@ -25,6 +25,7 @@
     <button class="tool" data-tool="build" title="建造 (B)">▲</button>
     <button class="tool" data-tool="erase" title="拆除 (E)">▼</button>
     <button class="tool" data-tool="paint" title="刷色 (P)">■</button>
+    <button class="tool" data-tool="select" title="选择（S）：点选 / Shift 多选 / Esc 取消">▣</button>
     <span class="sep"></span>
     <button class="tool" id="undo" title="撤销 (Z)">↶</button>
     <button class="tool" id="redo" title="重做 (Y)">↷</button>
@@ -36,7 +37,8 @@
     <button id="demo" title="换一个种子重新生成当前场景 (R)">◎</button>
     <button id="clear" title="清空 (C)">✕</button>
     <button id="share" title="复制分享链接">⧉</button>
-    <button id="exportobj" title="导出 .OBJ（1430224300003545091）">⇩</button>
+    <button id="exportobj" title="导出主体 .OBJ（1430224300003545091）">⇩</button>
+    <button id="exportscene" title="导出场景 .OBJ+.MTL（主体+水面+植被+材质，1430224300003545091）">⇊</button>
     <button id="code-library-open" title="实际源码、能力组合与工坊入口">能力库</button>
     <button id="help" title="帮助 (H)">?</button>
   </div>

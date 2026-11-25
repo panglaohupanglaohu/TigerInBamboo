@@ -4,6 +4,8 @@
 
 ## 接手顺序
 
+0. **能力树 / 两库 / 游戏管线这条主线先读 `CAPABILITY_PIPELINE_GUIDE.md`**：项目目的、用户要求原话、REACode 与 REACodeRefactoring 怎么综合看、每轮必做的重算、现在的真实状态、后 20 轮与再后 50 轮的安排都在那里。本文件只管双工坊的周期测试与保护规则。
+
 1. 读 `../AGENTS.md`、`PROJECT_HANDOFF.md` 最新段、本 Guide、`WORKSHOP_TEST.md`、`WORKSHOP_LOG.md`，学习接入任务再读 `pipelineLearningGuide.md` 与 `pipelineLearningTest.md`。需要项目全局改动时读 PLAN/TODOS/game-progress。
 2. `git status --short` 确认并行改动；不能回滚别人未提交文件。原版 `townscaper-web/REACode`、`.workbuddy` 不动，不重复开展其他自动任务的视频学习。
 3. 查最新测试目录 summary.json/browser.json。历史 PASS 不能充当本轮 PASS；缺少证据记 NOT_RUN，依赖缺失记 BLOCKED。

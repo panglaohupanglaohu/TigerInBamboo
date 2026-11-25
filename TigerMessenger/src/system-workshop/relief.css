@@ -1,0 +1,24 @@
+/* 地貌管线面板（R41–R50）。场景管线页一直显示（擂台岛不需要游戏）；直达页签（data-layer-focus）时让位。
+   与 apostles-terrain.css 同一写法：自带样式，不改 studio.css。 */
+#relief-workshop{display:none}
+body[data-tier=scene] #relief-workshop{display:block;margin-top:16px;padding:14px 16px;border:1px solid #3a3f2c;border-radius:10px;background:linear-gradient(180deg,#14170f,#0f120c);color:#e3e8d6}
+body[data-layer-focus] #relief-workshop{display:none!important}
+#relief-workshop .rl-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+#relief-workshop .rl-head h3{margin:0;font-size:15px;letter-spacing:.04em}
+#relief-workshop .rl-head .muted,#relief-workshop .muted{color:#9aa48c;font-size:12px}
+#relief-workshop .rl-input{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+#relief-workshop .rl-input label{display:flex;gap:4px;align-items:center;font-size:12px}
+#relief-workshop .rl-main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+#relief-workshop .tier-side[data-tier=relief]{display:block}
+#relief-workshop .rl-thumbs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
+#relief-workshop .rl-thumbs figure{margin:0;background:#0b0d08;border:1px solid #2b3022;border-radius:8px;padding:6px}
+#relief-workshop .rl-thumbs canvas{width:100%;height:auto;image-rendering:pixelated;display:block}
+#relief-workshop .rl-thumbs figcaption{font-size:12px;color:#b7c0a6;margin-top:4px}
+#relief-workshop .rl-legend{font-size:11px;color:#9aa48c}
+#relief-workshop table.rl-evidence{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+#relief-workshop table.rl-evidence th,#relief-workshop table.rl-evidence td{border-bottom:1px solid #2b3022;padding:4px 6px;text-align:left;vertical-align:top}
+#relief-workshop table.rl-evidence td.ok{color:#9fd27a}#relief-workshop table.rl-evidence td.bad{color:#ff8f7a}#relief-workshop table.rl-evidence td.na{color:#c9b86a}
+#relief-workshop .rl-scene{margin-top:12px;padding:10px 12px;border:1px dashed #4a5236;border-radius:8px}
+#relief-workshop .rl-scene .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:6px}
+#relief-workshop .rl-pending{margin:6px 0 0;padding:6px 8px;border-left:3px solid #c9a227;background:#1c1a0e;font-size:12px}
+#relief-workshop[data-direct] {outline:2px solid #c9a227;outline-offset:2px}

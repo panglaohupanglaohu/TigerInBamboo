@@ -37,11 +37,12 @@ for (const kind of ['quad', 'mixed']) for (const seed of [7, 11]) {
   const victim = crate ?? props[0];
   const posBefore = layer.pos.slice(slots.get(victim.key) * 216, slots.get(victim.key) * 216 + 216);
   w.fill(w.cells[victim.cell], 0); // erase the quay cell → prop disappears (and maybe neighbours change)
-  const r2 = layer.refresh(3); layer.update(3.05);
+  const r2 = layer.refresh(3); layer.update(3.012);   // 第 192 轮：片内一帧塌陷 → 取半帧看收缩中
   const sv = layer.life.slotOf(victim.key);
   assert.equal(sv, slots.get(victim.key), 'vanishing prop keeps its slot');
   const sc = layer.scaleOf(victim.key); assert.ok(sc > 0 && sc < 1, 'shrinking, still drawn ' + sc);
   assert.deepEqual(layer.pos.slice(sv * 216, sv * 216 + 216), posBefore, 'old geometry kept for the shrink');
+  layer.update(3.05); assert.equal(layer.scaleOf(victim.key), 0, 'collapsed within one frame, slot still held');
   layer.update(3.6);
   assert.equal(layer.life.slotOf(victim.key), -1, 'slot released after shrink');
   assert.equal(layer.life.records[sv * 4 + 3], 0);
@@ -50,7 +51,7 @@ for (const kind of ['quad', 'mixed']) for (const seed of [7, 11]) {
   assert.ok(r2.floats < props.length * 72 * 9 / 4);
   // re-adding: restore -> same key grows again
   w.fill(w.cells[victim.cell], 1); w.color[victim.cell] = 0; w.touch();
-  layer.refresh(4); layer.update(4.02);
+  layer.refresh(4); layer.update(4.004);
   if (collectWorldProps(w, { L: F.L }).some((p) => p.key === victim.key)) { const s = layer.scaleOf(victim.key); assert.ok(s !== null && s < .5, 'regrows from 0'); }
   checked++;
 }

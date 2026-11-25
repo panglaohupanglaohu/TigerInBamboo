@@ -1,0 +1,54 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/nav-default-on-e2e/run-1795502289464",
+  "capabilities": [],
+  "steps": {
+    "defaultOn": {
+      "finePortals": true,
+      "unitHeight": 0.34,
+      "fine": {
+        "covered": 0,
+        "archNodes": 0,
+        "flatNodes": 0,
+        "sideWalls": 0,
+        "legs": 0,
+        "portals": 718,
+        "narrowed": 0,
+        "closed": 0,
+        "meanNarrowing": 0,
+        "unitHeight": 0.34
+      },
+      "deployNav": {
+        "finePortals": true,
+        "unitHeight": 0.34,
+        "arches": 0,
+        "archCandidates": 1,
+        "footing": false,
+        "heavy": 0,
+        "traffic": null
+      }
+    },
+    "explicitOff": {
+      "finePortals": false,
+      "deployNav": {
+        "finePortals": false,
+        "unitHeight": 0.18,
+        "arches": 0,
+        "archCandidates": 1,
+        "footing": false,
+        "heavy": 0,
+        "traffic": null
+      }
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true
+}

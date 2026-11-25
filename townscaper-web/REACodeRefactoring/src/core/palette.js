@@ -30,6 +30,7 @@ export const BUILD = {
   stone: '#8d8f95', stoneDark: '#6d6f76', band: '#7d3836',
   paving: '#5e6168', pavingAlt: '#666970',
   lawn: '#6f9a5e', lawnAlt: '#679357', tree: '#4e8558', treeLight: '#5f9a63', trunk: '#6e5443',
+  path: '#a49c8a',   // 庭院小径（裁判 townmesh.js STYLE.path；片内实测暖浅灰 190,162,148=#bea294）
   steel: '#33373e', frame: '#f6f2e8', glass: '#3d4b58', door: '#5d4a3b', chimney: '#e9e1d2', rail: '#2f3238',
 };
 

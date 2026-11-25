@@ -1,0 +1,41 @@
+{
+ "capability": "relief.cliff",
+ "line": "terrain",
+ "verdict": "equivalent",
+ "measured": {
+  "at": "2026-11-24T18:35:11.373Z",
+  "total": 0,
+  "byPath": {},
+  "unregisteredCount": 0,
+  "used": [],
+  "unused": [],
+  "ms": 6
+ },
+ "status": "measured",
+ "note": "Quick 预填（读码推断，2026-11-23 R41–R50）：verdict / measured 为 null = 还没实算；由 Kiro 跑 tools/refactor/record-relief-evidence.mjs 写入（唯一写入方）。登记的 diffs 是「已知会不同、原因已查明」的差异；实算出现登记外的差异 → tests/relief-parity.test.mjs 红。",
+ "original": "townscaper-web/REACode/src/overhangterrain.js",
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/overhang-terrain.js"
+ ],
+ "inputs": {
+  "seeds": [
+   7,
+   20261123
+  ],
+  "steps": [
+   9,
+   6
+  ],
+  "compare": "陡崖省取整后的混合高度"
+ },
+ "diffs": [],
+ "flaws": [
+  "原版 buildTerrain(seed) 不把 opts 传给 heightField，step 改不了；重构 buildTerrain(seed, opts) 会传"
+ ],
+ "extensions": [
+  "mixSoftSharp 可作用于任意高度场 + 保护格 + 陆地不变海"
+ ],
+ "harness": "TigerMessenger/src/system-workshop/terrain/parity-cases.js + parity.js",
+ "test": "TigerMessenger/tests/relief-parity.test.mjs",
+ "recordedBy": "record-relief-evidence.mjs（实算）"
+}

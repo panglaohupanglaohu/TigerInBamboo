@@ -1,0 +1,36 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/relief-old-port-e2e/run-1795545817363",
+  "scene": "old-port",
+  "steps": {
+    "keysBefore": [
+      "tm.citadelEditor.collapsed",
+      "tm.citadelEditor.dropToGround",
+      "tm.defaults.v1",
+      "tm.equatorialClouds.enabled",
+      "tm.morris.panel.collapsed",
+      "tm.questPanel.collapsed"
+    ],
+    "scanned": {
+      "direct": "old-port",
+      "scene": "old-port",
+      "note": "扫描失败：游戏场景尚未就绪",
+      "nodes": 0,
+      "status": "实景切到：旧港湾"
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "capabilities": [
+    "relief.soft",
+    "relief.cliff",
+    "relief.valley",
+    "relief.overhang",
+    "relief.ledge",
+    "relief.passes"
+  ],
+  "failure": "扫描失败：扫描失败：游戏场景尚未就绪 / 实景切到：旧港湾"
+}

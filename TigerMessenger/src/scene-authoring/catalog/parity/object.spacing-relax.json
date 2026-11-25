@@ -1,0 +1,43 @@
+{
+ "capability": "object.spacing-relax",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "object",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/rectpack.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/atlas.js"
+ ],
+ "inputs": {
+  "cases": "64×64,32×16,100×50"
+ },
+ "metrics": [
+  {
+   "id": "pack",
+   "name": "placed/fill 三组全等",
+   "equal": true
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "shelfPack 超宽",
+   "original": {
+    "placed": 1,
+    "fill": 1
+   },
+   "refactored": {
+    "placed": 0,
+    "fill": 0,
+    "rects": []
+   },
+   "note": "重构多了 w>width 提前 break 与 rects 输出"
+  }
+ ],
+ "basis": "shelfPack 同名同签名，placed/fill 逐案比；重构额外返回 rects（超集，不算差异）但 w>width 的 break 口径不同要登记。"
+}

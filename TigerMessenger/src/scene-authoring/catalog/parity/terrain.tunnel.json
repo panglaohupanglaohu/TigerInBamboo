@@ -1,0 +1,62 @@
+{
+ "capability": "terrain.tunnel",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "terrain",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/cavepath.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js"
+ ],
+ "inputs": {
+  "originalSlab": "10×4 板",
+  "arena": "9×9 岩脊"
+ },
+ "metrics": [
+  {
+   "id": "origWidth",
+   "name": "原版洞宽（格）",
+   "original": 4,
+   "refactored": 3
+  },
+  {
+   "id": "origSection",
+   "name": "原版断面",
+   "original": "起拱 1.00→冠 1.80（半椭圆）",
+   "refactored": "单层体素口（floor+1 层挖空）"
+  },
+  {
+   "id": "origRoof",
+   "name": "原版洞顶最薄",
+   "original": 0.9,
+   "refactored": "≥1 层（floor+2 及以上保留）"
+  },
+  {
+   "id": "refCarved",
+   "name": "本侧挖空格（口空顶实）",
+   "original": "—",
+   "refactored": 3
+  },
+  {
+   "id": "refApplied",
+   "name": "本侧应用",
+   "original": "—",
+   "refactored": 1
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "shape",
+   "id": "断面形状",
+   "original": "三段式半椭圆（spring 1.00→crown 1.80，层高 0.90 约 2 层）",
+   "refactored": "矩形单层口（挖 floor+1 整层）",
+   "note": "「中间高岩、两端同高地面、打通一层、顶留岩」机制一致"
+  }
+ ],
+ "basis": "cavepath 的洞口几何是连续半椭圆；本侧 tunnel 是体素层整层挖空。同一「瑞士奶酪」机制、断面表示不同如实登记——本侧擂场实挖 3 格口、顶岩保留。"
+}

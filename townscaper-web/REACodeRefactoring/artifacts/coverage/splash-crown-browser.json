@@ -1,0 +1,673 @@
+{
+ "ok": true,
+ "style": "crown",
+ "spawn": {
+  "id": 0,
+  "style": "crown"
+ },
+ "stats": {
+  "0.02": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 0.02,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0.0291,
+    "alive": true,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 1,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.2787,
+      "a": 0.8962,
+      "alive": true
+     },
+     {
+      "r": 0,
+      "a": 0,
+      "alive": false
+     },
+     {
+      "r": 0,
+      "a": 0,
+      "alive": false
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "0.18": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 0.18,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0.2346,
+    "alive": true,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 1,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.3385,
+      "a": 0.8657,
+      "alive": true
+     },
+     {
+      "r": 0,
+      "a": 0,
+      "alive": false
+     },
+     {
+      "r": 0,
+      "a": 0,
+      "alive": false
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "0.34": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 0.34,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0.3243,
+    "alive": true,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 2,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.3887,
+      "a": 0.835,
+      "alive": true
+     },
+     {
+      "r": 0.329,
+      "a": 0.5848,
+      "alive": true
+     },
+     {
+      "r": 0,
+      "a": 0,
+      "alive": false
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "0.6": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 0.6,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0.2327,
+    "alive": true,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 3,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.4535,
+      "a": 0.7844,
+      "alive": true
+     },
+     {
+      "r": 0.4322,
+      "a": 0.5515,
+      "alive": true
+     },
+     {
+      "r": 0.3297,
+      "a": 0.5873,
+      "alive": true
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "0.88": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 0.88,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0.0187,
+    "alive": true,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 3,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.5053,
+      "a": 0.729,
+      "alive": true
+     },
+     {
+      "r": 0.5148,
+      "a": 0.5151,
+      "alive": true
+     },
+     {
+      "r": 0.4646,
+      "a": 0.5515,
+      "alive": true
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "1.05": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 1.05,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0,
+    "alive": false,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 3,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.5299,
+      "a": 0.6948,
+      "alive": true
+     },
+     {
+      "r": 0.5539,
+      "a": 0.4926,
+      "alive": true
+     },
+     {
+      "r": 0.5283,
+      "a": 0.5295,
+      "alive": true
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "1.6": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 1.6,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0,
+    "alive": false,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 3,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.584,
+      "a": 0.5812,
+      "alive": true
+     },
+     {
+      "r": 0.6401,
+      "a": 0.4182,
+      "alive": true
+     },
+     {
+      "r": 0.6691,
+      "a": 0.4565,
+      "alive": true
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "2.4": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 2.4,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0,
+    "alive": false,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 3,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.6222,
+      "a": 0.4049,
+      "alive": true
+     },
+     {
+      "r": 0.7008,
+      "a": 0.3033,
+      "alive": true
+     },
+     {
+      "r": 0.7683,
+      "a": 0.3446,
+      "alive": true
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "3.2": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 3.2,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0,
+    "alive": false,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 3,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0.638,
+      "a": 0.2056,
+      "alive": true
+     },
+     {
+      "r": 0.726,
+      "a": 0.1759,
+      "alive": true
+     },
+     {
+      "r": 0.8094,
+      "a": 0.2226,
+      "alive": true
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  },
+  "3.9": {
+   "style": "crown",
+   "crownVisible": true,
+   "events": 1,
+   "age": 3.9,
+   "scale": 0.541,
+   "crown": {
+    "strips": 10,
+    "h": 0,
+    "alive": false,
+    "life": 0.9
+   },
+   "rings": {
+    "total": 3,
+    "alive": 2,
+    "life": 3.8,
+    "delays": [
+     0,
+     0.22,
+     0.5
+    ],
+    "states": [
+     {
+      "r": 0,
+      "a": 0,
+      "alive": false
+     },
+     {
+      "r": 0.7356,
+      "a": 0.0378,
+      "alive": true
+     },
+     {
+      "r": 0.825,
+      "a": 0.0991,
+      "alive": true
+     }
+    ]
+   },
+   "drops": {
+    "spawned": 11,
+    "live": 11
+   }
+  }
+ },
+ "pix": {
+  "0.3": {
+   "px": 17979,
+   "w": 265,
+   "h": 278,
+   "top": 246,
+   "peaks": [
+    {
+     "r": 6,
+     "n": 79
+    },
+    {
+     "r": 24,
+     "n": 47
+    },
+    {
+     "r": 39,
+     "n": 49
+    },
+    {
+     "r": 72,
+     "n": 1177
+    },
+    {
+     "r": 93,
+     "n": 688
+    },
+    {
+     "r": 111,
+     "n": 212
+    },
+    {
+     "r": 123,
+     "n": 194
+    },
+    {
+     "r": 135,
+     "n": 182
+    },
+    {
+     "r": 156,
+     "n": 152
+    },
+    {
+     "r": 165,
+     "n": 147
+    }
+   ],
+   "whites": {
+    "200": 13286,
+    "215": 11390,
+    "230": 3901
+   },
+   "crownWhite": 657,
+   "screen": [
+    640,
+    450
+   ]
+  },
+  "0.8": {
+   "px": 18974,
+   "w": 268,
+   "h": 221,
+   "top": 329,
+   "peaks": [
+    {
+     "r": 48,
+     "n": 56
+    },
+    {
+     "r": 96,
+     "n": 1485
+    }
+   ],
+   "whites": {
+    "200": 13292,
+    "215": 11771,
+    "230": 10373
+   },
+   "crownWhite": 337,
+   "screen": [
+    640,
+    450
+   ]
+  },
+  "1.6": {
+   "px": 29961,
+   "w": 364,
+   "h": 248,
+   "top": 322,
+   "peaks": [
+    {
+     "r": 48,
+     "n": 18
+    },
+    {
+     "r": 66,
+     "n": 24
+    },
+    {
+     "r": 81,
+     "n": 45
+    },
+    {
+     "r": 126,
+     "n": 1472
+    },
+    {
+     "r": 135,
+     "n": 1433
+    },
+    {
+     "r": 144,
+     "n": 1434
+    }
+   ],
+   "whites": {
+    "200": 14815,
+    "215": 6922,
+    "230": 2735
+   },
+   "crownWhite": 0,
+   "screen": [
+    640,
+    450
+   ]
+  },
+  "3.2": {
+   "px": 44019,
+   "w": 442,
+   "h": 271,
+   "top": 299,
+   "peaks": [
+    {
+     "r": 48,
+     "n": 18
+    },
+    {
+     "r": 66,
+     "n": 24
+    },
+    {
+     "r": 81,
+     "n": 45
+    },
+    {
+     "r": 120,
+     "n": 740
+    },
+    {
+     "r": 135,
+     "n": 1462
+    },
+    {
+     "r": 150,
+     "n": 1774
+    },
+    {
+     "r": 168,
+     "n": 1606
+    }
+   ],
+   "whites": {
+    "200": 188,
+    "215": 150,
+    "230": 0
+   },
+   "crownWhite": 0,
+   "screen": [
+    640,
+    450
+   ]
+  }
+ },
+ "noise": 0,
+ "plainStyle": "plain",
+ "plainDraw": {
+  "ringN": 1,
+  "rings": 1,
+  "crownEvents": 0
+ },
+ "plainPix": {
+  "0.3": {
+   "px": 14521,
+   "w": 238,
+   "h": 173,
+   "top": 364,
+   "peaks": [
+    {
+     "r": 84,
+     "n": 1334
+    }
+   ],
+   "whites": {
+    "200": 14167,
+    "215": 373,
+    "230": 0
+   },
+   "crownWhite": 218,
+   "screen": [
+    640,
+    450
+   ]
+  },
+  "3.2": {
+   "px": 0,
+   "w": 0,
+   "h": 0,
+   "top": 0,
+   "peaks": [],
+   "whites": {
+    "200": 447,
+    "215": 373,
+    "230": 0
+   },
+   "crownWhite": 218,
+   "screen": [
+    640,
+    450
+   ]
+  }
+ },
+ "errors": []
+}

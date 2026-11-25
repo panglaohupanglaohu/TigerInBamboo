@@ -12,17 +12,19 @@ const bounded=(from,to,budget)=>{
 };
 const match=M=>M.length?[{id:'materials',count:M.length,reason:'当前场景材质色表；保留已保存的人工调色，按真实色差限制变化'}]:[];
 export const PERCEPTUAL_CAPABILITIES=[
- {meta:{id:'scene.oklab-contrast',domain:'atmosphere',name:'感知明暗层次',
+ {meta:{id:'scene.oklab-contrast',domain:'atmosphere',line:'palette',name:'感知明暗层次',
+   reads:['materials'],writes:['materials'],preserves:['userSaves'],
    does:'用重构库OKLab转换，在材质使用次数加权的亮度中心两侧拉开或收拢层次，保留色彩方向。每种材质按实际输出色差限制改动；不修改灯光、体素或模型。',
-   related:['1482346496460828674'],modules:['src/core/oklab.js'],
+   related:['1482346496460828674'],modules:['src/core/oklab.js'],ideas:['townscaper-web/REACode/engine/outline.js'],   // 同帖落点：对比贴图喂 outline 线源
    keywords:['层次','对比','明暗','灰','contrast','oklab'],
    params:{gain:{label:'层次倍率',min:.75,max:1.4,step:.05,default:1.15},maxDelta:{label:'最大感知色差',min:1,max:20,step:1,default:8}}},
   match,run(M,p){const lab=M.map(m=>hexToOklab(m.color)),W=M.reduce((s,m)=>s+weight(m),0),pivot=M.reduce((s,m,i)=>s+lab[i][0]*weight(m),0)/Math.max(1,W),colors={};
    M.forEach((m,i)=>{const [L,a,b]=lab[i];colors[m.id]=bounded(m.color,[Math.max(0,Math.min(1,pivot+(L-pivot)*p.gain)),a,b],p.maxDelta);});return{colors,note:'材质表OKLab明暗适配；不是三角面contrast texture'};
   }},
- {meta:{id:'scene.oklab-palette',domain:'style',name:'感知色板归并',
+ {meta:{id:'scene.oklab-palette',domain:'style',line:'palette',name:'感知色板归并',
+   reads:['materials'],writes:['materials','palette'],preserves:['userSaves'],
    does:'复用重构库OKLab颜色空间，按感知色差与材质使用次数选主色，在归并时保留各材质原始明暗。保护已保存人工调色，限制每种材质的实际色差。',
-   related:['1710031224838771027','1712088611934371876'],modules:['src/core/oklab.js'],
+   related:['1710031224838771027','1712088611934371876'],modules:['src/core/oklab.js'],ideas:['townscaper-web/REACode/src/palette.js'],   // 同帖：颜色可能性空间色板
    keywords:['主色','色板','归并','颜色','统一','palette','oklab'],
    params:{colors:{label:'主色数',min:2,max:12,step:1,default:5},strength:{label:'归并程度',min:.1,max:1,step:.05,default:.5},maxDelta:{label:'最大感知色差',min:1,max:20,step:1,default:8}}},
   match,run(M,p){if(!M.length)return{colors:{}};

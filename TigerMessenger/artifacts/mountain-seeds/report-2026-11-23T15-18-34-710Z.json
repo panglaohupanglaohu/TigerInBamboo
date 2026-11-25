@@ -1,0 +1,679 @@
+{
+ "at": "2026-11-23T15:18:34.710Z",
+ "field": "arenaIsland(20261123)",
+ "genome": "seedGenome(s)：massif.seed = s，rolling.seed = 37s mod 1000，其余默认",
+ "ms": 1041,
+ "version": 1,
+ "count": 30,
+ "passed": 30,
+ "rows": [
+  {
+   "seed": 1,
+   "score": 98.1,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9538,
+    "cliff": 0,
+    "drain": 0.7073,
+    "hardEdge": 1.527,
+    "prominence": 54.99,
+    "top": 78.06
+   },
+   "ms": 70
+  },
+  {
+   "seed": 2,
+   "score": 97.4,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9347,
+    "cliff": 0,
+    "drain": 0.7088,
+    "hardEdge": 1.635,
+    "prominence": 58.84,
+    "top": 81.71
+   },
+   "ms": 36
+  },
+  {
+   "seed": 3,
+   "score": 97.2,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9315,
+    "cliff": 0,
+    "drain": 0.7124,
+    "hardEdge": 1.5245,
+    "prominence": 54.38,
+    "top": 76.72
+   },
+   "ms": 26
+  },
+  {
+   "seed": 4,
+   "score": 97.4,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9357,
+    "cliff": 0,
+    "drain": 0.7013,
+    "hardEdge": 1.5174,
+    "prominence": 49.79,
+    "top": 72.98
+   },
+   "ms": 36
+  },
+  {
+   "seed": 5,
+   "score": 97.4,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9357,
+    "cliff": 0,
+    "drain": 0.6906,
+    "hardEdge": 1.5519,
+    "prominence": 54.73,
+    "top": 78.56
+   },
+   "ms": 39
+  },
+  {
+   "seed": 6,
+   "score": 96.9,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.924,
+    "cliff": 0.0005,
+    "drain": 0.6872,
+    "hardEdge": 1.6379,
+    "prominence": 53.46,
+    "top": 76.94
+   },
+   "ms": 22
+  },
+  {
+   "seed": 7,
+   "score": 97,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9262,
+    "cliff": 0,
+    "drain": 0.7477,
+    "hardEdge": 1.5781,
+    "prominence": 59.32,
+    "top": 80.81
+   },
+   "ms": 22
+  },
+  {
+   "seed": 8,
+   "score": 97.3,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9335,
+    "cliff": 0,
+    "drain": 0.6991,
+    "hardEdge": 1.5637,
+    "prominence": 49.15,
+    "top": 72.46
+   },
+   "ms": 22
+  },
+  {
+   "seed": 9,
+   "score": 96.7,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9178,
+    "cliff": 0,
+    "drain": 0.7196,
+    "hardEdge": 1.6545,
+    "prominence": 60.77,
+    "top": 83.43
+   },
+   "ms": 23
+  },
+  {
+   "seed": 10,
+   "score": 97.2,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9313,
+    "cliff": 0.0002,
+    "drain": 0.6921,
+    "hardEdge": 1.6829,
+    "prominence": 57.73,
+    "top": 82.03
+   },
+   "ms": 25
+  },
+  {
+   "seed": 11,
+   "score": 97.3,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.933,
+    "cliff": 0,
+    "drain": 0.6955,
+    "hardEdge": 1.5124,
+    "prominence": 50.22,
+    "top": 73.29
+   },
+   "ms": 23
+  },
+  {
+   "seed": 12,
+   "score": 96.9,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9221,
+    "cliff": 0,
+    "drain": 0.7034,
+    "hardEdge": 1.7186,
+    "prominence": 60.55,
+    "top": 83.18
+   },
+   "ms": 22
+  },
+  {
+   "seed": 13,
+   "score": 96.8,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9224,
+    "cliff": 0,
+    "drain": 0.7163,
+    "hardEdge": 1.5411,
+    "prominence": 57.12,
+    "top": 79.09
+   },
+   "ms": 22
+  },
+  {
+   "seed": 14,
+   "score": 97.7,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9427,
+    "cliff": 0,
+    "drain": 0.693,
+    "hardEdge": 1.7333,
+    "prominence": 60.96,
+    "top": 84.55
+   },
+   "ms": 22
+  },
+  {
+   "seed": 15,
+   "score": 97.3,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9344,
+    "cliff": 0,
+    "drain": 0.7049,
+    "hardEdge": 1.5719,
+    "prominence": 47.55,
+    "top": 70.5
+   },
+   "ms": 22
+  },
+  {
+   "seed": 16,
+   "score": 96.3,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9078,
+    "cliff": 0,
+    "drain": 0.6986,
+    "hardEdge": 1.7167,
+    "prominence": 60.54,
+    "top": 83.04
+   },
+   "ms": 22
+  },
+  {
+   "seed": 17,
+   "score": 97.2,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9315,
+    "cliff": 0,
+    "drain": 0.7056,
+    "hardEdge": 1.6578,
+    "prominence": 59.15,
+    "top": 81.61
+   },
+   "ms": 21
+  },
+  {
+   "seed": 18,
+   "score": 97.5,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.939,
+    "cliff": 0,
+    "drain": 0.6945,
+    "hardEdge": 1.5434,
+    "prominence": 56.51,
+    "top": 79.31
+   },
+   "ms": 22
+  },
+  {
+   "seed": 19,
+   "score": 97,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9269,
+    "cliff": 0,
+    "drain": 0.7046,
+    "hardEdge": 1.5419,
+    "prominence": 52.36,
+    "top": 74.26
+   },
+   "ms": 26
+  },
+  {
+   "seed": 20,
+   "score": 97.2,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9306,
+    "cliff": 0,
+    "drain": 0.6892,
+    "hardEdge": 1.5428,
+    "prominence": 52.18,
+    "top": 74.82
+   },
+   "ms": 22
+  },
+  {
+   "seed": 21,
+   "score": 97.5,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9381,
+    "cliff": 0,
+    "drain": 0.7061,
+    "hardEdge": 1.6019,
+    "prominence": 58.64,
+    "top": 80.93
+   },
+   "ms": 23
+  },
+  {
+   "seed": 22,
+   "score": 96.9,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.924,
+    "cliff": 0,
+    "drain": 0.6858,
+    "hardEdge": 1.6794,
+    "prominence": 60.55,
+    "top": 84.1
+   },
+   "ms": 25
+  },
+  {
+   "seed": 23,
+   "score": 97.6,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9405,
+    "cliff": 0,
+    "drain": 0.694,
+    "hardEdge": 1.5391,
+    "prominence": 53.47,
+    "top": 77.11
+   },
+   "ms": 22
+  },
+  {
+   "seed": 24,
+   "score": 97.3,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.934,
+    "cliff": 0,
+    "drain": 0.6945,
+    "hardEdge": 1.5643,
+    "prominence": 52.17,
+    "top": 74.83
+   },
+   "ms": 25
+  },
+  {
+   "seed": 25,
+   "score": 97.4,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9366,
+    "cliff": 0,
+    "drain": 0.7218,
+    "hardEdge": 1.6348,
+    "prominence": 59.5,
+    "top": 80.41
+   },
+   "ms": 26
+  },
+  {
+   "seed": 26,
+   "score": 96.4,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9132,
+    "cliff": 0,
+    "drain": 0.7042,
+    "hardEdge": 1.5251,
+    "prominence": 53.31,
+    "top": 75.79
+   },
+   "ms": 23
+  },
+  {
+   "seed": 27,
+   "score": 97.8,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9444,
+    "cliff": 0,
+    "drain": 0.7,
+    "hardEdge": 1.7345,
+    "prominence": 59.46,
+    "top": 84.04
+   },
+   "ms": 22
+  },
+  {
+   "seed": 28,
+   "score": 97.3,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9342,
+    "cliff": 0,
+    "drain": 0.6872,
+    "hardEdge": 1.6294,
+    "prominence": 57.71,
+    "top": 80.14
+   },
+   "ms": 21
+  },
+  {
+   "seed": 29,
+   "score": 97.4,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9349,
+    "cliff": 0,
+    "drain": 0.7025,
+    "hardEdge": 1.64,
+    "prominence": 59.97,
+    "top": 82.23
+   },
+   "ms": 22
+  },
+  {
+   "seed": 30,
+   "score": 96.9,
+   "status": "warn",
+   "hard": [],
+   "warn": [
+    "山上能走"
+   ],
+   "metrics": {
+    "mid": 0.9233,
+    "cliff": 0,
+    "drain": 0.703,
+    "hardEdge": 1.7011,
+    "prominence": 57.26,
+    "top": 80.7
+   },
+   "ms": 21
+  }
+ ],
+ "distribution": {
+  "mid": {
+   "min": 0.9078,
+   "p10": 0.9217,
+   "median": 0.9333,
+   "p90": 0.9407,
+   "max": 0.9538,
+   "mean": 0.9313,
+   "bins": [
+    1,
+    1,
+    1,
+    5,
+    3,
+    10,
+    5,
+    3,
+    0,
+    1
+   ]
+  },
+  "cliff": {
+   "min": 0,
+   "p10": 0,
+   "median": 0,
+   "p90": 0,
+   "max": 0.0005,
+   "mean": 0,
+   "bins": [
+    28,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  "drain": {
+   "min": 0.6858,
+   "p10": 0.689,
+   "median": 0.7019,
+   "p90": 0.7166,
+   "max": 0.7477,
+   "mean": 0.7024,
+   "bins": [
+    5,
+    6,
+    8,
+    6,
+    2,
+    2,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  "hardEdge": {
+   "min": 1.5124,
+   "p10": 1.525,
+   "median": 1.59,
+   "p90": 1.7169,
+   "max": 1.7345,
+   "mean": 1.6067,
+   "bins": [
+    5,
+    6,
+    4,
+    0,
+    1,
+    5,
+    2,
+    2,
+    1,
+    4
+   ]
+  },
+  "prominence": {
+   "min": 47.55,
+   "p10": 50.177,
+   "median": 57.19,
+   "p90": 60.55,
+   "max": 60.96,
+   "mean": 56.078,
+   "bins": [
+    1,
+    3,
+    0,
+    3,
+    3,
+    3,
+    1,
+    4,
+    6,
+    6
+   ]
+  },
+  "top": {
+   "min": 70.5,
+   "p10": 73.259,
+   "median": 79.725,
+   "p90": 83.491,
+   "max": 84.55,
+   "mean": 78.921,
+   "bins": [
+    1,
+    3,
+    1,
+    3,
+    3,
+    2,
+    3,
+    6,
+    3,
+    5
+   ]
+  }
+ },
+ "pick": {
+  "best": 1,
+  "worst": 16,
+  "typical": 21,
+  "typicalDistance": 0.1242
+ }
+}

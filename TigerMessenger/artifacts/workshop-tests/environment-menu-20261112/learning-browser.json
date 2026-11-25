@@ -1,13 +1,5 @@
 {
   "errors": [],
-  "stages": [
-    "待学习（0）",
-    "待实现（77）",
-    "待验证（8）",
-    "待核对（10）",
-    "待补来源（2）",
-    "已核销（7）"
-  ],
-  "snapshotId": "sha256:d9f1b22d16cf29cdc0ee1f7e4664ce988de37585df1e043e912f42d179dee389",
-  "passed": true
+  "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('[data-progress-section=\"next\"] > summary')\n    - locator resolved to <summary>整理后待办（5） · 已核销 0</summary>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    39 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/backlog-delivery-browser.mjs:2:257",
+  "passed": false
 }

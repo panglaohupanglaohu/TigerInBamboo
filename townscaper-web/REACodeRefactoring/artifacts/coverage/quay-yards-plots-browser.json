@@ -1,0 +1,90 @@
+{
+  "out": {
+    "plain": {
+      "cells": 2516,
+      "yards": 12,
+      "open": 8,
+      "quaySealed": 0,
+      "garden": null,
+      "pathCells": 7,
+      "yardSpanX": [
+        -2.923987610586824,
+        -1.4762038048739177
+      ],
+      "version": 341
+    },
+    "garden": {
+      "cells": 2516,
+      "yards": 12,
+      "open": 8,
+      "quaySealed": 0,
+      "garden": {
+        "stats": {
+          "comps": 1,
+          "doorPaths": 1,
+          "fallbackPaths": 0,
+          "plots": 2,
+          "hubs": 1,
+          "bigPlots": 0,
+          "bigCells": 0,
+          "plotSizes": [
+            5,
+            4
+          ]
+        },
+        "plots": 2,
+        "plotCells": 9,
+        "paths": 3,
+        "doors": 1,
+        "hubs": 1
+      },
+      "pathCells": 3,
+      "yardSpanX": [
+        -2.923987610586824,
+        -1.4762038048739177
+      ],
+      "version": 341
+    },
+    "quay": {
+      "cells": 2516,
+      "yards": 36,
+      "open": 2,
+      "quaySealed": 89,
+      "garden": {
+        "stats": {
+          "comps": 7,
+          "doorPaths": 1,
+          "fallbackPaths": 1,
+          "plots": 10,
+          "hubs": 2,
+          "bigPlots": 0,
+          "bigCells": 0,
+          "plotSizes": [
+            5,
+            4,
+            3,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1
+          ]
+        },
+        "plots": 10,
+        "plotCells": 25,
+        "paths": 11,
+        "doors": 2,
+        "hubs": 2
+      },
+      "pathCells": 11,
+      "yardSpanX": [
+        -4.642598346964396,
+        4.210887016399181
+      ],
+      "version": 341
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,59 @@
+{
+ "capability": "planet.light-rock",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "mountain",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/mountainlight.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/mountain-bake.js"
+ ],
+ "inputs": {
+  "mountain": "120×90 seed=31",
+  "normalSamples": 352
+ },
+ "metrics": [
+  {
+   "id": "normal",
+   "name": "352 点法线最大差",
+   "original": 0,
+   "refactored": 0,
+   "equal": true
+  },
+  {
+   "id": "nlMean",
+   "name": "baked 岩面平均 N·L",
+   "original": 0.490785,
+   "refactored": 0.474201
+  },
+  {
+   "id": "lumaMean",
+   "name": "baked 岩面平均亮度",
+   "original": 0.664507,
+   "refactored": 0.601911
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "baked stats",
+   "original": {
+    "nlMean": 0.4907851010413509,
+    "lumaMean": 0.6645073275552706,
+    "n": 9345
+   },
+   "refactored": {
+    "nlMean": 0.4742011643469111,
+    "lumaMean": 0.6019109509255971,
+    "n": 7340
+   },
+   "note": "岩面色/光源口径差异（本地 bake 假设，非原作纹理烘焙）"
+  }
+ ],
+ "basis": "mountain-bake 自述 Port of mountainlight.js：同一高度场喂 normalAt/mountainNormalAt 逐点比法线，再比 baked 渲染的岩面均值统计。"
+}

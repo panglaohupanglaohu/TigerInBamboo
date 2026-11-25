@@ -1,0 +1,72 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/rea-terrain-citadel/run-1795270124261",
+  "steps": {
+    "probe": {
+      "ms": 978,
+      "r": {
+        "ok": true,
+        "id": "citadel",
+        "label": "高山圣城",
+        "previewing": false,
+        "site": {
+          "tris": 179233,
+          "rays": 13186,
+          "plateauRaised": 0,
+          "ms": 58,
+          "meshes": 730,
+          "cells": 13186,
+          "land": 3921,
+          "maxLevel": 12,
+          "houses": 4,
+          "scale": 5,
+          "gridRadius": 32,
+          "levelHeight": 0.45
+        },
+        "clearance": {
+          "rails": 3586,
+          "samples": 14011,
+          "tunnelSamples": 12353,
+          "maxRaise": -0.1,
+          "maxRaiseAt": {
+            "x": -17.9,
+            "z": -16.2
+          },
+          "minTightClearance": 0,
+          "minTightAt": {
+            "x": 17,
+            "z": 16.8,
+            "realClear": 0
+          },
+          "halfLevel": 1.13
+        }
+      }
+    },
+    "preview": {
+      "previewing": true,
+      "hiddenMeshes": 2,
+      "ok": true
+    },
+    "bridgeState": {
+      "active": true,
+      "id": "citadel",
+      "previewing": true,
+      "hiddenMeshes": 2,
+      "site": {
+        "tris": 179233,
+        "rays": 13186,
+        "plateauRaised": 0,
+        "ms": 58,
+        "meshes": 730,
+        "cells": 13186,
+        "land": 3921,
+        "maxLevel": 12,
+        "houses": 4,
+        "scale": 5,
+        "levelHeight": 0.45
+      }
+    },
+    "reverted": true
+  },
+  "errors": [],
+  "pass": true
+}

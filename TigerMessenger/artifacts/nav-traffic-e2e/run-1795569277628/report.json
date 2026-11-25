@@ -1,0 +1,208 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/nav-traffic-e2e/run-1795569277628",
+  "capabilities": [
+    "battle.navTraffic"
+  ],
+  "steps": {
+    "scene": "apostles",
+    "match": {
+      "count": 1,
+      "text": "✓ 窄道会车窄道 29 格 · 弯道 15 · 岔口 31"
+    },
+    "nodes": {
+      "preloaded": [
+        "battle.stage",
+        "battle.navTraffic"
+      ],
+      "added": [],
+      "now": [
+        "battle.stage",
+        "battle.garrison",
+        "battle.waves",
+        "battle.navFinePortals",
+        "battle.navTraffic",
+        "battle.navFooting"
+      ]
+    },
+    "run": {
+      "title": "候选 · 通过（需留意）",
+      "steps": [
+        "部署战斗舞台：执行舞台 36×36 格 · 5 米/格 · 士兵 1.7 米",
+        "守军布防：执行增援 1 队 × 8 人 · 装备 1 级 · 含弓手",
+        "登陆波次：执行首波 3s · 之后每 26s 一波",
+        "拱洞精细门户：执行拱下节点 1 · 平底洞 0 · 收窄门户 0 · 封死 0 · 侧壁 0；穿墙探针 0 处：关时放得下身体 0，开后拦下 0；穿拱模拟 0 处：开 到达 0 / 穿拱 0 / 擦墙帧 0；关 擦墙帧 0",
+        "窄道会车：执行窄道 29 格 · 弯道 15 · 岔口 31 · 窄门会车冲突 2；体型重路由：264 对起终点里大个子绕路 0、走不通 0（最大绕路 ×1）；对向会车（窄道 3 格）：7/8 到达（大个子 1/2）· 用了 2400 帧 · 最长原地 2390 帧",
+        "穿洞与脚高插值：执行楼梯 44 架：踏面最大一步 0.167（不插值一步 1）；洞道节点 1：脚高不在洞底的 0 个（洞顶比洞底高 2）；逐帧 20 帧：脚高最大跳变 0.167（不插值 1）· 楼梯帧 17 · 洞道帧 0"
+      ],
+      "checks": [
+        {
+          "status": "pass",
+          "text": "✓ 战场可用陆地 241 格 · 最高 8 层 · 小屋 4"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 防守目标4 个小屋 / 台地目标"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 舞台尺度5 米/格 · 半径 18 格"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 舞台覆盖采样命中陆地 241/4170 格"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 守军规模增援 1 队 × 8 人 = 8 人（装备 1 级）"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 波次节奏首波 3s · 间隔 26s"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 精细门户开关已开 · 身高 0.34"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 门户身高身高 0.34（舞台单位）"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 拱脚不穿墙拱下节点 1 · 拱脚探针 0 处 · 放得下身体（穿墙）0 处"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 门户报告复算复算一致：收窄 0 · 穿拱 0/0"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 会车报告复算复算一致：窄道 29 · 弯道 15 · 岔口 31"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 体型参数大个子半径 0.12 · 比例 0.25"
+        },
+        {
+          "status": "warn",
+          "text": "! 对向会车7/8 到达 · 2400 帧 · 最长原地 2390 帧 · 最大挤压 0.103"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 脚高报告复算复算一致"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 洞里脚贴洞底洞道节点 1 · 脚不在洞底 0"
+        },
+        {
+          "status": "pass",
+          "text": "✓ 楼梯踏面插值踏面最大一步 0.167 · 不插值 1"
+        }
+      ]
+    },
+    "stepText": "窄道会车：执行窄道 29 格 · 弯道 15 · 岔口 31 · 窄门会车冲突 2；体型重路由：264 对起终点里大个子绕路 0、走不通 0（最大绕路 ×1）；对向会车（窄道 3 格）：7/8 到达（大个子 1/2）· 用了 2400 帧 · 最长原地 2390 帧",
+    "navChecks": [
+      {
+        "status": "pass",
+        "text": "✓ 会车报告复算复算一致：窄道 29 · 弯道 15 · 岔口 31"
+      },
+      {
+        "status": "pass",
+        "text": "✓ 体型参数大个子半径 0.12 · 比例 0.25"
+      },
+      {
+        "status": "warn",
+        "text": "! 对向会车7/8 到达 · 2400 帧 · 最长原地 2390 帧 · 最大挤压 0.103"
+      }
+    ],
+    "samples": [
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      },
+      {
+        "units": 32,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "clips": 0,
+        "covered": 0
+      }
+    ],
+    "reroute": {
+      "tried": 33,
+      "rerouted": 0,
+      "blocked": 0,
+      "minPortal": 0.25707654705971156
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true
+}

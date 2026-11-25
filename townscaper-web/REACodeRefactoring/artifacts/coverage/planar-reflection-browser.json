@@ -1,0 +1,119 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "layerPx": 5902,
+      "leakAbove": 0,
+      "horizon": -226.1,
+      "noise": 0,
+      "restored": 0,
+      "mirCells": 2387,
+      "explained": 4123,
+      "tested": 1469,
+      "waterHit": 1451,
+      "notWater": 18,
+      "badPx": [
+        [
+          117,
+          223
+        ],
+        [
+          99,
+          231
+        ],
+        [
+          87,
+          237
+        ],
+        [
+          535,
+          279
+        ],
+        [
+          533,
+          281
+        ],
+        [
+          521,
+          291
+        ]
+      ],
+      "freeHit": 1451,
+      "freeTested": 1469,
+      "occLeak": 18,
+      "occTested": 1469,
+      "rtt": {
+        "w": 640,
+        "h": 410,
+        "cover": 34.7,
+        "ms": 0.7
+      },
+      "skirt": {
+        "radNarrow": 1.2212,
+        "radWide": 1.954,
+        "ratio": 1.6
+      },
+      "versionUnchanged": true,
+      "strength": 0.72,
+      "fail": []
+    },
+    {
+      "kind": "quad",
+      "layerPx": 11281,
+      "leakAbove": 0,
+      "horizon": -226.1,
+      "noise": 0,
+      "restored": 0,
+      "mirCells": 2820,
+      "explained": 10392,
+      "tested": 2826,
+      "waterHit": 2785,
+      "notWater": 41,
+      "badPx": [
+        [
+          537,
+          237
+        ],
+        [
+          537,
+          239
+        ],
+        [
+          537,
+          241
+        ],
+        [
+          547,
+          261
+        ],
+        [
+          547,
+          265
+        ],
+        [
+          547,
+          267
+        ]
+      ],
+      "freeHit": 2785,
+      "freeTested": 2826,
+      "occLeak": 41,
+      "occTested": 2826,
+      "rtt": {
+        "w": 640,
+        "h": 410,
+        "cover": 29.8,
+        "ms": 0.6
+      },
+      "skirt": {
+        "radNarrow": 1.2595,
+        "radWide": 2.0152,
+        "ratio": 1.6
+      },
+      "versionUnchanged": true,
+      "strength": 0.72,
+      "fail": []
+    }
+  ],
+  "errors": []
+}

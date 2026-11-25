@@ -1,0 +1,854 @@
+TAP version 13
+# Subtest: all posts preserve evidence and are sorted by exact author time, never study round or scan time
+ok 1 - all posts preserve evidence and are sorted by exact author time, never study round or scan time
+  ---
+  duration_ms: 17.558042
+  type: 'test'
+  ...
+# Subtest: same-post explanations and cross-project combinations remain distinct from scoped replacements
+ok 2 - same-post explanations and cross-project combinations remain distinct from scoped replacements
+  ---
+  duration_ms: 5.719
+  type: 'test'
+  ...
+# Subtest: changed source invalidates only dependent interpretation and changes shared fingerprint
+ok 3 - changed source invalidates only dependent interpretation and changes shared fingerprint
+  ---
+  duration_ms: 34.410625
+  type: 'test'
+  ...
+# Subtest: physical scan and catalog carry the same evolution fingerprint without promoting executable status
+ok 4 - physical scan and catalog carry the same evolution fingerprint without promoting executable status
+  ---
+  duration_ms: 365.906917
+  type: 'test'
+  ...
+# Subtest: every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations
+not ok 5 - every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations
+  ---
+  duration_ms: 9.813625
+  type: 'test'
+  location: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/capability-evolution.test.mjs:37:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    The expression evaluated to a falsy value:
+    
+      assert.ok(partials.every(e=>e.completion.current&&['高','中','低'].includes(e.completion.priority)&&e.completion.acceptance&&e.completion.nextAction))
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: '=='
+  stack: |-
+    TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/capability-evolution.test.mjs:38:221)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+# Subtest: 代际按关系与阶段切分，方向先向前
+ok 6 - 代际按关系与阶段切分，方向先向前
+  ---
+  duration_ms: 8.720792
+  type: 'test'
+  ...
+# Subtest: 模块归线、import 推断与组合前置
+ok 7 - 模块归线、import 推断与组合前置
+  ---
+  duration_ms: 0.418542
+  type: 'test'
+  ...
+# Subtest: 补学队列：得分、理由，以及经验 / 管线需求回流
+ok 8 - 补学队列：得分、理由，以及经验 / 管线需求回流
+  ---
+  duration_ms: 0.685167
+  type: 'test'
+  ...
+# Subtest: 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置
+ok 9 - 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置
+  ---
+  duration_ms: 0.444541
+  type: 'test'
+  ...
+# Subtest: 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定
+ok 10 - 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定
+  ---
+  duration_ms: 59.626917
+  type: 'test'
+  ...
+# Subtest: 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学
+ok 11 - 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学
+  ---
+  duration_ms: 137.560583
+  type: 'test'
+  ...
+# Subtest: 每条能力线恰好挂在一个枝上，枝的合计等于各线之和
+ok 12 - 每条能力线恰好挂在一个枝上，枝的合计等于各线之和
+  ---
+  duration_ms: 0.5915
+  type: 'test'
+  ...
+# Subtest: 双源对账：每个原版叶子状态与对齐数据一致
+ok 13 - 双源对账：每个原版叶子状态与对齐数据一致
+  ---
+  duration_ms: 0.319542
+  type: 'test'
+  ...
+# Subtest: JEV 归线只采纳置信度 ≥ 0.85 的结果
+ok 14 - JEV 归线只采纳置信度 ≥ 0.85 的结果
+  ---
+  duration_ms: 0.315292
+  type: 'test'
+  ...
+# Subtest: 嫁接队列按分排序，条目都是只在原版或接口没带全
+ok 15 - 嫁接队列按分排序，条目都是只在原版或接口没带全
+  ---
+  duration_ms: 0.139958
+  type: 'test'
+  ...
+# Subtest: 解锁前沿：自己不能执行、前置都能执行
+ok 16 - 解锁前沿：自己不能执行、前置都能执行
+  ---
+  duration_ms: 0.093292
+  type: 'test'
+  ...
+# Subtest: 目标路径「圣城山形」：6 个能力都挂在存在的能力线上，声明调用的库模块真实存在
+ok 17 - 目标路径「圣城山形」：6 个能力都挂在存在的能力线上，声明调用的库模块真实存在
+  ---
+  duration_ms: 0.459333
+  type: 'test'
+  ...
+# Subtest: 山形：六步管线把方台变成山，保护区 / 轨道 / 海岸一格不动
+ok 18 - 山形：六步管线把方台变成山，保护区 / 轨道 / 海岸一格不动
+  ---
+  duration_ms: 79.886208
+  type: 'test'
+  ...
+# Subtest: 山形：同样输入结果确定；步骤乱序也按固定顺序执行
+ok 19 - 山形：同样输入结果确定；步骤乱序也按固定顺序执行
+  ---
+  duration_ms: 59.455416
+  type: 'test'
+  ...
+# Subtest: 验证：改动保护区 / 淹掉海岸 / 山体压到轨旁都判失败
+ok 20 - 验证：改动保护区 / 淹掉海岸 / 山体压到轨旁都判失败
+  ---
+  duration_ms: 73.679708
+  type: 'test'
+  ...
+# Subtest: whole directory has exactly one reviewed row per actual code file, including HTML and tools
+not ok 21 - whole directory has exactly one reviewed row per actual code file, including HTML and tools
+  ---
+  duration_ms: 1.700875
+  type: 'test'
+  location: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/reacode-file-status.test.mjs:4:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    ... Skipped lines
+    
+      [
+        'Townscaper.html',
+        'alivelab.html',
+        'archvoidlab.html',
+        'blobshadowlab.html',
+    ...
+        'quadspherelab.html',
+    -   'shorelab.html',
+        'shrubcardlab.html',
+        'slotsolvelab.html',
+        'smokelab.html',
+        'snapshot64lab.html',
+        'socketrocklab.html',
+    ...
+        'src/campaignmap.js',
+    -   'src/cascades.js',
+        'src/cavepath.js',
+        'src/cheesenav.js',
+        'src/clouddeck.js',
+        'src/colorgamut.js',
+        'src/colorvolume.js',
+    ...
+        'src/housekit.js',
+    -   'src/icefringe.js',
+        'src/infograph.js',
+        'src/islandpasses.js',
+        'src/learnpanel.js',
+        'src/levelflora.js',
+        'src/lighting.js',
+    ...
+        'src/texelsnap.js',
+    -   'src/tideflat.js',
+        'src/tileforce.js',
+        'src/tileplace.js',
+        'src/tilerepair.js',
+        'src/topoline.js',
+        'src/town.js',
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    0: 'Townscaper.html'
+    1: 'alivelab.html'
+    2: 'archvoidlab.html'
+    3: 'blobshadowlab.html'
+    4: 'bloodfieldlab.html'
+    5: 'bouncelab.html'
+    6: 'buildanimlab.html'
+    7: 'campaignmaplab.html'
+    8: 'cavepathlab.html'
+    9: 'clouddecklab.html'
+    10: 'colorvolumelab.html'
+    11: 'combatlab.html'
+    12: 'compare.html'
+    13: 'contrasttexlab.html'
+    14: 'courtyardlab.html'
+    15: 'decalboillab.html'
+    16: 'decolab.html'
+    17: 'depfilllab.html'
+    18: 'engine/aoviz.html'
+    19: 'engine/atlasorder.html'
+    20: 'engine/backlit.js'
+    21: 'engine/badnorth.html'
+    22: 'engine/ballistic.html'
+    23: 'engine/barycentric.html'
+    24: 'engine/birds.js'
+    25: 'engine/blendlab.html'
+    26: 'engine/blobs.html'
+    27: 'engine/blotch.js'
+    28: 'engine/bnbrush.js'
+    29: 'engine/bncanopy.js'
+    30: 'engine/border.html'
+    31: 'engine/boxtest.html'
+    32: 'engine/butterflies.js'
+    33: 'engine/cage.js'
+    34: 'engine/cavenav.html'
+    35: 'engine/cheese.html'
+    36: 'engine/contour.js'
+    37: 'engine/demo.html'
+    38: 'engine/fitlab.html'
+    39: 'engine/flags.js'
+    40: 'engine/fog.js'
+    41: 'engine/frontier.html'
+    42: 'engine/gridmodes.html'
+    43: 'engine/hallway.html'
+    44: 'engine/impostor.js'
+    45: 'engine/infograph.html'
+    46: 'engine/islands.js'
+    47: 'engine/lightvol.js'
+    48: 'engine/los.js'
+    49: 'engine/mandala.html'
+    50: 'engine/mesa.js'
+    51: 'engine/meshcheck.js'
+    52: 'engine/mipfilter.html'
+    53: 'engine/mixedpersp.html'
+    54: 'engine/navflow.html'
+    55: 'engine/navgrid.html'
+    56: 'engine/noise.js'
+    57: 'engine/normalsmooth.js'
+    58: 'engine/ornament.html'
+    59: 'engine/ornament.js'
+    60: 'engine/outline.js'
+    61: 'engine/piperepair.html'
+    62: 'engine/portrait.html'
+    63: 'engine/props.html'
+    64: 'engine/props.js'
+    65: 'engine/rayvis.html'
+    66: 'engine/reflection.js'
+    67: 'engine/relax.js'
+    68: 'engine/repair.html'
+    69: 'engine/rivers.js'
+    70: 'engine/roofs.js'
+    71: 'engine/shorefield.js'
+    72: 'engine/snapshot.js'
+    73: 'engine/snow.js'
+    74: 'engine/sphere.html'
+    75: 'engine/sphere.js'
+    76: 'engine/splash.html'
+    77: 'engine/splash.js'
+    78: 'engine/splice.html'
+    79: 'engine/spritepack.js'
+    80: 'engine/surface.js'
+    81: 'engine/surfaceshadow.js'
+    82: 'engine/terrain.html'
+    83: 'engine/terrain.js'
+    84: 'engine/texlab.html'
+    85: 'engine/tileplace.html'
+    86: 'engine/traffic.html'
+    87: 'engine/triflow.html'
+    88: 'engine/trigraph.html'
+    89: 'engine/triisland.html'
+    90: 'engine/unitbatch.html'
+    91: 'engine/units.html'
+    92: 'engine/vertexlight.js'
+    93: 'engine/voxelshadow.js'
+    94: 'engine/waterfall.js'
+    95: 'engine/watervol.js'
+    96: 'engine/waves.js'
+    97: 'engine/world.html'
+    98: 'engine/worldmap.html'
+    99: 'engine/worldmap.js'
+    100: 'flow.html'
+    101: 'foliagebloblab.html'
+    102: 'fusion.html'
+    103: 'game.html'
+    104: 'grassedgelab.html'
+    105: 'gridpatchlab.html'
+    106: 'hiprooflab.html'
+    107: 'housekitlab.html'
+    108: 'index.html'
+    109: 'islandpasseslab.html'
+    110: 'learn.html'
+    111: 'learn/data.js'
+    112: 'learn/learned.js'
+    113: 'learn/learnui.js'
+    114: 'learn/pipeline.js'
+    115: 'learned.html'
+    116: 'levelfloralab.html'
+    117: 'looptintlab.html'
+    118: 'megatexlab.html'
+    119: 'mirrordecorlab.html'
+    120: 'mixedwfclab.html'
+    121: 'navribbonlab.html'
+    122: 'occmasklab.html'
+    123: 'oldclips.html'
+    124: 'orderbadgelab.html'
+    125: 'overhangterrainlab.html'
+    126: 'overview.html'
+    127: 'patchclusterlab.html'
+    128: 'penumbralab.html'
+    129: 'piercefloorlab.html'
+    130: 'pipeline.html'
+    131: 'planetatmolab.html'
+    132: 'plantlab.html'
+    133: 'propframelab.html'
+    134: 'quadinflab.html'
+    135: 'quadspherelab.html'
+    136: 'shorelab.html'
+    137: 'shrubcardlab.html'
+    138: 'slotsolvelab.html'
+    139: 'smokelab.html'
+    140: 'snapshot64lab.html'
+    141: 'socketrocklab.html'
+    142: 'spherefusion.html'
+    143: 'squadbannerlab.html'
+    144: 'squarehexlab.html'
+    145: 'squigglefieldlab.html'
+    146: 'src/adjacency.js'
+    147: 'src/app.js'
+    148: 'src/archvoid.js'
+    149: 'src/ballistic.js'
+    150: 'src/barycentric.js'
+    151: 'src/birds.js'
+    152: 'src/blobrelax.js'
+    153: 'src/blobshadow.js'
+    154: 'src/bloodfield.js'
+    155: 'src/borderpath.js'
+    156: 'src/bouncegi.js'
+    157: 'src/boxtest.js'
+    158: 'src/buildanim.js'
+    159: 'src/campaignmap.js'
+    160: 'src/cascades.js'
+    161: 'src/cavepath.js'
+    162: 'src/cheesenav.js'
+    163: 'src/clouddeck.js'
+    164: 'src/colorgamut.js'
+    165: 'src/colorvolume.js'
+    166: 'src/combatfx.js'
+    167: 'src/contrast.js'
+    168: 'src/contrasttex.js'
+    169: 'src/coroutine.js'
+    170: 'src/courtyard.js'
+    171: 'src/decalfield.js'
+    172: 'src/demo.js'
+    173: 'src/depfill.js'
+    174: 'src/dfgrow.js'
+    175: 'src/dirsprites.js'
+    176: 'src/doodlewall.js'
+    177: 'src/dual.js'
+    178: 'src/edgeplant.js'
+    179: 'src/edgesmooth.js'
+    180: 'src/floatprobe.js'
+    181: 'src/flowdemo.js'
+    182: 'src/flowfield.js'
+    183: 'src/foliageblob.js'
+    184: 'src/frontier.js'
+    185: 'src/fusion.js'
+    186: 'src/grasscards.js'
+    187: 'src/grassedge.js'
+    188: 'src/grid.js'
+    189: 'src/gridmodes.js'
+    190: 'src/gridpatch.js'
+    191: 'src/gridwfc.js'
+    192: 'src/grouping.js'
+    193: 'src/halfedge.js'
+    194: 'src/hiproof.js'
+    195: 'src/holenav.js'
+    196: 'src/housekit.js'
+    197: 'src/icefringe.js'
+    198: 'src/infograph.js'
+    199: 'src/islandpasses.js'
+    200: 'src/learnpanel.js'
+    201: 'src/levelflora.js'
+    202: 'src/lighting.js'
+    203: 'src/lightingcache.js'
+    204: 'src/looptint.js'
+    205: 'src/looptown.js'
+    206: 'src/mandala.js'
+    207: 'src/march.js'
+    208: 'src/megatex.js'
+    209: 'src/mesh.js'
+    210: 'src/mipcustom.js'
+    211: 'src/mipfilter.js'
+    212: 'src/mirrordecor.js'
+    213: 'src/mixedwfc.js'
+    214: 'src/mountainlight.js'
+    215: 'src/navgraph.js'
+    216: 'src/navgrid.js'
+    217: 'src/navribbon.js'
+    218: 'src/occmask.js'
+    219: 'src/orderbadge.js'
+    220: 'src/overhangterrain.js'
+    221: 'src/paintnormal.js'
+    222: 'src/palette.js'
+    223: 'src/partsprites.js'
+    224: 'src/patchblend.js'
+    225: 'src/patchcluster.js'
+    226: 'src/penumbra.js'
+    227: 'src/piercefloor.js'
+    228: 'src/piperepair.js'
+    229: 'src/planetatmo.js'
+    230: 'src/portrait.js'
+    231: 'src/propanim.js'
+    232: 'src/propframe.js'
+    233: 'src/quadgrid.js'
+    234: 'src/quadinf.js'
+    235: 'src/quadsphere.js'
+    236: 'src/quadtex.js'
+    237: 'src/rayvis.js'
+    238: 'src/rectpack.js'
+    239: 'src/reflstreak.js'
+    240: 'src/repeatbreak.js'
+    241: 'src/save.js'
+    242: 'src/savestring.js'
+    243: 'src/scene.js'
+    244: 'src/shore.js'
+    245: 'src/shrubcard.js'
+    246: 'src/slotsolve.js'
+    247: 'src/smear.js'
+    248: 'src/smokefx.js'
+    249: 'src/snapshot64.js'
+    250: 'src/socketrock.js'
+    251: 'src/spherefusion.js'
+    252: 'src/spherehouse.js'
+    253: 'src/spheretown.js'
+    254: 'src/splice.js'
+    255: 'src/squadbanner.js'
+    256: 'src/squarehex.js'
+    257: 'src/squigglefield.js'
+    258: 'src/stilts.js'
+    259: 'src/storydatum.js'
+    260: 'src/surfacedeco.js'
+    261: 'src/surfaceshadow.js'
+    262: 'src/terracecliff.js'
+    263: 'src/terraceladder.js'
+    264: 'src/terrainmesh.js'
+    265: 'src/texelsnap.js'
+    266: 'src/tideflat.js'
+    267: 'src/tileforce.js'
+    268: 'src/tileplace.js'
+    269: 'src/tilerepair.js'
+    270: 'src/topoline.js'
+    271: 'src/town.js'
+    272: 'src/townmesh.js'
+    273: 'src/trace.js'
+    274: 'src/traffic.js'
+    275: 'src/triGraph.js'
+    276: 'src/triflow.js'
+    277: 'src/triflowfield.js'
+    278: 'src/triisland.js'
+    279: 'src/uidecor.js'
+    280: 'src/uikit.js'
+    281: 'src/unitbatch.js'
+    282: 'src/unitsnap.js'
+    283: 'src/voxelao.js'
+    284: 'src/voxelflow.js'
+    285: 'src/voxelnav.js'
+    286: 'src/wake.js'
+    287: 'src/walkreach.js'
+    288: 'src/wind.js'
+    289: 'src/wobbletex.js'
+    290: 'stiltslab.html'
+    291: 'storydatumlab.html'
+    292: 'terraceclifflab.html'
+    293: 'terraceladderlab.html'
+    294: 'tmp/cap/bsheet.html'
+    295: 'tmp/cap/bsheet2.html'
+    296: 'tools/ab.mjs'
+    297: 'tools/add.mjs'
+    298: 'tools/batch-ids.mjs'
+    299: 'tools/batch.mjs'
+    300: 'tools/contact-sheet.mjs'
+    301: 'tools/mark.mjs'
+    302: 'tools/measure.html'
+    303: 'tools/measure.mjs'
+    304: 'tools/pixprobe.mjs'
+    305: 'tools/player.html'
+    306: 'tools/posters.mjs'
+    307: 'tools/report.mjs'
+    308: 'tools/shot.mjs'
+    309: 'tools/video-frames.mjs'
+    310: 'triflowfieldlab.html'
+    311: 'uidecorlab.html'
+    312: 'uikitlab.html'
+    313: 'unitsnaplab.html'
+    314: 'vendor/three.module.js'
+    315: 'wakelab.html'
+    316: 'walkreachlab.html'
+  actual:
+    0: 'Townscaper.html'
+    1: 'alivelab.html'
+    2: 'archvoidlab.html'
+    3: 'blobshadowlab.html'
+    4: 'bloodfieldlab.html'
+    5: 'bouncelab.html'
+    6: 'buildanimlab.html'
+    7: 'campaignmaplab.html'
+    8: 'cavepathlab.html'
+    9: 'clouddecklab.html'
+    10: 'colorvolumelab.html'
+    11: 'combatlab.html'
+    12: 'compare.html'
+    13: 'contrasttexlab.html'
+    14: 'courtyardlab.html'
+    15: 'decalboillab.html'
+    16: 'decolab.html'
+    17: 'depfilllab.html'
+    18: 'engine/aoviz.html'
+    19: 'engine/atlasorder.html'
+    20: 'engine/backlit.js'
+    21: 'engine/badnorth.html'
+    22: 'engine/ballistic.html'
+    23: 'engine/barycentric.html'
+    24: 'engine/birds.js'
+    25: 'engine/blendlab.html'
+    26: 'engine/blobs.html'
+    27: 'engine/blotch.js'
+    28: 'engine/bnbrush.js'
+    29: 'engine/bncanopy.js'
+    30: 'engine/border.html'
+    31: 'engine/boxtest.html'
+    32: 'engine/butterflies.js'
+    33: 'engine/cage.js'
+    34: 'engine/cavenav.html'
+    35: 'engine/cheese.html'
+    36: 'engine/contour.js'
+    37: 'engine/demo.html'
+    38: 'engine/fitlab.html'
+    39: 'engine/flags.js'
+    40: 'engine/fog.js'
+    41: 'engine/frontier.html'
+    42: 'engine/gridmodes.html'
+    43: 'engine/hallway.html'
+    44: 'engine/impostor.js'
+    45: 'engine/infograph.html'
+    46: 'engine/islands.js'
+    47: 'engine/lightvol.js'
+    48: 'engine/los.js'
+    49: 'engine/mandala.html'
+    50: 'engine/mesa.js'
+    51: 'engine/meshcheck.js'
+    52: 'engine/mipfilter.html'
+    53: 'engine/mixedpersp.html'
+    54: 'engine/navflow.html'
+    55: 'engine/navgrid.html'
+    56: 'engine/noise.js'
+    57: 'engine/normalsmooth.js'
+    58: 'engine/ornament.html'
+    59: 'engine/ornament.js'
+    60: 'engine/outline.js'
+    61: 'engine/piperepair.html'
+    62: 'engine/portrait.html'
+    63: 'engine/props.html'
+    64: 'engine/props.js'
+    65: 'engine/rayvis.html'
+    66: 'engine/reflection.js'
+    67: 'engine/relax.js'
+    68: 'engine/repair.html'
+    69: 'engine/rivers.js'
+    70: 'engine/roofs.js'
+    71: 'engine/shorefield.js'
+    72: 'engine/snapshot.js'
+    73: 'engine/snow.js'
+    74: 'engine/sphere.html'
+    75: 'engine/sphere.js'
+    76: 'engine/splash.html'
+    77: 'engine/splash.js'
+    78: 'engine/splice.html'
+    79: 'engine/spritepack.js'
+    80: 'engine/surface.js'
+    81: 'engine/surfaceshadow.js'
+    82: 'engine/terrain.html'
+    83: 'engine/terrain.js'
+    84: 'engine/texlab.html'
+    85: 'engine/tileplace.html'
+    86: 'engine/traffic.html'
+    87: 'engine/triflow.html'
+    88: 'engine/trigraph.html'
+    89: 'engine/triisland.html'
+    90: 'engine/unitbatch.html'
+    91: 'engine/units.html'
+    92: 'engine/vertexlight.js'
+    93: 'engine/voxelshadow.js'
+    94: 'engine/waterfall.js'
+    95: 'engine/watervol.js'
+    96: 'engine/waves.js'
+    97: 'engine/world.html'
+    98: 'engine/worldmap.html'
+    99: 'engine/worldmap.js'
+    100: 'flow.html'
+    101: 'foliagebloblab.html'
+    102: 'fusion.html'
+    103: 'game.html'
+    104: 'grassedgelab.html'
+    105: 'gridpatchlab.html'
+    106: 'hiprooflab.html'
+    107: 'housekitlab.html'
+    108: 'index.html'
+    109: 'islandpasseslab.html'
+    110: 'learn.html'
+    111: 'learn/data.js'
+    112: 'learn/learned.js'
+    113: 'learn/learnui.js'
+    114: 'learn/pipeline.js'
+    115: 'learned.html'
+    116: 'levelfloralab.html'
+    117: 'looptintlab.html'
+    118: 'megatexlab.html'
+    119: 'mirrordecorlab.html'
+    120: 'mixedwfclab.html'
+    121: 'navribbonlab.html'
+    122: 'occmasklab.html'
+    123: 'oldclips.html'
+    124: 'orderbadgelab.html'
+    125: 'overhangterrainlab.html'
+    126: 'overview.html'
+    127: 'patchclusterlab.html'
+    128: 'penumbralab.html'
+    129: 'piercefloorlab.html'
+    130: 'pipeline.html'
+    131: 'planetatmolab.html'
+    132: 'plantlab.html'
+    133: 'propframelab.html'
+    134: 'quadinflab.html'
+    135: 'quadspherelab.html'
+    136: 'shrubcardlab.html'
+    137: 'slotsolvelab.html'
+    138: 'smokelab.html'
+    139: 'snapshot64lab.html'
+    140: 'socketrocklab.html'
+    141: 'spherefusion.html'
+    142: 'squadbannerlab.html'
+    143: 'squarehexlab.html'
+    144: 'squigglefieldlab.html'
+    145: 'src/adjacency.js'
+    146: 'src/app.js'
+    147: 'src/archvoid.js'
+    148: 'src/ballistic.js'
+    149: 'src/barycentric.js'
+    150: 'src/birds.js'
+    151: 'src/blobrelax.js'
+    152: 'src/blobshadow.js'
+    153: 'src/bloodfield.js'
+    154: 'src/borderpath.js'
+    155: 'src/bouncegi.js'
+    156: 'src/boxtest.js'
+    157: 'src/buildanim.js'
+    158: 'src/campaignmap.js'
+    159: 'src/cavepath.js'
+    160: 'src/cheesenav.js'
+    161: 'src/clouddeck.js'
+    162: 'src/colorgamut.js'
+    163: 'src/colorvolume.js'
+    164: 'src/combatfx.js'
+    165: 'src/contrast.js'
+    166: 'src/contrasttex.js'
+    167: 'src/coroutine.js'
+    168: 'src/courtyard.js'
+    169: 'src/decalfield.js'
+    170: 'src/demo.js'
+    171: 'src/depfill.js'
+    172: 'src/dfgrow.js'
+    173: 'src/dirsprites.js'
+    174: 'src/doodlewall.js'
+    175: 'src/dual.js'
+    176: 'src/edgeplant.js'
+    177: 'src/edgesmooth.js'
+    178: 'src/floatprobe.js'
+    179: 'src/flowdemo.js'
+    180: 'src/flowfield.js'
+    181: 'src/foliageblob.js'
+    182: 'src/frontier.js'
+    183: 'src/fusion.js'
+    184: 'src/grasscards.js'
+    185: 'src/grassedge.js'
+    186: 'src/grid.js'
+    187: 'src/gridmodes.js'
+    188: 'src/gridpatch.js'
+    189: 'src/gridwfc.js'
+    190: 'src/grouping.js'
+    191: 'src/halfedge.js'
+    192: 'src/hiproof.js'
+    193: 'src/holenav.js'
+    194: 'src/housekit.js'
+    195: 'src/infograph.js'
+    196: 'src/islandpasses.js'
+    197: 'src/learnpanel.js'
+    198: 'src/levelflora.js'
+    199: 'src/lighting.js'
+    200: 'src/lightingcache.js'
+    201: 'src/looptint.js'
+    202: 'src/looptown.js'
+    203: 'src/mandala.js'
+    204: 'src/march.js'
+    205: 'src/megatex.js'
+    206: 'src/mesh.js'
+    207: 'src/mipcustom.js'
+    208: 'src/mipfilter.js'
+    209: 'src/mirrordecor.js'
+    210: 'src/mixedwfc.js'
+    211: 'src/mountainlight.js'
+    212: 'src/navgraph.js'
+    213: 'src/navgrid.js'
+    214: 'src/navribbon.js'
+    215: 'src/occmask.js'
+    216: 'src/orderbadge.js'
+    217: 'src/overhangterrain.js'
+    218: 'src/paintnormal.js'
+    219: 'src/palette.js'
+    220: 'src/partsprites.js'
+    221: 'src/patchblend.js'
+    222: 'src/patchcluster.js'
+    223: 'src/penumbra.js'
+    224: 'src/piercefloor.js'
+    225: 'src/piperepair.js'
+    226: 'src/planetatmo.js'
+    227: 'src/portrait.js'
+    228: 'src/propanim.js'
+    229: 'src/propframe.js'
+    230: 'src/quadgrid.js'
+    231: 'src/quadinf.js'
+    232: 'src/quadsphere.js'
+    233: 'src/quadtex.js'
+    234: 'src/rayvis.js'
+    235: 'src/rectpack.js'
+    236: 'src/reflstreak.js'
+    237: 'src/repeatbreak.js'
+    238: 'src/save.js'
+    239: 'src/savestring.js'
+    240: 'src/scene.js'
+    241: 'src/shore.js'
+    242: 'src/shrubcard.js'
+    243: 'src/slotsolve.js'
+    244: 'src/smear.js'
+    245: 'src/smokefx.js'
+    246: 'src/snapshot64.js'
+    247: 'src/socketrock.js'
+    248: 'src/spherefusion.js'
+    249: 'src/spherehouse.js'
+    250: 'src/spheretown.js'
+    251: 'src/splice.js'
+    252: 'src/squadbanner.js'
+    253: 'src/squarehex.js'
+    254: 'src/squigglefield.js'
+    255: 'src/stilts.js'
+    256: 'src/storydatum.js'
+    257: 'src/surfacedeco.js'
+    258: 'src/surfaceshadow.js'
+    259: 'src/terracecliff.js'
+    260: 'src/terraceladder.js'
+    261: 'src/terrainmesh.js'
+    262: 'src/texelsnap.js'
+    263: 'src/tileforce.js'
+    264: 'src/tileplace.js'
+    265: 'src/tilerepair.js'
+    266: 'src/topoline.js'
+    267: 'src/town.js'
+    268: 'src/townmesh.js'
+    269: 'src/trace.js'
+    270: 'src/traffic.js'
+    271: 'src/triGraph.js'
+    272: 'src/triflow.js'
+    273: 'src/triflowfield.js'
+    274: 'src/triisland.js'
+    275: 'src/uidecor.js'
+    276: 'src/uikit.js'
+    277: 'src/unitbatch.js'
+    278: 'src/unitsnap.js'
+    279: 'src/voxelao.js'
+    280: 'src/voxelflow.js'
+    281: 'src/voxelnav.js'
+    282: 'src/wake.js'
+    283: 'src/walkreach.js'
+    284: 'src/wind.js'
+    285: 'src/wobbletex.js'
+    286: 'stiltslab.html'
+    287: 'storydatumlab.html'
+    288: 'terraceclifflab.html'
+    289: 'terraceladderlab.html'
+    290: 'tmp/cap/bsheet.html'
+    291: 'tmp/cap/bsheet2.html'
+    292: 'tools/ab.mjs'
+    293: 'tools/add.mjs'
+    294: 'tools/batch-ids.mjs'
+    295: 'tools/batch.mjs'
+    296: 'tools/contact-sheet.mjs'
+    297: 'tools/mark.mjs'
+    298: 'tools/measure.html'
+    299: 'tools/measure.mjs'
+    300: 'tools/pixprobe.mjs'
+    301: 'tools/player.html'
+    302: 'tools/posters.mjs'
+    303: 'tools/report.mjs'
+    304: 'tools/shot.mjs'
+    305: 'tools/video-frames.mjs'
+    306: 'triflowfieldlab.html'
+    307: 'uidecorlab.html'
+    308: 'uikitlab.html'
+    309: 'unitsnaplab.html'
+    310: 'vendor/three.module.js'
+    311: 'wakelab.html'
+    312: 'walkreachlab.html'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/reacode-file-status.test.mjs:4:112)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.start (node:internal/test_runner/test:1262:17)
+    startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17)
+  ...
+# Subtest: source identities and all claimed target paths exist; pages cannot inherit core completion
+ok 22 - source identities and all claimed target paths exist; pages cannot inherit core completion
+  ---
+  duration_ms: 19.798708
+  type: 'test'
+  ...
+# Subtest: verified deliveries are explicitly scoped with execution evidence and residual gaps
+ok 23 - verified deliveries are explicitly scoped with execution evidence and residual gaps
+  ---
+  duration_ms: 0.215791
+  type: 'test'
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 21
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 820.698084

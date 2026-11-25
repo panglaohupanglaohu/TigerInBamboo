@@ -28,12 +28,22 @@
     {
       "kind": "mixed",
       "before": {
-        "rockVoxels": 30,
-        "groundConnected": 30,
+        "rockVoxels": 18,
+        "groundConnected": 18,
         "unsupported": 0,
         "undersides": 1,
-        "exposedFaces": 81,
+        "exposedFaces": 61,
         "cavityColumns": 1,
+        "overhang": {
+          "version": 691,
+          "rockVoxels": 18,
+          "overhangAboveWater": 0,
+          "soffits": 1,
+          "coveredAir": 3,
+          "reachableCoveredAir": 3,
+          "sealedAir": 0,
+          "caveDepth": 1
+        },
         "undersideVertices": 6,
         "version": 691
       },
@@ -42,12 +52,22 @@
     {
       "kind": "quad",
       "before": {
-        "rockVoxels": 28,
-        "groundConnected": 28,
+        "rockVoxels": 16,
+        "groundConnected": 16,
         "unsupported": 0,
         "undersides": 1,
-        "exposedFaces": 80,
+        "exposedFaces": 58,
         "cavityColumns": 1,
+        "overhang": {
+          "version": 798,
+          "rockVoxels": 16,
+          "overhangAboveWater": 0,
+          "soffits": 1,
+          "coveredAir": 3,
+          "reachableCoveredAir": 3,
+          "sealedAir": 0,
+          "caveDepth": 1
+        },
         "undersideVertices": 6,
         "version": 798
       },

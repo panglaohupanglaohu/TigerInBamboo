@@ -14,30 +14,143 @@
 const finite = (...v) => v.every(Number.isFinite);
 const vec = (v) => Array.isArray(v) ? v : [v.x, v.y, v.z];
 
-/** Integrate one virtual wind particle through the shared field. A step that
- * would enter a solid World bit slides: first drop the vertical part, then the
- * horizontal part, finally rest on the support below. Never ends inside rock. */
-export function traceWind(sample, probes, start, { steps = 12, dt = .09 } = {}) {
-  if (typeof sample !== 'function' || !probes || typeof probes.occupied !== 'function') throw new TypeError('traceWind needs a sampler and World probes');
-  if (!Array.isArray(start) || start.length !== 3 || !finite(...start) || !Number.isInteger(steps) || steps < 1 || steps > 512 || !finite(dt) || dt <= 0) throw new RangeError('Invalid wind trace');
+/** One recorded wind-particle trajectory: the integrated sample points plus
+ * query/status metadata. points[k] sits at time k*dt; `at(t)` interpolates any
+ * moment in between. Semantics:
+ *   status 'exited'  — left `bounds`; `exitIndex` marks the first outside point.
+ *   status 'rest'    — ended unable to move (World wall on every component).
+ *   status 'advected'— still moving when steps ran out.
+ *   tunnels          — contiguous runs spent inside a roofed cavity: free at the
+ *                      particle's level, solid one `levelHeight` above （命中洞）.
+ *                      `through` when the run is followed by open-air points
+ *                      (the particle re-emerged — 穿洞, not just touched one). */
+export class WindPath {
+  constructor({ points, dt, blocked = 0, exitIndex = null, tunnels = [] }) {
+    if (!Array.isArray(points) || !points.length || !points.every((p) => Array.isArray(p) && p.length === 3 && finite(...p)) || !finite(dt) || dt <= 0 || !Number.isInteger(blocked) || blocked < 0) throw new RangeError('Invalid wind path');
+    this.points = points.map((p) => [p[0], p[1], p[2]]);
+    this.dt = dt;
+    this.blocked = blocked;
+    this.exitIndex = exitIndex;
+    this.tunnels = tunnels;
+  }
+  get start() { return this.points[0]; }
+  get end() { return this.points[this.points.length - 1]; }
+  get steps() { return this.points.length - 1; }
+  get duration() { return this.steps * this.dt; }
+  get status() {
+    if (this.exitIndex !== null) return 'exited';
+    const a = this.points[this.points.length - 2], b = this.points[this.points.length - 1];
+    return a && a[0] === b[0] && a[1] === b[1] && a[2] === b[2] ? 'rest' : 'advected';
+  }
+  get hitsHole() { return this.tunnels.length > 0; }
+  get throughHole() { return this.tunnels.some((t) => t.through); }
+  /** Position at time t, clamped to [0, duration]. at(k*dt) == points[k]. */
+  at(t) {
+    if (!finite(t)) throw new RangeError('Invalid wind path time');
+    if (this.points.length === 1) return this.points[0].slice();
+    const c = Math.max(0, Math.min(this.duration, t)) / this.dt;
+    const i = Math.min(this.points.length - 2, Math.floor(c)), s = c - i;
+    const a = this.points[i], b = this.points[i + 1];
+    return [a[0] + (b[0] - a[0]) * s, a[1] + (b[1] - a[1]) * s, a[2] + (b[2] - a[2]) * s];
+  }
+  stepAt(i) { return this.points[Math.max(0, Math.min(this.points.length - 1, Math.round(i)))]; }
+  get length() {
+    if (this._length === undefined) {
+      let s = 0;
+      for (let i = 1; i < this.points.length; i++) { const a = this.points[i - 1], b = this.points[i]; s += Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]); }
+      this._length = s;
+    }
+    return this._length;
+  }
+}
+
+/** Integrate one virtual wind particle into a queryable WindPath.
+ * With `probes` (World probes) a step that would enter a solid bit slides:
+ * first drop the vertical part, then the horizontal part, finally rest — never
+ * ends inside rock; roofed-cavity runs are reported in `tunnels`.
+ * With `probes = null` it free-integrates and only clamps to `minY`.
+ * `bounds` ({x0,z0,x1,z1[,y0,y1]}) stops the path at the first outside point. */
+export function traceWindPath(sample, probes, start, { steps = 12, dt = .09, bounds = null, levelHeight = .5, minY = .02 } = {}) {
+  const solid = typeof probes?.occupied === 'function';
+  if (typeof sample !== 'function' || (probes != null && !solid)) throw new TypeError('traceWind needs a sampler and World probes');
+  if (!Array.isArray(start) || start.length !== 3 || !finite(...start) || !Number.isInteger(steps) || steps < 1 || steps > 512 || !finite(dt) || dt <= 0 || !finite(levelHeight) || levelHeight <= 0 || !finite(minY)) throw new RangeError('Invalid wind trace');
+  if (bounds !== null && (typeof bounds !== 'object' || !finite(bounds.x0, bounds.z0, bounds.x1, bounds.z1) || bounds.x0 >= bounds.x1 || bounds.z0 >= bounds.z1 || (bounds.y0 !== undefined && !finite(bounds.y0)) || (bounds.y1 !== undefined && !finite(bounds.y1)))) throw new RangeError('Invalid wind trace bounds');
   let [x, y, z] = start;
-  if (probes.occupied(x, y, z)) throw new RangeError('Wind trace starts inside solid World voxel');
+  if (solid && probes.occupied(x, y, z)) throw new RangeError('Wind trace starts inside solid World voxel');
+  const outside = (px, py, pz) => bounds !== null && (px < bounds.x0 || px > bounds.x1 || pz < bounds.z0 || pz > bounds.z1 || (bounds.y0 !== undefined && py < bounds.y0) || (bounds.y1 !== undefined && py > bounds.y1));
   const pts = [[x, y, z]];
-  let blocked = 0;
+  let blocked = 0, exitIndex = null;
   for (let i = 0; i < steps; i++) {
     const [vx, vy, vz] = vec(sample(x, y, z));
     if (!finite(vx, vy, vz)) throw new RangeError('Wind sampler returned nonfinite vector');
-    const tries = [[vx, vy, vz], [vx, 0, vz], [0, vy, 0]];
     let moved = false;
-    for (const [ax, ay, az] of tries) {
-      if (Math.abs(ax) + Math.abs(ay) + Math.abs(az) < 1e-12) continue;
-      const nx = x + ax * dt, ny = Math.max(.02, y + ay * dt), nz = z + az * dt;
-      if (!probes.occupied(nx, ny, nz)) { x = nx; y = ny; z = nz; moved = true; break; }
+    if (solid) {
+      const tries = [[vx, vy, vz], [vx, 0, vz], [0, vy, 0]];
+      for (const [ax, ay, az] of tries) {
+        if (Math.abs(ax) + Math.abs(ay) + Math.abs(az) < 1e-12) continue;
+        const nx = x + ax * dt, ny = Math.max(minY, y + ay * dt), nz = z + az * dt;
+        if (!probes.occupied(nx, ny, nz)) { x = nx; y = ny; z = nz; moved = true; break; }
+      }
+    } else {
+      x += vx * dt; y = Math.max(minY, y + vy * dt); z += vz * dt; moved = true;
     }
     if (!moved) blocked++;
     pts.push([x, y, z]);
+    if (outside(x, y, z)) { exitIndex = pts.length - 1; break; }
   }
-  return { points: pts, blocked };
+  const tunnels = [];
+  if (solid) {
+    // In-hole = free here but solid one level up: a roofed cavity (tunnel, under
+    // a deck/roof). Runs of in-hole points are tunnel events; a run that is not
+    // the last run-end means the particle emerged on the other side.
+    let open = -1;
+    for (let i = 0; i <= pts.length; i++) {
+      const h = i < pts.length && !outside(...pts[i]) && probes.occupied(pts[i][0], pts[i][1] + levelHeight, pts[i][2]);
+      if (h && open < 0) open = i;
+      if (!h && open >= 0) { tunnels.push({ from: open, to: i - 1, through: i < pts.length }); open = -1; }
+    }
+  }
+  return new WindPath({ points: pts, dt, blocked, exitIndex, tunnels });
+}
+
+/** Integrate one virtual wind particle through the shared field (legacy shape).
+ * Same sliding semantics as traceWindPath; returns only {points, blocked}. */
+export function traceWind(sample, probes, start, opts = {}) {
+  if (typeof sample !== 'function' || !probes || typeof probes.occupied !== 'function') throw new TypeError('traceWind needs a sampler and World probes');
+  const p = traceWindPath(sample, probes, start, opts);
+  return { points: p.points, blocked: p.blocked };
+}
+
+/** Analytic wind field (REACode wind.js parity): main direction + terrain lift +
+ * two incommensurate low-frequency perturbations, phases seeded deterministically.
+ *   at(x,y,z,groundY)     → velocity [vx,vy,vz], speed normalised to .55–1.25
+ *   trace(x,y,z,opts)     → WindPath (the full trajectory interface)
+ * With `probes` + `bounds` the trace runs the shared-voxel integrator and reports
+ * tunnels/exits; `probes.supportBelow` feeds the lift term the real support
+ * height. Without probes it free-integrates and clamps to `groundY` like the
+ * original (the flag-mesh use case, 926890207298899969). */
+export function makeWindField({ dir = [.86, .12, .5], lift = .55, swirl = .42, seed = 7, groundY = 0, probes = null, bounds = null, levelHeight = .5 } = {}) {
+  if (!Array.isArray(dir) || dir.length !== 3 || !finite(...dir) || !Math.hypot(...dir) || !finite(lift, swirl, groundY)) throw new RangeError('Invalid wind field');
+  const L = Math.hypot(dir[0], dir[1], dir[2]);
+  const ux = dir[0] / L, uy = dir[1] / L, uz = dir[2] / L;
+  let s = (seed | 0) || 1;
+  const ph = () => { s = (Math.imul(s, 1103515245) + 12345) | 0; return ((s >>> 8) & 0xffff) / 0xffff * Math.PI * 2; };
+  const p1 = ph(), p2 = ph(), p3 = ph();
+  function at(x, y, z, gy = groundY) {
+    const h = Math.max(0, y - gy);
+    const up = lift * Math.min(1, h / 3.5);
+    const a = Math.sin(x * .31 + z * .22 + p1) * .5 + Math.sin(x * .13 - z * .17 + p2) * .5;
+    const b = Math.cos(x * .27 - z * .19 + p3) * .5 + Math.cos(x * .11 + z * .23 + p1) * .5;
+    const vx = ux + a * swirl * .6, vy = uy + up + (a + b) * .12, vz = uz + b * swirl * .6;
+    const l = Math.hypot(vx, vy, vz) || 1;
+    const speed = .55 + .7 * Math.min(1, Math.abs(a * .5 + b * .5) + up);
+    return [vx / l * speed, vy / l * speed, vz / l * speed];
+  }
+  function trace(x, y, z, { steps = 12, dt = .09, groundY: gy = groundY, bounds: b = bounds } = {}) {
+    if (probes) return traceWindPath((px, py, pz) => { const sup = typeof probes.supportBelow === 'function' ? probes.supportBelow(px, pz, py) : null; return at(px, py, pz, sup ? sup.y : gy); }, probes, [x, y, z], { steps, dt, bounds: b, levelHeight });
+    return traceWindPath((px, py, pz) => at(px, py, pz, gy), null, [x, y, z], { steps, dt, bounds: b, levelHeight, minY: gy + .02 });
+  }
+  return { at, trace, dir: [ux, uy, uz], sampleCurve };
 }
 
 /** Curve through particle samples (Catmull-Rom passes through every control point). */

@@ -1,0 +1,15 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/artifacts/fx-apostles-e2e/run-1795392726846",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描失败：cand is not defined"
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "Error: probe scan failed: 扫描失败：cand is not defined\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-apostles-browser.mjs:28:52",
+  "state": {
+    "status": "实景切到：十二门徒",
+    "note": "扫描失败：cand is not defined"
+  }
+}

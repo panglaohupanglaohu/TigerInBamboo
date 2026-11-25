@@ -1,0 +1,61 @@
+{
+  "reports": [
+    {
+      "kind": "quad",
+      "landed": 8,
+      "kills": {
+        "kills": 5,
+        "level": 3,
+        "tier": 3,
+        "hp": [
+          3,
+          3,
+          0,
+          "small"
+        ],
+        "stats": {
+          "credited": 5,
+          "promoted": 2,
+          "last": {
+            "uid": 1,
+            "level": 3
+          }
+        },
+        "promotedDelta": 2,
+        "creditedDelta": 5,
+        "uid": 1
+      },
+      "instanceIdx": 0,
+      "changedPixels": 4560
+    },
+    {
+      "kind": "mixed",
+      "landed": 8,
+      "kills": {
+        "kills": 5,
+        "level": 3,
+        "tier": 3,
+        "hp": [
+          3,
+          3,
+          0,
+          "small"
+        ],
+        "stats": {
+          "credited": 5,
+          "promoted": 2,
+          "last": {
+            "uid": 1,
+            "level": 3
+          }
+        },
+        "promotedDelta": 2,
+        "creditedDelta": 5,
+        "uid": 1
+      },
+      "instanceIdx": 0,
+      "changedPixels": 1624
+    }
+  ],
+  "errors": []
+}

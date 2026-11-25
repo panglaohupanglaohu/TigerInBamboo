@@ -22,19 +22,24 @@ const fus = planetFusion(pw, planet, { density: 0, seed: 5 }), at = fus.houses.a
 // planetFusion(density 0) 只 touch 不改地形：核对高度与河格都没变，才把 riverFlow 版本续上（否则 navgraph 退回河口距离）
 if (pw.cells.every((c) => pw.ground(c) === res.heights[c.id] && pw.river[c.id] === res.river[c.id])) pw.riverFlow.version = pw.version;
 const cells = pw.cells, G = (c) => pw.ground(c), maxH = stats.maxLevel;
+// 验收开关（只影响绘制，不动生成）：?lines=0 关流向白线、?river=0 把河格按陆地色画（做 A/B）、?focus=<格id> 把该格转向相机
+const showLines = Q.get('lines') !== '0', showRiver = Q.get('river') !== '0';
 const centre = (c, h = G(c), lift = 1.004) => { const ring = c.ring.map((k) => at(k, h)); return [0, 1, 2].map((i) => ring.reduce((s, p) => s + p[i], 0) / ring.length * lift); };
 // 地表：顶面按高度渐变（低处草绿 → 高处土黄），河格蓝；一层台阶的侧面是暗草色，≥2 层的陡崖是灰白岩壁（原片白色崖）
 const pos = [], col = [], lerp = (a, b, t) => a.map((x, i) => x + (b[i] - x) * t);
 const lowC = [0.47, 0.66, 0.33], highC = [0.84, 0.71, 0.45], riverC = [0.16, 0.36, 0.5], stepC = null, cliffC = [0.9, 0.88, 0.82];
 for (const c of cells) {
   const h = G(c); if (!h) continue;
-  const ring = c.ring.map((k) => at(k, h)), ctr = ring.reduce((s, p) => s.map((x, i) => x + p[i] / ring.length), [0, 0, 0]);
-  const top = pw.river[c.id] ? riverC : lerp(lowC, highC, Math.min(1, (h - 1) / Math.max(1, maxH - 2)));
+  const isRiver = pw.river[c.id] && showRiver;
+  // 河面画在岸高（河床 +1）：原片的河是一条与岸齐平的蓝带，画在河床顶面会被自己的沟壁挡成一条干沟
+  const hy = isRiver ? Math.min(maxH, h + 1) : h;
+  const ring = c.ring.map((k) => at(k, hy)), ctr = ring.reduce((s, p) => s.map((x, i) => x + p[i] / ring.length), [0, 0, 0]);
+  const top = isRiver ? riverC : lerp(lowC, highC, Math.min(1, (h - 1) / Math.max(1, maxH - 2)));
   for (let k = 0; k < ring.length; k++) { pos.push(...ctr, ...ring[k], ...ring[(k + 1) % ring.length]); for (let r = 0; r < 3; r++) col.push(...top); }
   c.edgeNeighbors.forEach((o, k) => {
-    const oh = o >= 0 ? G(cells[o]) : 0; if (oh >= h) return;
-    const a = c.ring[k], b = c.ring[(k + 1) % c.ring.length], wc = h - oh > 1 || oh === 0 ? cliffC : top.map((x) => x * 0.86);
-    for (let l = oh + 1; l <= h; l++) { const a0 = at(a, l - 1), b0 = at(b, l - 1), a1 = at(a, l), b1 = at(b, l); pos.push(...a0, ...b0, ...b1, ...a0, ...b1, ...a1); for (let r = 0; r < 6; r++) col.push(...wc); }
+    const oh = o >= 0 ? G(cells[o]) : 0; if (oh >= hy) return;
+    const a = c.ring[k], b = c.ring[(k + 1) % c.ring.length], wc = hy - oh > 1 || oh === 0 ? cliffC : top.map((x) => x * 0.86);
+    for (let l = oh + 1; l <= hy; l++) { const a0 = at(a, l - 1), b0 = at(b, l - 1), a1 = at(a, l), b1 = at(b, l); pos.push(...a0, ...b0, ...b1, ...a0, ...b1, ...a1); for (let r = 0; r < 6; r++) col.push(...wc); }
   });
 }
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('c'), antialias: true });
@@ -45,9 +50,11 @@ const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float
 const land = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .95, flatShading: true }));
 const seaR = Math.hypot(...at(cells.find((c) => !G(c)).ring[0], 0)) * 0.999;
 const sea = new THREE.Mesh(new THREE.SphereGeometry(seaR, 96, 64), new THREE.MeshStandardMaterial({ color: 0x4a8fae, roughness: .5 }));
+sea.visible = Q.get('sea') !== '0';   // ?sea=0 只留陆地（原片 f0065 那种纯陆地半球，便于同口径比色）
 const grp = new THREE.Group(); grp.add(land, sea); scene.add(grp);
 // 河的流向（flowTo）细白线
-{ const p = []; for (const c of cells) if (pw.river[c.id] && res.flowTo[c.id] >= 0) p.push(...centre(c, G(c), 1.006), ...centre(cells[res.flowTo[c.id]], undefined, 1.006));
+if (showLines) { const p = []; const lift = (c) => centre(c, pw.river[c.id] ? Math.min(maxH, G(c) + 1) : G(c), 1.006);
+  for (const c of cells) if (pw.river[c.id] && res.flowTo[c.id] >= 0) p.push(...lift(c), ...lift(cells[res.flowTo[c.id]]));
   const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(p, 3));
   grp.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0xdff4ff }))); }
 // 导航树
@@ -75,7 +82,7 @@ function drawNav(start) {
   if (Q.get('face') !== '0') { const d = new THREE.Vector3(...nav.start.dir).normalize(), cam = camera.position.clone().normalize(); grp.quaternion.setFromUnitVectors(d, cam); faced = true; }
   // 沿河 vs 走路：同一对河格（河口 ↔ 最远的主干上游格）顺/逆流的最短时间
   Object.assign(navOut, { start: nav.start.id, reached, treeEdgesOnRiver: viaRiver, regions: nav.regions.length, flowSource: nav.flowSource });
-  window.__c09nav = navOut; document.getElementById('stats').textContent = JSON.stringify({ ...stats, nav: navOut });
+  window.__c09nav = navOut; window.__c09navHandle = nav; document.getElementById('stats').textContent = JSON.stringify({ ...stats, nav: navOut });
 }
 if (Q.get('nav')) {
   const id = Q.get('nav') === 'auto' ? res.paths[0][Math.floor(res.paths[0].length * 0.85)] : +Q.get('nav');
@@ -85,9 +92,65 @@ if (Q.get('nav')) {
     const hit = ray.intersectObject(land)[0]; if (!hit) return; const v = grp.worldToLocal(hit.point.clone()).normalize();
     let best = null, bd = -2; for (const c of cells) { if (!G(c)) continue; const d = v.x * c.dir[0] + v.y * c.dir[1] + v.z * c.dir[2]; if (d > bd) { bd = d; best = c; } } if (best) drawNav(best); });
 }
+/* 沿河更快（1795831296952041691）的只读量具：同一条主干的两端量「顺流 / 逆流 / 纯步行」三种口径。
+ * 球面用弦长（与 buildNav 的 metric 同一把尺），所以不能直接复用 riverRouteStats —— 那个的步行基线是投影 cx/cz。
+ * 步行基线：只按高差收费（平 1 / 缓坡 1.25 / 台阶 1.8），与 navgraph 的 SLOPE/STAIR 同一套常数，但没有任何河流优惠。 */
+const stepCost = (nav, a, b) => {
+  if (!nav.walk[a.id] || !nav.walk[b.id]) return Infinity;
+  const dh = nav.hgt[b.id] - nav.hgt[a.id]; if (Math.abs(dh) > 2) return Infinity;
+  return chord(a, b) * (dh === 0 ? 1 : dh === 1 ? 1.25 : 1.8);
+};
+const plainOptimal = (nav, from, to) => {
+  const n = cells.length, dist = new Float64Array(n).fill(Infinity), heap = [[0, from.id]]; dist[from.id] = 0;
+  while (heap.length) {
+    let bi = 0; for (let i = 1; i < heap.length; i++) if (heap[i][0] < heap[bi][0]) bi = i;
+    const [d, id] = heap[bi]; heap[bi] = heap[heap.length - 1]; heap.pop();
+    if (d > dist[id]) continue; if (id === to.id) break;
+    for (const nb of cells[id].edgeNeighbors) { if (nb < 0) continue; const nd = d + stepCost(nav, cells[id], cells[nb]); if (nd < dist[nb]) { dist[nb] = nd; heap.push([nd, nb]); } }
+  }
+  return dist[to.id];
+};
+window.__c09routeProbe = (pathIdx = 0) => {
+  const nav = buildNav(pw, { metric: chord, slopeStep: 1 });
+  const kids = new Int32Array(cells.length);
+  for (const c of cells) if (pw.river[c.id] && res.flowTo[c.id] >= 0) kids[res.flowTo[c.id]]++;
+  let edges = 0, down = 0, neutral = 0, uphillDown = 0, conf = 0, confResolved = 0, confCheaper = 0;
+  for (const c of cells) {
+    const pid = res.flowTo[c.id]; if (!pw.river[c.id] || pid < 0) continue;
+    const P = cells[pid], d = nav.riverDirection(c, P);
+    edges++; if (d > 0) down++; if (!d) neutral++;
+    if (d > 0 && nav.hgt[P.id] > nav.hgt[c.id]) uphillDown++;
+    if (kids[P.id] >= 2) { conf++; if (d > 0) confResolved++; if (nav.cost(c, P) < nav.cost(P, c)) confCheaper++; }
+  }
+  const out = { pathIdx, paths: res.paths.length, edges, down, neutral, uphillDown, confluences: conf, confluenceResolved: confResolved, confluenceCheaper: confCheaper, flowSource: nav.flowSource };
+  const path = res.paths[Math.min(Math.max(pathIdx | 0, 0), res.paths.length - 1)] ?? [];
+  const head = path.length ? cells[path[0]] : null, tail = path.length ? cells[path[path.length - 1]] : null;
+  if (path.length >= 4 && head && tail && nav.walk[head.id] && nav.walk[tail.id]) {
+    const tDown = buildNav(pw, { start: tail, metric: chord, slopeStep: 1 }).tree.time[head.id];
+    const tUp = buildNav(pw, { start: head, metric: chord, slopeStep: 1 }).tree.time[tail.id];
+    let walk = 0; for (let k = 1; k < path.length; k++) walk += chord(cells[path[k]], cells[path[k - 1]]);
+    const opt = plainOptimal(nav, tail, head);
+    Object.assign(out, { mouth: head.id, src: tail.id, steps: path.length - 1, tDown, tUp, walk, walkOptimal: opt,
+      speedup: walk / tDown, speedupOptimal: opt / tDown, upDownRatio: tUp / tDown, detourRatio: tDown / opt });
+  }
+  window.__c09routes = out; return out;
+};
+if (Q.get('nav')) window.__c09routeProbe(num('path', 0));
+if (!faced && Q.get('focus')) { const fc = cells[+Q.get('focus')] || cells[res.paths[0][res.paths[0].length - 1]];
+  const d = new THREE.Vector3(...fc.dir).normalize(), cam = camera.position.clone().normalize(); grp.quaternion.setFromUnitVectors(d, cam); faced = true; }
 if (!faced) { grp.rotation.y = num('rot', 0.6); grp.rotation.x = num('tilt', 0.3); }
 function resize() { const w = innerWidth, h = innerHeight - 96; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); }
 resize(); addEventListener('resize', resize);
 renderer.setAnimationLoop(() => { if (!Q.get('still') && !faced) grp.rotation.y += 0.002; renderer.render(scene, camera); });
+// 只读探针：把 DFS 河树 + BFS 父链原样交出去，供浏览器验收（不参与绘制）
+window.__c09river = {
+  source: pw.riverFlow.source, version: pw.riverFlow.version, cells: cells.length,
+  land: res.landCount, riverCells: res.riverCells, mouths: res.mouths.slice(), confluences: res.confluences,
+  cliffs: res.cliffs, forcedSteep: res.forcedSteep, paths: res.paths.map((p) => p.length), path0: res.paths[0].slice(),
+  ground: cells.map(G), river: cells.map((c) => pw.river[c.id]), flowTo: Array.from(res.flowTo),
+  depth: Array.from(res.depth), parent: Array.from(res.parent), nb: cells.map((c) => c.edgeNeighbors.slice()),
+};
+window.__c09view = { renderer, scene, camera, grp, land, sea };   // 只读句柄：验收脚本要 renderer.render() 后立刻 readPixels
+window.__c09world = pw;                                            // 只读句柄：验收脚本要用同一个 World 调 findNavPath/simplifyNav
 window.__c09planet = stats; if (!Q.get('nav')) document.getElementById('stats').textContent = JSON.stringify(stats);
 </script></html>

@@ -13,22 +13,81 @@ import { TriGraph } from '../core/trigraph.js';
 import { stereoProject, stereoUnproject } from './planet-town.js';
 
 const norm = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
+const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
 
-/** 投影（极点 = 最"北"的点，排除）→ 按半径排序的插入序。 */
-export function projectionOrder(points) {
+/* ---------------- 极点鲁棒性（第 118 轮）----------------
+ * 立体投影在极点附近病态：sinθ→0 时 r=tan(θ/2)→0 尚可，但 **θ→0 的第二个点** r=1/(1-cosθ) 会炸到 1e9，
+ * 超级三角跟着放大，Bowyer–Watson 的「坏三角」判定就退化成巨型薄三角；两点重合时直接 RangeError。
+ * 做法：① 极点优先取「最北点」；② 最北点与其余点角距过小（< minSin）时，在次北的几个点里挑角距最大的那个当极点，
+ * 并把坐标架转到极点朝 +Y（真旋转，行列式 +1，不镜像所以三角朝向不变）；③ 落在极点上的重合点合并、不参与三角化。
+ * 返回的 R 在 liftToSphere 里反着用（Rᵀ），投影往返误差因此仍是同一个量。
+ */
+const IDENTITY = [[1, 0, 0], [0, 1, 0], [0, 0, 1]];
+/** R 的三行 = 新坐标架 {x, axis, z}，其中 z = x×axis ⇒ 右手、det=+1、R·axis=(0,1,0)。 */
+function basisFor(axis) {
+  const a = norm(axis);
+  const h = Math.abs(a[1]) < .9 ? [0, 1, 0] : [1, 0, 0];
+  const x = norm(cross3(h, a)), z = cross3(x, a);
+  return [x, a, z];
+}
+const applyR = (R, p) => [dot3(R[0], p), dot3(R[1], p), dot3(R[2], p)];
+const applyRT = (R, q) => [R[0][0] * q[0] + R[1][0] * q[1] + R[2][0] * q[2], R[0][1] * q[0] + R[1][1] * q[1] + R[2][1] * q[2], R[0][2] * q[0] + R[1][2] * q[1] + R[2][2] * q[2]];
+
+/** 极点选点 + 重合点合并。返回 { pole, merged, rotated, axis, minSin, R, points }。 */
+export function poleGuard(points, { minSin = 1e-3, topK = 12, mergeSin = 1e-9, maxTilt = .7 } = {}) {
+  const P = points.map(norm), n = P.length;
+  if (!n) throw new RangeError('poleGuard needs points');
+  const byY = P.map((_, i) => i).sort((a, b) => P[b][1] - P[a][1] || a - b);
+  const ax = P[byY[0]];
+  const clearance = (c) => { // 其余点到方向 P[c] 的最小 sinθ（= xz 半径下限）
+    let m = Infinity;
+    for (let i = 0; i < n; i++) if (i !== c) { const c2 = dot3(P[i], P[c]); m = Math.min(m, Math.sqrt(Math.max(0, 1 - c2 * c2))); }
+    return m;
+  };
+  let pole = byY[0], rotated = false, R = IDENTITY, base = clearance(pole);
+  if (base < minSin) {
+    for (const c of byY.slice(0, Math.max(1, topK))) {
+      if (Math.acos(Math.max(-1, Math.min(1, dot3(P[c], ax)))) > maxTilt) break;
+      const s = clearance(c);
+      if (s > base * 1.5) { pole = c; base = s; rotated = true; R = basisFor(P[c]); }
+    }
+  }
+  // 重合点：落在极点方向上的、以及互相重合的，逐一合并（不参与三角化，否则退化成零面积三角）
+  const merged = [], keep = [];
+  for (let i = 0; i < n; i++) {
+    if (i === pole) continue;
+    if (1 - dot3(P[i], P[pole]) < mergeSin) { merged.push({ i, into: pole, why: 'pole' }); continue; }
+    const hit = keep.find((j) => Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1], P[i][2] - P[j][2]) < mergeSin);
+    if (hit !== undefined) { merged.push({ i, into: hit, why: 'dup' }); continue; }
+    keep.push(i);
+  }
+  let minSinNow = Infinity; for (const i of keep) { const q = applyR(R, P[i]); minSinNow = Math.min(minSinNow, Math.hypot(q[0], q[2])); }
+  return { pole, merged, rotated, axis: P[pole], minSin: minSinNow, R, points: P, keep };
+}
+
+/** 投影（极点 = 最"北"的点，排除）→ 按半径排序的插入序。guard:false 走第 56 批的旧路径（不旋转、不合并）。 */
+export function projectionOrder(points, { guard = true, minSin = 1e-3 } = {}) {
   let pole = 0; for (let i = 1; i < points.length; i++) if (points[i][1] > points[pole][1]) pole = i;
+  if (!guard) {
+    const items = [];
+    for (let i = 0; i < points.length; i++) if (i !== pole) { const [u, v] = stereoProject(norm(points[i])); items.push({ i, u, v, r: Math.hypot(u, v) }); }
+    items.sort((a, b) => a.r - b.r);
+    return { pole, items, guard: null };
+  }
+  const g = poleGuard(points, { minSin });
   const items = [];
-  for (let i = 0; i < points.length; i++) if (i !== pole) { const [u, v] = stereoProject(norm(points[i])); items.push({ i, u, v, r: Math.hypot(u, v) }); }
-  items.sort((a, b) => a.r - b.r);
-  return { pole, items };
+  for (const i of g.keep) { const q = applyR(g.R, g.points[i]); const [u, v] = stereoProject(q); items.push({ i, u, v, r: Math.hypot(u, v) }); }
+  items.sort((a, b) => a.r - b.r || a.i - b.i);
+  return { pole: g.pole, items, guard: g };
 }
 
 /**
  * 回放器：可视的超级三角（bound 取最大半径的 1.15 倍，原片的超级三角就在画面里），按半径逐点插入。
  * frame(k) → { k, tris:[[x,y]×3]…（含超级三角顶点）, superTris, maxR, inserted }；k 往回走时从头重放。
  */
-export function createInsertionReplay(points, { boundScale = 1.15 } = {}) {
-  const { pole, items } = projectionOrder(points);
+export function createInsertionReplay(points, { boundScale = 1.15, minSin = 1e-3 } = {}) {
+  const { pole, items, guard } = projectionOrder(points, { minSin });
   const maxR = items.length ? items[items.length - 1].r : 1, bound = maxR * boundScale;
   let T = new TriGraph(bound), k = 0, cavities = 0;
   const frame = (target) => {
@@ -39,7 +98,7 @@ export function createInsertionReplay(points, { boundScale = 1.15 } = {}) {
     const tris = T.tris.map((t) => t.map(P)), superTris = T.tris.filter((t) => t[0] < 3 || t[1] < 3 || t[2] < 3).length;
     return { k, total: items.length, tris, superTris, realTris: T.tris.length - superTris, lastR: k ? items[k - 1].r : 0, maxR, bound, pole, graph: T };
   };
-  return { frame, items, pole, bound, maxR };
+  return { frame, items, pole, bound, maxR, guard, R: guard ? guard.R : IDENTITY };
 }
 
 /** 平面三角化抬回球面 + 凸包边连极点 → 闭合球面三角网（与 buildSphere 同一做法）。 */
@@ -50,8 +109,8 @@ export function liftToSphere(points, replay) {
   const cnt = new Map();
   for (const [a, b, c] of tris) for (const [u, v] of [[a, b], [b, c], [c, a]]) cnt.set(u + ',' + v, [u, v]);
   for (const [u, v] of [...cnt.values()]) if (!cnt.has(v + ',' + u)) tris.push([v, u, replay.pole]);
-  // 投影往返误差：平面点抬回球面与原点的距离
-  let roundTrip = 0; for (const o of replay.items) { const p = stereoUnproject([o.u, o.v]), q = norm(points[o.i]); roundTrip = Math.max(roundTrip, Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2])); }
+  // 投影往返误差：平面点抬回球面（先按坐标架反旋 Rᵀ）与原点的距离
+  let roundTrip = 0; for (const o of replay.items) { const p = applyRT(replay.R || IDENTITY, stereoUnproject([o.u, o.v])), q = norm(points[o.i]); roundTrip = Math.max(roundTrip, Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2])); }
   return { tris, roundTrip };
 }
 

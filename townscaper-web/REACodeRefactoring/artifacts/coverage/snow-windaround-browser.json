@@ -1,0 +1,108 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "shader": {
+        "pointCoord": true,
+        "radialDiscard": true,
+        "softEdge": true,
+        "perParticleSize": true,
+        "perParticleAlpha": true,
+        "sizeNotConstant": true
+      },
+      "size": {
+        "n": 3000,
+        "min": 0.55,
+        "max": 1.4499,
+        "cv": 0.2598,
+        "distinct": 901
+      },
+      "island": {
+        "cells": 2023,
+        "solidRadius": 13.411,
+        "center": [
+          0.012,
+          -0.048
+        ],
+        "levelHeight": 0.5
+      },
+      "ring": {
+        "farAlong": 0.9996,
+        "points": 216,
+        "air": 162,
+        "blocked": 55,
+        "blockedHalf": 0,
+        "inSolid": 54,
+        "maxLift": 0.275,
+        "minAlong": 0.5105,
+        "maxAcross": 0.2179
+      },
+      "trace": {
+        "seeds": 39,
+        "straightHit": 7,
+        "deflected": 15,
+        "insideSteps": 0,
+        "respawn": 39,
+        "meanSteps": 81.9,
+        "maxDev": 0.938,
+        "meanDev": 0.095,
+        "devAboveHalfR": 0,
+        "maxLift": 0.365,
+        "meanLift": 0.051,
+        "lifted": 15
+      },
+      "alpha": {
+        "n": 986,
+        "min": 0.1814,
+        "max": 0.7052,
+        "cv": 0.1856,
+        "near": 0.2433,
+        "mid": 0.3673,
+        "high": 0.5509,
+        "nNear": 146,
+        "nHigh": 610,
+        "inner": 0.4964,
+        "outer": 0.4286,
+        "nInner": 493,
+        "nOuter": 493
+      },
+      "inSolidNow": 0,
+      "fieldVersion": 4820,
+      "worldVersion": 4820,
+      "reversed": {
+        "along": -0.774,
+        "forward": 0.774
+      }
+    },
+    {
+      "pix": {
+        "size": [
+          1440,
+          760
+        ],
+        "skyH": 152,
+        "skyNoise": 531,
+        "skyOn": 1011,
+        "skyOff2": 1128,
+        "skySum": 94487,
+        "fullNoise": 5348,
+        "fullOn": 615080,
+        "skyBrightOn": 309,
+        "skyBrightNoise": 90,
+        "skyBrightBack": 130,
+        "whiteSky": [
+          71506,
+          71529
+        ],
+        "whiteFull": [
+          254424,
+          760010
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "shots": [
+    "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/snow-wind-close-r210.png"
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/viking-apostles-e2e/run-1795569504409",
+  "steps": {
+    "worldReady": "ok",
+    "muster": {
+      "site": "apostles"
+    },
+    "board0": {
+      "count": 0,
+      "walking": 72,
+      "refillLeft": 228
+    },
+    "board20": {
+      "count": 0,
+      "walking": 86,
+      "refillLeft": 214
+    },
+    "board40": {
+      "count": 0,
+      "walking": 99,
+      "refillLeft": 201
+    },
+    "board60": {
+      "count": 0,
+      "walking": 110,
+      "refillLeft": 190
+    },
+    "board80": {
+      "count": 2,
+      "walking": 108,
+      "refillLeft": 190
+    },
+    "board100": {
+      "count": 5,
+      "walking": 106,
+      "refillLeft": 189
+    },
+    "boardStat": {
+      "i": 102,
+      "whistled": false,
+      "active": true,
+      "departed": false,
+      "departedFrame": -1,
+      "refillLeft": 188,
+      "walking": 104,
+      "ships": [
+        {
+          "id": "leebai",
+          "count": 0,
+          "walkers": 56
+        },
+        {
+          "id": "duke",
+          "count": 8,
+          "walkers": 48
+        }
+      ]
+    },
+    "boarded": [
+      {
+        "id": "leebai",
+        "count": 0
+      },
+      {
+        "id": "duke",
+        "count": 8
+      }
+    ],
+    "sailPhase": "sail-apostles",
+    "route": {
+      "routeMeta": null,
+      "legs": [
+        {
+          "id": "leebai",
+          "source": "astar",
+          "len": 328
+        },
+        {
+          "id": "duke"
+        }
+      ]
+    },
+    "holdPhase": "hold-apostles",
+    "gate": {
+      "open": true,
+      "waitingSec": 0
+    },
+    "battlePhase": "apostles",
+    "stage": {
+      "name": "viking-apostles-battle",
+      "scale": 5,
+      "gridRadius": 18,
+      "defSquads": 3,
+      "defUnits": 24,
+      "atkUnits": 0,
+      "wave": 0,
+      "houses": 4
+    },
+    "wave1": {
+      "units": {
+        "wave": 1,
+        "boats": 1,
+        "vikLanded": 0,
+        "vikTotal": 8,
+        "def": 24
+      },
+      "campaign": {
+        "wave": 1,
+        "alive": 32
+      }
+    },
+    "melee": {
+      "defBefore": 24,
+      "defNow": 20
+    },
+    "final": {
+      "phase": "apostles",
+      "t": 57.4,
+      "pool": 99,
+      "battleSite": "apostles",
+      "route": {
+        "ok": true,
+        "site": "apostles",
+        "legs": [
+          {
+            "id": "leebai",
+            "len": 328,
+            "sailSec": 1,
+            "source": "astar",
+            "pts": 3
+          },
+          {
+            "id": "duke",
+            "len": 2360,
+            "sailSec": 9,
+            "source": "detour-fallback",
+            "pts": 238
+          }
+        ],
+        "obstacles": {
+          "crossRails": true
+        },
+        "timing": {
+          "departBeforeMossSec": 600,
+          "musterBudgetSec": 360,
+          "holdAfterArriveSec": 30,
+          "cruiseSpeedMps": 15,
+          "dashSpeedMps": 15,
+          "avgBatianTargetSec": 180,
+          "mossApproachSec": 70
+        },
+        "table": null
+      },
+      "timing": {
+        "departBeforeMossSec": 600,
+        "musterBudgetSec": 360,
+        "holdAfterArriveSec": 30,
+        "cruiseSpeedMps": 15,
+        "dashSpeedMps": 15,
+        "avgBatianTargetSec": 180,
+        "mossApproachSec": 70
+      },
+      "battleEta": 250,
+      "mossEta": 250,
+      "ships": [
+        {
+          "id": "leebai",
+          "count": 46,
+          "voyage": {
+            "pts": 3,
+            "len": 328,
+            "source": "astar",
+            "sailSec": 1
+          }
+        },
+        {
+          "id": "duke",
+          "count": 53,
+          "voyage": {
+            "pts": 238,
+            "len": 2473,
+            "source": "detour-fallback",
+            "sailSec": 10,
+            "blocked": 0,
+            "fixes": 200,
+            "dryLegs": 44
+          }
+        }
+      ],
+      "citadel": null,
+      "batianAttack": {
+        "throws": 0,
+        "shield": 0,
+        "hull": 0,
+        "missed": 0,
+        "trooperStrikes": 0,
+        "trooperWounds": 0,
+        "trooperKills": 0,
+        "vikingsCut": 0,
+        "pursuing": 0
+      },
+      "battle": {
+        "wave": 2,
+        "alive": 36
+      },
+      "log": [
+        "sail-apostles",
+        "preplan-apostles(leebai:328m/1s/astar · duke:2360m/9s/detour-fallback)",
+        "hold-apostles(锚地待命 · 等待主战场开战窗口)",
+        "site-defenders(十二门徒守军 = REA 默认守军 3 队 / 24 人（岩群无本地驻军编制；另有霸天舰队攻方对抗面）)",
+        "apostles(锚地控制位就绪 · 开战)"
+      ]
+    }
+  },
+  "errors": [],
+  "pass": true
+}

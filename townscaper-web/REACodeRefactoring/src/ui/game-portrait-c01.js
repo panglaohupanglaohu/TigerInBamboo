@@ -88,9 +88,19 @@ export const GAME_DRAWERS = Object.freeze({
   gear: { none() {}, helmet: (f) => helmet(f, false), nasal: (f) => helmet(f, true), mail, hood },
   frame: { cut: frame },
 });
-/** 同一走表器、换表画游戏内头像。返回 { spec, drawn }。 */
-export function drawGamePortrait(ctx, seed, box) {
-  const spec = sampleSlots(seed, GAME_SLOTS);
+/** 游戏角色接口：把守军小队映射成头像「钉槽值」（sampleSlots pin）。
+ * gear = 兵种装备：矛兵是重甲 → 锁甲兜帽 mail；弓手轻装 → 布兜帽 hood；步兵不钉（随种子）。
+ * bg = 队色底：按小队序号轮四种底色，同一小队永远同色。
+ * 原片头像素材（兜帽/锁甲等全装备层级）不可得——这层只管「哪支队 → 哪套装备/底色」的接线。 */
+export function squadPortraitIdentity(sq) {
+  if (!sq || !Number.isInteger(sq.id) || sq.id < 0) throw new TypeError('invalid squad identity');
+  return { gear: sq.pike ? 'mail' : sq.archer ? 'hood' : null, bg: Object.keys(BG)[sq.id % Object.keys(BG).length] };
+}
+/** 同一走表器、换表画游戏内头像。{pin:{槽:变体}} 或 {identity:squadPortraitIdentity(sq)} 钉槽。返回 { spec, drawn }。 */
+export function drawGamePortrait(ctx, seed, box, { pin = null, identity = null } = {}) {
+  const merged = { ...(pin || {}) };
+  if (identity) for (const k of ['gear', 'bg']) if (identity[k] != null) merged[k] = identity[k];
+  const spec = sampleSlots(seed, GAME_SLOTS, { pin: merged });
   // 盔 / 锁甲 / 兜帽盖住头发：头发槽照样采样（同一随机流），只是被装备层盖住
   const drawn = drawSlotPortrait(ctx, spec, box, { slots: GAME_SLOTS, drawers: GAME_DRAWERS });
   return { spec, drawn };

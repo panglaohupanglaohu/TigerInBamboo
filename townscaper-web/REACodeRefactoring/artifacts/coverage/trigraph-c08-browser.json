@@ -1,0 +1,57 @@
+{
+  "grow": {
+    "step": 200,
+    "hot": 33,
+    "audit": {
+      "manifold": true,
+      "delaunay": true,
+      "tris": 401,
+      "finite": true,
+      "degenerate": 0,
+      "orphanVertices": 0,
+      "checkedTriangles": 401,
+      "full": true,
+      "removed": 0
+    },
+    "tris": 385,
+    "verts": 200
+  },
+  "del": {
+    "edits": {
+      "removed": 5,
+      "moved": 0
+    },
+    "audit": {
+      "manifold": true,
+      "delaunay": true,
+      "tris": 391,
+      "finite": true,
+      "degenerate": 0,
+      "orphanVertices": 0,
+      "checkedTriangles": 391,
+      "full": true,
+      "removed": 5
+    },
+    "tris": 375,
+    "removed": 5
+  },
+  "move": {
+    "edits": {
+      "removed": 5,
+      "moved": 5
+    },
+    "audit": {
+      "manifold": true,
+      "delaunay": true,
+      "tris": 391,
+      "finite": true,
+      "degenerate": 0,
+      "orphanVertices": 0,
+      "checkedTriangles": 391,
+      "full": true,
+      "removed": 10
+    },
+    "live": 195
+  },
+  "errors": []
+}

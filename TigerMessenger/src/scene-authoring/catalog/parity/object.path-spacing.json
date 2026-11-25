@@ -1,0 +1,84 @@
+{
+ "capability": "object.path-spacing",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "object",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/navribbon.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/path-samples.js"
+ ],
+ "inputs": {
+  "centerline": "perSeg 64/12",
+  "steps": [
+   1,
+   0.35
+  ]
+ },
+ "metrics": [
+  {
+   "id": "arc-64-1",
+   "name": "perSeg=64 step=1 同弧长采样位置逐位",
+   "original": 17,
+   "refactored": 18,
+   "equal": true
+  },
+  {
+   "id": "arc-64-0.35",
+   "name": "perSeg=64 step=0.35 同弧长采样位置逐位",
+   "original": 47,
+   "refactored": 48,
+   "equal": true
+  },
+  {
+   "id": "arc-12-1",
+   "name": "perSeg=12 step=1 同弧长采样位置逐位",
+   "original": 17,
+   "refactored": 18,
+   "equal": true
+  },
+  {
+   "id": "arc-12-0.35",
+   "name": "perSeg=12 step=0.35 同弧长采样位置逐位",
+   "original": 47,
+   "refactored": 48,
+   "equal": true
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "tail-64-1",
+   "original": "17 点（丢不足一步的尾巴）",
+   "refactored": "18 点（末尾必追加折线终点 s=len）",
+   "note": "tests/path-samples-referee.mjs 登记的工程差异"
+  },
+  {
+   "kind": "value",
+   "id": "tail-64-0.35",
+   "original": "47 点（丢不足一步的尾巴）",
+   "refactored": "48 点（末尾必追加折线终点 s=len）",
+   "note": "tests/path-samples-referee.mjs 登记的工程差异"
+  },
+  {
+   "kind": "value",
+   "id": "tail-12-1",
+   "original": "17 点（丢不足一步的尾巴）",
+   "refactored": "18 点（末尾必追加折线终点 s=len）",
+   "note": "tests/path-samples-referee.mjs 登记的工程差异"
+  },
+  {
+   "kind": "value",
+   "id": "tail-12-0.35",
+   "original": "47 点（丢不足一步的尾巴）",
+   "refactored": "48 点（末尾必追加折线终点 s=len）",
+   "note": "tests/path-samples-referee.mjs 登记的工程差异"
+  }
+ ],
+ "basis": "同一中线同一弧长 s 处的采样位置逐位比——裁判二分定位、本侧线性游标是同一式子；端点保留差异如实登记。"
+}

@@ -1,0 +1,436 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/capability-contracts-e2e/run-1795460305716",
+  "capabilities": [
+    {
+      "id": "mountain.protect",
+      "contract": "读 高度场、陆地遮罩、建筑遮罩、轨道遮罩、海岸线 · 写 保护遮罩 · 不动 已有建筑（含用户搭建）不动、建筑保护带不动、轨道净空、海岸线不变、不写用户存档",
+      "source": "过渡表",
+      "checks": "已有建筑（含用户搭建）不动、建筑保护带不动、轨道净空、海岸线不变、不写用户存档"
+    },
+    {
+      "id": "mountain.massif",
+      "contract": "读 高度场、保护遮罩 · 写 高度场 · 不动 建筑保护带不动、轨道净空、海岸线不变",
+      "source": "过渡表",
+      "checks": "建筑保护带不动、轨道净空、海岸线不变"
+    },
+    {
+      "id": "mountain.erode",
+      "contract": "读 高度场、保护遮罩 · 写 高度场 · 不动 建筑保护带不动、轨道净空、海岸线不变",
+      "source": "过渡表",
+      "checks": "建筑保护带不动、轨道净空、海岸线不变"
+    },
+    {
+      "id": "mountain.rolling",
+      "contract": "读 高度场、保护遮罩 · 写 高度场 · 不动 建筑保护带不动、轨道净空、海岸线不变",
+      "source": "过渡表",
+      "checks": "建筑保护带不动、轨道净空、海岸线不变"
+    },
+    {
+      "id": "mountain.talus",
+      "contract": "读 高度场、保护遮罩 · 写 高度场 · 不动 建筑保护带不动、轨道净空、海岸线不变",
+      "source": "过渡表",
+      "checks": "建筑保护带不动、轨道净空、海岸线不变"
+    },
+    {
+      "id": "mountain.lowpoly",
+      "contract": "读 高度场 · 写 地形网格、配色 · 不动 建筑保护带不动、轨道净空、海岸线不变、原地形只隐藏不改",
+      "source": "过渡表",
+      "checks": "建筑保护带不动、轨道净空、海岸线不变、原地形只隐藏不改"
+    },
+    {
+      "id": "building.sites",
+      "contract": "读 高度场、陆地遮罩、建筑遮罩、轨道遮罩、海岸线 · 写 可建遮罩 · 不动 已有建筑（含用户搭建）不动、建筑保护带不动、轨道净空、海岸线不变、不写用户存档、不碰湖上建筑、原地形只隐藏不改",
+      "source": "meta",
+      "checks": "已有建筑（含用户搭建）不动、建筑保护带不动、轨道净空、海岸线不变、不写用户存档、不碰湖上建筑、原地形只隐藏不改"
+    },
+    {
+      "id": "building.prefabs",
+      "contract": "读 — · 写 多格 prefab 目录 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "building.joint-wfc",
+      "contract": "读 可建遮罩、多格 prefab 目录、高度场 · 写 候选建筑群、候选路网 · 不动 已有建筑（含用户搭建）不动、建筑保护带不动、轨道净空、海岸线不变、不写用户存档、不碰湖上建筑、原地形只隐藏不改",
+      "source": "meta",
+      "checks": "已有建筑（含用户搭建）不动、建筑保护带不动、轨道净空、海岸线不变、不写用户存档、不碰湖上建筑、原地形只隐藏不改"
+    },
+    {
+      "id": "relief.soft",
+      "contract": "—",
+      "source": "没有",
+      "checks": "—"
+    },
+    {
+      "id": "relief.cliff",
+      "contract": "—",
+      "source": "没有",
+      "checks": "—"
+    },
+    {
+      "id": "relief.valley",
+      "contract": "—",
+      "source": "没有",
+      "checks": "—"
+    },
+    {
+      "id": "relief.overhang",
+      "contract": "—",
+      "source": "没有",
+      "checks": "—"
+    },
+    {
+      "id": "relief.ledge",
+      "contract": "—",
+      "source": "没有",
+      "checks": "—"
+    },
+    {
+      "id": "relief.passes",
+      "contract": "—",
+      "source": "没有",
+      "checks": "—"
+    },
+    {
+      "id": "apostles.soft",
+      "contract": "读 地形网格 · 写 地形外观开关 · 不动 不写用户存档、原地形只隐藏不改",
+      "source": "meta",
+      "checks": "不写用户存档、原地形只隐藏不改"
+    },
+    {
+      "id": "apostles.palette",
+      "contract": "读 地形网格 · 写 地形外观开关、配色 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "battle.stage",
+      "contract": "读 高度场、陆地遮罩、建筑遮罩 · 写 战斗舞台 · 不动 已有建筑（含用户搭建）不动、不写用户存档",
+      "source": "过渡表",
+      "checks": "已有建筑（含用户搭建）不动、不写用户存档"
+    },
+    {
+      "id": "battle.garrison",
+      "contract": "读 战斗舞台 · 写 守军 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "battle.waves",
+      "contract": "读 战斗舞台 · 写 来袭波次 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "battle.navFinePortals",
+      "contract": "读 战斗舞台 · 写 战斗舞台 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "battle.navTraffic",
+      "contract": "读 战斗舞台 · 写 战斗舞台 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "battle.navFooting",
+      "contract": "读 战斗舞台 · 写 战斗舞台 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.campaign",
+      "contract": "读 战斗舞台 · 写 战役图、前线 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.camera",
+      "contract": "读 战斗舞台 · 写 镜头路径 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.wake",
+      "contract": "读 战斗舞台 · 写 尾迹 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.ornament",
+      "contract": "读 战斗舞台 · 写 装饰 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.fire",
+      "contract": "读 战斗舞台 · 写 火焰效果 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.hallway",
+      "contract": "读 战斗舞台 · 写 走廊样板 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.sediment",
+      "contract": "读 战斗舞台 · 写 沉积层带 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.projectiles",
+      "contract": "读 战斗舞台 · 写 弹道 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "fx.replay",
+      "contract": "读 战斗舞台 · 写 回放 · 不动 不写用户存档",
+      "source": "过渡表",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "scene.oklab-contrast",
+      "contract": "读 材质 · 写 材质 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "scene.oklab-palette",
+      "contract": "读 材质 · 写 材质、配色 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "scene.palette-unify",
+      "contract": "读 材质 · 写 材质、配色 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "scene.tone",
+      "contract": "读 材质 · 写 材质 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "scene.style-pack",
+      "contract": "读 材质 · 写 材质、配色 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "object.path-spacing",
+      "contract": "读 物件排布 · 写 物件排布 · 不动 手工锁定物件不动、不写用户存档",
+      "source": "meta",
+      "checks": "手工锁定物件不动、不写用户存档"
+    },
+    {
+      "id": "object.scale-variety",
+      "contract": "读 物件排布 · 写 物件排布 · 不动 手工锁定物件不动、不写用户存档",
+      "source": "meta",
+      "checks": "手工锁定物件不动、不写用户存档"
+    },
+    {
+      "id": "object.yaw-variety",
+      "contract": "读 物件排布 · 写 物件排布 · 不动 手工锁定物件不动、不写用户存档",
+      "source": "meta",
+      "checks": "手工锁定物件不动、不写用户存档"
+    },
+    {
+      "id": "object.spacing-relax",
+      "contract": "读 物件排布 · 写 物件排布 · 不动 手工锁定物件不动、不写用户存档",
+      "source": "meta",
+      "checks": "手工锁定物件不动、不写用户存档"
+    },
+    {
+      "id": "planet.sea-level",
+      "contract": "读 星球配方 · 写 星球配方、海平面 · 不动 场景锚点不被淹、不写用户存档",
+      "source": "meta",
+      "checks": "场景锚点不被淹、不写用户存档"
+    },
+    {
+      "id": "planet.reseed",
+      "contract": "读 星球配方 · 写 星球配方、星球地貌 · 不动 场景锚点不被淹、不写用户存档",
+      "source": "meta",
+      "checks": "场景锚点不被淹、不写用户存档"
+    },
+    {
+      "id": "planet.surface-detail",
+      "contract": "读 星球配方 · 写 星球配方、星球地貌 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.chart-split",
+      "contract": "读 星球配方 · 写 星球配方、星球地貌 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.grid-subdivision",
+      "contract": "读 星球配方 · 写 星球配方、星球地貌 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.sea-shore-field",
+      "contract": "读 星球配方 · 写 海面外观 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.sea-tint",
+      "contract": "读 星球配方 · 写 海面外观 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.sea-foam",
+      "contract": "读 星球配方 · 写 海面外观 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.sea-waves",
+      "contract": "读 星球配方 · 写 海面外观 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.sea-reflection",
+      "contract": "读 星球配方 · 写 海面外观 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.weather-kind",
+      "contract": "读 星球配方 · 写 天气 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.weather-wind",
+      "contract": "读 星球配方 · 写 天气 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.weather-clouds",
+      "contract": "读 星球配方 · 写 天气 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.light-time",
+      "contract": "读 星球配方 · 写 光照 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.light-sun-shadow",
+      "contract": "读 星球配方 · 写 光照 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.light-ambient-bounce",
+      "contract": "读 星球配方 · 写 光照 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.light-ao",
+      "contract": "读 星球配方 · 写 光照 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.light-ink-rim",
+      "contract": "读 星球配方 · 写 光照 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.light-rock",
+      "contract": "读 星球配方 · 写 光照 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.light-view-grade",
+      "contract": "读 星球配方 · 写 光照 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.weather-snow-cover",
+      "contract": "读 星球配方 · 写 天气 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    },
+    {
+      "id": "planet.weather-fog",
+      "contract": "读 星球配方 · 写 天气 · 不动 不写用户存档",
+      "source": "meta",
+      "checks": "不写用户存档"
+    }
+  ],
+  "steps": {
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「高山圣城（通用插件 + 构建面板）」自动预装 3 个能力（建筑选址、多格 prefab 目录、联合 WFC 摆建筑群），点 ▶ 执行管线一键跑完整条。",
+    "contracts": {
+      "total": 63,
+      "declared": 57,
+      "fromMeta": 36,
+      "fromOverlay": 21,
+      "missing": 6,
+      "missingIds": [
+        "relief.soft",
+        "relief.cliff",
+        "relief.valley",
+        "relief.overhang",
+        "relief.ledge",
+        "relief.passes"
+      ],
+      "errors": 6,
+      "errorIds": [
+        "relief.soft",
+        "relief.cliff",
+        "relief.valley",
+        "relief.overhang",
+        "relief.ledge",
+        "relief.passes"
+      ],
+      "warnings": 51
+    },
+    "reliefPending": [
+      "relief.soft",
+      "relief.cliff",
+      "relief.valley",
+      "relief.overhang",
+      "relief.ledge",
+      "relief.passes"
+    ],
+    "rows": 63
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R51-1-contract-panel.png",
+    "R51-2-page.png"
+  ],
+  "pass": true
+}

@@ -1,0 +1,472 @@
+{
+  "R": {
+    "mixed": {
+      "file": {
+        "off": "artifacts/coverage/slope-cliff-mixed-terraced-r151.png",
+        "on": "artifacts/coverage/slope-cliff-mixed-soft-r151.png"
+      },
+      "off": {
+        "grid": "mixed",
+        "seed": 7,
+        "opts": {
+          "seed": 7,
+          "riverRelax": false,
+          "lakes": false,
+          "basins": 0,
+          "erosion": null,
+          "softSlopes": true,
+          "softRelax": true
+        },
+        "lakes": 0,
+        "lakeCells": 0,
+        "relax": null,
+        "joint": null,
+        "erosion": null,
+        "minimaAfter": null,
+        "gridSides": {
+          "3": 1142,
+          "4": 881
+        },
+        "cells": 2023,
+        "riverCells": 37,
+        "riverReaches": 2,
+        "riverMouths": 2,
+        "land": 591,
+        "levelCount": 10,
+        "softTops": false,
+        "slope": {
+          "flat": 126.9,
+          "soft": 0,
+          "steep": 0,
+          "wallArea": 227.6
+        },
+        "walls": {
+          "edges": 563,
+          "hist": {
+            "1": 350,
+            "2": 157,
+            "3": 39,
+            "more": 17
+          },
+          "quads": 863,
+          "fill": 0
+        },
+        "edges": {
+          "drawn": 547,
+          "seamless": 0
+        }
+      },
+      "on": {
+        "grid": "mixed",
+        "seed": 7,
+        "opts": {
+          "seed": 7,
+          "riverRelax": false,
+          "lakes": false,
+          "basins": 0,
+          "erosion": null,
+          "softSlopes": true,
+          "softRelax": true
+        },
+        "lakes": 0,
+        "lakeCells": 0,
+        "relax": null,
+        "joint": null,
+        "erosion": null,
+        "minimaAfter": null,
+        "gridSides": {
+          "3": 1142,
+          "4": 881
+        },
+        "cells": 2023,
+        "riverCells": 37,
+        "riverReaches": 2,
+        "riverMouths": 2,
+        "land": 591,
+        "levelCount": 10,
+        "softTops": true,
+        "slope": {
+          "flat": 95.3,
+          "soft": 25,
+          "steep": 22.8,
+          "wallArea": 197.6
+        },
+        "walls": {
+          "edges": 456,
+          "hist": {
+            "1": 243,
+            "2": 157,
+            "3": 39,
+            "more": 17
+          },
+          "quads": 756,
+          "fill": 4
+        },
+        "edges": {
+          "drawn": 436,
+          "seamless": 111
+        },
+        "soft": {
+          "vertices": 93,
+          "groups": 93,
+          "stepEdges": 163,
+          "melted": 143,
+          "seamless": 111,
+          "stretched": 32,
+          "meltedShare": 0.877,
+          "cliffEdges": 172,
+          "cliffShared": 17,
+          "cliffHorizontal": 0,
+          "bySides": {
+            "4:3": {
+              "edges": 68,
+              "melted": 57,
+              "seamless": 49
+            },
+            "4:4": {
+              "edges": 44,
+              "melted": 39,
+              "seamless": 27
+            },
+            "3:4": {
+              "edges": 23,
+              "melted": 20,
+              "seamless": 16
+            },
+            "3:3": {
+              "edges": 28,
+              "melted": 27,
+              "seamless": 19
+            }
+          }
+        }
+      },
+      "noise": {
+        "pixels": 0,
+        "total": 630000,
+        "mean": 0
+      },
+      "ab": {
+        "pixels": 25782,
+        "total": 630000,
+        "mean": 30.08
+      }
+    },
+    "quad": {
+      "file": {
+        "off": "artifacts/coverage/slope-cliff-quad-terraced-r151.png",
+        "on": "artifacts/coverage/slope-cliff-quad-soft-r151.png"
+      },
+      "off": {
+        "grid": "quad",
+        "seed": 7,
+        "opts": {
+          "seed": 7,
+          "riverRelax": false,
+          "lakes": false,
+          "basins": 0,
+          "erosion": null,
+          "softSlopes": true,
+          "softRelax": true
+        },
+        "lakes": 0,
+        "lakeCells": 0,
+        "relax": null,
+        "joint": null,
+        "erosion": null,
+        "minimaAfter": null,
+        "gridSides": {
+          "4": 2516
+        },
+        "cells": 2516,
+        "riverCells": 20,
+        "riverReaches": 2,
+        "riverMouths": 2,
+        "land": 736,
+        "levelCount": 10,
+        "softTops": false,
+        "slope": {
+          "flat": 134.9,
+          "soft": 0,
+          "steep": 0,
+          "wallArea": 230.4
+        },
+        "walls": {
+          "edges": 760,
+          "hist": {
+            "1": 470,
+            "2": 215,
+            "3": 47,
+            "more": 28
+          },
+          "quads": 1170,
+          "fill": 0
+        },
+        "edges": {
+          "drawn": 738,
+          "seamless": 0
+        }
+      },
+      "on": {
+        "grid": "quad",
+        "seed": 7,
+        "opts": {
+          "seed": 7,
+          "riverRelax": false,
+          "lakes": false,
+          "basins": 0,
+          "erosion": null,
+          "softSlopes": true,
+          "softRelax": true
+        },
+        "lakes": 0,
+        "lakeCells": 0,
+        "relax": null,
+        "joint": null,
+        "erosion": null,
+        "minimaAfter": null,
+        "gridSides": {
+          "4": 2516
+        },
+        "cells": 2516,
+        "riverCells": 20,
+        "riverReaches": 2,
+        "riverMouths": 2,
+        "land": 736,
+        "levelCount": 10,
+        "softTops": true,
+        "slope": {
+          "flat": 95.2,
+          "soft": 29.8,
+          "steep": 28.7,
+          "wallArea": 192.7
+        },
+        "walls": {
+          "edges": 574,
+          "hist": {
+            "1": 284,
+            "2": 215,
+            "3": 47,
+            "more": 28
+          },
+          "quads": 984,
+          "fill": 1
+        },
+        "edges": {
+          "drawn": 551,
+          "seamless": 187
+        },
+        "soft": {
+          "vertices": 158,
+          "groups": 158,
+          "stepEdges": 210,
+          "melted": 208,
+          "seamless": 186,
+          "stretched": 22,
+          "meltedShare": 0.99,
+          "cliffEdges": 218,
+          "cliffShared": 8,
+          "cliffHorizontal": 0,
+          "bySides": {
+            "4:4": {
+              "edges": 210,
+              "melted": 208,
+              "seamless": 186
+            }
+          }
+        }
+      },
+      "noise": {
+        "pixels": 0,
+        "total": 630000,
+        "mean": 0
+      },
+      "ab": {
+        "pixels": 30993,
+        "total": 630000,
+        "mean": 29.39
+      }
+    }
+  },
+  "E": {
+    "grid": "mixed",
+    "seed": 7,
+    "opts": {
+      "seed": 7,
+      "riverRelax": false,
+      "lakes": false,
+      "basins": 0,
+      "erosion": {
+        "passes": 2
+      },
+      "softSlopes": true,
+      "softRelax": true
+    },
+    "lakes": 0,
+    "lakeCells": 0,
+    "relax": null,
+    "joint": null,
+    "erosion": {
+      "lowered": 165,
+      "volume": 165
+    },
+    "minimaAfter": 0,
+    "gridSides": {
+      "3": 1142,
+      "4": 881
+    },
+    "cells": 2023,
+    "riverCells": 37,
+    "riverReaches": 2,
+    "riverMouths": 2,
+    "land": 590,
+    "levelCount": 10,
+    "softTops": true,
+    "slope": {
+      "flat": 90.5,
+      "soft": 27.8,
+      "steep": 20,
+      "wallArea": 199.6
+    },
+    "walls": {
+      "edges": 527,
+      "hist": {
+        "1": 331,
+        "2": 157,
+        "3": 30,
+        "more": 9
+      },
+      "quads": 772,
+      "fill": 4
+    },
+    "soft": {
+      "vertices": 93,
+      "groups": 96,
+      "stepEdges": 136,
+      "melted": 120,
+      "seamless": 94,
+      "stretched": 26,
+      "meltedShare": 0.882,
+      "cliffEdges": 168,
+      "cliffShared": 37,
+      "cliffHorizontal": 0,
+      "bySides": {
+        "4:3": {
+          "edges": 62,
+          "melted": 52,
+          "seamless": 44
+        },
+        "4:4": {
+          "edges": 32,
+          "melted": 30,
+          "seamless": 21
+        },
+        "3:4": {
+          "edges": 18,
+          "melted": 15,
+          "seamless": 12
+        },
+        "3:3": {
+          "edges": 24,
+          "melted": 23,
+          "seamless": 17
+        }
+      }
+    },
+    "water": {
+      "minimaBefore": 2,
+      "minimaAfter": 0,
+      "minimaWorld": 0,
+      "drainedFill": 1,
+      "drainedRaw": 1,
+      "raised": 6,
+      "invalidated": 0
+    }
+  },
+  "ED": {
+    "grid": "mixed",
+    "seed": 7,
+    "opts": {
+      "seed": 7,
+      "riverRelax": false,
+      "lakes": false,
+      "basins": 0,
+      "erosion": null,
+      "softSlopes": true,
+      "softRelax": true
+    },
+    "lakes": 0,
+    "lakeCells": 0,
+    "relax": null,
+    "joint": null,
+    "erosion": null,
+    "minimaAfter": null,
+    "gridSides": {
+      "3": 1142,
+      "4": 881
+    },
+    "cells": 2023,
+    "riverCells": 37,
+    "riverReaches": 2,
+    "riverMouths": 2,
+    "land": 591,
+    "levelCount": 10,
+    "softTops": true,
+    "slope": {
+      "flat": 95.3,
+      "soft": 25,
+      "steep": 22.8,
+      "wallArea": 197.6
+    },
+    "walls": {
+      "edges": 456,
+      "hist": {
+        "1": 243,
+        "2": 157,
+        "3": 39,
+        "more": 17
+      },
+      "quads": 756,
+      "fill": 4
+    },
+    "edges": {
+      "drawn": 436,
+      "seamless": 111
+    },
+    "soft": {
+      "vertices": 93,
+      "groups": 93,
+      "stepEdges": 163,
+      "melted": 143,
+      "seamless": 111,
+      "stretched": 32,
+      "meltedShare": 0.877,
+      "cliffEdges": 172,
+      "cliffShared": 17,
+      "cliffHorizontal": 0,
+      "bySides": {
+        "4:3": {
+          "edges": 68,
+          "melted": 57,
+          "seamless": 49
+        },
+        "4:4": {
+          "edges": 44,
+          "melted": 39,
+          "seamless": 27
+        },
+        "3:4": {
+          "edges": 23,
+          "melted": 20,
+          "seamless": 16
+        },
+        "3:3": {
+          "edges": 28,
+          "melted": 27,
+          "seamless": 19
+        }
+      }
+    }
+  },
+  "errors": []
+}

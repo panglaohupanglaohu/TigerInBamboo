@@ -41,8 +41,14 @@ const land = la.points.find((p) => near(p[1], 0) && p[0] > 2);
 assert.ok(land && near(land[0], 2.55), '落点应当外抛 0.55，实际 ' + JSON.stringify(land));
 // 落差不到 minStep 不加弧
 assert.equal(landArcs([[0, 1, 0], [4, 0.7, 0]], { minStep: 0.5 }).arcs, 0);
-// 段太短（外抛会越过终点）退化成斜落
-assert.equal(landArcs([[0, 1, 0], [0.4, 0, 0]], { minStep: 0.5, land: 0.55 }).arcs, 0);
+// 段太短：外抛距离是**上限**，按剩余段长收边（第 175 轮：真实导航图一格只有 0.42–0.47 宽，
+// 固定 0.55 会越过终点，原实现整段放弃弧 → 主战场 2 处跨崖 6 个点埋进崖体）
+const short = landArcs([[0, 1, 0], [0.4, 0, 0]], { minStep: 0.5, land: 0.55 });
+assert.equal(short.arcs, 1);
+const shortLand = short.points.find((p) => near(p[1], 0));
+assert.ok(shortLand && shortLand[0] > 0.2 && shortLand[0] < 0.4, '落点收边到剩余段内，实际 ' + JSON.stringify(shortLand));
+// 剩余余量小到塞不下弧（< 5% 段长）才退化成斜落
+assert.equal(landArcs([[0, 1, 0], [0.4, 0, 0]], { minStep: 0.5, land: 0.55, at: 0.95 }).arcs, 0);
 
 // 6. 关节点：预览点串一个都不许埋在岩体里，直连折线必然埋
 const surface = (x) => (x < 2 ? 1 : 0);            // 崖沿在 x=2，左侧高 1 层

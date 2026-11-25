@@ -8,12 +8,14 @@ label{font:inherit;margin-right:16px}input[type=range]{vertical-align:middle}
 #stats{font-size:13px;color:#3c565e;margin:10px 0 14px;font-variant-numeric:tabular-nums}
 a{color:#276e86}
 </style>
-<h1>选中小队脚下的浅色线网（凸包 + 辐条 + 角标）</h1>
+<h1>选中小队脚下的浅色线网（格边界 + 辐条 + 角标）</h1>
 <p class="lead">对照片子 883447205176238083（654 帧，雪地图）：每支队伍站住之后，脚下会浮出一层近白的青色线网 —— 沿占位格最外一圈的轮廓、中间一点连到每个角的辐条（所以轮廓内部被切成几个三角面）、每个角上一个小方块标记。<br>
-下面把同一支 3×4 的队伍摆成三种占位（整块 / 少两格的凹形 / 散开成一排），看线网怎么跟着占地走。左图是占位格与士兵，右图只留线网。</p>
+下面把同一支 3×4 的队伍摆成三种占位（整块 / L 形少一格 / U 形少两格），看线网怎么跟着占地走。<b>线沿格边界走</b>（勾选框可关掉对照凸包），凹形占位时缺口里那条虚线是凸包 —— 它会把这个凹口一刀切掉，原片不会。左图是占位格与士兵，右图只留线网。</p>
 <div>
 <label>队伍人数 <input id="n" type="range" min="4" max="12" step="1" value="12"></label>
 <label>占位散布 <input id="spread" type="range" min="0" max="0.55" step="0.05" value="0"></label>
+<label>占位形状 <select id="shape"><option value="block">整块 3×4</option><option value="L">L 形（少一格，凹口）</option><option value="U">U 形（少两格）</option></select></label>
+<label><input id="edge" type="checkbox" checked> 按格边界走（凹口保留）</label>
 </div>
 <div id="stats"></div>
 <div class="row">
@@ -22,30 +24,30 @@ a{color:#276e86}
 </div>
 <p><a href="index.html?scene=badnorth" target="_top">Bad North 实景</a> · <a href="artifacts/coverage/883447205176238083-review.md">逐帧记录</a></p>
 <script type="module">
-import { footprint } from './src/badnorth/squad-footprint.js';
+import { footprint, footprintCells, cellOutline, hullRing } from './src/badnorth/squad-footprint.js';
 
 const S = 46, OX = 210, OY = 300;
 const proj = ([x, z]) => [OX + (x - z) * S * 0.62, OY - (x + z) * S * 0.36];
 const $ = (id) => document.getElementById(id);
-let n = 12, spread = 0;
+let n = 12, spread = 0, shape = 'block', edge = true;
 
 // 3 列 × 4 行的方块占位，按人数从前往后填；spread>0 时每个兵朝外抖一点
-function post(cx, cz) {
-  return [cx, cz];
-}
 function soldiers() {
   const out = [];
   const cols = 3, rows = 4;
   for (let i = 0; i < n; i++) {
     const col = i % cols, row = Math.floor(i / cols);
-    const cx = col - (cols - 1) / 2, cz = row - (rows - 1) / 2;
+    const cx = col - (cols - 1) / 2, cz = row - (rows - 1) / 2 + 0.5;   // 行对齐到整数格心，占位才连成一片
+    // L / U：把最后一行的一角（U 是两角）挖掉，占位不是方块了 —— 凸包会把这个凹口切掉
+    if (shape === 'L' && col === cols - 1 && row === rows - 1) continue;
+    if (shape === 'U' && row === rows - 1 && col !== 1) continue;
     const jitter = spread * ((i * 37 % 11) / 10 - 0.5);
     out.push([cx + jitter, cz + jitter * 0.6]);
   }
   return out;
 }
 function cellQuad([x, z]) {
-  const h = 0.85;
+  const h = 0.5;   // 线网现在贴格边界，格块也按 1×1 画，两者才对得上
   return [[x - h, z - h], [x + h, z - h], [x + h, z + h], [x - h, z + h]].map(proj);
 }
 function poly(ctx, pts, fill, stroke, lw = 1.2) {
@@ -61,7 +63,10 @@ const cellCtx = $('cells').getContext('2d'), netCtx = $('net').getContext('2d');
 
 function draw() {
   const men = soldiers();
-  const fp = footprint(men);
+  // 占位格 = 士兵所在格去重（原片的线网贴的是格边界，不是人的凸包）
+  const seen = new Set(), cells = [];
+  for (const m of men) { const k = `${Math.round(m[0])},${Math.round(m[1])}`; if (!seen.has(k)) { seen.add(k); cells.push([Math.round(m[0]), Math.round(m[1])]); } }
+  const fp = edge ? footprintCells(men, cells) : footprint(men);
   ground(cellCtx);
   for (const m of men) {
     poly(cellCtx, cellQuad(m), 'rgba(84,178,206,.16)', 'rgba(96,188,214,.55)', 1);
@@ -71,10 +76,15 @@ function draw() {
     cellCtx.beginPath(); cellCtx.moveTo(p[0], p[1] - 26); cellCtx.lineTo(p[0] + 5, p[1] - 16); cellCtx.lineTo(p[0] - 5, p[1] - 16); cellCtx.closePath(); cellCtx.fill();
   }
   ground(netCtx);
-  // 三角面（极淡填充，方便看出扇形怎么切）
-  for (const [c, a, b] of fp.tris) poly(netCtx, [proj(c), proj(a), proj(b)], 'rgba(224,252,255,.18)', null);
+  // 凸包对照（虚线）：凹口被这条线一刀切掉
+  if (edge && fp.notchArea > 1e-9) {
+    const hull = hullRing(fp.rings.flat());   // 凸包对照用**格角**算（不是人），才和 fp.hullArea 同一口径
+    netCtx.setLineDash([5, 4]); poly(netCtx, hull.map(proj), null, 'rgba(214,120,96,.9)', 1.2); netCtx.setLineDash([]);
+  }
+  // 三角面（极淡填充，方便看出耳切怎么铺满凹形）
+  for (const [c, a, b] of (fp.fillTris ?? fp.tris)) poly(netCtx, [proj(c), proj(a), proj(b)], 'rgba(224,252,255,.18)', null);
   // 轮廓
-  poly(netCtx, fp.ring.map(proj), null, '#eafdff', 1.6);
+  for (const r of (fp.rings ?? [fp.ring])) poly(netCtx, r.map(proj), null, '#eafdff', 1.6);
   // 辐条
   netCtx.strokeStyle = 'rgba(226,252,255,.85)'; netCtx.lineWidth = 1.1;
   for (const s of fp.spokes) { const a = proj(s[0]), b = proj(s[1]); netCtx.beginPath(); netCtx.moveTo(...a); netCtx.lineTo(...b); netCtx.stroke(); }
@@ -82,11 +92,13 @@ function draw() {
   for (const t of fp.ticks) poly(netCtx, t.map(proj), '#f4ffff', 'rgba(226,252,255,.9)', 1);
   // 中心点
   const h = proj(fp.hub); netCtx.fillStyle = '#ffffff'; netCtx.fillRect(h[0] - 2, h[1] - 2, 4, 4);
-  $('stats').textContent = `人数 ${men.length} · 轮廓 ${fp.ring.length} 角 · 辐条 ${fp.spokes.length} · 三角面 ${fp.tris.length} · 角标 ${fp.ticks.length} · 面积 ${fp.area.toFixed(2)} 格 · 周长 ${fp.perimeter.toFixed(2)}${fp.degenerate ? ' · 退化为一条线（无面）' : ''}`;
-  window.__fp = { men: men.length, ring: fp.ring.length, spokes: fp.spokes.length, tris: fp.tris.length, area: fp.area, perimeter: fp.perimeter, degenerate: fp.degenerate };
+  $('stats').textContent = `人数 ${men.length} · 占位格 ${cells.length} · 轮廓 ${fp.ring.length} 角 · 辐条 ${fp.spokes.length} · 三角面 ${fp.tris.length} · 角标 ${fp.ticks.length} · 面积 ${fp.area.toFixed(2)} 格 · 周长 ${fp.perimeter.toFixed(2)}${fp.notchArea > 1e-9 ? ` · 凹口保留 ${fp.notchArea.toFixed(2)} 格（凸包会切掉）` : ''}${fp.degenerate ? ' · 退化为一条线（无面）' : ''}`;
+  window.__fp = { men: men.length, cells: cells.length, ring: fp.ring.length, spokes: fp.spokes.length, tris: fp.tris.length, area: fp.area, perimeter: fp.perimeter, hullArea: fp.hullArea ?? null, notchArea: fp.notchArea ?? 0, degenerate: fp.degenerate };
 }
 $('n').addEventListener('input', (e) => { n = Number(e.target.value); draw(); });
 $('spread').addEventListener('input', (e) => { spread = Number(e.target.value); draw(); });
+$('shape').addEventListener('change', (e) => { shape = e.target.value; draw(); });
+$('edge').addEventListener('change', (e) => { edge = e.target.checked; draw(); });
 draw();
 window.__fpReady = true;
 </script>

@@ -1,0 +1,289 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [
+  "terrain.arch",
+  "terrain.overhang",
+  "terrain.seastack",
+  "terrain.tunnel",
+  "terrain.ledge",
+  "build.lighthouse",
+  "build.assembly",
+  "terrain.shrub-texture",
+  "water.volume",
+  "build.lighthouse-light",
+  "effects.smoke",
+  "grid.contours",
+  "world.openness"
+ ],
+ "errors": [],
+ "steps": {
+  "mount": "ok",
+  "town": {
+   "cells": 10132,
+   "solid": 1078
+  },
+  "scan": {
+   "terrain.arch": 1,
+   "terrain.overhang": 122,
+   "terrain.seastack": 153,
+   "terrain.tunnel": 38,
+   "terrain.ledge": 12,
+   "build.lighthouse": 52,
+   "build.assembly": 1,
+   "terrain.shrub-texture": 1,
+   "water.volume": 1,
+   "build.lighthouse-light": 0,
+   "effects.smoke": 1,
+   "grid.contours": 1,
+   "world.openness": 1
+  },
+  "run": [
+   {
+    "id": "terrain.arch",
+    "status": "applied",
+    "applied": [
+     "arch:4462-7509"
+    ],
+    "tried": 1,
+    "ms": 0,
+    "params": {
+     "count": 1,
+     "minHeight": 4
+    },
+    "reasons": [
+     "岩柱 4462 ↔ 7509 之间隔 2 格、低 ≥2 层，可在第 5 层架石拱"
+    ],
+    "focus": [
+     7510
+    ]
+   },
+   {
+    "id": "terrain.overhang",
+    "status": "applied",
+    "applied": [
+     "overhang:636>2725"
+    ],
+    "tried": 1,
+    "ms": 0,
+    "params": {
+     "count": 1
+    },
+    "reasons": [
+     "崖顶 636（5 层）比邻格 2725（0 层）高 5 层，可外伸"
+    ],
+    "focus": [
+     2725
+    ]
+   },
+   {
+    "id": "terrain.seastack",
+    "status": "applied",
+    "applied": [
+     "stack:5720"
+    ],
+    "tried": 1,
+    "ms": 0,
+    "params": {
+     "count": 1,
+     "height": 5
+    },
+    "reasons": [
+     "水格 5720 离岸两格、四周是水，可立石柱"
+    ],
+    "focus": [
+     5720
+    ]
+   },
+   {
+    "id": "terrain.tunnel",
+    "status": "applied",
+    "applied": [
+     "tunnel:1835-6520"
+    ],
+    "tried": 1,
+    "ms": 0,
+    "params": {
+     "count": 1
+    },
+    "reasons": [
+     "1835 与 6520 同在第 5 层，中间 1 格岩体更高，可在第 6 层打通"
+    ],
+    "focus": [
+     6519
+    ]
+   },
+   {
+    "id": "terrain.ledge",
+    "status": "applied",
+    "applied": [
+     "ledge:4750>4747@3"
+    ],
+    "tried": 1,
+    "ms": 0,
+    "params": {
+     "count": 1
+    },
+    "reasons": [
+     "格 4750（顶 1 层）挨着 6 层岩壁 4747，可在第 3 层贴一层悬空窄檐（落差 2）"
+    ],
+    "focus": [
+     4750
+    ]
+   },
+   {
+    "id": "build.lighthouse",
+    "status": "applied",
+    "applied": [
+     "lighthouse:19"
+    ],
+    "tried": 1,
+    "ms": 0,
+    "params": {
+     "count": 1,
+     "height": 7
+    },
+    "layer3d": "lighthouse",
+    "reasons": [
+     "楼 19（3 层）临水、邻格最高 3 层，加高到 7 层即成灯塔"
+    ],
+    "focus": [
+     19
+    ]
+   },
+   {
+    "id": "build.assembly",
+    "status": "applied",
+    "applied": [
+     "court:586"
+    ],
+    "tried": 1,
+    "ms": 2,
+    "params": {
+     "kind": "auto",
+     "count": 1,
+     "wallLevels": 2,
+     "deckLevel": 2,
+     "pillar": true,
+     "seed": 1
+    },
+    "reasons": [
+     "98 格连通铺地、69 格内院，环铺地砌 2 层墙加顶即成围合楼体"
+    ],
+    "focus": [
+     6906
+    ]
+   },
+   {
+    "id": "terrain.shrub-texture",
+    "status": "layer",
+    "layer3d": "shrubtex",
+    "params": {}
+   },
+   {
+    "id": "water.volume",
+    "status": "layer",
+    "layer3d": "watervol",
+    "params": {}
+   },
+   {
+    "id": "build.lighthouse-light",
+    "status": "layer",
+    "layer3d": "lighthouse",
+    "params": {}
+   },
+   {
+    "id": "effects.smoke",
+    "status": "layer",
+    "layer3d": "smoke",
+    "params": {}
+   },
+   {
+    "id": "grid.contours",
+    "status": "layer",
+    "layer3d": "contours",
+    "params": {}
+   },
+   {
+    "id": "world.openness",
+    "status": "layer",
+    "layer3d": "rayvis",
+    "params": {}
+   }
+  ],
+  "applied": [
+   "terrain.arch",
+   "terrain.overhang",
+   "terrain.seastack",
+   "terrain.tunnel",
+   "terrain.ledge",
+   "build.lighthouse",
+   "build.assembly"
+  ],
+  "layers": [
+   "shrubtex",
+   "watervol",
+   "lighthouse",
+   "smoke",
+   "contours",
+   "rayvis"
+  ],
+  "preview": {
+   "showing": "candidate",
+   "layers": [
+    {
+     "name": "shrubtex",
+     "count": 795
+    },
+    {
+     "name": "watervol",
+     "count": 6
+    },
+    {
+     "name": "lighthouse",
+     "count": 1
+    },
+    {
+     "name": "smoke",
+     "count": 22
+    },
+    {
+     "name": "contours",
+     "count": 1434
+    },
+    {
+     "name": "rayvis",
+     "count": 1152
+    }
+   ],
+   "geometryChanged": true
+  },
+  "layerCounts": [
+   {
+    "name": "shrubtex",
+    "count": 795
+   },
+   {
+    "name": "watervol",
+    "count": 6
+   },
+   {
+    "name": "lighthouse",
+    "count": 1
+   },
+   {
+    "name": "smoke",
+    "count": 22
+   },
+   {
+    "name": "contours",
+    "count": 1434
+   },
+   {
+    "name": "rayvis",
+    "count": 1152
+   }
+  ],
+  "reverted": true
+ },
+ "pass": true
+}

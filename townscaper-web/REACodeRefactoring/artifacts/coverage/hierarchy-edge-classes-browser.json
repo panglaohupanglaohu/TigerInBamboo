@@ -1,0 +1,143 @@
+{
+  "entry": {
+    "checked": true,
+    "label": "边类型着色",
+    "out": "切面 1（黑 硬边 648 · 红 模块边界 514 · 蓝 材质边界 5 · 共 1167 条格边）· 蓝色输入 11 对\n逐切面 黑/红/蓝：1:648/514/5 2:643/540/0 3:656/458/0 4:694/594/0 5:670/435/0 6:660/480/0 7:642/190/0 8:651/184/0 9:642/24/0 10:633/22/0",
+    "segs": [
+      {
+        "name": "edge-class-hard",
+        "color": 1118481,
+        "lines": 648
+      },
+      {
+        "name": "edge-class-tile",
+        "color": 16723245,
+        "lines": 514
+      },
+      {
+        "name": "edge-class-material",
+        "color": 3107839,
+        "lines": 5
+      }
+    ],
+    "colors": {
+      "hard": 1118481,
+      "tile": 16723245,
+      "material": 3107839
+    },
+    "visible": true
+  },
+  "recount": {
+    "counts": {
+      "hard": 648,
+      "tile": 514,
+      "material": 5
+    },
+    "slice": 1,
+    "slices": 11,
+    "samples": 15190,
+    "rankDiff": 0,
+    "pinnedBad": 0,
+    "matNoOpt": 0,
+    "table": [
+      {
+        "slice": 1,
+        "hard": 648,
+        "tile": 514,
+        "material": 5,
+        "total": 1167
+      },
+      {
+        "slice": 2,
+        "hard": 643,
+        "tile": 540,
+        "material": 0,
+        "total": 1183
+      },
+      {
+        "slice": 3,
+        "hard": 656,
+        "tile": 458,
+        "material": 0,
+        "total": 1114
+      },
+      {
+        "slice": 4,
+        "hard": 694,
+        "tile": 594,
+        "material": 0,
+        "total": 1288
+      },
+      {
+        "slice": 5,
+        "hard": 670,
+        "tile": 435,
+        "material": 0,
+        "total": 1105
+      },
+      {
+        "slice": 6,
+        "hard": 660,
+        "tile": 480,
+        "material": 0,
+        "total": 1140
+      },
+      {
+        "slice": 7,
+        "hard": 642,
+        "tile": 190,
+        "material": 0,
+        "total": 832
+      },
+      {
+        "slice": 8,
+        "hard": 651,
+        "tile": 184,
+        "material": 0,
+        "total": 835
+      },
+      {
+        "slice": 9,
+        "hard": 642,
+        "tile": 24,
+        "material": 0,
+        "total": 666
+      },
+      {
+        "slice": 10,
+        "hard": 633,
+        "tile": 22,
+        "material": 0,
+        "total": 655
+      }
+    ],
+    "materials": 11,
+    "firstMatSlice": 1
+  },
+  "ab": {
+    "differing": 27960,
+    "total": 991200,
+    "maxd": 664,
+    "ink": {
+      "black": 2878,
+      "red": 8476,
+      "blue": 61
+    }
+  },
+  "offCounts": {
+    "hard": 648,
+    "tile": 514,
+    "material": 5,
+    "total": 1167
+  },
+  "matAb": {
+    "differing": 21545,
+    "total": 991200,
+    "maxd": 371,
+    "ink": {
+      "black": 0,
+      "red": 13557,
+      "blue": 316
+    }
+  }
+}

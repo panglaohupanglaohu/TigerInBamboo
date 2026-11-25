@@ -1,0 +1,46 @@
+{
+  "r": {
+    "started": true,
+    "stage": true,
+    "running": true,
+    "start": {
+      "ok": true,
+      "id": "apostles",
+      "label": "十二门徒",
+      "scale": 5,
+      "gridRadius": 18,
+      "report": {
+        "tris": 12760,
+        "rays": 4170,
+        "plateauRaised": 0,
+        "ms": 7,
+        "meshes": 1,
+        "cells": 4170,
+        "land": 239,
+        "maxLevel": 8,
+        "houses": 4
+      },
+      "focus": [
+        68.12150229155837,
+        91.87482527390678,
+        -139.63784374742508
+      ],
+      "units": 24
+    },
+    "units": 24,
+    "wave": 0,
+    "startup": "ready",
+    "hasTm": true
+  },
+  "snap": {
+    "wave": 1,
+    "units": 32,
+    "alive": 32,
+    "boats": 2,
+    "houses": 4
+  },
+  "errors": [],
+  "logs": [
+    "[sceneBattle] started {\"ok\":true,\"id\":\"apostles\",\"label\":\"十二门徒\",\"scale\":5,\"gridRadius\":18,\"report\":{\"tris\":12760,\"rays\":4170,\"plateauRaised\":0,\"ms\":7,\"meshes\":1,\"cells\":4170,\"land\":239,\"maxLevel\":8,\"houses\":4},\"focus\":[68.12150229155837,91.87482527390678,-139.63784374742508],\"units\":24}"
+  ]
+}

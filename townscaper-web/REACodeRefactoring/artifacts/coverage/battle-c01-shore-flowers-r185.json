@@ -1,0 +1,232 @@
+{
+ "checks": [
+  {
+   "name": "花层默认开",
+   "ok": true,
+   "detail": "{\"on\":true,\"visible\":true}"
+  },
+  {
+   "name": "泡沫带仍默认关（该片水面干净）",
+   "ok": true,
+   "detail": "{\"foamOn\":false,\"foamBuilt\":false}"
+  },
+  {
+   "name": "花簇存在且每簇 4–7 朵",
+   "ok": true,
+   "detail": "20 簇 / 110 朵，簇内 4–7"
+  },
+  {
+   "name": "花点全在陆地台面上",
+   "ok": true,
+   "detail": "离地 0 朵"
+  },
+  {
+   "name": "花贴台面顶 +0.012（视觉偏移后）",
+   "ok": true,
+   "detail": "平均 |Δy| 6.93e-8"
+  },
+  {
+   "name": "簇格不重复",
+   "ok": true,
+   "detail": "20 / 20"
+  },
+  {
+   "name": "stats 与探针一致",
+   "ok": true,
+   "detail": "[110,20]"
+  },
+  {
+   "name": "颜色以米白为主",
+   "ok": true,
+   "detail": "{\"cream\":0.6454545454545455,\"pink\":0.35454545454545455}"
+  },
+  {
+   "name": "同状态噪声 0",
+   "ok": true,
+   "detail": "0 px"
+  },
+  {
+   "name": "关花层后花真的不画（几何仍在、visible=false）",
+   "ok": true,
+   "detail": "{\"off\":false,\"pts\":110,\"back\":true}"
+  },
+  {
+   "name": "花层开/关在画面上可分",
+   "ok": true,
+   "detail": "494 px（1440×1000）"
+  },
+  {
+   "name": "差分像素落在花点投影附近（不是全屏亮度漂移）",
+   "ok": true,
+   "detail": "100.0% 在 110 个花点 ±10px 内"
+  },
+  {
+   "name": "开→关→开 回位 0",
+   "ok": true,
+   "detail": "0 px"
+  },
+  {
+   "name": "船上单位被击杀 → 捕获贴船姿态",
+   "ok": true,
+   "detail": "{\"dead\":true,\"anchor\":true,\"err\":7.502364383071836e-7}"
+  },
+  {
+   "name": "船横摇后尸体仍贴船（逐元素 <1e-6）",
+   "ok": true,
+   "detail": "roll Δ 0.0322 / pose Δ 4.40e-8"
+  },
+  {
+   "name": "射空的箭 attach 到 boat.mesh 且零漂移",
+   "ok": true,
+   "detail": "parent=true drift=0.00e+0"
+  },
+  {
+   "name": "甲板血池随 gore 铺开（24 段带子、opacity↑）",
+   "ok": true,
+   "detail": "{\"segs\":24,\"o\":[0,0.384],\"sx\":[0.26,0.522]}"
+  },
+  {
+   "name": "无 console error",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "pixels": {
+  "noise": {
+   "w": 1440,
+   "h": 1000,
+   "diffPx": 0,
+   "onFlower": 0,
+   "ratio": 0
+  },
+  "onOff": {
+   "w": 1440,
+   "h": 1000,
+   "diffPx": 494,
+   "onFlower": 494,
+   "ratio": 1
+  },
+  "restored": {
+   "w": 1440,
+   "h": 1000,
+   "diffPx": 0,
+   "onFlower": 0,
+   "ratio": 0
+  },
+  "uvPoints": 110
+ },
+ "flowers": {
+  "probe": {
+   "on": true,
+   "visible": true,
+   "points": 110,
+   "clusters": 20,
+   "sizes": {
+    "min": 4,
+    "max": 7
+   },
+   "cells": [
+    {
+     "cell": 343,
+     "top": 6,
+     "size": 4,
+     "at": 0
+    },
+    {
+     "cell": 849,
+     "top": 2,
+     "size": 4,
+     "at": 4
+    },
+    {
+     "cell": 936,
+     "top": 2,
+     "size": 4,
+     "at": 8
+    },
+    {
+     "cell": 937,
+     "top": 2,
+     "size": 7,
+     "at": 12
+    },
+    {
+     "cell": 1119,
+     "top": 4,
+     "size": 7,
+     "at": 19
+    },
+    {
+     "cell": 1121,
+     "top": 4,
+     "size": 5,
+     "at": 26
+    },
+    {
+     "cell": 1222,
+     "top": 2,
+     "size": 7,
+     "at": 31
+    },
+    {
+     "cell": 1570,
+     "top": 6,
+     "size": 4,
+     "at": 38
+    }
+   ],
+   "offLand": 0,
+   "maxYOff": 6.933212279847111e-8,
+   "foamOn": false,
+   "foamBuilt": false,
+   "colorMix": {
+    "cream": 0.6454545454545455,
+    "pink": 0.35454545454545455
+   }
+  },
+  "clusters": 20,
+  "points": 110,
+  "sizes": {
+   "min": 4,
+   "max": 7
+  },
+  "offLand": 0,
+  "maxYOff": 6.933212279847111e-8,
+  "colorMix": {
+   "cream": 0.6454545454545455,
+   "pink": 0.35454545454545455
+  },
+  "foamOn": false,
+  "foamBuilt": false,
+  "flowersVisible": true,
+  "on": true,
+  "statsFlowers": 110,
+  "statsClusters": 20,
+  "uniq": 20,
+  "flagsDefaultOn": true,
+  "foamDefaultOn": false,
+  "nsegs": 24
+ },
+ "attachments": {
+  "dead": true,
+  "hasAnchor": true,
+  "poseErr0": 7.502364383071836e-7,
+  "poseErr": 4.404290265824784e-8,
+  "rollChange": 0.03219250086144229,
+  "arrowParented": true,
+  "arrowDrift": 0,
+  "poolBefore": {
+   "opacity": 0,
+   "sx": 0.26,
+   "segs": 24
+  },
+  "poolAfter": {
+   "opacity": 0.384354702966661,
+   "sx": 0.5216686817797028,
+   "segs": 24
+  },
+  "gore": 0.3074837623733288,
+  "boatState": "in"
+ },
+ "errors": []
+}

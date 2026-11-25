@@ -43,4 +43,16 @@ assert.equal(sh.uniforms.uPenOn.value, 1); assert.deepEqual(sh.uniforms.uPenDims
 const v0 = pt.texture; pt.refresh(); assert.equal(pt.texture, v0, '世界与太阳不变不重烘');
 view.sunDir.set(.5, .8, .1).normalize(); pt.refresh(); assert.notEqual(pt.texture, v0, '太阳变了重烘');
 pt.setEnabled(false); assert.equal(view.mesh.receiveShadow, true); assert.equal(view.penumbra, null); assert.equal(sh.uniforms.uPenOn.value, 0);
-console.log('PASS penumbra-terrain: receivers packed per level (max err', maxErr.toFixed(4) + '), overhang two receivers, material chain, toggle restores PCF/water layer');
+// dispose：材质补丁/缓存键还原、纹理销毁、可重复调用
+pt.setEnabled(true); const tex = pt.texture; assert.ok(tex);
+let disposed = 0; tex.addEventListener?.('dispose', () => disposed++); const origDispose = tex.dispose.bind(tex); tex.dispose = () => { disposed++; origDispose(); };
+pt.dispose();
+assert.ok(disposed >= 1, '打包纹理被 dispose'); assert.equal(pt.texture, null);
+const sh2 = { uniforms: {}, fragmentShader: 'A#include <common>B#include <opaque_fragment>', vertexShader: '' };
+mat.onBeforeCompile(sh2);
+assert.equal(orig, 2, 'dispose 后材质补丁还原为原链');
+assert.ok(!sh2.fragmentShader.includes('penumbraTone'), '还原后不再注入半影着色');
+assert.equal(mat.customProgramCacheKey(), 'base', 'cacheKey 还原');
+assert.equal(pt.uniforms.uPenOn.value, 0); assert.equal(pt.uniforms.uPenTex.value, null);
+pt.dispose();   // 幂等
+console.log('PASS penumbra-terrain: receivers packed per level (max err', maxErr.toFixed(4) + '), overhang two receivers, material chain, toggle restores PCF/water layer, dispose restores material+texture');

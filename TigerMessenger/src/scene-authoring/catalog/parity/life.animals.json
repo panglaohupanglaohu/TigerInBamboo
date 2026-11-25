@@ -1,0 +1,31 @@
+{
+ "capability": "life.animals",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "life",
+ "sameCriteriaEqual": true,
+ "verdict": "equivalent",
+ "original": [
+  "townscaper-web/REACode/src/flowfield.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/world/navmesh-flow.js"
+ ],
+ "inputs": {
+  "mesh": "6×4 方格（35 顶点 24 面）",
+  "goal": "vertex(5,3)"
+ },
+ "metrics": [
+  {
+   "id": "dist",
+   "name": "35 顶点到目标代价逐位",
+   "original": "dist[]",
+   "refactored": "dist[]",
+   "equal": true
+  }
+ ],
+ "diffs": [],
+ "basis": "两边都是「从目标反向 Dijkstra 得到达代价场」：同一顶点图（poly 内全连接、3D 边权）喂 buildFlowField 与 buildVertexField，逐顶点比 dist。"
+}

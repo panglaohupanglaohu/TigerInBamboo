@@ -17,6 +17,7 @@ a{color:#276e86}
   <label>Start Speed <input id="speed" type="range" min="3" max="14" step="0.01" value="7.61"><span id="speedOut">7.61</span></label>
   <label>Drag <input id="drag" type="range" min="0" max="2" step="0.01" value="0.83"><span id="dragOut">0.83</span></label>
   <label>Gravity <input id="gravity" type="range" min="2" max="20" step="0.1" value="9.8"><span id="gravityOut">9.80</span></label>
+  <label>阻力模型 <select id="model"><option value="linear">线性 −k·v</option><option value="quadratic">二次 −k·|v|·v</option></select></label>
   <label><input id="grid" type="checkbox" checked> 查找表点阵（第 56 批：格点出射方向）</label>
   <label><input id="tangent" type="checkbox"> 弧上切线划线（旧口径）</label>
   <label>弧上划线间距 <input id="spacing" type="range" min="0.2" max="1.2" step="0.05" value="0.5"></label>
@@ -34,17 +35,19 @@ a{color:#276e86}
       <li>同：Drag 越大射程越短（片中 0.83 → 1.26 时扇面明显收缩）</li>
       <li>第 56 批纠正：原尺寸 frame-0040 里白线落在<b>规则点阵</b>上，每格点一根 = 打中该格点的出射方向；右上够不着的格点只剩白点。这正是原文「把弹道作业做成查找表」——<code>launchGrid()</code> 逐格点解低弧出射角（线性阻力 + 二分），<code>lookup()</code> 双线性查表</li>
       <li>第三行参数是 Gravity（frame-0040 露出半行），已加滑杆</li>
+      <li>第 190 轮：阻力模型两档都在（<code>linear</code> −k·v / <code>quadratic</code> −k·|v|·v，RK4）。片内**判不出**是哪一档：把二次档的 k 拟合到与线性档同 45° 射程后，两条轨迹最大只差 <b>1.89% 射程</b>（≈2px，小于 25px 的划线），所以页面给切换而不是硬选一种</li>
       <li>旧口径「弧上等弧长切线」保留为可选开关</li>
     </ul>
     <p style="font-size:13px;color:#4a656e;margin:8px 0 0">落点用二分求 y(t)=0，arc 采样与划线都不受 dt 影响；<a href="artifacts/coverage/816332161036984320-review.md">逐帧记录</a></p>
   </div>
 </div>
 <script type="module">
-import { trajectoryFan, analyticRange, launchGrid } from './src/core/trajectory-fan.js';
+import { trajectoryFan, analyticRange, launchGrid, quadMaxReach } from './src/core/trajectory-fan.js';
 
 const cv = document.querySelector('#fan');
 const ctx = cv.getContext('2d');
-const S = { speed: 7.61, drag: 0.83, spacing: 0.5, gravity: 9.8 };
+const S = { speed: 7.61, drag: 0.83, spacing: 0.5, gravity: 9.8, model: 'linear' };
+if (new URLSearchParams(location.search).get('model') === 'quadratic') S.model = 'quadratic';
 let G = 9.8;
 // 固定比例尺：不同 Drag 的截图能直接比（不跟着 maxRange 自适应）
 const UNIT = 95;
@@ -58,9 +61,12 @@ const toPx = (x, y) => [ORIGIN.x + x * UNIT, ORIGIN.y - y * UNIT];
 
 function draw() {
   G = S.gravity;
-  last = trajectoryFan({ speed: S.speed, drag: S.drag, spacing: S.spacing, gravity: G, groundY: -(cv.height - ORIGIN.y) / UNIT });
+  last = trajectoryFan({ speed: S.speed, drag: S.drag, dragModel: S.model, spacing: S.spacing, gravity: G, groundY: -(cv.height - ORIGIN.y) / UNIT });
   const gridOn = document.querySelector('#grid').checked, tangentOn = document.querySelector('#tangent').checked;
-  grid = launchGrid({ speed: S.speed, drag: S.drag, gravity: G, x0: 0, x1: Math.floor((cv.width - ORIGIN.x - 10) / UNIT / CELL) * CELL, y0: -Math.floor((cv.height - ORIGIN.y - 8) / UNIT / CELL) * CELL, y1: Math.floor((ORIGIN.y - 8) / UNIT / CELL) * CELL, cell: CELL });
+  // 二次阻力够不到的点会先按射程否掉（quadMaxReach），否则每个够不着的格点都要积到 maxTime
+  const reach = S.model === 'quadratic' ? quadMaxReach({ speed: S.speed, drag: S.drag, gravity: G }) : Infinity;
+  const x1 = Math.floor((cv.width - ORIGIN.x - 10) / UNIT / CELL) * CELL;
+  grid = launchGrid({ speed: S.speed, drag: S.drag, dragModel: S.model, gravity: G, x0: 0, x1, y0: -Math.floor((cv.height - ORIGIN.y - 8) / UNIT / CELL) * CELL, y1: Math.floor((ORIGIN.y - 8) / UNIT / CELL) * CELL, cell: CELL });
   const w = cv.width;
   const h = cv.height;
   ctx.fillStyle = '#3d5062';
@@ -127,18 +133,21 @@ function draw() {
 
   const a45 = analyticRange(S.speed, 45, G);
   document.querySelector('#stats').innerHTML =
-    `arcs ${last.arcs.length} · 划线 ${last.tickCount} 段 · 最大射程 <b>${last.maxRange.toFixed(2)}</b> 单位 · 最高 ${last.maxApex.toFixed(2)} 单位 · ` +
-    `无阻力 45° 解析射程 ${a45.toFixed(2)}（阻力把它压到 ${last.maxRange.toFixed(2)}）` + (gridOn ? ` · 查找表 ${grid.nodes.length} 格点，有解 <b>${grid.solved}</b>，够不着 ${grid.unreachable}` : '');
+    `模型 <b>${S.model}</b> · arcs ${last.arcs.length} · 划线 ${last.tickCount} 段 · 最大射程 <b>${last.maxRange.toFixed(2)}</b> 单位 · 最高 ${last.maxApex.toFixed(2)} 单位 · ` +
+    `无阻力 45° 解析射程 ${a45.toFixed(2)}（阻力把它压到 ${last.maxRange.toFixed(2)}）` + (gridOn ? ` · 查找表 ${grid.nodes.length} 格点，有解 <b>${grid.solved}</b>，够不着 ${grid.unreachable}${Number.isFinite(reach) ? `（射程上界 ${reach.toFixed(2)}）` : ''}` : '');
   statsValue = {
+    model: S.model,
     arcs: last.arcs.length,
     tickCount: last.tickCount,
     maxRange: Number(last.maxRange.toFixed(4)),
     maxApex: Number(last.maxApex.toFixed(4)),
     analytic45: Number(a45.toFixed(4)),
+    groundY: -(cv.height - ORIGIN.y) / UNIT,
+    reach: Number.isFinite(reach) ? Number(reach.toFixed(4)) : null,
     speed: S.speed,
     drag: S.drag,
     gravity: G,
-    grid: grid ? { nodes: grid.nodes.length, solved: grid.solved, unreachable: grid.unreachable } : null,
+    grid: grid ? { nodes: grid.nodes.length, solved: grid.solved, unreachable: grid.unreachable, model: grid.dragModel } : null,
   };
 }
 
@@ -155,6 +164,8 @@ bind('drag', 'drag', 'dragOut');
 bind('spacing', 'spacing');
 bind('gravity', 'gravity', 'gravityOut');
 document.querySelector('#grid').onchange = draw; document.querySelector('#tangent').onchange = draw;
+document.querySelector('#model').onchange = (e) => { S.model = e.target.value; draw(); };
+document.querySelector('#model').value = S.model;
 draw();
 
 window.fanPage = {
@@ -163,7 +174,9 @@ window.fanPage = {
   setDrag(v) { S.drag = v; document.querySelector('#drag').value = v; document.querySelector('#dragOut').textContent = v.toFixed(2); draw(); },
   stats() { return statsValue; },
   grid() { return grid; },
+  fan() { return last; },
   setGravity(v) { S.gravity = v; document.querySelector('#gravity').value = v; document.querySelector('#gravityOut').textContent = v.toFixed(2); draw(); },
+  setModel(m) { S.model = m; document.querySelector('#model').value = m; draw(); },
   redraw: draw,
 };
 </script></html>

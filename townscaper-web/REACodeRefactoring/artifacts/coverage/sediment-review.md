@@ -28,3 +28,13 @@
 累计78/285，剩207；136模块27增强/71静态/38部分/0未覆盖。原版只读。下一批草色块跨崖边/防跨重要边渗色两段尚未全帧，继续共享顶面与岩壁过渡。
 
 收口回归：sediment-pages.cjs确认首页/pipeline显示78/285，小镇/北境默认strata=0；URL on=strata实际为2，原fields开关/增量属性仍通过，无页面异常。aField新增岩壁/旧条枚举后，既有texture-fields-browser测试接受这些合法非田纹标记并复测通过，四档像素线积分宽度仍0.99608px。素材/README匹配285、历史笔记243，管线缺0段，diff空白检查通过。
+
+## 弯层理剪切场残差收口 · 2026-11-26
+
+针对 learn 残差「场形=裁判二倍频值噪声 vs 本地解析正弦场」与「位移 xz 分量（y-only 可逆设计）」：
+
+- **场形可逐式移植**：裁判 REACode engine/surface.js 把场逐式写出（sHash→sNoise→sWobble 二倍频值噪声→sWarp），不是只给参数。sediment.js 与 SEDIMENT_GLSL 换成同一套式子；tests/sediment.mjs 直接从裁判文件提取四函数体（空白归一）断言逐字一致，JS↔测试内独立转写 4096 同点采样 maxΔ=0（位级一致）。
+- **xz 分量**：裁判位移 vec3(b,a,b*.7)·uSedAmp 已含 xz（裁判注释：xz 也抖，否则线只是"上下浮动"）。W=p+D(x,z) 不再是纯 y 剪切，解析逆不存在；但 D 只依赖 (x,z)，逆问题降为二维定点迭代 u←w.xz−D_xz(u)，位移雅可比实测≈0.19<1 收缩——与裁判自己的量具 src/wobbletex.js 定点迭代同款做法。unwarpSediment 迭代至 1e-15 停，10000 点往返残差 3.55e-15（阈值 1e-9），iter3→iter12 单调收敛 4.5e-7→0。「可逆」保留为迭代可逆，不再宣称解析逆。
+- **GLSL 侧**：uSedAmp/uSedFreq 裁判同款 uniform 进 SEDIMENT_GLSL（view.js 接线，uSedAmp=uStrata.y×2 同源同步）；弯层模式（uStrataMode>3.5）裂纹/砂砾改吃 sed.x+sed.z，与裁判 sed=wp+sWarp(wp) 同构；mode1/2 相位行不变（c09 断言保留）。
+- **GPU 复测**（sediment-browser.cjs，standalone 材质补 uSedAmp=.28/uSedFreq=.52）：mixed wobblePixels 5596、quad 5209，旧→弯 7593/6497 像素；三角剖分对换缝 0；World/几何零漂移。
+- **残差**（如实）：原作真实场仍未知——裁判场本身是重构近似，移植裁判≠拿到原作算法（卡点·C，需新证据再立项）；vendor 未接 SEDIMENT_GLSL（B 批换库项，scene-consumer-notes.json sediment 键已记）。

@@ -29,6 +29,12 @@ import { createInsertionReplay, liftToSphere, relaxRetriangulate } from './src/s
 const q = new URLSearchParams(location.search);
 const cv = document.getElementById('c'), ctx = cv.getContext('2d'), kEl = document.getElementById('k'), statEl = document.getElementById('stat');
 const sphere = buildSphere({ n: Number(q.get('n')) || 600, seed: 3, spacing: 30, relax: 0 });
+// ?fat=1：把次北点搬到最北点上，演示极点守卫（旧路径会 RangeError，守卫下合并后仍闭合）
+if (q.get('fat')) {
+  const P = sphere.pts; let top = 0; for (let i = 1; i < P.length; i++) if (P[i][1] > P[top][1]) top = i;
+  let sec = -1; for (let i = 0; i < P.length; i++) if (i !== top && (sec < 0 || P[i][1] > P[sec][1])) sec = i;
+  P[sec] = P[top].slice();
+}
 const replay = createInsertionReplay(sphere.pts);
 const lift = liftToSphere(sphere.pts, replay), topo = sphereTopologyReport(sphere.pts, lift.tris);
 const rr = relaxRetriangulate(sphere.steps.random.slice(0, 300), { iters: 10 });
@@ -48,8 +54,9 @@ function draw() {
   for (let i = 0; i < replay.items.length; i++) { const o = replay.items[i], p = P([o.u, -o.v]); if (p[0] < -5 || p[1] < -5 || p[0] > W + 5 || p[1] > H + 5) continue; ctx.globalAlpha = i < f.k ? .95 : .35; ctx.fillRect(p[0] - 1.2, p[1] - 1.2, 2.4, 2.4); }
   ctx.globalAlpha = 1;
   kEl.value = t;
-  statEl.textContent = `已插入 ${f.k}/${f.total} 点（极点 #${f.pole} 不投影）· 当前半径 ${f.lastR.toFixed(3)} / 最大 ${f.maxR.toFixed(2)}\n平面三角 ${f.realTris} + 连超级三角 ${f.superTris} · 超级三角 bound ${f.bound.toFixed(1)}\n抬回球面：${lift.tris.length} 面、闭合 ${topo.closed}、Euler ${topo.euler} · 投影往返误差 ${lift.roundTrip.toExponential(1)}\n松弛 + 每轮重三角化（300 点）：每轮改边 ${rr.changed.join(' → ')}`;
-  window.sphereInsert = { k: f.k, total: f.total, realTris: f.realTris, superTris: f.superTris, liftFaces: lift.tris.length, closed: topo.closed, euler: topo.euler, roundTrip: lift.roundTrip, retri: rr.changed, setT: (x) => { t = x; playing = false; draw(); return window.sphereInsert; } };
+  const gd = replay.guard;
+  statEl.textContent = `已插入 ${f.k}/${f.total} 点（极点 #${f.pole} 不投影）· 当前半径 ${f.lastR.toFixed(3)} / 最大 ${f.maxR.toFixed(2)}\n平面三角 ${f.realTris} + 连超级三角 ${f.superTris} · 超级三角 bound ${f.bound.toFixed(1)}\n极点守卫：${gd.rotated ? '极点已换到角距更大的点' : '最北点直接可用'} · 最小 sinθ ${gd.minSin.toExponential(2)} · 合并重合点 ${gd.merged.length}\n抬回球面：${lift.tris.length} 面、闭合 ${topo.closed}${topo.orphanVertices ? `（孤点 ${topo.orphanVertices} = 被合并的重合点）` : ''}、Euler ${topo.euler} · 投影往返误差 ${lift.roundTrip.toExponential(1)}\n松弛 + 每轮重三角化（300 点）：每轮改边 ${rr.changed.join(' → ')}`;
+  window.sphereInsert = { k: f.k, total: f.total, realTris: f.realTris, superTris: f.superTris, liftFaces: lift.tris.length, closed: topo.closed, closedEff: topo.boundaryEdges === 0 && topo.nonManifoldEdges === 0 && topo.euler === 2, orphan: topo.orphanVertices, euler: topo.euler, roundTrip: lift.roundTrip, retri: rr.changed, guard: { pole: gd.pole, rotated: gd.rotated, minSin: gd.minSin, merged: gd.merged.length, maxR: f.maxR, bound: f.bound }, setT: (x) => { t = x; playing = false; draw(); return window.sphereInsert; } };
 }
 function resize() { cv.width = innerWidth; cv.height = innerHeight; draw(); }
 addEventListener('resize', resize);

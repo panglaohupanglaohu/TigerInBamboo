@@ -136,6 +136,8 @@ export class View {
 
     // Shore: static skirt (foam rim + pale halo) and the looping wave ribbons.
     this.skirtMaterial = makeSkirtMaterial(new THREE.Color('#9fd0d3'));
+    // [TM] R73-B：同上游 view.js——裙带白段/缝隙跟水时钟走，缺 uTime 分段缝会静止
+    this.skirtMaterial.uniforms.uTime = this.waterUniforms.uTime;
     this.skirt = new THREE.Mesh(new THREE.BufferGeometry(), this.skirtMaterial);
     this.skirt.renderOrder = 2;
     this.scene.add(this.skirt);

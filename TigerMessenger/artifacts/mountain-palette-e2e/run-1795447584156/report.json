@@ -1,0 +1,66 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/mountain-palette-e2e/run-1795447584156",
+  "steps": {
+    "scan": "扫描完成：6 / 6 个能力能作用。 已按「高山圣城」自动预装 6 个能力（保护带、山体隆起、沟谷侵蚀、连绵圆润 等），点 ▶ 执行管线一键跑完整条。",
+    "run": {
+      "h4": "候选 · 通过（需留意）",
+      "palette": 1
+    },
+    "rows": [
+      {
+        "id": 1,
+        "label": "Bad North 夏季",
+        "grassShare": 0.204,
+        "greyShare": 0.459,
+        "grassSat": 0.28,
+        "status": "fail",
+        "checks": [
+          "fail",
+          "fail"
+        ]
+      },
+      {
+        "id": 2,
+        "label": "Townscaper",
+        "grassShare": 0.204,
+        "greyShare": 0.796,
+        "grassSat": 0.407,
+        "status": "fail",
+        "checks": [
+          "fail",
+          "fail"
+        ]
+      }
+    ],
+    "states": {
+      "1": {
+        "palette": 1,
+        "override": true,
+        "triangles": 12444
+      },
+      "2": {
+        "palette": 2,
+        "override": true,
+        "triangles": 12444
+      }
+    },
+    "back": {
+      "palette": 1,
+      "override": false
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R27-0-plan-palette.png",
+    "R27-1-compare-panel.png",
+    "R27-2-live-badnorth-summer.png",
+    "R27-3-live-townscaper.png",
+    "R27-4-page.png"
+  ],
+  "pass": true
+}

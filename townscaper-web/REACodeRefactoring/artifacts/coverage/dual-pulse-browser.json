@@ -1,0 +1,43 @@
+{
+  "reports": [
+    {
+      "setup": {
+        "stats": {
+          "triangles": 1632,
+          "cells": 879,
+          "sites": 879,
+          "vertices": 19584
+        },
+        "pulse0": 0.9586262436684915
+      },
+      "geo": {
+        "segments": 9792,
+        "lengthAtScale1": 1418.9287738352202,
+        "quads": {
+          "triangles": 1632,
+          "cells": 879,
+          "sites": 879,
+          "vertices": 19584
+        }
+      },
+      "pix": {
+        "w": 1440,
+        "h": 748,
+        "diff": 48646
+      },
+      "shots": {
+        "peak": {
+          "value": 1,
+          "file": "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/dual-pulse-quad-peak.png"
+        },
+        "trough": {
+          "value": 0.829,
+          "file": "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/dual-pulse-quad-trough.png"
+        }
+      },
+      "geoRatio": 1.206,
+      "clipRatio": 1.206
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,157 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/fx-apostles-e2e/run-1795549393374",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描完成：9 / 9 个能力能作用。 已按「十二门徒」自动预装 9 个能力（岛屿分区与前线、环绕镜头路径、船尾迹、界面装饰面板 等），点 ▶ 执行管线一键跑完整条。",
+    "siteInfo": "舞台格网 241 格 · 最高 8 层 · 小屋 4",
+    "baseColors": 1,
+    "pipelineNodes": 9,
+    "candidate": "候选 · 验证通过",
+    "checks": [
+      "✓ 分区覆盖241 格分成 3 区",
+      "✓ 前线连通且有净空前线 92 点 · 段净空 3.47",
+      "✓ 镜头路径97 点 · 半径 8",
+      "✓ 角速度上限峰值 30.2°/s（限 45）",
+      "✓ 泡沫数量134 片",
+      "✓ V 形半角与对称半角 0.69°（重算 0.69° · ≤Kelvin 19.47°）",
+      "✓ 面板与镜像面板 48² · 镜像 UV 对称",
+      "✓ 回放图可复算计划 10 节点 · 独立重建 一致 · 轨迹收敛",
+      "✓ 点火处在格网上3 处 · 都在格网上 · 点火时刻依次",
+      "✓ 火光衰减与烟放大0.18s 0.581（计划 0.581）· 0.39s 0.226（计划 0.226）· 曲线单调",
+      "✓ 爆燃团分层16 张 / 3 层（复算 16 / 3）",
+      "✓ 版式可独立复算7 块板 · 独立重算一致",
+      "✓ 板覆盖整面墙覆盖 100.0% · 无重叠 · 门在墙内",
+      "✓ 样板落点格 (1.6, -0.92) · 8 层",
+      "✓ 崖面可独立重数计划 61 面 · 暴力重数 61 面",
+      "✓ 层带岩性与首尾岩性不符 0 条 · 断缝 0 处（抽查 61 面）",
+      "✓ 层带宽窄相间带宽变异系数 0.402（≥ 0.3 才不是均匀斑马纹）",
+      "✓ 落点命中6 支 · 最大偏差 0.0009 格（限 0.06）· 落点不在岸格 0",
+      "✓ 弹道是弧每条弹道顶点都不低于两端"
+    ],
+    "candColors": 2334,
+    "replayVisible": true,
+    "replayColors": 689,
+    "overlay": {
+      "overlay": true,
+      "visible": true,
+      "children": 4
+    },
+    "liveState": {
+      "active": true,
+      "visible": true,
+      "t": 2.05,
+      "frames": 41,
+      "drawn": [
+        "火 3 处（life/effects.js 火粒子）",
+        "走廊样板 7 块板（build/doodle-hallway.js）",
+        "崖面层带 61 面",
+        "弹道 6 条"
+      ],
+      "errors": {
+        "wake": "liftAt is not defined"
+      },
+      "fire": {
+        "sources": 3,
+        "lit": 3,
+        "alive": 2580,
+        "peakLight": 2.489,
+        "rows": [
+          {
+            "lit": true,
+            "alive": 852,
+            "light": 1.441,
+            "visible": true
+          },
+          {
+            "lit": true,
+            "alive": 897,
+            "light": 1.423,
+            "visible": true
+          },
+          {
+            "lit": true,
+            "alive": 831,
+            "light": 1.078,
+            "visible": true
+          }
+        ]
+      },
+      "hallway": {
+        "placed": true,
+        "meshes": 11,
+        "panels": 7
+      },
+      "sediment": {
+        "faces": 61,
+        "triangles": 760,
+        "lines": 314
+      },
+      "projectiles": {
+        "arcs": 6,
+        "moved": 41
+      },
+      "wake": {
+        "particles": 0
+      },
+      "camera": {
+        "saved": false,
+        "mode": null,
+        "flying": false,
+        "done": false,
+        "u": 0,
+        "seconds": 0,
+        "frames": 0,
+        "sweep": 0,
+        "expected": null,
+        "samples": 0
+      }
+    },
+    "previewNote": "候选已预览。确认前不会写入。",
+    "compareColors": 8,
+    "adoptedNote": "扫描完成：9 / 9 个能力能作用。",
+    "draft": "pass",
+    "reverted": {
+      "ok": true,
+      "removed": true
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "capabilities": [
+    {
+      "id": "fx.campaign"
+    },
+    {
+      "id": "fx.camera"
+    },
+    {
+      "id": "fx.wake"
+    },
+    {
+      "id": "fx.ornament"
+    },
+    {
+      "id": "fx.fire"
+    },
+    {
+      "id": "fx.hallway"
+    },
+    {
+      "id": "fx.sediment"
+    },
+    {
+      "id": "fx.projectiles"
+    },
+    {
+      "id": "fx.replay"
+    }
+  ],
+  "pass": false
+}

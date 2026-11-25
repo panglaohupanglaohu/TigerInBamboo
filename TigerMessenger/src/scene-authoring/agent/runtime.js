@@ -48,17 +48,5 @@ export async function withRetry(slot, msg, opts, emit) {
   try { return await slot.call(msg, opts); }
   catch (e) { if (!e.timeout) throw e; emit?.({ type: 'recover', name: slot.name, why: e.message }); return slot.call(msg, opts); }
 }
-export function experienceStore(key, storage = globalThis.localStorage) {
-  const read = () => { try { return JSON.parse(storage.getItem(key) || '[]'); } catch { return []; } };
-  return {
-    read,
-    add(row) { try { const rows = read(); rows.push(row); while (rows.length > 300) rows.shift(); storage.setItem(key, JSON.stringify(rows)); } catch {} return row; },
-    summary(id, rows = read()) {
-      const has = (r) => r.steps?.some((s) => s.id === id);
-      const runs = rows.filter((r) => r.outcome === 'previewed' && has(r));
-      return { runs: runs.length, passed: runs.filter((r) => r.verify !== 'fail').length, failed: runs.filter((r) => r.verify === 'fail').length,
-        committed: rows.filter((r) => r.outcome === 'committed' && has(r)).length, lastFailure: ((f) => f && (!f.blame?.length || f.blame.includes(id)) ? f.why : '')([...runs].reverse().find((r) => r.verify === 'fail')) };
-      // 失败只记在出问题的能力上（blame）；没有指明是谁时才算在整条管线上
-    },
-  };
-}
+// 统一经验存储：写 tm.capability.experience.v2，读合并 v2 + 旧分层键（见 experience.js，§6-1）
+export { experienceStore } from './experience.js';

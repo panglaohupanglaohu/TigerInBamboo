@@ -1,0 +1,109 @@
+{
+ "capability": "battle.navFinePortals",
+ "verdict": "diff-registered",
+ "line": "navigation",
+ "generatedAt": "2026-11-25T15:27:02.437Z",
+ "generator": "TigerMessenger/tools/refactor/nav-parity.mjs",
+ "basis": "本能力在 Worker 与实景里真实调用 vendor 副本的 layerednav / battle-navigation（meta.modules）；这份是这两份模块对原版 cheesenav / holenav 的对照登记，完整内容见 navigation.json。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/parity/navigation.json",
+ "sameCriteriaEqual": true,
+ "original": [
+  "townscaper-web/REACode/src/cheesenav.js",
+  "townscaper-web/REACode/src/holenav.js"
+ ],
+ "refactored": [
+  "TigerMessenger/src/vendor/townscaper-rea-refactoring/src/world/layerednav.js",
+  "TigerMessenger/src/vendor/townscaper-rea-refactoring/src/world/battle-navigation.js"
+ ],
+ "inputs": {
+  "cheese": {
+   "w": 20,
+   "h": 11,
+   "d": 20,
+   "seed": 7,
+   "tunnels": 7,
+   "tunnelLen": 60
+  },
+  "holes": {
+   "W": 15,
+   "D": 15,
+   "openness": 0.55,
+   "seed": 7
+  },
+  "pairs": 200,
+  "pairSeed": 11
+ },
+ "gaps": 0,
+ "diffs": [
+  {
+   "id": "cheese.battle.nodes",
+   "case": "cheese",
+   "criteria": "battle",
+   "metric": "nodes",
+   "original": 268,
+   "refactored": 1013,
+   "kind": "design",
+   "note": "战役判据按 1 层净空（士兵身高 0.18 < 半层 0.5）取可站点，原版要头顶两格空气；外壳顶面在重构版里也算可站。"
+  },
+  {
+   "id": "cheese.battle.components",
+   "case": "cheese",
+   "criteria": "battle",
+   "metric": "components",
+   "original": 79,
+   "refactored": 10,
+   "kind": "design",
+   "note": "战役判据允许 1–2 层的台阶边（maxStep 2），原版只走同一层；外壳顶面连成一块。"
+  },
+  {
+   "id": "cheese.battle.largestShare",
+   "case": "cheese",
+   "criteria": "battle",
+   "metric": "largestShare",
+   "original": 0.2313,
+   "refactored": 0.4235,
+   "kind": "design",
+   "note": "同上：台阶边与外壳顶面把碎块并进了大块。"
+  },
+  {
+   "id": "cheese.battle.covered",
+   "case": "cheese",
+   "criteria": "battle",
+   "metric": "covered",
+   "original": 268,
+   "refactored": 613,
+   "kind": "design",
+   "note": "净空要求变低后，更多矮洞里的点被算成可站的洞道节点。"
+  },
+  {
+   "id": "holes.battle.nodes",
+   "case": "holes",
+   "criteria": "battle",
+   "metric": "nodes",
+   "original": 104,
+   "refactored": 248,
+   "kind": "design",
+   "note": "战役判据把墙顶与门楣顶也算成可站点（原版墙不可站）。"
+  },
+  {
+   "id": "holes.battle.components",
+   "case": "holes",
+   "criteria": "battle",
+   "metric": "components",
+   "original": 8,
+   "refactored": 9,
+   "kind": "design",
+   "note": "墙顶 / 门楣顶连成的走道在重构版里是另外的连通块。"
+  },
+  {
+   "id": "holes.battle.largestShare",
+   "case": "holes",
+   "criteria": "battle",
+   "metric": "largestShare",
+   "original": 0.8269,
+   "refactored": 0.5806,
+   "kind": "design",
+   "note": "同上：节点总数变多，最大块占比被摊薄。"
+  }
+ ]
+}

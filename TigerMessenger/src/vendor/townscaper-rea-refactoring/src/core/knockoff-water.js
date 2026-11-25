@@ -1,5 +1,8 @@
 /**
- * knockoff-water.js — 击退出崖 → 空中翻滚 → 落水（[TM] 2026-11-10 从待重构 REACode 搬入）
+ * knockoff-water.js — 击退出崖 → 空中翻滚 → 落水（2026-11-10 从待重构 REACode 搬入；2026-11-16 上游化为 opt-in 模块）
+ *
+ * opt-in：battle.js 只有 `view.knockoffWater === true` 才接这组函数；不接时行为与本仓旧版完全一致
+ *   （近战击退 0.05、落水按 resolveFallLanding 标记死亡，没有水花 / drownStats / 矛轴推）。
  *
  * 来源：townscaper-web/REACode/src/combatfx.js（未改原文件），按 REACodeRefactoring battle.js 的单位接口改写：
  *   REACode 用 u.state = WALK/AIR/FALL/LAND/DROWN 状态机；Refactoring 只有 u.fall（{vx,vy,vz,from}）+ #fallStep，

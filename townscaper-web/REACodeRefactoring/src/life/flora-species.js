@@ -6,6 +6,10 @@
  *    这里给 LEVEL_SPECIES 的六种 shape 各建一套几何：
  *      dots 白花碎点 · tuft 矮圆丛 · blade 高草（交叉细叶）· fan 蕨（扇形五叶）· puff 圆叶灌木 · conifer 松（两节锥）
  *    原片里一级是白花草甸、上去是深色灌丛——形状本身就是层级图例。原版美术素材没有，几何是程序化替代。
+ *    r74：落丛改按裁判 buildFlora 参数（levelFloraCluster：presence 密度闸、丛内 4–9、
+ *    半径 .20–.46 格、个体缩放 .55–1.25），加表面型密度调制（岸/崖边/内部，本地近似）
+ *    与雨生态色组（ecology:'rain'，帧 109+ 紫/灰白近似）；物种材质绑共享 leaf atlas
+ *    （Vegetation.leafSurface = sharedLeafTexture 单例，同纹理对象同开关）。
  *
  * 2) REACode dual.js / 959752525867036672 "a dual to the triangular grid and a suitable place to start
  *    with foliage placement"：core/vertex-dual.js 的 dualFoliageSites（每个顶点格一处、跨崖只保留最高台地楔、
@@ -16,8 +20,9 @@
  * 坐标都走 shape.at(vertex, level)（与地形网格同一套笼形变形），所以丛不会悬空/埋进崖里。
  */
 import * as THREE from 'three';
-import { LEVEL_SPECIES, levelFloraSpecies, levelFloraRanks } from '../core/level-flora.js';
+import { LEVEL_SPECIES, levelFloraSpecies, levelFloraRanks, levelFloraCluster, FLORA_ECOLOGIES } from '../core/level-flora.js';
 import { dualFoliageSites } from '../core/vertex-dual.js';
+import { LEAF_SURFACE_GLSL } from './leaf-surface.js';
 
 export const SPECIES_SHAPES = Object.freeze(['dots', 'tuft', 'blade', 'fan', 'puff', 'conifer']);
 /** 每种形状一格放几丛、基础尺寸（世界单位）。 */
@@ -80,16 +85,29 @@ export function speciesGeometry(shape) {
   }
 }
 
-function speciesMaterial(uLight) {
+/**
+ * 物种材质：Lambert + aShade 底暗顶亮 + uLight。
+ * 传共享 leaf surface（Vegetation.leafSurface，sharedLeafTexture 单例）时绑同一批
+ * uniform 对象：uLeafAtlas/uLeafAtlasOn 与灌木/树冠读同一张纹理、同一个开关；
+ * 角落叶纹的球面映射按各物种几何的包围球中心算（uLeafCenter）。不传则无图集支路。
+ */
+function speciesMaterial(uLight, surface = null, center = new THREE.Vector3()) {
   const m = new THREE.MeshLambertMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+  m.alphaToCoverage = !!surface;
   m.onBeforeCompile = (sh) => {
     sh.uniforms.uLight = uLight;
-    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aShade;\nvarying float vShade;')
-      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvShade = aShade;');
-    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vShade;\nuniform float uLight;')
+    if (surface) { sh.uniforms.uLeafAtlas = surface.uniform; sh.uniforms.uLeafAtlasOn = surface.on; sh.uniforms.uLeafCenter = { value: center }; }
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aShade;\nvarying float vShade;' + (surface ? '\nuniform vec3 uLeafCenter;\nvarying vec3 vLeafSphere;' : ''))
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvShade = aShade;' + (surface ? '\nvLeafSphere = position - uLeafCenter;' : ''));
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vShade;\nuniform float uLight;' + (surface ? LEAF_SURFACE_GLSL : ''))
       .replace('#include <opaque_fragment>', 'outgoingLight *= vShade * uLight;\n#include <opaque_fragment>');
+    if (surface) sh.fragmentShader = sh.fragmentShader.replace('#include <dithering_fragment>', `#include <dithering_fragment>
+      float rimF = 1.0 - abs(dot(normalize(normal), normalize(vViewPosition)));
+      float leafA = leafCoverage(1.0 - rimF, leafPattern(vLeafSphere));
+      if (leafA <= .001) discard;
+      gl_FragColor.a *= leafA;`);
   };
-  m.customProgramCacheKey = () => 'flora-species';
+  m.customProgramCacheKey = () => 'flora-species-' + !!surface;
   return m;
 }
 
@@ -130,9 +148,12 @@ export class FloraSpecies {
     this.veg.group.add(this.group);
     this.levelFlora = false;   // 物种几何
     this.dual = false;         // 对偶落点 + 崖壁竖面
-    const max = 6000, uLight = this.veg.uLight;
+    this.ecology = 'meadow';   // 'rain' = 帧 109+ 紫/灰白生态色组近似（同物种键/形状）
+    const max = 6000, uLight = this.veg.uLight, leafSurface = this.veg.leafSurface ?? null;
     this.meshes = Object.fromEntries(SPECIES_SHAPES.map((s) => {
-      const m = new THREE.InstancedMesh(speciesGeometry(s), speciesMaterial(uLight), max);
+      const g = speciesGeometry(s);
+      g.computeBoundingBox();
+      const m = new THREE.InstancedMesh(g, speciesMaterial(uLight, leafSurface, g.boundingBox.getCenter(new THREE.Vector3())), max);
       m.count = 0; m.frustumCulled = false; m.receiveShadow = false;
       m.setColorAt(0, new THREE.Color(1, 1, 1));
       this.group.add(m);
@@ -141,13 +162,15 @@ export class FloraSpecies {
     this.stats = {};
   }
 
-  setModes({ levelFlora = this.levelFlora, dual = this.dual } = {}) {
+  setModes({ levelFlora = this.levelFlora, dual = this.dual, ecology = this.ecology } = {}) {
+    if (!FLORA_ECOLOGIES.includes(ecology)) throw new RangeError('unknown flora ecology ' + ecology);
     const changedLevel = levelFlora !== this.levelFlora;
-    this.levelFlora = !!levelFlora; this.dual = !!dual;
+    this.levelFlora = !!levelFlora; this.dual = !!dual; this.ecology = ecology;
     const on = this.levelFlora || this.dual;
     this.group.visible = on;
     this.veg.tufts.visible = !on && (this.veg.layers?.grass ?? true);   // 物种 / 对偶丛替换通用地被丛
     if (changedLevel) this.veg.levelFlora = this.levelFlora;           // Vegetation 的物种调色也跟着切
+    if (this.levelFlora) this.veg.floraEcology = this.ecology;         // 生态色组同步（草甸/雨景近似）
     return on;
   }
 
@@ -160,26 +183,25 @@ export class FloraSpecies {
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), v = new THREE.Vector3(), sc = new THREE.Vector3(), col = new THREE.Color();
     const kindOk = (c) => { const g = world.ground(c); return g > 1 && world.top(c) === g && !world.river[c.id]; };
     const ranks = levelFloraRanks(world.cells.map((c) => (kindOk(c) ? world.ground(c) : 0)));
-    const speciesOf = (c) => this.levelFlora ? levelFloraSpecies(ranks.get(world.ground(c)) ?? 0, c.id) : { key: 'grass', shape: 'tuft', colors: ['#8fa85a', '#9fb465', '#7e9c50'] };
+    const speciesOf = (c) => this.levelFlora ? levelFloraSpecies(ranks.get(world.ground(c)) ?? 0, c.id, { ecology: this.ecology }) : { key: 'grass', shape: 'tuft', colors: ['#8fa85a', '#9fb465', '#7e9c50'] };
+    // 表面型：顶层台地内部 / 崖顶边（邻居更低）/ 临水（最低草层，邻居是水或界外）
+    const surfaceOf = (c) => {
+      const g = world.ground(c); let lo = Infinity;
+      for (let i = 0; i < c.n; i++) { const o = world.neighbor(c, i); lo = Math.min(lo, o ? world.top(o) : 0); }
+      return g <= 2 && lo <= 1 ? 'shore' : lo < g ? 'edge' : 'interior';
+    };
     let seed = 1;
-    const put = (shape, x, y, z, colors, scale, tilt = null) => {
+    const put = (shape, x, y, z, colors, scale, tilt = null, jitter = true) => {
       const mesh = this.meshes[shape];
       if (counts[shape] >= mesh.instanceMatrix.count) return;
       const r = hash(seed++, 3);
       if (tilt) { e.set(tilt.ax, r * Math.PI * 2, tilt.az, 'YXZ'); q.setFromEuler(e); } else q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), r * Math.PI * 2);
-      m.compose(v.set(x, y, z), q, sc.setScalar(scale * (.8 + .4 * hash(seed, 9))));
+      m.compose(v.set(x, y, z), q, sc.setScalar(scale * (jitter ? .8 + .4 * hash(seed, 9) : 1)));
       mesh.setMatrixAt(counts[shape], m);
       mesh.setColorAt(counts[shape], col.set(colors[(hash(seed, 11) * colors.length) | 0]));
       counts[shape]++;
     };
     const rows = [];
-    const randomIn = (pts, s) => { // 扇形三角按面积
-      const tris = []; let A = 0;
-      for (let i = 1; i < pts.length - 1; i++) { const [a, b, c] = [pts[0], pts[i], pts[i + 1]]; const ar = Math.abs((b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1])) / 2; tris.push([a, b, c, ar]); A += ar; }
-      let r = hash(s, 1) * A, t = tris[0]; for (const x of tris) { if (r <= x[3]) { t = x; break; } r -= x[3]; }
-      let u = hash(s, 2), w = hash(s, 4); if (u + w > 1) { u = 1 - u; w = 1 - w; }
-      return [t[0][0] + (t[1][0] - t[0][0]) * u + (t[2][0] - t[0][0]) * w, t[0][1] + (t[1][1] - t[0][1]) * u + (t[2][1] - t[0][1]) * w];
-    };
     let sites = 0, wall = 0;
     if (this.dual) {
       // 对偶落点：每个顶点格一丛（跨崖只在最高台地），物种按落点所在格
@@ -207,18 +229,27 @@ export class FloraSpecies {
         wall++;
       }
     } else {
-      // 物种几何：每格一簇同物种（按格随机点），数量按形状
+      // 物种几何：每格一丛同物种（裁判 buildFlora 口径：presence 密度闸、丛内 4–9 个、
+      // 丛半径 .20–.46 格、个体缩放 .55–1.25；items 的 dx/dz 以格半宽为单位）。
+      // 表面型调制（岸/崖边/内部密度系数）是本地近似，裁判只有层绑 species set。
+      let absent = 0;
       for (const c of world.cells) {
         if (!kindOk(c)) continue;
-        const g = world.ground(c), sp = speciesOf(c), [n, size] = SHAPE_PLAN[sp.shape];
+        const g = world.ground(c), surface = surfaceOf(c);
+        const cl = levelFloraCluster(ranks.get(g) ?? 0, c.id, { seed: 11, mode: 'perLevel', ecology: this.ecology, surface });
+        if (!cl.present) { absent++; continue; }
         const pts = c.pts.map((p) => at(p, g));
-        for (let j = 0; j < n; j++) { const [x, z] = randomIn(pts, c.id * 37 + j); put(sp.shape, x, g * L, z, sp.colors, size); }
-        rows.push({ cell: c.id, level: g, key: sp.key, shape: sp.shape });
+        const cx = pts.reduce((a, p) => a + p[0], 0) / pts.length, cz = pts.reduce((a, p) => a + p[1], 0) / pts.length;
+        const cellR = pts.reduce((a, p) => a + Math.hypot(p[0] - cx, p[1] - cz), 0) / pts.length;   // ≈ 格半宽
+        const size = SHAPE_PLAN[cl.shape][1];
+        for (const it of cl.items) put(cl.shape, cx + it.dx * 2 * cellR, g * L, cz + it.dz * 2 * cellR, cl.colors, it.scale * size, null, false);   // 裁判缩放 .55–1.25 已含抖动，不再二次乘
+        rows.push({ cell: c.id, level: g, key: cl.key, shape: cl.shape, surface, items: cl.count });
       }
+      this.absentCells = absent;
     }
     for (const s of SPECIES_SHAPES) { const mesh = this.meshes[s]; mesh.count = counts[s]; mesh.instanceMatrix.needsUpdate = true; if (mesh.instanceColor) mesh.instanceColor.needsUpdate = true; }
     this.rows = rows;
-    this.stats = { counts, dualSites: sites, wallSites: wall, cells: rows.length, ms: +(performance.now() - t0).toFixed(1) };
+    this.stats = { counts, dualSites: sites, wallSites: wall, cells: rows.length, absentCells: this.dual ? null : (this.absentCells ?? 0), ecology: this.ecology, ms: +(performance.now() - t0).toFixed(1) };
     return this.stats;
   }
 }

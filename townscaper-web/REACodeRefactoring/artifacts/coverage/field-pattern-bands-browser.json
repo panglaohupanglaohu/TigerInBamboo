@@ -1,0 +1,259 @@
+{
+  "id": "1714613599035863191",
+  "round": "r159",
+  "island": {
+    "maskPx": 290597,
+    "maskShare": 0.331,
+    "lumShape": {
+      "mean": 100.47,
+      "darkShare": 0.331,
+      "n": 876800
+    },
+    "lumLitOverIsland": {
+      "n": 290597,
+      "mean": 135.65
+    },
+    "vegPx": 20015,
+    "vegStillLitInShape": 0,
+    "diffBandsVsLit": 95073,
+    "diffUnlitVsLit": 240925,
+    "diffShapeVsLit": 290597,
+    "greenInsideIsland": {
+      "vegOn": {
+        "n": 290597,
+        "greenShare": 0.138
+      },
+      "vegOff": {
+        "n": 290597,
+        "greenShare": 0.069
+      }
+    },
+    "diffVegOnOff": 80446
+  },
+  "silhouette": {
+    "shapeState": {
+      "waves": false,
+      "skirt": false,
+      "override": true
+    },
+    "restoreState": {
+      "waves": true,
+      "skirt": true,
+      "override": false
+    }
+  },
+  "closeups": [
+    {
+      "mode": "stripes",
+      "cell": [
+        -1.5906,
+        2,
+        -2.1967
+      ],
+      "deg": -149.64,
+      "periodPx": 104.7,
+      "patchPx": 28908,
+      "sdHp": 3.77,
+      "amp": 5.82,
+      "duty": 0.432,
+      "transShare": 0.599,
+      "uFields": 1
+    },
+    {
+      "mode": "bands",
+      "cell": [
+        -1.5906,
+        2,
+        -2.1967
+      ],
+      "deg": -149.64,
+      "periodPx": 104.7,
+      "patchPx": 28908,
+      "sdHp": 4.62,
+      "amp": 6.99,
+      "duty": 0.451,
+      "transShare": 0.586,
+      "uFields": 3
+    },
+    {
+      "mode": "stripes",
+      "cell": [
+        -3.7141,
+        3,
+        3.7227
+      ],
+      "deg": -62.38,
+      "periodPx": 102.7,
+      "patchPx": 27218,
+      "sdHp": 4.39,
+      "amp": 5.84,
+      "duty": 0.486,
+      "transShare": 0.654,
+      "uFields": 1
+    },
+    {
+      "mode": "bands",
+      "cell": [
+        -3.7141,
+        3,
+        3.7227
+      ],
+      "deg": -62.38,
+      "periodPx": 102.7,
+      "patchPx": 27218,
+      "sdHp": 5.95,
+      "amp": 7.7,
+      "duty": 0.546,
+      "transShare": 0.451,
+      "uFields": 3
+    },
+    {
+      "mode": "stripes",
+      "cell": [
+        -0.2315,
+        2,
+        -5.749
+      ],
+      "deg": 128.22,
+      "periodPx": 106.3,
+      "patchPx": 26172,
+      "sdHp": 4.31,
+      "amp": 5.42,
+      "duty": 0.455,
+      "transShare": 0.46,
+      "uFields": 1
+    },
+    {
+      "mode": "bands",
+      "cell": [
+        -0.2315,
+        2,
+        -5.749
+      ],
+      "deg": 128.22,
+      "periodPx": 106.3,
+      "patchPx": 26172,
+      "sdHp": 5.59,
+      "amp": 6.93,
+      "duty": 0.524,
+      "transShare": 0.372,
+      "uFields": 3
+    },
+    {
+      "mode": "stripes",
+      "cell": [
+        2.9919,
+        3,
+        1.4143
+      ],
+      "deg": 139.64,
+      "periodPx": 106.5,
+      "patchPx": 25694,
+      "sdHp": 9.32,
+      "amp": 16.48,
+      "duty": 0.441,
+      "transShare": 0.684,
+      "uFields": 1
+    },
+    {
+      "mode": "bands",
+      "cell": [
+        2.9919,
+        3,
+        1.4143
+      ],
+      "deg": 139.64,
+      "periodPx": 106.5,
+      "patchPx": 25694,
+      "sdHp": 10.31,
+      "amp": 18.11,
+      "duty": 0.504,
+      "transShare": 0.72,
+      "uFields": 3
+    },
+    {
+      "mode": "stripes",
+      "cell": [
+        -7.3177,
+        0.5,
+        1.6819
+      ],
+      "deg": -165.23,
+      "periodPx": 105.7,
+      "patchPx": 23762,
+      "sdHp": 12.97,
+      "amp": 21.22,
+      "duty": 0.449,
+      "transShare": 0.599,
+      "uFields": 1
+    },
+    {
+      "mode": "bands",
+      "cell": [
+        -7.3177,
+        0.5,
+        1.6819
+      ],
+      "deg": -165.23,
+      "periodPx": 105.7,
+      "patchPx": 23762,
+      "sdHp": 11.61,
+      "amp": 17.92,
+      "duty": 0.494,
+      "transShare": 0.411,
+      "uFields": 3
+    },
+    {
+      "mode": "stripes",
+      "cell": [
+        3.2295,
+        3,
+        -4.122
+      ],
+      "deg": 49.75,
+      "periodPx": 106.3,
+      "patchPx": 24628,
+      "sdHp": 12.11,
+      "amp": 19.03,
+      "duty": 0.281,
+      "transShare": 0.495,
+      "uFields": 1
+    },
+    {
+      "mode": "bands",
+      "cell": [
+        3.2295,
+        3,
+        -4.122
+      ],
+      "deg": 49.75,
+      "periodPx": 106.3,
+      "patchPx": 24628,
+      "sdHp": 12.82,
+      "amp": 18.16,
+      "duty": 0.363,
+      "transShare": 0.572,
+      "uFields": 3
+    }
+  ],
+  "summary": {
+    "patches": 12,
+    "dutyBands": 0.48,
+    "dutyStripes": 0.424,
+    "sdBands": 8.48,
+    "sdStripes": 7.81,
+    "sdPairsUp": 5,
+    "sdPairs": 6,
+    "transBands": 0.519,
+    "transStripes": 0.582,
+    "periodPx": [
+      104.7,
+      102.7,
+      106.3,
+      106.5,
+      105.7,
+      106.3
+    ]
+  },
+  "consoleErrors": []
+}

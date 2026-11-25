@@ -1,0 +1,485 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-25T00:23:21.974Z",
+ "arena": {
+  "fixture": "固定 SUMMARY（land .62、4 锚点、6 图幅）+ DEFAULT_PLANET_RECIPE",
+  "runner": "TigerMessenger/tools/refactor/record-planet-arena.mjs（实算）"
+ },
+ "judge": "规则写死：match targets≥1 且 runPlanetPlan status=applied 且配方键/海面字段/天气字段至少一处有真实变化为「擂过」。",
+ "results": [
+  {
+   "id": "planet.sea-level",
+   "name": "海平面",
+   "domain": "water",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [
+     "seaLevel"
+    ],
+    "sea": [],
+    "weather": []
+   },
+   "produced": 1,
+   "pass": true,
+   "reason": "陆地占 62%；最低的陆上场景锚点高 1.20（anchor-a）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.reseed",
+   "name": "重解地形",
+   "domain": "terrain",
+   "targets": 1,
+   "status": "applied",
+   "ms": 1,
+   "changed": {
+    "recipe": [
+     "seed"
+    ],
+    "sea": [],
+    "weather": []
+   },
+   "produced": 1,
+   "pass": true,
+   "reason": "4 个场景锚点固定，地形 WFC 解 wfc-abc",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.surface-detail",
+   "name": "地表分辨率",
+   "domain": "grid",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [
+     "resolution"
+    ],
+    "sea": [],
+    "weather": []
+   },
+   "produced": 1,
+   "pass": true,
+   "reason": "当前分辨率 24，编译 42 ms",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.chart-split",
+   "name": "切图数",
+   "domain": "grid",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [
+     "chartLimit"
+    ],
+    "sea": [],
+    "weather": []
+   },
+   "produced": 1,
+   "pass": true,
+   "reason": "当前 6 个切图，接缝检查 通过",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.grid-subdivision",
+   "name": "网格细分",
+   "domain": "grid",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": []
+   },
+   "produced": 0,
+   "pass": false,
+   "reason": "当前细分 1 级，1280 个格子；2 级目前编译不通过（实验）",
+   "verdict": "未过"
+  },
+  {
+   "id": "planet.sea-shore-field",
+   "name": "岸带距离场",
+   "domain": "water",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [
+     "field",
+     "tint",
+     "foam",
+     "waves",
+     "reflection",
+     "bay"
+    ],
+    "weather": []
+   },
+   "produced": 6,
+   "pass": true,
+   "reason": "全球海面（不含莫西斯湖、各个内湖）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.sea-tint",
+   "name": "莫西斯湖水色",
+   "domain": "water",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [
+     "field",
+     "tint",
+     "foam",
+     "waves",
+     "reflection"
+    ],
+    "weather": []
+   },
+   "produced": 5,
+   "pass": true,
+   "reason": "全球海面",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.sea-foam",
+   "name": "岸边白沫与光晕",
+   "domain": "water",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [
+     "field",
+     "tint",
+     "foam",
+     "waves",
+     "reflection"
+    ],
+    "weather": []
+   },
+   "produced": 5,
+   "pass": true,
+   "reason": "所有海岸线",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.sea-waves",
+   "name": "外推浪带",
+   "domain": "water",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [
+     "field",
+     "tint",
+     "foam",
+     "waves",
+     "reflection"
+    ],
+    "weather": []
+   },
+   "produced": 5,
+   "pass": true,
+   "reason": "所有海岸线",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.sea-reflection",
+   "name": "彩色中间倒影",
+   "domain": "water",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [
+     "field",
+     "tint",
+     "foam",
+     "waves",
+     "reflection"
+    ],
+    "weather": []
+   },
+   "produced": 5,
+   "pass": true,
+   "reason": "底部贴着海面的岸边建筑（莫西斯湖不参与）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.weather-kind",
+   "name": "天气类型",
+   "domain": "weather",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog"
+    ]
+   },
+   "produced": 3,
+   "pass": true,
+   "reason": "全球天气（world/weather.js）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.weather-wind",
+   "name": "风",
+   "domain": "weather",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog"
+    ]
+   },
+   "produced": 3,
+   "pass": true,
+   "reason": "云、雨、雪、旗共用的风",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.weather-clouds",
+   "name": "云（阴云与云影）",
+   "domain": "weather",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "clouds"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "全球 impostor 云（planet-v8-cloud-impostors）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.light-time",
+   "name": "时刻与太阳",
+   "domain": "light",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "time"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "星球昼夜（P.timeOfDay / P.daySpeed）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.light-sun-shadow",
+   "name": "太阳与投影",
+   "domain": "light",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "light"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "全局太阳（平行光强度 + 阴影贴图类型 / 半径）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.light-ambient-bounce",
+   "name": "天光与反弹色",
+   "domain": "light",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "light"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "环境光 / 半球光（地面色）/ 补光",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.light-ao",
+   "name": "环境遮蔽（AO）",
+   "domain": "light",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "light"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "K3 体素 AO（uVoxelAoStrength）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.light-ink-rim",
+   "name": "墨线与逆光亮边",
+   "domain": "light",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "light"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "圣城新设计可见建筑合成的描边层（citadel-ink-outline）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.light-rock",
+   "name": "山岩明暗与岩层",
+   "domain": "light",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "light"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "圣城山体岩石材质（citadelRockStrata）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.light-view-grade",
+   "name": "视图与调色",
+   "domain": "light",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "light"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "全局材质视图 + 画布调色 + 曝光",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.weather-snow-cover",
+   "name": "积雪（雪后的建筑）",
+   "domain": "weather",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog",
+     "snow"
+    ]
+   },
+   "produced": 4,
+   "pass": true,
+   "reason": "莫西斯湖城镇材质（自带 uSnow，按量渐变）",
+   "verdict": "擂过"
+  },
+  {
+   "id": "planet.weather-fog",
+   "name": "天气雾",
+   "domain": "weather",
+   "targets": 1,
+   "status": "applied",
+   "ms": 0,
+   "changed": {
+    "recipe": [],
+    "sea": [],
+    "weather": [
+     "kind",
+     "wind",
+     "fog"
+    ]
+   },
+   "produced": 3,
+   "pass": true,
+   "reason": "全局雾（叠在灯光系统的雾上，不改它的设置）",
+   "verdict": "擂过"
+  }
+ ],
+ "counts": {
+  "caps": 22,
+  "passed": 21
+ }
+}

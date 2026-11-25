@@ -1,0 +1,71 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [
+  "terrain.preserve",
+  "building.edit",
+  "water.surface",
+  "light.time",
+  "world.ink",
+  "vegetation.layers",
+  "animals.birds",
+  "weather.atmosphere",
+  "effects.fire",
+  "life.layers"
+ ],
+ "errors": [],
+ "steps": {
+  "mount": "ok",
+  "editorPath": {
+   "encode": 319,
+   "preview": "candidate",
+   "reverted": true
+  },
+  "applied": {
+   "waves": false,
+   "reflection": false,
+   "time": "dusk",
+   "outline": false,
+   "grid": true,
+   "vegetation": false,
+   "birds": false,
+   "fog": true,
+   "snow": true,
+   "fire": false
+  },
+  "checks": {
+   "water.surface": true,
+   "light.time": true,
+   "world.ink": true,
+   "vegetation.layers": true,
+   "animals.birds": true,
+   "weather.atmosphere": true,
+   "effects.fire": true,
+   "life.layers": true
+  },
+  "flipBack": {
+   "waves": true,
+   "reflection": true,
+   "time": "night",
+   "outline": true,
+   "grid": false,
+   "vegetation": true,
+   "birds": true,
+   "fog": false,
+   "snow": false,
+   "fire": true
+  },
+  "baseline": {
+   "waves": true,
+   "reflection": true,
+   "time": "day",
+   "outline": true,
+   "grid": false,
+   "vegetation": true,
+   "birds": true,
+   "fog": false,
+   "snow": false,
+   "fire": false
+  }
+ },
+ "pass": true
+}

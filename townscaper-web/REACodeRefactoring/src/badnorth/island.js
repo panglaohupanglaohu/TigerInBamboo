@@ -13,6 +13,7 @@
 import { fbm, makeRng } from '../core/noise.js';
 import { buildNav } from '../world/navgraph.js';
 import { carveBadNorthCaves, cavesFromUrl } from './island-caves.js';   // 第 56 批 C02：洞穴变体（默认关）
+import { planCaveLight, caveLightFromUrl } from '../light/cave-light.js';   // 906416813810049025：洞内暗一档 + 洞口渐变
 
 export function generateBadNorth(world, seed = 7, { caves = cavesFromUrl() } = {}) {
   world.reset();
@@ -74,6 +75,8 @@ export function generateBadNorth(world, seed = 7, { caves = cavesFromUrl() } = {
   }
   world.bnNavFix = navFix;
   world.bnCaves = caves > 0 ? carveBadNorthCaves(world, seed, { count: caves }) : null;
+  // 906416813810049025：洞内光照按「离洞口多远」压暗（?cavelight=0 关档做 A/B）
+  world.caveLight = world.bnCaves?.length && caveLightFromUrl() ? planCaveLight(world) : null;
   // 4. 小屋：台地上（≥2 层）四周平的格子，挑 3–5 个，彼此隔开；墙色 -1 = 主题的白墙
   const flat = cells.filter((c) => { const g = world.ground(c); return g >= 2 && world.top(c) === g && c.edgeNeighbors.every((id) => id >= 0 && world.ground(cells[id]) === g); });
   const houses = [];

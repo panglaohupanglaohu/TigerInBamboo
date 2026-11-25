@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>星球：边光衰减 + 两层云壳</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:108ch; }
+  header b { color:#9c4720; font-weight:650; }
+  #stage { position:fixed; inset:104px 316px 66px 16px; display:flex; gap:14px; align-items:center;
+    justify-content:center; background:#0d1622; border-radius:12px; border:1px solid var(--line); padding:10px; }
+  .col { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .col span { color:#8fa4b8; font-size:11.5px; }
+  canvas { display:block; border-radius:8px; }
+  #panel { position:fixed; right:16px; top:104px; width:290px; bottom:66px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:11px 13px; display:flex;
+    flex-direction:column; gap:7px; overflow:auto; box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #panel label.chk { display:flex; gap:7px; align-items:center; font-size:12.5px; cursor:pointer; }
+  #stats { position:fixed; left:18px; bottom:14px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; z-index:5; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .warn { color:#9c4720; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>球形世界：<b>轮廓外的边光衰减</b> + 两层互相穿过的云<span style="font-size:12px;color:#5c727a;font-weight:400"> · 768886648625061889</span></h1>
+  <p>让球看起来是球的不是明暗，是轮廓外面那 20% 半径的衰减。表是沿 x=208 竖扫 11 个采样点归一化出来的，前 5px 比指数掉得慢（云散射）。</p>
+</header>
+<div id="stage">
+  <div class="col"><canvas id="cv"></canvas><span>拖动看云 / 边光</span></div>
+</div>
+<div id="panel">
+  <h2>参数</h2>
+  <label class="chk"><input type="checkbox" id="atm" checked> 边光（A/B）</label>
+  <label class="chk"><input type="checkbox" id="cld" checked> 云壳</label>
+  <div class="row"><span>半径</span><b id="vr">157</b></div>
+  <input type="range" id="r" min="90" max="180" value="157" step="1">
+  <div class="row"><span>自转</span><b id="vt">0.0</b></div>
+  <input type="range" id="t" min="0" max="600" value="0" step="1">
+  <h2 style="margin-top:4px">量出来的</h2>
+  <div class="row"><span>边光半宽</span><b id="vhw">–</b></div>
+  <div class="row"><span>衰减到 0 的位置</span><b id="vend">–</b></div>
+  <div class="row"><span>轮廓处亮度</span><b id="vedge">–</b></div>
+</div>
+<div id="stats"></div>
+
+<script type="module">
+import { ATMO, haloAlpha, haloColor, cloudField, terrainColor, sphereShade, smoothstep } from './src/planetatmo.js';
+
+const $ = (id) => document.getElementById(id);
+const cv = $('cv');
+const S = 400;
+cv.width = S; cv.height = S;
+const ctx = cv.getContext('2d');
+
+const CX = 200, CY = 200;
+let tNorm = 0;
+
+function h2(x, y) {
+  let n = Math.imul(x | 0, 374761393) ^ Math.imul(y | 0, 668265263);
+  n = Math.imul(n ^ (n >>> 13), 1274126177);
+  return ((n ^ (n >>> 16)) >>> 0) / 4294967296;
+}
+function vnoise(x, y) {
+  const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
+  const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+  const a = h2(xi, yi), b = h2(xi + 1, yi), c = h2(xi, yi + 1), d = h2(xi + 1, yi + 1);
+  return (a * (1 - u) + b * u) * (1 - v) + (c * (1 - u) + d * u) * v;
+}
+
+function draw() {
+  const R = +$('r').value;
+  const t = +$('t').value;
+  $('vr').textContent = R;
+  $('vt').textContent = (t / 60).toFixed(1) + 's';
+
+  const img = ctx.createImageData(S, S);
+  const px = img.data;
+  const atmOn = $('atm').checked;
+  const cldOn = $('cld').checked;
+
+  for (let y = 0; y < S; y++) {
+    for (let x = 0; x < S; x++) {
+      const p = (y * S + x) * 4;
+      const dx = (x - CX) / R, dy = (y - CY) / R;
+      const d2 = dx * dx + dy * dy;
+      const d = Math.sqrt(d2);
+      let col;
+      if (d <= 1) {
+        // 球面法线
+        const nz = Math.sqrt(Math.max(0, 1 - d2));
+        const shade = sphereShade(dx, -dy, nz);
+        // 球面经纬：**不能用 atan2(dy,dx)** —— 那在球心处有奇点，
+        // 第一版就是这么写的，结果球心长出一个风车状的星芒（片子里没有）。
+        // 正确做法：lon 从 atan2(x, z) 取（奇点在轮廓 z→0，正好被边光压住），
+        // lat 从 y 取，球心处两个都是 0。
+        const lon = Math.atan2(dx, nz) + t * 0.0016;
+        const lat = Math.asin(Math.max(-1, Math.min(1, -dy))) * 0.9;
+        const land = vnoise(lon * 2.1 + 3.7, lat * 2.1 - 1.3) * 0.6
+          + vnoise(lon * 4.7, lat * 4.7) * 0.4;
+        col = terrainColor(land).map((c) => c * shade);
+        if (cldOn) {
+          const c = cloudField(lon * 1.6, lat * 1.6, t, 0.3);
+          if (c > 0) col = col.map((v, i) => v + (ATMO.cloud[i] * (0.55 + 0.45 * shade) - v) * c * 0.95);
+        }
+        // 极薄的边缘散射：球内最外 3% 也提一点亮，否则边光会像"贴上去的环"
+        const rim = smoothstep(1.0, 0.94, d);
+        col = col.map((v, i) => v + (ATMO.edge[i] - v) * rim * 0.22);
+      } else {
+        col = ATMO.bg.slice();
+        if (atmOn) {
+          const a = haloAlpha(d - 1);
+          if (a > 0) {
+            const hc = haloColor(a);
+            col = col.map((v, i) => v + (hc[i] - v) * a);
+            // 8bit 量化会在这么大一片渐变上留下同心环，加 1 个 LSB 的抖动打散
+            const dth = (h2(x * 3 + 1, y * 7 + 5) - 0.5) * 1.4;
+            col = col.map((v) => v + dth);
+          }
+        }
+      }
+      px[p] = Math.min(255, col[0]);
+      px[p + 1] = Math.min(255, col[1]);
+      px[p + 2] = Math.min(255, col[2]);
+      px[p + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+
+  // 沿 12 点方向竖扫，量"轮廓 → 背景"的距离（跟片子里的扫法一致）
+  const lum = (x, y) => { const p = (y * S + x) * 4; return 0.3 * px[p] + 0.59 * px[p + 1] + 0.11 * px[p + 2]; };
+  const bg = lum(4, 4);
+  let edgeY = CY - R, edgeL = lum(CX, edgeY - 1);
+  let last = 0;
+  for (let d = 1; d < R * 0.6; d++) {
+    const L = lum(CX, Math.round(edgeY - d));
+    if ((L - bg) / Math.max(1, (edgeL - bg)) > 0.02) last = d;
+  }
+  const half = (() => {
+    for (let d = 1; d < R * 0.6; d++) {
+      const L = lum(CX, Math.round(edgeY - d));
+      if ((L - bg) / Math.max(1, (edgeL - bg)) < 0.5) return d;
+    }
+    return -1;
+  })();
+
+  $('vhw').textContent = (half / R * 100).toFixed(1) + '% R';
+  $('vend').textContent = (last / R * 100).toFixed(1) + '% R';
+  $('vedge').textContent = Math.round(edgeL);
+
+  $('stats').innerHTML =
+    `边光表：<b>${ATMO.HALO.length}</b> 个采样点（量自 f020 的竖扫）· 半宽 <span class="${Math.abs(half / R - 0.064) < 0.02 ? 'ok' : 'warn'}">${(half / R * 100).toFixed(1)}% R</span>` +
+    `（片子 6.4%）· 衰减到背景 <b>${(last / R * 100).toFixed(1)}% R</b>（片子 20.4%）` +
+    ` · 轮廓亮度 <b>${Math.round(edgeL)}</b>（片子 105）· 背景 <b>${Math.round(bg)}</b>（片子 19）`;
+  window.__planet = { R, half: half / R, end: last / R, edgeL, bg, atmOn };
+}
+['r', 't'].forEach((id) => $(id).addEventListener('input', draw));
+['atm', 'cld'].forEach((id) => $(id).addEventListener('change', draw));
+window.__setT = (v) => { $('t').value = v; draw(); return window.__planet; };
+window.__setAtm = (v) => { $('atm').checked = v; draw(); return window.__planet; };
+draw();
+</script>
+</body>
+</html>

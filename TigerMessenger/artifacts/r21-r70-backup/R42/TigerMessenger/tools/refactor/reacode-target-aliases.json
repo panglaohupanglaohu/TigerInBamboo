@@ -1,0 +1,6 @@
+{
+ "engine/mixedpersp.html":{"targets":["mixed-perspective.html","src/core/mixed-perspective.js","src/world/view-mixed-persp.js"],"reason":"已读原页及当前混合透视模块。源片1310503825510367232一致，现版采用投影矩阵；页面交互与视觉等价仍独立核验。"},
+ "engine/blendlab.html":{"targets":["fire.html","src/life/effects.js","src/core/smoke-order.js"],"reason":"已读原页ADD/MAX分屏及现版effects火卡材质；1056999668486471682来源一致。找到实现不能代替分屏功能验收。"},
+ "game.html":{"targets":["index.html"],"reason":"原页仅meta refresh重定向到index；新主入口已存在。"},
+ "learned.html":{"targets":["pipeline.html"],"reason":"原页仅重定向到pipeline学习台账；当前管线页已存在，旧锚点兼容待核。"}
+}

@@ -36,7 +36,7 @@ wire.visible = Q.get('wire') === '1'; scene.add(wire);
 // —— 共享 ImpostorBaker：树三种 + 云两种，同一张图集
 const baker = useUnlitVertexColors(new ImpostorBaker(renderer, 2048)), tex = baker.rt.texture;
 const snap = Q.get('snap') === '1';   // 对照：只取最近一张方位图（普通"多张图跳变"做法）
-const mk = (baked, max, o) => { const f = localUpImpostorField(tex, baked, max, o); if (snap) { f.material.vertexShader = f.material.vertexShader.replace('vT = f - vK;', 'vT = 0.0; vK = floor(f + .5); if (vK > 7.5) vK = 0.0;'); } return f; };
+const mk = (baked, max, o) => { const f = localUpImpostorField(tex, baked, max, { baker, ...o }); if (snap) { f.material.vertexShader = f.material.vertexShader.replace('vT = f - vK;', 'vT = 0.0; vK = floor(f + .5); if (vK > 7.5) vK = 0.0;'); } return f; };
 const treeBaked = [0, 1, 2].map((v) => baker.bake(treeCrownGeometry(v + 1), 128, { pitches: [.12, .5, 1.05] }));
 const cloudBaked = [1, 2].map((v) => baker.bake(fluffyCloudGeometry(v * 3 + 1), 192, { vertexColors: true, pitches: [.2, 1.0] }));
 const sites = planetImpostorSites(elev, { seed: 5, sea: SEA, trees: num('trees', 1800), clouds: num('nclouds', 110), forest });

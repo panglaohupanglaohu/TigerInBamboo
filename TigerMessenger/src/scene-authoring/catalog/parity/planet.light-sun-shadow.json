@@ -1,0 +1,52 @@
+{
+ "capability": "planet.light-sun-shadow",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/surfaceshadow.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/light/surface-shadow.js"
+ ],
+ "inputs": {
+  "seamsGrid": "24×16",
+  "shadowGrid": "40×30",
+  "params": "castH.18/zTestH.02/steps56/stepLen1.15/LIGHT(-.82,-.48,.035)"
+ },
+ "metrics": [
+  {
+   "id": "seams",
+   "name": "islandSeams 计数一致",
+   "refactored": 20,
+   "equal": false
+  },
+  {
+   "id": "map",
+   "name": "shadowMap↔bakeSurfaceShadow 全图最大差(归一)",
+   "original": 0,
+   "refactored": 1
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "islandSeams",
+   "original": "{\"seamPx\":20,\"seamSharePct\":50,\"maxJump\":0.97}",
+   "refactored": "{\"seamPx\":20,\"seamShare\":0.5,\"maxJump\":0.9686274509803922}"
+  },
+  {
+   "kind": "value",
+   "id": "shadowMap↔bakeSurfaceShadow",
+   "original": "Float32 0..1",
+   "refactored": "Uint8 0..255",
+   "maxDiff": 1,
+   "note": "原版地基=模糊半径14核、重构=盒均值；光高测试 hf[j]>rayH+z vs casters[j]>h+s·t·w+bias 的插点口径也略有差别"
+  }
+ ],
+ "basis": "islandSeams 同一图案两种量化喂两边；bakeSurfaceShadow 参数逐项对齐原版 shadowMap（blur14↔baseRadius14、LIGHT 三分量↔dx/dz/slope、RAYS3↔rays3）。"
+}

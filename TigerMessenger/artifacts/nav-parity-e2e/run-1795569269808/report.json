@@ -1,0 +1,196 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/nav-parity-e2e/run-1795569269808",
+  "capabilities": [],
+  "steps": {
+    "scene": "apostles",
+    "parity": {
+      "state": "ready",
+      "rows": [
+        {
+          "case": "cheese",
+          "metric": "components",
+          "cells": [
+            {
+              "text": "奶酪",
+              "cls": ""
+            },
+            {
+              "text": "连通块数",
+              "cls": ""
+            },
+            {
+              "text": "79",
+              "cls": ""
+            },
+            {
+              "text": "79",
+              "cls": "eq"
+            },
+            {
+              "text": "10",
+              "cls": "ne"
+            }
+          ]
+        },
+        {
+          "case": "cheese",
+          "metric": "largestShare",
+          "cells": [
+            {
+              "text": "奶酪",
+              "cls": ""
+            },
+            {
+              "text": "最大块占比",
+              "cls": ""
+            },
+            {
+              "text": "23.1%",
+              "cls": ""
+            },
+            {
+              "text": "23.1%",
+              "cls": "eq"
+            },
+            {
+              "text": "42.4%",
+              "cls": "ne"
+            }
+          ]
+        },
+        {
+          "case": "cheese",
+          "metric": "covered",
+          "cells": [
+            {
+              "text": "奶酪",
+              "cls": ""
+            },
+            {
+              "text": "被覆盖节点数",
+              "cls": ""
+            },
+            {
+              "text": "268",
+              "cls": ""
+            },
+            {
+              "text": "268",
+              "cls": "eq"
+            },
+            {
+              "text": "613",
+              "cls": "ne"
+            }
+          ]
+        },
+        {
+          "case": "holes",
+          "metric": "components",
+          "cells": [
+            {
+              "text": "门洞",
+              "cls": ""
+            },
+            {
+              "text": "连通块数",
+              "cls": ""
+            },
+            {
+              "text": "8",
+              "cls": ""
+            },
+            {
+              "text": "8",
+              "cls": "eq"
+            },
+            {
+              "text": "9",
+              "cls": "ne"
+            }
+          ]
+        },
+        {
+          "case": "holes",
+          "metric": "largestShare",
+          "cells": [
+            {
+              "text": "门洞",
+              "cls": ""
+            },
+            {
+              "text": "最大块占比",
+              "cls": ""
+            },
+            {
+              "text": "82.7%",
+              "cls": ""
+            },
+            {
+              "text": "82.7%",
+              "cls": "eq"
+            },
+            {
+              "text": "58.1%",
+              "cls": "ne"
+            }
+          ]
+        },
+        {
+          "case": "holes",
+          "metric": "covered",
+          "cells": [
+            {
+              "text": "门洞",
+              "cls": ""
+            },
+            {
+              "text": "被覆盖节点数",
+              "cls": ""
+            },
+            {
+              "text": "23",
+              "cls": ""
+            },
+            {
+              "text": "23",
+              "cls": "eq"
+            },
+            {
+              "text": "23",
+              "cls": "eq"
+            }
+          ]
+        }
+      ],
+      "verdict": "同判据一致（这两座岛上行为等价） · 缺口 1 条 · 口径差异 7 处 · 现算 25857 ms",
+      "sameEqual": "1",
+      "gaps": 1,
+      "gapItems": [
+        "holes.routes.cost"
+      ],
+      "registered": "1",
+      "regText": "已登记：catalog/parity/navigation.json（2026-11-23T16:07:47.917Z，diff-registered，与现算一致）",
+      "live": {
+        "registered": {
+          "verdict": "diff-registered",
+          "generatedAt": "2026-11-23T16:07:47.917Z",
+          "gaps": 1,
+          "sameAsLive": true
+        },
+        "error": null,
+        "verdict": "diff-registered"
+      }
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true
+}

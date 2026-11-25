@@ -122,7 +122,20 @@ export function buildTerrain(w, world, { L, shape = null }) {
       if (altered(c, a, b, o)) {
         // soft-slope corners: one quad per exposed level, stretched between the neighbour's surface (Yb) and ours (Yt)
         const og = o ? world.ground(o) : 0;
-        if (og >= g) continue;
+        if (og >= g) {
+          // same-level neighbour whose corner heights differ (mixed vertex: non-plain cell stayed fixed,
+          // or a different soft group): no wall would cover the gap between the two fans — fill it once.
+          if (og === g && o && c.id < o.id) {
+            const lo = [Math.min(soft.y(c.id, a.id) ?? g * L, soft.y(o.id, a.id) ?? g * L), Math.min(soft.y(c.id, b.id) ?? g * L, soft.y(o.id, b.id) ?? g * L)];
+            const hi = [Math.max(soft.y(c.id, a.id) ?? g * L, soft.y(o.id, a.id) ?? g * L), Math.max(soft.y(c.id, b.id) ?? g * L, soft.y(o.id, b.id) ?? g * L)];
+            if (hi[0] - lo[0] > 1e-9 || hi[1] - lo[1] > 1e-9) {
+              const q = [WP(a, lo[0]), WP(b, lo[1]), WP(b, hi[1]), WP(a, hi[0])];
+              w.soft = true; w.quad(...q, out, wallBase, 1.0, 0, 1.0); w.soft = false;
+              rec?.walls.push({ cell: c.id, edge: i, lv: g, q, out, fill: true });
+            }
+          }
+          continue;
+        }
         const Yt = [soft.y(c.id, a.id) ?? g * L, soft.y(c.id, b.id) ?? g * L];
         const Yb = [o ? soft.y(o.id, a.id) ?? og * L : 0, o ? soft.y(o.id, b.id) ?? og * L : 0];
         if (Math.abs(Yt[0] - Yb[0]) < 1e-9 && Math.abs(Yt[1] - Yb[1]) < 1e-9) continue;   // linked: seamless slope

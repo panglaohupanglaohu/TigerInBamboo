@@ -1,6 +1,204 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>硬边约束 · REACode 重构版</title><style>body{margin:0;font:14px/1.6 system-ui;color:#203a42;background:#edf4f2}header{padding:12px}p{margin:4px}label{margin:5px}iframe{width:100%;height:76vh;border:0}</style><header><a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <a href="artifacts/coverage/hierarchy-review.md">逐帧证据</a> · <b>共享地形 · 显式硬边约束</b><p>选取现有网格中位移明显的一条边。开启硬边后，两端在各切面保持原坐标；沿用原平滑、建筑/外圈钉点和面积保护。黑线为约束边，青线为未约束对照。</p><label>网格<select id="grid"><option value="mixed">混合</option><option value="quad">四边形</option></select></label><label><input id="hard" type="checkbox" checked>显式硬边</label><label><input id="smooth" type="checkbox" checked>平滑形变</label><button id="focus">约束边近景</button><output id="status">加载…</output><p>1670720537662836736原片黑=硬边、红=模块边界、蓝=材质边界；本地崖顶/崖脚等级只是近似。模块/材质三角网边界与完整无/普通/分层三模式仍待补，不把本实验记成原作保形完成。</p></header><iframe id="scene" title="共享地形硬边对照"></iframe><script type="module">
-import{shapeTerrain}from'./src/terrain/shape.js';const $=s=>document.querySelector(s);let api,T,pair,slice,baseline,line,epoch=0;
-function apply(){if(!api)return;const{world,grid,view}=api;view.worldMesh.smooth=$('#smooth').checked;view.worldMesh.shapeOptions={...view.worldMesh.shapeOptions,hardEdges:$('#hard').checked?[pair]:[]};view.worldMesh.invalidate();view.render(0);const shape=view.worldMesh.shape;let error=0;for(const id of pair)for(let s=0;s<shape.slices;s++){const p=grid.verts[id],q=shape.at(p,s);error=Math.max(error,Math.hypot(p.x-q[0],p.z-q[1]));}if(line){view.scene.remove(line);line.geometry.dispose();line.material.dispose();}const points=pair.map(id=>{const q=shape.at(grid.verts[id],slice);return new T.Vector3(q[0],slice*.5+.04,q[1]);});line=new T.Line(new T.BufferGeometry().setFromPoints(points),new T.LineBasicMaterial({color:$('#hard').checked?0x111111:0x00ffff,depthTest:false}));line.renderOrder=100;view.scene.add(line);$('#status').textContent=`边${pair.join('↔')} · 原平滑位移${baseline.toFixed(4)} · 当前端点最大位移${error.toFixed(7)} · 保护切面${shape.guard.guardedSlices}`;window.hierarchyReview={api,pair,slice,shape,baseline,error};}
-function focus(){if(!api)return;const [a,b]=pair.map(id=>api.grid.verts[id]),v=api.view;v.target.set((a.x+b.x)/2,slice*.5,(a.z+b.z)/2);v.distance=8;v.pitch=.65;v.updateCamera();v.render(0);}
-function load(){const token=++epoch;api=null;window.hierarchyReview=null;line=null;$('#scene').onload=()=>{const ready=async()=>{if(token!==epoch)return;const r=$('#scene').contentWindow.rea;if(!r?.view?.worldMesh?.shape){setTimeout(ready,100);return}api=r;T=await $('#scene').contentWindow.eval("import('three')");if(token!==epoch)return;const base=shapeTerrain(api.world);baseline=-1;for(const c of api.grid.cells)for(let i=0;i<c.n;i++){const a=c.pts[i],b=c.pts[(i+1)%c.n];for(let s=0;s<base.slices;s++){const qa=base.at(a,s),qb=base.at(b,s),d=Math.max(Math.hypot(a.x-qa[0],a.z-qa[1]),Math.hypot(b.x-qb[0],b.z-qb[1]));if(d>baseline){baseline=d;pair=[a.id,b.id];slice=s;}}}apply();focus();};ready();};$('#scene').src='index.html?scene=terrain&grid='+$('#grid').value;}$('#focus').onclick=focus;$('#grid').onchange=load;$('#hard').onchange=$('#smooth').onchange=apply;load();
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>硬边约束 · REACode 重构版</title><style>body{margin:0;font:14px/1.6 system-ui;color:#203a42;background:#edf4f2}header{padding:12px}p{margin:4px}label{margin:5px}iframe{width:100%;height:70vh;border:0}output{display:block;padding:4px 8px;margin:4px 0;background:#fff;border-radius:4px;font:12px/1.5 ui-monospace,monospace;white-space:pre-wrap}</style><header><a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <a href="artifacts/coverage/hierarchy-review.md">逐帧证据</a> · <b>共享地形 · 显式硬边约束 / 三档平滑</b><p>选取现有网格中位移明显的一条边。开启硬边后，两端在各切面保持原坐标；沿用原平滑、建筑/外圈钉点和面积保护。黑线为约束边，青线为未约束对照。</p><label>网格<select id="grid"><option value="mixed">混合</option><option value="quad">四边形</option></select></label><label>平滑模式<select id="mode"><option value="none">无（no smoothing）</option><option value="dumb">普通（dumb smoothing）</option><option value="hierarchical" selected>分层（hierarchical smoothing）</option></select></label><label><input id="hard" type="checkbox" checked>显式硬边</label><label><input id="smooth" type="checkbox" checked>平滑形变</label><label><input id="clsOn" type="checkbox" checked>边类型着色</label><label>切面<select id="clsSlice"></select></label><button id="focus">约束边近景</button><button id="focusMat">材质边界近景</button><output id="status">加载…</output><output id="modes">三档读数待加载…</output><output id="clsOut">边类型待加载…</output><p>1670725072540106755 原片依次切「no / dumb / hierarchical」三档（画面左上角就是这三个标签，切点在帧 64→65 与 119→120）：<b>no</b> 岸线是一段段直边+硬折角；<b>dumb</b> 把所有轮廓点一起拉平，台地/岸线变成锯齿小台阶（原片说的 jankyness）；<b>hierarchical</b> 只让同级或更硬的邻点相拉，于是台地保持方正的“意图”、岸线圆滑。下面 `#modes` 是同一座岛上三档的实测读数。<br>1670720537662836736 原片黑=硬边、红=模块边界、蓝=材质边界。<b>本地三类边（同一套 rank 分级，不走主网格）</b>：<b>黑</b>=钉住（显式硬边两端 / 六边形外圈 / 建筑格）、<b>红</b>=模块边界（崖顶线 R_s 与崖脚线 R_{s+1}，即实心格与空格的交界）、<b>蓝</b>=材质边界（同高度相邻格 river 归属不同，落在台地上的水/陆交界）。分级口径是<b>格边</b>上的近似：原片分类的是原始模块/材质三角网的边，本仓没有那份三角网，所以不把本实验记成原作保形完成。</p><iframe id="scene" title="共享地形硬边 / 三档平滑对照"></iframe><script type="module">
+import{shapeTerrain,smoothingMetrics}from'./src/terrain/shape.js';
+const $=s=>document.querySelector(s);
+const MODES=['none','dumb','hierarchical'];
+let api,T,pair,slice,baseline,line,epoch=0,table=null;
+// 1670720537662836736：黑=硬边 / 红=模块边界 / 蓝=材质边界。三色层只做「分类可视化」，
+// 分类用单独一份 shapeTerrain（带 materials），不写进 view.worldMesh.shapeOptions → 主网格渲染零改动。
+const CLS_COLORS={hard:0x111111,tile:0xff2d2d,material:0x2f6bff};
+let clsGroup=null,clsShape=null,matPairs=[],clsSlice=1,clsCounts={hard:0,tile:0,material:0,total:0},clsBySlice=[];
+
+const avg=a=>{const v=a.filter(x=>x!==null&&Number.isFinite(x));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null};
+
+/** 同一座 World 上三档模式的读数（纯查询，不改 World）：kink=崖顶线的平均转角、drift=切面面积相对原始网格的漂移、
+ *  moved=位移超过 1e-9 的 (顶点×切面) 采样数、pinnedBad=被钉住却仍移动的采样数（应为 0）。 */
+function modeTable(){
+  if(!api)return null;
+  const world=api.world,out={};
+  for(const m of MODES){
+    const sh=shapeTerrain(world,{mode:m}),K=[],D=[],R=[];
+    for(let s=1;s<sh.slices;s++){const q=smoothingMetrics(world,sh,s);K.push(q.kink['cliff-top']);D.push(q.areaDrift);R.push(q.regularity);}
+    // at() 走 Float32 存储，原坐标是 Float64 → 位移阈值取 1e-5 m（下方 maxMove 另证 no 档恒为 0）
+    let moved=0,maxMove=0,pinnedBad=0;
+    for(const v of world.grid.verts)for(let s=0;s<sh.slices;s++){
+      const a=sh.at(v,s),d=Math.hypot(a[0]-v.x,a[1]-v.z);
+      if(d>1e-5){moved++;maxMove=Math.max(maxMove,d);}
+      if(sh.rank(v.id,s)==='pinned'&&d>1e-5)pinnedBad++;
+    }
+    out[m]={mode:m,slices:sh.slices,verts:world.grid.verts.length,kinkTop:avg(K),drift:avg(D),regularity:avg(R),moved,maxMove:+maxMove.toFixed(4),pinnedBad,ms:sh.ms};
+  }
+  const diff=(a,b)=>{let n=0,big=0,mx=0;for(const v of world.grid.verts)for(let s=0;s<a.slices;s++){const p=a.at(v,s),q=b.at(v,s),d=Math.hypot(p[0]-q[0],p[1]-q[1]);if(d>1e-5)n++;if(d>0.02)big++;if(d>mx)mx=d;}return{n,big,max:+mx.toFixed(4)};};
+  const none=shapeTerrain(world,{mode:'none'}),dumb=shapeTerrain(world,{mode:'dumb'}),hier=shapeTerrain(world,{mode:'hierarchical'});
+  out.diff={dumbVsNone:diff(dumb,none),hierVsNone:diff(hier,none),hierVsDumb:diff(hier,dumb),samples:world.grid.verts.length*none.slices};
+  out.sameWorld=true;
+  return out;
+}
+
+function showModes(){
+  table=modeTable();
+  if(!table){$('#modes').textContent='三档读数待加载…';return;}
+  const f=x=>x===null?'—':x.toFixed(2);
+  const rows=MODES.map(m=>{const r=table[m];return`${m.padEnd(13)} 崖顶转角 ${f(r.kinkTop)}° · 面积漂移 ${(r.drift*100).toFixed(2)}% · 正则度 ${f(r.regularity)}° · 位移采样 ${r.moved}/${r.verts*r.slices} · 最大位移 ${r.maxMove} · 钉住违例 ${r.pinnedBad}`;});
+  $('#modes').textContent=[`当前档 ${$('#mode').value}（slices ${table.none.slices}）`,...rows,
+    `逐采样差分（>1e-5 m / >2 cm）：dumb↔none ${table.diff.dumbVsNone.n}/${table.diff.dumbVsNone.big} · hier↔none ${table.diff.hierVsNone.n}/${table.diff.hierVsNone.big} · hier↔dumb ${table.diff.hierVsDumb.n}/${table.diff.hierVsDumb.big} / 共 ${table.diff.samples}`].join('\n');
+}
+
+function apply(){
+  if(!api)return;
+  const{world,grid,view}=api;
+  view.worldMesh.smooth=$('#smooth').checked;
+  view.worldMesh.shapeOptions={...view.worldMesh.shapeOptions,hardEdges:$('#hard').checked?[pair]:[],mode:$('#mode').value};
+  view.worldMesh.invalidate();view.render(0);
+  const shape=view.worldMesh.shape;
+  let error=0;
+  for(const id of pair)for(let s=0;s<shape.slices;s++){const p=grid.verts[id],q=shape.at(p,s);error=Math.max(error,Math.hypot(p.x-q[0],p.z-q[1]));}
+  if(line){view.scene.remove(line);line.geometry.dispose();line.material.dispose();}
+  const points=pair.map(id=>{const q=shape.at(grid.verts[id],slice);return new T.Vector3(q[0],slice*.5+.04,q[1]);});
+  line=new T.Line(new T.BufferGeometry().setFromPoints(points),new T.LineBasicMaterial({color:$('#hard').checked?0x111111:0x00ffff,depthTest:false}));
+  line.renderOrder=100;view.scene.add(line);
+  $('#status').textContent=`边${pair.join('↔')} · 原平滑位移${baseline.toFixed(4)} · 当前端点最大位移${error.toFixed(7)} · 保护切面${shape.guard.guardedSlices} · 档位${shape.mode}`;
+  window.hierarchyReview={api,pair,slice,shape,baseline,error};
+  showModes();
+  buildClasses();
+}
+
+/** 蓝色「材质边界」的输入：同高度的两格之间 river 归属不同（台地上的水/陆交界）。
+ *  用显式顶点对喂给 shapeTerrain 的 materials（不依赖 ?materials=river 的整片条件）。 */
+function riverMaterialPairs(){
+  if(!api)return[];
+  const{world,grid}=api,pairs=[];
+  for(const c of grid.cells)for(let i=0;i<c.n;i++){
+    const nid=c.edgeNeighbors[i];if(nid<0||nid<c.id)continue;const o=grid.cells[nid];
+    const t=world.top(c);if(t<1||world.top(o)!==t)continue;
+    if(world.river[c.id]!==world.river[nid])pairs.push([c.pts[i].id,c.pts[(i+1)%c.n].id]);
+  }
+  return pairs;
+}
+
+/** 一条边归哪一类：钉住 > 崖顶/崖脚（模块边界）> 材质边界 > 自由。 */
+function edgeClass(shape,s,a,b){
+  const ra=shape.rank(a,s),rb=shape.rank(b,s);
+  if(ra==='pinned'||rb==='pinned')return'hard';
+  if(ra==='cliff-top'||ra==='cliff-foot'||rb==='cliff-top'||rb==='cliff-foot')return'tile';
+  if(ra==='material'||rb==='material')return'material';
+  return null;
+}
+
+/** 逐切面统计三类边（去重：一条格边只算一次）。 */
+function classTable(){
+  if(!clsShape)return[];
+  const grid=api.grid,rows=[];
+  for(let s=1;s<clsShape.slices;s++){
+    const cnt={slice:s,hard:0,tile:0,material:0,total:0},seen=new Set();
+    for(const c of grid.cells)for(let i=0;i<c.n;i++){
+      const a=c.pts[i].id,b=c.pts[(i+1)%c.n].id,key=a<b?a+':'+b:b+':'+a;
+      if(seen.has(key))continue;seen.add(key);
+      const k=edgeClass(clsShape,s,a,b);if(!k)continue;
+      cnt[k]++;cnt.total++;
+    }
+    rows.push(cnt);
+  }
+  return rows;
+}
+
+function buildClasses(keepSlice){
+  if(!api||!T)return;
+  const{grid,view}=api;
+  // 分类用独立 shape（带 materials）：不改主网格的 shapeOptions
+  clsShape=shapeTerrain(api.world,{mode:$('#mode').value,materials:matPairs,hardEdges:$('#hard').checked?[pair]:[]});
+  clsBySlice=classTable();
+  const sel=$('#clsSlice');
+  const maxS=clsShape.slices-1;
+  if(sel.options.length!==maxS){sel.textContent='';for(let s=1;s<=maxS;s++){const o=document.createElement('option');o.value=o.textContent=s;sel.append(o);}}
+  // 默认切面取「有蓝色材质边」的最低切面（原片蓝线就那一小段），没有就退回 1
+  if(!keepSlice){const withMat=clsBySlice.find(r=>r.material>0);clsSlice=Math.min(maxS,withMat?withMat.slice:1);}
+  clsSlice=Math.max(1,Math.min(maxS,clsSlice));
+  sel.value=clsSlice;
+
+  if(clsGroup){view.scene.remove(clsGroup);clsGroup.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});clsGroup=null;}
+  clsGroup=new T.Group();clsGroup.name='edge-classes';
+  const s=clsSlice,seen=new Set(),buf={hard:[],tile:[],material:[]};
+  for(const c of grid.cells)for(let i=0;i<c.n;i++){
+    const a=c.pts[i].id,b=c.pts[(i+1)%c.n].id,key=a<b?a+':'+b:b+':'+a;
+    if(seen.has(key))continue;seen.add(key);
+    const k=edgeClass(clsShape,s,a,b);if(!k)continue;
+    const pa=clsShape.at(grid.verts[a],s),pb=clsShape.at(grid.verts[b],s),y=s*.5+.04;
+    buf[k].push(pa[0],y,pa[1],pb[0],y,pb[1]);
+  }
+  clsCounts={hard:buf.hard.length/6,tile:buf.tile.length/6,material:buf.material.length/6,total:0};
+  clsCounts.total=clsCounts.hard+clsCounts.tile+clsCounts.material;
+  for(const k of['hard','tile','material']){
+    if(!buf[k].length)continue;
+    const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(buf[k],3));
+    const m=new T.LineBasicMaterial({color:CLS_COLORS[k],depthTest:false,transparent:true,opacity:.95});
+    const l=new T.LineSegments(g,m);l.renderOrder=101;l.name='edge-class-'+k;clsGroup.add(l);
+  }
+  clsGroup.visible=$('#clsOn').checked;
+  view.scene.add(clsGroup);
+  const by=clsBySlice.map(r=>`${r.slice}:${r.hard}/${r.tile}/${r.material}`).join(' ');
+  $('#clsOut').textContent=`切面 ${s}（黑 硬边 ${clsCounts.hard} · 红 模块边界 ${clsCounts.tile} · 蓝 材质边界 ${clsCounts.material} · 共 ${clsCounts.total} 条格边）· 蓝色输入 ${matPairs.length} 对\n逐切面 黑/红/蓝：${by}`;
+  view.render(0);
+}
+
+function focus(){
+  if(!api)return;
+  const[a,b]=pair.map(id=>api.grid.verts[id]),v=api.view;
+  v.target.set((a.x+b.x)/2,slice*.5,(a.z+b.z)/2);v.distance=8;v.pitch=.65;v.updateCamera();v.render(0);
+}
+
+/** 材质边界近景：把相机推到蓝色那一段（第一个 material 顶点的位置）。 */
+function focusMat(){
+  if(!api||!clsShape)return;
+  let best=null;
+  for(let s=1;s<clsShape.slices&&!best;s++)for(const v of api.grid.verts)if(clsShape.rank(v.id,s)==='material'){best={v,s};break;}
+  if(!best)return;
+  const q=clsShape.at(best.v,best.s),v=api.view;
+  v.target.set(q[0],best.s*.5,q[1]);v.distance=6;v.pitch=.8;v.updateCamera();v.render(0);
+}
+
+function load(){
+  const token=++epoch;api=null;window.hierarchyReview=null;line=null;
+  $('#scene').onload=()=>{
+    const ready=async()=>{
+      if(token!==epoch)return;
+      const r=$('#scene').contentWindow.rea;
+      if(!r?.view?.worldMesh?.shape){setTimeout(ready,100);return}
+      api=r;T=await $('#scene').contentWindow.eval("import('three')");
+      if(token!==epoch)return;
+      matPairs=riverMaterialPairs();
+      const base=shapeTerrain(api.world);baseline=-1;
+      for(const c of api.grid.cells)for(let i=0;i<c.n;i++){const a=c.pts[i],b=c.pts[(i+1)%c.n];
+        for(let s=0;s<base.slices;s++){const qa=base.at(a,s),qb=base.at(b,s),d=Math.max(Math.hypot(a.x-qa[0],a.z-qa[1]),Math.hypot(b.x-qb[0],b.z-qb[1]));
+          if(d>baseline){baseline=d;pair=[a.id,b.id];slice=s;}}}
+      // 原片是侧视、台地与岸线同屏 → 只把相机推到「约束边近景」不改档，三档各自出画面
+      apply();focus();
+      window.hierarchyModes={api:()=>api,setMode:m=>{if(!MODES.includes(m))throw new RangeError('mode must be '+MODES.join('/'));$('#mode').value=m;apply();return table;},table:()=>table,rebuild:()=>{table=modeTable();return table;},shapes:()=>Object.fromEntries(MODES.map(m=>[m,shapeTerrain(api.world,{mode:m})])),modes:MODES};
+      // 1670720537662836736：三色边分类的只读探针（分类结论 + 每色段数 + 逐切面表）
+      window.hierarchyClasses={
+        counts:()=>({...clsCounts}),
+        slice:()=>clsSlice,
+        table:()=>clsBySlice.map(r=>({...r})),
+        materials:()=>matPairs.map(p=>[...p]),
+        hard:()=>$('#hard').checked?[pair.slice()]:[],
+        colors:{...CLS_COLORS},
+        segments:()=>clsGroup?clsGroup.children.map(l=>({name:l.name,color:l.material.color.getHex(),lines:l.geometry.getAttribute('position').count/2})):[],
+        legend:()=>[...document.querySelectorAll('#clsOut,header p')].map(e=>e.textContent).join('\n'),
+        shape:()=>clsShape,
+        visible:()=>!!clsGroup?.visible,
+        setVisible:v=>{if(clsGroup)clsGroup.visible=!!v;$('#clsOn').checked=!!v;api.view.render(0);return !!clsGroup?.visible;},
+        setSlice:s=>{clsSlice=s;buildClasses(true);return {...clsCounts};},
+      };
+    };
+    ready();
+  };
+  $('#scene').src='index.html?scene=terrain&grid='+$('#grid').value;
+}
+$('#focus').onclick=focus;
+$('#focusMat').onclick=focusMat;
+$('#clsOn').onchange=()=>{if(clsGroup)clsGroup.visible=$('#clsOn').checked;if(api)api.view.render(0);};
+$('#clsSlice').onchange=()=>{clsSlice=+$('#clsSlice').value;buildClasses(true);};
+$('#grid').onchange=load;
+$('#mode').onchange=apply;
+$('#hard').onchange=$('#smooth').onchange=apply;
+load();
 </script></html>

@@ -1,0 +1,38 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/mountain-citadel-e2e/run-1795569085306",
+  "steps": {
+    "tree": {
+      "treeLines": "27",
+      "treeBreadth": "279",
+      "treeDepth": "377",
+      "treeGrafts": "155",
+      "treeGoals": "7",
+      "treeExecUnique": "95",
+      "treeExecPerLine": "171",
+      "maturity": "loaded",
+      "needs": [
+        "⚙ 保护带",
+        "⚙ 山体隆起",
+        "⚙ 沟谷侵蚀",
+        "⚙ 连绵圆润",
+        "⚙ 岩屑坡",
+        "⚙ 低面片着色"
+      ],
+      "branches": [
+        "空间基座",
+        "地貌",
+        "构筑",
+        "光影与画面",
+        "生命与天气",
+        "玩法",
+        "表达"
+      ]
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "failure": "page.screenshot: Timeout 30000ms exceeded.\nCall log:\n  - taking page screenshot\n  - waiting for fonts to load...\n  - fonts loaded\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-citadel-browser.mjs:20:13"
+}

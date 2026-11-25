@@ -1,0 +1,61 @@
+{
+ "capability": "weather.atmosphere",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/engine/fog.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/fog-envelope.js"
+ ],
+ "inputs": {
+  "envelope": "inner=5,outer=26",
+  "near": "ss(3,9,d)",
+  "band": "1-ss(u,2.4u,y)"
+ },
+ "metrics": [
+  {
+   "id": "envCurve",
+   "name": "包络 21 采样（r=0→30）",
+   "original": "near(d) 相机距",
+   "refactored": "fogEnvelope(d) 岛心距",
+   "equal": false
+  },
+  {
+   "id": "smoothKernel",
+   "name": "平滑核 t²(3-2t)",
+   "original": "GLSL smoothstep",
+   "refactored": "JS smooth 同式",
+   "equal": true
+  },
+  {
+   "id": "bandTop",
+   "name": "竖直带示例（y=0.5/1.4/2.8,uBand=1.4）",
+   "original": "[1,1,0.198]",
+   "refactored": "makeFogWisps top=1.35",
+   "equal": null
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "param",
+   "id": "envelope-vs-near",
+   "original": "near=smoothstep(3,9,camDist)：相机距离衰减",
+   "refactored": "fogEnvelope(r,inner,outer)：岛心半径包络（含外沿 20% 回落）",
+   "note": "衰减基准不同：原版按相机距离防贴脸全白，本侧按岛心半径限定雾域；同一 smoothstep 平滑核"
+  },
+  {
+   "kind": "param",
+   "id": "band",
+   "original": "band=1-smoothstep(uBand,uBand*2.4,y)：竖直带贴水面",
+   "refactored": "makeFogWisps bottom/top 参数化雾片高度",
+   "note": "雾片贴水/封顶思路一致，参数化路径不同（uniform 常量 vs 生成参数）"
+  }
+ ],
+ "basis": "fog.js 原版是风场驱动的雾片仿真（GLSL 衰减 + 绕行），fog-envelope 是纯包络函数 + wisp 生成器——同一「贴水雾片、柔边、不糊岛」意图，数学口径不同如实登记；smoothstep 核逐字一致。"
+}

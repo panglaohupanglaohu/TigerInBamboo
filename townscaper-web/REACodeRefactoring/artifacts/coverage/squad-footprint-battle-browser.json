@@ -1,0 +1,130 @@
+{
+  "fixture": {
+    "top": 4,
+    "pairStats": {
+      "squad": 0,
+      "men": 8,
+      "cells": 2,
+      "ring": 6,
+      "spokes": 6,
+      "ticks": 6,
+      "tris": 6,
+      "area": 0.40058096481777616,
+      "cellArea": 0.40058096481777616,
+      "perimeter": 2.727405714111256,
+      "hullArea": 0.40735850720775735,
+      "notchArea": 0.006777542389981184,
+      "triArea": 0.4005809648177765,
+      "segments": 36,
+      "minLift": 2.8610229296788248e-8
+    },
+    "lStats": {
+      "squad": 0,
+      "men": 8,
+      "cells": 3,
+      "ring": 8,
+      "spokes": 8,
+      "ticks": 8,
+      "tris": 8,
+      "area": 0.5383590231992407,
+      "cellArea": 0.5383590231992407,
+      "perimeter": 3.566706913862097,
+      "hullArea": 0.6954907148280313,
+      "notchArea": 0.1571316916287906,
+      "triArea": 0.538359023199241,
+      "segments": 48,
+      "minLift": 2.8610229296788248e-8
+    },
+    "verts": 96,
+    "squad": 0,
+    "archer": false,
+    "L": 0.5,
+    "cells": [
+      0,
+      1,
+      2
+    ]
+  },
+  "pixels": {
+    "W": 480,
+    "H": 340,
+    "diff": 1100,
+    "noise": 0,
+    "box": [
+      184,
+      97,
+      289,
+      224
+    ],
+    "boxFrac": 0.083,
+    "frames": 3
+  },
+  "flags": [
+    {
+      "squad": 0,
+      "marker": true,
+      "visible": true,
+      "lift": 0.74,
+      "dot": 1,
+      "color": "ffffff",
+      "size": 0.085
+    },
+    {
+      "squad": 1,
+      "marker": true,
+      "visible": true,
+      "lift": 0.74,
+      "dot": 1,
+      "color": "ffffff",
+      "size": 0.085
+    },
+    {
+      "squad": 2,
+      "marker": true,
+      "visible": true,
+      "lift": 0.74,
+      "dot": 1,
+      "color": "ffffff",
+      "size": 0.085
+    }
+  ],
+  "arrow": {
+    "steps": 1,
+    "points": 2,
+    "tail": [
+      -1.9608850479125977,
+      1.149999976158142,
+      3.6549947261810303
+    ],
+    "headBefore": [
+      -1.733919620513916,
+      1.1831499338150024,
+      3.695417881011963
+    ],
+    "headAfter": [
+      -1.6431334018707275,
+      1.1922098398208618,
+      3.7115871906280518
+    ],
+    "grown": 0.09265886879206314,
+    "from": [
+      -1.9608850549812389,
+      1.15,
+      3.654994657922429
+    ],
+    "flying": true,
+    "trailAfterStuck": false,
+    "stuck": true,
+    "color": "f7f4ea",
+    "opacity": 0.62,
+    "arrowCount": 3
+  },
+  "offSwitch": {
+    "on": false,
+    "stats": null,
+    "visible": false,
+    "ring": true
+  },
+  "ok": 17,
+  "errors": []
+}

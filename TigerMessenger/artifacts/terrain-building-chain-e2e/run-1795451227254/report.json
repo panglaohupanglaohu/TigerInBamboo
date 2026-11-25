@@ -1,0 +1,35 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/terrain-building-chain-e2e/run-1795451227254",
+  "capabilities": [],
+  "steps": {
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「高山圣城（通用插件 + 构建面板）」自动预装 3 个能力（建筑选址、多格 prefab 目录、联合 WFC 摆建筑群），点 ▶ 执行管线一键跑完整条。",
+    "chain": {
+      "started": 1795451307325,
+      "steps": [
+        {
+          "layer": "mountain",
+          "status": "fail",
+          "previewed": true
+        }
+      ],
+      "ok": false,
+      "error": "山形候选没出来或验证未通过：建筑与保护带不动✓ 轨道净空保留✓ 海岸线不变✓ 有主峰✓ 山坡而非方台! 竖崖占比✗ 面数预算✓ 着色数据完整✓ 玩家地面与山形一致✓ 山上能走!",
+      "ms": 1044
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R60-1-assemble-panel.png",
+    "zz-failure.png"
+  ],
+  "pass": false,
+  "failure": "Error: 两段连跑没成功：{\"started\":1795451307325,\"steps\":[{\"layer\":\"mountain\",\"status\":\"fail\",\"previewed\":true}],\"ok\":false,\"error\":\"山形候选没出来或验证未通过：建筑与保护带不动✓ 轨道净空保留✓ 海岸线不变✓ 有主峰✓ 山坡而非方台! 竖崖占比✗ 面数预算✓ 着色数据完整✓ 玩家地面与山形一致✓ 山上能走!\",\"ms\":1044}\n    at expect (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:15:38)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/terrain-building-chain-browser.mjs:13:2\n    at async Object.finish (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:52:8)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/terrain-building-chain-browser.mjs:7:1"
+}

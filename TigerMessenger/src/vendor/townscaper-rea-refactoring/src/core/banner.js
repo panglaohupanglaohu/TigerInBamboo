@@ -43,3 +43,22 @@ export function bakeBanner({width=128,height=64,color=[80,170,160],tail='fork',e
   }
   return{width,height,rgba,opaque,white,tail,emblem,notch};
 }
+
+/* 第 53 批（G5）：827216768783495168（原文 And another one；三队各举一面浅蓝底大旗，白徽记 骷髅/剑/三叉戟）。
+ * REACode/src/squadbanner.js 的两件「共用一份」：
+ *   · 三格徽记图集：徽记只画一次，旗面/盾面都按格号取（旗面墨量 = 图集那一格的墨量）；
+ *   · 军色 → 角色色：一队一个色相，身体/盾/头盔/旗底按同一套明度/饱和度偏移派生（队内色差恒 0）。
+ *   · 旗面公告板偏航夹在 ±40°（投影宽最少 cos40°）。
+ * 金饰盾纹、竖旗横杆与 Battle 里的实际替换尚未做（Battle 仍是 Bezier 飘带旗 + 单色盾）。 */
+export const SQUAD_EMBLEMS=Object.freeze(['skull','sword','trident']);
+export function bakeEmblemAtlas({cell=48,emblems=SQUAD_EMBLEMS}={}){
+ if(!Number.isInteger(cell)||cell<16||cell>256)throw new RangeError('invalid atlas cell');
+ const width=cell*emblems.length,height=cell,rgba=new Uint8Array(width*height*4),ink=new Array(emblems.length).fill(0);
+ emblems.forEach((e,k)=>{if(!BANNER_EMBLEMS.includes(e))throw new RangeError('unknown emblem');
+  for(let y=0;y<cell;y++)for(let x=0;x<cell;x++){const u=.28+((x+.5)/cell-.5),v=(y+.5)/cell;if(inkAt(u,v,1,e)){const i=(y*width+k*cell+x)*4;rgba.set([255,255,255,255],i);ink[k]++;}}});
+ return{width,height,cell,rgba,emblems:[...emblems],ink:ink.map(n=>n/(cell*cell)),uv:(k)=>({u0:k/emblems.length,u1:(k+1)/emblems.length,v0:0,v1:1})};
+}
+export const SQUAD_ROLES=Object.freeze({body:{dl:-.16,s:.34},shield:{dl:.04,s:.52},helmet:{dl:.30,s:.16},field:{dl:.26,s:.46}});
+export function hslToRgb(h,s,l){const a=s*Math.min(l,1-l),f=n=>{const k=(n+h/30)%12;return Math.round(255*(l-a*Math.max(-1,Math.min(k-3,9-k,1))));};return[f(0),f(8),f(4)];}
+export function squadRolePalette(hue){if(!Number.isFinite(hue))throw new RangeError('invalid hue');const h=((hue%360)+360)%360;return Object.fromEntries(Object.entries(SQUAD_ROLES).map(([k,r])=>[k,hslToRgb(h,r.s,.5+r.dl)]));}
+export function bannerBillboardYaw(yawDeg,clampDeg=40){if(!Number.isFinite(yawDeg))throw new RangeError('invalid yaw');const y=Math.max(-clampDeg,Math.min(clampDeg,yawDeg));return{yaw:y,clamped:y!==yawDeg,widthRatio:Math.cos(y*Math.PI/180)};}

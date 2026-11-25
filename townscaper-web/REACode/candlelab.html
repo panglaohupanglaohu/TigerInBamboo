@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>生日蜡烛：杆底 60% 线性渐隐 + 叠加辉光 + 三层焰</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:104px; right:332px; bottom:8px;
+    display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; object-fit:contain; border-radius:9px;
+    border:1px solid var(--line); background:#dde6e7; }
+  #panel { position:fixed; right:12px; top:104px; width:308px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>生日蜡烛 —— 杆底 60% 线性渐隐、叠加式辉光、三层焰</h1>
+  <p>1022855252574437376（2018-07-27）原文只有 "<b>it's my birthday!</b>"，一句实现描述都没有。逐像素量的：
+  杆 <b>7×31px</b>（画幅 1.75% × 7.75%）、<b>上 40% 实心、下 60% 线性渐隐到 0</b>（反解 α：1.00 / 0.72 / 0.45 / 0）；
+  焰总包围盒 <b>10×21</b>、焰心 <b>5×9</b> 暖白 <code>(255,253,230)</code>；那圈粉不是调出来的 ——
+  暖橙叠加到青灰底上就成了 <b>(255,161,145)</b>。下排三个是典型错法。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>① 正确</b> 渐隐底 + 叠加辉光 + 焰心</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span>错法：<b>杆硬底</b>（插进糖霜，出交线）</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span>错法：<b>辉光用 α 混合</b>（变灰橙）</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span>错法：<b>焰只一层</b>（像贴纸）</span><canvas id="cvD"></canvas></div>
+  <div class="cell"><span>错法：<b>焰压扁</b>（12×10）</span><canvas id="cvE"></canvas></div>
+  <div class="cell"><span>对照：<b>不插蜡烛</b></span><canvas id="cvF"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · C（正确那张）</h2>
+  <div id="probe"></div>
+  <hr />
+  <h2>片中实测</h2>
+  <div class="row"><span>杆宽 / 高</span><b>7px / 31px</b></div>
+  <div class="row"><span>实心段</span><b>12px（40%）</b></div>
+  <div class="row"><span>渐隐段</span><b>19px（60%）</b></div>
+  <div class="row"><span>焰 包围盒</span><b>10 × 21</b></div>
+  <div class="row"><span>焰心</span><b>5 × 9 (255,253,230)</b></div>
+  <div class="row"><span>焰外缘</span><b>(255,213,205)</b></div>
+  <div class="row"><span>辉光半径</span><b>≈22px</b></div>
+  <div class="row"><span>根数</span><b>11</b></div>
+  <hr />
+  <h2>结论</h2>
+  <div class="row"><span>① 渐隐是"化进地里"</span><b>不是硬切</b></div>
+  <div class="row"><span>② 辉光必须叠加</span><b>α 混合变脏</b></div>
+  <div class="row"><span>③ 焰三层</span><b>粉橙 / 亮 / 暖白</b></div>
+</div>
+
+<script type="module">
+import { MEASURED, makeCandles, paintCandle, paintCandles, probeCandle, pixelDiff } from './src/candleprops.js';
+import { makeCam, makeIsland, paintIsland } from './src/rimline.js';
+
+const W = 400, H = 400;
+const cam = makeCam({ cx: 200, cy: 250, w: 26, h: 15, zh: 13 });
+
+// 蛋糕台：两层，台面是糖霜色（片中粉红），侧面剩岩灰
+function hash(x, y) {
+  let s = Math.imul(x * 374761393 + y * 668265263, 1274126177);
+  s = (s ^ (s >>> 13)) >>> 0;
+  return (s % 1000) / 1000;
+}
+function heightFn(x, y) {
+  const d = Math.hypot(x - 5, y - 5) + (hash(x, y) - 0.5) * 0.8;
+  if (d > 4.4) return 0;
+  if (d > 2.6) return 1;
+  return 2;
+}
+const cells = makeIsland(11, heightFn);
+const CAKE = { top: '#d98c96', sideA: '#9ba1a6', sideB: '#868d92' };
+
+const hAt = new Map(cells.map((c) => [c.x + ',' + c.y, c.h]));
+const spots = [
+  [2, 2], [4, 2], [6, 2], [3, 4], [5, 4], [7, 4], [2, 6], [4, 6], [6, 6], [8, 5], [5, 7],
+].map(([x, y]) => {
+  const h = hAt.get(x + ',' + y) || 1;
+  const p = cam.p(x + 0.5, y + 0.5, h);
+  return [p[0], p[1]];
+}).filter((p) => p[0] > 10 && p[0] < W - 10);
+const candles = makeCandles({ spots, scale: 1, seed: 23 });
+
+function base(ctx) {
+  const g = ctx.createRadialGradient(W / 2, 240, 30, W / 2, 240, 300);
+  g.addColorStop(0, '#c5d2d4');
+  g.addColorStop(1, '#a9babc');
+  ctx.fillStyle = g;
+  ctx.fillRect(0, 0, W, H);
+  paintIsland(ctx, cam, cells, Object.assign({ plate: true, drawRim: true,
+    rim: { iters: 2, width: 2 } }, CAKE));
+}
+
+const defs = {
+  cvA: {},
+  cvB: { ghostBase: false },
+  cvC: { haloMode: 'alpha' },
+  cvD: { flatFlame: true },
+  cvE: { flameScale: [1.35, 0.6] },
+  cvF: null,
+};
+const out = {};
+for (const [id, o] of Object.entries(defs)) {
+  const cv = document.getElementById(id);
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+  base(ctx);
+  if (o) paintCandles(ctx, candles, Object.assign({ t: 0.4, scale: 1 }, o));
+  out[id] = ctx;
+}
+
+// 反测专用：单独一根、背景干净、位置已知（11 根挤在一起时探针会被邻火的辉光串味，
+// 第一版就是这样量出"杆宽 0px、渐隐 81px"的垃圾数）
+const pcv = document.createElement('canvas');
+pcv.width = 200; pcv.height = 140;
+const pctx = pcv.getContext('2d');
+pctx.fillStyle = '#6e7f84'; pctx.fillRect(0, 0, 200, 140);
+const tall = Object.assign({}, candles.slice().sort((a, b) => a.h - b.h).pop(), {
+  x: 100, y: 120, tilt: 0, phase: 0.9,
+});
+paintCandle(pctx, tall, { t: 0.4, scale: 1 });
+const pr = probeCandle(pctx, tall);
+const rows = [
+  ['杆宽（目标 7）', pr.shaftW + 'px', pr.shaftW === MEASURED.shaftW],
+  ['实心段（目标 12）', pr.solidH + 'px', Math.abs(pr.solidH - 12) <= 2],
+  ['渐隐段（目标 19）', pr.fadeH + 'px', Math.abs(pr.fadeH - 19) <= 3],
+  ['渐隐占比（目标 60%）', (pr.fadeShare * 100).toFixed(0) + '%', Math.abs(pr.fadeShare - 0.6) < 0.1],
+  ['焰心宽度（目标 5）', pr.coreW + 'px', Math.abs(pr.coreW - 5) <= 2],
+];
+const el = document.getElementById('probe');
+for (const [k, v, ok] of rows) {
+  el.insertAdjacentHTML('beforeend',
+    `<div class="row ${ok ? 'good' : 'bad'}"><span>${k}</span><b>${v}</b></div>`);
+}
+const names = { cvB: '硬底', cvC: 'α 辉光', cvD: '单层焰', cvE: '焰压扁', cvF: '无蜡烛' };
+for (const k of ['cvB', 'cvC', 'cvD', 'cvE', 'cvF']) {
+  const d = pixelDiff(out.cvA, out[k]);
+  el.insertAdjacentHTML('beforeend',
+    `<div class="row"><span>vs ${names[k]} 像素差</span><b>${(d.changed * 100).toFixed(2)}%</b></div>`);
+}
+window.__CAN = { out, candles, tall, pr };
+window.__READY = true;
+</script>
+</body>
+</html>

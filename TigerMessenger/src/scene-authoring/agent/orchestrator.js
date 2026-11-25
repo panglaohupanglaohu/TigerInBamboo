@@ -13,16 +13,10 @@ import {executionContext,assertEngineContext,assertExecutionScope,assertEngineCo
 import { rea } from './rea.js';
 import { Watchdog, WorkerSlot } from './runtime.js';
 
-const EXP_KEY = 'tm.capability.experience.v1';
+import { unifiedStore, summaryFor, scheduleExperiencePush } from './experience.js';
 
-export function readExperience(storage = localStorage) { try { return JSON.parse(storage.getItem(EXP_KEY) || '[]'); } catch { return []; } }
-export function experienceFor(id, rows = readExperience()) {
-  const has = (r) => r.steps?.some((s) => s.id === id);
-  const runs = rows.filter((r) => r.outcome === 'previewed' && has(r));
-  return { runs: runs.length, applied: runs.filter((r) => r.steps.find((s) => s.id === id)?.status === 'applied').length,
-    passed: runs.filter((r) => r.verify === 'pass' || r.verify === 'warn').length, failed: runs.filter((r) => r.verify === 'fail').length,
-    committed: rows.filter((r) => r.outcome === 'committed' && has(r)).length, lastFailure: [...runs].reverse().find((r) => r.verify === 'fail')?.why || '', lastAt: runs.at(-1)?.at || null };
-}
+export function readExperience(storage = localStorage) { return unifiedStore({ storage }).read(); }
+export function experienceFor(id, rows = readExperience()) { return summaryFor(id, rows); }
 
 export function createAgent({ request, onEvent = () => {}, storage = localStorage }) {
   const log = [];
@@ -38,9 +32,8 @@ export function createAgent({ request, onEvent = () => {}, storage = localStorag
     try { return await slot.call(msg, opts); }
     catch (e) { if (!e.timeout) throw e; emit({ type: 'recover', name: slot.name, why: e.message }); return slot.call(msg, opts); }   // Watchdog：超时后重建 Worker，重试一次
   }
-  function remember(row) {
-    try { const rows = readExperience(storage); rows.push(row); while (rows.length > 300) rows.shift(); storage.setItem(EXP_KEY, JSON.stringify(rows)); emit({ type: 'experience', row }); } catch {}
-  }
+  const expStore = unifiedStore({ storage, onWrite: (r) => scheduleExperiencePush([r]) });
+  function remember(row) { expStore.add(row, 'scene'); emit({ type: 'experience', row }); }
 
   return {
     log, watchdog: dog,

@@ -9,13 +9,13 @@
  *
  * 新学到的能力：写一个模块、导出上面三样，在下面登记，工坊扫描时就能发现并匹配到场景物件。
  */
-import { arch, overhang, seastack, tunnel } from './terrain.js';
-import { lighthouse } from './build.js';
+import { arch, overhang, seastack, tunnel, ledge } from './terrain.js';
+import { lighthouse, assembly } from './build.js';
 import { LAYER_CAPS } from './layers-meta.js';
 import { pickSpread } from './ops.js';
 
 export const REGISTRY_VERSION = 1;
-export const CAPABILITIES = [arch, overhang, seastack, tunnel, lighthouse, ...LAYER_CAPS];
+export const CAPABILITIES = [arch, overhang, seastack, tunnel, ledge, lighthouse, assembly, ...LAYER_CAPS];
 const byId = new Map(CAPABILITIES.map((c) => [c.meta.id, c]));
 export const getCapability = (id) => byId.get(id);
 
@@ -24,7 +24,9 @@ export function describeCapabilities() {
   return CAPABILITIES.map(({ meta }) => ({ ...meta, params: meta.params || {}, executable: true }));
 }
 
-const defaults = (meta, params = {}) => Object.fromEntries(Object.entries(meta.params || {}).map(([k, p]) => [k, Math.max(p.min ?? -Infinity, Math.min(p.max ?? Infinity, params[k] ?? p.default))]));
+const defaults = (meta, params = {}) => Object.fromEntries(Object.entries(meta.params || {}).map(([k, p]) => [k,
+  typeof p.default === 'number' ? Math.max(p.min ?? -Infinity, Math.min(p.max ?? Infinity, params[k] ?? p.default))
+    : (params[k] ?? p.default)]));
 
 /**
  * 场景扫描：每个能力在当前 World 上能作用到哪些物件。

@@ -1,0 +1,63 @@
+{
+ "capability": "mountain.talus",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "mountain",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/overhangterrain.js",
+  "townscaper-web/REACode/src/terracecliff.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/soft-tops.js"
+ ],
+ "inputs": {
+  "originalSeed": 7,
+  "arena": "8×8 交替 1 层台阶（slopeMask 全软）",
+  "cornerGroups": 6
+ },
+ "metrics": [
+  {
+   "id": "origSoft",
+   "name": "原版软省相邻对连续占比（|Δh|<.55·step）",
+   "original": "1127/1128 = 99.9%",
+   "refactored": "—"
+  },
+  {
+   "id": "origSharp",
+   "name": "原版陡省相邻对台阶占比（|Δh|≥.45·step）",
+   "original": "80/548 = 14.6%",
+   "refactored": "—"
+  },
+  {
+   "id": "refCorners",
+   "name": "本侧共享角点组数",
+   "original": "—",
+   "refactored": 6
+  },
+  {
+   "id": "refMean",
+   "name": "本侧角点高=成员均值（样例）",
+   "original": "—",
+   "refactored": [
+    15,
+    15,
+    null,
+    null
+   ]
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "representation",
+   "id": "软坡表示",
+   "original": "连续高度场（soft 省不量化）",
+   "refactored": "体素整层 World + 角点均值融合（地形网格层）",
+   "note": "「软省 1 层台阶熔成连续坡、陡省保崖」机制一致，表示层不同如实登记"
+  }
+ ],
+ "basis": "原版 heightField 软省相邻对连续率 99.9%、陡省台阶率 14.6%；本侧 softCorners 在全软擂场把 1 层台阶熔成共享角点（6 组）。机制对账如实登记。"
+}

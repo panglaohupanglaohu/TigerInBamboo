@@ -31,3 +31,57 @@ export function meshSlopeProfile(surface,{flatDeg=3,cliffDeg=40}={}){
  const total=top.flat+top.soft+top.steep;
  return{top,topArea:total,softShare:total?top.soft/total:0,wallArea,maxTopDeg:maxDeg,histogram10deg:hist};
 }
+
+/** height 选项：'top' = 柱顶（岩石 + 建筑都算，World.top）；'ground' = 只看岩石地表（World.ground）；
+ * 或自定义 (cell)=>层数 的函数。缺省 'top'——同高片看的是「能站人的顶面」，不是只看地形。
+ */
+const heightFn=(world,height)=>{
+ if(typeof height==='function')return height;
+ if(height==='top'||height==null)return c=>world.top(c);
+ if(height==='ground')return c=>world.ground(c);
+ throw new RangeError('height must be "top", "ground" or a function');
+};
+const cellArea=c=>Math.abs(c.pts.reduce((v,p,i)=>{const q=c.pts[(i+1)%c.n];return v+p.x*q.z-q.x*p.z},0))/2;
+const edgeLen=(c,i)=>{const a=c.pts[i],b=c.pts[(i+1)%c.n];return Math.hypot(a.x-b.x,a.z-b.z);};
+
+/** 补学 #6（815236105079398400，185帧「irregular is the new hex」）：真实 World 的「同高片」诊断。
+ * 相邻（共边）且顶面同高的柱子聚成一片；输出每片的层数、格数、面积与边界长（边界 = 片内格子
+ * 朝格外 / 水面 / 不同高邻居的边长之和）。与 terraceProfile 的 patches 不同：这里按 top（含建筑）
+ * 分片并量边界周长，patches 按 ground（只岩石）分片只量面积——两者都保留，语义不同。
+ * 原片算法未公开（learn/data.js 卡点·C），这是可观察行为诊断，不是原算法恢复。
+ */
+export function plateauRuns(world,{height='top'}={}){
+ const h=heightFn(world,height),cells=world.cells,byId=new Map(cells.map(c=>[c.id,c])),H=new Map(cells.map(c=>[c.id,h(c)])),seen=new Set(),runs=[];
+ for(const c of cells){const level=H.get(c.id);if(!level||seen.has(c.id))continue;
+  const members=[c];seen.add(c.id);let area=0,boundary=0,boundaryEdges=0;
+  for(let j=0;j<members.length;j++){const q=members[j];area+=cellArea(q);
+   for(let i=0;i<q.n;i++){const id=q.edgeNeighbors[i],nb=byId.get(id),nh=nb?H.get(id):0;
+    if(nb&&nh===level){if(!seen.has(id)){seen.add(id);members.push(nb);}}
+    else{boundary+=edgeLen(q,i);boundaryEdges++;}}}
+  runs.push({level,cells:members.map(q=>q.id),count:members.length,area,boundary,boundaryEdges});
+ }
+ runs.sort((a,b)=>b.count-a.count||a.level-b.level);
+ const levels={};for(const r of runs)levels[r.level]=(levels[r.level]||0)+1;
+ return{version:world.version,height:typeof height==='string'?height:'custom',landCells:seen.size,count:runs.length,levels,runs,logicalColumnsOnly:true};
+}
+
+/** 补学 #6 同一来源：真实 World 的「逻辑阶差面积」诊断。
+ * 逐条格边看（只从较高那侧计一次，与 terraceProfile 的 step 边同一口径）：邻柱（缺邻居按 0 层，
+ * 与岸线同一约定）矮 minStep 层以上（缺省 ≥2 层）的边是「逻辑阶差」——量化台地之间那一面近垂直的墙。
+ * 所夹面积 = 边长 × 高差层数 × levelHeight（逻辑立面面积，不是实际网格墙面）。
+ * 返回边数、总长、总面积、按高差分桶；land = 两边都是柱子的阶差，shore = 朝水面 / 格外的阶差。
+ */
+export function stepDropArea(world,{minStep=2,levelHeight=1,height='top'}={}){
+ if(!Number.isFinite(minStep)||minStep<1)throw new RangeError('minStep must be >= 1');
+ if(!Number.isFinite(levelHeight)||levelHeight<=0)throw new RangeError('positive level height required');
+ const h=heightFn(world,height),cells=world.cells,byId=new Map(cells.map(c=>[c.id,c])),steps=[],byDrop={};
+ let length=0,area=0,land=0,shore=0,shoreLength=0;
+ for(const c of cells){const level=h(c);if(!level)continue;
+  for(let i=0;i<c.n;i++){const id=c.edgeNeighbors[i],nb=byId.get(id),oh=nb?h(nb):0,d=level-oh;
+   if(d<minStep)continue;
+   const len=edgeLen(c,i),toWater=!nb||!oh;
+   steps.push({cell:c.id,edge:i,level,other:oh,drop:d,length:len,shore:toWater});
+   length+=len;area+=len*d*levelHeight;byDrop[d]=(byDrop[d]||0)+1;
+   if(toWater){shore++;shoreLength+=len;}else land++;}}
+ return{version:world.version,minStep,edges:steps.length,land,shore,shoreLength,length,area,byDrop,steps,logicalColumnsOnly:true};
+}

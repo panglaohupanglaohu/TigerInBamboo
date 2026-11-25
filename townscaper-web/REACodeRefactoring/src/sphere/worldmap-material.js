@@ -13,6 +13,10 @@ import { worldMapShoreColors } from './worldmap-shore.js';
 export function worldMapTexture(opts = {}) {
   const map = buildWorldMap(opts), col = opts.shore ? worldMapShoreColors(map, opts) : worldMapColors(map, opts);
   const tex = new THREE.DataTexture(col.rgba, map.w, map.h, THREE.RGBAFormat);
+  // r154：配色 bytes 是 sRGB 作者值（与 worldMapColors 的 0..1 色板一致）。r160 的 DataTexture 默认
+  // NoColorSpace（当线性数据用），而渲染器输出是 sRGB → 整颗星球被线性→sRGB 再提亮一次（海 (92,158,161)
+  // 渲成灰蓝、草变粉绿），原片是高饱和的绿/青。这里补上标记，采样时 sRGB→线性。
+  tex.colorSpace = THREE.SRGBColorSpace;
   tex.flipY = false;   // data row 0 (north) sits at v = 0; the shader flips v accordingly
   tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.ClampToEdgeWrapping;
   tex.magFilter = THREE.LinearFilter; tex.minFilter = THREE.LinearFilter; tex.generateMipmaps = false;

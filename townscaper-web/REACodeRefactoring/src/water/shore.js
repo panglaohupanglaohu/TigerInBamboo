@@ -104,8 +104,11 @@ function distanceField(town, grid, index, ptsOf, res = 0.07, pad = 2.5) {
 /**
  * @returns {{skirt: THREE.BufferGeometry, waves: THREE.BufferGeometry}}
  */
-export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves = 2, foot = 0.075, shape = null } = {}) {
+export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves = 2, foot = 0.075, shape = null, skirtWidth = 1 } = {}) {
   if (![reach, foot].every(Number.isFinite) || reach <= 0 || foot < 0 || !Number.isInteger(waves) || waves < 0 || waves > 32) throw new RangeError('shore options');
+  // 1215644531221311488 "(Also, the wave skirt stretches further this time)"：
+  // 裙带宽度是**尺度**参数（片内那圈三角裙伸到约一个建筑进深），默认 1 = 旧窄带，原片宽档约 1.6。
+  if (!Number.isFinite(skirtWidth) || skirtWidth < 0.5 || skirtWidth > 3) throw new RangeError('skirt width');
   // 地形变形后海岸在切面 0（水面）上的真实位置；没有 shape 时就是网格原位
   const posOf = shape ? (p) => { const [x, z] = shape.at(p, 0); return { x, z }; } : (p) => p;
   const ptsOf = shape ? (c) => c.pts.map(posOf) : (c) => c.pts;
@@ -113,7 +116,7 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
   const field = distanceField(town, grid, index, ptsOf);
 
   // skirt: rim + halo (alpha, colour-mix) ; waves: per-vertex shore/sea/phase
-  const sPos = [], sA = [], sIdx = [];
+  const sPos = [], sA = [], sArc = [], sIdx = [];
   const yLine = [], bLine = [];   // debug: the yellow and blue lines of 1849732997945110651
   const wShore = [], wSea = [], wPhase = [], wRow = [], wIdx = [];
   const wIn = [], wOut = [], wPeriod = [], wCrest = [], wWidth = [];
@@ -165,14 +168,18 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
     const seed = hash01(N * 7919 + Math.round(shore[0].x * 100));
 
     // ---- static skirt: [rim inner, rim outer, halo outer]
+    // 1991099314714902634：片内岸线白带**不是**沿全岸常亮 —— 只在有浪的岸段亮起，
+    // 段与段之间留缝，缝隙随时间沿岸移动、宽度来回胀缩（分段展开 / 聚散）。
+    // 故给裙带烘一个弧长相位 aArc，遮挡强度由 skirtCoverage(aArc, t) 调制（见 skirtBreakGLSL）。
     const base = sv;
     for (let i = 0; i < N; i++) {
       const s = shore[i], b = sea[i];
       const dx = b.x - s.x, dz = b.z - s.z;
-      sPos.push(s.x - dx * 0.06, 0.006, s.z - dz * 0.06); sA.push(0.95);
-      sPos.push(s.x + dx * 0.12, 0.006, s.z + dz * 0.12); sA.push(0.0);
-      sPos.push(s.x + dx * 0.04, 0.004, s.z + dz * 0.04); sA.push(-0.42);   // halo: negative = tint
-      sPos.push(s.x + dx * 1.35, 0.004, s.z + dz * 1.35); sA.push(-0.0);
+      const u = arc[i] / Math.max(perimeter, 1e-9) * Math.PI * 2;
+      sPos.push(s.x - dx * 0.06 * skirtWidth, 0.006, s.z - dz * 0.06 * skirtWidth); sA.push(0.95); sArc.push(u);
+      sPos.push(s.x + dx * 0.12 * skirtWidth, 0.006, s.z + dz * 0.12 * skirtWidth); sA.push(0.0); sArc.push(u);
+      sPos.push(s.x + dx * 0.04 * skirtWidth, 0.004, s.z + dz * 0.04 * skirtWidth); sA.push(-0.42); sArc.push(u);   // halo: negative = tint
+      sPos.push(s.x + dx * 1.35 * skirtWidth, 0.004, s.z + dz * 1.35 * skirtWidth); sA.push(-0.0); sArc.push(u);
       sv += 4;
     }
     for (let i = 0; i < N; i++) {
@@ -233,6 +240,7 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
   const skirt = new THREE.BufferGeometry();
   skirt.setAttribute('position', new THREE.Float32BufferAttribute(sPos, 3));
   skirt.setAttribute('aA', new THREE.Float32BufferAttribute(sA, 1));
+  skirt.setAttribute('aArc', new THREE.Float32BufferAttribute(sArc, 1));
   skirt.setIndex(sIdx);
   skirt.computeBoundingSphere();
 
@@ -266,22 +274,109 @@ export function makeSkirtMaterial(waterTint) {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: false,
-    uniforms: { uFoam: { value: new THREE.Color('#f7fbfa') }, uTint: { value: waterTint } },
+    // 裙带是贴在水面上的一层薄条：环向绕序让法线朝下，FrontSide 从上往下看几乎全被剔除
+    // （同机位实测可读像素只有双面的 6%）→ 必须双面，否则「静态白边 + 淡晕」只画出零星几段。
+    side: THREE.DoubleSide,
+    uniforms: {
+      uFoam: { value: new THREE.Color('#f7fbfa') },
+      uTint: { value: waterTint },
+      uTime: { value: 0 },
+      uSkirtBreak: { value: 1 },     // 1 = 岸段分段（片内形制）；0 = 沿全岸常亮的旧档
+      uSkirtDrift: { value: 0.35 },  // 缝隙沿岸扫过的角速度（弧度/秒）
+      uSkirtGap: { value: 0.14 },    // 缝隙里残留的湿痕强度（不是全黑）
+    },
     vertexShader: /* glsl */ `
       attribute float aA;
+      attribute float aArc;
+      uniform float uTime;
+      uniform float uSkirtBreak;
+      uniform float uSkirtDrift;
+      uniform float uSkirtGap;
       varying float vA;
-      void main() { vA = aA; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      varying float vCover;
+      ${skirtBreakGLSL}
+      void main() {
+        float cover = skirtCoverage(aArc - uTime * uSkirtDrift);
+        vCover = mix(1.0, mix(uSkirtGap, 1.0, cover), clamp(uSkirtBreak, 0.0, 1.0));
+        vA = aA;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`,
     fragmentShader: /* glsl */ `
       uniform vec3 uFoam;
       uniform vec3 uTint;
       varying float vA;
+      varying float vCover;
       void main() {
         // positive: foam rim; negative: the pale halo ("the skirt stretches further")
-        if (vA >= 0.0) gl_FragColor = vec4(uFoam, vA * vA);
-        else gl_FragColor = vec4(uTint, -vA);
+        if (vA >= 0.0) gl_FragColor = vec4(uFoam, vA * vA * vCover);
+        else gl_FragColor = vec4(uTint, -vA * vCover);
         #include <colorspace_fragment>
       }`,
   });
+}
+
+/**
+ * 岸段分段覆盖率：u 是沿闭合岸线的弧长相位（0..2π），整数谐波保证绕一圈接缝连续。
+ * `amp` 随时间呼吸 → 白段变宽（聚）/ 变窄、缝隙张开（散），即片内 0010–0140 的展开与聚拢。
+ * 与 skirtBreakGLSL 逐式同源；JS 版供测试做 CPU 孪生。
+ */
+export function skirtCoverage(u, time = 0, { breathe = 0.16, base = 0.34 } = {}) {
+  const amp = base + breathe * Math.sin(0.55 * time);
+  const raw = 0.54 + amp * Math.sin(3 * u + 1.1 - 0.35 * time) + 0.14 * Math.sin(7 * u + 2.3 - 0.62 * time);
+  const t = Math.min(1, Math.max(0, (raw - 0.24) / 0.40));
+  return t * t * (3 - 2 * t);
+}
+
+export const skirtBreakGLSL = /* glsl */ `
+float skirtCoverage(float u) {
+  float amp = 0.34 + 0.16 * sin(0.55 * uTime);
+  float raw = 0.54 + amp * sin(3.0 * u + 1.1 - 0.35 * uTime)
+                  + 0.14 * sin(7.0 * u + 2.3 - 0.62 * uTime);
+  return smoothstep(0.24, 0.64, raw);
+}`;
+
+/**
+ * 裙带分段的量具：把笔直的「亮段 / 缝」按 aArc 回放成 run。
+ * 每条闭合岸线一圈从 u=0 起算（aArc 会回跳），按 `thr` 切亮/缝，报段数、缝隙占比与最长缝。
+ */
+export function skirtStats(geometry, time = 0, thr = 0.5, drift = 0.35, brk = 1) {
+  const arc = geometry?.getAttribute?.('aArc');
+  const aA = geometry?.getAttribute?.('aA');
+  if (!arc || !aA) return { loops: 0, runs: 0, gaps: 0, gapShare: 0, longestGapDeg: 0, coveredShare: 0 };
+  const step = arc.count / aA.count === 1 ? 1 : 4;   // 每个岸点 4 个顶点（rim in/out + halo in/out）
+  const loops = [];
+  let cur = null, prev = -1;
+  for (let i = 0; i < arc.count; i += step) {
+    const u = arc.getX(i);
+    if (u < prev - 1e-6) { cur = []; loops.push(cur); }
+    else if (!cur) { cur = []; loops.push(cur); }
+    cur.push(u); prev = u;
+  }
+  let runs = 0, gaps = 0, covered = 0, total = 0, longest = 0;
+  for (const loop of loops) {
+    // 亮段 = 覆盖串；绕一圈因此要看「首尾是否都亮」（否则跨接缝的那一段会被切成两段）
+    let inGap = false, gapStart = 0, gapSpan = 0, anyGap = false, firstCovered = false;
+    for (let i = 0; i < loop.length; i++) {
+      // 与顶点着色器同口径：相位先减去 uTime·uSkirtDrift（缝隙沿岸扫过），再按 uSkirtBreak 混回常亮
+      const c = 1 - brk * (1 - skirtCoverage(loop[i] - time * drift, time));
+      total++;
+      if (c >= thr) covered++;
+      const g = c < thr;
+      if (i === 0) firstCovered = !g;
+      if (g && !inGap) { inGap = true; anyGap = true; gaps++; gapStart = loop[i]; gapSpan = 0; }
+      if (g) gapSpan = loop[i] - gapStart;
+      if (!g && inGap) { inGap = false; runs++; }
+      if (g) longest = Math.max(longest, gapSpan);
+    }
+    if (!anyGap) runs++;            // 整圈常亮 = 1 段
+    else if (firstCovered && inGap) runs++;   // 首端亮、末端缝：跨接缝那段单独算一段
+  }
+  return {
+    loops: loops.length, runs, gaps,
+    gapShare: total ? +(1 - covered / total).toFixed(4) : 0,
+    coveredShare: total ? +(covered / total).toFixed(4) : 0,
+    longestGapDeg: +(longest * 180 / Math.PI).toFixed(1),
+  };
 }
 
 /**

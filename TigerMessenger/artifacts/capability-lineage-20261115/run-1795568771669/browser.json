@@ -1,0 +1,30 @@
+{
+  "errors": [],
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/capability-lineage-20261115/run-1795568771669",
+  "source": {
+    "lines": 27,
+    "queue": 35,
+    "order": [
+      "1768627849529893109",
+      "815236105079398400",
+      "828984794407170048",
+      "865200072685912064",
+      "1205420678859632640",
+      "1238474550511308800",
+      "1482346496460828674",
+      "793557992931266561"
+    ],
+    "shore": [
+      "A",
+      "A+",
+      "A++",
+      "A+++",
+      "A+4"
+    ],
+    "focus": "1215642481162887168",
+    "mobileOverflow": false,
+    "pageOverflowFrom": []
+  },
+  "pass": false,
+  "failure": "AssertionError [ERR_ASSERTION]: 常用页签只有三个\n\n4 !== 3\n\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/capability-lineage-browser.mjs:24:105"
+}

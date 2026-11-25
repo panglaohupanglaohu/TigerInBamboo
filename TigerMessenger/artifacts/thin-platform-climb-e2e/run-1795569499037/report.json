@@ -1,0 +1,642 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/thin-platform-climb-e2e/run-1795569499037",
+  "capabilities": [],
+  "steps": {
+    "vendorSync": {
+      "terrain/thin-platform.js": true,
+      "world/climb-route.js": true,
+      "world/navlayer.js": true
+    },
+    "synthetic": {
+      "placed": {
+        "level": 3,
+        "placed": [
+          12,
+          20
+        ],
+        "skipped": []
+      },
+      "ledges": [
+        {
+          "level": 3,
+          "cells": [
+            12,
+            20
+          ],
+          "gap": 1,
+          "walls": [
+            4,
+            13,
+            21
+          ]
+        }
+      ],
+      "route": {
+        "ok": true,
+        "climbs": [
+          {
+            "from": 19,
+            "to": 20,
+            "rise": 2,
+            "thin": true,
+            "supportDepth": 1,
+            "length": 1.0239140588936164
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "rise": 1,
+            "thin": false,
+            "supportDepth": 4,
+            "length": 0.5462600113499064
+          }
+        ],
+        "points": 26,
+        "y0": 0.5,
+        "y1": 2
+      },
+      "walkLedge": [
+        {
+          "id": 12,
+          "walk": true,
+          "hgt": 3
+        },
+        {
+          "id": 20,
+          "walk": true,
+          "hgt": 3
+        }
+      ],
+      "sim": {
+        "frames": 178,
+        "arrived": true,
+        "arrivedAt": 177,
+        "cells": [
+          25,
+          17,
+          18,
+          19,
+          20,
+          12,
+          13,
+          14
+        ],
+        "track": [
+          {
+            "f": 0,
+            "x": 1.015,
+            "z": 2.974,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 3,
+            "x": 1.062,
+            "z": 2.897,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 6,
+            "x": 1.108,
+            "z": 2.82,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 9,
+            "x": 1.155,
+            "z": 2.743,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 12,
+            "x": 1.199,
+            "z": 2.665,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 15,
+            "x": 1.233,
+            "z": 2.581,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 18,
+            "x": 1.235,
+            "z": 2.493,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 21,
+            "x": 1.318,
+            "z": 2.457,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 24,
+            "x": 1.399,
+            "z": 2.419,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 27,
+            "x": 1.478,
+            "z": 2.375,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 30,
+            "x": 1.562,
+            "z": 2.349,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 33,
+            "x": 1.651,
+            "z": 2.333,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 36,
+            "x": 1.74,
+            "z": 2.318,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 39,
+            "x": 1.828,
+            "z": 2.302,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 42,
+            "x": 1.917,
+            "z": 2.286,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 45,
+            "x": 2.005,
+            "z": 2.27,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 48,
+            "x": 2.094,
+            "z": 2.254,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 51,
+            "x": 2.182,
+            "z": 2.237,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 54,
+            "x": 2.271,
+            "z": 2.219,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 57,
+            "x": 2.359,
+            "z": 2.2,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 60,
+            "x": 2.446,
+            "z": 2.179,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 63,
+            "x": 2.533,
+            "z": 2.158,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 66,
+            "x": 2.622,
+            "z": 2.145,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 69,
+            "x": 2.711,
+            "z": 2.131,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 72,
+            "x": 2.8,
+            "z": 2.118,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 75,
+            "x": 2.889,
+            "z": 2.105,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 78,
+            "x": 2.978,
+            "z": 2.091,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 81,
+            "x": 3.067,
+            "z": 2.078,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 84,
+            "x": 3.156,
+            "z": 2.065,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 87,
+            "x": 3.245,
+            "z": 2.052,
+            "foot": 0.5,
+            "floor": 1,
+            "ladder": null
+          },
+          {
+            "f": 89,
+            "x": 3.305,
+            "z": 2.043,
+            "foot": 0.611,
+            "floor": 1,
+            "ladder": {
+              "p": 0.111,
+              "rung": 1
+            }
+          },
+          {
+            "f": 90,
+            "x": 3.334,
+            "z": 2.038,
+            "foot": 0.74,
+            "floor": 1,
+            "ladder": {
+              "p": 0.24,
+              "rung": 3
+            }
+          },
+          {
+            "f": 91,
+            "x": 3.364,
+            "z": 2.034,
+            "foot": 0.888,
+            "floor": 1,
+            "ladder": {
+              "p": 0.388,
+              "rung": 4
+            }
+          },
+          {
+            "f": 92,
+            "x": 3.394,
+            "z": 2.029,
+            "foot": 1.022,
+            "floor": 1,
+            "ladder": {
+              "p": 0.522,
+              "rung": 6
+            }
+          },
+          {
+            "f": 93,
+            "x": 3.423,
+            "z": 2.025,
+            "foot": 1.147,
+            "floor": 1,
+            "ladder": {
+              "p": 0.647,
+              "rung": 8
+            }
+          },
+          {
+            "f": 94,
+            "x": 3.453,
+            "z": 2.02,
+            "foot": 1.283,
+            "floor": 1,
+            "ladder": {
+              "p": 0.783,
+              "rung": 10
+            }
+          },
+          {
+            "f": 95,
+            "x": 3.483,
+            "z": 2.016,
+            "foot": 1.429,
+            "floor": 1,
+            "ladder": {
+              "p": 0.929,
+              "rung": 11
+            }
+          },
+          {
+            "f": 96,
+            "x": 3.513,
+            "z": 2.012,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 99,
+            "x": 3.58,
+            "z": 1.952,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 102,
+            "x": 3.646,
+            "z": 1.891,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 105,
+            "x": 3.712,
+            "z": 1.83,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 108,
+            "x": 3.777,
+            "z": 1.768,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 111,
+            "x": 3.84,
+            "z": 1.703,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 114,
+            "x": 3.9,
+            "z": 1.636,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 117,
+            "x": 3.954,
+            "z": 1.564,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 120,
+            "x": 3.984,
+            "z": 1.48,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 123,
+            "x": 4.055,
+            "z": 1.424,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 126,
+            "x": 4.125,
+            "z": 1.369,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 129,
+            "x": 4.196,
+            "z": 1.313,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 132,
+            "x": 4.266,
+            "z": 1.257,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 135,
+            "x": 4.337,
+            "z": 1.201,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 138,
+            "x": 4.407,
+            "z": 1.145,
+            "foot": 1.5,
+            "floor": 3,
+            "ladder": null
+          },
+          {
+            "f": 140,
+            "x": 4.454,
+            "z": 1.108,
+            "foot": 1.893,
+            "floor": 3,
+            "ladder": {
+              "p": 0.785,
+              "rung": 5
+            }
+          },
+          {
+            "f": 141,
+            "x": 4.478,
+            "z": 1.089,
+            "foot": 1.943,
+            "floor": 3,
+            "ladder": {
+              "p": 0.886,
+              "rung": 6
+            }
+          },
+          {
+            "f": 144,
+            "x": 4.561,
+            "z": 1.068,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 147,
+            "x": 4.651,
+            "z": 1.063,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 150,
+            "x": 4.741,
+            "z": 1.059,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 153,
+            "x": 4.831,
+            "z": 1.055,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 156,
+            "x": 4.921,
+            "z": 1.051,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 159,
+            "x": 5.011,
+            "z": 1.046,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 162,
+            "x": 5.101,
+            "z": 1.042,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 165,
+            "x": 5.19,
+            "z": 1.038,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 168,
+            "x": 5.28,
+            "z": 1.034,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 171,
+            "x": 5.37,
+            "z": 1.03,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          },
+          {
+            "f": 174,
+            "x": 5.46,
+            "z": 1.025,
+            "foot": 2,
+            "floor": 4,
+            "ladder": null
+          }
+        ]
+      },
+      "avoid": {
+        "thinLadders": 1,
+        "plan": false
+      }
+    }
+  },
+  "errors": [],
+  "pass": true
+}

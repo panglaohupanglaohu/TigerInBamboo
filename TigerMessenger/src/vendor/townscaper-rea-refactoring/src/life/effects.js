@@ -5,18 +5,40 @@
  *   1258421104756097029 "We were long overdue for some splashier splashes"
  *     画面：往水里放一块 → 一圈白色泡沫环向外扩、中间溅起一团水花；拆掉也有。
  *   1246074663546916873 "The props now animate when they appear and disappear. This was much trickier than I anticipated."
- *     画面：放下的东西从小"弹"到原尺寸（略过冲再回落）；拆掉的东西缩没。
+ *     画面：原片道具随布局变化出现/消失；当前代码仅做柱顶增长缩放和拆除灰尘，不是完整逐道具生命周期。
  *   1056990611738451968 "New fire effect. For blend mode, I use Max instead of Add … the particles blend together
  *     and form a common silhouette."  1056999668486471682 "Works well in daylight too, largely thanks to the max blend"
  *     画面：烟囱 / 屋顶上的火是一团团软圆粒子，黄 → 橙 → 红，互相融成一个整体轮廓，白天也不发白。
  *
  * 出现动画在主材质的顶点着色器里做（world/view.js 注入）：最近 8 次"长高"的格子，
- *   格心周围、原高度以上的顶点按弹性曲线从 0.35 缩放到 1（过冲 8%）—— 合并成一个网格之后
+ *   格心周围、原高度以上的顶点按弹性曲线按本地 0.45s 曲线从 0.35 缩放到 1（并非由视频恢复的参数）—— 合并成一个网格之后
  *   没法单独动某个道具，这是把"哪里刚变了"作为 uniform 交给着色器的办法。
  * 消失：几何已经没了，补一团往上飘、慢慢变淡的灰尘。
  */
 
 import * as THREE from 'three';
+import { fireCardGLSL, fireLightLevel } from '../core/smoke-order.js';
+import { CrownSplash } from './splash-c07.js';
+
+/** One tiling value-noise texture with mips (REACode smokefx noiseTexture): one sample per card fragment. */
+let fireNoise = null;
+export function fireNoiseTexture() {
+  if (fireNoise) return fireNoise;
+  const S = 64, data = new Uint8Array(S * S * 4);
+  // Lattice hash wraps at the octave period, so the texture tiles under RepeatWrapping.
+  const H = (i, j, P) => { let q = Math.imul((((i % P) + P) % P) * 73856093 ^ (((j % P) + P) % P) * 19349663 ^ P * 83492791, 2654435761); q ^= q >>> 15; return (q >>> 0) / 4294967296; };
+  for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) {
+    let v = 0;
+    for (const [P, a] of [[8, .55], [16, .45]]) {
+      const u = x / S * P, w = y / S * P, i = Math.floor(u), j = Math.floor(w), fx = u - i, fy = w - j, sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+      v += a * ((H(i, j, P) * (1 - sx) + H(i + 1, j, P) * sx) * (1 - sy) + (H(i, j + 1, P) * (1 - sx) + H(i + 1, j + 1, P) * sx) * sy);
+    }
+    data.set([v * 255, v * 255, v * 255, 255], (y * S + x) * 4);
+  }
+  fireNoise = new THREE.DataTexture(data, S, S, THREE.RGBAFormat);
+  fireNoise.wrapS = fireNoise.wrapT = THREE.RepeatWrapping; fireNoise.magFilter = THREE.LinearFilter; fireNoise.minFilter = THREE.LinearMipmapLinearFilter; fireNoise.generateMipmaps = true; fireNoise.needsUpdate = true;
+  return fireNoise;
+}
 
 const MAX_POPS = 8;
 
@@ -46,12 +68,19 @@ export function popShaderChunk() {
 }
 
 export class Effects {
-  constructor({ scene, uTime, popUniforms }) {
+  constructor({ scene, uTime, popUniforms, random = Math.random }) {
+    this.random = random; this.fireShrink = 2;
     this.uTime = uTime;
     this.pop = popUniforms;
     this.popIdx = 0;
     this.group = new THREE.Group();
     scene.add(this.group);
+
+    // 1258421104756097029：冠状竖直水帘 + 3 圈长寿命泡沫环 + 10–12 颗飞沫（splash-c07）。
+    // 主场景默认走这一档（片子就是"水花要更漂亮"），`?splash=plain` 退回旧的一圈 1.1s + 26 颗外抛飞沫做对照。
+    this.splashStyle = (globalThis.location?.search ?? '').includes('splash=plain') ? 'plain' : 'crown';
+    this.crown = new CrownSplash({ scene, uTime, random });
+    this.crown.group.visible = this.splashStyle === 'crown';
 
     // 泡沫环（水花）：一个实例化的圆环，按年龄扩大、变淡
     const ring = new THREE.RingGeometry(0.75, 1, 40);
@@ -102,32 +131,53 @@ export class Effects {
     // 火：Max 混合的软粒子（1056990611738451968）
     this.fireN = 900;
     this.fp = new Float32Array(this.fireN * 3); this.fv = new Float32Array(this.fireN * 3); this.flife = new Float32Array(this.fireN);
+    this.fspan = new Float32Array(this.fireN);
     this.fsize = new Float32Array(this.fireN); this.fage = new Float32Array(this.fireN);
     const fg = new THREE.BufferGeometry();
+    fg.setDrawRange(0, 0);
     fg.setAttribute('position', new THREE.BufferAttribute(this.fp, 3));
     fg.setAttribute('aSize', new THREE.BufferAttribute(this.fsize, 1));
     fg.setAttribute('aAge', new THREE.BufferAttribute(this.fage, 1));
+    // 1015149712469524480: per-card UV roll, forward or backward along the flow.
+    this.froll = Float32Array.from({ length: this.fireN }, (_, i) => (((i * 0.754877666) % 1) - .5) * 2.2 || .3);
+    fg.setAttribute('aRoll', new THREE.BufferAttribute(this.froll, 1));
     this.fire = new THREE.Points(fg, new THREE.ShaderMaterial({
       transparent: true, depthWrite: false,
+      uniforms: { uTime, uFireNoise: { value: fireNoiseTexture() }, uMipBias: { value: 2.4 } },
       blending: THREE.CustomBlending, blendEquation: THREE.MaxEquation, blendSrc: THREE.OneFactor, blendDst: THREE.OneFactor,
       vertexShader: /* glsl */ `
         attribute float aSize;
         attribute float aAge;
+        attribute float aRoll;
         varying float vAge;
+        varying float vRoll;
         void main() {
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
           gl_PointSize = aSize * 380.0 / -mv.z;
           vAge = aAge;
+          vRoll = aRoll;
           gl_Position = projectionMatrix * mv;
         }`,
       fragmentShader: /* glsl */ `
+        uniform float uTime;
+        uniform sampler2D uFireNoise;
+        uniform float uMipBias;
         varying float vAge;
+        varying float vRoll;
+        ${fireCardGLSL}
         void main() {
-          float r = length(gl_PointCoord - 0.5) * 2.0;
-          float m = 1.0 - smoothstep(0.55, 1.0, r);                       // 软圆
+          // Point size zero may clamp to one pixel: expired particles must discard.
+          if (vAge >= 1.0) discard;
+          // REACode smokefx makeFlame: one noise sample per card, rolled along the flow, mip grows with age.
+          vec2 pc = vec2(gl_PointCoord.x, 1.0 - gl_PointCoord.y);
+          vec2 nuv = vec2(pc.x + vRoll * .37, pc.y * 1.35 + vRoll + mod(uTime * .24, 1.0) * sign(vRoll));
+          float n = texture2D(uFireNoise, nuv, vAge * uMipBias).r;
+          vec2 fc = fireCard(pc, vAge, n);
+          float m = fc.x;
           if (m <= 0.0) discard;
           vec3 hot = vec3(1.0, 0.93, 0.6), mid = vec3(1.0, 0.55, 0.18), cool = vec3(0.85, 0.2, 0.12);
           vec3 c = vAge < 0.5 ? mix(hot, mid, vAge * 2.0) : mix(mid, cool, (vAge - 0.5) * 2.0);
+          c = mix(c, vec3(1.0, 0.96, 0.75), fc.y * 0.35);                 // cutoff pulled in → brighter rim
           // Max 混合：颜色乘遮罩，重叠处取最大值 → 融成一个轮廓，不会加成一片白
           gl_FragColor = vec4(c * m, m);
           #include <colorspace_fragment>
@@ -138,10 +188,32 @@ export class Effects {
     this.fire.renderOrder = 7;
     this.group.add(this.fire);
     this.fireSources = [];
+    // Dynamic firelight: intensity follows live flame mass; hidden (no shader light) without fire.
+    this.fireLight = new THREE.PointLight(0xff9a48, 0, 3.5, 2);
+    this.fireLight.visible = false;
+    this.group.add(this.fireLight);
   }
 
   set showFire(on) { this.fire.visible = on; }
-  setFireSources(list) { this.fireSources = list; }
+  setFireSources(list) { this.fireSources = list; if (!list.length) this.clearFire(); }
+  // 1056990611738451968: additive is a diagnostic comparison, max remains default.
+  // 1056992291108413446: power 2 shrinks faster than a linear profile.
+  setFireAppearance({ blend = 'max', shrink = 2 } = {}) {
+    if (!['max', 'add'].includes(blend) || !Number.isFinite(shrink) || shrink < 1 || shrink > 6) throw new RangeError('Invalid fire appearance');
+    this.fireShrink = shrink;
+    this.fire.material.blendEquation = blend === 'max' ? THREE.MaxEquation : THREE.AddEquation;
+  }
+  clearFire() { this.flife.fill(0); this.fspan.fill(0); this.fsize.fill(0); this.fage.fill(0); this.fire.geometry.setDrawRange(0, 0); if (this.fireLight) { this.fireLight.intensity = 0; this.fireLight.visible = false; } }
+  dispose() { this.group.removeFromParent(); for (const o of [this.rings, this.points, this.fire]) { o.geometry.dispose(); o.material.dispose(); } this.crown.dispose(); this.clearFire(); this.fireSources = []; }
+
+  /** 1258421104756097029：水花形制两档（默认 crown = 片中冠状水帘；plain = 旧一圈 1.1s + 26 颗）。 */
+  setSplashStyle(style = 'crown') {
+    if (!['crown', 'plain'].includes(style)) throw new RangeError('Invalid splash style');
+    this.splashStyle = style; this.crown.group.visible = style === 'crown'; this.rings.visible = style === 'plain';
+    return style;
+  }
+  splashStats(t = this.uTime.value) { return { style: this.splashStyle, crownVisible: this.crown.group.visible, ...this.crown.stats(t) }; }
+
 
   /** 建造 / 拆除时调用：before / after 是这格之前和之后的顶层（层号）。 */
   onEdit(cell, before, after, L) {
@@ -160,6 +232,7 @@ export class Effects {
   }
 
   #splash(cell, t) {
+    if (this.splashStyle === 'crown') { this.crown.spawn(cell, t); return; }   // 1258421104756097029
     const i = this.ringN++ % 32;
     const m = new THREE.Matrix4().makeTranslation(cell.cx, 0, cell.cz);
     m.scale(new THREE.Vector3(1.2, 1, 1.2));
@@ -188,7 +261,9 @@ export class Effects {
   }
 
   update(dt, wind) {
+    if (!Number.isFinite(dt) || dt < 0) throw new RangeError('Invalid effects timestep');
     dt = Math.min(dt, 0.05);
+    this.crown.update(dt);
     // 飞沫 / 灰尘
     let alive = false;
     for (let i = 0; i < this.N; i++) {
@@ -207,20 +282,31 @@ export class Effects {
     const w = wind ?? new THREE.Vector3(1, 0, 0);
     for (let i = 0; i < this.fireN; i++) {
       if (this.flife[i] <= 0) {
-        const s = this.fireSources[(Math.random() * this.fireSources.length) | 0];
-        this.fp.set([s.x + (Math.random() - 0.5) * 0.06, s.y, s.z + (Math.random() - 0.5) * 0.06], i * 3);
-        this.fv.set([(Math.random() - 0.5) * 0.08, 0.35 + Math.random() * 0.3, (Math.random() - 0.5) * 0.08], i * 3);
-        this.flife[i] = 0.6 + Math.random() * 0.7;
+        const s = this.fireSources[(this.random() * this.fireSources.length) | 0];
+        this.fp.set([s.x + (this.random() - 0.5) * 0.06, s.y, s.z + (this.random() - 0.5) * 0.06], i * 3);
+        this.fv.set([(this.random() - 0.5) * 0.08, 0.35 + this.random() * 0.3, (this.random() - 0.5) * 0.08], i * 3);
+        this.flife[i] = this.fspan[i] = 0.6 + this.random() * 0.7;
         this.fage[i] = 0;
+        this.fsize[i] = 0.13 * (0.8 + 0.4 * ((i * 0.618) % 1));
         continue;
       }
       this.flife[i] -= dt;
-      this.fage[i] = Math.min(1, this.fage[i] + dt / 1.1);
+      this.fage[i] = Math.min(1, 1 - Math.max(0, this.flife[i]) / this.fspan[i]);
       this.fv[i * 3] += w.x * 0.25 * dt; this.fv[i * 3 + 2] += w.z * 0.25 * dt;
       for (let a = 0; a < 3; a++) this.fp[i * 3 + a] += this.fv[i * 3 + a] * dt;
-      this.fsize[i] = 0.11 * (1 - this.fage[i] * 0.75);
+      // 1056992291108413446 "The quads above shrink way more than they are supposed to. This looks much better and breaks up
+      // the flame in a much more interesting way"：往上缩得比"应该的"快得多，火焰顶端碎成小块
+      const k = 1 - this.fage[i];
+      this.fsize[i] = 0.13 * Math.pow(k, this.fireShrink) * (0.8 + 0.4 * ((i * 0.618) % 1));
     }
+    this.fire.geometry.setDrawRange(0, this.fireN);
     const ga = this.fire.geometry.attributes;
     ga.position.needsUpdate = ga.aSize.needsUpdate = ga.aAge.needsUpdate = true;
+    let sx = 0, sy = 0, sz = 0;
+    for (const s of this.fireSources) { sx += s.x; sy += s.y; sz += s.z; }
+    const n = this.fireSources.length;
+    this.fireLight.position.set(sx / n, sy / n + .3, sz / n);
+    this.fireLight.intensity = fireLightLevel(this.fsize, this.fage, this.uTime?.value ?? 0);
+    this.fireLight.visible = this.fireLight.intensity > 0;
   }
 }

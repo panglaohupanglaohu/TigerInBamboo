@@ -1,0 +1,62 @@
+{
+ "capability": "terrain.arch",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "terrain",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/archvoid.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js"
+ ],
+ "inputs": {
+  "originalArch": "span 9 · riseRatio .5 · 楔石 15",
+  "arena": "9×9 双柱"
+ },
+ "metrics": [
+  {
+   "id": "origProfile",
+   "name": "原版断面",
+   "original": "半椭圆 矢高 4.5 · 内弧 14.14",
+   "refactored": "平桥面 第 5 层"
+  },
+  {
+   "id": "origWedges",
+   "name": "原版楔石块",
+   "original": 15,
+   "refactored": "—"
+  },
+  {
+   "id": "refSpan",
+   "name": "本侧跨格数",
+   "original": "—",
+   "refactored": 2
+  },
+  {
+   "id": "refThick",
+   "name": "本侧加厚格（≥3 落差 → 拱厚 2）",
+   "original": "—",
+   "refactored": 2
+  },
+  {
+   "id": "refApplied",
+   "name": "本侧应用",
+   "original": "—",
+   "refactored": 1
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "shape",
+   "id": "拱形",
+   "original": "半椭圆楔石拱（archInner/Outer + 法向外推厚度）",
+   "refactored": "平桥面体素（低差 ≥3 自动厚 2 层）",
+   "note": "「两柱间锚定跨接」机制一致、断面表示不同如实登记"
+  }
+ ],
+ "basis": "archvoid 是参数半椭圆拱（楔石 15 块）；本侧 arch 在双柱擂场跨 2 格平桥面、自动加厚 2 格。同族机制对账如实登记。"
+}

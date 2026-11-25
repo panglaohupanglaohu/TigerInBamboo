@@ -1,0 +1,97 @@
+{
+  "before": {
+    "live": 140,
+    "fill": 0.587890625,
+    "leaves": 292,
+    "freeLeaves": 33,
+    "largestShare": 0.035545023696682464,
+    "largestFree": 3840,
+    "tiny": 1,
+    "small": 1,
+    "minFree": 256,
+    "freeArea": 108032,
+    "usedArea": 154112
+  },
+  "mix": {
+    "add": 35,
+    "rem": 25
+  },
+  "mixed": {
+    "live": 150,
+    "fill": 0.6708984375,
+    "leaves": 352,
+    "freeLeaves": 64,
+    "largestShare": 0.032640949554896145,
+    "largestFree": 2816,
+    "tiny": 24,
+    "small": 31,
+    "minFree": 256,
+    "freeArea": 86272,
+    "usedArea": 175872
+  },
+  "holes": {
+    "before": {
+      "px": 518400,
+      "bg": 198104,
+      "share": 0.3821450617283951
+    },
+    "frag": {
+      "px": 518400,
+      "bg": 220065,
+      "share": 0.42450810185185184
+    }
+  },
+  "rmOnly": {
+    "freed": 30,
+    "live": 120
+  },
+  "frag": {
+    "live": 120,
+    "fill": 0.5380859375,
+    "leaves": 349,
+    "freeLeaves": 118,
+    "largestShare": 0.023255813953488372,
+    "largestFree": 2816,
+    "tiny": 45,
+    "small": 76,
+    "minFree": 256,
+    "freeArea": 121088,
+    "usedArea": 141056
+  },
+  "tight": {
+    "tried": 40,
+    "placed": 40,
+    "live0": 120,
+    "live1": 160,
+    "fill0": 0.5380859375,
+    "fill1": 0.7138671875,
+    "used": 187136,
+    "free": 75008
+  },
+  "coalesce": {
+    "s0": 2,
+    "s1": 2,
+    "s2": 1,
+    "freeArea": 4096,
+    "largest": 4096,
+    "chain": [
+      3,
+      3,
+      2,
+      1
+    ],
+    "chainFree": 4096,
+    "chainLargest": 4096
+  },
+  "guard": {
+    "twice": [
+      true,
+      false
+    ],
+    "forged": false,
+    "foreign": false,
+    "unchanged": true,
+    "otherAlive": 1
+  },
+  "stText": "120 块 · 占用 53.8% · 空闲叶 118/349 · 树深 32 · 本次手指 0（剪掉 0 枝，试了 0 个候选）· 近 20 次平均手指 2.20 · 删补中"
+}

@@ -1,0 +1,68 @@
+{
+  "reports": [
+    {
+      "seed": 3,
+      "edges": 391,
+      "down": 391,
+      "neutral": 0,
+      "uphillDown": 0,
+      "confluences": 58,
+      "pathCount": 47,
+      "steps": 31,
+      "tDown": 0.7248731822093812,
+      "tUp": 1.089630290961242,
+      "walk": 2.532751594991925,
+      "walkOptimal": 1.3837645738681197,
+      "speedup": 3.4940616609269646,
+      "speedupOptimal": 1.9089747114805196,
+      "upDownRatio": 1.50320127396643,
+      "detourRatio": 0.5238414076341757,
+      "treeEdgesOnRiver": 334,
+      "reached": 1667,
+      "labels": 18
+    },
+    {
+      "seed": 5,
+      "edges": 398,
+      "down": 398,
+      "neutral": 0,
+      "uphillDown": 0,
+      "confluences": 62,
+      "pathCount": 50,
+      "steps": 29,
+      "tDown": 0.6461803014208045,
+      "tUp": 1.1053678815263162,
+      "walk": 2.153934338069348,
+      "walkOptimal": 1.4168785929626033,
+      "speedup": 3.333333333333333,
+      "speedupOptimal": 2.1926985236894523,
+      "upDownRatio": 1.710618350785163,
+      "detourRatio": 0.4560590474231688,
+      "treeEdgesOnRiver": 352,
+      "reached": 1729,
+      "labels": 18
+    }
+  ],
+  "iface": {
+    "pathCost": 0.7248731822093812,
+    "pathSteps": 22,
+    "treeTime": 0.7248731822093812,
+    "steps": 31,
+    "nodes": 1683,
+    "walkable": 1704,
+    "compression": 0.9876760563380281,
+    "finiteEdges": 9300,
+    "badEdges": 0,
+    "directed": 782,
+    "flatPairs": 352,
+    "priceBad": 0
+  },
+  "ratio": {
+    "tDown": 0.7248731822093812,
+    "tUp": 1.089630290961242,
+    "ratio": 0.6652469082608908,
+    "speedup": 3.4940616609269646,
+    "steps": 31
+  },
+  "errors": []
+}

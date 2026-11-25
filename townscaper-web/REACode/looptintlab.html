@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>边界环逐环上色：数颜色就是数洞（半边调试视图）</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:11px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:118ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; inset:112px 352px 46px 16px; display:flex; gap:10px; }
+  .col { flex:1; display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .col > span { font-size:11.5px; color:var(--muted); }
+  canvas { display:block; width:100%; border-radius:10px; border:1px solid var(--line); background:#3e2c27; }
+  #panel { position:fixed; right:16px; top:112px; width:322px; bottom:46px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:10px 12px; display:flex;
+    flex-direction:column; gap:8px; overflow:auto; box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.03em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:#b23a2a; }
+  table { border-collapse:collapse; font-size:11px; width:100%; }
+  td,th { border-bottom:1px solid var(--line); padding:3px 4px; text-align:right;
+    font-variant-numeric:tabular-nums; }
+  th:first-child, td:first-child { text-align:left; color:var(--muted); }
+  button { font:inherit; font-size:12px; padding:4px 8px; border-radius:6px; border:1px solid var(--line);
+    background:#fff; color:var(--ink); cursor:pointer; }
+  button:hover { border-color:#9fb6bd; }
+  button.on { background:#1d2f36; color:#fff; border-color:#1d2f36; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; }
+  .sw { display:inline-block; width:11px; height:11px; border-radius:2px; vertical-align:-1px; margin-right:4px;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.25); }
+  #foot { position:fixed; left:18px; bottom:10px; right:352px; font-size:11.5px; color:var(--muted); }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>边界环逐环上色 — 数颜色就是数洞</h1>
+  <p>片子 <b>1459169210752507904</b>「And another」只有两个词，上一条（<b>1458921394855718917</b>）才交代是半边结构实验。
+  逐像素量到：背景 #3e2c27 格子内外**同色**、内部边 #b06040 游程中位数 <b>1px</b>、边界边**也是 1px** 只换色相。
+  所以这不是描边，是调试视图 —— 左栏按环上色，右栏是反例（整圈一个色），两栏只差染色，别的完全一样。</p>
+</header>
+
+<div id="stage">
+  <div class="col"><span>逐环上色（片子的画法）：环数 = 色数</span><canvas id="cvA"></canvas></div>
+  <div class="col"><span>反例：整圈同一个色 —— 洞就数不出来了</span><canvas id="cvB"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>拓扑自检（<code>selfTest()</code>）</h2>
+  <table id="tblTest"><thead><tr><th>断言</th><th>实测</th><th></th></tr></thead><tbody></tbody></table>
+
+  <h2>当前这一帧</h2>
+  <div class="row"><span>格 / 顶点 / 半边</span><b id="vCell">—</b></div>
+  <div class="row"><span>内部边 / 边界边</span><b id="vEdge">—</b></div>
+  <div class="row"><span>边界环 / 色数</span><b id="vLoop">—</b></div>
+  <div class="row"><span>环长（降序）</span><b id="vLens">—</b></div>
+  <div id="loopcards" style="font-size:11.5px;color:var(--muted);line-height:1.7"></div>
+  <div class="row"><span>χ = V−E+F</span><b id="vChi">—</b></div>
+  <div class="row"><span>两栏像素差</span><b id="vDiff">—</b></div>
+
+  <h2>片中量到的色（参照）</h2>
+  <div id="seen" style="font-size:11.5px;color:var(--muted)"></div>
+
+  <h2>控制</h2>
+  <div class="chips">
+    <button id="bHole">挖 2 个洞</button>
+    <button id="bReplay">重播生长</button>
+    <button id="bTint" class="on">逐环上色</button>
+  </div>
+  <div class="row"><span>生长进度</span><b id="vGrow">—</b></div>
+  <div class="row"><span>本步环数变化</span><b id="vMerge">—</b></div>
+  <div class="row"><span>片中时间线</span><b>3 色 @1.18–1.31s → 1 色 @1.379s</b></div>
+</div>
+
+<div id="foot">模型 <code>src/looptint.js</code>（消费 <code>src/halfedge.js</code> 的构建结果）。边界线与内部线**同宽 1px**，
+差别只在色相 —— 这是从 f009/f013 的横向游程里量出来的，不是目测。</div>
+
+<script type="module">
+import { buildHalfEdge, halfEdgeReport } from './src/halfedge.js';
+import { TINT, SEEN, tintLoops, tintEdges, tintStats, makePatch, growthTrace, selfTest } from './src/looptint.js';
+
+const A = document.getElementById('cvA');
+const B = document.getElementById('cvB');
+const ctxA = A.getContext('2d', { willReadFrequently: true });
+const ctxB = B.getContext('2d', { willReadFrequently: true });
+
+let holesOn = true;
+let perLoop = true;
+let seq = [];          // 生长序列（逐步加格子）
+let step = 0;          // 当前加到第几个
+let trace = null;
+let built = null;      // 当前 buildHalfEdge 结果
+let prevTint = null;
+
+function sizeCanvases() {
+  const w = Math.max(260, Math.floor(A.parentElement.clientWidth));
+  const h = Math.max(240, Math.floor((window.innerHeight - 112 - 46 - 22)));
+  for (const cv of [A, B]) {
+    cv.width = w; cv.height = h;
+    cv.style.height = h + 'px';
+  }
+}
+
+/** 片子里的投影：等距 + 一点点碗形弯曲（补片边缘是往回弯的，不是平面） */
+function projector(W, H, cells) {
+  let minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9;
+  for (const c of cells) for (const p of c.pts) {
+    const sx = (p.x - p.y) * 0.86, sy = (p.x + p.y) * 0.5;
+    if (sx < minx) minx = sx; if (sx > maxx) maxx = sx;
+    if (sy < miny) miny = sy; if (sy > maxy) maxy = sy;
+  }
+  const spanX = Math.max(1, maxx - minx), spanY = Math.max(1, maxy - miny);
+  const z = Math.min((W * 0.9) / spanX, (H * 0.9) / spanY);
+  const ox = W / 2 - ((minx + maxx) / 2) * z;
+  const oy = H / 2 - ((miny + maxy) / 2) * z;
+  return (p) => {
+    const sx = (p.x - p.y) * 0.86, sy = (p.x + p.y) * 0.5;
+    const bow = 0.030 * z * (p.x * p.x + p.y * p.y);   // 碗形：越靠边越往回沉
+    return { x: ox + sx * z, y: oy + sy * z - bow };
+  };
+}
+
+function draw(ctx, cv, usePerLoop) {
+  const W = cv.width, H = cv.height;
+  ctx.fillStyle = TINT.bgOuter;
+  ctx.fillRect(0, 0, W, H);
+  if (!built) return;
+  const proj = projector(W, H, built.cellsRaw);
+  const posOf = (vid) => {
+    const p = VREC.get(vid);
+    return proj(p);
+  };
+  const { edges } = tintEdges(built.he, posOf, { perLoop: usePerLoop });
+  ctx.lineWidth = TINT.stroke;
+  ctx.lineCap = 'butt';
+  // 内部边先画，边界边后画（片子里两者都压在最上面，但先内后外能保证交界处是彩色）
+  for (const pass of ['interior', 'boundary']) {
+    for (const e of edges) {
+      if (e.kind !== pass) continue;
+      ctx.strokeStyle = e.css;
+      ctx.beginPath();
+      ctx.moveTo(e.x1, e.y1);
+      ctx.lineTo(e.x2, e.y2);
+      ctx.stroke();
+    }
+  }
+}
+
+// 顶点 id → 坐标（buildHalfEdge 只给 id，坐标由生成器带出来）
+const VREC = new Map();
+
+function rebuild() {
+  const patch = makePatch({
+    n: 23, radius: 7.4, seed: 5, jitter: 0.55, cell: 1,
+    holes: holesOn ? [{ x: -2.9, y: -2.1, r: 1.75 }, { x: 2.8, y: 2.3, r: 1.55 }] : [],
+  });
+  VREC.clear();
+  patch.pos.forEach((p, i) => VREC.set(i, p));
+  seq = patch.cells;
+  trace = growthTrace(seq.slice(0, Math.max(1, Math.min(seq.length, 26))).concat(seq.slice(26)));  // 全量轨迹（前 26 步逐格，后面也逐格）
+  step = seq.length;
+  built = { cellsRaw: seq, he: buildHalfEdge(seq.slice(0, step)) };
+  prevTint = null;
+  render();
+}
+
+function render() {
+  // A = 按当前开关；B = 强制同一色
+  const sub = seq.slice(0, step);
+  built.he = buildHalfEdge(sub);
+  built.cellsRaw = sub;
+  draw(ctxA, A, perLoop);
+  draw(ctxB, B, false);
+  updatePanel();
+}
+
+function updatePanel() {
+  const he = built.he;
+  const st = tintStats(he);
+  const t = tintLoops(he);
+  document.getElementById('vCell').textContent = `${st.cells} / ${st.verts} / ${st.halfEdges}`;
+  document.getElementById('vEdge').textContent = `${st.interiorEdges} / ${st.boundaryEdges}`;
+  document.getElementById('vLoop').textContent = `${st.boundaryLoops} / ${t.colors}`;
+  document.getElementById('vLens').textContent = st.loopLens.slice(0, 5).join(' · ') || '—';
+  document.getElementById('loopcards').innerHTML = t.loops
+    .slice().sort((a, b) => b.len - a.len)
+    .map((L) => `<div><span class="sw" style="background:${L.hue.css}"></span>环 ${L.len} 边 · h${L.hue.h.toFixed(0)}${perLoop ? '' : '（未启用）'}</div>`)
+    .join('');
+  const chiEl = document.getElementById('vChi');
+  chiEl.textContent = `${st.euler}（应 = 2 − ${st.boundaryLoops} = ${2 - st.boundaryLoops}）`;
+  chiEl.parentElement.className = 'row ' + (st.euler === 2 - st.boundaryLoops ? 'good' : 'bad');
+  document.getElementById('vGrow').textContent = `${step} / ${seq.length} 格`;
+  const at = trace && trace[Math.min(step, trace.length - 1)];
+  document.getElementById('vMerge').textContent = at ? `环 ${at.loops} · 色 ${at.colors}` : '—';
+  const dp = diffPct();
+  document.getElementById('vDiff').textContent = `${dp.toFixed(2)} % 全画面 / ${(diffPct.ink || 0).toFixed(1)} % 线条`;
+}
+
+let raf = null;
+function replay() {
+  cancelAnimationFrame(raf);
+  step = 1;
+  let t0 = 0;
+  const tick = (ts) => {
+    if (!t0) t0 = ts;
+    const want = Math.min(seq.length, 1 + Math.floor((ts - t0) / 45));
+    if (want !== step) { step = want; render(); }
+    if (step < seq.length) raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+}
+
+/**
+ * 两栏像素差。给两个数：
+ *   whole = 占**整幅画面**的比例（线条只占零点几个百分点，所以这个数天生很小，别拿它当"改动很小"读）
+ *   ink   = 占**线条像素**的比例（两栏只差染色，线条位置逐像素相同，所以这个数应该接近 100%）
+ * 之所以两个都报：只看 whole 会误判成"没差别"，只看 ink 又会忽略"面积占比本来就小"。
+ */
+function diffPct() {
+  const da = ctxA.getImageData(0, 0, A.width, A.height).data;
+  const db = ctxB.getImageData(0, 0, B.width, B.height).data;
+  const bg = [0x3e, 0x2c, 0x27];
+  let n = 0, tot = 0, ink = 0, inkTot = 0;
+  for (let i = 0; i < da.length; i += 4) {
+    tot++;
+    const d = Math.abs(da[i] - db[i]) + Math.abs(da[i + 1] - db[i + 1]) + Math.abs(da[i + 2] - db[i + 2]);
+    const isInk = Math.abs(da[i] - bg[0]) + Math.abs(da[i + 1] - bg[1]) + Math.abs(da[i + 2] - bg[2]) > 24
+              || Math.abs(db[i] - bg[0]) + Math.abs(db[i + 1] - bg[1]) + Math.abs(db[i + 2] - bg[2]) > 24;
+    if (isInk) { inkTot++; if (d > 6) ink++; }
+    if (d > 6) n++;
+  }
+  const r = (n / tot) * 100, ri = inkTot ? (ink / inkTot) * 100 : 0;
+  diffPct.ink = ri;
+  return r;
+}
+
+/* ── 面板：自检表 + 参照色 ── */
+const T = selfTest();
+const tb = document.querySelector('#tblTest tbody');
+for (const r of T.rows) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${r.name}</td><td>${r.got}</td><td style="color:${r.ok ? '#1d7a4f' : '#b23a2a'}">${r.ok ? '✓' : '✗'}</td>`;
+  tb.appendChild(tr);
+}
+document.getElementById('seen').innerHTML = SEEN.map((s) =>
+  `<div><span class="sw" style="background:${s.hex}"></span>${s.hex} h${s.h} s${s.s} v${s.v} <span style="opacity:.7">${s.at}</span></div>`).join('');
+
+document.getElementById('bHole').onclick = (e) => {
+  holesOn = !holesOn;
+  e.target.classList.toggle('on', holesOn);
+  e.target.textContent = holesOn ? '填上洞（回到单连通）' : '挖 2 个洞';
+  rebuild();
+};
+document.getElementById('bReplay').onclick = () => replay();
+document.getElementById('bTint').onclick = (e) => {
+  perLoop = !perLoop;
+  e.target.classList.toggle('on', perLoop);
+  e.target.textContent = perLoop ? '逐环上色' : '整圈单色';
+  render();
+};
+
+sizeCanvases();
+rebuild();
+window.looptint = {
+  selfTest: () => T,
+  stats: () => tintStats(built.he),
+  diff: () => ({ whole: diffPct(), ink: diffPct.ink }),
+  setStep: (n) => { step = Math.max(1, Math.min(seq.length, n)); render(); return step; },
+  loopColors: () => tintLoops(built.he).loops.map((l) => ({ len: l.len, h: l.hue.h, css: l.hue.css })),
+};
+window.addEventListener('resize', () => { sizeCanvases(); render(); });
+</script>
+</body>
+</html>

@@ -33,10 +33,13 @@ const geo=await p.evaluate(async()=>{
   const THREE=await import('three');const dots=rea.battle.passageDots;dots.updateMatrixWorld(true);
   const cam=rea.view.camera;cam.updateMatrixWorld(true);
   const arr=dots.geometry.getAttribute('position').array;const v=new THREE.Vector3();const pts=[];
-  for(let i=0;i<arr.length;i+=3){v.set(arr[i],arr[i+1],arr[i+2]).applyMatrix4(dots.matrixWorld);v.project(cam);
-    if(v.z>1)continue;pts.push([Math.round((v.x*.5+.5)*1440),Math.round((-v.y*.5+.5)*1000)]);}
+  for(let i=0;i<arr.length;i+=3){v.set(arr[i],arr[i+1],arr[i+2]);const depth=-v.clone().applyMatrix4(cam.matrixWorldInverse).z;
+    v.applyMatrix4(dots.matrixWorld).project(cam);
+    if(v.z>1)continue;pts.push([Math.round((v.x*.5+.5)*1440),Math.round((-v.y*.5+.5)*1000),depth]);}
   const m=dots.material;
-  return {pts,color:m.color.getHexString(),size:m.size,alphaTest:m.alphaTest,toneMapped:m.toneMapped,stats:rea.battle.passageStats};
+  // 第 164 轮：默认是世界尺寸点 + 物理像素下限 → 屏幕上真正看到的直径要按 three 的公式逐点算，不能再读 material.size。
+  return {pts,color:m.color.getHexString(),size:m.size,sizeAttenuation:m.sizeAttenuation,style:{...rea.battle.passageDotStyle},
+    dotPx:rea.battle.passageDotPx(),alphaTest:m.alphaTest,toneMapped:m.toneMapped,stats:rea.battle.passageStats};
 });
 const shot=r+'traffic-dots-on.png';await p.screenshot({path:shot});
 await p.evaluate(()=>rea.view.setDebug('passages',false));
@@ -76,14 +79,24 @@ const pitch=await p.evaluate(async()=>{
     const px=Math.hypot((pa.x-pb.x)*.5*innerWidth,(-pa.y+pb.y)*.5*innerHeight);
     out.push(px/s.count);}
   return out;});
-pitch.sort((a,b)=>a-b);const spacingPx=pitch.length?pitch[pitch.length>>1]:0, ratio=spacingPx/geo.size;
+pitch.sort((a,b)=>a-b);const spacingPx=pitch.length?pitch[pitch.length>>1]:0;
+// 屏幕上真实点径（CSS px）= max(下限, size·(H/2)/depth)；取全部点的中位当「这个机位的点径」
+const eff=geo.pts.map(q=>Math.max(geo.style.minPx,geo.size*(1000/2)/Math.max(.1,q[2]||1))).sort((a,b)=>a-b);
+const effPx=eff.length?eff[eff.length>>1]:geo.size;
+const ratio=spacingPx/effPx;
 out.segPitchSamples=pitch.length;out.spacingPx=+spacingPx.toFixed(2);out.spacingRatio=+ratio.toFixed(2);
 out.pitchMin=+(pitch[0]??0).toFixed(2);out.pitchMax=+(pitch[pitch.length-1]??0).toFixed(2);
+out.sizeAttenuation=geo.sizeAttenuation;out.effPx=+effPx.toFixed(2);out.floorCss=geo.style.minPx;out.mode=geo.dotPx.mode;
+out.dotPxNear=geo.dotPx.nearPx;out.dotPxFar=geo.dotPx.farPx;out.clampedShare=geo.dotPx.clampedShare;
 fs.writeFileSync(r+'traffic-dots-check.json',JSON.stringify(out,null,2));
 await b.close();
 if(errors.length)throw Error(errors.join('\n'));
 if(geo.color!=='ffffff')throw Error('markers must be pure white, got #'+geo.color);
-if(!(geo.size>=7))throw Error('marker size too small: '+geo.size);
+// 第 164 轮：默认是世界尺寸档（size 是 world 单位），判「不合适」要看屏幕上真正画出来多大：
+// 逐点 max(7px 下限, size·(H/2)/depth) 的中位必须 ≥7，且近端要比中位大（世界尺寸真的在放大）。
+if(!geo.sizeAttenuation)throw Error('默认应走世界尺寸（sizeAttenuation=true），实际 '+geo.sizeAttenuation);
+if(!(effPx>=7-1e-9))throw Error('on-screen dot size too small: '+effPx);
+if(!(geo.dotPx.nearPx>=effPx))throw Error('近端点没有更大：'+geo.dotPx.nearPx+' < '+effPx);
 // 第 54 轮：spacing 0.265→0.28 把点距/点径从 2.08 调到原片的 2.2，同图点数随之 182→173。
 // 点数下限跟着放到 165（仍然远多于「每段只有 1 个点」），但比例必须收在原片口径里。
 if(!(geo.stats.dots>=165))throw Error('too few markers: '+geo.stats.dots);

@@ -1,0 +1,213 @@
+{
+  "stats": {
+    "cells": 634,
+    "coverage": {
+      "total": 634,
+      "inRange": 634,
+      "maxSigma": 0.12358646806778367
+    },
+    "meshVerts": 3804,
+    "meshTris": 1268,
+    "nonFinite": 0,
+    "cornerRefsOnSphere": 2536,
+    "radius": 60
+  },
+  "seam": {
+    "edgePairs": 2452,
+    "mismatched": 0,
+    "maxGap": 0,
+    "cornerRefs": 2536,
+    "uniqueCorners": 677,
+    "weldedCornerRefs": 2532,
+    "maxSharing": 6
+  },
+  "snap": {
+    "w": 1440,
+    "h": 1000,
+    "bytes": 5760000
+  },
+  "edits": {
+    "ops": [
+      {
+        "x": 0.4,
+        "z": 0.3,
+        "tool": "build",
+        "i": 0,
+        "hit": true,
+        "changed": true,
+        "target": 1,
+        "cell": 144
+      },
+      {
+        "x": 0.4,
+        "z": 0.3,
+        "tool": "build",
+        "i": 1,
+        "hit": true,
+        "changed": true,
+        "target": 2,
+        "cell": 144
+      },
+      {
+        "x": 0.4,
+        "z": 0.3,
+        "tool": "build",
+        "i": 2,
+        "hit": true,
+        "changed": true,
+        "target": 3,
+        "cell": 144
+      },
+      {
+        "x": 1.9,
+        "z": -0.9,
+        "tool": "build",
+        "i": 0,
+        "hit": true,
+        "changed": true,
+        "target": 1,
+        "cell": 41
+      },
+      {
+        "x": 1.9,
+        "z": -0.9,
+        "tool": "build",
+        "i": 1,
+        "hit": true,
+        "changed": true,
+        "target": 2,
+        "cell": 41
+      },
+      {
+        "x": -1.7,
+        "z": 1.3,
+        "tool": "build",
+        "i": 0,
+        "hit": true,
+        "changed": true,
+        "target": 1,
+        "cell": 606
+      },
+      {
+        "x": -1.7,
+        "z": 1.3,
+        "tool": "build",
+        "i": 1,
+        "hit": true,
+        "changed": true,
+        "target": 2,
+        "cell": 606
+      },
+      {
+        "x": -1.7,
+        "z": 1.3,
+        "tool": "build",
+        "i": 2,
+        "hit": true,
+        "changed": true,
+        "target": 3,
+        "cell": 606
+      },
+      {
+        "x": -1.7,
+        "z": 1.3,
+        "tool": "build",
+        "i": 3,
+        "hit": true,
+        "changed": true,
+        "target": 4,
+        "cell": 606
+      },
+      {
+        "x": -1.7,
+        "z": 1.3,
+        "tool": "erase",
+        "i": 0,
+        "hit": true,
+        "changed": true,
+        "target": 1,
+        "cell": 606
+      },
+      {
+        "x": 0.4,
+        "z": 0.3,
+        "tool": "paint",
+        "i": 0,
+        "hit": true,
+        "changed": true,
+        "target": 1,
+        "cell": 144
+      },
+      {
+        "x": 2.7,
+        "z": 1.5,
+        "tool": "raise",
+        "i": 0,
+        "hit": true,
+        "changed": true,
+        "target": 1,
+        "cell": 363
+      },
+      {
+        "x": 2.7,
+        "z": 1.5,
+        "tool": "raise",
+        "i": 1,
+        "hit": true,
+        "changed": true,
+        "target": 2,
+        "cell": 363
+      },
+      {
+        "x": -2.6,
+        "z": -1.6,
+        "tool": "level",
+        "i": 0,
+        "hit": true,
+        "changed": true,
+        "target": 2,
+        "cell": 532
+      },
+      {
+        "x": 30,
+        "z": 30,
+        "tool": "build",
+        "i": 0,
+        "hit": false,
+        "changed": null,
+        "target": null,
+        "cell": null
+      }
+    ],
+    "tops": {
+      "41": 2,
+      "144": 3,
+      "363": 2,
+      "532": 2,
+      "606": 4
+    },
+    "solidCells": 5
+  },
+  "editDiff": {
+    "pixels": 30381,
+    "maxDelta": 167,
+    "totalPx": 1440000
+  },
+  "roundtrip": {
+    "saveLen": 68,
+    "specRoundTrip": true,
+    "arraysEqual": true,
+    "reencoded": true,
+    "pixelDiff": 0,
+    "maxDelta": 0
+  },
+  "seamView": {
+    "edgeMid": [
+      8.62837454817797,
+      57.60110794005968,
+      -14.409397416557612
+    ],
+    "anchorDist": 0.014901669519283732
+  },
+  "errors": []
+}

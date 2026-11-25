@@ -3,8 +3,8 @@
  * 改造 Worker 在布局副本上算出每个物件的新增量，验证 Worker 检查，实景预览走 bridge 的 objects.preview；
  * 写入 = 进入物件编辑记录（一步撤销，随场景草稿 / 定稿保存）。
  */
-import { describeObjectCapabilities } from './object/capabilities.js?v=sys-r15';
-import { mountTierWorkshop } from './tier-workshop.js?v=engine-r1';
+import { describeObjectCapabilities } from './object/capabilities.js?v=contract-r2';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 const KIND = { 'plane-tree': '悬铃树', cypress: '柏树', hollyhock: '蜀葵花丛' };
 

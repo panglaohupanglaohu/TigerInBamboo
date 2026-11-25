@@ -1,0 +1,102 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/relief-arena-e2e/run-1795569429955",
+  "steps": {
+    "keysBefore": [
+      "tm.defaults.v1",
+      "tm.questPanel.collapsed"
+    ],
+    "mounted": {
+      "height": 1085,
+      "mode": "arena",
+      "input": "arena",
+      "rows": 0,
+      "sidebar": [
+        true,
+        true,
+        true
+      ]
+    },
+    "preloaded": {
+      "note": "扫描完成：6 / 6 个能力能作用。 可改陆地 1785 格。 已按「擂台岛」自动预装 6 个能力（软坡（缓坡省连续）、硬崖（陡崖省台阶）、河谷（开河 + 填洼）、悬垂（崖顶岩檐） 等），点 ▶ 执行管线一键跑完整条。",
+      "nodes": 6,
+      "names": [
+        "⚙ 软坡（缓坡省连续）",
+        "⚙ 硬崖（陡崖省台阶）",
+        "⚙ 河谷（开河 + 填洼）",
+        "⚙ 悬垂（崖顶岩檐）",
+        "⚙ 薄台与攀爬（崖边梯子）",
+        "⚙ 三遍（等高线 = 层界格边）"
+      ],
+      "scanned": "arena"
+    },
+    "candidate": {
+      "h4": "候选 · 通过（需留意）",
+      "previewed": "1",
+      "fails": [],
+      "checks": [
+        "check-pass ✓ 作用在本场景计划 arena · 当前 arena",
+        "check-pass ✓ 不写存档 / 不改默认plan.persist = false",
+        "check-pass ✓ 步骤与计划一致计划 relief.soft → relief.cliff → relief.valley → relief.overhang → relie",
+        "check-pass ✓ 高度场大小3721 / 3721",
+        "check-pass ✓ 建筑 / 轨道及外扩 1 圈不动保护格 207 个，全部原样",
+        "check-pass ✓ 海陆不变（海岸线）海陆格一致",
+        "check-pass ✓ 可改陆地填洼后没有排不出去的坑可改区会被再次抬起的格 0 · 保护环内原始微坑 8（不可改） · 排水率 98.2%",
+        "check-pass ✓ 河格都有不上坡的去处河格 183 个",
+        "check-pass ✓ 岩檐：檐下是空的、不在保护格上48 块岩檐",
+        "check-pass ✓ 梯子：梯脚在下层台面、梯顶搭上层台沿、梯长 = √(H²+run²)16 把",
+        "check-pass ✓ 等高线在格边上且与复算一致复算 1115 段 · 计划 1115 段",
+        "check-warn ! 竖崖占比 ≤ 12%竖崖（> 62°）28.1% · 中等坡 49.2%",
+        "check-pass ✓ 最大可走连通片 ≥ 60%最大连通片 63.6%（61 片）"
+      ],
+      "thumbW": 244,
+      "thumbColors": 662,
+      "river": true,
+      "caption": "候选：6 步 · 中等坡占比 49.2% · 可站平台占比 8.9% · 竖崖占比 28.1% · 排水率 98.2% · 坑（格） 8 · 硬边位移（m） 0 · 悬垂（檐下面积占比） 1.2% · 最大可走连通 63.6% · 崖边攀爬率 20.6% · 等高线在格边 0.0%"
+    },
+    "parity": [
+      {
+        "id": "relief.soft",
+        "registry": "行为等价（已实算）",
+        "live": "一致",
+        "cls": "ok"
+      },
+      {
+        "id": "relief.cliff",
+        "registry": "行为等价（已实算）",
+        "live": "一致",
+        "cls": "ok"
+      },
+      {
+        "id": "relief.valley",
+        "registry": "差异已登记（已实算，7 条）",
+        "live": "出错：Failed to fetch dynamically imported module: http://localhost:8931/townscaper-web/REACode/engine/rivers.js",
+        "cls": "bad"
+      },
+      {
+        "id": "relief.overhang",
+        "registry": "差异已登记（已实算，1 条）",
+        "live": "差异都已登记（2 处）",
+        "cls": "ok"
+      },
+      {
+        "id": "relief.ledge",
+        "registry": "行为等价（已实算）",
+        "live": "一致",
+        "cls": "ok"
+      },
+      {
+        "id": "relief.passes",
+        "registry": "行为等价（已实算）",
+        "live": "一致",
+        "cls": "ok"
+      }
+    ]
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "note": "面板 / 擂台岛端到端（不是实景）；截图要人打开看",
+  "failure": "对照有登记外差异或出错：[{\"id\":\"relief.valley\",\"registry\":\"差异已登记（已实算，7 条）\",\"live\":\"出错：Failed to fetch dynamically imported module: http://localhost:8931/townscaper-web/REACode/engine/rivers.js\",\"cls\":\"bad\"}]"
+}

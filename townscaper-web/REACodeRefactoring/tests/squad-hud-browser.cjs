@@ -94,21 +94,31 @@ const fs = require('fs');
     await p.waitForFunction(() => window.__fpReady === true, null, { polling: 50 });
     const fp12 = await p.evaluate(() => window.__fp);
     check('整块 12 人：轮廓 4 角 4 三角面', fp12.ring === 4 && fp12.tris === 4 && fp12.spokes === 4, JSON.stringify(fp12));
-    // 3 列 × 4 行，格心间距 1 → 轮廓 2 格 × 3 格，面积 6、周长 10
-    check('12 人占位轮廓 = 2×3 格（面积 6、周长 10）', Math.abs(fp12.area - 6) < 1e-6 && Math.abs(fp12.perimeter - 10) < 1e-6, `area ${fp12.area} perimeter ${fp12.perimeter}`);
+    // 口径改成「沿格边界」后：3 列 × 4 行 = 12 个占位格，轮廓 3×4 格，面积 12、周长 14
+    // （旧账是人的凸包：2 格 × 3 格、面积 6、周长 10 —— 那是 r157 之前的凸包口径）
+    check('12 人占位轮廓 = 3×4 格（面积 12、周长 14）', Math.abs(fp12.area - 12) < 1e-6 && Math.abs(fp12.perimeter - 14) < 1e-6, `area ${fp12.area} perimeter ${fp12.perimeter}`);
 
     const fp4 = await p.evaluate(() => {
       const n = document.getElementById('n'); n.value = '4'; n.dispatchEvent(new Event('input'));
       return window.__fp;
     });
-    check('4 人（3+1）：轮廓塌成三角，面积 1 格', fp4.ring === 3 && fp4.tris === 3 && Math.abs(fp4.area - 1) < 1e-6, JSON.stringify(fp4));
+    // 4 人 = 3+1 的 L 形占位：按格边界走是 6 个角、面积 4；凸包只有 5（会把一个凹口切掉）
+    check('4 人（3+1）L 形：6 角、面积 4、凸包 5（凹口 1）', fp4.ring === 6 && fp4.tris === 6 && Math.abs(fp4.area - 4) < 1e-6 && Math.abs(fp4.notchArea - 1) < 1e-6, JSON.stringify(fp4));
 
     const fpScatter = await p.evaluate(() => {
       const n = document.getElementById('n'); n.value = '9'; n.dispatchEvent(new Event('input'));
       const sp = document.getElementById('spread'); sp.value = '0.55'; sp.dispatchEvent(new Event('input'));
       return window.__fp;
     });
-    check('散开后轮廓角变多、面积变大', fpScatter.ring >= 4 && fpScatter.area > 1.2, JSON.stringify(fpScatter));
+    // 线网跟「占位格」不跟人：人在格内抖动，格子没变 → 线网不该变形
+    check('格内散开后线网不变形（仍 4 角 9 格）', fpScatter.ring === 4 && Math.abs(fpScatter.area - 9) < 1e-6, JSON.stringify(fpScatter));
+    const fpL = await p.evaluate(() => {
+      const n = document.getElementById('n'); n.value = '12'; n.dispatchEvent(new Event('input'));
+      const sp = document.getElementById('spread'); sp.value = '0'; sp.dispatchEvent(new Event('input'));
+      const s = document.getElementById('shape'); s.value = 'L'; s.dispatchEvent(new Event('change'));
+      return window.__fp;
+    });
+    check('凹形占位保留缺口（面积 < 凸包）', fpL.notchArea > 0.4 && fpL.area < fpL.hullArea, JSON.stringify(fpL));
 
     const netPx = await count(p, '#net', [234, 253, 255]);
     check('近白青色线网像素在画布上', netPx > 400, `net px ${netPx}`);
@@ -118,6 +128,7 @@ const fs = require('fs');
     await p.evaluate(() => {
       const n = document.getElementById('n'); n.value = '12'; n.dispatchEvent(new Event('input'));
       const sp = document.getElementById('spread'); sp.value = '0'; sp.dispatchEvent(new Event('input'));
+      const sh = document.getElementById('shape'); sh.value = 'block'; sh.dispatchEvent(new Event('change'));
     });
     const file3 = await shot(p, '.row', 'artifacts/coverage/squad-footprint-12.png');
 

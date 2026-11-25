@@ -1,0 +1,83 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/building-prefab-e2e/run-1795568537089",
+  "capabilities": [
+    {
+      "id": "building.prefabs",
+      "prefab": "cottage",
+      "cells": 1,
+      "label": "小屋 · 1 格"
+    },
+    {
+      "id": "building.prefabs",
+      "prefab": "hall",
+      "cells": 2,
+      "label": "长屋 · 2 格"
+    },
+    {
+      "id": "building.prefabs",
+      "prefab": "lhouse",
+      "cells": 3,
+      "label": "L 形宅 · 3 格"
+    },
+    {
+      "id": "building.prefabs",
+      "prefab": "chapel",
+      "cells": 3,
+      "label": "礼拜堂 · 3 格"
+    },
+    {
+      "id": "building.prefabs",
+      "prefab": "manor",
+      "cells": 4,
+      "label": "大宅 · 4 格"
+    }
+  ],
+  "steps": {
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「高山圣城（通用插件 + 构建面板）」自动预装 3 个能力（建筑选址、多格 prefab 目录、联合 WFC 摆建筑群），点 ▶ 执行管线一键跑完整条。",
+    "figs": [
+      {
+        "id": "cottage",
+        "cells": 1,
+        "doors": 1,
+        "label": "小屋 · 1 格"
+      },
+      {
+        "id": "hall",
+        "cells": 2,
+        "doors": 1,
+        "label": "长屋 · 2 格"
+      },
+      {
+        "id": "lhouse",
+        "cells": 3,
+        "doors": 1,
+        "label": "L 形宅 · 3 格"
+      },
+      {
+        "id": "chapel",
+        "cells": 3,
+        "doors": 1,
+        "label": "礼拜堂 · 3 格"
+      },
+      {
+        "id": "manor",
+        "cells": 4,
+        "doors": 1,
+        "label": "大宅 · 4 格"
+      }
+    ]
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R54-1-prefab-catalog.png"
+  ],
+  "pass": true
+}

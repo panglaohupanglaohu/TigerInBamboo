@@ -48,13 +48,16 @@ export function install(view) {
     showStage(i) {
       const r = st.last; if (!r?.snapshots?.length) throw new Error('megagi: rebake with options({keepSnapshots:true}) first');
       const s = r.snapshots[i]; if (!s) throw new RangeError('stage');
-      if (!st.lights) st.lights = { sun: view.sun.intensity, amb: view.ambient.intensity, hemi: view.hemi.intensity };
-      view.ambient.intensity = 0; view.hemi.intensity = 0; view.sun.intensity = s.stage === 'reset' ? 0 : st.lights.sun;
+      if (!st.lights) st.lights = { sun: view.sun.intensity, amb: view.ambient.intensity, hemi: view.hemi.intensity, fill: view.fill?.intensity ?? 0 };
+      // 第 136 轮：原片慢放序列里 reset 全黑、direct 阶段「只有直射、阴影纯黑」——
+      // 只关 ambient/hemi 不够，本仓还有一盏 fill 方向光（setTimeOfDay 的 P.fill），漏关会让阴影始终有底光。
+      view.ambient.intensity = 0; view.hemi.intensity = 0; if (view.fill) view.fill.intensity = 0;
+      view.sun.intensity = s.stage === 'reset' ? 0 : st.lights.sun;
       r.lv.set(s.lv); writeAGI(r, s.stage === 'reset' || s.stage === 'direct');
       return { stage: s.stage, bounce: s.bounce, index: i, of: r.snapshots.length };
     },
     endStages() {
-      const r = st.last; if (st.lights) { view.sun.intensity = st.lights.sun; view.ambient.intensity = st.lights.amb; view.hemi.intensity = st.lights.hemi; st.lights = null; }
+      const r = st.last; if (st.lights) { view.sun.intensity = st.lights.sun; view.ambient.intensity = st.lights.amb; view.hemi.intensity = st.lights.hemi; if (view.fill) view.fill.intensity = st.lights.fill; st.lights = null; }
       if (r && st.finalLV) { r.lv.set(st.finalLV); writeAGI(r); }
     },
     stats() { return st.last ? { ...st.last.stats, bounceStats: st.last.bounceStats.map((b) => ({ bounce: b.bounce, relativeChange: +(b.relativeChange ?? 0).toFixed(5) })) } : {}; },

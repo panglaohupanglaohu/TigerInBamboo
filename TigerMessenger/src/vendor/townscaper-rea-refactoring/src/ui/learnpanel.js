@@ -11,7 +11,7 @@
  * URL: index.html?on=grid,shorelines&off=waves&tour=arch&time=night
  */
 
-const DEFAULT_ON = new Set(['waves', 'reflection', 'ao', 'shadows', 'smooth', 'outline', 'backlit', 'birds', 'vegetation', 'grass', 'shrubs', 'trees', 'flowers', 'leafy', 'clouds', 'flags', 'wires', 'butterflies', 'sound', 'stairs']);
+const DEFAULT_ON = new Set(['waves', 'reflection', 'ao', 'shadows', 'smooth', 'outline', 'backlit', 'birds', 'vegetation', 'grass', 'shrubs', 'trees', 'flowers', 'leafy', 'clouds', 'flags', 'wires', 'butterflies', 'sound', 'stairs', 'waterfalls', 'boats', 'gore', 'hardnormal', 'motionblur', 'lighthouse', 'passages']);
 
 const GUIDE_RULES = [
   ['先读原文，再看画面', '原文在 REA-agent/gifs/README.md，连同前后几条一起读；不要看画面猜，也别去抓 x.com。'],
@@ -24,9 +24,20 @@ const GUIDE_RULES = [
 ];
 
 const PAGES = [
+  ['wfc.html', '确定性WFC接口约束', '多边形半边、固定格、正反顺序对照'],
+  ['scheduler.html', '跨帧嵌套协程', '共享World连通性分析、工作预算、重开和取消'],
+  ['coverage.html', '原版 → 重构模块映射（动态清单）', '逐模块落点、已知差距与下一批学习任务'],
+  ['navigation.html', '洞内多层导航验收', '共享 World 多层/柱顶对照、身高净空、混合与四边形'],
+  ['refactoring-audit.html', '重构审核清单（285 段）', '历史实现状态、README 原文、代码差异与待复核项目'],
   ['architecture.html', '系统全局（架构图）', '每一层的模块、数据流、和原 REACode 的对应关系'],
   ['pipeline.html', '管线图与学习路线', '判断 + 9 步路线 + 四条管线，每一步的视频、状态、代码'],
-  ['learn.html', '学习笔记', '237 段视频：原文 → 学到什么 → 代码位置'],
+  ['learn.html', '学习笔记', '素材原文 → 学习记录 → 代码位置'],
+  ['index.html?scene=badnorth', '北境 · Bad North', '守岛打维京人：长船登陆、选中小队（时间变慢）下令、血 / 尸体 / 箭粘在船上；1–6 换季节'],
+  ['campaign.html', 'Bad North 战役地图', '节点散开 → 剔除 → 随机游走主路 → 支路 → 分区 → 64² 岛屿快照'],
+  ['planet.html', '球面网格 → 小星球', '随机点 → 散开 → 球极投影 Delaunay → 松弛 → 台阶星球 + 防蘑菇化'],
+  ['textures.html', '贴图实验室', 'fwidth 抗锯齿线、隔像素一条线、反差线模拟、地面笔触、径向排序、调色板编辑、UI 装饰、扭动距离场（含展开动画）'],
+  ['ui.html', 'UI 实验室', '头像生成器、旗帜生成器（同一个层级部件生成器）、确认弹出、斜按钮、图标'],
+  ['grids.html', '网格实验室', '三角 / 方格 / 混合、无限网格（块 + 簇插值）、对偶图、拓扑直线、重心坐标'],
   ['GUIDE.md', '接手指南（中文）', '规矩、目录、流程、接口、坑、下一步'],
   ['ARCHITECTURE.md', '架构文档', '模块职责与依赖，文字版'],
   ['../REACode/index.html', '原版 REACode', '重构前的系统（未改动）'],
@@ -64,6 +75,8 @@ const css = `
 #learnpanel .lp-seg { display: flex; gap: 4px; margin: 2px 0 4px 24px; }
 #learnpanel .lp-seg button { flex: 1; border: 1px solid rgba(30,60,70,.15); background: rgba(255,255,255,.7); border-radius: 7px; padding: 3px 6px; cursor: pointer; font: inherit; font-size: 12px; color: inherit; }
 #learnpanel .lp-seg button.on { background: #1f3139; color: #fff; }
+#learnpanel .lp-sun { display: flex; align-items: center; gap: 6px; margin: 0 0 4px 24px; font-size: 12px; }
+#learnpanel .lp-sun input { flex: 1; min-width: 0; }
 #learnpanel a.lp-page { display: block; padding: 5px 8px; border-radius: 8px; text-decoration: none; color: inherit; }
 #learnpanel a.lp-page:hover { background: rgba(255,255,255,.75); }
 #learnpanel a.lp-page b { font-weight: 600; }
@@ -104,7 +117,7 @@ export function mountLearnPanel(view, town, { getScene = () => '', loadScene = (
   const laneCount = (lane) => {
     const all = lane.groups.flatMap((g) => g[1]);
     const done = all.filter((s) => s.status === 'done' || s.status === 'engine').length;
-    return `${done}/${all.length}`;
+    return `历史实现 ${done}/${all.length}`;
   };
   const lanesHtml = P.lanes.map((lane, li) => `
     <details ${li < 1 ? 'open' : ''} data-lane="${lane.key}">
@@ -128,9 +141,9 @@ export function mountLearnPanel(view, town, { getScene = () => '', loadScene = (
     else if (s.status === 'todo') act = `<span class="lp-act" style="opacity:.55;border-style:dashed">未做</span>`;
     else act = '<span></span>';
     const seg = s.toggle === 'time'
-      ? `<div class="lp-seg" id="lp-time"><button data-t="day">白天</button><button data-t="dusk">黄昏</button><button data-t="night">夜晚</button></div>` : '';
+      ? `<div class="lp-seg" id="lp-time"><button data-t="day">白天</button><button data-t="dusk">黄昏</button><button data-t="night">夜晚</button></div><label class="lp-sun">太阳方位 <input type="range" id="lp-sun" min="0" max="360" value="0" step="1" /></label>` : '';
     return `<div class="lp-row">${toggle}
-      <label for="lp-${uid}">${s.name}${s.where ? `<small>${s.where}</small>` : ''}</label>
+      <label for="lp-${uid}">${s.name}${s.where ? `<small>${s.where}</small>` : ''}<small><a href="refactoring-audit.html#clip-${s.id}">${window.REFACTOR_STATUS?.[s.id] || '待核查'}</a></small></label>
       ${act}
       ${s.id ? `<button class="lp-thumb" data-play="${s.id}" data-name="${esc(s.name)}" title="${esc(tip)}" style="background-image:url(learn/thumbs/${s.id}.jpg)"></button>` : '<span class="lp-thumb" style="visibility:hidden"></span>'}
     </div>${seg}`;
@@ -139,7 +152,7 @@ export function mountLearnPanel(view, town, { getScene = () => '', loadScene = (
   const flow = P.lanes.map((l) => `<span style="background:${l.color}">${l.name.split(' ')[0].replace('（基础能力）', '')}</span>`).join('→');
   host.className = 'panel' + (innerWidth < 720 ? ' collapsed' : '');
   host.innerHTML = `
-    <div class="lp-head"><b>重构版 · 系统与管线</b><span>${L ? L.items.length + ' 段视频' : ''} · 收起/展开</span></div>
+    <div class="lp-head"><b>重构版 · 系统与管线</b><span>${L ? L.items.length + ' 条素材记录' : ''} · 收起/展开</span></div>
     <div class="lp-body">
       ${archHtml()}
       <div class="lp-verdict"><b>判断</b>${esc(P.verdict.title)}。
@@ -188,6 +201,9 @@ export function mountLearnPanel(view, town, { getScene = () => '', loadScene = (
   sceneDefaults(getScene());
 
   // ---- time of day
+  // 太阳小工具（1313840428685447170 "I added some sunlight (with shadows) and a gizmo to control it"）
+  // [TM] morrisTownscaperMenu 的 view 契约没有 setSunAngle（上游 View 才有）；滑杆存在但方法缺省时静默跳过。
+  host.querySelector('#lp-sun')?.addEventListener('input', (e) => view.setSunAngle?.(+e.target.value));
   const seg = host.querySelector('#lp-time');
   const markTime = () => seg?.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.t === view.timeOfDay));
   if (seg) seg.onclick = (e) => { const t = e.target.dataset?.t; if (t) view.setTimeOfDay(t); };

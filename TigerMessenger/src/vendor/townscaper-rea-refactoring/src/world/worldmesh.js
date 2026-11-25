@@ -16,12 +16,13 @@
  */
 
 import * as THREE from 'three';
+import {bakeNormalLight} from '../core/mountain-bake.js';
 import { MeshWriter } from '../core/meshwriter.js';
 import { BUILD, TERRAIN } from '../core/palette.js';
 import { buildTerrain } from '../terrain/terrainmesh.js';
 import { shapeTerrain } from '../terrain/shape.js';
 import { buildBuildings } from '../build/buildings.js';
-import { bakeLighting } from '../light/bake.js';
+import { bakeLighting, AO_MODES, normalizeSunShadow } from '../light/bake.js';
 
 const CHUNK = 2.5;        // 块边长（世界单位）：越小，一次编辑重烘焙的范围越小
 const AO_REACH = 0.7;     // 体素变化影响多远的烘焙（模糊半径 + 采样偏移 + 余量）
@@ -45,7 +46,17 @@ class ChunkRouter {
     }
     return w;
   }
-  at(cell) { this.cur = this.writer(this.chunkOf(cell)); this.cur.soft = this._soft; }
+  at(cell) { this.cur = this.writer(this.chunkOf(cell)); this.cur.soft = this._soft; this.cur.edgeTri = this._edgeTri; }
+  set fieldFrame(v) { this.cur.fieldFrame = v; }
+  // 第 53 轮：terrainmesh 的顶面扇形靠 edgeTri 写 aEdge（0 崖边 → 格心 <1，崖越高越小）。
+  // 这里原先只代理了 fieldFrame / soft，`w.edgeTri = [...]` 落在路由对象上、到不了真正的 MeshWriter，
+  // 于是活的世界网格里顶面 aEdge 恒为 1 → 纯纹理灌木带在任何页面上都画不出来（本轮浏览器探针实测 8628/8628 顶点 = 1.000）。
+  set edgeTri(v) { this._edgeTri = v; this.cur.edgeTri = v; }
+  get edgeTri() { return this._edgeTri; }
+  // 第 99 轮：`w.bandTri = k` 与 edgeTri 完全同一个坑 —— 路由对象上直接赋值到不了真正的 MeshWriter，
+  //   活网格里 aBand 会恒为 1（本轮浏览器探针首次实测 16616/16616 = 1.000 才抓到）。必须显式代理。
+  set bandTri(v) { this.cur.bandTri = v; }
+  get bandTri() { return this.cur.bandTri; }
   set soft(v) { this._soft = v; this.cur.soft = v; }
   get soft() { return this._soft; }
   c(hex) { return this.cur.c(hex); }
@@ -66,6 +77,9 @@ function hashWriter(w) {
   for (let i = 0; i < w.pos.length; i++) mix(Math.round(w.pos[i] * 10000));
   for (let i = 0; i < w.col.length; i++) mix(Math.round(w.col[i] * 4096));
   for (let i = 0; i < w.glow.length; i++) mix(w.glow[i] * 7);
+  for (let i = 0; i < w.edge.length; i += 3) mix(Math.round(w.edge[i] * 64) * 13);
+  if (w.band) for (let i = 0; i < w.band.length; i += 3) mix(Math.round(w.band[i] * 64) * 17);   // 第 99 轮：带宽倍率变了要重烘
+  for (const v of w.field) mix(Math.round(v * 10000));
   return h ^ w.pos.length;
 }
 
@@ -91,16 +105,32 @@ export class WorldMesh {
     this.debugModules = false;   // 模块签名调试色（build/buildings.js）
     this.smooth = true;   // 层级平滑 + 笼形变形（terrain/shape.js）
     this.shape = null;
+    this.shapeOptions = {};
     this.stats = {};
     this.cache = new Map();      // 块 → { hash, pos, col, glow, normal, outline }
     this.prev = null;            // 上次的体素快照，用来找变了的格子
+    this.editFxLimit = 40;       // 单次差分超过此格数就不发 edits（换场景/读档防爆量）；回放期 app.js 放宽
     this.bakeRes = null;
     this.landKey = '';           // 岸浪只在陆地 / 钢柱 / 海岸形状变了时重建
     this.shoreDirty = true;
     this.full = true;
   }
 
-  /** 强制下次整体重建（开关烘焙 / 平滑、换场景时）。 */
+  /** 强制下次整体重建（开关烘焙 / 平滑、换场景时）。
+   *  bounces>1 = 裁判 townmesh.js 多跳档（diffuseAir 扩散 + airGain 补光），opt-in，
+   *  不传时保持单跳老行为；bounce/airGain 不传则取裁判多跳档默认 .62/.55。 */
+  setBakeLighting({enabled=true,strength=.62,bounce,bounces=1,airGain,diffuseGain,stride,aoMode='vertex',sunShadow=null}={}) {
+    if(typeof enabled!=='boolean'||![strength].every(Number.isFinite)||strength<0||strength>1)throw new RangeError('invalid layered bake settings');
+    if(bounce!==undefined&&(typeof bounce!=='number'||bounce<0||bounce>1))throw new RangeError('invalid layered bake settings');
+    if(!Number.isInteger(bounces)||bounces<1||bounces>8)throw new RangeError('invalid bounces');
+    if(airGain!==undefined&&(typeof airGain!=='number'||airGain<0||airGain>2))throw new RangeError('invalid airGain');
+    if(!AO_MODES.includes(aoMode))throw new RangeError('invalid aoMode');if(sunShadow)normalizeSunShadow(sunShadow);
+    // 裁判 townmesh 档：多跳时未显式给 bounce/airGain 就用 .62/.55（0.42 只改 1.8% 像素）
+    const b=bounce??(bounces>1?.62:.42),ag=airGain??(bounces>1?.55:0);
+    const old=this.bakeLightingOptions??{strength:.62,bounce:.42,bounces:1,airGain:0,aoMode:'vertex',sunShadow:null};
+    if(this.bake===enabled&&old.strength===strength&&old.bounce===b&&old.bounces===bounces&&old.airGain===ag&&old.diffuseGain===diffuseGain&&old.stride===stride&&old.aoMode===aoMode&&JSON.stringify(old.sunShadow)===JSON.stringify(sunShadow))return;
+    this.bake=enabled;this.bakeLightingOptions={strength,bounce:b,bounces,airGain:ag,diffuseGain,stride,aoMode,sunShadow};this.invalidate();
+  }
   invalidate() { this.builtVersion = -1; this.full = true; }
 
   chunkKey(c) { return Math.floor(c.cx / CHUNK) * 1000 + Math.floor(c.cz / CHUNK); }
@@ -127,7 +157,7 @@ export class WorldMesh {
     }
     // 给出现 / 消失动画、水花用：每个变了的格子之前和之后的顶层
     const topOf = (m) => (m === 0 ? 0 : 32 - Math.clz32(m));
-    this.edits = (prev && changed.length <= 40) ? changed.map((c) => ({ cell: c, before: topOf(prev.solid[c.id]), after: world.top(c) })) : [];
+    this.edits = (prev && changed.length <= (this.editFxLimit ?? 40)) ? changed.map((c) => ({ cell: c, before: topOf(prev.solid[c.id]), after: world.top(c) })) : [];
     this.prev = { solid: world.solid.slice(), rock: world.rock.slice(), color: world.color.slice(), river: world.river.slice() };
     const full = this.full;
     this.full = false;
@@ -141,16 +171,18 @@ export class WorldMesh {
     }
 
     // 1. 全部重新生成，按块路由
-    const shape = shapeTerrain(world, { enabled: this.smooth });
+    const shape = shapeTerrain(world, { ...this.shapeOptions, enabled: this.smooth });
     this.shape = shape;
     const r = new ChunkRouter((c) => this.chunkKey(c));
     const terrain = buildTerrain(r, world, { L, shape });
     const tTerrain = performance.now();
     const build = buildBuildings(r, world, { L, debugModules: this.debugModules });
+    this.build = build;   // r56 C05·C：门窗记录等给 render/opening-punch-layer.js（只读）
     const tBuild = performance.now();
 
     // 2. 找脏块
-    const changedBoxes = changed.map((c) => ({ minX: c.minX - AO_REACH, maxX: c.maxX + AO_REACH, minZ: c.minZ - AO_REACH, maxZ: c.maxZ + AO_REACH }));
+    const sunOpt = this.bakeLightingOptions?.sunShadow, reach = sunOpt ? Math.max(AO_REACH, (() => { const n = normalizeSunShadow(sunOpt, L); return n.steps * n.stepLen + n.normalBias + 0.2; })()) : AO_REACH;
+    const changedBoxes = changed.map((c) => ({ minX: c.minX - reach, maxX: c.maxX + reach, minZ: c.minZ - reach, maxZ: c.maxZ + reach }));
     const overlaps = (a, b) => a.minX <= b.maxX && a.maxX >= b.minX && a.minZ <= b.maxZ && a.maxZ >= b.minZ;
     const rock = r.c(TERRAIN.rock), stone = r.c(BUILD.stone), plaster = r.c(BUILD.plaster);
     const colorOf = (c, lv) => {
@@ -170,7 +202,7 @@ export class WorldMesh {
       dirtyCount++;
       const w = it.w;
       if (this.bake) {
-        bakeMs += bakeLighting(w, world, { L, shape, colorOf, region: it.box, res: this.bakeRes }).ms;
+        bakeMs += bakeLighting(w, world, { L, shape, colorOf, region: it.box, res: this.bakeRes, ...this.bakeLightingOptions }).ms;
       }
       // 法线：带上相邻块落在本块范围里的三角形
       const halo = { pos: [], soft: [] };
@@ -190,7 +222,7 @@ export class WorldMesh {
         }
       }
       const { normal, outline } = w.normals(halo);
-      fresh.set(it.k, { hash: it.hash, pos: new Float32Array(w.pos), col: new Float32Array(w.col), glow: new Float32Array(w.glow), normal, outline });
+      fresh.set(it.k, { hash: it.hash, pos: new Float32Array(w.pos), col: new Float32Array(w.col), field: new Float32Array(w.field), edge: new Float32Array(w.edge), band: w.band ? new Float32Array(w.band) : new Float32Array(w.pos.length).fill(1), glow: new Float32Array(w.glow), normal, outline });
     }
     this.cache = fresh;
 
@@ -207,15 +239,19 @@ export class WorldMesh {
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(cat('pos', 3), 3));
     g.setAttribute('color', new THREE.BufferAttribute(cat('col', 3), 3));
+    g.setAttribute('aField', new THREE.BufferAttribute(cat('field', 3), 3));
     g.setAttribute('aGlow', new THREE.BufferAttribute(cat('glow', 1), 1));
+    g.setAttribute('aEdge', new THREE.BufferAttribute(cat('edge', 1), 1));   // 1707490932017279035 纯纹理灌木：到崖边距离
+    g.setAttribute('aBand', new THREE.BufferAttribute(cat('band', 1), 1));   // 第 99 轮：逐三角灌木带宽倍率（shrub-band.js）
     g.setAttribute('normal', new THREE.BufferAttribute(cat('normal', 3), 3));
+    g.setAttribute('aMountainTone',new THREE.BufferAttribute(bakeNormalLight(g.getAttribute('normal').array),1));
     g.setAttribute('aOutline', new THREE.BufferAttribute(cat('outline', 3), 3));
     g.computeBoundingSphere();
     this.geometry = g;
     this.posts = build.posts;
-    this.garden = { yards: build.yardCells, paths: build.pathCells };
+    this.garden = { yards: build.yardCells, paths: build.pathCells, openings: build.yardOpenings };
     this.chimneys = build.chimneys;   // 给植被层（后院灌木、小花）
-    this.buildStats = { modules: build.modules, doors: build.doors };   // 用到几种拼图块、开了几扇门
+    this.buildStats = { decoPlacements:build.decoPlacements,decoDrawn:build.decoDrawn,decoDropped:build.decoDropped,archBudgets:build.archBudgets, modules: build.modules, doors: build.doors, decorationGroups: build.decorationGroups, decoSolved:build.decoSolved,decoFailures:build.decoFailures,archCount:build.archCount, archSegments:build.archSegments };   // 用到几种拼图块、开了几扇门
 
     // 4. 岸浪要不要重建：陆地（第 1 层实心）、钢柱、海岸切面形状
     let land = '';

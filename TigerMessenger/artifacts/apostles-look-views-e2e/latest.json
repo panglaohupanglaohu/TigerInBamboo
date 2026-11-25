@@ -1,0 +1,52 @@
+{
+  "dir": "artifacts/apostles-look-views-e2e/run-1795514865996",
+  "at": 1795514988410,
+  "pass": true,
+  "looks": {
+    "approved": {
+      "views": [
+        {
+          "view": "overview",
+          "file": "approved-overview.png",
+          "valid": true
+        },
+        {
+          "view": "side",
+          "file": "approved-side.png",
+          "valid": true
+        },
+        {
+          "view": "top",
+          "file": "approved-top.png",
+          "valid": true
+        },
+        {
+          "view": "cliff-foot",
+          "file": "approved-cliff-foot.png",
+          "valid": true
+        }
+      ],
+      "surface": {
+        "status": "warn",
+        "totals": {
+          "masses": 6,
+          "considered": 97176,
+          "inverted": 0,
+          "openEdges": 80000,
+          "transparentRock": 0,
+          "plants": 1580,
+          "plantBad": 33,
+          "foam": 9556,
+          "foamStray": 2,
+          "coast": 2880,
+          "foamUncovered": 0,
+          "plantBadShare": 0.0209,
+          "foamStrayShare": 0.0002,
+          "foamUncoveredShare": 0
+        }
+      },
+      "error": null
+    }
+  },
+  "regressions": {}
+}

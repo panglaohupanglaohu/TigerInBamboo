@@ -1,0 +1,44 @@
+// 山形进化墙端到端：高山圣城 → 繁殖第 1 代 → 点一座看实景 → 留种 2 座 → 繁殖第 2 代 → 回到原山。隔离浏览器，不采用。
+import {createRequire} from 'node:module';import fs from 'node:fs';import path from 'node:path';
+const require=createRequire(import.meta.url),{chromium}=require('/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+const out=path.resolve('artifacts/mountain-evolve-e2e/run-'+Date.now());fs.mkdirSync(out,{recursive:true});
+const report={out,steps:{},errors:[]};
+const browser=await chromium.launch({headless:true,executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',args:['--mute-audio']});
+const page=await (await browser.newContext({viewport:{width:1600,height:1100}})).newPage();
+page.on('pageerror',e=>report.errors.push('pageerror: '+e.message));page.on('console',m=>{if(m.type()==='error')report.errors.push('console: '+m.text().slice(0,240));});
+const wall='#mountain-evolve',cards=()=>page.evaluate(()=>[...document.querySelectorAll('#mountain-evolve .ev-card')].map(c=>({id:c.dataset.id,bad:c.classList.contains('bad'),score:c.querySelector('.ev-score').textContent,tag:c.querySelector('.ev-tag').textContent,meta:c.querySelector('.ev-meta').textContent.slice(0,90)})));
+const gameCmd=(action,payload={})=>page.evaluate(([a,pl])=>new Promise(res=>{const id=Math.random().toString(36).slice(2);const h=e=>{if(e.data?.type==='tm.pipeline.reply'&&e.data.id===id){removeEventListener('message',h);res(e.data.error?{error:e.data.error}:e.data.result);}};addEventListener('message',h);document.querySelector('iframe').contentWindow.postMessage({type:'tm.pipeline.command',id,action:a,payload:pl},location.origin);setTimeout(()=>res({timeout:true}),20000);}),[action,payload]);
+try{
+ await page.goto('http://localhost:8931/TigerMessenger/pipeline.html#scene');
+ await page.waitForFunction(()=>document.querySelector('#connection')?.textContent.includes('游戏已连接'),{},{timeout:300000});
+ await page.waitForFunction(()=>[...document.querySelectorAll('#scene option')].some(o=>o.value==='citadel'),{},{timeout:90000});
+ await page.locator('#scene').selectOption('citadel');
+ await page.waitForSelector(wall,{state:'visible',timeout:120000});
+ const frame=page.frames().find(f=>f.url().includes('index.html'));await frame.waitForFunction(()=>!!globalThis.__tm?.scene,{},{timeout:300000});
+ await page.screenshot({path:path.join(out,'0-before.png')});
+ const t0=Date.now();await page.locator(wall+' button.primary').click();
+ await page.waitForFunction(()=>document.querySelector('#mountain-evolve')?.dataset.generation==='1',{},{timeout:300000});
+ report.steps.gen1Seconds=Math.round((Date.now()-t0)/1000);report.steps.gen1=await cards();
+ await page.locator(wall).scrollIntoViewIfNeeded();await page.locator(wall).screenshot({path:path.join(out,'1-wall-gen1.png')});
+ const good=report.steps.gen1.filter(c=>!c.bad).sort((a,b)=>+b.score-+a.score);if(good.length<2)throw Error('第 1 代通过硬检查的不足 2 座');
+ await page.locator(`${wall} .ev-card[data-id="${good[0].id}"] canvas`).click();
+ await page.waitForSelector(wall+' .ev-card.live',{timeout:120000});await page.waitForTimeout(2500);
+ report.steps.previewState=await gameCmd('mountain.state');report.steps.status1=await page.locator('#status').textContent();
+ await page.screenshot({path:path.join(out,'2-scene-best-gen1.png'),fullPage:true});
+ for(const c of good.slice(0,2))await page.locator(`${wall} .ev-card[data-id="${c.id}"] .ev-star`).click();
+ report.steps.seeded=await page.locator(wall+' .ev-card.seed').count();
+ await page.locator(wall+' button.primary').click();
+ await page.waitForFunction(()=>document.querySelector('#mountain-evolve')?.dataset.generation==='2',{},{timeout:300000});
+ report.steps.gen2=await cards();report.steps.lineage=await page.locator(wall+' .ev-line').textContent();
+ await page.locator(wall).screenshot({path:path.join(out,'3-wall-gen2.png')});
+ const good2=report.steps.gen2.filter(c=>!c.bad).sort((a,b)=>+b.score-+a.score);
+ const child=good2.find(c=>c.tag==='后代')||good2[0];
+ await page.locator(`${wall} .ev-card[data-id="${child.id}"] canvas`).click();await page.waitForTimeout(3000);
+ await page.screenshot({path:path.join(out,'4-scene-gen2.png'),fullPage:true});
+ report.steps.taste=await page.evaluate(()=>JSON.parse(localStorage.getItem('tm.mountain.taste.v1')||'[]').length);
+ await page.locator(wall+' button',{hasText:'回到原山'}).click();await page.waitForTimeout(1500);
+ report.steps.afterRevert=await gameCmd('mountain.state');report.steps.adopted=await page.evaluate(()=>Object.keys(localStorage).filter(k=>k.startsWith('tm.mountain.adopted')));
+ const b1=Math.max(...good.map(c=>+c.score)),b2=Math.max(...good2.map(c=>+c.score));report.steps.best=[b1,b2];
+ report.pass=report.steps.gen1.length===12&&report.steps.gen2.length===12&&report.steps.seeded===2&&report.steps.previewState?.previewing===true&&b2>=b1&&report.steps.gen2.filter(c=>c.tag==='上代留种').length===2&&report.steps.adopted.length===0&&!report.errors.length;
+}catch(e){report.pass=false;report.failure=String(e.stack||e).slice(0,900);try{await page.screenshot({path:path.join(out,'fail.png'),fullPage:true});}catch{}}
+fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,1));console.log(JSON.stringify(report,null,1).slice(0,5000));await browser.close();process.exit(report.pass?0:1);

@@ -1,0 +1,26 @@
+{
+ "capability": "building.prefabs",
+ "line": "tools",
+ "schemaVersion": 1,
+ "pass": true,
+ "basis": "本能力在合成高度场考场（building.json）真实跑过 match→run，成绩见共享表——判定规则写在表头，不手改。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/arena/building.json#building.prefabs",
+ "runner": "TigerMessenger/tools/refactor/record-building-arena.mjs（实算）",
+ "test": "TigerMessenger/tests/building-pipeline.test.mjs",
+ "arena": {
+  "fixture": "18×18 高度场"
+ },
+ "result": {
+  "verdict": "擂过",
+  "targets": 1,
+  "applied": 1,
+  "planKeys": [
+   "prefabs"
+  ],
+  "layout": 0,
+  "changed": 1,
+  "error": null,
+  "ms": 0
+ },
+ "recordedAt": "2026-11-25"
+}

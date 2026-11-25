@@ -1,0 +1,240 @@
+{
+ "schemaVersion": 1,
+ "date": "2026-11-25",
+ "generatedAt": "2026-11-24T18:24:48.967Z",
+ "dir": "artifacts/nightly/2026-11-25",
+ "report": "artifacts/nightly/2026-11-25/morning-report.md",
+ "json": "artifacts/nightly/2026-11-25/morning-report.json",
+ "headline": {
+  "newCapabilities": 12,
+  "lineUp": 9,
+  "lineDown": 0,
+  "better": 1,
+  "worse": 0,
+  "first": false
+ },
+ "newCapabilities": [
+  {
+   "id": "life.animals",
+   "name": "小动物（导航面流动）",
+   "line": "animals",
+   "label": "L7（缺 ④⑥）"
+  },
+  {
+   "id": "life.plant-atlas",
+   "name": "植物图集（全场景共用）",
+   "line": "plants",
+   "label": "L7（缺 ④⑥）"
+  },
+  {
+   "id": "life.smoke",
+   "name": "烟（烟囱）",
+   "line": "smoke",
+   "label": "L7（缺 ④⑥）"
+  },
+  {
+   "id": "life.wind",
+   "name": "风",
+   "line": "wind",
+   "label": "L7（缺 ④⑥）"
+  },
+  {
+   "id": "light.bounce",
+   "name": "彩色反弹 · 多跳",
+   "line": "light",
+   "label": "L7（缺 ⑥）"
+  },
+  {
+   "id": "light.megatex",
+   "name": "大纹理（一张图集）",
+   "line": "atlas",
+   "label": "L7（缺 ⑥）"
+  },
+  {
+   "id": "light.voxel-ao",
+   "name": "体素遮蔽（AO）",
+   "line": "shadows",
+   "label": "L7（缺 ⑥）"
+  },
+  {
+   "id": "scene.plateau-diag",
+   "name": "台地诊断（同高片 · 逻辑阶差面积）",
+   "line": "grid",
+   "label": "L7（缺 ④⑥）"
+  }
+ ],
+ "lineChanges": [
+  {
+   "line": "grid",
+   "name": "网格",
+   "from": 6,
+   "to": 7,
+   "up": true
+  },
+  {
+   "line": "light",
+   "name": "光照",
+   "from": 6,
+   "to": 7,
+   "up": true
+  },
+  {
+   "line": "shadows",
+   "name": "阴影",
+   "from": 3,
+   "to": 7,
+   "up": true
+  },
+  {
+   "line": "plants",
+   "name": "植被",
+   "from": 5,
+   "to": 7,
+   "up": true
+  },
+  {
+   "line": "atlas",
+   "name": "精灵表示",
+   "from": 5,
+   "to": 7,
+   "up": true
+  },
+  {
+   "line": "wind",
+   "name": "共享风",
+   "from": 5,
+   "to": 7,
+   "up": true
+  },
+  {
+   "line": "navigation",
+   "name": "导航",
+   "from": 6,
+   "to": 7,
+   "up": true
+  },
+  {
+   "line": "smoke",
+   "name": "烟火",
+   "from": 6,
+   "to": 7,
+   "up": true
+  }
+ ],
+ "metricDeltas": [
+  {
+   "key": "fx:sediment-variety",
+   "goal": "fx",
+   "name": "层带宽度变异系数",
+   "scene": "合成舞台",
+   "from": 0.293,
+   "to": 0.354,
+   "delta": 0.061,
+   "better": true,
+   "threshold": 0.3,
+   "direction": "min"
+  }
+ ],
+ "tests": {
+  "drift": null,
+  "unit": null
+ },
+ "tree": {
+  "lines": 27,
+  "fruit": 27,
+  "frontier": [],
+  "executablesUnique": 85,
+  "goals": 7
+ },
+ "steps": [
+  {
+   "id": "r1",
+   "label": "① 原版逐文件状态",
+   "status": "pass"
+  },
+  {
+   "id": "r2",
+   "label": "② 系统目录",
+   "status": "pass"
+  },
+  {
+   "id": "r3",
+   "label": "③ 重构库扫描",
+   "status": "pass"
+  },
+  {
+   "id": "r4",
+   "label": "④ 场景依赖扫描",
+   "status": "pass"
+  },
+  {
+   "id": "jev",
+   "label": "JEV 归线（§5.4）",
+   "status": "skipped"
+  },
+  {
+   "id": "r5",
+   "label": "⑤ 能力谱系",
+   "status": "pass"
+  },
+  {
+   "id": "goals",
+   "label": "目标路径各跑一次（Node，进程内）",
+   "status": "pass"
+  },
+  {
+   "id": "r6",
+   "label": "⑥ 补学队列（含指标差距分）",
+   "status": "pass"
+  },
+  {
+   "id": "r7",
+   "label": "⑦ 九级成熟度",
+   "status": "pass"
+  }
+ ],
+ "goals": [
+  {
+   "id": "battle",
+   "name": "场景战役：Bad North 玩法层",
+   "status": "run",
+   "verify": "warn"
+  },
+  {
+   "id": "mountain",
+   "name": "圣城山形：有山的模样",
+   "status": "run",
+   "verify": "pass"
+  },
+  {
+   "id": "fx",
+   "name": "fx",
+   "status": "run",
+   "verify": "pass"
+  },
+  {
+   "id": "apostles-terrain",
+   "name": "apostles-terrain",
+   "status": "run",
+   "verify": "pass"
+  },
+  {
+   "id": "lightlife",
+   "name": "lightlife",
+   "status": "run",
+   "verify": "pass"
+  },
+  {
+   "id": "building",
+   "name": "building",
+   "status": "run",
+   "verify": "warn"
+  },
+  {
+   "id": "relief",
+   "name": "relief",
+   "status": "run",
+   "verify": "pass"
+  }
+ ]
+}

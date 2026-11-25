@@ -1,0 +1,10 @@
+{
+  "res": {
+    "error": "Cannot read properties of undefined (reading 'add')",
+    "stack": "TypeError: Cannot read properties of undefined (reading 'add')\n    at new ReaBattleStage (http://localhost:8931/TigerMessenger/src/world/rea/reaBattleStage.js:57:11)\n    at Module.startSceneBattle (http://localhost:8931/TigerMessenger/src/world/rea/sceneBattle.js:23:17)\n    at eval (eval at evaluate (:311:30), <anonymous>:5:13)\n    at async <anonymous>:337:30"
+  },
+  "snap": {
+    "stage": false
+  },
+  "errors": []
+}

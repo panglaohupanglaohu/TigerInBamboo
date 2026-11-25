@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>四档视图 — flat texture / shaded / lighting only / AO mesh</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:104px; right:340px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; object-fit:contain; border-radius:9px;
+    border:1px solid var(--line); background:#dfe8e7; }
+  #panel { position:fixed; right:12px; top:104px; width:316px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:6px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>同一座塔的四档看穿：flat texture / shaded / lighting only / AO baking mesh</h1>
+  <p>原文 <b>1298689301488775169</b>（2020-08-26）："Flat texture, shaded, lighting only, and my AO baking mesh."
+  —— 四档的<b>名字和顺序</b>是原文给的，其余全从画面来：片子是一块调试 UI（右上四个图标：方 / 圆 / 太阳 / 叠层），
+  24 帧里整幅平均亮度只在 <b>131.0–132.4</b>、饱和度 <b>0.365–0.373</b> 之间动（1.06% / 0.008），
+  帧差热力图显示变化的像素集中在<b>朝上的面</b>——所以四档换的是"光怎么落"，不是"色相怎么变"。
+  <br /><b>已知差异（不修）</b>：片子里四档饱和度都掉不下来（0.37 附近），说明他的 "lighting only" 并没有把画面变灰；
+  本页的 light 档是纯灰度，饱和度会掉到 ~0.02。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>① flat texture</b> —— 只有贴图色，面内零梯度</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span><b>② shaded</b> —— 光 × 顶点 AO（3×3 细分出渐变）</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>③ lighting only</b> —— 只印照明项（灰度）</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span><b>④ AO baking mesh</b> —— AO 灰度 + 唯一棱集的 1px 网格</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 同一块墙的面内 std（取 flat 档最长同色游程）</h2>
+  <div class="row" id="rFlatA"><span>① flat texture</span><b>—</b></div>
+  <div class="row" id="rFlatB"><span>② shaded</span><b>—</b></div>
+  <div class="row" id="rFlatRatio"><span>② / ① 倍数</span><b>—</b></div>
+  <hr />
+  <h2>反测 · 整幅统计</h2>
+  <div class="row" id="rLum"><span>四档亮度极差</span><b>—</b></div>
+  <div class="row" id="rSat"><span>③ 档饱和度</span><b>—</b></div>
+  <div class="row" id="rDark"><span>④ 档深色线覆盖</span><b>—</b></div>
+  <hr />
+  <h2>同机位 A/B（同几何同相机，只差一档）</h2>
+  <div class="row" id="dAB"><span>② shaded / ① flat</span><b>—</b></div>
+  <div class="row" id="dAC"><span>③ light / ① flat</span><b>—</b></div>
+  <div class="row" id="dBD"><span>④ mesh / ② shaded</span><b>—</b></div>
+  <hr />
+  <h2>片子对照</h2>
+  <div class="row"><span>片中 24 帧亮度</span><b>131.0 – 132.4</b></div>
+  <div class="row"><span>片中 24 帧饱和度</span><b>0.365 – 0.373</b></div>
+  <div class="row"><span>片中变化集中在</span><b>朝上的面</b></div>
+  <hr />
+  <p style="margin:0;font-size:11px;color:var(--muted)">几何只是量测台架：一座 4×4 平台上的三层塔 + 三条悬挑，
+  够让顶点 AO 在墙根 / 悬挑下方压出明暗，也够让四档的差别落在朝上的面上。</p>
+</div>
+
+<script type="module">
+import * as VM from './src/viewmodes.js';
+
+const S = 2;
+const CW = 340, CH = 330;
+
+function setup(id) {
+  const cv = document.getElementById(id);
+  cv.width = CW * S; cv.height = CH * S;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  return { cv, ctx };
+}
+
+const voxels = VM.buildTower();
+const cam = VM.makeCam({ cx: (CW / 2) * S, cy: 105 * S, p: 28, hz: 26, scale: S });
+const BG = [216, 226, 225];
+
+const cells = {
+  albedo: setup('cvA'),
+  shaded: setup('cvB'),
+  light: setup('cvC'),
+  aomesh: setup('cvD'),
+};
+
+for (const [mode, c] of Object.entries(cells)) {
+  VM.paintTower(c.ctx, { voxels, cam, mode, scale: S, bg: BG, sub: mode === 'albedo' ? 1 : VM.MEASURED.sub });
+}
+
+const setRow = (id, val, ok) => {
+  const el = document.getElementById(id);
+  el.querySelector('b').textContent = val;
+  el.className = 'row' + (ok === true ? ' good' : ok === false ? ' bad' : '');
+};
+
+/* 找几面墙来量：
+ * flat 档面内是纯色，所以"同色水平游程"一定落在某个面里。把这些长游程当候选矩形，
+ * 逐个去两个档里量同一块区域的 std。
+ *   · flat 档：所有候选都该是 0.00（这就是"面内零梯度"的定义）；
+ *   · shaded 档：只有被遮住的那几面墙会有渐变，所以取候选里**最大**的那个。
+ * 不能只取最长的一条：最长的那条往往落在顶平台，而平台四面全受光，两档都是 0，
+ * 于是"两档一样平"——第一版就是这么得出 0.00 / 0.00 的。
+ */
+function runs(c) {
+  const W = c.cv.width, H = c.cv.height;
+  const d = c.ctx.getImageData(0, 0, W, H).data;
+  const out = [];
+  for (let y = 40; y < H - 40; y += 2) {
+    let x = 0;
+    while (x < W) {
+      const i = (y * W + x) * 4;
+      const r = d[i], g = d[i + 1], b = d[i + 2];
+      let e = x + 1;
+      while (e < W) {
+        const j = (y * W + e) * 4;
+        if (d[j] !== r || d[j + 1] !== g || d[j + 2] !== b) break;
+        e++;
+      }
+      // ⚠ 背景那一片也是"同色大游程"，不排掉的话所有候选都落在背景上，
+      //   两档当然都是 0.00 —— 又是"看起来量了其实没量"。
+      const isBg = Math.abs(r - BG[0]) < 4 && Math.abs(g - BG[1]) < 4 && Math.abs(b - BG[2]) < 4;
+      if (e - x > 60 && !isBg) out.push({ len: e - x, x, y });
+      x = e;
+    }
+  }
+  return out.sort((a, b) => b.len - a.len);
+}
+const PW = 26, PH = 13;
+const cand = runs(cells.albedo).slice(0, 80);
+let fA = 0, fB = 0, pick = null;
+for (const r of cand) {
+  const px = Math.round(r.x + r.len / 2 - PW / 2);
+  const py = r.y - (PH >> 1);
+  if (px < 2 || py < 2 || px + PW > CW * S - 2 || py + PH > CH * S - 2) continue;
+  const a = VM.probePatch(cells.albedo.ctx, px, py, PW, PH).std;
+  // 只在 flat 档确认"这一块是纯色"的位置取样，否则量到的是两个面的接缝
+  if (a > 0.8) continue;
+  const b = VM.probePatch(cells.shaded.ctx, px, py, PW, PH).std;
+  fA = Math.max(fA, a);
+  if (b > fB) { fB = b; pick = { x: px, y: py, a, b }; }
+}
+const ratio = fB / Math.max(0.05, fA);
+setRow('rFlatA', fA.toFixed(2), fA < 0.6);
+setRow('rFlatB', fB.toFixed(2), fB > 2);
+setRow('rFlatRatio', ratio.toFixed(1) + '×', ratio > 2);
+document.getElementById('rFlatA').previousElementSibling.textContent =
+  '① flat texture（' + PW + '×' + PH + ' 纯色块）';
+
+const p = {};
+for (const [k, c] of Object.entries(cells)) p[k] = VM.probeFrame(c.ctx);
+const lums = Object.values(p).map((x) => x.lum);
+const spread = 100 * (Math.max(...lums) - Math.min(...lums)) / (lums.reduce((a, b) => a + b, 0) / 4);
+setRow('rLum', spread.toFixed(2) + '%（片子 1.06%）', null);
+setRow('rSat', p.light.sat.toFixed(3), null);
+setRow('rDark', (p.aomesh.dark * 100).toFixed(2) + '%', p.aomesh.dark > 0.005);
+
+const d1 = VM.diffPair(cells.shaded.ctx, cells.albedo.ctx);
+const d2 = VM.diffPair(cells.light.ctx, cells.albedo.ctx);
+const d3 = VM.diffPair(cells.aomesh.ctx, cells.shaded.ctx);
+setRow('dAB', d1.pct.toFixed(2) + '% 像素差 · 均值 ' + d1.mean.toFixed(1), null);
+setRow('dAC', d2.pct.toFixed(2) + '% 像素差 · 均值 ' + d2.mean.toFixed(1), null);
+setRow('dBD', d3.pct.toFixed(2) + '% 像素差 · 均值 ' + d3.mean.toFixed(1), null);
+
+window.__probe = { pick, flatA: fA, flatB: fB, lumSpread: spread, p, d1, d2, d3 };
+window.__ready = true;
+</script>
+</body>
+</html>

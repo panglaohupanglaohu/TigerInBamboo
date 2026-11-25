@@ -69,6 +69,39 @@ export function areaStats(quads, posOf) {
   return { quads: quads.length, min, max, flipped, under };
 }
 
+const qtl = (a, p) => { if (!a.length) return NaN; const s = [...a].sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.max(0, Math.round((s.length - 1) * p)))]; };
+const mean = (a) => a.reduce((s, x) => s + x, 0) / (a.length || 1);
+const cv = (a) => { const m = mean(a); return m ? Math.sqrt(mean(a.map((x) => (x - m) ** 2))) / m : 0; };
+
+/**
+ * 块内疏密均匀度（第 135 轮，1151137783785771008 的「块内疏密均匀度指标」）：
+ * 对窗口内每块已最终化的格子量「面积 / 原始点阵面积」与边长，给出
+ *   - area：p10/p50/p90、p90/p10、CV  → 格子大小差多少
+ *   - edge：边长 p50 与 CV
+ *   - between / within：块均值的离散 vs 块内离散 → 块边界有没有「块与块疏密不同」的痕迹
+ * 只用最终化位置（P.pos），不重算任何几何；空窗口返回 null。
+ */
+export function densityStats(win) {
+  const ratios = [], edges = [], patchMeans = [], patchCvs = [];
+  for (const P of win.finals) {
+    const rs = [];
+    for (const q of P.quads) {
+      const pts = q.map((v) => P.pos.get(v.id) || [v.x0, v.z0]);
+      const a = signedArea(pts.map((p) => ({ x: p[0], z: p[1] }))), a0 = Math.abs(signedArea(q.map((v) => ({ x: v.x0, z: v.z0 }))));
+      if (a0 > 0) rs.push(a / a0);
+      for (let i = 0; i < 4; i++) { const p = pts[i], o = pts[(i + 1) % 4]; edges.push(Math.hypot(p[0] - o[0], p[1] - o[1])); }
+    }
+    if (rs.length) { ratios.push(...rs); patchMeans.push(mean(rs)); patchCvs.push(cv(rs)); }
+  }
+  if (!ratios.length) return null;
+  return {
+    quads: ratios.length, patches: patchMeans.length,
+    area: { p10: qtl(ratios, .1), p50: qtl(ratios, .5), p90: qtl(ratios, .9), min: Math.min(...ratios), max: Math.max(...ratios), span: qtl(ratios, .9) / qtl(ratios, .1), cv: cv(ratios), flipped: ratios.filter((r) => r <= 0).length },
+    edge: { p50: qtl(edges, .5), cv: cv(edges) },
+    within: mean(patchCvs), between: cv(patchMeans), patchMeans,
+  };
+}
+
 /**
  * 面积回拉：每格按 sqrt(原始面积/当前面积) 绕自己形心缩放一点，共享点取平均；块边界点（rim）钉住 →
  * 两侧块各自处理也不会出缝，流式最终化结果仍与顺序无关。返回新的位置 Map，不改输入。

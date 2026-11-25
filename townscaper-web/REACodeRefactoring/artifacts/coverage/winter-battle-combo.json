@@ -1,0 +1,149 @@
+{
+ "checks": [
+  {
+   "name": "冬季主题真应用（bnTheme.sky=#c4c7cb）",
+   "ok": true,
+   "detail": "{\"themeValue\":\"winter\",\"bnSky\":\"#c4c7cb\",\"bg\":\"#c4c7cb\",\"uSnow\":1,\"snowVisible\":true,\"snowN\":3000}"
+  },
+  {
+   "name": "场景背景换成冬季天色",
+   "ok": true,
+   "detail": "#c4c7cb"
+  },
+  {
+   "name": "雪粒子开 + 表面混白 uSnow=1",
+   "ok": true,
+   "detail": "{\"themeValue\":\"winter\",\"bnSky\":\"#c4c7cb\",\"bg\":\"#c4c7cb\",\"uSnow\":1,\"snowVisible\":true,\"snowN\":3000}"
+  },
+  {
+   "name": "冬景植被覆盖：带 emissive 的植被材质真挂霜",
+   "ok": true,
+   "detail": "{\"emissiveMaterials\":5,\"frosted\":5,\"sample\":{\"before\":\"#0\",\"now\":\"#a7adb5\"}}"
+  },
+  {
+   "name": "3000 雪粒在位、位置有限、有透明度",
+   "ok": true,
+   "detail": "{\"live\":3000,\"bad\":0,\"n\":3000}"
+  },
+  {
+   "name": "同一时刻五类齐：≥2 船在场",
+   "ok": true,
+   "detail": "2 船（t=29s 第2波）"
+  },
+  {
+   "name": "士兵同屏：守军旗帜可见 + 维京人上岸",
+   "ok": true,
+   "detail": "旗 3 / 岸上维京 7 / 守军 24"
+  },
+  {
+   "name": "血迹：真近战留下血泊与击杀",
+   "ok": true,
+   "detail": "blood.count=3 kills=1 尸体=1"
+  },
+  {
+   "name": "黑烟：小屋失守 → 烟源 + 烟卡真在画",
+   "ok": true,
+   "detail": "src=1 cards=26 失守=1"
+  },
+  {
+   "name": "火光同步（showFire + fireSources）",
+   "ok": true,
+   "detail": "true"
+  },
+  {
+   "name": "防线移动令真实下达（导航可达格）",
+   "ok": true,
+   "detail": "{\"t\":20.7,\"cell\":671,\"doorDist\":5.74}"
+  },
+  {
+   "name": "冻结帧同状态噪声 0（验收真冻结）",
+   "ok": true,
+   "detail": "0 px"
+  },
+  {
+   "name": "雪层开/关在画面上可分（粒子 + 表面混白）",
+   "ok": true,
+   "detail": "155584 px（1440×1000）"
+  },
+  {
+   "name": "雪 关→开 回位 0",
+   "ok": true,
+   "detail": "0 px"
+  },
+  {
+   "name": "组合帧有深红血像素（原片红色血迹同屏）",
+   "ok": true,
+   "detail": "2151 px"
+  },
+  {
+   "name": "烟柱投影带比冬季天空暗（黑烟真在画面里）",
+   "ok": true,
+   "detail": "{\"dark\":17332,\"n\":17380,\"median\":110,\"src\":[-1.3466791366612891,1.9000000000000001,3.6959874541631312]}"
+  },
+  {
+   "name": "无 console error",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "state": {
+  "winter": {
+   "themeValue": "winter",
+   "bnSky": "#c4c7cb",
+   "bg": "#c4c7cb",
+   "uSnow": 1,
+   "snowVisible": true,
+   "snowN": 3000
+  },
+  "combo": {
+   "t": 29,
+   "wave": 2,
+   "boats": 2,
+   "boatsNearShore": 1,
+   "vikAshore": 7,
+   "vikOnBoat": 10,
+   "defAlive": 24,
+   "flagsVisible": 3,
+   "corpses": 1,
+   "blood": 3,
+   "kills": 1,
+   "smokeSrc": 1,
+   "smokeCards": 26,
+   "housesLost": 1,
+   "fire": true,
+   "met": true,
+   "redirectedAt": {
+    "t": 20.7,
+    "cell": 671,
+    "doorDist": 5.74
+   }
+  }
+ },
+ "pixels": {
+  "w": 1440,
+  "h": 1000,
+  "noise": 0,
+  "snowDiff": 155584,
+  "restored": 0,
+  "bloodPx": 2151,
+  "plume": {
+   "dark": 17332,
+   "n": 17380,
+   "median": 110,
+   "src": [
+    -1.3466791366612891,
+    1.9000000000000001,
+    3.6959874541631312
+   ]
+  }
+ },
+ "frost": {
+  "emissiveMaterials": 5,
+  "frosted": 5,
+  "sample": {
+   "before": "#0",
+   "now": "#a7adb5"
+  }
+ },
+ "errors": []
+}

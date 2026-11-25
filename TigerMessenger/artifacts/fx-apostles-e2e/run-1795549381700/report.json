@@ -1,0 +1,38 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/fx-apostles-e2e/run-1795549381700",
+  "steps": {},
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "capabilities": [
+    {
+      "id": "fx.campaign"
+    },
+    {
+      "id": "fx.camera"
+    },
+    {
+      "id": "fx.wake"
+    },
+    {
+      "id": "fx.ornament"
+    },
+    {
+      "id": "fx.fire"
+    },
+    {
+      "id": "fx.hallway"
+    },
+    {
+      "id": "fx.sediment"
+    },
+    {
+      "id": "fx.projectiles"
+    },
+    {
+      "id": "fx.replay"
+    }
+  ],
+  "pass": false,
+  "failure": "page.waitForFunction: Target page, context or browser has been closed\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-apostles-browser.mjs:17:13"
+}

@@ -36,6 +36,8 @@ export class World {
   reset() {
     this.solid.fill(0); this.rock.fill(0); this.color.fill(-1); this.river.fill(0);
     if (this.splicedHouses) this.splicedHouses.clear();   // 嵌入房子（build/splice.js）随地形一起清
+    if (this.houseInstances) this.houseInstances.clear(); // 多格实例身份（build/multicell.js）也一起清
+    this.saveMeta = null;   // save.js 解码出的视图侧状态注解，地形清空后不再属于任何存档
     this.touch();
   }
 
@@ -118,13 +120,17 @@ export class World {
 
   /* ---- 快照（撤销栈用） --------------------------------------------------- */
   // spliced：嵌入房子覆盖层（1584623053061099520，build/splice.js）随撤销栈一起存/恢复；没有时为 null。
+  // house：多格实例登记（1579483114178768898，build/multicell.js），id → 冻结回执或移除留洞。
+  //   跟着同一个快照走 = 撤销/重做一条目恢复体素和实例身份，不再要页面另记一份平行账。
   snapshot() {
     const spliced = this.splicedHouses?.size ? [...this.splicedHouses].sort((a, b) => a[0] - b[0]).map(([id, h]) => [id, { ...h }]) : null;
-    return { solid: this.solid.slice(), rock: this.rock.slice(), color: this.color.slice(), river: this.river.slice(), spliced };
+    const house = this.houseInstances?.size ? [...this.houseInstances].sort((a, b) => String(a[0]).localeCompare(String(b[0]))).map(([id, e]) => [id, e]) : null;
+    return { solid: this.solid.slice(), rock: this.rock.slice(), color: this.color.slice(), river: this.river.slice(), spliced, house };
   }
   restore(s) {
     this.solid.set(s.solid); this.rock.set(s.rock); this.color.set(s.color); this.river.set(s.river);
     if ('spliced' in s) this.splicedHouses = s.spliced ? new Map(s.spliced.map(([id, h]) => [id, { ...h }])) : null;
+    if ('house' in s) this.houseInstances = s.house ? new Map(s.house.map(([id, e]) => [id, e])) : null;
     this.touch();
   }
 }

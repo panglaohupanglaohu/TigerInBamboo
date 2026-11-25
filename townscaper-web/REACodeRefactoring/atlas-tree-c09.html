@@ -9,7 +9,7 @@ import { Atlas } from './src/core/atlas.js';
 import { treeLayers, armFromTrace, placeBottomLeft, project3D, atlasRng } from './src/core/atlas-c09.js';
 const Q = new URLSearchParams(location.search), num = (k, d) => Q.has(k) ? +Q.get(k) : d;
 const S = 512, cv = document.querySelector('#cv'), g = cv.getContext('2d');
-const st = { atlas: new Atlas(S, S), live: [], colors: new Map(), rng: atlasRng(num('seed', 7)), mode: Q.get('view') === '3d' ? '3d' : 'arm', last: null, removing: Q.get('remove') === '1', fails: 0, yaw: num('yaw', 35) * Math.PI / 180, pitch: num('pitch', 38) * Math.PI / 180, fingerLog: [] };
+const st = { atlas: new Atlas(S, S), live: [], colors: new Map(), rng: atlasRng(num('seed', 7)), mode: Q.get('view') === '3d' ? '3d' : 'arm', last: null, removing: Q.get('remove') === '1', showArm: Q.get('arm') !== '0', fails: 0, yaw: num('yaw', 35) * Math.PI / 180, pitch: num('pitch', 38) * Math.PI / 180, fingerLog: [] };
 function size() { const k = Math.min(innerWidth, innerHeight); cv.width = cv.height = k; }
 size(); addEventListener('resize', () => { size(); draw(); });
 function step() {
@@ -28,9 +28,13 @@ function draw() {
     const m = k * .1, sc = (k - 2 * m) / S, X = (x) => m + x * sc, Y = (y) => k - m - y * sc;
     g.fillStyle = '#3d3b4a'; g.fillRect(0, 0, k, k);
     for (const r of st.live) { g.fillStyle = st.colors.get(r) || '#666'; g.globalAlpha = .85; g.fillRect(X(r.x), Y(r.y + r.h), r.w * sc, r.h * sc); }
-    g.globalAlpha = 1; g.strokeStyle = '#121118'; g.lineWidth = 1;
+    g.globalAlpha = 1; g.lineWidth = 1;
+    // 片内 2D 段（0030 原尺寸）：整块板只有一圈深色细框，板内的树线是**浅色**的
+    // —— 每一片叶（含已占格）描一圈 rgba(240,246,244,.55)，空地上才看得出树怎么切的。
+    g.strokeStyle = 'rgba(18,17,24,.85)'; g.strokeRect(X(0) + .5, Y(S) + .5, S * sc, S * sc);
+    g.strokeStyle = 'rgba(240,246,244,.55)';
     for (const n of L.nodes) if (n.leaf) g.strokeRect(X(n.x) + .5, Y(n.y + n.h) + .5, n.w * sc, n.h * sc);
-    if (last) {
+    if (last && st.showArm) {
       g.strokeStyle = '#3ee6f0'; g.lineWidth = 1.6; g.beginPath();
       for (const [x0, y0, x1, y1] of last.arm.segments) { g.moveTo(X(x0), Y(y0)); g.lineTo(X(x1), Y(y1)); }
       g.stroke();
@@ -62,6 +66,9 @@ document.querySelector('#mode').onclick = () => { st.mode = st.mode === 'arm' ? 
 document.querySelector('#play').onclick = () => setPlay(!playing);
 document.querySelector('#step').onclick = () => { setPlay(false); tick(); };
 document.querySelector('#rm').checked = st.removing; document.querySelector('#rm').onchange = (e) => { st.removing = e.target.checked; };
-window.atlasTree = { st, step, draw, treeLayers: () => treeLayers(st.atlas), armOf: () => st.last && armFromTrace(st.last.trace) };
+window.atlasTree = { st, step, draw, treeLayers: () => treeLayers(st.atlas), armOf: () => st.last && armFromTrace(st.last.trace), project3D,
+  // 探针：某次放置的槽覆盖了整棵树的哪几片叶子（跨叶放置 = 一个槽吃掉 ≥2 片 free 叶）
+  leavesInSlot: (slot) => treeLayers(st.atlas).nodes.filter((n) => n.leaf && n.x >= slot.x && n.y >= slot.y && n.x + n.w <= slot.x + slot.w && n.y + n.h <= slot.y + slot.h),
+  canvas: () => cv };
 draw(); setPlay(playing);
 </script></html>

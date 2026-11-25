@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>草地地块 — 格子并集 + 内缩路缘环</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:104px; right:340px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; object-fit:contain; border-radius:9px;
+    border:1px solid var(--line); background:#cfd6d5; }
+  #panel { position:fixed; right:12px; top:104px; width:316px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:6px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>草地地块：连通格子并成一块，外圈压 5px 浅路缘，最外 1px 深描线</h1>
+  <p>原文 <b>1178731576982724611</b>（2019-09-30）："I made some grassy plots. I'm real happy with the shapes they make."
+  —— 原文只说两件事：是 <b>plot</b>（地块，不是一格一块草）、他满意的是 <b>shape</b>。路缘和描线画面里没提，是量出来的：
+  横穿一块地（y=254）的顺序是 <b>铺地 (128,127,124) → 1px 近黑描线 → 5px 浅路缘 (156,155,149) → 1px 暗缝 (91,88,66) → 草 (115,114,80)</b>。
+  下排是三种错法，右面板把渲染结果再量一遍。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>① 正确</b> 并集边界 + 内缩路缘环 + 屏幕空间圆角</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span><b>② 错法：stroke 原折线</b> 路缘一半落到地块外、描线被盖住</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>③ 错法：只填草</b> 没有路缘也没有描线</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span><b>④ 错法：不磨圆</b> 凹口和折角全是尖的</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 环带游程（目标 描线1 / 路缘5 / 暗缝1）</h2>
+  <div class="row" id="rCurb"><span>路缘宽 px</span><b>—</b></div>
+  <div class="row" id="rOrder"><span>由外向内顺序</span><b>—</b></div>
+  <div class="row" id="rGrass"><span>草面最长游程 px</span><b>—</b></div>
+  <hr />
+  <h2>反测 · 片中占比</h2>
+  <div class="row" id="rPct"><span>草占画面（片中 10.98%）</span><b>—</b></div>
+  <div class="row" id="rCorner"><span>拐角数（圆角后）</span><b>—</b></div>
+  <hr />
+  <h2>同机位 A/B（同格子集合、同相机）</h2>
+  <div class="row" id="dAB"><span>① 正确 / ② stroke</span><b>—</b></div>
+  <div class="row" id="dAC"><span>① 正确 / ③ 只填草</span><b>—</b></div>
+  <div class="row" id="dAD"><span>① 正确 / ④ 不磨圆</span><b>—</b></div>
+  <hr />
+  <p style="margin:0;font-size:11px;color:var(--muted)">格子集合故意做了两个 <b>凹口</b>（下面那块地的左上、右边那块地的下沿）：
+  只有"并集边界"才会把它们保留成楔形缺口；逐格画圆角方块会把凹口填平。</p>
+</div>
+
+<script type="module">
+import * as GP from './src/grassplot.js';
+
+const S = 2;
+const CW = 340, CH = 330;
+
+function setup(id) {
+  const cv = document.getElementById(id);
+  cv.width = CW * S; cv.height = CH * S;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  return { cv, ctx };
+}
+
+/** 用字符串画格子地图：#=地块 */
+function tilesFrom(rows, ox = 0, oy = 0) {
+  const s = new Set();
+  rows.forEach((row, y) => {
+    [...row].forEach((ch, x) => { if (ch === '#') s.add((x + ox) + ',' + (y + oy)); });
+  });
+  return s;
+}
+
+const tiles = new Set([
+  ...tilesFrom([
+    '..####..',
+    '.######.',
+    '########',
+    '.#####..',
+    '..###...',
+  ], 0, 0),
+  ...tilesFrom([
+    '###.',
+    '.###',
+    '..#.',
+  ], 3, 6),
+]);
+
+const cam = GP.makeCam({ cx: (CW / 2) * S - 44, cy: 104 * S, p: 26, scale: S });
+
+const cells = { A: setup('cvA'), B: setup('cvB'), C: setup('cvC'), D: setup('cvD') };
+
+// ① 正确
+GP.paintPlot(cells.A.ctx, { tiles, cam, scale: S, seed: 3 });
+// ② 错法：stroke 原折线
+GP.paintPlot(cells.B.ctx, { tiles, cam, scale: S, naive: true, seed: 3 });
+// ③ 错法：只填草（路缘宽 0、无描线）
+{
+  const m = { ...GP.MEASURED, curbW: 0, seamW: 0, outlineW: 0, cornerRound: 2 };
+  GP.paintPlot(cells.C.ctx, { tiles, cam, scale: S, seed: 3, m });
+}
+// ④ 错法：不磨圆
+{
+  const m = { ...GP.MEASURED, cornerRound: 0 };
+  GP.paintPlot(cells.D.ctx, { tiles, cam, scale: S, seed: 3, m });
+}
+
+const setRow = (id, val, ok) => {
+  const el = document.getElementById(id);
+  el.querySelector('b').textContent = val;
+  el.className = 'row' + (ok === true ? ' good' : ok === false ? ' bad' : '');
+};
+
+// 扫多行找一条真正穿过地块的行：要求顺序里有 描线→路缘
+let best = null;
+for (let y = Math.round(60 * S); y < CH * S - 4; y += 2) {
+  const r = GP.probeRing(cells.A.ctx, y, GP.MEASURED, S);
+  if (r.curbW != null && r.curbW > 1 && r.curbW < 16) { best = r; if (r.curbW > 3.5 && r.curbW < 7) break; }
+}
+if (best) {
+  setRow('rCurb', best.curbW.toFixed(1), best.curbW > 4 && best.curbW < 6.6);
+  setRow('rOrder', best.order.split('').map((k) => ({ o: '描线', c: '路缘', s: '暗缝', g: '草' }[k])).join('→'), best.order === 'ocs');
+  setRow('rGrass', best.grassRun.toFixed(0), best.grassRun > 40);
+} else { setRow('rCurb', '—', false); setRow('rOrder', '—', false); }
+
+// 草占比：按颜色统计
+{
+  const d = cells.A.ctx.getImageData(0, 0, CW * S, CH * S).data;
+  let g = 0, n = 0;
+  for (let i = 0; i < d.length; i += 4) {
+    n++;
+    if (Math.abs(d[i] - 115) < 14 && Math.abs(d[i + 1] - 114) < 14 && Math.abs(d[i + 2] - 80) < 16) g++;
+  }
+  setRow('rPct', ((100 * g) / n).toFixed(1) + '%', null);
+  document.getElementById('rPct').previousElementSibling.textContent = '本页草占比（片中 10.98%）';
+}
+
+// 拐角数：把环上相邻两段的屏幕夹角 > 25° 记一个拐角
+{
+  const segs = GP.plotEdges(tiles);
+  const rings = GP.paintPlot(cells.A.ctx, { tiles, cam, scale: S, seed: 3 });
+  let corners = 0;
+  for (const r of rings.rings) {
+    for (let i = 0; i < r.length; i++) {
+      const a = r[(i - 1 + r.length) % r.length], b = r[i], c = r[(i + 1) % r.length];
+      const v1 = [b[0] - a[0], b[1] - a[1]], v2 = [c[0] - b[0], c[1] - b[1]];
+      const ang = Math.abs(Math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1]));
+      if (ang > 0.44) corners++;
+    }
+  }
+  setRow('rCorner', corners + '（段 ' + segs.length + '）', null);
+}
+
+const d1 = simpleDiff(cells.A.ctx, cells.B.ctx);
+const d2 = simpleDiff(cells.A.ctx, cells.C.ctx);
+const d3 = simpleDiff(cells.A.ctx, cells.D.ctx);
+setRow('dAB', d1.toFixed(2) + '% 像素差', null);
+setRow('dAC', d2.toFixed(2) + '% 像素差', null);
+setRow('dAD', d3.toFixed(2) + '% 像素差', null);
+
+function simpleDiff(a, b) {
+  const A = a.getImageData(0, 0, CW * S, CH * S).data;
+  const B = b.getImageData(0, 0, CW * S, CH * S).data;
+  let c = 0, n = 0;
+  for (let i = 0; i < A.length; i += 4) {
+    n++;
+    const d = Math.abs(A[i] - B[i]) + Math.abs(A[i + 1] - B[i + 1]) + Math.abs(A[i + 2] - B[i + 2]);
+    if (d > 18) c++;
+  }
+  return (100 * c) / n;
+}
+
+window.__probe = { ring: best, dAB: d1, dAC: d2, dAD: d3 };
+window.__ready = true;
+</script>
+</body>
+</html>

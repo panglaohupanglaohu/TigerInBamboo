@@ -23,6 +23,7 @@ import { buildTerrain } from '../terrain/terrainmesh.js';
 import { shapeTerrain } from '../terrain/shape.js';
 import { buildBuildings } from '../build/buildings.js';
 import { bakeLighting, AO_MODES, normalizeSunShadow } from '../light/bake.js';
+import { applyCaveLight } from '../light/cave-light.js';
 
 const CHUNK = 2.5;        // 块边长（世界单位）：越小，一次编辑重烘焙的范围越小
 const AO_REACH = 0.7;     // 体素变化影响多远的烘焙（模糊半径 + 采样偏移 + 余量）
@@ -109,19 +110,27 @@ export class WorldMesh {
     this.stats = {};
     this.cache = new Map();      // 块 → { hash, pos, col, glow, normal, outline }
     this.prev = null;            // 上次的体素快照，用来找变了的格子
+    this.editFxLimit = 40;       // 单次差分超过此格数就不发 edits（换场景/读档防爆量）；回放期 app.js 放宽
     this.bakeRes = null;
     this.landKey = '';           // 岸浪只在陆地 / 钢柱 / 海岸形状变了时重建
     this.shoreDirty = true;
     this.full = true;
   }
 
-  /** 强制下次整体重建（开关烘焙 / 平滑、换场景时）。 */
-  setBakeLighting({enabled=true,strength=.62,bounce=.42,aoMode='vertex',sunShadow=null}={}) {
-    if(typeof enabled!=='boolean'||![strength,bounce].every(Number.isFinite)||strength<0||strength>1||bounce<0||bounce>1)throw new RangeError('invalid layered bake settings');
+  /** 强制下次整体重建（开关烘焙 / 平滑、换场景时）。
+   *  bounces>1 = 裁判 townmesh.js 多跳档（diffuseAir 扩散 + airGain 补光），opt-in，
+   *  不传时保持单跳老行为；bounce/airGain 不传则取裁判多跳档默认 .62/.55。 */
+  setBakeLighting({enabled=true,strength=.62,bounce,bounces=1,airGain,diffuseGain,stride,aoMode='vertex',sunShadow=null}={}) {
+    if(typeof enabled!=='boolean'||![strength].every(Number.isFinite)||strength<0||strength>1)throw new RangeError('invalid layered bake settings');
+    if(bounce!==undefined&&(typeof bounce!=='number'||bounce<0||bounce>1))throw new RangeError('invalid layered bake settings');
+    if(!Number.isInteger(bounces)||bounces<1||bounces>8)throw new RangeError('invalid bounces');
+    if(airGain!==undefined&&(typeof airGain!=='number'||airGain<0||airGain>2))throw new RangeError('invalid airGain');
     if(!AO_MODES.includes(aoMode))throw new RangeError('invalid aoMode');if(sunShadow)normalizeSunShadow(sunShadow);
-    const old=this.bakeLightingOptions??{strength:.62,bounce:.42,aoMode:'vertex',sunShadow:null};
-    if(this.bake===enabled&&old.strength===strength&&old.bounce===bounce&&old.aoMode===aoMode&&JSON.stringify(old.sunShadow)===JSON.stringify(sunShadow))return;
-    this.bake=enabled;this.bakeLightingOptions={strength,bounce,aoMode,sunShadow};this.invalidate();
+    // 裁判 townmesh 档：多跳时未显式给 bounce/airGain 就用 .62/.55（0.42 只改 1.8% 像素）
+    const b=bounce??(bounces>1?.62:.42),ag=airGain??(bounces>1?.55:0);
+    const old=this.bakeLightingOptions??{strength:.62,bounce:.42,bounces:1,airGain:0,aoMode:'vertex',sunShadow:null};
+    if(this.bake===enabled&&old.strength===strength&&old.bounce===b&&old.bounces===bounces&&old.airGain===ag&&old.diffuseGain===diffuseGain&&old.stride===stride&&old.aoMode===aoMode&&JSON.stringify(old.sunShadow)===JSON.stringify(sunShadow))return;
+    this.bake=enabled;this.bakeLightingOptions={strength,bounce:b,bounces,airGain:ag,diffuseGain,stride,aoMode,sunShadow};this.invalidate();
   }
   invalidate() { this.builtVersion = -1; this.full = true; }
 
@@ -149,7 +158,7 @@ export class WorldMesh {
     }
     // 给出现 / 消失动画、水花用：每个变了的格子之前和之后的顶层
     const topOf = (m) => (m === 0 ? 0 : 32 - Math.clz32(m));
-    this.edits = (prev && changed.length <= 40) ? changed.map((c) => ({ cell: c, before: topOf(prev.solid[c.id]), after: world.top(c) })) : [];
+    this.edits = (prev && changed.length <= (this.editFxLimit ?? 40)) ? changed.map((c) => ({ cell: c, before: topOf(prev.solid[c.id]), after: world.top(c) })) : [];
     this.prev = { solid: world.solid.slice(), rock: world.rock.slice(), color: world.color.slice(), river: world.river.slice() };
     const full = this.full;
     this.full = false;
@@ -186,6 +195,7 @@ export class WorldMesh {
     const entries = [...r.writers.entries()].filter(([, w]) => w.pos.length);
     const info = entries.map(([k, w]) => ({ k, w, hash: hashWriter(w), box: boundsOf(w.pos) }));
     let bakeMs = 0, dirtyCount = 0;
+    if (world.caveLight) this.caveShadeStats = { rejected: 0, shaded: 0 };   // 第 241 轮：面朝向挡掉的顶点数
     const fresh = new Map();
     for (const it of info) {
       const old = this.cache.get(it.k);
@@ -214,6 +224,12 @@ export class WorldMesh {
         }
       }
       const { normal, outline } = w.normals(halo);
+      // 906416813810049025：洞内比洞外暗一档 + 洞口渐变（体素 AO 差不出这一档，见 cave-light.js 头注释）。
+      // 只对坏块、且只在 world.caveLight 存在时（北境洞穴岛）生效；其它场景这一行是空转。
+      // 第 241 轮：必须**在法线之后**乘色 —— 面朝向判据要用顶点法线把「朝外立面」挡掉（r240 的 148839px 全落在外墙上）。
+      if (world.caveLight && it.box) {
+        this.caveShadeVerts = (this.caveShadeVerts || 0) + applyCaveLight(w, world.caveLight, normal, this.caveShadeStats);
+      }
       fresh.set(it.k, { hash: it.hash, pos: new Float32Array(w.pos), col: new Float32Array(w.col), field: new Float32Array(w.field), edge: new Float32Array(w.edge), band: w.band ? new Float32Array(w.band) : new Float32Array(w.pos.length).fill(1), glow: new Float32Array(w.glow), normal, outline });
     }
     this.cache = fresh;

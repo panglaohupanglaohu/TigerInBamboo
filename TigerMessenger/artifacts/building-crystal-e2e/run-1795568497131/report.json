@@ -1,0 +1,14 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/building-crystal-e2e/run-1795568497131",
+  "capabilities": [],
+  "steps": {},
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [],
+  "pass": false,
+  "failure": "page.selectOption: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#scene')\n    - locator resolved to <select id=\"scene\">…</select>\n  - attempting select option action\n    - waiting for element to be visible and enabled\n\n    at Object.boot (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:34:160)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/building-crystal-browser.mjs:7:20\n    at async Object.finish (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:53:8)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/building-crystal-browser.mjs:6:1"
+}

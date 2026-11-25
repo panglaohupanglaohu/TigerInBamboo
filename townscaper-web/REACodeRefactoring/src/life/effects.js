@@ -18,6 +18,7 @@
 
 import * as THREE from 'three';
 import { fireCardGLSL, fireLightLevel } from '../core/smoke-order.js';
+import { CrownSplash } from './splash-c07.js';
 
 /** One tiling value-noise texture with mips (REACode smokefx noiseTexture): one sample per card fragment. */
 let fireNoise = null;
@@ -74,6 +75,12 @@ export class Effects {
     this.popIdx = 0;
     this.group = new THREE.Group();
     scene.add(this.group);
+
+    // 1258421104756097029：冠状竖直水帘 + 3 圈长寿命泡沫环 + 10–12 颗飞沫（splash-c07）。
+    // 主场景默认走这一档（片子就是"水花要更漂亮"），`?splash=plain` 退回旧的一圈 1.1s + 26 颗外抛飞沫做对照。
+    this.splashStyle = (globalThis.location?.search ?? '').includes('splash=plain') ? 'plain' : 'crown';
+    this.crown = new CrownSplash({ scene, uTime, random });
+    this.crown.group.visible = this.splashStyle === 'crown';
 
     // 泡沫环（水花）：一个实例化的圆环，按年龄扩大、变淡
     const ring = new THREE.RingGeometry(0.75, 1, 40);
@@ -197,7 +204,15 @@ export class Effects {
     this.fire.material.blendEquation = blend === 'max' ? THREE.MaxEquation : THREE.AddEquation;
   }
   clearFire() { this.flife.fill(0); this.fspan.fill(0); this.fsize.fill(0); this.fage.fill(0); this.fire.geometry.setDrawRange(0, 0); if (this.fireLight) { this.fireLight.intensity = 0; this.fireLight.visible = false; } }
-  dispose() { this.group.removeFromParent(); for (const o of [this.rings, this.points, this.fire]) { o.geometry.dispose(); o.material.dispose(); } this.clearFire(); this.fireSources = []; }
+  dispose() { this.group.removeFromParent(); for (const o of [this.rings, this.points, this.fire]) { o.geometry.dispose(); o.material.dispose(); } this.crown.dispose(); this.clearFire(); this.fireSources = []; }
+
+  /** 1258421104756097029：水花形制两档（默认 crown = 片中冠状水帘；plain = 旧一圈 1.1s + 26 颗）。 */
+  setSplashStyle(style = 'crown') {
+    if (!['crown', 'plain'].includes(style)) throw new RangeError('Invalid splash style');
+    this.splashStyle = style; this.crown.group.visible = style === 'crown'; this.rings.visible = style === 'plain';
+    return style;
+  }
+  splashStats(t = this.uTime.value) { return { style: this.splashStyle, crownVisible: this.crown.group.visible, ...this.crown.stats(t) }; }
 
 
   /** 建造 / 拆除时调用：before / after 是这格之前和之后的顶层（层号）。 */
@@ -217,6 +232,7 @@ export class Effects {
   }
 
   #splash(cell, t) {
+    if (this.splashStyle === 'crown') { this.crown.spawn(cell, t); return; }   // 1258421104756097029
     const i = this.ringN++ % 32;
     const m = new THREE.Matrix4().makeTranslation(cell.cx, 0, cell.cz);
     m.scale(new THREE.Vector3(1.2, 1, 1.2));
@@ -247,6 +263,7 @@ export class Effects {
   update(dt, wind) {
     if (!Number.isFinite(dt) || dt < 0) throw new RangeError('Invalid effects timestep');
     dt = Math.min(dt, 0.05);
+    this.crown.update(dt);
     // 飞沫 / 灰尘
     let alive = false;
     for (let i = 0; i < this.N; i++) {

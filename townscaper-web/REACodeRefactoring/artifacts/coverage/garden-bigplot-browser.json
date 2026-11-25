@@ -1,0 +1,203 @@
+{
+  "out": {
+    "town": {
+      "yards": 36,
+      "open": 2,
+      "quaySealed": 89,
+      "plots": 10,
+      "plotCells": 25,
+      "plotSizes": [
+        5,
+        4,
+        3,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1
+      ],
+      "bigPlots": 0,
+      "stats": {
+        "comps": 7,
+        "doorPaths": 1,
+        "fallbackPaths": 1,
+        "plots": 10,
+        "hubs": 2,
+        "bigPlots": 0,
+        "bigCells": 0,
+        "plotSizes": [
+          5,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      "paths": 11,
+      "cellsOfPlot": [
+        2,
+        2,
+        1,
+        2,
+        4,
+        5,
+        2,
+        2,
+        2,
+        3
+      ]
+    },
+    "carve": {
+      "ok": true,
+      "seed": 1923,
+      "innerCells": 42,
+      "ringCells": 45,
+      "patch": 87,
+      "cx": 0.34077927922819606,
+      "cz": 0.12559394308695648
+    },
+    "onBig": {
+      "yards": 42,
+      "open": 0,
+      "quaySealed": 0,
+      "plots": 8,
+      "plotCells": 37,
+      "plotSizes": [
+        16,
+        5,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1
+      ],
+      "bigPlots": 1,
+      "stats": {
+        "comps": 1,
+        "doorPaths": 1,
+        "fallbackPaths": 0,
+        "plots": 8,
+        "hubs": 1,
+        "bigPlots": 1,
+        "bigCells": 16,
+        "plotSizes": [
+          16,
+          5,
+          5,
+          4,
+          3,
+          2,
+          1,
+          1
+        ]
+      },
+      "paths": 5,
+      "cellsOfPlot": [
+        16,
+        1,
+        4,
+        5,
+        2,
+        5,
+        3,
+        1
+      ]
+    },
+    "ab": {
+      "W": 1000,
+      "H": 700,
+      "noise": 0,
+      "onVsOff": 80617,
+      "pOn": [
+        16,
+        5,
+        5,
+        4,
+        3,
+        2,
+        1,
+        1
+      ],
+      "pOff": [
+        5,
+        5,
+        5,
+        5,
+        5,
+        4,
+        4,
+        1,
+        1,
+        1,
+        1
+      ],
+      "bigOff": 0
+    },
+    "urlOff": {
+      "yards": 36,
+      "open": 2,
+      "quaySealed": 89,
+      "plots": 10,
+      "plotCells": 25,
+      "plotSizes": [
+        5,
+        4,
+        3,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1
+      ],
+      "bigPlots": 0,
+      "stats": {
+        "comps": 7,
+        "doorPaths": 1,
+        "fallbackPaths": 1,
+        "plots": 10,
+        "hubs": 2,
+        "bigPlots": 0,
+        "bigCells": 0,
+        "plotSizes": [
+          5,
+          4,
+          3,
+          2,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1
+        ]
+      },
+      "paths": 11,
+      "cellsOfPlot": [
+        2,
+        2,
+        1,
+        2,
+        4,
+        5,
+        2,
+        2,
+        2,
+        3
+      ]
+    },
+    "rules": {
+      "bigField": 0
+    }
+  },
+  "errors": []
+}

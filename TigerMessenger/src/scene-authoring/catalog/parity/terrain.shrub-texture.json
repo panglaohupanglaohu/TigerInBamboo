@@ -1,0 +1,78 @@
+{
+ "capability": "terrain.shrub-texture",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "terrain",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/engine/blotch.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/blotch-pattern.js"
+ ],
+ "inputs": {
+  "samples": 2000,
+  "domain": "flat-top（rimMask=flatMask=1）",
+  "params": "swirl 2.3 / density .5 / amt 1 与 .6 两组"
+ },
+ "metrics": [
+  {
+   "id": "chain",
+   "name": "权重链输出差（amt=1）",
+   "original": "—",
+   "refactored": "max |Δtint| 1.11e-16（2000 组）"
+  },
+  {
+   "id": "chain-a06",
+   "name": "权重链输出差（amt=0.6）",
+   "original": "edge×topW（不含强度）",
+   "refactored": "edge×wgt（含强度）→ max Δ 0.0408"
+  },
+  {
+   "id": "wobble",
+   "name": "角度场公式",
+   "original": "bWobble=n·.72+n(2.07p+17.3)·.28",
+   "refactored": "bwWobble 逐字同式 → diff 0"
+  },
+  {
+   "id": "field",
+   "name": "色斑场源",
+   "original": "手绘图集 uBlotchTex 三通道",
+   "refactored": "本地 bfbm 四代：coverage 56.6% mean 0.464"
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "场源",
+   "original": "texture2D(uBlotchTex) 手绘图集",
+   "refactored": "bfbm 本地场（注释自标「场用本地 fbm 代替图集通道」）",
+   "note": "权重链逐式等价（amt=1 差 0）但输入场不同源，整体输出如实登记差异"
+  },
+  {
+   "kind": "value",
+   "id": "边缘抗锯齿",
+   "original": "smoothstep 固定阈值",
+   "refactored": "阈值 ±fwidth(b) 软化",
+   "note": "GLSL 微分软化，JS 求值按 width=0"
+  },
+  {
+   "kind": "value",
+   "id": "edge 强度契约",
+   "original": "edge×topW（strength=0 仍留压暗）",
+   "refactored": "edge×wgt（零强度=关闭）",
+   "note": "amt=0.6 时该项分叉 max Δ 0.0408——本侧刻意改的契约如实登记"
+  },
+  {
+   "kind": "value",
+   "id": "层偏移",
+   "original": "无 level 项",
+   "refactored": "每层 level*1.7/3.1/2.6 平移噪声坐标",
+   "note": "本侧新增逐层变化如实登记"
+  }
+ ],
+ "basis": "色斑笔触同帖（1703750394164199473/1704246032626762189）：原版图集权重链 vs 本侧 GLSL 孪生逐式转 JS，2000 组同输入对拍——amt=1 链差 1.1e-16、amt=0.6 分叉 0.041、wobble/配色/密度公式逐字同式；场源与软化差异如实登记。"
+}

@@ -1,0 +1,61 @@
+{
+ "capability": "planet.reseed",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/tileplace.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/build/tile-assembly.js"
+ ],
+ "inputs": {
+  "keys": [
+   "TILESET_FORT",
+   "TILESET_RUIN"
+  ]
+ },
+ "metrics": [
+  {
+   "id": "fort",
+   "name": "FORT tile 组",
+   "original": 2,
+   "refactored": 2
+  },
+  {
+   "id": "ruin",
+   "name": "RUIN tile 组",
+   "original": 2,
+   "refactored": 2
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "TILESET_FORT",
+   "paths": [
+    "TILESET_FORT.joins.0",
+    "TILESET_FORT.joins.1"
+   ],
+   "original": "joins={}",
+   "refactored": "joins=[\"A|D\",\"W|D\"]",
+   "note": "重构给 tileset 补了原版留空的 join 约束声明，其余字段深等"
+  },
+  {
+   "kind": "value",
+   "id": "TILESET_RUIN",
+   "paths": [
+    "TILESET_RUIN.joins.0",
+    "TILESET_RUIN.joins.1"
+   ],
+   "original": "joins={}",
+   "refactored": "joins=[\"A|D\",\"W|D\"]",
+   "note": "重构给 tileset 补了原版留空的 join 约束声明，其余字段深等"
+  }
+ ],
+ "basis": "两套 TILESET 常量逐路径深比较；WFC 求解器本体（tileplace↔wfc.js）接口不同名，另列。"
+}

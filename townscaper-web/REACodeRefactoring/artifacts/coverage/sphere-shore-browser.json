@@ -1,0 +1,187 @@
+{
+  "stats": {
+    "R": 60,
+    "vendor": false,
+    "opts": {
+      "mode": "sphere",
+      "spacing": 0.18,
+      "maxStep": 0.05,
+      "smoothIters": 6,
+      "reach": 0.4
+    },
+    "terra": {
+      "landCells": 136,
+      "rockCells": 56,
+      "waterCells": 498
+    },
+    "cells": 634,
+    "loops": 3,
+    "per": [
+      {
+        "loop": 0,
+        "count": 188,
+        "subdivided": 0,
+        "maxStepAngle": 0.003106737309011784,
+        "meanStepAngle": 0.0023623964911701004,
+        "minChord": 0.09321636805071343,
+        "breaks": 0,
+        "nonFinite": 0,
+        "maxRadialDev": 2.1316282072803006e-14,
+        "maxNormalDot": 8.326672684688674e-17,
+        "minNormalLen": 0.9999999999999998,
+        "seaPoints": 188,
+        "maxSeaDev": 2.513045327390273e-12,
+        "maxSeaRadialDev": 1.4210854715202004e-14
+      },
+      {
+        "loop": 1,
+        "count": 42,
+        "subdivided": 0,
+        "maxStepAngle": 0.003132219941324989,
+        "meanStepAngle": 0.002312330849999015,
+        "minChord": 0.08345805675338193,
+        "breaks": 0,
+        "nonFinite": 0,
+        "maxRadialDev": 2.1316282072803006e-14,
+        "maxNormalDot": 5.551115123125783e-17,
+        "minNormalLen": 0.9999999999999999,
+        "seaPoints": 42,
+        "maxSeaDev": 2.513045327390273e-12,
+        "maxSeaRadialDev": 7.105427357601002e-15
+      },
+      {
+        "loop": 2,
+        "count": 45,
+        "subdivided": 0,
+        "maxStepAngle": 0.00304551203430053,
+        "meanStepAngle": 0.002454253798342065,
+        "minChord": 0.10074340006712325,
+        "breaks": 0,
+        "nonFinite": 0,
+        "maxRadialDev": 1.4210854715202004e-14,
+        "maxNormalDot": 5.551115123125783e-17,
+        "minNormalLen": 0.9999999999999999,
+        "seaPoints": 45,
+        "maxSeaDev": 3.4822145167368035e-12,
+        "maxSeaRadialDev": 7.105427357601002e-15
+      }
+    ],
+    "totalPts": 275,
+    "totalBreaks": 0,
+    "totalNonFinite": 0,
+    "nonFiniteMesh": 0
+  },
+  "seam": {
+    "shoreLoops": 3,
+    "shoreCorners": 84,
+    "cornerRefs": 343,
+    "sharedCorners": 84,
+    "pairsMismatched": 0,
+    "maxGap": 0
+  },
+  "determinism": {
+    "sameWorld": true,
+    "rebuilt": true
+  },
+  "shoreDiff": {
+    "pixels": 5041,
+    "maxDelta": 217,
+    "totalPx": 1440000
+  },
+  "closeup": {
+    "mid": [
+      12.378446219884644,
+      56.61992862366918,
+      -15.5228139147524
+    ],
+    "loopPts": 188
+  },
+  "vendor": {
+    "stats": {
+      "R": 60,
+      "vendor": true,
+      "opts": {
+        "mode": "sphere",
+        "spacing": 0.18,
+        "maxStep": 0.05,
+        "smoothIters": 6,
+        "reach": 0.4
+      },
+      "terra": {
+        "landCells": 136,
+        "rockCells": 56,
+        "waterCells": 498
+      },
+      "cells": 634,
+      "loops": 3,
+      "per": [
+        {
+          "loop": 0,
+          "count": 188,
+          "subdivided": 0,
+          "maxStepAngle": 0.003106737309011784,
+          "meanStepAngle": 0.0023623964911701004,
+          "minChord": 0.09321636805071343,
+          "breaks": 0,
+          "nonFinite": 0,
+          "maxRadialDev": 2.1316282072803006e-14,
+          "maxNormalDot": 8.326672684688674e-17,
+          "minNormalLen": 0.9999999999999998,
+          "seaPoints": 188,
+          "maxSeaDev": 2.513045327390273e-12,
+          "maxSeaRadialDev": 1.4210854715202004e-14
+        },
+        {
+          "loop": 1,
+          "count": 42,
+          "subdivided": 0,
+          "maxStepAngle": 0.003132219941324989,
+          "meanStepAngle": 0.002312330849999015,
+          "minChord": 0.08345805675338193,
+          "breaks": 0,
+          "nonFinite": 0,
+          "maxRadialDev": 2.1316282072803006e-14,
+          "maxNormalDot": 5.551115123125783e-17,
+          "minNormalLen": 0.9999999999999999,
+          "seaPoints": 42,
+          "maxSeaDev": 2.513045327390273e-12,
+          "maxSeaRadialDev": 7.105427357601002e-15
+        },
+        {
+          "loop": 2,
+          "count": 45,
+          "subdivided": 0,
+          "maxStepAngle": 0.00304551203430053,
+          "meanStepAngle": 0.002454253798342065,
+          "minChord": 0.10074340006712325,
+          "breaks": 0,
+          "nonFinite": 0,
+          "maxRadialDev": 1.4210854715202004e-14,
+          "maxNormalDot": 5.551115123125783e-17,
+          "minNormalLen": 0.9999999999999999,
+          "seaPoints": 45,
+          "maxSeaDev": 3.4822145167368035e-12,
+          "maxSeaRadialDev": 7.105427357601002e-15
+        }
+      ],
+      "totalPts": 275,
+      "totalBreaks": 0,
+      "totalNonFinite": 0,
+      "nonFiniteMesh": 0
+    },
+    "seam": {
+      "shoreLoops": 3,
+      "shoreCorners": 84,
+      "cornerRefs": 343,
+      "sharedCorners": 84,
+      "pairsMismatched": 0,
+      "maxGap": 0
+    },
+    "det": {
+      "sameWorld": true,
+      "rebuilt": true
+    },
+    "available": true
+  },
+  "errors": []
+}

@@ -1,0 +1,41 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/defaults-panel-e2e/run-1795453158785",
+  "steps": {
+    "A": {
+      "rows": [
+        "citadel:mountain",
+        "old-port:relief"
+      ],
+      "text": "当前默认场景层能力谁定的时间citadelmountainmountain.pipeline手动采用2026/11/24 09:00:00撤回old-portreliefrelief.soft按实测选优代选2026/11/24 10:00:00撤回"
+    },
+    "afterRevert": {
+      "rows": [
+        "citadel:mountain",
+        "old-port:relief"
+      ],
+      "stored": {
+        "citadel:mountain": {
+          "capabilityId": "mountain.pipeline",
+          "planId": "citadel-m1",
+          "plan": null,
+          "adoptedBy": "user",
+          "at": "2026-11-24T01:00:00.000Z",
+          "source": "workshop",
+          "note": "测试"
+        },
+        "old-port:relief": {
+          "capabilityId": "relief.soft",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "auto-test",
+          "at": "2026-11-24T02:00:00.000Z",
+          "source": "auto-test",
+          "note": ""
+        }
+      }
+    }
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "撤回后 citadel:mountain 还在：[\"citadel:mountain\",\"old-port:relief\"]"
+}

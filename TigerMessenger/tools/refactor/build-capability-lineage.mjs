@@ -15,12 +15,23 @@ import { describeCapabilities } from '../../../townscaper-web/REACodeRefactoring
 import { describeObjectCapabilities } from '../../src/system-workshop/object/capabilities.js';
 import { describeGsceneCapabilities } from '../../src/system-workshop/gscene/capabilities.js';
 import { describePlanetCapabilities } from '../../src/system-workshop/planet/capabilities.js';
+import { describeBattleCapabilities } from '../../src/system-workshop/battle/capabilities.js';
+import { describeMountainCapabilities } from '../../src/system-workshop/mountain/capabilities.js';
+import { describeFxCapabilities } from '../../src/system-workshop/fx/capabilities.js';
+import { describeApostlesTerrainCapabilities } from '../../src/system-workshop/apostles-terrain/capabilities.js';
+import { describeLightLifeCapabilities } from '../../src/system-workshop/lightlife/capabilities.js';
+import { describeBuildingCapabilities } from '../../src/system-workshop/building/capabilities.js';
+import { describeReliefCapabilities } from '../../src/system-workshop/relief/capabilities.js';
 
 const workspace = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../..');
-export async function computeLineage({ root = workspace } = {}) {
+/** 谱系 / 能力树 / 成熟度共用的可执行能力清单（R23 抽出来，内容与原来 computeLineage 里的一致；不含场景管线的 editor / live 节点）。 */
+export function collectExecutables() {
+  return [...describeCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describeGsceneCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describePlanetCapabilities().map((c) => ({ ...c, tier: 'planet' })), ...describeObjectCapabilities().map((c) => ({ ...c, tier: 'object' })), ...describeBattleCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describeMountainCapabilities().map((c) => ({ ...c, tier: 'scene', modules: (c.sources || []).filter((x) => x.includes('REACodeRefactoring/')).map((x) => x.split('REACodeRefactoring/')[1]) })), ...describeFxCapabilities().map((c) => ({ ...c, tier: 'scene', modules: (c.sources || []).filter((x) => x.includes('REACodeRefactoring/')).map((x) => x.split('REACodeRefactoring/')[1]) })), ...describeApostlesTerrainCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describeLightLifeCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describeBuildingCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describeReliefCapabilities().map((c) => ({ ...c, tier: 'scene' }))];
+}
+export async function computeLineage({ root = workspace, experience = {}, demand = [] } = {}) {
   const manifest = await scanCodeLibrary({ root });
-  const executables = [...describeCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describeGsceneCapabilities().map((c) => ({ ...c, tier: 'scene' })), ...describePlanetCapabilities().map((c) => ({ ...c, tier: 'planet' })), ...describeObjectCapabilities().map((c) => ({ ...c, tier: 'object' }))];
-  return { manifest, lineage: buildCapabilityLineage(manifest.evolution, { modules: manifest.modules, alignment: manifest.alignment, executables, consumers: scanSceneConsumers({ root }).consumers }) };
+  const executables = collectExecutables();
+  return { manifest, lineage: buildCapabilityLineage(manifest.evolution, { modules: manifest.modules, alignment: manifest.alignment, executables, experience, demand, consumers: scanSceneConsumers({ root }).consumers }) };
 }
 const short = (n) => n.split(/[：:]/)[0], cell = (t) => String(t ?? '').replace(/\|/g, '／').replace(/\s+/g, ' ').trim();
 export function renderLineageDoc({ manifest, lineage }) {

@@ -1,0 +1,50 @@
+{
+ "capability": "fx.projectiles",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T15:27:35.730Z",
+ "generator": "TigerMessenger/tools/refactor/fx-parity.mjs",
+ "verdict": "diff-registered",
+ "line": "fx",
+ "basis": "两边都是同一速度 Verlet 积分（前后速度均值推位置）。把原版参数对齐到同 g/drag/dt/起点后逐弧比射程与顶点；默认参数差（g9.8·drag2·dt1/30 vs g6·drag0·dt1/60）如实登记。",
+ "metrics": [
+  {
+   "id": "range",
+   "name": "同参数 20 弧射程最大差",
+   "original": 0,
+   "refactored": 0.10773613098446688
+  },
+  {
+   "id": "apex",
+   "name": "同参数 20 弧顶点最大差",
+   "original": 0,
+   "refactored": 0
+  }
+ ],
+ "inputs": {
+  "speeds": [
+   3,
+   5,
+   7,
+   9,
+   11
+  ],
+  "angles": [
+   15,
+   30,
+   45,
+   55
+  ],
+  "shared": "g=9.8 drag=2 dt=1/30 start y=0 落地 y≤0"
+ },
+ "diffs": [
+  {
+   "kind": "defaults",
+   "id": "params",
+   "original": "g=9.8 drag=2 startOffset=0.1 dt=1/30",
+   "refactored": "g=6 drag=0 dt=1/60"
+  }
+ ],
+ "gaps": 0,
+ "skipped": []
+}

@@ -27,7 +27,11 @@ export const LAYERS = [
   { name: '近团', depth: 1.0, alpha: 0.86, blur: 11, scale: 1.00, gain: 1.00, y: [300, 610] },
 ];
 
-export const WIND = 26;        // 近层的水平速度 px/s
+// 实测修正（第 36 轮，见 src/skyfilm.js）：对 1243228419162341379 的 f000/f023 做
+// 暴力平移搜索，最佳解是**单一平移** (-49,-4)px/11.02s = 4.45 px/s、相关 0.864。
+// 原来这个值写成 26 px/s，比片子快 5.8 倍（11s 该走 286px，实际只走 49px）。
+// 三层视差本身这条片子证不出来（单一平移就解释了 86%），保留结构但速度按实测改。
+export const WIND = 4.5;       // 近层的水平速度 px/s（实测 4.45，别凭感觉调大）
 export const SUN_DX = 118;     // 云 → 影 的水平偏移（太阳在左上方）
 export const SUN_DY = 226;     // 云 → 影 的竖直偏移：云带在 y≈500，地面在 726
 export const SHADOW_STRENGTH = 0.46;

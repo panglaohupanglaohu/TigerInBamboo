@@ -1,0 +1,56 @@
+{
+ "capability": "fx.campaign",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T15:27:35.730Z",
+ "generator": "TigerMessenger/tools/refactor/fx-parity.mjs",
+ "verdict": "diff-registered",
+ "line": "fx",
+ "basis": "原版 knnEdges 已从 campaignmap.js 复原，同 scatter 节点集实测对拍：边集 Jaccard 0.7087（重合 1866/2028）；重构版 Delaunay 近似+连通桥接为刻意的可玩性修复，如实登记不判等价。",
+ "metrics": [
+  {
+   "id": "edgeOverlap",
+   "name": "同节点集边重合率（3 种子合计）",
+   "original": "knn 2028 边",
+   "refactored": "graph 2471 边 · 重合 1866 · Jaccard 0.7087"
+  },
+  {
+   "id": "seeds",
+   "name": "各种子明细",
+   "original": "7:651e 11:676e 23:701e",
+   "refactored": "7:828e/J0.7059/B0 11:810e/J0.7199/B0 23:833e/J0.7007/B0"
+  }
+ ],
+ "inputs": {
+  "seeds": [
+   7,
+   11,
+   23
+  ],
+  "scatter": {
+   "w": 640,
+   "h": 400
+  },
+  "knn": {
+   "k": 3,
+   "linkDist": 66
+  }
+ },
+ "diffs": [
+  {
+   "kind": "design",
+   "id": "graph.adjacency",
+   "original": "knnEdges(k=3,linkDist=66)：3 种子共 2028 边",
+   "refactored": "campaignGraph（Delaunay+2NN+Kruskal 桥）：2471 边；重合 1866，边集 Jaccard 0.7087",
+   "note": "原版 knn 判据已从 campaignmap.js 复原并实测；重构版为 Delaunay 近似+连通修复，非 unknow，是实测差异。"
+  },
+  {
+   "kind": "design",
+   "id": "graph.connectivity",
+   "original": "knn 不保证连通（原作靠游走 stuck 计数暴露）",
+   "refactored": "Kruskal 桥接保证连通（3 种子桥 0/0/0，修复前连通块 1/1/1）"
+  }
+ ],
+ "gaps": 1,
+ "skipped": []
+}

@@ -43,7 +43,11 @@ function draw() {
   ctx.globalAlpha = 1;
   for (const v of G.ids) { const r = isBridgeEnd.has(v) || G.nb(v).length > 5 ? 4.6 : 2.6; ctx.fillStyle = '#13232a'; ctx.strokeStyle = coloured > 0 ? regionColour(v) : reached.has(v) && t < 1.1 ? '#f3f3e8' : 'rgba(200,210,210,.6)'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(...P(v), r, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); }
   document.getElementById('stat').textContent = `节点 ${G.ids.length} · 边 ${edges.length} · 带间辐条 ${G.spokeEdges.length}（含外伸悬挂 4）· 桥 ${bridges.size}\n区域（去掉辐条后的连通块）${regions.sizes.length}：${regions.sizes.slice(0, 4).join(' / ')} + 悬挂点 ${regions.sizes.length - 4}\n中心搜索 ${searchK}/${L.layers.length - 1} 层${coloured > 0 ? ' · 按区域上色' : ''}`;
-  window.graphBandsC08 = { nodes: G.ids.length, edges: edges.length, spokes: G.spokeEdges.length, bridges: bridges.size, regions: regions.sizes, layers: L.layers.length - 1, searchK, t };
+  // 读数 + 几何：验收要能按「半径/角度」分开量色相，才能判「颜色=环带」还是「颜色=分支扇区」
+  const bandRadii = new Map(); for (const v of G.ids) { const [x, z] = G.pos.get(v), r = Math.hypot(x, z), b = G.band.get(v); const e = bandRadii.get(b) || { min: Infinity, max: 0, n: 0, sum: 0 }; e.min = Math.min(e.min, r); e.max = Math.max(e.max, r); e.sum += r; e.n++; bandRadii.set(b, e); }
+  const regionBands = regions.groups.map((g) => (g.length > 1 ? G.band.get(g[0]) : -1));
+  window.graphBandsC08 = { nodes: G.ids.length, edges: edges.length, spokes: G.spokeEdges.length, bridges: bridges.size, regions: regions.sizes, layers: L.layers.length - 1, searchK, t,
+    geom: { ox, oy, sc, R }, ticks: 72, radialLines: 12, hues: HUES, regionBands, bandMeans: [...bandRadii].sort((a, b) => a[0] - b[0]).map(([b, e]) => ({ band: b, n: e.n, mean: e.sum / e.n, min: e.min, max: e.max })) };
 }
 document.getElementById('play').onclick = (e) => { playing = !playing; e.target.classList.toggle('on', playing); };
 addEventListener('resize', draw);

@@ -55,6 +55,17 @@ export function generateApostleTerrain(world,{seed=7,mask,cap,limit,spire=false,
   for(const c of cells){const h=copy[c.id];if(!h)continue;let maxN=0,minN=Infinity;
    for(let i=0;i<c.n;i++){const o=nb(c,i);if(!o)continue;maxN=Math.max(maxN,copy[o.id]);minN=Math.min(minN,copy[o.id]);}
    if(minN!==Infinity&&maxN-h>=3)level[c.id]=maxN-2;if(minN!==Infinity&&h-minN>=4)level[c.id]=minN+2;}}
+ // 4b) 缓坡缘裙（仅 soft 候选）：APOSTLES_TERRAIN_DIAGNOSIS 第 2 步——平顶台地在缓坡省里
+ //   没有 1 层台阶可融。对距陆缘 < 6 格的缓坡省格按「向内每 2 格抬 1 层」降边缘，
+ //   占地、cap、轨道净空都不变（只降不升）；陡崖省与海蚀基座不动。
+ if(sharp){const dist=new Int16Array(cells.length).fill(-1),dq=[];
+  for(const c of cells)if(!level[c.id]){dist[c.id]=0;dq.push(c.id);}
+  for(let h=0;h<dq.length;h++)for(const o of cells[dq[h]].edgeNeighbors)if(o>=0&&dist[o]<0){dist[o]=dist[dq[h]]+1;dq.push(o);}
+  for(const c of cells){const d=dist[c.id];if(!level[c.id]||d<=0||d>=6||sharp[c.id]>=.5)continue;
+   level[c.id]=Math.max(2,level[c.id]-Math.ceil((6-d)/2));}
+  // 4c) 坡度上限（诊断第 3 步）：缓坡省相邻最多差 1 层，softTops 才有连续台阶可融；
+  //   库 limitSoftSlopes 只降不升，陡崖省不参与不被拉低；门徒纯岩体无建筑钉点，海岸低格天然是低源。
+  lib?.generate?.limitSoftSlopes?.(cells,level,sharp,{step:1});}
  // 5) canyons: narrow ridged bands (lower frequency than the demo island: one or two cuts per mass)
  if(canyons)for(const c of cells){if(!level[c.id])continue;const ch=ridged(c.cx*.075+7.3+seed*.013,c.cz*.075+2.1,{octaves:2,freq:1.5,seed:seed+91});
   if(ch<.13)level[c.id]=0;else if(ch<.19)level[c.id]=Math.min(level[c.id],1);}

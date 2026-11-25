@@ -11,6 +11,9 @@
  *   - 门优先：小径端点 = 院子里贴着「房子门」那条边的格（buildings.js 的 door 表：每栋房子一扇门，开在朝码头层空地的墙上）；
  *     中心 = 离院子形心最近的格；从中心在院内 BFS，取到每个门格的最短路并成小径树。院子里没有门就沿用原 core/garden-paths.js 的端点。
  *   - 草地块 = 院内非小径格用 core/field-plots.js 的 partitionPlots 并成 2–5 格的块；块的外边界整体内收一道石沿。
+ *   - 大田（第 194 轮）：院子草格 ≥ 2×9=18 时，先长一块「大田」占草格 ≈55%（上限 16 格），余下再按 2–5 格切 ——
+ *     片 0095/0250 里同一座岛上是「一块 10+ 格的大田 + 若干 2–5 格小块」，不是均一的碎块；草格不够 18 时不出大田（保持旧形制）。
+ *   - 最小块 2 格：1 格地块并进共边最多的邻块（片里没有 1 格的孤立草地）。
  *   - 小径条宽 0.2（格宽约 1），只沿小径树的连接边画（格心 → 边中点），门格多画一段到门边。
  */
 import { partitionPlots } from '../core/field-plots.js';
@@ -20,13 +23,38 @@ import { UP } from '../core/meshwriter.js';
 const h01 = (x) => { let h = Math.imul(x ^ 0x9e3779b9, 0x85ebca6b); h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
 
 /**
+ * 大田：从「邻居最多」的草格起（同样多取 id 小的），每步吃「与本区域共边最多」的候选（同样多取 id 小的），
+ * 长到 target 格为止。全程无随机 → 同输入同输出。返回 Set<cellId>。
+ */
+export function growBigField(lawn, lawnNbr, target) {
+  if (!lawn.length || target <= 0) return new Set();
+  const byId = new Map(lawn.map((c) => [c.id, c]));
+  let seed = lawn[0], bestDeg = -1;
+  for (const c of lawn) { const d = lawnNbr(c).length; if (d > bestDeg || (d === bestDeg && c.id < seed.id)) { bestDeg = d; seed = c; } }
+  const inRegion = new Set([seed.id]), frontier = new Set();
+  for (const o of lawnNbr(seed)) frontier.add(o.id);
+  while (inRegion.size < target && frontier.size) {
+    let best = -1, bestAdj = -1;
+    for (const id of frontier) {
+      if (!byId.has(id)) continue;
+      let adj = 0; for (const o of lawnNbr(byId.get(id))) if (inRegion.has(o.id)) adj++;
+      if (adj > bestAdj || (adj === bestAdj && id < best)) { bestAdj = adj; best = id; }
+    }
+    if (best < 0) break;
+    inRegion.add(best); frontier.delete(best);
+    for (const o of lawnNbr(byId.get(best))) if (!inRegion.has(o.id)) frontier.add(o.id);
+  }
+  return inRegion;
+}
+
+/**
  * @param {object} world  共享 World
  * @param {object[][]} comps  courtyards.components
  * @param {Map} door  buildings.js 的 door 表（house → { key:'cellId:edge' }）
  * @param {(c,i)=>object|null} nbr
  * @param {Uint8Array} path  原小径标记（就地改写：有门的院子换成门优先的小径树）
  */
-export function planGardenC07(world, comps, door, nbr, path, { maxPlot = 5 } = {}) {
+export function planGardenC07(world, comps, door, nbr, path, { maxPlot = 5, bigField = 0.55, bigMin = 9, bigMax = 16 } = {}) {
   const cells = world.cells, compOf = new Map();
   comps.forEach((comp, k) => { for (const c of comp) compOf.set(c.id, k); });
   const links = new Map(), hubs = new Set(), doorCells = new Map(), plotOf = new Map(), plots = [];
@@ -40,7 +68,7 @@ export function planGardenC07(world, comps, door, nbr, path, { maxPlot = 5 } = {
     if (!doorCells.has(y.id)) doorCells.set(y.id, []);
     doorCells.get(y.id).push(back);
   }
-  const stats = { comps: comps.length, doorPaths: 0, fallbackPaths: 0, plots: 0, hubs: 0 };
+  const stats = { comps: comps.length, doorPaths: 0, fallbackPaths: 0, plots: 0, hubs: 0, bigPlots: 0, bigCells: 0, plotSizes: [] };
   comps.forEach((comp, k) => {
     const ids = new Set(comp.map((c) => c.id));
     const doors = comp.filter((c) => doorCells.has(c.id));
@@ -67,12 +95,36 @@ export function planGardenC07(world, comps, door, nbr, path, { maxPlot = 5 } = {
     const lawn = comp.filter((c) => !path[c.id]);
     if (lawn.length) {
       const lawnIds = new Set(lawn.map((c) => c.id));
-      const part = partitionPlots({ cells: lawn, neighbors: (c) => Array.from({ length: c.n }, (_, i) => nbr(c, i)).filter((b) => b && lawnIds.has(b.id)), seed: 1 + Math.min(...lawn.map((c) => c.id)), joinChance: 0.85, maxCells: maxPlot });
-      for (const [id, p] of part.plotOf) plotOf.set(id, plots.length + p);
-      for (const p of part.plots) plots.push({ comp: k, cells: p.cells });
+      const lawnNbr = (c) => { const out = []; for (let i = 0; i < c.n; i++) { const b = nbr(c, i); if (b && lawnIds.has(b.id)) out.push(b); } return out; };
+      const local = [];
+      // ① 大田：草格够两倍「大田最小格数」才切，保证余下还够再分小块（片里是「大田 + 小块」共存）
+      let rest = lawn;
+      if (bigField > 0 && lawn.length >= 2 * bigMin) {
+        const target = Math.min(bigMax, Math.max(bigMin, Math.round(lawn.length * bigField)), lawn.length - bigMin);
+        const bigIds = growBigField(lawn, lawnNbr, target);
+        if (bigIds.size >= bigMin) {
+          local.push({ cells: lawn.filter((c) => bigIds.has(c.id)).map((c) => c.id), big: true });
+          rest = lawn.filter((c) => !bigIds.has(c.id));
+          stats.bigPlots++; stats.bigCells += bigIds.size;
+        }
+      }
+      // ② 余下按 2–5 格切
+      if (rest.length) {
+        const restIds = new Set(rest.map((c) => c.id));
+        const part = partitionPlots({ cells: rest, neighbors: (c) => { const out = []; for (let i = 0; i < c.n; i++) { const b = nbr(c, i); if (b && restIds.has(b.id)) out.push(b); } return out; }, seed: 1 + Math.min(...rest.map((c) => c.id)), joinChance: 0.85, maxCells: maxPlot });
+        for (const p of part.plots) local.push({ cells: p.cells, big: false });
+      }
+      // ③ 不做「最小块合并」：片 0095 里确有单格圆角草台（石沿内一小片草），1 格地块是合理的
+      for (const p of local) {
+        if (!p.cells.length) continue;
+        const idx = plots.length;
+        for (const id of p.cells) plotOf.set(id, idx);
+        plots.push({ comp: k, cells: p.cells, big: !!p.big });
+      }
     }
   });
   stats.plots = plots.length;
+  stats.plotSizes = plots.map((p) => p.cells.length).sort((a, b) => b - a);
   return { links, hubs, doorCells, plotOf, plots, compOf, stats };
 }
 

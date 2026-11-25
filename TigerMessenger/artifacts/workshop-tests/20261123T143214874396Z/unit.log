@@ -1,0 +1,242 @@
+✔ preload: empty pipeline gets every matched capability, in registry order (0.761ms)
+✔ preload: prerequisites come along even if they had no direct match (0.111417ms)
+✔ preload: never touches a pipeline that already has runnable nodes (0.091209ms)
+✔ preload: user clearing the pipeline is respected unless forced (0.055125ms)
+✔ preload: no scan / nothing matches → nothing added (0.08525ms)
+✔ preload: note names the scene and the action (0.10625ms)
+✔ preload: real battle / mountain registries — every cap matched ⇒ all preloaded, requires satisfied (1.594ms)
+✔ preload: scene-layer workshops opt in; planet / object do not (0.698708ms)
+✔ 能力库只含可执行条目且元数据完整 (1.026959ms)
+✔ 扫描：三个能力都匹配到有陆地和小屋的采样 (0.139125ms)
+✔ 扫描：没有小屋时守军布防不匹配，没有陆地时全不匹配 (0.101375ms)
+✔ 执行：三步管线产出完整作战计划（私有副本） (0.302333ms)
+✔ 参数规范化：越界收进范围、布尔按类型取 (0.1725ms)
+✔ 验证：健全计划通过；无陆地 / 无小屋 / 参数缺失判失败 (0.323125ms)
+✔ 验证：超编守军给 warn/fail 且归责 battle.garrison (0.229458ms)
+✔ all posts preserve evidence and are sorted by exact author time, never study round or scan time (17.071958ms)
+✔ same-post explanations and cross-project combinations remain distinct from scoped replacements (5.9085ms)
+✔ changed source invalidates only dependent interpretation and changes shared fingerprint (71.782292ms)
+✖ physical scan and catalog carry the same evolution fingerprint without promoting executable status (98.781208ms)
+✔ every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations (4.953458ms)
+✔ scene taxonomy groups life effects vehicles without changing execution readiness (1.541041ms)
+✔ every real scanned record has one scene category; shared algorithms stay foundational (29.276417ms)
+✔ new capability inserts after its last scene-layer node without reordering existing recipe (0.167708ms)
+✔ 代际按关系与阶段切分，方向先向前 (11.263291ms)
+✔ 模块归线、import 推断与组合前置 (0.44625ms)
+✔ 补学队列：得分、理由，以及经验 / 管线需求回流 (0.697791ms)
+✔ 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置 (0.339417ms)
+✔ 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定 (73.889708ms)
+✔ 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学 (158.99775ms)
+file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tools/refactor/build-capability-maturity.mjs:22
+import { decideMaturity, summarizeMaturity, lineMaturity, buildCountTable, MATURITY_LEVELS, PARITY_VERDICTS, E2E_DIR_LAYER } from '../../../townscaper-web/REACodeRefactoring/src/core/capability-maturity.js';
+                                                                                                             ^^^^^^^^^^^^^
+SyntaxError: The requested module '../../../townscaper-web/REACodeRefactoring/src/core/capability-maturity.js' does not provide an export named 'E2E_DIR_LAYER'
+    at #asyncInstantiate (node:internal/modules/esm/module_job:455:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:553:5)
+    at async node:internal/modules/esm/loader:647:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)
+
+Node.js v24.22.3
+✖ TigerMessenger/tests/capability-maturity.test.mjs (58.525709ms)
+✔ scanner reads real library, preserves distinct entries, never enables live execution (28.526208ms)
+✔ invalid format rejected without executing JS; malicious controls stripped (0.268041ms)
+/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1752
+  let error = new Error(text);
+              ^
+
+Error: Build failed with 1 error:
+src/core/capability-maturity.js:13:31: ERROR: Expected ";" but found "且同目录至少一张"
+    at failureErrorWithLog (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1752:15)
+    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1211:25
+    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1163:52
+    at buildResponseToResult (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1209:7)
+    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1236:16
+    at responseCallbacks.<computed> (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:886:9)
+    at handleIncomingPacket (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:941:12)
+    at Socket.readFromStdout (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:864:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12) {
+  errors: [Getter/Setter],
+  warnings: [Getter/Setter]
+}
+
+Node.js v24.22.3
+✖ TigerMessenger/tests/capability-tree.test.mjs (185.754792ms)
+✔ parser reads real exports and imports without executing source or comment examples (55.123709ms)
+✖ physical inventory preserves every module once, videos separately and no automatic executable promotion (101.755458ms)
+✖ library dependencies link only explicit implemented adapters, with palette before contrast (58.295541ms)
+✔ 写只进 v2 键，旧分层键不动 (0.6005ms)
+✔ 旧键记录合并进读侧，去重并按时间排序 (1.287875ms)
+✔ 汇总语义：失败按 blame 归属，committed 只算采用 (1.020833ms)
+✔ 导出文件导入另一台机器（全新存储）：记录与汇总一致，重复导入不产生重复 (0.3345ms)
+✔ 验证失败写入后，同一存储读出的 failed 立即 +1（队列重算的输入） (0.119542ms)
+✔ experiment restores data actual parameters and recipe; stale state cannot finalize (3.5535ms)
+✔ restore failure rolls all state back; backup quota stops before mutation (0.207ms)
+✔ invalid snapshot parameters and codec reject before backup or scene changes (0.11825ms)
+✔ fx catalog has 5 executable capabilities mapped to adapt lines (0.824166ms)
+✔ fx runPlan executes all five capabilities on a synthetic stage (63.856291ms)
+✔ fx verify independently re-checks the produced plan (86.60525ms)
+✔ fx verify fails on missing or corrupted plan (0.243042ms)
+✔ editor dock ships on local and published pages; ?dev=0 / ?release=1 opt out (5.868042ms)
+✔ two real source-backed adapters change materials on a copy, keep actual output within color budget (2.497666ms)
+✔ all material adapters preserve manual colors by default; explicit opt-in works (0.380292ms)
+✔ verifier rejects forged locked edits and perceptual budget excess independently (0.157458ms)
+✔ reordered inputs produce identical deterministic palette results (0.693166ms)
+✔ neutral gain is a no-op, malformed params and invalid output are rejected (0.299ms)
+✔ gamut extremes are finite and quantized output obeys the tightest budget (5.735833ms)
+✔ layer-focus: three focus layers, each bound to a real pane and supported scenes (0.577833ms)
+✔ layer-focus: resolveTab maps focus names onto the scene tier (0.16ms)
+✔ layer-focus: sceneForFocus only switches when the current scene cannot run the layer (0.206958ms)
+✔ layer-focus: pipeline.html has the three direct tabs in the sub-workshop tablist (0.406125ms)
+✔ layer-focus: focus mode hides the voxel pane and gives the focused pane a readable height (0.437667ms)
+✔ layer-focus: system-tabs wires focus tabs and exposes the focus to callers (0.325333ms)
+✔ immutable verified proof fixture separates existing frame review, delivered code, source limits and residual work (32.408375ms)
+✔ changed proof is rejected and original learning backlog remains visible (12.624958ms)
+✔ changed learning evidence or record text cannot inherit the reviewed closure (11.650416ms)
+✔ live source drift safely invalidates old proof instead of counting it as complete (16.349875ms)
+✔ all 113 records accounted, duplicate histories consolidated, closure evidence retained (38.2705ms)
+✔ reordering preserves reviewed identities and states (24.676375ms)
+✔ new or changed titles never inherit a closure from clip IDs (0.33675ms)
+✔ changed evidence reopens a historical closure (0.8385ms)
+✔ missing ledger keeps every entry visible and requires review (8.358958ms)
+✔ same clip with distinct deliverables is not collapsed (0.353666ms)
+✔ superseded DDA implementation is not scheduled twice (0.704792ms)
+✔ live source may evolve without dropping records or reusing historical positions (12.553625ms)
+✔ last successful learning cache survives new reader and revalidates hashes (134.314875ms)
+✔ quota and oversized learning payload preserve previous slot (72.320041ms)
+✔ corrupt cached data rejects instead of activating an unverified offline view (10.11375ms)
+✔ synchronous storage-open denial releases the deadline timer immediately (0.25225ms)
+✔ late storage-open result closes after timeout without starting a transaction (0.158542ms)
+✔ active storage transaction aborts and closes at deadline without publishing result (0.106208ms)
+✔ parses real ARCH single quotes comments trailing commas and real JSON declarations without execution (53.915625ms)
+✔ data escapes work; execution expressions prototypes duplicates and trailing programs are rejected (0.429708ms)
+✔ bounds malformed strings comments and nesting without accepting a partial result (0.147584ms)
+✔ reorder and rename preserve comparison identity; status or lane changes are explicit revisions (6.7315ms)
+✔ new duplicates never renumber old anchors; exact ambiguous anchors are quarantined (1.081ms)
+✔ location edits become review conflicts; genuine additions and removals are explicit without mutating source (7.954292ms)
+✔ real library comparison is idempotent; every record is indexed or explicitly conflicted (101.707709ms)
+✔ decode real seven source files as one hash-checked data value without script execution (76.569542ms)
+✔ tamper version duplicate and missing core reject; incomplete value never commits globals (109.643666ms)
+✔ optional absence explicit and accepted; supported data grammar still checks structure (37.181125ms)
+✔ video card promotes readable content title and labels rather than a source ID (0.434416ms)
+✔ review frame prefixes are removed and long descriptions stay bounded (0.193459ms)
+✔ 变异与交叉：每个基因都落在能力声明的范围和步长上 (6.775625ms)
+✔ 第一代：基线排第一、没有重复、同种子可复现、换种子不同 (647.990958ms)
+✔ 精英保留：留种的亲本原样进下一代，所以每代最好成绩不会倒退 (500.416917ms)
+✔ 默认参数在合成场地上通过硬检查；describeGenome 只列出变了的基因 (19.839167ms)
+✔ actual REA arc sampling redistributes interiors and passes existing verifier (1.665417ms)
+✔ manual anchors, hidden and out-of-scope objects remain untouched (0.310958ms)
+✔ over-budget or blocked segment produces no unsafe edits (1.399458ms)
+✔ source ordering does not affect stable layout results (0.225292ms)
+✔ actual material composition calls library code, preserves inputs, traces ordered steps and output (9.416291ms)
+✔ preflight rejects missing code, wrong parameter types and invalid plans before touching adapter (0.937458ms)
+✔ library schema changes invalidate catalog and plan identities; dependencies and conflicts are real (1.010875ms)
+✔ object combination executes on sequential copied layouts and returns actual edits (2.918583ms)
+✔ commit gate rejects failed checks, changed target and incomplete execution (0.287833ms)
+✔ altered Worker output cannot retain a valid execution receipt (1.552084ms)
+✔ execution failure stays on the private copy and incomplete reports cannot become candidates (1.033625ms)
+✔ missing/manual adapters cannot masquerade as complete execution (2.20375ms)
+✔ candidate preserves geometry and setting locks; manual drift and tampering reject (0.717042ms)
+✔ candidate reloads from isolated disk and preserves current snapshot (6.938ms)
+✔ disabled and removed capabilities restore baseline; unrelated geometry never enters settings (0.499542ms)
+✔ duplicate capabilities and invalid parameters reject (0.133917ms)
+✔ saved experiment retains independent recipe and baseline (2.479541ms)
+✔ legacy life recipe stays valid; new defaults separate weather vegetation animals smoke and fire (0.177584ms)
+✔ whole directory has exactly one reviewed row per actual code file, including HTML and tools (0.918666ms)
+✔ source identities and all claimed target paths exist; pages cannot inherit core completion (54.403417ms)
+✔ verified deliveries are explicitly scoped with execution evidence and residual gaps (0.126375ms)
+✔ recent: 按加入日期倒序，限制条数，带能力线 / 场景 / 级别 / 日期依据 (8.407209ms)
+✔ recent: 本机首次执行只能把「上限」类日期往前提，不覆盖日志 / meta 给的日期 (13.32075ms)
+✔ recent: 没有成熟度数据时降级 —— 只列页面已登记的能力，日期未知、未评级，不编日期 (0.202208ms)
+✔ recent: 点一行去哪 —— 直达层用 R21 页签，其余去对应工坊并切到能跑的场景 (0.09975ms)
+✔ recent 页面接线：pipeline.html 有栏位，studio.js 读成熟度与经验并按目标跳转，版本号已加 (0.819167ms)
+✔ immutable experiments and explicit validated final survive reload (7.5545ms)
+✔ storage failure is surfaced and duplicate plugins rejected (0.229292ms)
+✔ exact runtime version is stable after a new final; missing versions reject (0.149875ms)
+✔ planet: small sea-level rise passes all checks (627.762917ms)
+✔ planet: drowning a scene landmark fails verification (564.278292ms)
+✔ planet: compiler failure is a failed candidate, not a crash (62.97475ms)
+✔ object: scan finds identical trees and overlaps; router follows goal keywords (0.650041ms)
+✔ object: plan reduces overlaps, keeps manual edits, passes verification (0.749584ms)
+✔ object: touching a manual edit or exceeding the move budget fails (0.094292ms)
+✔ catalog: three workshops, every node has an execution state (5.967083ms)
+✔ actual fixed REA source executes a detached reproducible candidate with exact source revision (19.840917ms)
+✔ node target binding remains fixed and refuses another selected object or stale revision (1.954208ms)
+✔ raw leaf cards, region input and session UUID cannot masquerade as compatible canopy targets (0.24325ms)
+✔ tampered payload, algorithm identity, writeSet or params reject before execution (5.584958ms)
+✔ invalid or overbudget algorithm inputs reject, and JSON roundtrip preserves execution (34.865958ms)
+✔ scene/object viewport orbit, pan and dolly preserve world and initial pose (3.149125ms)
+✔ ownership handoff applies stored pose and projection after a prior camera resets them (0.188666ms)
+ℹ tests 138
+ℹ suites 0
+ℹ pass 133
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1928.658417
+
+✖ failing tests:
+
+test at TigerMessenger/tests/capability-evolution.test.mjs:32:1
+✖ physical scan and catalog carry the same evolution fingerprint without promoting executable status (98.781208ms)
+  Error: Build failed with 1 error:
+  src/core/capability-maturity.js:13:31: ERROR: Expected ";" but found "且同目录至少一张"
+      at failureErrorWithLog (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1752:15)
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1211:25
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1163:52
+      at buildResponseToResult (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1209:7)
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1236:16
+      at responseCallbacks.<computed> (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:886:9)
+      at handleIncomingPacket (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:941:12)
+      at Socket.readFromStdout (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:864:7)
+      at Socket.emit (node:events:514:28)
+      at addChunk (node:internal/streams/readable:569:12) {
+    errors: [ { detail: undefined, id: '', location: [Object], notes: [], pluginName: '', text: 'Expected ";" but found "且同目录至少一张"' } ],
+    warnings: []
+  }
+
+test at TigerMessenger/tests/capability-maturity.test.mjs:1:1
+✖ TigerMessenger/tests/capability-maturity.test.mjs (58.525709ms)
+  'test failed'
+
+test at TigerMessenger/tests/capability-tree.test.mjs:1:1
+✖ TigerMessenger/tests/capability-tree.test.mjs (185.754792ms)
+  'test failed'
+
+test at TigerMessenger/tests/code-library-catalog.test.mjs:15:1
+✖ physical inventory preserves every module once, videos separately and no automatic executable promotion (101.755458ms)
+  Error: Build failed with 1 error:
+  src/core/capability-maturity.js:13:31: ERROR: Expected ";" but found "且同目录至少一张"
+      at failureErrorWithLog (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1752:15)
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1211:25
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1163:52
+      at buildResponseToResult (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1209:7)
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1236:16
+      at responseCallbacks.<computed> (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:886:9)
+      at handleIncomingPacket (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:941:12)
+      at Socket.readFromStdout (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:864:7)
+      at Socket.emit (node:events:514:28)
+      at addChunk (node:internal/streams/readable:569:12) {
+    errors: [ { detail: undefined, id: '', location: [Object], notes: [], pluginName: '', text: 'Expected ";" but found "且同目录至少一张"' } ],
+    warnings: []
+  }
+
+test at TigerMessenger/tests/code-library-catalog.test.mjs:21:1
+✖ library dependencies link only explicit implemented adapters, with palette before contrast (58.295541ms)
+  Error: Build failed with 1 error:
+  src/core/capability-maturity.js:13:31: ERROR: Expected ";" but found "且同目录至少一张"
+      at failureErrorWithLog (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1752:15)
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1211:25
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1163:52
+      at buildResponseToResult (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1209:7)
+      at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:1236:16
+      at responseCallbacks.<computed> (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:886:9)
+      at handleIncomingPacket (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:941:12)
+      at Socket.readFromStdout (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/node_modules/esbuild/lib/main.js:864:7)
+      at Socket.emit (node:events:514:28)
+      at addChunk (node:internal/streams/readable:569:12) {
+    errors: [ { detail: undefined, id: '', location: [Object], notes: [], pluginName: '', text: 'Expected ";" but found "且同目录至少一张"' } ],
+    warnings: []
+  }
+

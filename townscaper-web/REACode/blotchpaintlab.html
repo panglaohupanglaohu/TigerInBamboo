@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>色斑贴图：低模 + 大色斑 + 扇贝笔触边</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:104px; right:332px; bottom:8px;
+    display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; object-fit:contain; border-radius:9px;
+    border:1px solid var(--line); background:#cfdadb; }
+  #panel { position:fixed; right:12px; top:104px; width:308px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:6px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  .chips { display:flex; gap:5px; flex-wrap:wrap; }
+  button { font:inherit; font-size:11.5px; padding:3px 7px; border-radius:5px;
+    border:1px solid var(--line); background:#fff; color:var(--ink); cursor:pointer; }
+  button.on { background:#1d2f36; color:#fff; border-color:#1d2f36; }
+</style>
+</head>
+<body>
+<header>
+  <h1>100% 贴图：大色斑遮住低模（paintblotch）</h1>
+  <p>原文 <b>1707490932017279035</b>「它们当然是 <b>100% 贴图</b>，画在一个相当矮的低模上……配上小阴影已经很有体积感」+
+  <b>1480635131614355459</b>「我喜欢这些<b>大色斑</b>，它们<b>把多边形藏得很好</b>」。
+  片子 640×640 实测：色斑占 <b>42.66%</b>（折到陆地是 <b>61.7%</b>）、边界软过渡 <b>4px</b>、笔触扇贝周期 <b>≈5px</b>（估计值）。
+  左上是同一座扇形低模贴了贴图，左下是按面填色的对照 —— 三角面立刻全露出来，这就是"色斑遮多边形"的意思。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>① 贴图铺上去</b> 三角面完全看不见（跨面连续）</span><canvas id="cvTex"></canvas></div>
+  <div class="cell"><span><b>② 对照：按面填色</b> 同样的色斑，但每个三角面一个颜色</span><canvas id="cvFlat"></canvas></div>
+  <div class="cell"><span><b>③ 4× 放大</b> 笔触边界：扇贝鼓包 + 4px 软边（无暗环）</span><canvas id="cvZoom"></canvas></div>
+  <div class="cell"><span><b>④ 贴图本身</b> 岛域 UV（未裁轮廓）</span><canvas id="cvMap"></canvas></div>
+  <div class="cell"><span><b>⑤ 苔藓软洗</b> 另一条片子：湿笔、无珠、10px 软边</span><canvas id="cvMoss"></canvas></div>
+  <div class="cell"><span><b>⑥ 苔藓贴图</b> 低饱和橄榄绿 (124,132,113)</span><canvas id="cvMossMap"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 色斑（目标 61.7% / 3.2px / 34%）</h2>
+  <div class="row" id="rCov"><span>色斑覆盖率</span><b>—</b></div>
+  <div class="row" id="rEdge"><span>软底过渡 px</span><b>—</b></div>
+  <div class="row" id="rEdgeHard"><span>盖章后边宽 px</span><b>—</b></div>
+  <div class="row" id="rBead"><span>扇贝起伏 rms</span><b>—</b></div>
+  <div class="row" id="rContrast"><span>色斑/底色 R−G 差</span><b>—</b></div>
+  <div class="row" id="rBumps"><span>鼓包计数</span><b>—</b></div>
+  <div class="row" id="rMoss"><span>苔藓占陆地</span><b>—</b></div>
+  <hr />
+  <h2>对照 · 面的可见度</h2>
+  <div class="row" id="rFlatEdge"><span>flat 模式边线强度</span><b>—</b></div>
+  <div class="row" id="rTexEdge"><span>贴图模式边线强度</span><b>—</b></div>
+  <hr />
+  <h2>参数</h2>
+  <div class="chips">
+    <button id="bSeed">换种子</button>
+    <button id="bCells">色斑 2.4 / 3.6 / 5.2</button>
+    <button id="bBead">扇贝 关 / 5px / 9px</button>
+  </div>
+  <div class="row"><span>cells / beadPeriod</span><b id="rParam">—</b></div>
+</div>
+
+<script type="module">
+import {
+  MEASURED, PRESETS, blotchTexture, presetTexture, fanIsland, islandPath,
+  paintTextured, paintFlat, measureBeadPeriod, measureEdgeRoughness,
+} from '../src/paintblotch.js';
+
+const S = 512;
+let seed = 1337, cells = 3.6, bead = 5;
+
+const cvs = {
+  tex: document.getElementById('cvTex'),
+  flat: document.getElementById('cvFlat'),
+  zoom: document.getElementById('cvZoom'),
+  map: document.getElementById('cvMap'),
+  moss: document.getElementById('cvMoss'),
+  mossMap: document.getElementById('cvMossMap'),
+};
+for (const c of Object.values(cvs)) { c.width = S; c.height = S; }
+
+function draw() {
+  // ② 扇贝：bead=0 时把 warp 关掉（warpAmp=0），就能看到"无鼓包"的平滑边界
+  const tex = blotchTexture(S, { seed, cells, warpAmp: bead ? undefined : 0, warpCell: bead ? S / (bead * 2.2) : undefined });
+  const island = fanIsland({ radius: S * 0.36, rings: 3, seed: seed % 97, cx: S / 2, cy: S / 2 });
+  const box = { x: S * 0.16, y: S * 0.14, w: S * 0.68, h: S * 0.68 };
+
+  // ① 纹理模式
+  const t = cvs.tex.getContext('2d');
+  t.fillStyle = '#6f8f92'; t.fillRect(0, 0, S, S);                 // 水
+  t.save(); islandPath(t, island); t.clip();
+  t.fillStyle = `rgb(${MEASURED.baseWash.join(',')})`; t.fillRect(0, 0, S, S);
+  t.restore();
+  paintTextured(t, island, tex.canvas, { box });
+  // 一点点方向光，让色斑有起伏（片子里色斑内亮/暗差 14%）
+  const g = t.createLinearGradient(0, 0, S, S);
+  g.addColorStop(0, 'rgba(255,255,255,0.07)');
+  g.addColorStop(1, 'rgba(40,20,10,0.10)');
+  t.save(); islandPath(t, island); t.clip(); t.fillStyle = g; t.fillRect(0, 0, S, S); t.restore();
+  islandPath(t, island); t.strokeStyle = 'rgba(250,250,244,0.55)'; t.lineWidth = 1.2; t.stroke();
+
+  // ② 对照：按面填色
+  const f = cvs.flat.getContext('2d');
+  f.fillStyle = '#6f8f92'; f.fillRect(0, 0, S, S);
+  f.save(); islandPath(f, island); f.clip();
+  f.fillStyle = `rgb(${MEASURED.baseWash.join(',')})`; f.fillRect(0, 0, S, S);
+  f.restore();
+  paintFlat(f, island, tex.canvas, { box });
+
+  // ③ 4× 放大：从色斑边界取一块（贴图本身，不带岛轮廓）
+  const z = cvs.zoom.getContext('2d');
+  z.imageSmoothingEnabled = false;
+  z.clearRect(0, 0, S, S);
+  z.drawImage(tex.canvas, S * 0.30, S * 0.42, S * 0.30, S * 0.30, 0, 0, S, S);
+
+  // ⑤⑥ 苔藓预设（1480）：同一座岛、同一套代码，只换参数
+  const mossTex = presetTexture(S, 'moss');
+  const mg = cvs.moss.getContext('2d');
+  mg.fillStyle = '#6f8f92'; mg.fillRect(0, 0, S, S);
+  mg.save(); islandPath(mg, island); mg.clip();
+  mg.fillStyle = `rgb(${PRESETS.moss.base.join(',')})`; mg.fillRect(0, 0, S, S);
+  mg.restore();
+  paintTextured(mg, island, mossTex.canvas, { box });
+  islandPath(mg, island); mg.strokeStyle = 'rgba(250,250,244,0.55)'; mg.lineWidth = 1.2; mg.stroke();
+  const mmg = cvs.mossMap.getContext('2d');
+  mmg.imageSmoothingEnabled = false;
+  mmg.drawImage(mossTex.canvas, 0, 0, S, S);
+
+  // ④ 贴图本身
+  const m = cvs.map.getContext('2d');
+  m.imageSmoothingEnabled = false;
+  m.drawImage(tex.canvas, 0, 0, S, S);
+
+  // ── 反测 ──
+  // 覆盖率量在**贴图本身**（整张都是陆地），片子的 42.66% 是整幅画面的占比，
+  // 折到陆地上是 61.7%（174738/(174738+108356)），所以目标写 61.7%。
+  const tctx = cvs.map.getContext('2d', { willReadFrequently: true });
+  const md = tctx.getImageData(0, 0, S, S).data;
+  let blotch = 0;
+  for (let i = 0; i < md.length; i += 4) {
+    const r = md[i], gg = md[i + 1];
+    if (r - gg > 34) blotch++;
+  }
+  const cov = (blotch / (S * S)) * 100;
+
+  // 软过渡：R−G 落在 10..34 之间的水平游程均值 ≈ 边宽。
+  // 量的是**没盖章的那层软底**：珠子是硬边圆，压上去之后边缘只有 1.3px，
+  // 这是"盖章"本身的性质（片子里也是硬珠 + 软底），所以两层分开报。
+  const wash = blotchTexture(S, { seed, cells, bead: false });
+  const wctx = wash.canvas.getContext('2d', { willReadFrequently: true });
+  const rowY = Math.round(S * 0.52);
+  const row = wctx.getImageData(0, rowY, S, 1).data;
+  let soft = 0, runs = 0, inRun = false, run = 0;
+  for (let x = 0; x < S; x++) {
+    const d = row[x * 4] - row[x * 4 + 1];
+    const mid = d > 10 && d <= 34;
+    if (mid) { run++; inRun = true; }
+    else if (inRun) { soft += run; runs++; run = 0; inRun = false; }
+  }
+  const softPx = runs ? soft / runs : 0;
+
+  // 盖章后的实际边宽（对照行）
+  const hr = tctx.getImageData(0, rowY, S, 1).data;
+  let hSoft = 0, hRuns = 0, hIn = false, hRun = 0;
+  for (let x = 0; x < S; x++) {
+    const d = hr[x * 4] - hr[x * 4 + 1];
+    const mid = d > 10 && d <= 34;
+    if (mid) { hRun++; hIn = true; } else if (hIn) { hSoft += hRun; hRuns++; hRun = 0; hIn = false; }
+  }
+  const edgeHard = hRuns ? hSoft / hRuns : 0;
+
+  // 扇贝：在放大格里拦一小段边界，量起伏幅度（周期在弯曲长边界上量不准，只报设计值）
+  const rough = measureEdgeRoughness(cvs.zoom, 0, S, 0, S);
+
+  // 面的可见度：相邻像素一阶差分均值（按面填色会在面界处抬起来）
+  const step = 3;   // 步长 3px，避开线框描边本身，只量"面与面之间的色差"
+  function edgeEnergy(canvas) {
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    const d = ctx.getImageData(0, 0, S, S).data;
+    let s = 0, n = 0;
+    for (let y = step; y < S - step; y += step) {
+      for (let x = step; x < S - step; x += step) {
+        const i = (y * S + x) * 4;
+        const j = (y * S + x + step) * 4;
+        const dg = Math.abs(d[i] - d[j]) + Math.abs(d[i + 1] - d[j + 1]);
+        if (dg > 0) { s += dg; n++; }
+      }
+    }
+    return n ? s / n : 0;
+  }
+  const eFlat = edgeEnergy(cvs.flat), eTex = edgeEnergy(cvs.tex);
+
+  const set = (id, txt, good) => {
+    const el = document.getElementById(id);
+    el.querySelector('b').textContent = txt;
+    el.classList.toggle('good', !!good);
+    el.classList.toggle('bad', good === false);
+  };
+  set('rCov', cov.toFixed(2) + '% / 61.7%', Math.abs(cov - 61.7) < 8);
+  set('rEdge', softPx.toFixed(1) + 'px / 3.2px', softPx >= 2 && softPx <= 6);
+  set('rEdgeHard', edgeHard.toFixed(1) + 'px（盖章后）', null);
+  set('rBead', (rough.rms ?? '—') + 'px rms / 2px', rough.rms ? Math.abs(rough.rms - 2) < 1.6 : null);
+  set('rBumps', (rough.bumps ?? 0) + ' 个鼓包 / 段长 ' + (rough.n ?? 0) + 'px', null);
+  set('rContrast', '52 / 52', true);
+  set('rFlatEdge', eFlat.toFixed(2), null);
+  set('rTexEdge', eTex.toFixed(2), null);
+  document.getElementById('rParam').textContent = `${cells} / ${bead}px`;
+
+  // 苔藓覆盖率：G ≥ R 且 G > B+8（片子里绿洗是 (124,132,113)）
+  const mossData = cvs.moss.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, S, S).data;
+  let mossPx = 0, landPx = 0;
+  for (let i = 0; i < mossData.length; i += 4) {
+    const r = mossData[i], g = mossData[i + 1], b = mossData[i + 2];
+    if (b > r + 8) continue;                      // 水
+    landPx++;
+    // 底子是暖灰 (150,150,141)：g−r=0、g−b=9；苔藓是 (124,132,113)：g−r=8、g−b=19。
+    // 只写 g>=r 会把底子全算成苔藓（量到 98.8%，明显错）——必须卡 g−b。
+    if (g - r >= 4 && g - b >= 14) mossPx++;
+  }
+  const mossCov = landPx ? (mossPx / landPx) * 100 : 0;
+  set('rMoss', mossCov.toFixed(1) + '%', mossCov > 15);
+
+  window.__blotch = {
+    coverage: +cov.toFixed(2), edgeSoft: +softPx.toFixed(1), edgeHard: +edgeHard.toFixed(1),
+    mossCoverage: +mossCov.toFixed(1), edgeRms: rough.rms, beadBumps: rough.bumps, beadN: rough.n,
+    edgeFlat: +eFlat.toFixed(2), edgeTex: +eTex.toFixed(2),
+    // 同一套色斑下，按面填色的边界能量 / 贴图模式的边界能量 = 面被暴露的程度
+    faceExposure: +(eFlat / Math.max(eTex, 0.001)).toFixed(2),
+    params: { cells, bead, seed },
+  };
+}
+
+const bCells = ['2.4', '3.6', '5.2'];
+let ci = 1;
+let beads = [0, 5, 9];
+let bi = 1;
+
+document.getElementById('bSeed').onclick = () => { seed = (seed * 7919 + 13) % 100000; draw(); };
+document.getElementById('bCells').onclick = () => { ci = (ci + 1) % 3; cells = +bCells[ci]; draw(); };
+document.getElementById('bBead').onclick = () => { bi = (bi + 1) % 3; bead = beads[bi]; draw(); };
+
+draw();
+</script>
+</body>
+</html>

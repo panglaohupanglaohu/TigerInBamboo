@@ -106,16 +106,22 @@ export function createExpressionBallisticTable({
     stats: Object.freeze({ arcs: arcs.length, samples: arcs.reduce((s, a) => s + a.pts.length, 0), maxRange: Math.max(...arcs.map((a) => a.range)) }),
     /** 候选（已按 Valid 优先、Cost 升序）：页面画扇子用；limit 截断。 */
     candidates(dx, dy, limit = 64) { if (![dx, dy].every(Number.isFinite)) return []; return rank(dx, dy).slice(0, limit).map((r) => ({ arcId: r.arc.id, speed: r.speed, angleDeg: r.angleDeg, minDist: r.minDist, time: r.time, impactSpeed: r.impactSpeed, cost: r.cost, ok: r.ok })); },
-    lookup(dx, dy) {
+    /** accept(shot)=>bool：逐条候选过滤（Validity 契约用）。缓存的是 2cm 格里的 ranked 合法弧列表；
+     *  最近点按真实目标重算（弧不变，到点时间跟着目标走），重算后 Valid 仍要真过，accept 再挑第一条放得行的。 */
+    lookup(dx, dy, accept) {
       if (!Number.isFinite(dx) || !Number.isFinite(dy) || dx < .05 || dx > 6.5 || Math.abs(dy) > 3) return null;
       const key = Math.round(dx * 50) + ':' + Math.round(dy * 50);
-      let r = cache.get(key);
-      if (r === undefined) { const best = rank(dx, dy)[0]; r = best && best.ok ? best : null; if (cache.size > 20000) cache.clear(); cache.set(key, r); }
-      // 缓存的是 2cm 格里选中的那条弧；最近点按真实目标重算（弧不变，到点时间跟着目标走）
-      if (!r) return null;
-      const c = closestOnBakedArc(r.arc, dx, dy);
-      if (valid({ ...r, minDist: c.d, time: c.t }) !== true) return null;
-      return toShot({ ...r, minDist: c.d, time: c.t });
+      let list = cache.get(key);
+      if (list === undefined) { list = rank(dx, dy).filter((r) => r.ok).slice(0, 16); if (cache.size > 20000) cache.clear(); cache.set(key, list); }
+      for (const r of list) {
+        const c = closestOnBakedArc(r.arc, dx, dy);
+        const ctx = { ...r, minDist: c.d, time: c.t };
+        if (valid(ctx) !== true) continue;
+        const shot = toShot(ctx);
+        if (accept && !accept(shot)) continue;
+        return shot;
+      }
+      return null;
     },
   });
 }
@@ -142,4 +148,48 @@ export function projectileState(from, to, shot, T, gravity = PROJECTILE_GRAVITY)
   const vx0 = shot.v * Math.cos(shot.th), vy0 = shot.v * Math.sin(shot.th);
   const y = from[1] + vy0 * T - .5 * gravity * T * T;
   return { x, y, z, look: [x + ux * vx0, y + (vy0 - gravity * T), z + uz * vx0] };
+}
+
+/* ------------------------------------------------------------------------------------------------
+ * 987267068495003648 补学（TigerMessenger 补学队列）：Validity 契约 —— 「什么算一条合法弹道」。
+ * 原 Inspector 的 Valid 表达式只管「弧线离目标够不够近」，不管世界语义；这里补三件原作里就有的判据：
+ *   ① 射程环：水平距离必须落在 [minRange, maxRange]（Bad North 弓手内外圈，太近不射、超程不射）；
+ *   ② 遮挡：沿弧线按 projectileState 采样，任一点落进 blockedAt 就判 occluded
+ *      （高抛弧可以越过矮墙，所以契约是「逐条弧判」，不是「一条视线判」——配合表达式表的 accept 换弧）；
+ *   ③ 落点有效：groundAt 给出目标处地表高度，与瞄准点差超过 landingTolerance（或根本没有地表）即拒。
+ * 契约与真实目标/碰撞校验是两层：它只在「射前」拦，不替换飞行中的 clearSegment 与落点命中判定。
+ * ---------------------------------------------------------------------------------------------- */
+export function createShotContract({ minRange = 0, maxRange = Infinity, blockedAt = null, groundAt = null, landingTolerance = .3, samples = 32 } = {}) {
+  if (!Number.isFinite(minRange) || minRange < 0 || !(maxRange > minRange)) throw new RangeError('invalid range ring');
+  if (!(landingTolerance >= 0) || !Number.isFinite(landingTolerance)) throw new RangeError('landingTolerance must be >= 0');
+  if (!Number.isInteger(samples) || samples < 4 || samples > 512) throw new RangeError('samples must be an integer 4..512');
+  if (blockedAt != null && typeof blockedAt !== 'function') throw new TypeError('blockedAt must be a function');
+  if (groundAt != null && typeof groundAt !== 'function') throw new TypeError('groundAt must be a function');
+  const validate = (from, to, shot, gravity = PROJECTILE_GRAVITY) => {
+    if (!from || !to || ![from[0], from[1], from[2], to[0], to[1], to[2]].every(Number.isFinite)) return { ok: false, reason: 'invalid-input' };
+    if (!shot || !(shot.time > 0)) return { ok: false, reason: 'no-solution' };
+    const dist = Math.hypot(to[0] - from[0], to[2] - from[2]);
+    if (dist < minRange) return { ok: false, reason: 'inside-min-ring', dist };
+    if (dist > maxRange) return { ok: false, reason: 'beyond-max-ring', dist };
+    if (groundAt) {
+      const g = groundAt(to[0], to[2]);
+      if (!Number.isFinite(g) || Math.abs(to[1] - g) > landingTolerance) return { ok: false, reason: 'bad-landing', ground: Number.isFinite(g) ? g : null };
+    }
+    if (blockedAt) {
+      for (let i = 1; i < samples; i++) {           // 端点不采：出射点贴着弓手自己、落点贴着目标/地面
+        const T = shot.time * i / samples, p = projectileState(from, to, shot, T, gravity);
+        if (blockedAt(p.x, p.y, p.z)) return { ok: false, reason: 'occluded', at: { x: p.x, y: p.y, z: p.z }, t: T };
+      }
+    }
+    return { ok: true, dist };
+  };
+  return Object.freeze({ minRange, maxRange, landingTolerance, samples, validate });
+}
+
+/** 查表 + 契约一站完成。表达式表的 lookup(dx,dy,accept) 会按 accept 逐条候选过滤（墙挡住低抛就换高抛）；
+ *  解析表等不认第三参的表：取回唯一解后兜底再验一次，契约照样生效，只是没有备选弧可换。 */
+export function pickBallisticShot(table, dx, dy, accept) {
+  if (!table || typeof table.lookup !== 'function') return null;
+  const shot = table.lookup(dx, dy, accept);
+  return shot && (!accept || accept(shot)) ? shot : null;
 }

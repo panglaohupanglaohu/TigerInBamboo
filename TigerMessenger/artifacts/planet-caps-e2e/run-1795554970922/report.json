@@ -1,0 +1,28 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "planet": {
+   "ok": true,
+   "layers": {
+    "terrain": false,
+    "water": true,
+    "clouds": true,
+    "version": "v9"
+   },
+   "recipe": {
+    "seed": 1,
+    "radius": 160,
+    "landformChain": true,
+    "subdivision": 1,
+    "chartLimit": 0,
+    "resolution": 3,
+    "seaLevel": 0
+   }
+  },
+  "scan": "扫描完成：22 / 22 个能力能作用。星球 72 ms 编译完成。"
+ },
+ "pass": false,
+ "failure": "locator.dblclick: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#capability-sidebar [data-capability-id=\"planet.sea-level\"]')\n    - locator resolved to <article draggable=\"true\" data-maturity=\"5\" title=\"拖进管线，或双击加入\" class=\"cap-item exec-code runnable\" data-capability-id=\"planet.sea-level\">…</article>\n  - attempting dblclick action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying dblclick action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying dblclick action\n      - waiting 100ms\n    27 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying dblclick action\n       - waiting 500ms\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/planet-caps-browser.mjs:73:16"
+}

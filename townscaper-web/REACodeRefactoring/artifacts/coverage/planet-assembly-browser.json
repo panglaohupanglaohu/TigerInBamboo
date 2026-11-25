@@ -40,5 +40,41 @@
     "vertexColors": false,
     "children": 1
   },
+  "rootChecks": {
+    "setRoot": {
+      "target": 399,
+      "ok": 399,
+      "first": 399,
+      "root": 399,
+      "prefix": [
+        399,
+        87,
+        640,
+        194,
+        720,
+        579,
+        71,
+        744,
+        881,
+        889,
+        371,
+        634
+      ]
+    },
+    "picked": {
+      "root": 608,
+      "first": 608,
+      "land": true
+    },
+    "query": {
+      "root": 399,
+      "first": 399
+    },
+    "badQuery": {
+      "root": null,
+      "first": 7,
+      "cells": 618
+    }
+  },
   "errors": []
 }

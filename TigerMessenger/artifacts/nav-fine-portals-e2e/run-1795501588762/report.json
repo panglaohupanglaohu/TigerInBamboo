@@ -1,0 +1,299 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/nav-fine-portals-e2e/run-1795501588762",
+  "capabilities": [
+    "battle.navFinePortals"
+  ],
+  "steps": {
+    "demo": {
+      "unitHeight": 0.34,
+      "arch": {
+        "cell": 29,
+        "u0": 0.14622668902875746
+      },
+      "on": {
+        "arrived": true,
+        "frames": 80,
+        "clips": 0
+      },
+      "off": {
+        "arrived": true,
+        "frames": 80,
+        "clips": 7
+      },
+      "fine": {
+        "archNodes": 2,
+        "flatNodes": 0,
+        "covered": 2,
+        "sideWalls": 4,
+        "legs": 0,
+        "narrowed": 8,
+        "closed": 0,
+        "meanNarrowing": 0.292
+      },
+      "probes": {
+        "probes": 8,
+        "offFits": 8,
+        "onBlocked": 8,
+        "offFitsOnBlocked": 8
+      },
+      "stat": "身高 0.34 · 拱下节点 2 · 收窄门户 8（平均收窄 29.2%）· 侧壁 4 · 穿墙探针 8 处：关时放得下 8、开后拦下 8"
+    },
+    "demoOffClips": 7,
+    "firstScene": "apostles",
+    "scan": {
+      "apostles": {
+        "count": 1,
+        "text": "✓ 拱洞精细门户实景拱洞候选 1 列 · 采样里已有洞道 0 列"
+      }
+    },
+    "scene": "apostles",
+    "nodes": {
+      "preloaded": [
+        "battle.stage",
+        "battle.navFinePortals"
+      ],
+      "added": [],
+      "now": [
+        "battle.stage",
+        "battle.garrison",
+        "battle.waves",
+        "battle.navFinePortals",
+        "battle.navTraffic",
+        "battle.navFooting"
+      ]
+    },
+    "run": {
+      "title": "候选 · 验证通过",
+      "steps": [
+        "部署战斗舞台：执行舞台 36×36 格 · 5 米/格 · 士兵 1.7 米",
+        "守军布防：执行增援 1 队 × 8 人 · 装备 1 级 · 含弓手",
+        "登陆波次：执行首波 3s · 之后每 26s 一波",
+        "拱洞精细门户：执行拱下节点 1 · 平底洞 0 · 收窄门户 0 · 封死 0 · 侧壁 0；穿墙探针 0 处：关时放得下身体 0，开后拦下 0；穿拱模拟 0 处：开 到达 0 / 穿拱 0 / 擦墙帧 0；关 擦墙帧 0",
+        "窄道会车：执行窄道 37 格 · 弯道 23 · 岔口 38 · 窄门会车冲突 2；体型重路由：286 对起终点里大个子绕路 0、走不通 0（最大绕路 ×1）；对向会车（窄道 4 格）：8/8 到达（大个子 2/2）· 用了 45 帧 · 最长原地 0 帧",
+        "穿洞与脚高插值：执行楼梯 46 架：踏面最大一步 0.167（不插值一步 1）；洞道节点 1：脚高不在洞底的 0 个（洞顶比洞底高 2）；逐帧 20 帧：脚高最大跳变 0.167（不插值 1）· 楼梯帧 17 · 洞道帧 0"
+      ]
+    },
+    "routeArch": {
+      "through": false,
+      "reason": "dead-end-arches-only"
+    },
+    "samples": [
+      {
+        "running": true,
+        "units": 32,
+        "finePortals": true,
+        "unitHeight": 0.34,
+        "fine": {
+          "covered": 1,
+          "archNodes": 1,
+          "flatNodes": 0,
+          "sideWalls": 0,
+          "legs": 0,
+          "portals": 718,
+          "narrowed": 0,
+          "closed": 0,
+          "meanNarrowing": 0,
+          "unitHeight": 0.34
+        },
+        "graph": {
+          "nodes": 240,
+          "components": 2,
+          "covered": 1
+        },
+        "archesOn": true,
+        "archCandidates": 1,
+        "footing": true,
+        "covered": 0,
+        "clips": 0,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "measure": {
+          "units": 32,
+          "floating": 0,
+          "buried": 6,
+          "levels": 5,
+          "maxGap": 1.5
+        },
+        "drawn": {
+          "checked": 0,
+          "off": 0,
+          "maxError": 0
+        },
+        "plan": [
+          "finePortals",
+          "arches",
+          "unitHeight",
+          "fine",
+          "traffic",
+          "footing"
+        ]
+      },
+      {
+        "running": true,
+        "units": 32,
+        "finePortals": true,
+        "unitHeight": 0.34,
+        "fine": {
+          "covered": 1,
+          "archNodes": 1,
+          "flatNodes": 0,
+          "sideWalls": 0,
+          "legs": 0,
+          "portals": 718,
+          "narrowed": 0,
+          "closed": 0,
+          "meanNarrowing": 0,
+          "unitHeight": 0.34
+        },
+        "graph": {
+          "nodes": 240,
+          "components": 2,
+          "covered": 1
+        },
+        "archesOn": true,
+        "archCandidates": 1,
+        "footing": true,
+        "covered": 0,
+        "clips": 0,
+        "heavy": 8,
+        "heavyRadius": 0.12,
+        "measure": {
+          "units": 32,
+          "floating": 0,
+          "buried": 6,
+          "levels": 5,
+          "maxGap": 1.5
+        },
+        "drawn": {
+          "checked": 0,
+          "off": 0,
+          "maxError": 0
+        },
+        "plan": [
+          "finePortals",
+          "arches",
+          "unitHeight",
+          "fine",
+          "traffic",
+          "footing"
+        ]
+      },
+      {
+        "running": true,
+        "units": 36,
+        "finePortals": true,
+        "unitHeight": 0.34,
+        "fine": {
+          "covered": 1,
+          "archNodes": 1,
+          "flatNodes": 0,
+          "sideWalls": 0,
+          "legs": 0,
+          "portals": 718,
+          "narrowed": 0,
+          "closed": 0,
+          "meanNarrowing": 0,
+          "unitHeight": 0.34
+        },
+        "graph": {
+          "nodes": 240,
+          "components": 2,
+          "covered": 1
+        },
+        "archesOn": true,
+        "archCandidates": 1,
+        "footing": true,
+        "covered": 0,
+        "clips": 0,
+        "heavy": 9,
+        "heavyRadius": 0.12,
+        "measure": {
+          "units": 36,
+          "floating": 0,
+          "buried": 8,
+          "levels": 6,
+          "maxGap": 1.5
+        },
+        "drawn": {
+          "checked": 0,
+          "off": 0,
+          "maxError": 0
+        },
+        "plan": [
+          "finePortals",
+          "arches",
+          "unitHeight",
+          "fine",
+          "traffic",
+          "footing"
+        ]
+      },
+      {
+        "running": true,
+        "units": 35,
+        "finePortals": true,
+        "unitHeight": 0.34,
+        "fine": {
+          "covered": 1,
+          "archNodes": 1,
+          "flatNodes": 0,
+          "sideWalls": 0,
+          "legs": 0,
+          "portals": 718,
+          "narrowed": 0,
+          "closed": 0,
+          "meanNarrowing": 0,
+          "unitHeight": 0.34
+        },
+        "graph": {
+          "nodes": 240,
+          "components": 2,
+          "covered": 1
+        },
+        "archesOn": true,
+        "archCandidates": 1,
+        "footing": true,
+        "covered": 0,
+        "clips": 0,
+        "heavy": 10,
+        "heavyRadius": 0.12,
+        "measure": {
+          "units": 35,
+          "floating": 0,
+          "buried": 6,
+          "levels": 5,
+          "maxGap": 1.5
+        },
+        "drawn": {
+          "checked": 0,
+          "off": 0,
+          "maxError": 0
+        },
+        "plan": [
+          "finePortals",
+          "arches",
+          "unitHeight",
+          "fine",
+          "traffic",
+          "footing"
+        ]
+      }
+    ],
+    "maxUnderCover": 0,
+    "afterRevert": false
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true,
+  "notRun": [
+    "实景穿洞：dead-end-arches-only——开关/挖空/不卡墙已验，单位穿洞 NOT_VERIFIED"
+  ]
+}

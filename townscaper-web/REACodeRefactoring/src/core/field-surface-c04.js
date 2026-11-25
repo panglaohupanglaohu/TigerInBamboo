@@ -5,6 +5,7 @@
  * 这里补片子里另外看得到、旧页没做的四样（纯数据，不依赖 three）：
  *   ① 分层：地形走等值面（圆角），房子是独立硬边几何（坡屋顶 / 烟囱 / 门），与地形同一个区块时间窗一起缩、抬、换
  *      （832633189277409280：房子屋脊、门洞清晰可辨，地形却是黏土圆角 → 两套几何）。
+ *      配套 houseSupport 足印着座检查：模糊会把细柱顶熔掉一层，按盒高摆的房可能悬空/被埋，逐栋出 floating/buried 信号。
  *   ② 过渡碎块变暗：818 帧 0013–0043、832 帧 0082–0086 正在换形态的块明显比成品暗
  *      → 顶点按所在区块的过渡进度给一个暗度（0 = 成品色，1 = 最暗）。
  *   ③ 带状水线：沿水面高度那一层等值面的**外侧等距**画一圈白带（不是旧页的落地格边折线）
@@ -141,6 +142,39 @@ export function houseTriangles({ w = 2, d = 2, wall = 1.2, roof = .9, chimney = 
   return { tris, dark };
 }
 
+/**
+ * 房子着座检查：房子是独立硬边几何、不进等值面，但房基必须坐在地形体上
+ * （片中白房子都贴着岛面；模糊会把细柱顶熔掉一层，按盒子高度摆的房就可能悬空）。
+ *
+ * 对每栋房取足印四角 + 中心，在传入的（通常已模糊的）地形场上沿 y 自上而下找
+ * 第一个 ≥ iso 的实心点 top；base = h.y + 0.5 + (h.up || 0)，与页面
+ * mesh.position.y 同口径。clearance = base − top：
+ *   clearance >  tol → 'floating' 悬空（地形够不到房基，是缺陷信号）；
+ *   clearance < −tol → 'buried'   被埋（地形穿进房基，同样是缺陷信号）；
+ *   其他            → 'seated'   着座。
+ * overhang 记足印点下方完全没有实心柱的数量 —— 个别足印点悬在岛缘外是片中正常
+ * 现象（悬挑崖台上的房），只有整体够不到/被埋才算缺陷。过渡中段的房子带 up，
+ * 报 floating 是预期行为，调用方按 p.moving 自行解释。
+ */
+export function houseSupport(field, houses, { iso = .5, tol = .6, step = .25 } = {}) {
+  if (!field || !Number.isInteger(field.ny) || !Array.isArray(houses)) throw new RangeError('Invalid houseSupport input');
+  if (!Number.isFinite(iso) || !Number.isFinite(tol) || tol < 0 || !Number.isFinite(step) || step <= 0) throw new RangeError('Invalid houseSupport options');
+  const perHouse = houses.map((h) => {
+    const x0 = (h.x ?? 0) + 1, z0 = (h.z ?? 0) + 1, x1 = x0 + (h.w ?? 1), z1 = z0 + (h.d ?? 1);
+    const base = (h.y ?? 0) + .5 + (h.up || 0);
+    let top = -Infinity, overhang = 0;
+    for (const [px, pz] of [[x0, z0], [x1, z0], [x1, z1], [x0, z1], [(x0 + x1) / 2, (z0 + z1) / 2]]) {
+      let t = -Infinity;
+      for (let y = field.ny - 1; y >= 0; y -= step) if (sampleField(field, px, y, pz) >= iso) { t = y; break; }
+      if (t === -Infinity) overhang++; else top = Math.max(top, t);
+    }
+    const clearance = top === -Infinity ? Infinity : base - top;
+    const state = clearance > tol ? 'floating' : clearance < -tol ? 'buried' : 'seated';
+    return { id: h.id ?? null, x: h.x ?? 0, y: h.y ?? 0, z: h.z ?? 0, base, top: top === -Infinity ? null : top, clearance, overhang, state };
+  });
+  return { perHouse, seated: perHouse.filter((p) => p.state === 'seated').length, floating: perHouse.filter((p) => p.state === 'floating').length, buried: perHouse.filter((p) => p.state === 'buried').length };
+}
+
 /** 形态：地形盒（进等值面）+ 房子（硬边，不进场）。坐标与 field-surface.html 的 A/B 同一套格。 */
 export const LAYERED_SHAPES = {
   A: {
@@ -148,13 +182,15 @@ export const LAYERED_SHAPES = {
       { x: 4, y: 0, z: 4, w: 16, h: 6, d: 16 }, { x: 7, y: 6, z: 7, w: 6, h: 3, d: 6 }, { x: 8, y: 9, z: 8, w: 4, h: 5, d: 4 },
       { x: 15, y: 6, z: 9, w: 3, h: 4, d: 3 }, { x: 2, y: 0, z: 12, w: 4, h: 3, d: 6 },
     ],
-    houses: [{ x: 15, y: 6, z: 14, w: 3, d: 2 }, { x: 6, y: 6, z: 16, w: 2, d: 2 }, { x: 15, y: 10, z: 9, w: 2, d: 2 }],
+    // y=9：3×3 细柱顶经两遍模糊熔到 ≈9.25，原 y=10 的房基悬空 1.25 格（houseSupport 实测）
+    houses: [{ x: 15, y: 6, z: 14, w: 3, d: 2 }, { x: 6, y: 6, z: 16, w: 2, d: 2 }, { x: 15, y: 9, z: 9, w: 2, d: 2 }],
   },
   B: {
     terrain: [
       { x: 8, y: 0, z: 6, w: 14, h: 4, d: 9 }, { x: 11, y: 4, z: 8, w: 5, h: 7, d: 5 }, { x: 12, y: 11, z: 9, w: 3, h: 4, d: 3 },
       { x: 17, y: 4, z: 7, w: 3, h: 8, d: 3 }, { x: 4, y: 0, z: 9, w: 5, h: 2, d: 5 },
     ],
-    houses: [{ x: 18, y: 4, z: 12, w: 3, d: 2 }, { x: 9, y: 4, z: 12, w: 2, d: 2 }, { x: 5, y: 2, z: 10, w: 2, d: 2 }],
+    // 第二栋挪到 x8/z13：原位 x9/z12 足印压在高塔熔缘上，地形穿进房基 1.5 格；新位与台地面齐平、一角悬出岛缘（片中本就有崖沿房）
+    houses: [{ x: 18, y: 4, z: 12, w: 3, d: 2 }, { x: 8, y: 4, z: 13, w: 2, d: 2 }, { x: 5, y: 2, z: 10, w: 2, d: 2 }],
   },
 };

@@ -82,6 +82,7 @@ html:has(#citadel-editor[style*="display: block"]) #learnpanel,html:has(#crystal
 #tm-ui-dock .item:hover{background:rgba(18,35,46,.07)}
 #tm-ui-dock .item.on{background:#12232e;color:#fff}
 #tm-ui-dock .item small{display:block;opacity:.7;font-size:11px}
+#tm-ui-dock .scene-jump{border-bottom:1px solid rgba(18,35,46,.1);margin-bottom:4px;padding-bottom:4px}#tm-ui-dock .scene-jump:empty{display:none}
 #tm-ui-dock .foot{margin-top:6px;padding:6px 8px 2px;border-top:1px solid rgba(18,35,46,.1);font-size:11px;opacity:.75}
 /* Keep both edit and remote-toggle buttons reachable on touch screens. */
 @media (pointer:coarse),(hover:none){
@@ -98,11 +99,28 @@ function mountDock(){
  const menu=document.createElement('div');menu.className='menu';menu.hidden=true;
  const item=(label,note,fn)=>{const b=document.createElement('button');b.type='button';b.className='item';b.innerHTML=`${label}${note?`<small>${note}</small>`:''}`;b.onclick=()=>{fn();menu.hidden=true;};menu.append(b);return b;};
  const items=new Map();
+ const sceneBox=document.createElement('div');sceneBox.className='scene-jump';
  items.set(null,item('关闭编辑器','只显示玩家界面（提示 · 操控）',()=>setGroup(null)));
- for(const g of EDIT_GROUPS)items.set(g.id,item(g.name,g.note,()=>setGroup(g.id)));
+ // 「构建」下面的场景直达：选项实时读 #morris-town-target 下拉（莫西斯湖 / 十二门徒 / 高山圣城 / 水晶城 / 地图…），
+ // 点击 = 打开构建组 + 驱动现有下拉的 change（复用 selectTarget：镜头定位、面板开关、保存语义全走原路径）。
+ for(const g of EDIT_GROUPS){items.set(g.id,item(g.name,g.note,()=>setGroup(g.id)));if(g.id==='build')menu.append(sceneBox);}
+ const refreshSceneItems=()=>{
+  sceneBox.replaceChildren();
+  const sel=document.getElementById('morris-town-target');if(!sel)return;
+  sel.dispatchEvent(new Event('focus')); // 触发下拉的刷新（focus 不冒泡，不会触发菜单的「点外面关闭」）
+  for(const o of[...sel.options]){
+   const b=item('　· '+o.textContent,o.value===sel.value?'当前':'',()=>{
+    setGroup('build');
+    const s=document.getElementById('morris-town-target');if(!s)return;
+    s.value=o.value;s.dispatchEvent(new Event('change'));
+   });
+   if(o.value===sel.value)b.classList.add('on');
+   sceneBox.append(b);
+  }
+ };
  const mon=item('监控','帧率 · 探针 · 实时审计（F2）',()=>setMonitor(!state.monitor));
  const foot=document.createElement('div');foot.className='foot';foot.textContent='F1 开 / 关编辑器 · F2 监控 · 编辑与监控只在本地开发显示，发布版自动隐藏';menu.append(foot);
- button.onclick=()=>{menu.hidden=!menu.hidden;};
+ button.onclick=()=>{menu.hidden=!menu.hidden;if(!menu.hidden)refreshSceneItems();};
  document.addEventListener('pointerdown',e=>{if(!wrap.contains(e.target))menu.hidden=true;},true);
  wrap.append(menu,button);document.body.append(wrap);
  return{sync(){const g=EDIT_GROUPS.find(x=>x.id===state.group);button.textContent=g?`🛠 ${g.name}`:'🛠 编辑';button.classList.toggle('on',!!g);for(const[id,b]of items)b.classList.toggle('on',id===state.group);mon.classList.toggle('on',state.monitor);}};

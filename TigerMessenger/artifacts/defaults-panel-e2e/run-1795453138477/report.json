@@ -1,0 +1,15 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/defaults-panel-e2e/run-1795453138477",
+  "steps": {
+    "A": {
+      "rows": [
+        "citadel:mountain",
+        "old-port:relief"
+      ],
+      "text": "当前默认：正在读取 tm.defaults.v1…当前默认场景层能力谁定的时间citadelmountainmountain.pipeline手动采用2026/11/24 09:00:00撤回old-portreliefrelief.soft按实测选优代选2026/11/24 10:00:00撤回"
+    }
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "locator.screenshot: Error: strict mode violation: locator('#defaults-summary') resolved to 2 elements:\n    1) <section aria-label=\"当前默认\" id=\"defaults-summary\" class=\"defaults-summary\">…</section> aka getByRole('region', { name: '当前默认' })\n    2) <section class=\"defaults-ui\" id=\"defaults-summary\">…</section> aka getByText('当前默认场景层能力谁定的时间')\n\nCall log:\n  - waiting for locator('#defaults-summary')\n"
+}

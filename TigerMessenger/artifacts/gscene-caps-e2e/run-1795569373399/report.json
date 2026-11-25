@@ -1,0 +1,27 @@
+{
+ "capabilities": [
+  "scene.oklab-contrast",
+  "scene.oklab-palette",
+  "scene.palette-unify",
+  "scene.style-pack",
+  "scene.tone"
+ ],
+ "errors": [],
+ "steps": {
+  "scan": "扫描完成：5 / 5 个能力能作用。 已按「书店镇」自动预装 5 个能力（感知明暗层次、感知色板归并、风格统一（主色归并）、整体色调 等），点 ▶ 执行管线一键跑完整条。",
+  "pipelineNodes": 5,
+  "run": {
+   "checks": [
+    "✓ 数值25 种材质改色",
+    "✓ 人工调色保留已保存材质未改变",
+    "✓ 整体明度0.34 → 0.36（上限变化 0.25）",
+    "✓ 明暗层次明度标准差 0.292 → 0.308（低于一半判失败：画面会糊成一片）",
+    "✓ 颜色数21 → 20 种"
+   ],
+   "note": "候选已预览。确认前不会写入。"
+  }
+ },
+ "pass": true,
+ "scene": "bookshop",
+ "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/gscene-caps-e2e/run-1795569373399"
+}

@@ -88,11 +88,16 @@ export function waterColor(x, z) {
   if (Math.abs(v - Math.round(v)) < .05) c = mix3(c, [.32, .50, .68], .7);
   return c;
 }
-/** 手工 UV 岸带：u 弧长决定等距白点，v（0=水侧,1=陆侧）决定深浅与白点所在的带。 */
-export function shoreColor(u, v, sd, { dotSpacing = .4 } = {}) {
+/**
+ * 手工 UV 岸带：u 弧长决定等距白点，v（0=水侧,1=陆侧）决定深浅与白点所在的带；
+ * waves = 与岸平行的两道白浪线（原片图集 `Planet.psd` 里沙滩外那两条长横线，r156 补）。
+ */
+export function shoreColor(u, v, sd, { dotSpacing = .4, waves = true } = {}) {
   let c = mix3([.84, .66, .52], [.94, .80, .64], v);
-  const dot = Math.abs(u / dotSpacing - Math.round(u / dotSpacing));
-  if (dot < .2 && v < .35 && v > .04) c = mix3(c, [.97, .97, .95], .9);
+  // 白点是**圆**的（原片图集里是几粒泡沫点，不是竖条）：u 向按弧长、v 向按带内世界宽度各算距离
+  const du = Math.abs(u / dotSpacing - Math.round(u / dotSpacing)) * dotSpacing, dv = (v - .16) * .9;
+  if (dotSpacing > 0 && Math.hypot(du, dv) < .075) c = mix3(c, [.97, .97, .95], .9);
+  if (waves && (Math.abs(v - .34) < .022 || Math.abs(v - .58) < .022)) c = mix3(c, [.97, .98, .98], .88);
   if (Math.abs(sd + .06) < .035) c = mix3(c, [.76, .57, .44], .3);
   return c;
 }

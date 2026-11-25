@@ -1,0 +1,112 @@
+{
+  "stats": {
+    "openings": 240,
+    "doors": 4,
+    "depth": 0.06,
+    "frames": 29,
+    "upgraded": 0,
+    "skipped": 22
+  },
+  "build": {
+    "openings": 240,
+    "doors": 4
+  },
+  "W": 1000,
+  "H": 760,
+  "far": {
+    "changed": 6402,
+    "inside": 5347,
+    "outside": 1055,
+    "insideShare": 0.8352,
+    "noise": 0
+  },
+  "pick": {
+    "cell": 183,
+    "edge": 0,
+    "width": 0.082,
+    "height": 0.095,
+    "nx": -0.00354786137603638,
+    "nz": -0.9999937063200229,
+    "diff": 2324
+  },
+  "scan": {
+    "on": [
+      {
+        "dy": 0,
+        "diff": 2324,
+        "jamb": 1312,
+        "npx": 3158,
+        "darkN": 0,
+        "cxDark": null,
+        "darkOffN": 2244,
+        "jambOff": 914,
+        "cxDarkOff": 499.5,
+        "w": 53.2,
+        "h": 59.8
+      },
+      {
+        "dy": 0.1,
+        "diff": 2320,
+        "jamb": 1423,
+        "npx": 3117,
+        "darkN": 10,
+        "cxDark": 515.8,
+        "darkOffN": 2203,
+        "jambOff": 914,
+        "cxDarkOff": 499.09,
+        "w": 52.9,
+        "h": 61
+      },
+      {
+        "dy": 0.22,
+        "diff": 2256,
+        "jamb": 1711,
+        "npx": 3111,
+        "darkN": 12,
+        "cxDark": 498.5,
+        "darkOffN": 2145,
+        "jambOff": 966,
+        "cxDarkOff": 498.7,
+        "w": 51.9,
+        "h": 62.3
+      },
+      {
+        "dy": 0.4,
+        "diff": 2062,
+        "jamb": 1975,
+        "npx": 2932,
+        "darkN": 23,
+        "cxDark": 484.57,
+        "darkOffN": 1936,
+        "jambOff": 996,
+        "cxDarkOff": 497.97,
+        "w": 49,
+        "h": 64.3
+      }
+    ],
+    "off": [
+      {
+        "dy": 0,
+        "cx": 499.5,
+        "darkN": 2244
+      },
+      {
+        "dy": 0.1,
+        "cx": 499.09,
+        "darkN": 2203
+      },
+      {
+        "dy": 0.22,
+        "cx": 498.7,
+        "darkN": 2145
+      },
+      {
+        "dy": 0.4,
+        "cx": 497.97,
+        "darkN": 1936
+      }
+    ]
+  },
+  "cands": 173,
+  "errors": []
+}

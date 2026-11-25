@@ -1,4 +1,7 @@
 // 维京远征 · 航行与下锚（2026-11-09，规划 §3.4，P3；三版：可跨铁轨 + 书店镇→苔庭固化航线）。
+// 2026-11-16 用户：战役主场从苔庭改到十二门徒（apostles 已有 deploySceneBattle / battle-apostles e2e 实测）。
+//   resolveVikingSite()：默认 'apostles'，?vikingSite=moss 切回苔庭战役；planBookshopToSite / estimateSiteBattleEtaSec 按站参数化，
+//   原 planBookshopToMoss / estimateMossBattleEtaSec 保留为 site='moss' 的包装（固化航点表同样只在 moss 生效）。
 // 复用：warshipWaterRoutes 的 surface()（逐点取海面 / 海床 / 地面高度，含岛和建筑障碍）判断水深；
 //   它自带的 berth / route 是为港内短航线设计的（远航一次 berth 搜索 13–20 s，会卡住页面），远航航线在这里算。
 // 二版（用户问「船行驶路径都验证了吗」后实测：李白号去苔庭的实际航迹有 43 个采样点压在陆地上，最高压过圣城山体 12.8 m）：
@@ -8,12 +11,21 @@
 //      一版是「对准下一个航点」，转弯半径大于点距时抄近路，实测偏离航线最大 23 m。
 // 三版（2026-11-10 用户纠正「船可以跨过铁轨」）：
 //   - 电车高架 / 铁轨 / 双层轨桥不算船障；岛体、山体、浅滩仍挡。
-//   - 书店镇→苔庭改用带状网格 A*（planVoyageAstar）；实测可跨铁轨后李白 ~449 m、Duke ~323 m。
-//   - 离港钉死：苔庭之战前约 10 分钟（VOYAGE_TIMING.departBeforeMossSec=600）；巡航 15 m/s（2026-11-10 由 0.75 提速），到锚地后 hold-moss 等开战。
+//   - 书店镇→主战场改用带状网格 A*（planVoyageAstar）；实测可跨铁轨后书店镇→苔庭李白 ~449 m、Duke ~323 m。
+//   - 离港钉死：主战场开战前约 10 分钟（VOYAGE_TIMING.departBeforeMossSec=600，键名沿用苔庭战役时的命名）；巡航 15 m/s（2026-11-10 由 0.75 提速），到锚地后 hold-<site> 等开战。
 import * as THREE from 'three';
 import { MeshBVH } from '../../../vendor/jsm/libs/three-mesh-bvh.module.js';   // three-mesh-bvh 0.8.3（MIT）：大网格射线加速
 
 const R = 160;
+
+/**
+ * 维京远征的主战场站 id：默认 'apostles'（十二门徒；deploySceneBattle / battle-apostles e2e 已实测的场景）。
+ * ?vikingSite=moss 切回苔庭战役（西芳寺方阵守军 + 固化航线表仍完整保留）。
+ */
+export function resolveVikingSite(search = (typeof location !== 'undefined' ? location.search : '')) {
+  try { return new URLSearchParams(search).get('vikingSite') === 'moss' ? 'moss' : 'apostles'; }
+  catch { return 'apostles'; }
+}
 
 /** 用户明确：船可以跨过铁轨 / 电车高架。这些几何不挡航线（仍避开岛、山、陆地）。 */
 export function isCrossableRailOrTram(o) {
@@ -35,18 +47,18 @@ export function isVoyageShipMesh(o) {
 }
 
 /**
- * 战役时间常数（2026-11-10 用户：苔庭之战前约 10 分钟离开书店镇）。
+ * 战役时间常数（2026-11-10 用户：主战场开战前约 10 分钟离开书店镇；2026-11-16 主战场默认改十二门徒，键名里的 Moss 为历史命名）。
  * 实测书店镇→苔庭 A*：李白 449 m、Duke 323 m；巡航 15 m/s → 约半分钟到锚地。
  * 集结实测约 6 分钟 → 集结启动 ≈ 开战 −（离港提前 + 集结预算）。
  */
 export const VOYAGE_TIMING = Object.freeze({
-  departBeforeMossSec: 600,   // 离港 = 苔庭开战 − 10 分钟（用户估算，已钉死）
+  departBeforeMossSec: 600,   // 离港 = 主战场开战 − 10 分钟（用户估算，已钉死；键名沿用苔庭战役命名）
   musterBudgetSec: 360,       // 集结预算（书店镇补员实测约 6 分钟）
   holdAfterArriveSec: 30,     // 无霸天同步时，到锚地后再等多久开打（测试用）
-  cruiseSpeedMps: 15,         // 书店镇→苔庭巡航（2026-11-10 用户：0.75 → 5 → 15 m/s）；李白 449 m≈30 s、Duke 322 m≈21 s（另加加速 / 进锚地减速约 10 s）。?vikingSpeed= 可调
-  dashSpeedMps: 15,           // 苔庭→圣城（2026-11-10 与巡航统一 15 m/s，原 7）
+  cruiseSpeedMps: 15,         // 书店镇→主战场巡航（2026-11-10 用户：0.75 → 5 → 15 m/s）；苔庭实测李白 449 m≈30 s、Duke 322 m≈21 s（另加加速 / 进锚地减速约 10 s）。?vikingSpeed= 可调
+  dashSpeedMps: 15,           // 主战场→圣城（2026-11-10 与巡航统一 15 m/s，原 7）
   avgBatianTargetSec: 180,    // 估算霸天每个目标耗时（用于反推集结启动）
-  mossApproachSec: 70,        // 霸天开始打苔庭 → 旗舰开火触发开战的大约秒数
+  mossApproachSec: 70,        // 霸天转场到主战场 → 旗舰开火触发开战的大约秒数（键名沿用苔庭战役命名）
 });
 
 /**
@@ -95,31 +107,37 @@ export function scheduleBeforeMoss(battleEtaSec, timing = VOYAGE_TIMING) {
     sailBudgetSec: timing.departBeforeMossSec, // 巡航目标 ≈ 离港提前量
   };
 }
+/** 与上同义，主战场默认已是十二门徒（函数名沿用苔庭战役命名）。 */
+export const scheduleBeforeBattle = scheduleBeforeMoss;
 
-/** 按霸天战役剩余目标粗算「距苔庭开战还有多久」。 */
-export function estimateMossBattleEtaSec(batianSnapshot, targets, timing = VOYAGE_TIMING) {
+/** 按霸天战役剩余目标粗算「距 siteId 站开战还有多久」。 */
+export function estimateSiteBattleEtaSec(batianSnapshot, targets, timing = VOYAGE_TIMING, siteId = 'apostles') {
   if (!batianSnapshot || !Array.isArray(targets)) return null;
   const order = targets.map((t) => t.id);
-  const mossIdx = order.indexOf('moss');
-  if (mossIdx < 0) return null;
+  const siteIdx = order.indexOf(siteId);
+  if (siteIdx < 0) return null;
   const done = new Set(batianSnapshot.completedTargets || []);
   const cur = batianSnapshot.target;
   let remaining = 0;
-  for (let i = 0; i < mossIdx; i++) if (!done.has(order[i])) remaining++;
-  // 当前正在打苔庭：只剩进场到开火
-  if (cur === 'moss') {
+  for (let i = 0; i < siteIdx; i++) if (!done.has(order[i])) remaining++;
+  // 当前正在打主战场：只剩进场到开火
+  if (cur === siteId) {
     const phase = batianSnapshot.phase;
     if (['blockade', 'pincer', 'cannon', 'guard'].includes(phase)) return 0;
     if (phase === 'transit') return Math.max(5, timing.mossApproachSec * 0.5);
     if (phase === 'assemble') return timing.mossApproachSec;
     return timing.mossApproachSec;
   }
-  // 当前目标在苔庭之前：剩余整目标 + 当前目标尾巴 + 苔庭进场
+  // 当前目标在主战场之前：剩余整目标 + 当前目标尾巴 + 主战场进场
   let eta = remaining * timing.avgBatianTargetSec + timing.mossApproachSec;
-  if (cur && order.includes(cur) && order.indexOf(cur) < mossIdx) {
+  if (cur && order.includes(cur) && order.indexOf(cur) < siteIdx) {
     eta = Math.max(timing.mossApproachSec, (remaining - 0) * timing.avgBatianTargetSec + timing.mossApproachSec);
   }
   return eta;
+}
+/** 苔庭战役保留入口：等价于 estimateSiteBattleEtaSec(…, 'moss')。 */
+export function estimateMossBattleEtaSec(batianSnapshot, targets, timing = VOYAGE_TIMING) {
+  return estimateSiteBattleEtaSec(batianSnapshot, targets, timing, 'moss');
 }
 
 /**
@@ -344,20 +362,36 @@ export function createVoyageObstacles(scene, opts = {}) {
 }
 
 /**
- * 书店镇 → 苔庭锚地：优先运行时 A*（可跨铁轨）；失败则回退到 BOOKSHOP_TO_MOSS_ROUTE 固化航点。
+ * 书店镇 → 主战场锚地：优先运行时 A*（可跨铁轨）。
+ * 回退链：site='moss' → BOOKSHOP_TO_MOSS_ROUTE 固化航点；其他站（默认 apostles，没有固化表）→ 大圆 + 侧向绕行
+ *   （planVoyage）；还不行就退成起终点直线（source='straight-fallback'，让战役不卡死，航线质量记入 source）。
  * 返回 { points, length, ok, source, sailSec, speed }
  */
-export async function planBookshopToMoss(solver, from, to, { shipId = 'lee', obstacles = null, speed = VOYAGE_TIMING.cruiseSpeedMps, ...rest } = {}) {
+export async function planBookshopToSite(solver, from, to, { shipId = 'lee', obstacles = null, speed = VOYAGE_TIMING.cruiseSpeedMps, site = 'apostles', ...rest } = {}) {
   const clearance = shipId === 'duke' ? 7 : 9;
   const plan = await planVoyageAstar(solver, from, to, { step: 8, band: 200, clearance, obstacles, maxNodes: 100000, ...rest });
   if (plan.ok && plan.points?.length >= 2) {
     return { ...plan, source: 'astar', speed, sailSec: plan.length / speed };
   }
-  const table = shipId === 'duke' ? BOOKSHOP_TO_MOSS_ROUTE.duke : BOOKSHOP_TO_MOSS_ROUTE.lee;
-  const pts = table.dirs.map((d) => new THREE.Vector3(d[0], d[1], d[2]).normalize());
-  // 头尾换成本次实际起终点，避免泊位微移
-  pts[0] = from.clone().normalize();
-  pts[pts.length - 1] = to.clone().normalize();
-  const length = pts.slice(1).reduce((s, p, i) => s + pts[i].angleTo(p) * R, 0);
-  return { points: pts, ok: true, source: 'fixed-table', length, visits: 0, speed, sailSec: length / speed, fallbackFrom: plan.reason || 'astar-failed' };
+  if (site === 'moss') {
+    const table = shipId === 'duke' ? BOOKSHOP_TO_MOSS_ROUTE.duke : BOOKSHOP_TO_MOSS_ROUTE.lee;
+    const pts = table.dirs.map((d) => new THREE.Vector3(d[0], d[1], d[2]).normalize());
+    // 头尾换成本次实际起终点，避免泊位微移
+    pts[0] = from.clone().normalize();
+    pts[pts.length - 1] = to.clone().normalize();
+    const length = pts.slice(1).reduce((s, p, i) => s + pts[i].angleTo(p) * R, 0);
+    return { points: pts, ok: true, source: 'fixed-table', length, visits: 0, speed, sailSec: length / speed, fallbackFrom: plan.reason || 'astar-failed' };
+  }
+  try {
+    const detour = await planVoyage(solver, from, to, { step: 10, margin: clearance, obstacles });
+    if (detour?.points?.length >= 2) {
+      return { ...detour, ok: true, source: 'detour-fallback', speed, sailSec: (detour.length || 0) / speed, fallbackFrom: plan.reason || 'astar-failed' };
+    }
+  } catch { /* 绕行也失败就走下面的直线兜底 */ }
+  const a = from.clone().normalize(), b = to.clone().normalize(), length = a.angleTo(b) * R;
+  return { points: [a, b], ok: false, source: 'straight-fallback', length, visits: plan.visits || 0, speed, sailSec: length / speed, fallbackFrom: plan.reason || 'astar-failed' };
+}
+/** 苔庭战役保留入口：等价于 planBookshopToSite(…, { site: 'moss' })。 */
+export function planBookshopToMoss(solver, from, to, opts = {}) {
+  return planBookshopToSite(solver, from, to, { ...opts, site: 'moss' });
 }

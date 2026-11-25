@@ -1,0 +1,531 @@
+{
+ "default": {
+  "enabled": true,
+  "count": 24,
+  "visible": true,
+  "drawRange": 1077,
+  "stats": {
+   "pieces": 52,
+   "multiCell": 19,
+   "onStairs": 0,
+   "fitted": 0
+  },
+  "units": 24,
+  "live": 24,
+  "hasG3": true,
+  "g3shadowFit": false,
+  "material": {
+   "transparent": true,
+   "depthWrite": false,
+   "opacityFloor": true
+  }
+ },
+ "floor": {
+  "rows": [
+   {
+    "floor": 2,
+    "tris": 16,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 9,
+    "area": 0.02997,
+    "fill": 0.6625,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.03252,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 11,
+    "area": 0.037516,
+    "fill": 0.8293,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.01567,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 10,
+    "area": 0.03001,
+    "fill": 0.6634,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.0263,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 12,
+    "area": 0.03874,
+    "fill": 0.8563,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.01288,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 18,
+    "area": 0.044079,
+    "fill": 0.9744,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.00002,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 18,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 16,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 6,
+    "tris": 14,
+    "area": 0.040488,
+    "fill": 0.895,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.00882,
+    "expectOff": 0
+   },
+   {
+    "floor": 6,
+    "tris": 16,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 6,
+    "tris": 18,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 6,
+    "tris": 16,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 6,
+    "tris": 20,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 6,
+    "tris": 16,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 6,
+    "tris": 16,
+    "area": 0.043724,
+    "fill": 0.9665,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.00094,
+    "expectOff": 0
+   },
+   {
+    "floor": 7,
+    "tris": 8,
+    "area": 0.023743,
+    "fill": 0.5248,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.04642,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 10,
+    "area": 0.03552,
+    "fill": 0.7852,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.02018,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 13,
+    "area": 0.026501,
+    "fill": 0.5858,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.03944,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 16,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 20,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 16,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 19,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 16,
+    "area": 0.044085,
+    "fill": 0.9745,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0,
+    "expectOff": 0
+   },
+   {
+    "floor": 2,
+    "tris": 15,
+    "area": 0.036426,
+    "fill": 0.8052,
+    "minAboveFloor": 0.008,
+    "ySpread": 0,
+    "stair": false,
+    "fit": false,
+    "h": 0,
+    "offXZ": 0.01785,
+    "expectOff": 0
+   }
+  ],
+  "floors": [
+   2,
+   6,
+   7
+  ],
+  "stairUnits": 0,
+  "pieces": 52,
+  "multiCell": 19,
+  "onStairs": 0,
+  "minAboveFloor": {
+   "n": 24,
+   "min": 0.008,
+   "p50": 0.008,
+   "max": 0.008
+  },
+  "ySpread": {
+   "n": 24,
+   "min": 0,
+   "p50": 0,
+   "max": 0
+  },
+  "offXZ": {
+   "n": 24,
+   "min": 0,
+   "p50": 0,
+   "max": 0.04642
+  },
+  "area": {
+   "full": 0.045239,
+   "rows": 24
+  }
+ },
+ "height": {
+  "cases": [
+   {
+    "h": 0.45,
+    "dx": 0.1008,
+    "dz": 0.12682,
+    "offset": 0.162,
+    "alongLight": 0.162,
+    "cos": 1,
+    "alpha0": 0.3,
+    "alpha45": 0.13125,
+    "discY": 1.008
+   },
+   {
+    "h": 0.45,
+    "dx": 0.1008,
+    "dz": 0.12682,
+    "offset": 0.162,
+    "alongLight": 0.162,
+    "cos": 1,
+    "alpha0": 0.3,
+    "alpha45": 0.13125,
+    "discY": 1.008
+   },
+   {
+    "h": 0.45,
+    "dx": 0.1008,
+    "dz": 0.12682,
+    "offset": 0.162,
+    "alongLight": 0.162,
+    "cos": 1,
+    "alpha0": 0.3,
+    "alpha45": 0.13125,
+    "discY": 1.008
+   },
+   {
+    "h": 0.45,
+    "dx": 0.1008,
+    "dz": 0.12682,
+    "offset": 0.162,
+    "alongLight": 0.162,
+    "cos": 1,
+    "alpha0": 0.3,
+    "alpha45": 0.13125,
+    "discY": 3.008
+   },
+   {
+    "h": 0.45,
+    "dx": 0.1008,
+    "dz": 0.12682,
+    "offset": 0.162,
+    "alongLight": 0.162,
+    "cos": 1,
+    "alpha0": 0.3,
+    "alpha45": 0.13125,
+    "discY": 3.008
+   },
+   {
+    "h": 0.45,
+    "dx": 0.1008,
+    "dz": 0.12682,
+    "offset": 0.162,
+    "alongLight": 0.162,
+    "cos": 1,
+    "alpha0": 0.3,
+    "alpha45": 0.13125,
+    "discY": 3.008
+   }
+  ],
+  "expect": {
+   "offset": 0.162,
+   "alpha45": 0.13125,
+   "radiusGrowth": 1.196875
+  }
+ },
+ "slope": {
+  "deg": 20,
+  "xFlat": 0.24,
+  "xTilt": 0.2554,
+  "ratio": 1.06418,
+  "expectRatio": 1.06418,
+  "zFlat": 0.24,
+  "zTilt": 0.22553,
+  "areaFlat": 0.04408514,
+  "areaTilt": 0.04408512,
+  "areaRatio": 1,
+  "ySpreadTilt": 0.09296
+ },
+ "fitted": {
+  "enabled": true,
+  "fittedRanges": 22,
+  "ranges": 22,
+  "fits": [
+   {
+    "floor": 2,
+    "ySpread": 0,
+    "slopeDeg": 0
+   },
+   {
+    "floor": 2,
+    "ySpread": 0,
+    "slopeDeg": 0
+   },
+   {
+    "floor": 2,
+    "ySpread": 0,
+    "slopeDeg": 0
+   },
+   {
+    "floor": 2,
+    "ySpread": 0,
+    "slopeDeg": 0
+   },
+   {
+    "floor": 2,
+    "ySpread": 0,
+    "slopeDeg": 0
+   },
+   {
+    "floor": 2,
+    "ySpread": 0,
+    "slopeDeg": 0
+   },
+   {
+    "floor": 2,
+    "ySpread": 0,
+    "slopeDeg": 0
+   },
+   {
+    "floor": 6,
+    "ySpread": 0,
+    "slopeDeg": 0
+   }
+  ],
+  "g3fitted": 24
+ },
+ "aim": {
+  "target": [
+   -1.708,
+   1,
+   -2.77
+  ],
+  "distance": 4.5
+ },
+ "shotOn": {
+  "count": 22,
+  "visible": true
+ },
+ "shotOff": {
+  "count": 0,
+  "visible": false
+ },
+ "shotBack": {
+  "count": 22,
+  "visible": true
+ },
+ "off": {
+  "enabled": false,
+  "count": 0
+ },
+ "errors": []
+}

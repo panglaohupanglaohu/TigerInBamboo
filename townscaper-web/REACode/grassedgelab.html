@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>草描边 = 两次对比度采样之差</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:112ch; }
+  header b { color:#9c4720; font-weight:650; }
+  #stage { position:fixed; inset:96px 16px 62px 16px; background:#2c5058; border-radius:12px; overflow:hidden;
+    border:1px solid var(--line); }
+  #cv { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  #panel { position:fixed; right:26px; top:110px; width:236px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:11px 13px; display:flex; flex-direction:column; gap:8px; z-index:5;
+    box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #panel label.chk { display:flex; gap:7px; align-items:center; font-size:12.5px; color:var(--ink); cursor:pointer; }
+  #stats { position:fixed; left:18px; bottom:14px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; z-index:5; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .warn { color:#9c4720; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>草描边 = 两次对比度采样之差<span style="font-size:12px;color:#5c727a;font-weight:400"> · 1590674061092212738</span></h1>
+  <p>顶点着色器里，草在<b>自己站的地方</b>采一次对比度贴图，再沿视线向<b>背景</b>采一次；两次之差就是描边强度。
+     所以描边密度跟着画面结构走（崖沿出边、草坡不出边），而不是每片叶子都描一圈。</p>
+</header>
+<div id="stage"><canvas id="cv"></canvas></div>
+<div id="panel">
+  <h2>参数</h2>
+  <label class="chk"><input type="checkbox" id="on" checked> 开描边（A/B）</label>
+  <label class="chk"><input type="checkbox" id="fld"> 显示对比度场</label>
+  <div class="row"><span>相机方位</span><b id="vaz">0°</b></div>
+  <input type="range" id="az" min="0" max="359" value="40" step="1">
+  <div class="row"><span>俯角</span><b id="vel">35°</b></div>
+  <input type="range" id="el" min="18" max="80" value="35" step="1">
+  <div class="row"><span>描边增益</span><b id="vgain">2.6</b></div>
+  <input type="range" id="gain" min="0.6" max="6" value="2.6" step="0.1">
+  <div class="row"><span>草叶</span><b id="vn">0</b></div>
+  <div class="row"><span>描边覆盖率</span><b id="vcov">–</b></div>
+  <div class="row"><span>平均强度</span><b id="vmean">–</b></div>
+  <div class="row"><span>转向抖动 field</span><b id="vjf">–</b></div>
+  <div class="row"><span>转向抖动 遮挡判定</span><b id="vjo">–</b></div>
+</div>
+<div id="stats"></div>
+
+<script type="module">
+import { buildQuadGrid } from './src/quadgrid.js';
+import { Town } from './src/town.js';
+import { placeCards } from './src/grasscards.js';
+import { buildContrastField, bladeOutline, audit } from './src/grassedge.js';
+
+const $ = (id) => document.getElementById(id);
+const cv = $('cv');
+const dpr = Math.min(2, window.devicePixelRatio || 1);
+function fit() {
+  const r = cv.parentElement.getBoundingClientRect();
+  const W = Math.max(1, Math.round(r.width * dpr)), H = Math.max(1, Math.round(r.height * dpr));
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const g = cv.getContext('2d');
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { g, w: r.width, h: r.height };
+}
+
+/* ---------------- 岛 ---------------- */
+const grid = buildQuadGrid({ radius: 9, hexSize: 1, seed: 20261121 });
+const town = new Town(grid);
+for (const c of grid.cells) {
+  const n = Math.sin(c.cx * 0.55) * Math.cos(c.cz * 0.48) * 0.5 + 0.5;
+  const h = Math.max(1, Math.min(4, Math.round(1 + n * 3.4)));
+  town.fill(c, h);
+}
+const cards = placeCards(town, grid, { seed: 1590674, perEdge: 5, perInner: 3 }).cards;
+$('vn').textContent = cards.length;
+
+const field = buildContrastField(town, grid, { res: 128, levelHeight: 1 });
+
+/* ---------------- 视图 ---------------- */
+let camAz = 40 * Math.PI / 180;
+let elev = 35 * Math.PI / 180;
+let gain = 2.6;
+let showOutline = true, showField = false;
+
+function bounds() {
+  let x0 = 1e9, x1 = -1e9, z0 = 1e9, z1 = -1e9;
+  for (const c of grid.cells) for (const p of c.pts) {
+    x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x);
+    z0 = Math.min(z0, p.z); z1 = Math.max(z1, p.z);
+  }
+  return { x0, x1, z0, z1 };
+}
+const B = bounds();
+const MAXTOP = Math.max(...grid.cells.map((c) => town.top(c)));
+// 取景要把"高度抬起来的那截"也算进去，否则台地顶部会被画框切掉（第一版就是这样被切了）。
+function makeView(w, h, pad = 40) {
+  const VSCALE = 0.72 * Math.max(0.55, Math.sin(35 * Math.PI / 180) + 0.35);
+  const s = Math.min(
+    (w - pad * 2) / (B.x1 - B.x0),
+    (h - pad * 2) / ((B.z1 - B.z0) + MAXTOP * VSCALE),
+  );
+  const ox = pad + (w - pad * 2 - (B.x1 - B.x0) * s) / 2 - B.x0 * s;
+  const oz = pad + (h - pad * 2 - ((B.z1 - B.z0) + MAXTOP * VSCALE) * s) / 2 - B.z0 * s
+    + MAXTOP * VSCALE * s;
+  return { s, X: (x) => ox + x * s, Z: (z) => oz + z * s };
+}
+
+const CELL_COLOR = ['#5f7f4e', '#6f8c52', '#88955c', '#a89a63', '#c3b07b'];
+const WALL_COLOR = ['#4a6440', '#556b46', '#6b7a4c', '#8a8055', '#9d9268'];
+let levelPx = 26;
+const topY = (t) => -t * levelPx;
+
+function drawField(g, view) {
+  // 对比度场本身画出来：亮 = 背景亮（水/草坡），暗 = 背景暗（崖脚、崖面）
+  const step = Math.max(2, Math.round(field.step * view.s));
+  for (let j = 0; j < field.h; j++) {
+    for (let i = 0; i < field.w; i++) {
+      const v = field.data[j * field.w + i];
+      if (v <= 0.001) continue;
+      const x = field.x0 + i * field.step, z = field.z0 + j * field.step;
+      const t = Math.min(1, v * 1.25);
+      const r = Math.round(28 + 210 * t), gg = Math.round(70 + 140 * t), b = Math.round(80 + 120 * t);
+      g.fillStyle = `rgb(${r},${gg},${b})`;
+      g.fillRect(view.X(x), view.Z(z), step, step);
+    }
+  }
+}
+
+function drawCells(g, view) {
+  // 画家算法：按 z 从远到近；每格先画朝向镜头的侧面（有落差才算），再画顶面。
+  // 没有这一步就是一张平贴的俯视图 —— 而"崖脚暗带"恰恰是从侧面上读出来的。
+  const list = grid.cells.filter((c) => town.top(c) > 0).slice().sort((a, b) => a.cz - b.cz);
+  for (const c of list) {
+    const top = town.top(c);
+    const pts = c.pts;
+    const nbr = c.edgeNeighbors || c.nbr;
+    const yTop = topY(top);
+    for (let e = 0; e < pts.length; e++) {
+      const nb = nbr ? nbr[e] : -1;
+      const nt = nb >= 0 && nb !== undefined ? town.top(grid.cells[nb]) : 0;
+      if (nt >= top) continue;
+      const a = pts[e], b = pts[(e + 1) % pts.length];
+      g.beginPath();
+      g.moveTo(view.X(a.x), view.Z(a.z) + yTop);
+      g.lineTo(view.X(b.x), view.Z(b.z) + yTop);
+      g.lineTo(view.X(b.x), view.Z(b.z) + topY(nt));
+      g.lineTo(view.X(a.x), view.Z(a.z) + topY(nt));
+      g.closePath();
+      g.fillStyle = WALL_COLOR[Math.min(4, top - 1)];
+      g.fill();
+    }
+    g.beginPath();
+    pts.forEach((p, i) => {
+      const px = view.X(p.x), pz = view.Z(p.z) + yTop;
+      if (i) g.lineTo(px, pz); else g.moveTo(px, pz);
+    });
+    g.closePath();
+    g.fillStyle = CELL_COLOR[Math.min(4, top)];
+    g.fill();
+    g.strokeStyle = 'rgba(20,34,30,.16)';
+    g.lineWidth = 0.6;
+    g.stroke();
+  }
+}
+
+function drawCards(g, view, cam) {
+  const list = cards.map((c) => ({ c, r: bladeOutline(c, field, cam, { elevation: elev, gain, heightScale: 1 }) }))
+    .sort((a, b) => a.c.z - b.c.z);
+  for (const { c, r } of list) {
+    const px = view.X(c.x), pz = view.Z(c.z) - c.y * levelPx * 0.92;
+    const len = Math.max(2.5, c.h * view.s * 0.78);
+    const half = Math.max(0.9, c.w * view.s * 0.55);
+    const lean = Math.cos(c.rot - camAz) * 0.28;
+    g.save();
+    g.translate(px, pz);
+    g.fillStyle = c.kind === 'shrub' ? '#c9d68e' : '#d8e2a2';
+    g.fillRect(-half, -len, half * 2, len * (0.85 + 0.3 * Math.abs(lean)));
+    if (showOutline && r.strength > 0.03) {
+      // 描边落在"草顶压到背景上"的那一条边上：alpha 就是两次采样之差
+      g.globalAlpha = Math.min(0.92, 0.28 + r.strength * 0.85);
+      g.fillStyle = '#20301f';
+      g.fillRect(-half - 0.35, -len - 0.9, half * 2 + 0.7, Math.max(0.9, 0.6 + r.strength * 1.9));
+      // 侧边只在强度很高时补一笔（崖沿那几丛才看得出"贴片感"）
+      if (r.strength > 0.55) {
+        g.fillRect(-half - 0.6, -len, 0.8, len);
+        g.fillRect(half - 0.2, -len, 0.8, len);
+      }
+      g.globalAlpha = 1;
+    }
+    g.restore();
+  }
+}
+
+let stat = null;
+function draw() {
+  const { g, w, h } = fit();
+  const view = makeView(w, h);
+  levelPx = view.s * 0.72 * Math.max(0.55, Math.sin(elev) + 0.35);
+  const cam = { x: Math.cos(camAz), z: Math.sin(camAz) };
+  g.clearRect(0, 0, w, h);
+  g.fillStyle = '#2c5058';
+  g.fillRect(0, 0, w, h);
+  if (showField) drawField(g, view);
+  drawCells(g, view);
+  drawCards(g, view, cam);
+
+  // 角标：两次采样点的示意（取崖沿上强度最高的一丛）
+  let best = null;
+  for (const c of cards) {
+    const r = bladeOutline(c, field, cam, { elevation: elev, gain });
+    if (!best || r.strength > best.r.strength) best = { c, r };
+  }
+  if (best && best.r.strength > 0.12) {
+    const ax = view.X(best.c.x), az = view.Z(best.c.z) - best.c.y * levelPx * 0.92;
+    const bx = view.X(best.c.x - cam.x * best.r.d), bz = view.Z(best.c.z - cam.z * best.r.d)
+      - best.c.y * levelPx * 0.92;
+    g.strokeStyle = 'rgba(255,238,150,.85)'; g.lineWidth = 1.2; g.setLineDash([3, 3]);
+    g.beginPath(); g.moveTo(ax, az); g.lineTo(bx, bz); g.stroke(); g.setLineDash([]);
+    g.fillStyle = 'rgba(255,238,150,.95)'; g.beginPath(); g.arc(ax, az, 2.6, 0, 7); g.fill();
+    g.fillStyle = 'rgba(255,180,120,.95)'; g.beginPath(); g.arc(bx, bz, 2.6, 0, 7); g.fill();
+    g.font = '11px -apple-system,sans-serif';
+    g.fillStyle = 'rgba(255,245,210,.95)';
+    const lx = Math.min(w - 220, Math.max(8, ax + 7));
+    const ly = az - 8 < 30 ? az + 26 : az - 8;
+    const label = `A=${best.r.a.toFixed(2)}  B=${best.r.b.toFixed(2)}  |A−B|=${best.r.raw.toFixed(2)}`;
+    const tw = g.measureText(label).width;
+    g.fillStyle = 'rgba(18,30,28,.62)';
+    g.fillRect(lx - 4, ly - 11, tw + 8, 15);
+    g.fillStyle = 'rgba(255,245,210,.98)';
+    g.fillText(label, lx, ly);
+  }
+
+  updateStats();
+}
+
+function updateStats() {
+  if (!stat) stat = audit({ field, cards, town, grid, azimuths: 24, elevation: elev, gain });
+  $('vcov').textContent = (stat.coveredFrac * 100).toFixed(0) + '%';
+  $('vmean').textContent = stat.meanStrength.toFixed(3);
+  $('vjf').textContent = stat.jitterField.toFixed(4);
+  $('vjo').textContent = stat.jitterOcclusion.toFixed(4);
+  const ratio = stat.jitterOcclusion / Math.max(1e-6, stat.jitterField);
+  $('stats').innerHTML =
+    `两次采样描边：覆盖 <b>${(stat.coveredFrac * 100).toFixed(1)}%</b> 的草叶（>0.08 才算描到），平均强度 <b>${stat.meanStrength.toFixed(3)}</b>，` +
+    `强度直方图 <b>${stat.histogram.join('/')}</b>（十分位，连续分布 = 不是 0/1 两极管）。` +
+    `转向抖动（整帧均值）：场采样 <span class="ok">${stat.jitterField.toFixed(4)}</span> vs 二值遮挡 <span class="warn">${stat.jitterOcclusion.toFixed(4)}</span>；` +
+    `逐叶翻转率：场采样 <span class="ok">${(stat.flipField*100).toFixed(2)}%</span> vs 遮挡判定 <span class="warn">${(stat.flipOcclusion*100).toFixed(2)}%</span>` +
+    ` → <b>${(stat.flipOcclusion/Math.max(1e-9,stat.flipField)).toFixed(0)}×</b> 少翻面（原文那句 not too jittery）。` +
+    `  （${stat.cards} 片草，field ${field.w}×${field.h}，${stat.ms.toFixed(0)}ms/24 方位）`;
+}
+
+$('on').addEventListener('change', (e) => { showOutline = e.target.checked; draw(); });
+$('fld').addEventListener('change', (e) => { showField = e.target.checked; draw(); });
+$('az').addEventListener('input', (e) => {
+  camAz = (+e.target.value) * Math.PI / 180;
+  $('vaz').textContent = e.target.value + '°';
+  draw();
+});
+$('el').addEventListener('input', (e) => {
+  elev = (+e.target.value) * Math.PI / 180;
+  $('vel').textContent = e.target.value + '°';
+  stat = null; draw();
+});
+$('gain').addEventListener('input', (e) => {
+  gain = +e.target.value;
+  $('vgain').textContent = gain.toFixed(1);
+  stat = null; draw();
+});
+
+window.__lab = {
+  ready: true,
+  cards: cards.length,
+  stats: () => stat,
+  setAz: (deg) => { camAz = deg * Math.PI / 180; draw(); },
+  setOutline: (v) => { showOutline = v; $('on').checked = v; draw(); },
+  field,
+};
+
+draw();
+window.addEventListener('resize', draw);
+</script>
+</body>
+</html>

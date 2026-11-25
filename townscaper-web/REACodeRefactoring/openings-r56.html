@@ -6,7 +6,7 @@
 <canvas id="view"></canvas><div id="report"></div>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 <script type="module">
-import{buildQuadGrid,buildMixedGrid}from'./src/core/grid.js';import{decorateCells,buildCellIndex}from'./src/core/spatial.js';import{World}from'./src/core/world.js';import{PALETTES}from'./src/core/palette.js';
+import{propOverlap,frameDeviationDeg}from'./src/core/opening-footprint.js';import{buildQuadGrid,buildMixedGrid}from'./src/core/grid.js';import{decorateCells,buildCellIndex}from'./src/core/spatial.js';import{World}from'./src/core/world.js';import{PALETTES}from'./src/core/palette.js';
 import{View}from'./src/world/view.js';import{buildScene}from'./src/world/scenes.js';import{buildCanalTown}from'./src/build/canal-scene-r56.js';import{attachOpeningPunch}from'./src/render/opening-punch-layer.js';import*as THREE from'three';
 const q=new URLSearchParams(location.search),kind=q.get('grid')==='mixed'?'mixed':'quad',sceneName=q.get('scene')||'canal',L=.5;
 const grid=decorateCells(kind==='mixed'?buildMixedGrid({radius:22,hexSize:.62}):buildQuadGrid({radius:14,hexSize:1})),world=new World(grid);world.palette=PALETTES.town;
@@ -18,7 +18,7 @@ if(q.get('clean')){for(const k of['clouds','birds','boats','butterflies','flags'
 for(const k of(q.get('debug')||'').split(',').filter(Boolean))try{view.setDebug(k,true)}catch(e){}
 let punch=null;if(q.get('punch'))punch=attachOpeningPunch(view);
 function build(){view.render(0);return view.worldMesh.build;}
-function stats(){const b=build();return{scene:sceneName,kind,flags:Object.keys(FLAGS).filter(f=>world[f]),canal:scene,bridges:b.canalBridges.length,bridgeFaces:b.canalBridges.map(x=>({cell:x.cell,face:x.face,span:+x.span.toFixed(3),rise:+x.rise.toFixed(3),wedges:x.wedges,vault:x.vault})),church:b.churchDoors.map(x=>({cell:x.cell,edge:x.edge,width:+x.width.toFixed(3),bottom:+x.bottom.toFixed(3),top:+x.top.toFixed(3)})),openings:b.openings.length,openingDoors:b.openings.filter(o=>o.door).length,arches:b.archBudgets.length,wedges:b.archWedges,yardProps:b.yardProps.reduce((s,y)=>s+y.count,0),decoDrawn:b.decoDrawn,punch:punch?.stats()};}
+function stats(){const b=build();return{scene:sceneName,kind,flags:Object.keys(FLAGS).filter(f=>world[f]),canal:scene,bridges:b.canalBridges.length,bridgeFaces:b.canalBridges.map(x=>({cell:x.cell,face:x.face,span:+x.span.toFixed(3),rise:+x.rise.toFixed(3),wedges:x.wedges,vault:x.vault})),church:b.churchDoors.map(x=>({cell:x.cell,edge:x.edge,width:+x.width.toFixed(3),bottom:+x.bottom.toFixed(3),top:+x.top.toFixed(3),depth:x.depth,backWall:x.backWall,steps:x.steps})),openings:b.openings.length,openingDoors:b.openings.filter(o=>o.door).length,arches:b.archBudgets.length,wedges:b.archWedges,yardProps:b.yardProps.reduce((s,y)=>s+y.count,0),decoDrawn:b.decoDrawn,punch:punch?.stats()};}
 function focus(f=q.get('focus'),K=+(q.get('k')||0),O={}){if(!f)return;const g=(n,d)=>O[n]??(q.get(n)!==null?+q.get(n):d);const b=build();let c=null,tx,ty,tz,yaw=null;
  const faceYaw=(cell,ei)=>{const A=cell.pts[ei],B=cell.pts[(ei+1)%cell.n],ex=B.x-A.x,ez=B.z-A.z,l=Math.hypot(ex,ez),nx=ez/l,nz=-ex/l,mx=(A.x+B.x)/2,mz=(A.z+B.z)/2,sg=Math.sign(nx*(mx-cell.cx)+nz*(mz-cell.cz))||1;return[Math.atan2(nx*sg,nz*sg),mx,mz];};
  if(f==='bridge'&&b.canalBridges.length){const x=b.canalBridges[K%b.canalBridges.length];c=grid.cells[x.cell];const[yw,mx,mz]=faceYaw(c,x.face);yaw=yw;tx=c.cx;tz=c.cz;ty=.25;}
@@ -29,6 +29,59 @@ function focus(f=q.get('focus'),K=+(q.get('k')||0),O={}){if(!f)return;const g=(n
  else if(f.includes(',')){[tx,tz,ty]=f.split(',').map(Number);ty??=1;}
  if(tx===undefined)return;ty=g('ty',ty);view.target.set(tx,ty,tz);if(yaw!==null)view.yaw=yaw+g('yawOff',0);if(O.yaw!==undefined||q.get('yaw'))view.yaw=g('yaw',0);view.pitch=g('pitch',.35);view.distance=g('dist',4);view.updateCamera();window.r56focus={tx,ty,tz,yaw:view.yaw};}
 focus();window.r56aim=(f,k=0,o={})=>{focus(f,k,o);view.render(0);return window.r56focus;};
+/** 桥拱探针（第 123 轮）：不读日志，直接数世界网格里真正画出来的三角 ——
+ *  楔石环（K.frame 近白，色和>1.8）逐面 18 个三角 = 9 块楔石；拱顶键石（K.stoneDark，色和<0.62）2 个三角；
+ *  拱腹（stoneDark×0.72，落在两面对穿的格内）24 个三角；再沿水流轴打一条射线量「拱下是不是通的」。
+ *  一律用绘制后的 (s, y) 与面色判，不看 build 日志的说法。 */
+window.r56bridgeProbe=(k=+(q.get('k')||0))=>{
+ const b=build();const recs=b.canalBridges||[];
+ // 关掉开关后 recs 为空，仍用上一次记下的同一格同一面 → 同一机位做 A/B（几何是重建后的真实几何）
+ const rec=recs.length?recs[k%recs.length]:window.__lastBridge;
+ if(!rec)return{flag:!!world.canalBridges,faces:0};
+ if(recs.length)window.__lastBridge=rec;
+ const c=grid.cells[rec.cell],i=rec.face;
+ const A=c.pts[i],B=c.pts[(i+1)%c.n],ex=B.x-A.x,ez=B.z-A.z,len=Math.hypot(ex,ez)||1,ux=ex/len,uz=ez/len;
+ let nx=uz,nz=-ux;const mx=(A.x+B.x)/2,mz=(A.z+B.z)/2;if(nx*(mx-c.cx)+nz*(mz-c.cz)<0){nx=-nx;nz=-nz;}
+ const kk=rec.span/(2*len),rise=rec.rise,ya=rec.deck-.055,crown=rec.ys+rise;
+ const geo=view.worldMesh.geometry,P=geo.attributes.position.array,C=geo.attributes.color.array,nTri=P.length/9;
+ const ring=[],key=[],vault=[];let faceTris=0;
+ for(let t=0;t<nTri;t++){
+  let x=0,y=0,z=0,r=0,g2=0,b2=0;
+  for(let v=0;v<3;v++){const o=(t*3+v)*3;x+=P[o];y+=P[o+1];z+=P[o+2];r+=C[o];g2+=C[o+1];b2+=C[o+2];}
+  x/=3;y/=3;z/=3;r/=3;g2/=3;b2/=3;
+  const s=((x-A.x)*ux+(z-A.z)*uz)/len,d=(x-A.x)*nx+(z-A.z)*nz,sum=r+g2+b2;
+  if(s>=-.03&&s<=1.03&&y>=-.02&&y<=ya-.015&&d>=-.02&&d<=.16){
+   if(sum>1.8)ring.push({s,y,sum,rho:Math.hypot((2*s-1)/kk,y/rise)});
+   else if(sum<.62&&y>.7*rise)key.push({s,y,sum});
+   else faceTris++;
+  }
+  // 拱腹：夹在两面之间、拱顶以下的 stoneDark 条带
+  if(d<-0.12&&d>-len*1.15&&y>-0.02&&y<rise&&sum<.5)vault.push({s,y,sum});
+ }
+ const ringByS=ring.map(p=>p.s),keyTop=key.slice().sort((p,q)=>q.y-p.y)[0]||null;
+ // 射线：本面外 0.35、高 0.45·rise 朝格内 → 拱洞通不通（Möller–Trumbore）
+ const cast=(y0,dirOut,total=3)=>{
+  const px=mx+nx*0.35*dirOut,py=y0,pz=mz+nz*0.35*dirOut,dx=-nx*dirOut,dy=0,dz=-nz*dirOut;
+  let best=Infinity;
+  for(let t=0;t<nTri;t++){const o=t*9;
+   const ax=P[o],ay=P[o+1],az=P[o+2],e1x=P[o+3]-ax,e1y=P[o+4]-ay,e1z=P[o+5]-az,e2x=P[o+6]-ax,e2y=P[o+7]-ay,e2z=P[o+8]-az;
+   const hx=dy*e2z-dz*e2y,hy=dz*e2x-dx*e2z,hz=dx*e2y-dy*e2x,det=e1x*hx+e1y*hy+e1z*hz;
+   if(Math.abs(det)<1e-12)continue;
+   const sx=px-ax,sy=py-ay,sz=pz-az,u=(sx*hx+sy*hy+sz*hz)/det;if(u<0||u>1)continue;
+   const qx=sy*e1z-sz*e1y,qy=sz*e1x-sx*e1z,qz=sx*e1y-sy*e1x,v=(dx*qx+dy*qy+dz*qz)/det;if(v<0||u+v>1)continue;
+   const tt=(e2x*qx+e2y*qy+e2z*qz)/det;if(tt>=0&&tt<=total&&tt<best)best=tt;
+  }
+  return best===Infinity?null:+best.toFixed(4);
+ };
+ const yPass=.45*rise;
+ return{flag:!!world.canalBridges,faces:recs.length,cell:rec.cell,face:i,span:+rec.span.toFixed(3),rise:+rise.toFixed(3),
+  crown:+crown.toFixed(3),deck:+rec.deck.toFixed(3),ya:+ya.toFixed(3),kk:+kk.toFixed(4),
+  ringTris:ring.length,keyTris:key.length,ringTotal:ring.length+key.length,ringWedges:ring.length/2+(key.length?1:0),ringMinS:ring.length?+Math.min(...ringByS).toFixed(3):null,
+  ringMaxS:ring.length?+Math.max(...ringByS).toFixed(3):null,ringMaxY:ring.length?+Math.max(...ring.map(p=>p.y)).toFixed(4):null,
+  keyTris:key.length,keyS:keyTop?+keyTop.s.toFixed(4):null,keyY:keyTop?+keyTop.y.toFixed(4):null,keySum:keyTop?+keyTop.sum.toFixed(3):null,
+  vaultTris:vault.length,faceTris,
+  firstHitOpen:cast(yPass,1),firstHitAboveDeck:cast(rec.deck-.085,1),yPass:+yPass.toFixed(3),
+  vouchers:b.archVoussoirLog?b.archVoussoirLog.length:null,budgets:(b.archBudgets||[]).length};};
 /** 模板挖洞读回：同一镜头 punch 关 / 开各渲一帧，逐像素比较；变了的像素必须落在投影后的洞口矩形里。 */
 window.r56punchProbe=()=>{if(!punch)return null;const r=view.renderer,gl=r.getContext(),W=gl.drawingBufferWidth,H=gl.drawingBufferHeight;
  const grab=(on)=>{punch.enabled=on;view.render(0);view.render(0);const px=new Uint8Array(W*H*4);gl.readPixels(0,0,W,H,gl.RGBA,gl.UNSIGNED_BYTE,px);return px;};
@@ -40,6 +93,67 @@ window.r56punchProbe=()=>{if(!punch)return null;const r=view.renderer,gl=r.getCo
  const boxes=[];for(let i=0;i<tris.length;i+=2){const ps=[...tris[i],...(tris[i+1]??[])];boxes.push([Math.min(...ps.map(p=>p[0]))-2,Math.min(...ps.map(p=>p[1]))-2,Math.max(...ps.map(p=>p[0]))+2,Math.max(...ps.map(p=>p[1]))+2]);}
  let changed=0,inside=0;for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=(y*W+x)*4;if(Math.abs(off[i]-on[i])+Math.abs(off[i+1]-on[i+1])+Math.abs(off[i+2]-on[i+2])>6){changed++;if(boxes.some(b=>x>=b[0]&&x<=b[2]&&y>=b[1]&&y<=b[3]))inside++;}}
  return{W,H,maskTris:tris.length,changed,inside,outside:changed-inside,insideShare:changed?+(inside/changed).toFixed(4):null,punch:punch.stats()};};
+/** 后院道具探针（第 129 轮 · 1205416648397721601）：量「尽量多放 / 互不重叠 / 斜格上仍是正矩形」。
+ *  不读 build 日志里的 count：直接拿 placeProps 交出的真实 footprint 与格多边形逐对 SAT 判重叠、
+ *  逐角量到格边的余量、量格子的歪斜角与每个框的直角偏差；再改 tries 重跑同一个 World 量饱和曲线。
+ *  门窗另量「框的水平边是否与墙边平行」（视频里修掉的就是跟着斜格轴歪那种），并给一个跟格轴走的反向对照。 */
+window.r56propProbe=()=>{
+ const b=build(),list=b.yardProps||[];
+ const skewOf=c=>{let w=0;for(let i=0;i<c.n;i++){const A=c.pts[(i+c.n-1)%c.n],B=c.pts[i],C=c.pts[(i+1)%c.n];
+   const v1=[A.x-B.x,A.z-B.z],v2=[C.x-B.x,C.z-B.z],d=(v1[0]*v2[0]+v1[1]*v2[1])/(Math.hypot(v1[0],v1[1])*Math.hypot(v2[0],v2[1])||1);
+   w=Math.max(w,Math.abs(90-Math.acos(Math.max(-1,Math.min(1,d)))*180/Math.PI));}return w;};
+ const segD=(p,a,d)=>{const ex=d.x-a.x,ez=d.z-a.z,L2=ex*ex+ez*ez||1,t=Math.max(0,Math.min(1,((p.x-a.x)*ex+(p.z-a.z)*ez)/L2));return Math.hypot(p.x-a.x-ex*t,p.z-a.z-ez*t);};
+ const ang=(u,v)=>Math.acos(Math.max(-1,Math.min(1,Math.abs(u[0]*v[0]+u[1]*v[1])/(Math.hypot(u[0],u[1])*Math.hypot(v[0],v[1])||1))))*180/Math.PI;
+ let props=0,overlaps=0,obstacleHits=0,minPad=Infinity,frameDev=0,cov=0,maxSkew=0,skewedYard=0,dyads=0;
+ const kinds={},perCell=[];
+ for(const y of list){
+   const c=grid.cells[y.cell];if(!c)continue;
+   const sk=skewOf(c);maxSkew=Math.max(maxSkew,sk);if(sk>3)skewedYard++;
+   props+=y.props.length;cov+=y.coverage;frameDev=Math.max(frameDev,y.frameDevMax);
+   for(let a=0;a<y.props.length;a++){
+     const pa=y.props[a];
+     for(let d=a+1;d<y.props.length;d++){dyads++;if(propOverlap(pa.poly,y.props[d].poly))overlaps++;}
+     for(const o of(y.obstacles||[]))if(propOverlap(pa.poly,o.poly))obstacleHits++;
+     for(const p of pa.poly)minPad=Math.min(minPad,Math.min(...c.pts.map((q,i)=>segD(p,q,c.pts[(i+1)%c.n]))));
+     kinds[pa.kind||'box']=(kinds[pa.kind||'box']||0)+1;
+   }
+   perCell.push({cell:y.cell,n:y.props.length,skew:+sk.toFixed(2),coverage:+y.coverage.toFixed(4),frameDevMax:+y.frameDevMax.toFixed(4)});
+ }
+ // 饱和曲线：同一个 World 只改 tries（placeProps 的尝试次数）——「尽量多放」应是单调不减，且每个预算下都不重叠
+ const sat=[];for(const tries of[20,60,120,300]){world.yardPropTries=tries;world.touch();view.worldMesh.invalidate();const bb=build();
+   const ys=bb.yardProps||[];let bad=0;for(const y of ys)for(let a=0;a<y.props.length;a++)for(let d=a+1;d<y.props.length;d++)if(propOverlap(y.props[a].poly,y.props[d].poly))bad++;
+   sat.push({tries,props:ys.reduce((s,y)=>s+y.count,0),cells:ys.length,coverage:ys.length?+(ys.reduce((s,y)=>s+y.coverage,0)/ys.length).toFixed(4):0,overlaps:bad,
+     maxCoverage:ys.length?+Math.max(...ys.map(y=>y.coverage)).toFixed(4):0});}
+ world.yardPropTries=120;world.touch();view.worldMesh.invalidate();build();
+ // 门窗：开口框是「沿墙边量宽 × 世界竖直量高」，水平边与墙边的夹角必须为 0；反向对照用格子首边的斜基
+ let openDev=0,openYaw=0,skewYaw=0,openOnSkewed=0,maxOpenSkew=0,shearDev=0;
+ for(const o of(b.openings||[])){
+   const c=grid.cells[o.cell];if(!c)continue;
+   const A=c.pts[o.edge],B=c.pts[(o.edge+1)%c.n],len=Math.hypot(B.x-A.x,B.z-A.z)||1,ux=(B.x-A.x)/len,uz=(B.z-A.z)/len;
+   const sk=skewOf(c);maxOpenSkew=Math.max(maxOpenSkew,sk);if(sk>3)openOnSkewed++;
+   const t1=o.t-o.width/2/len,t2=o.t+o.width/2/len,P=(t,y)=>[A.x+(B.x-A.x)*t,y,A.z+(B.z-A.z)*t];
+   const real=[P(t1,o.y0),P(t2,o.y0),P(t2,o.y1),P(t1,o.y1)];
+   const dev=(q)=>{let w=0;for(let i=0;i<4;i++){const a=q[i],b2=q[(i+1)%4],d=q[(i+3)%4];
+     const v1=[b2[0]-a[0],b2[1]-a[1],b2[2]-a[2]],v2=[d[0]-a[0],d[1]-a[1],d[2]-a[2]];
+     const cc=(v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2])/(Math.hypot(...v1)*Math.hypot(...v2)||1);
+     w=Math.max(w,Math.abs(90-Math.acos(Math.max(-1,Math.min(1,cc)))*180/Math.PI));}return w;};
+   openDev=Math.max(openDev,dev(real));
+   const hEdge=[real[1][0]-real[0][0],real[1][2]-real[0][2]],vEdge=[real[3][0]-real[0][0],real[3][1]-real[0][1],real[3][2]-real[0][2]];
+   openYaw=Math.max(openYaw,ang(hEdge,[ux,uz]));
+   if(Math.abs(vEdge[0])+Math.abs(vEdge[2])>1e-9)openDev=99;   // 竖边必须真的竖直，不许跟着斜格轴歪
+   // 反向对照 A：同一个开口按「格子首边」的斜基画（原片修掉的那种歪法）
+   const lu=[c.pts[1].x-c.pts[0].x,c.pts[1].z-c.pts[0].z];
+   skewYaw=Math.max(skewYaw,ang([lu[0],lu[1]],[ux,uz]));
+   // 反向对照 B：同一个开口横向错切 40% 高度（斜格窗的另一种歪法）→ 直角偏差须被判出来
+   const h=o.y1-o.y0,k=.4;
+   shearDev=Math.max(shearDev,dev([real[0],real[1],[real[2][0]+ux*k*h,real[2][1],real[2][2]+uz*k*h],[real[3][0]+ux*k*h,real[3][1],real[3][2]+uz*k*h]]));
+ }
+ const ys=list.reduce((s,y)=>s+y.count,0),avgCov=list.length?cov/list.length:0;
+ return{flags:{yardProps:!!world.yardProps,yardPropArt:!!world.yardPropArt},cells:list.length,props:props||ys,
+  overlaps,dyads,obstacleHits,minPad:Number.isFinite(minPad)?+minPad.toFixed(5):null,frameDevMax:+frameDev.toFixed(6),
+  coverageAvg:+avgCov.toFixed(4),maxCellSkew:+maxSkew.toFixed(2),skewedYardCells:skewedYard,kinds,sat,
+  openings:(b.openings||[]).length,openOnSkewed,maxOpenSkew:+maxOpenSkew.toFixed(2),openRightAngleDev:+openDev.toFixed(6),
+  openYawErrDeg:+openYaw.toFixed(4),skewYawErrDeg:+skewYaw.toFixed(4),shearRightAngleDev:+shearDev.toFixed(3),perCell:perCell.slice(0,8)};};
 const box=document.querySelector('#boxes');for(const[k,t]of Object.entries(FLAGS)){const l=document.createElement('label');l.innerHTML=`<input type=checkbox ${world[k]?'checked':''}>${t}`;l.firstChild.onchange=e=>{world[k]=e.target.checked;world.touch();view.worldMesh.invalidate();rep();};box.append(l);}
 {const l=document.createElement('label');l.innerHTML=`<input type=checkbox ${punch?'checked':''}>门窗模板挖洞`;l.firstChild.onchange=e=>{if(!punch)punch=attachOpeningPunch(view);punch.enabled=e.target.checked;rep();};box.append(l);}
 function rep(){const o=stats();window.r56=o;document.querySelector('#report').textContent=JSON.stringify(o,null,1);}

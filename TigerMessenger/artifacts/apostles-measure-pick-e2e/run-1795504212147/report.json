@@ -1,0 +1,39 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-measure-pick-e2e/run-1795504212147",
+  "full": true,
+  "steps": {
+    "initial": {
+      "text": "待实测选出 · P-R32-01",
+      "kind": "pending",
+      "runDisabled": false,
+      "undoDisabled": true,
+      "rows": [],
+      "record": {
+        "capabilityId": "apostles.look",
+        "planId": null,
+        "plan": null,
+        "adoptedBy": "user",
+        "at": "2026-11-24T07:10:12.579Z",
+        "source": "pending-seed",
+        "note": "十二门徒三套外观（approved / soft / soft,palette）待按实测选优；实测选出只是推荐，采用与否仍待用户在对照面板点头。",
+        "status": "pending-measurement",
+        "pendingRef": "P-R32-01"
+      },
+      "summaryText": "当前默认场景层能力谁定的时间apostlesapostles-terrain待实测选出 · P-R32-01待决定登记2026/11/24 15:10:12去处理撤回citadelbuilding待你决定 · P-R57-01待决定登记2026/11/24 15:10:12去处理撤回citadelmountain待你决定 · P-R27-01,P-R28-01,P-R28-02待决定登记2026/11/24 15:10:12去处理撤回crystalbuilding待你决定 · P-R57-01待决定登记2026/11/24 15:10:12去处理撤回old-portrelief待你决定 · P-R49-01待决定登记2026/11/24 15:10:12去处理撤回",
+      "live": null
+    },
+    "crash1": {
+      "note": "Target crashed，重启浏览器续跑（同进程 GPU 崩溃计数会让下次重载也崩）"
+    },
+    "crash2": {
+      "note": "Target crashed，重启浏览器续跑（同进程 GPU 崩溃计数会让下次重载也崩）"
+    },
+    "crash3": {
+      "note": "Target crashed，重启浏览器续跑（同进程 GPU 崩溃计数会让下次重载也崩）"
+    }
+  },
+  "errors": [],
+  "pass": false,
+  "notRun": [],
+  "failure": "page.waitForFunction: Target page, context or browser has been closed"
+}

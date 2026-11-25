@@ -1,0 +1,128 @@
+{
+  "ok": 20,
+  "out": {
+    "on": {
+      "lost": true,
+      "burn": 4.02,
+      "charred": 1,
+      "charredVerts": 206,
+      "glows": 0,
+      "fires": 2,
+      "showFire": false,
+      "smokeSources": 1,
+      "scorchOn": true,
+      "scorched": 1,
+      "decals": 4,
+      "embers": 45
+    },
+    "housePx": {
+      "x": 559.9999999999998,
+      "y": 394.8675106829308
+    },
+    "melee": {
+      "hp": [
+        5,
+        6,
+        0
+      ],
+      "dead": [
+        false,
+        false,
+        true
+      ],
+      "blood": 76,
+      "bloodTotal": 76,
+      "drops": 0,
+      "hitFlashes": 0,
+      "flagsBefore": [
+        {
+          "id": 1,
+          "visible": true,
+          "cloth": true
+        },
+        {
+          "id": 2,
+          "visible": true,
+          "cloth": true
+        }
+      ],
+      "flags": [
+        {
+          "id": 2,
+          "visible": true,
+          "cloth": true
+        }
+      ],
+      "colors": [
+        {
+          "id": 0,
+          "mean": [
+            128,
+            189,
+            211
+          ]
+        },
+        {
+          "id": 1,
+          "mean": [
+            221,
+            157,
+            100
+          ]
+        },
+        {
+          "id": 2,
+          "mean": [
+            152,
+            213,
+            193
+          ]
+        }
+      ]
+    },
+    "sig": {
+      "on": {
+        "cells": 2516,
+        "tops": 1201,
+        "houses": 1
+      },
+      "off": {
+        "cells": 2516,
+        "tops": 1201,
+        "houses": 1
+      }
+    },
+    "off": {
+      "lost": true,
+      "burn": 4.02,
+      "charred": 1,
+      "charredVerts": 206,
+      "glows": 0,
+      "fires": 2,
+      "showFire": false,
+      "smokeSources": 1,
+      "scorchOn": false,
+      "scorched": 0,
+      "decals": 0,
+      "embers": 0
+    },
+    "ab": {
+      "px": 52473,
+      "bbox": [
+        387,
+        79,
+        737,
+        498
+      ],
+      "size": [
+        1120,
+        800
+      ]
+    },
+    "proj": {
+      "x": 559.9999999999998,
+      "y": 394.8675106829308
+    }
+  },
+  "errors": []
+}

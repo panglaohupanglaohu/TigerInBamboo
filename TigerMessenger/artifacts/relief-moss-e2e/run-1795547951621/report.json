@@ -1,0 +1,97 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/relief-moss-e2e/run-1795547951621",
+  "scene": "moss",
+  "steps": {
+    "keysBefore": [
+      "tm.citadelEditor.collapsed",
+      "tm.citadelEditor.dropToGround",
+      "tm.defaults.v1",
+      "tm.equatorialClouds.enabled",
+      "tm.morris.panel.collapsed",
+      "tm.questPanel.collapsed"
+    ],
+    "scanned": {
+      "direct": "moss",
+      "scene": "moss",
+      "note": "扫描完成：6 / 6 个能力能作用。 可改陆地 82 格。 已按「苔庭」自动预装 6 个能力（软坡（缓坡省连续）、硬崖（陡崖省台阶）、河谷（开河 + 填洼）、悬垂（崖顶岩檐） 等），点 ▶ 执行管线一键跑完整条。",
+      "nodes": 6,
+      "scanned": "moss",
+      "status": "苔庭：采样 51×51 格（3 m）· 陆地 190 格 · 保护格 271 · 地形网格 254 个"
+    },
+    "candidate": {
+      "h4": "候选 · 通过（需留意）",
+      "mode": "partial",
+      "fails": [],
+      "warns": [
+        "! 竖崖占比 ≤ 12%竖崖（> 62°）27.4% · 中等坡 59.5%"
+      ],
+      "status": "relief 候选：undefined",
+      "live": {
+        "group": true,
+        "visible": true,
+        "tris": 460,
+        "parts": [
+          "relief-surface",
+          "relief-ladders",
+          "relief-contours"
+        ]
+      }
+    },
+    "compare": {
+      "state": {
+        "active": "original",
+        "text": "实景候选：苔庭 · 正在看原样（partial，隐藏原地形网格 253 个，岩檐 0，梯子 8）"
+      },
+      "live": {
+        "group": true,
+        "visible": false,
+        "tris": 460,
+        "parts": [
+          "relief-surface",
+          "relief-ladders",
+          "relief-contours"
+        ]
+      }
+    },
+    "reverted": {
+      "state": {
+        "active": "none",
+        "text": "实景候选：没有（游戏里是原地形）"
+      },
+      "live": {
+        "group": false,
+        "visible": false,
+        "tris": 0,
+        "parts": []
+      }
+    },
+    "keysAfter": [
+      "tm.capability.experience.v2",
+      "tm.citadelEditor.collapsed",
+      "tm.citadelEditor.dropToGround",
+      "tm.defaults.v1",
+      "tm.equatorialClouds.enabled",
+      "tm.gscene.pipeline.v2",
+      "tm.morris.panel.collapsed",
+      "tm.questPanel.collapsed",
+      "tm.relief.pipeline.v2",
+      "tm.startup.profile.v1"
+    ]
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true,
+  "capabilities": [
+    "relief.soft",
+    "relief.cliff",
+    "relief.valley",
+    "relief.overhang",
+    "relief.ledge",
+    "relief.passes"
+  ]
+}

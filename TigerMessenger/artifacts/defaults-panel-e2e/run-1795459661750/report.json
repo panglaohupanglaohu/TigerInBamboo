@@ -1,0 +1,81 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/defaults-panel-e2e/run-1795459661750",
+  "steps": {
+    "A": {
+      "rows": [
+        "apostles:apostles-terrain",
+        "citadel:building",
+        "citadel:mountain",
+        "crystal:building",
+        "old-port:relief"
+      ],
+      "text": "当前默认场景层能力谁定的时间apostlesapostles-terrain待实测选出 · P-R32-01待决定登记2026/11/24 02:47:42撤回citadelbuilding待你决定 · P-R57-01待决定登记2026/11/24 02:47:42撤回citadelmountainmountain.pipeline手动采用2026/11/24 09:00:00撤回crystalbuilding待你决定 · P-R57-01待决定登记2026/11/24 02:47:42撤回old-portreliefrelief.soft按实测选优代选2026/11/24 10:00:00撤回"
+    },
+    "afterRevert": {
+      "rows": [
+        "apostles:apostles-terrain",
+        "citadel:building",
+        "crystal:building",
+        "old-port:relief"
+      ],
+      "stored": {
+        "apostles:apostles-terrain": {
+          "capabilityId": "apostles.look",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "user",
+          "at": "2026-11-23T18:47:42.134Z",
+          "source": "pending-seed",
+          "note": "十二门徒三套外观（approved / soft / soft,palette）待按实测选优；实测选出只是推荐，采用与否仍待用户在对照面板点头。",
+          "status": "pending-measurement",
+          "pendingRef": "P-R32-01"
+        },
+        "old-port:relief": {
+          "capabilityId": "relief.soft",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "auto-test",
+          "at": "2026-11-24T02:00:00.000Z",
+          "source": "auto-test",
+          "note": "",
+          "status": "active",
+          "pendingRef": null
+        },
+        "citadel:building": {
+          "capabilityId": "building.plan",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "user",
+          "at": "2026-11-23T18:47:42.134Z",
+          "source": "pending-seed",
+          "note": "高山圣城建筑群：采用后要不要像山形一样进游戏自动换上（现状 autoDeploy:false）待用户决定。",
+          "status": "pending-user",
+          "pendingRef": "P-R57-01"
+        },
+        "crystal:building": {
+          "capabilityId": "building.plan",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "user",
+          "at": "2026-11-23T18:47:42.134Z",
+          "source": "pending-seed",
+          "note": "水晶城建筑群：同 P-R57-01，采用后是否进游戏自动换上待用户决定。",
+          "status": "pending-user",
+          "pendingRef": "P-R57-01"
+        }
+      }
+    },
+    "B": {
+      "rows": [
+        "apostles:apostles-terrain",
+        "citadel:building",
+        "citadel:mountain",
+        "crystal:building",
+        "old-port:relief"
+      ],
+      "text": "当前默认场景层能力谁定的时间apostlesapostles-terrain待实测选出 · P-R32-01待决定登记2026/11/24 02:47:44撤回citadelbuilding待你决定 · P-R57-01待决定登记2026/11/24 02:47:44撤回citadelmountain待你决定 · P-R27-01,P-R28-01,P-R28-02待决定登记2026/11/24 02:47:44撤回crystalbuilding待你决定 · P-R57-01待决定登记2026/11/24 02:47:44撤回old-portrelief待你决定 · P-R49-01待决定登记2026/11/24 02:47:44撤回"
+    }
+  },
+  "errors": [],
+  "pass": true
+}

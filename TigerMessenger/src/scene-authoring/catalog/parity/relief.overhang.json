@@ -1,0 +1,48 @@
+{
+ "capability": "relief.overhang",
+ "line": "terrain",
+ "verdict": "diff-registered",
+ "measured": {
+  "at": "2026-11-24T18:35:11.373Z",
+  "total": 2,
+  "byPath": {
+   "seed20261123.measure.stackInWater": 1,
+   "seed7.measure.stackInWater": 1
+  },
+  "unregisteredCount": 0,
+  "used": [
+   "seed*.measure.stackInWater"
+  ],
+  "unused": [],
+  "ms": 56
+ },
+ "status": "measured",
+ "note": "Quick 预填（读码推断，2026-11-23 R41–R50）：verdict / measured 为 null = 还没实算；由 Kiro 跑 tools/refactor/record-relief-evidence.mjs 写入（唯一写入方）。登记的 diffs 是「已知会不同、原因已查明」的差异；实算出现登记外的差异 → tests/relief-parity.test.mjs 红。",
+ "original": "townscaper-web/REACode/src/overhangterrain.js",
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/overhang-terrain.js"
+ ],
+ "inputs": {
+  "seeds": [
+   7,
+   20261123
+  ],
+  "compare": "体素岛顶面 / 体素指纹 / 海蚀洞 / 石柱 / 网格面数与朝下面 / measure / step 6 高度指纹"
+ },
+ "diffs": [
+  {
+   "path": "seed*.measure.stackInWater",
+   "kind": "extra",
+   "reason": "重构版 measure 新增字段：海上石柱脚下那格是不是海（原版固定放在岸线 + 5 格，那格还在坡上时石柱站在陆地上，原版不报）"
+  }
+ ],
+ "flaws": [
+  "原版石柱位置不检查是否在水里（见 stackInWater）"
+ ],
+ "extensions": [
+  "cliffLips / lipStats：把岩檐推广到任意高度场（地貌管线 relief.overhang 用）"
+ ],
+ "harness": "TigerMessenger/src/system-workshop/terrain/parity-cases.js + parity.js",
+ "test": "TigerMessenger/tests/relief-parity.test.mjs",
+ "recordedBy": "record-relief-evidence.mjs（实算）"
+}

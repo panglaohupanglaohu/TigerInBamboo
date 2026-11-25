@@ -1,0 +1,194 @@
+TAP version 13
+# PASS cross-leaf band reuse, stable survivors, key ownership, exact area and 9000 candidate operations
+# Subtest: townscaper-web/REACodeRefactoring/tests/atlas-crossleaf.mjs
+ok 1 - townscaper-web/REACodeRefactoring/tests/atlas-crossleaf.mjs
+  ---
+  duration_ms: 162.309334
+  type: 'test'
+  ...
+# PASS 24000 dynamic operations, stale/foreign handles, area conservation, disjoint stable slots, explicit fragmentation and 6000-depth traversal
+# Subtest: townscaper-web/REACodeRefactoring/tests/atlas.mjs
+ok 2 - townscaper-web/REACodeRefactoring/tests/atlas.mjs
+  ---
+  duration_ms: 1810.3275
+  type: 'test'
+  ...
+# battle-c01 PASS {"column":{"waits":251,"arrived":6,"spreadOn":1.31,"spreadOff":0.64,"nearest":[0.117,0.123,0.131,0.131,0.117,0.123],"toGoal":0.023,"routeSamples":93,"routeArcs":1,"routeCorners":19,"routeTrimmed":91},"fx":{"coast":94,"flowers":152,"edges":62,"stacked":1427,"maxStack":4,"hitFlashes":20,"planks":1,"hazes":1,"glows":1}}
+# Subtest: townscaper-web/REACodeRefactoring/tests/battle-c01.mjs
+ok 3 - townscaper-web/REACodeRefactoring/tests/battle-c01.mjs
+  ---
+  duration_ms: 2525.357334
+  type: 'test'
+  ...
+# battle-g3: PASS {"banner":{"ink":[84,38,66],"gold":[536,536,536],"rimShare":0.416},"meleeOffDeaths":8,"meleeOn":{"sweeps":3,"sweepHits":3,"multiHits":0,"sweepBlockedByWall":0,"shieldBlocks":2,"shieldPushes":1,"climbing":0,"maxClimbing":0,"commands":0,"markers":0,"thinLadders":0,"fitted":0},"standards":{"shieldFaces":24},"thinLadders":{"thin":2,"otherLadders":64},"ladder":{"samples":44,"levels":44,"top":1},"climb":{"maxClimbing":8,"maxStep":0.283},"shadow":{"slopeDeg":12,"maxErr":0.0061},"ui":{"overlaps":0,"maxRot":0.77,"commands":6}}
+# Subtest: townscaper-web/REACodeRefactoring/tests/battle-g3.mjs
+ok 4 - townscaper-web/REACodeRefactoring/tests/battle-g3.mjs
+  ---
+  duration_ms: 1954.922084
+  type: 'test'
+  ...
+# PASS c02 bn-fx-b {"blood":{"cv":0.407,"satellites":13},"scorch":{"decals":4,"embers":20},"kick":{"dz":0.147,"killLift":0.18,"dmgLift":0.11},"flow_quad":{"gridSegs":2065,"faces":406},"flow_mixed":{"gridSegs":1197,"faces":312},"tumble":{"maxTilt":176.7,"maxTumbleDeg":554,"dust":1,"splashes":0,"dead":false},"wakes":{"foam":224,"spray":13,"behindShare":0.84},"navmesh":{"polys":317,"edges":828,"verts":408},"rain":{"drops":1600,"splats":77,"clouds":4},"swing":{"arcs":1},"footprint":{"squads":3,"segs":125},"caves_quad":{"tunnels":3,"through":3,"caveCells":6,"stacked":6,"nodes":419},"caves_mixed":{"tunnels":3,"through":3,"caveCells":8,"stacked":8,"nodes":325}}
+# Subtest: townscaper-web/REACodeRefactoring/tests/c02-bn-fx-b.mjs
+ok 5 - townscaper-web/REACodeRefactoring/tests/c02-bn-fx-b.mjs
+  ---
+  duration_ms: 1674.325417
+  type: 'test'
+  ...
+# PASS battle-c03 {"s1":0.389,"s2":0.242,"charred":9,"iso":{"levels":47,"segs":146,"wall":28},"plungeHits":1}
+# Subtest: townscaper-web/REACodeRefactoring/tests/c03-battle.mjs
+ok 6 - townscaper-web/REACodeRefactoring/tests/c03-battle.mjs
+  ---
+  duration_ms: 210.30125
+  type: 'test'
+  ...
+# {"ok":true,"segments":659,"levels":[1,10,2,3,4,5,6,7,8,9]}
+# Subtest: townscaper-web/REACodeRefactoring/tests/capability-grid-contours.mjs
+ok 7 - townscaper-web/REACodeRefactoring/tests/capability-grid-contours.mjs
+  ---
+  duration_ms: 182.430375
+  type: 'test'
+  ...
+# PASS comparison page selection, whitelist, original reference and actual target files
+# Subtest: townscaper-web/REACodeRefactoring/tests/comparison-pages.mjs
+ok 8 - townscaper-web/REACodeRefactoring/tests/comparison-pages.mjs
+  ---
+  duration_ms: 33.909084
+  type: 'test'
+  ...
+# house-char: ALL PASS {"charred":4,"r":0.044,"g":0.021,"b":0.07,"grow":1.3}
+# PASS overlapping C01/C03 char owners, both release orders, exact original restoration
+# Subtest: townscaper-web/REACodeRefactoring/tests/house-char.mjs
+ok 9 - townscaper-web/REACodeRefactoring/tests/house-char.mjs
+  ---
+  duration_ms: 34.243416
+  type: 'test'
+  ...
+# PASS 自定义 mip：线性空间平均、远处收敛 / sharp 保中景、Kaiser、三线性、各向异性 {"box":{"mean1":0.214,"amp1":0,"amp4":0,"last":0.214},"linear":{"mean1":0.5,"amp1":0,"amp4":0,"last":0.5},"kaiser":{"mean1":0.5,"amp1":0.048,"amp4":0.001,"last":0.5},"sharp":{"mean1":0.5,"amp1":0,"amp4":0,"last":0.5},"stripesAmp2":{"linear":0.967,"sharp":1,"kaiser":0.695},"isoRange":0,"anisoRange":0.8}
+# Subtest: townscaper-web/REACodeRefactoring/tests/mip-chain.mjs
+ok 10 - townscaper-web/REACodeRefactoring/tests/mip-chain.mjs
+  ---
+  duration_ms: 72.082
+  type: 'test'
+  ...
+# PASS migrated ground consumer: LOD active, reduced far energy/shimmer, repeat addressing, immutable source, bounded inputs [{"filter":"linear","mode":"none","meanAbsDelta":5.061217948717949},{"filter":"linear","mode":"trilinear","meanAbsDelta":0.0011217948717948717},{"filter":"linear","mode":"aniso","meanAbsDelta":0.023397435897435898}]
+# Subtest: townscaper-web/REACodeRefactoring/tests/mip-ground.mjs
+ok 11 - townscaper-web/REACodeRefactoring/tests/mip-ground.mjs
+  ---
+  duration_ms: 241.109666
+  type: 'test'
+  ...
+# PASS quad/mixed/hex, per-level corner dedup, actual shape transform, cliff heights, immutable shared World
+# Subtest: townscaper-web/REACodeRefactoring/tests/nav-diagnostic-geometry.mjs
+ok 12 - townscaper-web/REACodeRefactoring/tests/nav-diagnostic-geometry.mjs
+  ---
+  duration_ms: 68.195958
+  type: 'test'
+  ...
+# PASS real graph edits, type/single-input/cycle/budget rejection atomicity, undo/redo, state/layout roundtrip,90-frame parity
+# Subtest: townscaper-web/REACodeRefactoring/tests/node-graph-editor.mjs
+ok 13 - townscaper-web/REACodeRefactoring/tests/node-graph-editor.mjs
+  ---
+  duration_ms: 45.101
+  type: 'test'
+  ...
+# node-graph-runtime PASS · select/lerp/compose/sink 全部按 Unity 那条链的语义走
+# Subtest: townscaper-web/REACodeRefactoring/tests/node-graph-runtime.mjs
+ok 14 - townscaper-web/REACodeRefactoring/tests/node-graph-runtime.mjs
+  ---
+  duration_ms: 35.421875
+  type: 'test'
+  ...
+# node-graph-serialize: 21 checks PASS
+# Subtest: townscaper-web/REACodeRefactoring/tests/node-graph-serialize.mjs
+ok 15 - townscaper-web/REACodeRefactoring/tests/node-graph-serialize.mjs
+  ---
+  duration_ms: 39.44275
+  type: 'test'
+  ...
+# PASS mapped normal source and threshold toggles, exception-safe material/visibility/render-target restoration, texture ownership
+# Subtest: townscaper-web/REACodeRefactoring/tests/outline-painted.mjs
+ok 16 - townscaper-web/REACodeRefactoring/tests/outline-painted.mjs
+  ---
+  duration_ms: 148.746083
+  type: 'test'
+  ...
+# PASS CPU 参考：剪影/折痕/平面无线、depthMix=0 只留法线反差、外圈淡出、线宽×DPR；GPU 类 uniform 换算（未做浏览器渲染） {"width1":6,"width2":12}
+# Subtest: townscaper-web/REACodeRefactoring/tests/outline-pass.mjs
+ok 17 - townscaper-web/REACodeRefactoring/tests/outline-pass.mjs
+  ---
+  duration_ms: 173.355959
+  type: 'test'
+  ...
+# PASS chunky painted normals: chunk-flat, tiling, mesh perturb w/o moving vertices, World top variation {"sameInChunk":0.937,"worldTopStd":0.105,"audit":[[9,0.101,17.9],[16,0.106,18.1],[25,0.134,18.5],[36,0.136,18.8]]}
+# Subtest: townscaper-web/REACodeRefactoring/tests/paint-normal.mjs
+ok 18 - townscaper-web/REACodeRefactoring/tests/paint-normal.mjs
+  ---
+  duration_ms: 148.781291
+  type: 'test'
+  ...
+# prefab-socket ok 63 buildings 45 roads seed 7
+# Subtest: townscaper-web/REACodeRefactoring/tests/prefab-socket.mjs
+ok 19 - townscaper-web/REACodeRefactoring/tests/prefab-socket.mjs
+  ---
+  duration_ms: 191.317958
+  type: 'test'
+  ...
+# PASS curated scene composition: serialized toggles, original state, untouched active shading, failure rollback/recovery, battle scope
+# Subtest: townscaper-web/REACodeRefactoring/tests/scene-enhancement.mjs
+ok 20 - townscaper-web/REACodeRefactoring/tests/scene-enhancement.mjs
+  ---
+  duration_ms: 32.857334
+  type: 'test'
+  ...
+# PASS soft-continuous {"quad/7":{"softPairs":156,"cliffsBefore":37,"cliffsKept":175,"lowered":38,"softVertices":[54,77]},"quad/21":{"softPairs":87,"cliffsBefore":9,"cliffsKept":102,"lowered":7,"softVertices":[23,29]},"mixed/7":{"softPairs":80,"cliffsBefore":25,"cliffsKept":115,"lowered":27,"softVertices":[38,37]},"mixed/21":{"softPairs":39,"cliffsBefore":3,"cliffsKept":80,"lowered":3,"softVertices":[12,12]}}
+# Subtest: townscaper-web/REACodeRefactoring/tests/soft-continuous.mjs
+ok 21 - townscaper-web/REACodeRefactoring/tests/soft-continuous.mjs
+  ---
+  duration_ms: 173.425208
+  type: 'test'
+  ...
+# PASS SpriteAtlas bounded grow/update/free/padding/rollback; 15 differential radial layouts match original
+# Subtest: townscaper-web/REACodeRefactoring/tests/sprite-atlas.mjs
+ok 22 - townscaper-web/REACodeRefactoring/tests/sprite-atlas.mjs
+  ---
+  duration_ms: 116.075625
+  type: 'test'
+  ...
+# PASS analytic linear/no-drag parity, thin-scene collision without tunneling at30/60/120Hz, quadratic convergence, budget/input guards
+# Subtest: townscaper-web/REACodeRefactoring/tests/trajectory-trace.mjs
+ok 23 - townscaper-web/REACodeRefactoring/tests/trajectory-trace.mjs
+  ---
+  duration_ms: 36.990458
+  type: 'test'
+  ...
+# PASS video metrics: known 1Hz/1s, constant, grayscale, timestamps, nonfinite, work bound
+# Subtest: townscaper-web/REACodeRefactoring/tests/video-cycle-metrics.mjs
+ok 24 - townscaper-web/REACodeRefactoring/tests/video-cycle-metrics.mjs
+  ---
+  duration_ms: 83.717167
+  type: 'test'
+  ...
+# PASS View display combinations, switching, restore and rollback on failure
+# Subtest: townscaper-web/REACodeRefactoring/tests/view-combinations.mjs
+ok 25 - townscaper-web/REACodeRefactoring/tests/view-combinations.mjs
+  ---
+  duration_ms: 32.666459
+  type: 'test'
+  ...
+# PASS view-post-extras: URL/开关默认关, 渲染接管(outline 3 遍/smear 合成/直通), GLSL 拖影 = CPU smearImage, 软法线写回与还原, 风旗链式着色器
+# Subtest: townscaper-web/REACodeRefactoring/tests/view-post-extras.mjs
+ok 26 - townscaper-web/REACodeRefactoring/tests/view-post-extras.mjs
+  ---
+  duration_ms: 113.310916
+  type: 'test'
+  ...
+1..26
+# tests 26
+# suites 0
+# pass 26
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2533.375041
+

@@ -1,0 +1,8 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-compare-e2e/run-1795568497002",
+  "manifest": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-look-views-e2e/latest.json",
+  "steps": {},
+  "errors": [],
+  "pass": false,
+  "failure": "locator.selectOption: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#scene')\n    - locator resolved to <select id=\"scene\">…</select>\n  - attempting select option action\n    - waiting for element to be visible and enabled\n"
+}

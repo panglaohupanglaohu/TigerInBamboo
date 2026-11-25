@@ -1,0 +1,154 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-23T12:43:50.262Z",
+ "note": "裁判只证明「在这些种子和这些度量上」一致；度量没覆盖到的行为不在结论内。",
+ "cases": [
+  {
+   "id": "depfill",
+   "line": "terrain",
+   "clip": "1447488323845509121",
+   "original": "src/depfill.js",
+   "refactored": "src/core/depression-fill.js",
+   "claim": "侵蚀后的地形没有局部极小：每个洼地填成湖，所有陆地格都能排到海",
+   "declared": [
+    "重构版把整数溢出面 filled 和带微坡的排水面 surface 分开存；原版只有一张带累计微坡的 F。比较时 filled 对 F 用 EPS×路径长的容差。",
+    "重构版要求高度 ≥ 0，适配器把原版水下格钳到 0（两边都把 ≤0 当出口，结果不受影响）。",
+    "重构版按边邻接（方格上是 4 邻），原版是 8 邻。「同图」一栏用 8 邻比算法本身；「原生邻接」一栏用 4 邻量出拓扑差异有多大。"
+   ],
+   "seeds": 24,
+   "metrics": {
+    "抬升格集合差（只在一边被抬的格数）": {
+     "agree": 19,
+     "worst": 82,
+     "worstSeed": 8,
+     "tol": 0
+    },
+    "填后高度最大差": {
+     "agree": 24,
+     "worst": 0.0013999999999967372,
+     "worstSeed": 8,
+     "tol": 0.4096
+    },
+    "湖格数": {
+     "agree": 19,
+     "worst": 82,
+     "worstSeed": 8,
+     "tol": 0
+    },
+    "最大湖深": {
+     "agree": 24,
+     "worst": 0.00039999999999906777,
+     "worstSeed": 6,
+     "tol": 0.4096
+    },
+    "填后局部极小数": {
+     "agree": 24,
+     "worst": 0,
+     "worstSeed": null,
+     "tol": 0
+    },
+    "填后排水率": {
+     "agree": 24,
+     "worst": 0,
+     "worstSeed": null,
+     "tol": 1e-9
+    }
+   },
+   "observed": {
+    "4 邻接下湖格数": {
+     "min": 46,
+     "max": 164,
+     "mean": 99.20833333333333
+    },
+    "8 邻接下湖格数": {
+     "min": 42,
+     "max": 155,
+     "mean": 84.25
+    },
+    "4 邻接下只在重构版被抬的格": {
+     "min": 1,
+     "max": 44,
+     "mean": 14.666666666666666
+    },
+    "4 邻接下排水率": {
+     "min": 1,
+     "max": 1,
+     "mean": 1
+    }
+   },
+   "failures": [
+    {
+     "seed": 6,
+     "metric": "抬升格集合差（只在一边被抬的格数）",
+     "original": 0,
+     "refactored": 6,
+     "tol": 0
+    },
+    {
+     "seed": 6,
+     "metric": "湖格数",
+     "original": 103,
+     "refactored": 97,
+     "tol": 0
+    },
+    {
+     "seed": 8,
+     "metric": "抬升格集合差（只在一边被抬的格数）",
+     "original": 0,
+     "refactored": 82,
+     "tol": 0
+    },
+    {
+     "seed": 8,
+     "metric": "湖格数",
+     "original": 177,
+     "refactored": 95,
+     "tol": 0
+    },
+    {
+     "seed": 9,
+     "metric": "抬升格集合差（只在一边被抬的格数）",
+     "original": 0,
+     "refactored": 4,
+     "tol": 0
+    },
+    {
+     "seed": 9,
+     "metric": "湖格数",
+     "original": 67,
+     "refactored": 63,
+     "tol": 0
+    },
+    {
+     "seed": 16,
+     "metric": "抬升格集合差（只在一边被抬的格数）",
+     "original": 0,
+     "refactored": 1,
+     "tol": 0
+    },
+    {
+     "seed": 16,
+     "metric": "湖格数",
+     "original": 69,
+     "refactored": 68,
+     "tol": 0
+    },
+    {
+     "seed": 17,
+     "metric": "抬升格集合差（只在一边被抬的格数）",
+     "original": 0,
+     "refactored": 12,
+     "tol": 0
+    },
+    {
+     "seed": 17,
+     "metric": "湖格数",
+     "original": 113,
+     "refactored": 101,
+     "tol": 0
+    }
+   ],
+   "verdict": "diverges"
+  }
+ ]
+}

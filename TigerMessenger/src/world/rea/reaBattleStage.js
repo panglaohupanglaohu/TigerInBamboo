@@ -46,6 +46,7 @@ export class ReaBattleStage {
    */
   constructor({ scene, site = scene, dir, camera, scale = 3.5, gridRadius = 14, levelHeight = 0.5, name = 'rea-battle', houseFilter = HOUSE, sampleRadius = null, unitHeightM = null }) {
     this.name = name; this.scale = scale; this.L = levelHeight; this.site = site; this.camera = camera;
+    this.gridRadiusN = gridRadius; this.unitHeightM = unitHeightM;
     const up = dir.clone().normalize();
     const east = new THREE.Vector3(0, 1, 0).cross(up); if (east.lengthSq() < 1e-6) east.set(1, 0, 0); east.normalize();
     const north = up.clone().cross(east).normalize();   // 右手系：x = east, y = up, z = north → det = +1
@@ -77,17 +78,34 @@ export class ReaBattleStage {
     const wind = new THREE.Vector3();
     this.view = {
       scene: this.anchor, levelHeight, index: this.index, mesh: this.mesh, worldMesh: this.worldMesh, navLayer: null,
-      effects: { fireSources: [], showFire() {} }, smoke: { sources: [] },
+      effects: { fireSources: [], showFire() {} }, smoke: { sources: [], setFireCoupling() {}, ignite() {} },
       atmosphere: { sample: () => { const a = THREE.MathUtils.degToRad(P.windDir ?? 45), s = 0.6 + (P.windSpeed ?? 0.8); return wind.set(Math.cos(a) * s, 0, Math.sin(a) * s); } },
       camera, debugState: {}, goreOff: false, flowDebug: false,
+      // 击退落水（opt-in，core/knockoff-water.js）：矛轴推 0.12、推到水边必掉、上抛翻滚、入水溺水 + 水花 / drownStats
+      knockoffWater: true,
       // 2026-11-10 用户：士兵按真实身高画（默认 1.7 m）。REA 单位高 0.18 格 → 放大倍数 = 身高 /(0.18 × scale)；长船同倍放大
       unitScale: unitHeightM ? unitHeightM / (REA_UNIT_HEIGHT * scale) : 1,
       // 画单位 / 旗时的高度修正：实景地面高 − REA 层高（圣城一层 4 m，取整后人会埋进地面或悬空；只改画的位置，不改战斗逻辑）
       // 2026-11-10：再细到每个人脚下（细网格双线性，四点都有才用；否则退回格心高度）
-      visualOffset: (x, z) => { const c = this.index.cellAt(x, z); if (!c) return 0; const top = this.world.top(c); if (!top) return 0; const f = this.fineAt(x, z), ty = f ?? this.trueY.get(c.id); return ty == null ? 0 : ty - top * levelHeight; },
+      visualOffset: (x, z) => { const c = this.index.cellAt(x, z); if (!c) return 0; const top = this.world.top(c); if (!top) return 0;
+        // R36（只在作战计划打开 footing 且拱洞已挖空时）：站在洞底的人按洞底的实景高度画——细网格采的是拱顶，照旧算会把人画进拱里 / 地下
+        if (this.archesOn && this.footing) { const a = this.archByCell?.get(c.id); if (a) { const u = this.#unitAt(x, z); if (u && (u.navFloor ?? top) < top) return a.groundY - u.navFloor * levelHeight; } }
+        const f = this.fineAt(x, z), ty = f ?? this.trueY.get(c.id); return ty == null ? 0 : ty - top * levelHeight; },
     };
     this.battle = new Battle(this.view);
     this.battle.hud.style.top = '128px';
+    // 保平（2026-11-16 vendor 整树换库版 battle.js）：库版新默认逐项关掉，保持旧 vendor 的行为 / 视觉口径
+    const b = this.battle;
+    b.g3.set('continuousFlow', false);   // 旧 vendor 转向只走 steerTarget；连续流会改走位（nav e2e 不漂移优先）
+    b.infoSharing = false;               // InfoGraph 同伴转告守军位置：旧版没有，维京人只按流场 / 小屋走
+    b.c01.set('houseChar', false);       // 失守小屋焦黑画在 REA 导航面小屋上——舞台导航面不可见，画了也看不见
+    b.c01.set('shoreFlowers', false);    // 岸花按 REA 层高铺，与实景地面有 visualOffset 位差
+    b.c02.set('scorch', false);          // 焦痕贴花同上
+    b.setFootprint(false);               // 旧 vendor 没有占位脚印线
+    b.unitShadows.enabled = false;       // 旧 vendor 不画单位软盘影；影子贴 REA 层高与实景有位差
+    // R71（Guide §10）：本项目场景的战斗默认开精细门户（拱脚收窄 + 形变侧壁；库里默认仍关）。
+    // 作战计划 navigation.finePortals:false 仍可显式关掉（sceneBattle.applyNavigation）。
+    this.navDefaults = { finePortals: true };
     this.running = false;
   }
 
@@ -122,17 +140,22 @@ export class ReaBattleStage {
     let tris = new Float32Array(1 << 20), nt = 0;   // 三角形表用可增长的 Float32Array（普通数组存 200 万三角要 ~160 MB，测试页曾因此崩溃）
     const push10 = (a) => { if (nt + 10 > tris.length) { const g = new Float32Array(tris.length * 2); g.set(tris); tris = g; } tris.set(a, nt); const k = nt; nt += 10; return k; };
     const tmp10 = new Float32Array(10);
+    let tsg = new Int8Array(1 << 17);   // R34：每个三角形的朝向（+1 朝上 / −1 朝下）
     const va = new THREE.Vector3(), vb = new THREE.Vector3(), vc = new THREE.Vector3(), m = new THREE.Matrix4();
     const R2 = (radius / this.scale + 2) ** 2;
     for (const o of meshes) {
       const g = o.geometry, pos = g.attributes.position, ix = g.index?.array, n = ix ? ix.length : pos.count, oi = objs.push(o) - 1;
       isHouse[oi] = !!houseFilter && houseFilter.test(`${o.name}<${o.parent?.name || ''}<${o.parent?.parent?.name || ''}`);
       m.copy(o.matrixWorld);
+      const flip = m.determinant() < 0 ? -1 : 1;   // R34：镜像物体的三角形绕序反过来
       for (let i = 0; i < n; i += 3) {
         this.worldToStage(va.fromBufferAttribute(pos, ix ? ix[i] : i).applyMatrix4(m), va); this.worldToStage(vb.fromBufferAttribute(pos, ix ? ix[i + 1] : i + 1).applyMatrix4(m), vb); this.worldToStage(vc.fromBufferAttribute(pos, ix ? ix[i + 2] : i + 2).applyMatrix4(m), vc);
         if (va.x * va.x + va.z * va.z > R2 && vb.x * vb.x + vb.z * vb.z > R2 && vc.x * vc.x + vc.z * vc.z > R2) continue;
         tmp10[0] = va.x; tmp10[1] = va.y; tmp10[2] = va.z; tmp10[3] = vb.x; tmp10[4] = vb.y; tmp10[5] = vb.z; tmp10[6] = vc.x; tmp10[7] = vc.y; tmp10[8] = vc.z; tmp10[9] = oi;
-        const k = push10(tmp10);
+        const k = push10(tmp10), ti = k / 10;
+        // R34：记下三角形朝上还是朝下（舞台坐标 y 朝上；(b−a)×(c−a) 的 y 分量）。拱底 / 悬垂底面朝下，地面朝上
+        if (ti >= tsg.length) { const g2 = new Int8Array(tsg.length * 2); g2.set(tsg); tsg = g2; }
+        const ny = ((vb.z - va.z) * (vc.x - va.x) - (vb.x - va.x) * (vc.z - va.z)) * flip; tsg[ti] = ny > 1e-12 ? 1 : ny < -1e-12 ? -1 : 0;
         const x0 = Math.floor(Math.min(va.x, vb.x, vc.x) / BIN), x1 = Math.floor(Math.max(va.x, vb.x, vc.x) / BIN), z0 = Math.floor(Math.min(va.z, vb.z, vc.z) / BIN), z1 = Math.floor(Math.max(va.z, vb.z, vc.z) / BIN);
         if ((x1 - x0) * (z1 - z0) > 400) continue;   // 罕见的超大三角形（已截过大网格）跳过
         for (let x = x0; x <= x1; x++) for (let z = z0; z <= z1; z++) { const key = x * 100003 + z; let b = bins.get(key); if (!b) bins.set(key, (b = [])); b.push(k); }
@@ -151,6 +174,20 @@ export class ReaBattleStage {
         if (y > best) { best = y; bo = tris[k + 9]; }
       }
       return bo < 0 ? null : { y: best, object: objs[bo], house };
+    };
+    // R34：格心竖线上所有（非房子）命中，从高到低；s = 命中面的朝向
+    const hitsAt = (x, z) => {
+      const b = bins.get(Math.floor(x / BIN) * 100003 + Math.floor(z / BIN)); if (!b) return [];
+      const out = [];
+      for (const k of b) {
+        const ax = tris[k], ay = tris[k + 1], az = tris[k + 2], bx = tris[k + 3], by = tris[k + 4], bz = tris[k + 5], cx = tris[k + 6], cy = tris[k + 7], cz = tris[k + 8];
+        const d = (bz - cz) * (ax - cx) + (cx - bx) * (az - cz); if (Math.abs(d) < 1e-12) continue;
+        const l1 = ((bz - cz) * (x - cx) + (cx - bx) * (z - cz)) / d, l2 = ((cz - az) * (x - cx) + (ax - cx) * (z - cz)) / d, l3 = 1 - l1 - l2;
+        if (l1 < -1e-6 || l2 < -1e-6 || l3 < -1e-6) continue;
+        const y = l1 * ay + l2 * by + l3 * cy; if (y >= 60 / this.scale || isHouse[tris[k + 9]]) continue;
+        out.push({ y, s: tsg[k / 10] });
+      }
+      return out.sort((p, q) => q.y - p.y);
     };
     let land = 0, maxLv = 0, rays = 0; const houses = []; this.trueY = new Map();
     for (const c of this.grid.cells) {
@@ -200,10 +237,61 @@ export class ReaBattleStage {
       if (picked.length) this.housesFromPlateau = picked.length;
     }
     this.world.bnHouses = picked;
+    // R34 拱洞 / 悬垂候选（默认不生效）：格心竖线从顶往下，先遇到朝下的面（拱底 / 悬垂底面，比顶面低半层以上），
+    // 再遇到朝上的面（洞底地面）；两者之间至少空出一整层、上面还剩至少一层拱顶 → 这一列挖出洞，放进 solidHollow。
+    // 只有作战计划打开 navigation.arches 时 setArches(true) 才换进 World；不改实景、不改存档。
+    // 启发式：没闭合的网格 / 互相穿插的岩体会让朝向判断出错，候选数只是「可能有洞」。
+    this.solidOriginal = this.world.solid.slice(); this.rockOriginal = this.world.rock.slice();
+    const hollow = this.world.solid.slice(), arches = [];
+    for (const c of this.grid.cells) {
+      const top = this.world.top(c); if (!top || !this.trueY.has(c.id)) continue;
+      const hs = hitsAt(c.cx, c.cz); if (hs.length < 3) continue;
+      let dn = -1; for (let k = 1; k < hs.length; k++) if (hs[k].s < 0 && hs[k].y < hs[0].y - this.L * .5) { dn = k; break; }
+      if (dn < 0) continue;
+      let up = -1; for (let k = dn + 1; k < hs.length; k++) if (hs[k].s > 0 && hs[k].y < hs[dn].y) { up = k; break; }
+      if (up < 0 || hs[up].y * this.scale < 0.25) continue;
+      const ground = Math.max(1, Math.round(hs[up].y / this.L)), air1 = Math.min(top - 1, Math.floor(hs[dn].y / this.L + 1e-6));
+      if (air1 < ground + 1) continue;
+      let m = hollow[c.id]; for (let lv = ground + 1; lv <= air1; lv++) m &= ~(1 << (lv - 1));
+      hollow[c.id] = m; arches.push({ id: c.id, ground, air: [ground + 1, air1], top, groundY: hs[up].y });
+    }
+    this.solidHollow = hollow; this.rockHollow = this.rockOriginal.map((r, i) => r & hollow[i]);
+    this.archColumns = arches; this.archByCell = new Map(arches.map((a) => [a.id, a])); this.archesOn = false;
     this.world.touch();
-    return { tris: this.sampleTris, rays, plateauRaised: this.plateauRaised || 0, ms: Math.round(performance.now() - t0), meshes: meshes.length, cells: this.grid.cells.length, land, maxLevel: maxLv, houses: picked.length };
+    return { tris: this.sampleTris, rays, plateauRaised: this.plateauRaised || 0, ms: Math.round(performance.now() - t0), meshes: meshes.length, cells: this.grid.cells.length, land, maxLevel: maxLv, houses: picked.length, grid: (() => { const out = [], hs = new Set(picked); for (const c of this.grid.cells) { const lv = this.world.top(c); if (lv) out.push([+c.cx.toFixed(2), +c.cz.toFixed(2), lv, hs.has(c) ? 1 : 0]); } return out; })() };
   }
 
+  /** R34：拱洞挖空开关（作战计划 navigation.arches）。返回生效的列数；没有候选时恒为 0。 */
+  setArches(on) {
+    const want = !!on && (this.archColumns?.length || 0) > 0;
+    if (want !== !!this.archesOn) {
+      this.world.solid.set(want ? this.solidHollow : this.solidOriginal); this.world.rock.set(want ? this.rockHollow : this.rockOriginal);
+      this.world.touch(); this.archesOn = want;
+      this.worldMesh.rebuild(); this.mesh.geometry = this.worldMesh.geometry;   // 隐形导航面跟着换（battle.refreshPassages 按 builtVersion 判断）
+    }
+    return want ? this.archColumns.length : 0;
+  }
+  /** R33/R34：给 Worker 的导航采样（位掩码；solid 恒为未挖空的原样，hollow 为挖空后的版本） */
+  navSample() {
+    return { gridRadius: this.gridRadiusN, hexSize: 1, levelHeight: this.L, cells: this.grid.cells.length,
+      solid: Array.from(this.solidOriginal ?? this.world.solid), hollow: this.archColumns?.length ? Array.from(this.solidHollow) : null,
+      arches: this.archColumns?.length || 0, radius: .055, unitHeight: this.unitHeightM ? +(this.unitHeightM / this.scale).toFixed(3) : null };
+  }
+  /** R36：洞底的人画在哪（实景洞底高度 vs 画出来的脚高）；没挖空时没有可查的人 */
+  drawnFooting(tol = 0.15) {
+    const out = { checked: 0, off: 0, maxError: 0 };
+    if (!this.archesOn || !this.battle?.units) return out;
+    for (const u of this.battle.units) {
+      if (u.dead || u.onBoat || u.fall) continue;
+      const c = this.index.cellAt(u.x, u.z), a = c && this.archByCell.get(c.id); if (!a) continue;
+      const top = this.world.top(c); if ((u.navFloor ?? top) >= top) continue;
+      const e = Math.abs(u.y + this.view.visualOffset(u.x, u.z) - a.groundY);
+      out.checked++; out.maxError = Math.max(out.maxError, e); if (e > tol) out.off++;
+    }
+    out.maxError = +out.maxError.toFixed(3);
+    return out;
+  }
+  #unitAt(x, z) { const us = this.battle?.units; if (!us) return null; for (const u of us) if (u.x === x && u.z === z) return u; return null; }
   /** 细网格地面高（舞台局部 y）；四角缺任一个 → null */
   fineAt(x, z) {
     const F = this.fineStep, M = this.fineY; if (!M) return null;

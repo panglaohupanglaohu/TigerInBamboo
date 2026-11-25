@@ -1,0 +1,232 @@
+{
+ "out": "/Users/panglaohu/Downloads/TigerInBamboo/artifacts/mountain-evolve-e2e/run-1795569088806",
+ "steps": {
+  "gen1Seconds": 13,
+  "gen1": [
+   {
+    "id": "g1-0",
+    "bad": false,
+    "score": "66.9",
+    "tag": "基线",
+    "meta": "主峰 52 m · 中等坡 52% · 竖崖 14%默认参数"
+   },
+   {
+    "id": "g1-1",
+    "bad": true,
+    "score": "✗",
+    "tag": "探索",
+    "meta": "未过硬检查竖崖占比"
+   },
+   {
+    "id": "g1-2",
+    "bad": false,
+    "score": "66.3",
+    "tag": "探索",
+    "meta": "主峰 50 m · 中等坡 59% · 竖崖 17%主峰隆起 22→8 · 近保护区最大坡比 1.2→1 · 山脊间距 85→100 等 11 处"
+   },
+   {
+    "id": "g1-3",
+    "bad": true,
+    "score": "✗",
+    "tag": "探索",
+    "meta": "未过硬检查竖崖占比"
+   },
+   {
+    "id": "g1-4",
+    "bad": true,
+    "score": "✗",
+    "tag": "探索",
+    "meta": "未过硬检查竖崖占比"
+   },
+   {
+    "id": "g1-5",
+    "bad": true,
+    "score": "✗",
+    "tag": "探索",
+    "meta": "未过硬检查竖崖占比"
+   },
+   {
+    "id": "g1-6",
+    "bad": true,
+    "score": "✗",
+    "tag": "探索",
+    "meta": "未过硬检查竖崖占比"
+   },
+   {
+    "id": "g1-7",
+    "bad": true,
+    "score": "✗",
+    "tag": "探索",
+    "meta": "未过硬检查竖崖占比"
+   },
+   {
+    "id": "g1-8",
+    "bad": true,
+    "score": "✗",
+    "tag": "探索",
+    "meta": "未过硬检查竖崖占比"
+   },
+   {
+    "id": "g1-9",
+    "bad": false,
+    "score": "83.4",
+    "tag": "探索",
+    "meta": "主峰 42 m · 中等坡 80% · 竖崖 9%轨道保护带 8→6 · 隆起所需纵深 22→28 · 近保护区最大坡比 1.2→0.55 等 12 处"
+   },
+   {
+    "id": "g1-10",
+    "bad": false,
+    "score": "80.8",
+    "tag": "探索",
+    "meta": "主峰 43 m · 中等坡 73% · 竖崖 8%主峰隆起 22→12 · 近保护区最大坡比 1.2→0.4 · 台阶膜面化 0.2→0.4 等 12 处"
+   },
+   {
+    "id": "g1-11",
+    "bad": false,
+    "score": "84.7",
+    "tag": "探索",
+    "meta": "主峰 44 m · 中等坡 84% · 竖崖 9%建筑保护带 6→10 · 主峰隆起 22→8 · 近保护区最大坡比 1.2→0.45 等 13 处"
+   }
+  ],
+  "previewState": {
+   "active": true,
+   "id": "citadel",
+   "previewing": true,
+   "comparing": false,
+   "triangles": 12444,
+   "hidden": 3,
+   "vegetationMoved": 8,
+   "ground": {
+    "installed": true,
+    "active": true,
+    "queries": 204,
+    "used": 0
+   },
+   "palette": 2,
+   "paletteOverride": false,
+   "autoDeployed": false,
+   "auto": {
+    "id": "citadel",
+    "status": "skipped",
+    "reason": "没有采用记录：游戏里是原山形",
+    "tries": 0,
+    "at": 1795569337996
+   }
+  },
+  "status1": "实景已换成第 1 代 g1-11：主峰 44 m · 中等坡 84% · 竖崖 9% · 留意：山上能走 · 12444 面",
+  "seeded": 2,
+  "gen2": [
+   {
+    "id": "g2-0",
+    "bad": false,
+    "score": "84.7",
+    "tag": "上代留种",
+    "meta": "主峰 44 m · 中等坡 84% · 竖崖 9%建筑保护带 6→10 · 主峰隆起 22→8 · 近保护区最大坡比 1.2→0.45 等 13 处"
+   },
+   {
+    "id": "g2-1",
+    "bad": false,
+    "score": "83.4",
+    "tag": "上代留种",
+    "meta": "主峰 42 m · 中等坡 80% · 竖崖 9%轨道保护带 8→6 · 隆起所需纵深 22→28 · 近保护区最大坡比 1.2→0.55 等 12 处"
+   },
+   {
+    "id": "g2-2",
+    "bad": true,
+    "score": "✗",
+    "tag": "后代",
+    "meta": "未过硬检查玩家地面与山形一致"
+   },
+   {
+    "id": "g2-3",
+    "bad": false,
+    "score": "85.3",
+    "tag": "后代",
+    "meta": "主峰 43 m · 中等坡 86% · 竖崖 9%建筑保护带 6→15 · 轨道保护带 8→6 · 隆起所需纵深 22→13 等 19 处"
+   },
+   {
+    "id": "g2-4",
+    "bad": false,
+    "score": "73.9",
+    "tag": "后代",
+    "meta": "主峰 47 m · 中等坡 63% · 竖崖 11%主峰隆起 22→8 · 近保护区最大坡比 1.2→0.4 · 山脊间距 85→30 等 16 处"
+   },
+   {
+    "id": "g2-5",
+    "bad": false,
+    "score": "77.8",
+    "tag": "后代",
+    "meta": "主峰 47 m · 中等坡 72% · 竖崖 11%建筑保护带 6→11 · 轨道保护带 8→6 · 主峰隆起 22→32 等 21 处"
+   },
+   {
+    "id": "g2-6",
+    "bad": false,
+    "score": "85.9",
+    "tag": "后代",
+    "meta": "主峰 40 m · 中等坡 85% · 竖崖 8%轨道保护带 8→11 · 主峰隆起 22→8 · 隆起所需纵深 22→46 等 17 处"
+   },
+   {
+    "id": "g2-7",
+    "bad": false,
+    "score": "85.5",
+    "tag": "后代",
+    "meta": "主峰 36 m · 中等坡 85% · 竖崖 8%建筑保护带 6→10 · 轨道保护带 8→6 · 主峰隆起 22→24 等 21 处"
+   },
+   {
+    "id": "g2-8",
+    "bad": false,
+    "score": "79.8",
+    "tag": "后代",
+    "meta": "主峰 47 m · 中等坡 74% · 竖崖 10%主峰隆起 22→8 · 隆起所需纵深 22→80 · 近保护区最大坡比 1.2→0.45 等 20 处"
+   },
+   {
+    "id": "g2-9",
+    "bad": false,
+    "score": "82.8",
+    "tag": "后代",
+    "meta": "主峰 46 m · 中等坡 78% · 竖崖 8%建筑保护带 6→10 · 轨道保护带 8→6 · 主峰隆起 22→8 等 20 处"
+   },
+   {
+    "id": "g2-10",
+    "bad": false,
+    "score": "83.3",
+    "tag": "后代",
+    "meta": "主峰 42 m · 中等坡 80% · 竖崖 9%建筑保护带 6→5 · 轨道保护带 8→6 · 主峰隆起 22→36 等 19 处"
+   },
+   {
+    "id": "g2-11",
+    "bad": false,
+    "score": "88",
+    "tag": "后代",
+    "meta": "主峰 35 m · 中等坡 89% · 竖崖 8%建筑保护带 6→3 · 轨道保护带 8→6 · 主峰隆起 22→38 等 21 处"
+   }
+  ],
+  "lineage": "代际：第 1 代 最好 84.7 · 5/12 过硬检查→第 2 代 最好 88 · 11/12 过硬检查　比第 1 代 +3.3 分",
+  "taste": 2,
+  "afterRevert": {
+   "active": false,
+   "auto": {
+    "id": "citadel",
+    "status": "skipped",
+    "reason": "没有采用记录：游戏里是原山形",
+    "tries": 0,
+    "at": 1795569337996
+   }
+  },
+  "adopted": [],
+  "best": [
+   84.7,
+   88
+  ]
+ },
+ "errors": [
+  "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ],
+ "pass": false
+}

@@ -1,0 +1,69 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-terrain-pipeline-e2e/run-1795573669728",
+  "capabilities": [
+    "apostles.soft",
+    "apostles.palette"
+  ],
+  "steps": {
+    "mounted": {
+      "height": 1081,
+      "sidebarSoft": true,
+      "sidebarPalette": true,
+      "compare": true,
+      "cards": [
+        "approved",
+        "soft",
+        "soft+palette"
+      ],
+      "sceneApostles": "1"
+    },
+    "preloaded": {
+      "note": "扫描完成：2 / 2 个能力能作用。 软坡可作用岩体 6 块 · 配色可作用 6 块。 已按「十二门徒」自动预装 2 个能力（十二门徒软坡、十二门徒库地形色），点 ▶ 执行管线一键跑完整条。",
+      "nodes": 2,
+      "names": [
+        "⚙ 十二门徒软坡",
+        "⚙ 十二门徒库地形色"
+      ],
+      "live": "approved"
+    },
+    "storageBefore": {
+      "look": null,
+      "choice": null
+    },
+    "candidate": {
+      "h4": "候选 · 验证通过",
+      "note": "候选已预览。确认前不会写入。",
+      "checks": [
+        "✓ 开关组合候选 ?apostlesLook=soft,palette",
+        "✓ 与管线步骤对应2 步 → palette+soft",
+        "✓ 不写存档 / 不改默认候选只是一组外观开关：预览用网址参数重载游戏 iframe，不写 tm.apostles.look.v1、不动岩体存档和湖上建筑",
+        "✓ 作用在十二门徒apostles · 6 块岩体有数据",
+        "✓ 软坡台阶复算可融 163 · 陡崖省 1 层 154 · 竖崖 1513（6926 个陆地格）",
+        "✓ 软坡能不能起作用可融台阶占全部台阶 8.9%",
+        "✓ 配色差复算平均 ΔE 5.766",
+        "✓ 色变幅度现画面离库地形色平均 ΔE 5.766"
+      ],
+      "live": "palette+soft",
+      "stable": {
+        "ok": true,
+        "look": "palette+soft",
+        "count": 6
+      },
+      "iframe": "http://localhost:8931/TigerMessenger/index.html?dev=1&authoringEmbed=1&authoringRevision=edit-r2&citadelRuntime=1&apostlesLook=soft%2Cpalette",
+      "storage": {
+        "look": null,
+        "choice": null
+      }
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "failure": "page.waitForFunction: Target crashed "
+}

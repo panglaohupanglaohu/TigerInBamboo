@@ -1,7 +1,7 @@
 import {createExperimentSession} from './experiment-session.js';
 import {mountPipelineBridge} from './pipeline-bridge.js';
 import {createVersionStore,createSceneRegistry} from './store.js';
-import {UI_DEV} from '../ui/uiLayers.js?v=ui-layers-r4-release-edit';
+import {UI_DEV} from '../ui/uiLayers.js?v=ui-layers-r5-scenejump';
 export function mountSceneWorkbench(plugin){
  const offBridge=mountPipelineBridge(plugin);
  if(!UI_DEV)return {dispose:offBridge};

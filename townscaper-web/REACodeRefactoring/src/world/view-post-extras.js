@@ -42,7 +42,8 @@ vec4 orbitSmearAt(sampler2D tex, vec2 uv, vec2 res, vec2 c, float omegaDt, float
 
 /** 轨道相机的屏幕旋转量（一个快门内的弧度）：绕世界竖轴的角速度 ω = dyaw/dt，投到视线方向的分量 ω·sin(俯角)，
  * 乘快门 1/60 s（REACode smear.js smearLengthPx 的默认 dt）。用固定快门而不是实际帧间隔：帧率低时拖影长度不跟着变长。 */
-export function screenOmegaDt(yaw, lastYaw, pitch, dt, shutter = 1 / 60) {
+export const SMEAR_SHUTTER = 1 / 60;
+export function screenOmegaDt(yaw, lastYaw, pitch, dt, shutter = SMEAR_SHUTTER) {
   if (![yaw, lastYaw, pitch, dt].every(Number.isFinite) || dt <= 0) return 0;
   const d = Math.atan2(Math.sin(yaw - lastYaw), Math.cos(yaw - lastYaw));
   return d / dt * Math.sin(pitch) * shutter;
@@ -148,7 +149,7 @@ export function installPostExtras(view, { search = globalThis.location?.search ?
   function buildPitch() {
     const baker = new ImpostorBaker(r, 2048);
     const fields = veg.crowns.map((cr) => {
-      const f = new ImpostorField(baker.rt.texture, baker.bake(cr.m.geometry, 128, { pitches: [.12, .42, .85] }), veg.max.crowns, { uLight: veg.uLight, sphere: true });
+      const f = new ImpostorField(baker.rt.texture, baker.bake(cr.m.geometry, 128, { pitches: [.12, .42, .85] }), veg.max.crowns, { uLight: veg.uLight, sphere: true, baker });
       f.mesh.visible = false; veg.group.add(f.mesh); return f;
     });
     const cloudBaked = baker.bake(blobCloudGeometry(3), 256, { vertexColors: true });
@@ -191,8 +192,11 @@ export function installPostExtras(view, { search = globalThis.location?.search ?
         depthTest: false, depthWrite: false,
         uniforms: { tColor: { value: null }, uRes: { value: new THREE.Vector2() }, uCenter: { value: new THREE.Vector2() }, uOmegaDt: { value: 0 }, uMaxPx: { value: 24 } },
         vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }',
+        // r153：只做 sRGB 编码，**不再**做色调映射 —— 场景渲进 smearRT 时 TONE_MAPPING 已经生效一次
+        // （RT 的 texture.colorSpace 是线性，所以编码这一步缺，tonemapping 这一步重复），
+        // 旧版两处都带 → 开拖影整帧被二次 ACES 提亮（实测 omegaDt=0 时亮度 130.14 → 143.75）。
         fragmentShader: 'uniform sampler2D tColor; uniform vec2 uRes; uniform vec2 uCenter; uniform float uOmegaDt; uniform float uMaxPx; varying vec2 vUv;\n' + ORBIT_SMEAR_CENTER_GLSL +
-          '\nvoid main(){ gl_FragColor = orbitSmearAt(tColor, vUv, uRes, uCenter, uOmegaDt, uMaxPx);\n#include <tonemapping_fragment>\n#include <colorspace_fragment>\n}',
+          '\nvoid main(){ gl_FragColor = orbitSmearAt(tColor, vUv, uRes, uCenter, uOmegaDt, uMaxPx);\n#include <colorspace_fragment>\n}',
       });
       smearScene = new THREE.Scene(); smearScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), smearMat)); smearCam = new THREE.Camera();
     }
@@ -235,7 +239,12 @@ export function installPostExtras(view, { search = globalThis.location?.search ?
       u.uCenter.value.set((c.x * .5 + .5) * size.x, (c.y * .5 + .5) * size.y);
       u.uOmegaDt.value = omegaDt; u.uMaxPx.value = 24 * (r.getPixelRatio() || 1);
       raw(smearScene, smearCam);
-      stats.smear = { omegaDt: +omegaDt.toFixed(5), outerPx: +(Math.abs(omegaDt) * Math.min(size.x, size.y) / 2).toFixed(2), center: [Math.round(u.uCenter.value.x), Math.round(u.uCenter.value.y)] };
+      // r153「全指标接口」：屏幕角速度（rad/s，已按俯角投影）/ 快门 / 采样数 / 单帧上限 / 外圈拖影像素 + 圆心一律可读
+      stats.smear = {
+        omegaDt: +omegaDt.toFixed(5), screenOmega: +(omegaDt / SMEAR_SHUTTER).toFixed(4), shutter: SMEAR_SHUTTER, taps: 6,
+        maxPx: +u.uMaxPx.value.toFixed(2), outerPx: +(Math.abs(omegaDt) * Math.min(size.x, size.y) / 2).toFixed(2),
+        center: [Math.round(u.uCenter.value.x), Math.round(u.uCenter.value.y)],
+      };
       return;
     }
     ensureOutline(); outline.render(scene, camera);

@@ -1,0 +1,7 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/artifacts/fx-apostles-e2e/run-1795420954801",
+  "steps": {},
+  "errors": [],
+  "pass": false,
+  "failure": "page.waitForFunction: Target page, context or browser has been closed\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-apostles-browser.mjs:17:13"
+}

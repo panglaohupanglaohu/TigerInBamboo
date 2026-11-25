@@ -1,0 +1,67 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-25T00:25:19.123Z",
+ "arena": {
+  "fixture": "布局 10 物件（4 悬铃树含 1 锁定 + 4 柏树 + 2 互压蜀葵）",
+  "runner": "TigerMessenger/tools/refactor/record-object-arena.mjs（实算）"
+ },
+ "judge": "规则写死：match targets≥1 且 edits≥1 且同参数重跑逐位一致且锁定物件未被改动为「擂过」。",
+ "results": [
+  {
+   "id": "object.path-spacing",
+   "name": "沿现有排布等距",
+   "domain": "placement",
+   "targets": 2,
+   "edits": 2,
+   "maxDelta": 0.0078,
+   "deterministic": true,
+   "ms": 1,
+   "lockedTouched": [],
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "object.scale-variety",
+   "name": "同类尺寸变化",
+   "domain": "variant",
+   "targets": 2,
+   "edits": 7,
+   "maxDelta": 1.35,
+   "deterministic": true,
+   "ms": 0,
+   "lockedTouched": [],
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "object.yaw-variety",
+   "name": "朝向变化",
+   "domain": "variant",
+   "targets": 2,
+   "edits": 7,
+   "maxDelta": 14.915,
+   "deterministic": true,
+   "ms": 0,
+   "lockedTouched": [],
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "object.spacing-relax",
+   "name": "间距松弛",
+   "domain": "placement",
+   "targets": 1,
+   "edits": 3,
+   "maxDelta": 0.306,
+   "deterministic": true,
+   "ms": 1,
+   "lockedTouched": [],
+   "pass": true,
+   "verdict": "擂过"
+  }
+ ],
+ "counts": {
+  "caps": 4,
+  "passed": 4
+ }
+}

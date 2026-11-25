@@ -69,17 +69,22 @@ export function renderWithNormalFilter(pass, scene, camera) {
   pass.uniforms.uNear.value = camera.near; pass.uniforms.uFar.value = camera.far;
   pass.uniforms.uUpVS.value.set(0, 1, 0).transformDirection(camera.matrixWorldInverse);
   renderer.setRenderTarget(pass.colorTarget); renderer.clear(); renderer.render(scene, camera);
-  const hidden = []; let noNormal = 0;
+  const hidden = []; let noNormal = 0, outOfScope = 0;
+  // 线源只在被勾选的材质上（默认 = 共享地形材质）。云/天空/远景/树卡一旦进了法线遍，会在天上和云边上画出一像素锯齿线
+  // —— 原片天空、剪影、海面全是干净的，线只出现在岛的表面上。
+  const only = pass.c11NormalOnly ?? null;
   scene.traverse((o) => {
     if (!o.visible) return;
     const m = o.material, see = Array.isArray(m) ? m[0] : m, lacks = o.isMesh && !o.geometry?.attributes?.normal;
     if (lacks) noNormal++;
-    if ((o.userData && o.userData.overlayOnly) || o.isLine || o.isPoints || o.isSprite || (see && see.transparent && !see.depthWrite) || lacks) { o.visible = false; hidden.push(o); }
+    const scoped = only && o.isMesh && !only.has(see) && !(see && see.userData && see.userData.c11LineSource === true);
+    if (scoped) outOfScope++;
+    if ((o.userData && o.userData.overlayOnly) || o.isLine || o.isPoints || o.isSprite || (see && see.transparent && !see.depthWrite) || lacks || scoped) { o.visible = false; hidden.push(o); }
   });
   scene.overrideMaterial = pass.normalMaterial; renderer.setRenderTarget(pass.normalTarget); renderer.clear(); renderer.render(scene, camera);
   scene.overrideMaterial = prevOverride; for (const o of hidden) o.visible = true;
   renderer.setRenderTarget(prevTarget); renderer.render(pass.quadScene, pass.quadCamera);
-  pass.c11NoNormalHidden = noNormal;
+  pass.c11NoNormalHidden = noNormal; pass.c11OutOfScope = outOfScope;
 }
 
 export function install(view) {
@@ -94,25 +99,34 @@ export function install(view) {
         if (!st.prev.paintnormal) view.setDebug('paintnormal', true);
         pe.set('outline', true);
         const pass = pe.outlinePass;
-        st.pass = pass; st.prevNormalMat = pass.normalMaterial; st.prevFrag = pass.material.fragmentShader; st.prevDepthMix = pass.uniforms.uDepthMix.value;
+        st.pass = pass; st.prevNormalMat = pass.normalMaterial;
+        // r143：outline-pass.js 后来把硬编码阈值 smoothstep(0.55,0.98,nd) 换成了 uNormalThreshold uniform，
+        // 旧的「字符串 patch 复合着色器」找不到 token 直接抛错（且已经把几何描边打开、没还原 → 天上/云边全是锯齿线）。
+        // 现在直接设 pass 自己的 uniform，不碰着色器源码 → 天然幂等、无恢复残留。
+        st.origFrag ??= pass.material.fragmentShader;
+        st.prevFrag = st.origFrag; st.prevDepthMix = pass.uniforms.uDepthMix.value;
+        st.prevThreshold ??= pass.uniforms.uNormalThreshold.value.clone();
         st.mat ??= paintedNormalMaterial(sh.u);
         pass.normalMaterial = st.mat;
         pass.uniforms.uNdLo = { value: st.ndLo }; pass.uniforms.uNdHi = { value: st.ndHi };
-        pass.material.fragmentShader = patchCompositeSource(st.prevFrag); pass.material.needsUpdate = true;
+        pass.uniforms.uNormalThreshold.value.set(st.ndLo, st.ndHi);
         pass.uniforms.uDepthMix.value = 0;
+        pass.c11NormalOnly = new Set([view.material]);
         st.prevRender = Object.prototype.hasOwnProperty.call(pass, 'render') ? pass.render : null;
         pass.render = (scene, camera) => renderWithNormalFilter(pass, scene, camera);
       } else {
         const pass = st.pass;
         if (st.prevRender) pass.render = st.prevRender; else delete pass.render;
-        pass.normalMaterial = st.prevNormalMat; pass.material.fragmentShader = st.prevFrag; pass.material.needsUpdate = true; pass.uniforms.uDepthMix.value = st.prevDepthMix;
+        delete pass.c11NormalOnly;
+        pass.normalMaterial = st.prevNormalMat; pass.material.fragmentShader = st.origFrag ?? st.prevFrag; pass.material.needsUpdate = true; pass.uniforms.uDepthMix.value = st.prevDepthMix;
+        if (st.prevThreshold) pass.uniforms.uNormalThreshold.value.copy(st.prevThreshold);
         if (!st.prev.outline) pe.set('outline', false);
         if (!st.prev.paintnormal) view.setDebug('paintnormal', false);
       }
       st.on = on;
     },
-    setThresholds(lo, hi) { if (!(lo >= 0 && hi > lo && hi <= 2)) throw new RangeError('normalline thresholds'); st.ndLo = lo; st.ndHi = hi; if (st.pass?.uniforms.uNdLo) { st.pass.uniforms.uNdLo.value = lo; st.pass.uniforms.uNdHi.value = hi; } },
-    stats() { return { on: st.on, ndLo: st.ndLo, ndHi: st.ndHi, depthMix: st.pass?.uniforms.uDepthMix.value ?? null, paintedNormalPass: !!st.pass && st.pass.normalMaterial === st.mat, paintScale: view.shading?.u.uShPNScale.value, noNormalHidden: st.pass?.c11NoNormalHidden ?? null }; },
+    setThresholds(lo, hi) { if (!(lo >= 0 && hi > lo && hi <= 2)) throw new RangeError('normalline thresholds'); st.ndLo = lo; st.ndHi = hi; if (st.pass?.uniforms.uNdLo) { st.pass.uniforms.uNdLo.value = lo; st.pass.uniforms.uNdHi.value = hi; st.pass.uniforms.uNormalThreshold.value.set(lo, hi); } },
+    stats() { return { on: st.on, ndLo: st.ndLo, ndHi: st.ndHi, depthMix: st.pass?.uniforms.uDepthMix.value ?? null, paintedNormalPass: !!st.pass && st.pass.normalMaterial === st.mat, paintScale: view.shading?.u.uShPNScale.value, noNormalHidden: st.pass?.c11NoNormalHidden ?? null, outOfScope: st.pass?.c11OutOfScope ?? null, scopeSize: st.pass?.c11NormalOnly?.size ?? 0 }; },
   };
   return api;
 }

@@ -1,5 +1,6 @@
 import { cloudDepth } from '../core/cloud-depth.js';
-import { levelFloraSpecies, levelFloraRanks } from '../core/level-flora.js';
+import { nearCloudDepth, CLOUD_WIND_AMT } from '../core/cloud-motion.js';
+import { levelFloraSpecies, levelFloraRanks, RAIN_CROWN } from '../core/level-flora.js';
 import { CLOUD_SHADOW_GLSL } from '../light/cloud-shadow.js';
 
 /**
@@ -51,10 +52,13 @@ export function setCloudShadowUniforms(u) { CLOUD_UNIFORMS = u ?? null; return !
 import { anchoredBillboardGLSL, foldedCard } from '../core/anchored-billboard.js';
 import * as THREE from 'three';
 import {insetEdgeAnchor} from '../core/edge-inset.js';
-import {makeLeafSurface,LEAF_SURFACE_GLSL} from './leaf-surface.js';
+import {makeLeafSurface,LEAF_SURFACE_GLSL,LEAF_NOISE_GLSL} from './leaf-surface.js';
+import {makeLeafDepthMaterial} from './leaf-depth.js';
+import {LeafImpostorField} from './leaf-impostor.js';
 import { fbm, hash01 } from '../core/noise.js';
 import { buildCanopy } from '../core/canopy.js';
 import { ImpostorBaker, ImpostorField, cloudGeometry } from './impostor.js';
+import { fluffyCloudGeometry, patchBakedCloudColor, useUnlitVertexColors } from './impostor-c09.js';
 
 /* ------------------------------------------------------------ 随机 */
 function rng32(seed) {
@@ -211,14 +215,9 @@ function trunkGeometry() {
 
 /* ------------------------------------------------------------ 材质 */
 
-/** 实例化的团块 / 树干：Lambert + 实例颜色 + 风（越高摆得越多）。 */
-const LEAF_GLSL = /* glsl */ `
-  float lhash(vec3 p) { p = fract(p * 0.3183099 + 0.1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
-  float lnoise(vec3 x) {
-    vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
-    return mix(mix(mix(lhash(i), lhash(i + vec3(1,0,0)), f.x), mix(lhash(i + vec3(0,1,0)), lhash(i + vec3(1,1,0)), f.x), f.y),
-               mix(mix(lhash(i + vec3(0,0,1)), lhash(i + vec3(1,0,1)), f.x), mix(lhash(i + vec3(0,1,1)), lhash(i + vec3(1,1,1)), f.x), f.y), f.z);
-  }`;
+/** 实例化的团块 / 树干：Lambert + 实例颜色 + 风（越高摆得越多）。
+ * 噪声函数单一来源在 leaf-surface.js（LEAF_NOISE_GLSL），深度材质同源复用。 */
+const LEAF_GLSL = LEAF_NOISE_GLSL;
 
 /**
  * 叶状轮廓（1205420678859632640）：rim = 1 - |N·V|，叶片噪声贴在植物自己的坐标上（转镜头不游走）；
@@ -393,6 +392,7 @@ const COLORS = {
   shrub: ['#5e8a4c', '#6c9752', '#53804a', '#78a05a'],
   shrubWarm: ['#9c9a52', '#a99d58', '#b08f56'],   // 原片崖边那圈偏暖，这里压成橄榄 / 赭色，不要像石头
   crown: ['#4f7c4a', '#5a8a52', '#47703f', '#628f56'],
+  crownRain: [...RAIN_CROWN],   // 帧 109+ 雨景生态的紫树冠（近似，floraEcology='rain' 时用）
   flower: ['#f6f4ea', '#ffffff', '#f2efe0', '#f6f4ea', '#f1e7b8'],   // 白色碎点为主，偶尔一点淡黄
   hedge: ['#4f7f4c', '#5b8c55', '#467445'],
   trunk: '#6e5443',
@@ -409,6 +409,8 @@ export class Vegetation {
     this.stats = {};
 
     this.uLeafy = { value: 1 };
+    // 1241046107125399552：图集纹理是全场景共享单例（life/leaf-surface.js），
+    // 灌木 + 三种树冠材质绑同一个纹理对象；TownSkin 开时 uniform 指到全城 TownColor。
     this.leafSurface = makeLeafSurface();
     const tg = tuftGeometry();
     this.tuftColor = new THREE.InstancedBufferAttribute(new Float32Array(max.tufts * 3), 3);
@@ -440,13 +442,27 @@ export class Vegetation {
     this.crowns = CROWNS.map((f) => {
       const g = f();
       g.computeBoundingBox();
-      const m = new THREE.InstancedMesh(g, swayMaterial(this.uTime, 0.02, this.uLeafy, 28, this.leafSurface, g.boundingBox.getCenter(new THREE.Vector3())), max.crowns);
+      const c = g.boundingBox.getCenter(new THREE.Vector3());
+      const m = new THREE.InstancedMesh(g, swayMaterial(this.uTime, 0.02, this.uLeafy, 28, this.leafSurface, c), max.crowns);
+      // 匹配的阴影 caster：与彩色材质同源的深度材质（leaf-depth.js）——
+      // 同一份共享图集、同一视角 alpha 判据、同一风摆，否则影子是实心团块且不跟摆。
+      m.customDepthMaterial = makeLeafDepthMaterial({ uTime: this.uTime, uLeafy: this.uLeafy, surface: this.leafSurface, center: c, amount: 0.02, leafScale: 28 });
       const ink = new THREE.InstancedMesh(g, inkMaterial(this.uTime, 0.02, 0.009), max.crowns);
       return { m, ink };
     });
+    // 远景替身：共享 32² 图集的交叉面片（leaf-impostor.js，不需 renderer 烘焙）。
+    // 默认 count=0 / 隐藏；updateCrownLOD 把距离阈值外的树搬到这里。
+    this.farFields = this.crowns.map((cr) => {
+      const f = new LeafImpostorField(this.leafSurface, max.crowns, { source: cr.m.geometry, uLight: this.uLight });
+      f.mesh.visible = false;
+      return f;
+    });
+    this.crownLodDistance = 0;   // 世界单位：>0 时距离外树冠换成交叉面片替身
+    this.crownLodCamera = null;
+    this.crownPlacements = [];
     this.trunks = new THREE.InstancedMesh(trunkGeometry(), swayMaterial(this.uTime, 0.0), max.crowns * 3);
 
-    for (const m of [this.tufts, this.flowers, this.shrubs, this.shrubInk, this.wallCards, this.trunks, ...this.crowns.flatMap((c) => [c.m, c.ink])]) {
+    for (const m of [this.tufts, this.flowers, this.shrubs, this.shrubInk, this.wallCards, this.trunks, ...this.crowns.flatMap((c) => [c.m, c.ink]), ...this.farFields.map((f) => f.mesh)]) {
       m.frustumCulled = false;
       m.count = 0;
       this.group.add(m);
@@ -466,16 +482,23 @@ export class Vegetation {
   initImpostors(renderer) {
     const baker = new ImpostorBaker(renderer, 2048);
     this.impostorFields = this.crowns.map((cr) => {
-      const f = new ImpostorField(baker.rt.texture, baker.bake(cr.m.geometry), this.max.crowns, { uLight: this.uLight });
+      const f = new ImpostorField(baker.rt.texture, baker.bake(cr.m.geometry), this.max.crowns, { uLight: this.uLight, baker });
       f.mesh.visible = false;
       this.group.add(f.mesh);
       return f;
     });
     this.cloudBaked = baker.bake(cloudGeometry(), 256);   // 一团云只烘一次：近处的云和地平线阴云共用
-    this.cloudField = new ImpostorField(baker.rt.texture, this.cloudBaked, 64, { cloud: true, uTime: this.uTime, uLight: this.uLight });
+    // 1852334860137849222 r214：近云换菜花状蓬松云（impostor-c09 顶点色烘焙管线——光照/灰蓝底已在顶点色里，
+    // Baker 须用无光照 vertexColors 材质烘，不然 Lambert 再照一遍全白）+ 裁判云风材质（uWindAmt=0.6）+前景深度视差层；
+    // 远景阴云仍共用旧 cloudGeometry。原片云形为美术资产（卡点·B），此为更贴近的程序近似。
+    useUnlitVertexColors(baker);
+    this.nearCloudBaked = baker.bake(fluffyCloudGeometry(7), 256, { vertexColors: true });
+    this.cloudField = new ImpostorField(baker.rt.texture, this.nearCloudBaked, 64, { cloud: true, uTime: this.uTime, uLight: this.uLight, baker, windAmt: CLOUD_WIND_AMT, cloudParallax: 1 });
+    this.cloudField.material.fragmentShader = patchBakedCloudColor(this.cloudField.material.fragmentShader);
+    this.cloudField.material.needsUpdate = true;
     this.group.add(this.cloudField.mesh);
     // 远处的阴云（1243228419162341379 "Some moody clouds"）：同一团云，放大很多、偏灰，围在地平线上
-    this.backdrop = new ImpostorField(baker.rt.texture, this.cloudBaked, 48, { cloud: true, horizon: true, uTime: this.uTime, uLight: this.uLight });
+    this.backdrop = new ImpostorField(baker.rt.texture, this.cloudBaked, 48, { cloud: true, horizon: true, uTime: this.uTime, uLight: this.uLight, baker });
     this.backdrop.mesh.visible = false;
     this.backdrop.mesh.renderOrder = -2;
     this.group.add(this.backdrop.mesh);
@@ -490,8 +513,70 @@ export class Vegetation {
     if (!this.impostorFields) return;
     for (const f of this.impostorFields) f.mesh.visible = on && this.layers.trees;
     for (const c of this.crowns) c.m.visible = !on && this.layers.trees;
+    this.#syncFar();
     this.#syncInk();
   }
+
+  /** 远景交叉面片可见性：trees 层开着、距离 LOD 生效、且没切到烘焙 impostor。 */
+  #syncFar() {
+    const on = this.layers.trees && this.crownLodDistance > 0 && !this.impostorOn;
+    for (const f of this.farFields || []) f.mesh.visible = on;
+  }
+
+  /**
+   * 距离阈值 LOD：离镜头 > distance 的树冠换成共享图集交叉面片替身
+   * （leaf-impostor.js），阈值内仍画网格；distance<=0 或缺 camera 时全部回网格。
+   * 与八方位烘焙 impostor 正交：impostorOn 时全场烘焙替身优先，本划分只在
+   * 「网格 / 面片」两档间做（farFields 隐藏，数据仍按划分写好）。
+   * 无迟滞带：阈值是硬边界，边界来回的树每帧只在相机越过阈值时换档。
+   * @param {THREE.Camera|THREE.Vector3|{x,y,z}} camera 镜头或视点
+   * @param {number} [distance] 不传则沿用 crownLodDistance
+   * @returns {{near:number,far:number}}
+   */
+  updateCrownLOD(camera, distance = this.crownLodDistance) {
+    if (distance !== undefined) {
+      if (typeof distance !== 'number' || !Number.isFinite(distance) || distance < 0) throw new RangeError('crown LOD distance must be a finite number >= 0');
+      this.crownLodDistance = distance;
+    }
+    const cam = camera?.position ?? camera ?? null;
+    this.crownLodCamera = cam;
+    // 相机没移动且树位/阈值没变 → 直接回上次结果（避免每帧重写实例缓冲）
+    const key = `${cam ? `${cam.x.toFixed(3)},${cam.y.toFixed(3)},${cam.z.toFixed(3)}` : 'nocam'}|${this.crownLodDistance}|${this.#placementsVersion}`;
+    if (key === this.#lodKey && this.#lodResult) return this.#lodResult;
+    const near = [[], [], []], far = [[], [], []];
+    for (const p of this.crownPlacements) {
+      const d = cam && this.crownLodDistance > 0 ? Math.hypot(p.x - cam.x, p.y - cam.y, p.z - cam.z) : 0;
+      (d > this.crownLodDistance ? far : near)[p.variant].push(p);
+    }
+    let nTrunk = 0;
+    const trunkCol = new THREE.Color(COLORS.trunk);
+    for (let v = 0; v < 3; v++) {
+      const cr = this.crowns[v];
+      near[v].forEach((p, i) => { cr.m.setMatrixAt(i, p.matrix); cr.m.setColorAt(i, p.color); cr.ink.setMatrixAt(i, p.matrix); });
+      cr.m.count = cr.ink.count = near[v].length;
+      cr.m.instanceMatrix.needsUpdate = cr.ink.instanceMatrix.needsUpdate = true;
+      if (cr.m.instanceColor) cr.m.instanceColor.needsUpdate = true;
+      // 远树只画面片（卡片自身已含冠形剪影，树干在远处分辨不出）
+      this.farFields?.[v].commit(far[v].length);
+    }
+    for (const p of this.crownPlacements) {
+      const d = cam && this.crownLodDistance > 0 ? Math.hypot(p.x - cam.x, p.y - cam.y, p.z - cam.z) : 0;
+      if (d > this.crownLodDistance || nTrunk >= this.max.crowns * 3) continue;
+      this.trunks.setMatrixAt(nTrunk, p.matrix);
+      this.trunks.setColorAt(nTrunk, trunkCol);
+      nTrunk++;
+    }
+    this.trunks.count = nTrunk;
+    this.trunks.instanceMatrix.needsUpdate = true;
+    if (this.trunks.instanceColor) this.trunks.instanceColor.needsUpdate = true;
+    this.#syncFar();
+    const n = near[0].length + near[1].length + near[2].length, f = far[0].length + far[1].length + far[2].length;
+    this.#lodKey = key; this.#lodResult = { near: n, far: f };
+    return { near: n, far: f };
+  }
+  #lodKey = null;
+  #lodResult = null;
+  #placementsVersion = 0;
   setTuftAnchor(on) { if(typeof on!=='boolean')throw new TypeError('Tuft anchor toggle'); this.uTuftAnchor.value=on?1:0; }
   set clouds(on) { if (this.cloudField) this.cloudField.mesh.visible = on; }
   setCloudDepthMotion(on) { if(typeof on!=='boolean')throw new TypeError('cloud depth toggle');if(this.backdrop)this.backdrop.material.uniforms.uDepthMotion.value=on?1:0; }
@@ -504,6 +589,8 @@ export class Vegetation {
     this.uTuftInk.value = this.inkVisible ? 1 : 0;
   }
   layers = { grass: true, shrubs: true, trees: true, flowers: true };
+  floraEcology = 'meadow';      // 'rain' = 帧 109+ 紫/灰白生态色组近似（只换色，不换物种键/形状/落点）
+  levelFloraShapes = false;     // opt-in：levelFlora 开时草丛按物种形状做各向异性缩放（关时矩阵逐字节不变）
   set ink(on) { this.inkVisible = on; this.#syncInk(); }
   set leafAtlasOn(on) { this.leafSurface.on.value = on ? 1 : 0; }
   set leafyOn(on) { this.leafy = on; this.uLeafy.value = on ? 1 : 0; this.#syncInk(); }
@@ -516,10 +603,11 @@ export class Vegetation {
       this.trunks.visible = on;
       for (const c of this.crowns) c.m.visible = on && !this.impostorOn;
       for (const f of this.impostorFields || []) f.mesh.visible = on && this.impostorOn;
+      this.#syncFar();
     }
     this.#syncInk();
   }
-  setTimeOfDay(mode) { this.uLight.value = mode === 'night' ? 0.35 : mode === 'dusk' ? 0.8 : 1; }
+  setTimeOfDay(mode) { this.uLight.value = mode === 'night' ? 0.35 : mode === 'rain' ? 0.62 : mode === 'dusk' ? 0.8 : 1; }
 
   /**
    * 从 World + 地形形状重新撒一遍。
@@ -530,6 +618,7 @@ export class Vegetation {
     const t0 = performance.now();
     const L = this.L;
     const rnd = rng32(seed);
+    this.crownPlacements = [];   // 树位留底：距离 LOD（updateCrownLOD）按它重新分近网格/远面片
     const at = shape ? (p, s) => shape.at(p, s) : (p) => [p.x, p.z];
     const m = new THREE.Matrix4(), q = new THREE.Quaternion(), sc = new THREE.Vector3(), v = new THREE.Vector3(), col = new THREE.Color();
     const up = new THREE.Vector3(0, 1, 0);
@@ -571,6 +660,7 @@ export class Vegetation {
     };
 
     /* ---- 1. 树林：低频噪声圈出林地 ---- */
+    const crownPal = this.floraEcology === 'rain' ? COLORS.crownRain : COLORS.crown;   // 雨生态紫冠（近似）
     let nCrown = [0, 0, 0], nTrunk = 0;
     const treeCells = new Set();
     for (const c of cells) {
@@ -597,8 +687,9 @@ export class Vegetation {
           q.setFromAxisAngle(up, yaw);
           m.compose(v.set(x, y, z), q, sc.setScalar(s));
           cr.m.setMatrixAt(nCrown[variant], m); cr.ink.setMatrixAt(nCrown[variant], m);
-          cr.m.setColorAt(nCrown[variant], col.set(pick(COLORS.crown)));
+          cr.m.setColorAt(nCrown[variant], col.set(pick(crownPal)));
           this.impostorFields?.[variant].set(nCrown[variant], m, col, yaw);
+          this.crownPlacements.push({ variant, matrix: m.clone(), color: col.clone(), x, y, z });
           nCrown[variant]++;
         }
         if (nTrunk < this.max.crowns * 3) {
@@ -636,11 +727,15 @@ export class Vegetation {
       nF++;
     };
     // 一簇叶丛：中心点附近 3–6 团，大的在后、小的在前
-    const addClump = (x, z, y, palette, edge, size = 1) => {
+    // shapeScale（FLORA_SHAPE_SCALE，opt-in levelFloraShapes）按物种形状做各向异性缩放：
+    // blade/fan 高挑或宽、dots 贴地、conifer 最高——草型就是层高图例；默认 null → 矩阵与旧版逐字节一致。
+    const addClump = (x, z, y, palette, edge, size = 1, shapeScale = null) => {
       const n = 3 + ((rnd() * 4) | 0);
+      const sx = shapeScale ? shapeScale.xz : 1, sy = shapeScale ? shapeScale.y : 1;
       for (let t = 0; t < n && nT < this.max.tufts; t++) {
         const a = rnd() * Math.PI * 2, r = rnd() * 0.07 * size;
-        m.compose(v.set(x + Math.cos(a) * r, y, z + Math.sin(a) * r), q.identity(), sc.setScalar((0.55 + rnd() * 0.6) * size));
+        const s = (0.55 + rnd() * 0.6) * size;
+        m.compose(v.set(x + Math.cos(a) * r, y, z + Math.sin(a) * r), q.identity(), shapeScale ? sc.set(s * sx, s * sy, s * sx) : sc.setScalar(s));
         this.tufts.setMatrixAt(nT, m);
         col.set(pick(palette));
         this.tuftColor.setXYZ(nT, col.r, col.g, col.b);
@@ -657,8 +752,9 @@ export class Vegetation {
       const pts = c.pts.map((p) => at(p, g));
       const y = g * L;
       // 959530111187013632 / REACode levelflora: one species per cell cluster, species set bound to terrace rank.
-      const species = this.levelFlora ? levelFloraSpecies(floraRanks.get(g) ?? 0, c.id, { seed }) : null;
-      if (species) this.floraSpecies.push({ cell: c.id, level: g, key: species.key });
+      const species = this.levelFlora ? levelFloraSpecies(floraRanks.get(g) ?? 0, c.id, { seed, ecology: this.floraEcology }) : null;
+      if (species) this.floraSpecies.push({ cell: c.id, level: g, key: species.key, shape: species.shape, ecology: species.ecology });
+      const ss = this.levelFloraShapes && species ? species.size : null;
       const palette = species ? species.colors : kind === 'dry' ? COLORS.dry : COLORS.grass;
       // 叶丛长在"东西的边上"：崖顶边（身后是崖下 → 外轮廓加粗）、崖脚（贴着更高的邻居）、坡上
       // （1590669875869286400 画面：一簇簇堆在崖脚和崖顶；1063115611289645057：坡上撒小团帮助读出可走的地方）
@@ -675,12 +771,12 @@ export class Vegetation {
         // 往格子里收一点
         const ccx = pts.reduce((a, p) => a + p[0], 0) / pts.length, ccz = pts.reduce((a, p) => a + p[1], 0) / pts.length;
         const k = higher ? 0.18 : 0.12;
-        addClump(ex + (ccx - ex) * k, ez + (ccz - ez) * k, y, higher && !this.levelFlora ? COLORS.dry.concat(palette) : palette, lower ? 1 : 0, higher ? 1.3 : 0.95);
+        addClump(ex + (ccx - ex) * k, ez + (ccz - ez) * k, y, higher && !this.levelFlora ? COLORS.dry.concat(palette) : palette, lower ? 1 : 0, higher ? 1.3 : 0.95, ss);
         }
       }
-      if (kind === 'slope' && rnd() < 0.7) { const [x, z] = randomIn(pts); addClump(x, z, y, this.levelFlora ? palette : COLORS.grass, 0, 0.8); }
+      if (kind === 'slope' && rnd() < 0.7) { const [x, z] = randomIn(pts); addClump(x, z, y, this.levelFlora ? palette : COLORS.grass, 0, 0.8, ss); }
       // 开阔草地上偶尔一簇（林下更少）
-      if (kind === 'grass' && rnd() < (treeCells.has(c.id) ? 0.05 : 0.12)) { const [x, z] = randomIn(pts); addClump(x, z, y, palette, 0, 0.85); }
+      if (kind === 'grass' && rnd() < (treeCells.has(c.id) ? 0.05 : 0.12)) { const [x, z] = randomIn(pts); addClump(x, z, y, palette, 0, 0.85, ss); }
       // 小花：Bad North 式的白色碎点，一大片一大片（959530111187013632）
       if ((kind === 'grass' || kind === 'slope') && !treeCells.has(c.id)) {
         const fl = fbm(c.cx * 0.45 + 11, c.cz * 0.45 + 2, { octaves: 2, freq: 1.5, seed: 55 });
@@ -797,13 +893,15 @@ export class Vegetation {
         for (let k = 0; k < 7; k++) {
           const a = crng() * Math.PI * 2, r = R * (1.0 + crng() * 0.5);
           const bx = cx + Math.cos(a) * r, bz = cz + Math.sin(a) * r, by = Math.max(5, (maxTop + 4) * L) + crng() * 1.5;
+          // 前景云层次：一团云一个深度（内缘 1 → 外缘 1.8），着色器按 1/cd 放慢漂移与起伏（uCloudParallax）
+          const depth = nearCloudDepth(r, R);
           const puffs = 3 + ((crng() * 4) | 0);
           for (let j = 0; j < puffs && nC < 64; j++) {
             const yaw = crng() * Math.PI * 2;
             q.setFromAxisAngle(up, yaw);
             const s2 = 0.5 + crng() * 0.5;
             m.compose(v.set(bx + (crng() - 0.5) * 1.6, by + (crng() - 0.5) * 0.25, bz + (crng() - 0.5) * 1.0), q, sc.setScalar(s2));
-            this.cloudField.set(nC++, m, null, yaw);
+            this.cloudField.set(nC++, m, null, yaw, depth);
           }
         }
       }
@@ -834,6 +932,10 @@ export class Vegetation {
     });
     this.trunks.count = nTrunk; this.trunks.instanceMatrix.needsUpdate = true;
     if (this.trunks.instanceColor) this.trunks.instanceColor.needsUpdate = true;
+    // 树位变了：距离 LOD 重新划分（阈值 0 / 无相机时全部回网格、远面片清空）
+    this.#placementsVersion++;
+    this.#lodKey = null;
+    this.updateCrownLOD(this.crownLodCamera);
     this.stats = { tufts: nT, flowers: nF, shrubs: nS, trees: nCrown.reduce((a, b) => a + b, 0), ms: +(performance.now() - t0).toFixed(1) };
     return this.stats;
   }

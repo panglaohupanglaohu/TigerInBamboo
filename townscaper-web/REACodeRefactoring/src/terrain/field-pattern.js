@@ -38,7 +38,20 @@ float fieldTonePlots(vec3 p) {
   float tone = (.86 + .2 * h) * (.9 + .16 * stripe) * (1.0 - .22 * border);
   return mix(1.0, tone, clamp(p.z, 0.0, 1.0));
 }
-float fieldTone(vec3 p) { return uFields > 1.5 ? fieldTonePlots(p) : fieldToneStripes(p); }`;
+/* r159 · uFields >= 3: the clip's own width — wide soft bands (duty ~1:1, edges blurred over
+ * ~half a band) instead of the 0.18-width hairlines of mode 1. Same 0.2-unit period, so the
+ * tile orientation is unchanged; only the duty cycle / edge softness / contrast differ.
+ * Stripes (mode 1) and plots (mode 2) are untouched bit-for-bit. */
+float fieldToneBands(vec3 p) {
+  float phase = p.x * 5.0;
+  float fw = max(fwidth(phase), .0001);
+  // soft square wave: flat light/dark plateaus with smooth shoulders (duty .5, shoulder ~.32 of a period)
+  float g = smoothstep(-.62, .62, sin(phase * 6.2831853));
+  g = mix(g, .5, smoothstep(.35, .9, fw));          // unresolved bands fade to the mean, same rule as stripes
+  float fieldTonePlot = 1.0 + .05 * sin(p.x * 1.1 + p.y * 1.7);   // neighbouring fields differ slightly in tone
+  return mix(1.0, (.86 + .28 * g) * fieldTonePlot, clamp(p.z, 0.0, 1.0));
+}
+float fieldTone(vec3 p) { return uFields > 2.5 ? fieldToneBands(p) : (uFields > 1.5 ? fieldTonePlots(p) : fieldToneStripes(p)); }`;
 
 /** JS mirror of the plot partition used by fieldTonePlots (for node tests / diagnostics). */
 export function fieldPlotId(u, v) {
@@ -46,3 +59,26 @@ export function fieldPlotId(u, v) {
   const wx = .28 * Math.sin(qy * 2.1 + 1.3), wy = .28 * Math.sin(qx * 1.7 + .4);
   return [Math.floor(qx + wx), Math.floor(qy + wy)];
 }
+
+/** JS mirror of fieldToneBands (mode 3): returns the tone multiplier applied to the albedo. */
+export function fieldBandTone(x, y = 0, mask = 1) {
+  const phase = x * 5.0;
+  const s = Math.sin(phase * Math.PI * 2);
+  const g = smoothstep(-.62, .62, s);
+  const plot = 1.0 + .05 * Math.sin(x * 1.1 + y * 1.7);
+  return 1.0 + ((.86 + .28 * g) * plot - 1.0) * clamp01(mask);
+}
+
+/** JS mirror of fieldToneStripes (mode 1) — same three constants as the GLSL. */
+export function fieldStripeTone(x, y = 0, mask = 1) {
+  const phase = x * 5.0 + .22 * Math.sin(y * 3.0);
+  const d = Math.abs((phase - Math.floor(phase)) - .5);
+  const stripe = 1 - smoothstep(.22, .22, d);
+  return 1.0 + (.9 + .18 * stripe - 1) * clamp01(mask);
+}
+
+function smoothstep(a, b, x) {
+  const t = Math.min(1, Math.max(0, (x - a) / (b - a || 1e-9)));
+  return t * t * (3 - 2 * t);
+}
+const clamp01 = (v) => Math.min(1, Math.max(0, v));

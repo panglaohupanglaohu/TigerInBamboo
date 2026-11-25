@@ -1,0 +1,68 @@
+{
+ "on": {
+  "joint": true,
+  "ok": true,
+  "reason": "solved",
+  "lattice": 450,
+  "parents": 69,
+  "subcells": 150,
+  "levels": 3,
+  "catalog": 152,
+  "conflicts": 0,
+  "mismatchedGroupLevels": 0,
+  "towers": 5,
+  "decodeError": null,
+  "ms": 34.8,
+  "backtracks": 0,
+  "groups": 69,
+  "childCounts": [
+   1,
+   4
+  ],
+  "quads": 27
+ },
+ "off": {
+  "joint": false,
+  "ok": true,
+  "reason": "solved",
+  "lattice": 450,
+  "parents": 69,
+  "subcells": 150,
+  "levels": 3,
+  "catalog": 152,
+  "conflicts": 0,
+  "mismatchedGroupLevels": 81,
+  "towers": 0,
+  "decodeError": "joint subtile constraint violated",
+  "ms": 33.3,
+  "backtracks": 0,
+  "groups": 69,
+  "childCounts": [
+   1,
+   4
+  ],
+  "quads": 27
+ },
+ "seed9": {
+  "joint": true,
+  "ok": true,
+  "reason": "solved",
+  "lattice": 450,
+  "parents": 69,
+  "subcells": 150,
+  "levels": 3,
+  "catalog": 152,
+  "conflicts": 0,
+  "mismatchedGroupLevels": 0,
+  "towers": 6,
+  "decodeError": null,
+  "ms": 30.8,
+  "backtracks": 0,
+  "groups": 69,
+  "childCounts": [
+   1,
+   4
+  ],
+  "quads": 27
+ }
+}

@@ -1,0 +1,161 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "mount": "ok",
+  "state": {
+   "cells": 10132,
+   "radius": 28,
+   "allowed": 6111
+  },
+  "scan": {
+   "terrain.arch": 0,
+   "terrain.overhang": 0,
+   "terrain.seastack": 0,
+   "terrain.tunnel": 0,
+   "terrain.ledge": 0,
+   "build.lighthouse": 0,
+   "build.assembly": 0,
+   "terrain.shrub-texture": 0,
+   "water.volume": 0,
+   "build.lighthouse-light": 0,
+   "effects.smoke": 0,
+   "grid.contours": 0,
+   "world.openness": 0
+  },
+  "run": [
+   {
+    "id": "terrain.arch",
+    "status": "no-target",
+    "applied": [],
+    "tried": 0,
+    "ms": 0,
+    "params": {
+     "count": 1,
+     "minHeight": 4
+    },
+    "reasons": [],
+    "focus": []
+   },
+   {
+    "id": "terrain.overhang",
+    "status": "no-target",
+    "applied": [],
+    "tried": 0,
+    "ms": 0,
+    "params": {
+     "count": 1
+    },
+    "reasons": [],
+    "focus": []
+   },
+   {
+    "id": "terrain.seastack",
+    "status": "no-target",
+    "applied": [],
+    "tried": 0,
+    "ms": 0,
+    "params": {
+     "count": 1,
+     "height": 5
+    },
+    "reasons": [],
+    "focus": []
+   },
+   {
+    "id": "terrain.tunnel",
+    "status": "no-target",
+    "applied": [],
+    "tried": 0,
+    "ms": 0,
+    "params": {
+     "count": 1
+    },
+    "reasons": [],
+    "focus": []
+   },
+   {
+    "id": "terrain.ledge",
+    "status": "no-target",
+    "applied": [],
+    "tried": 0,
+    "ms": 0,
+    "params": {
+     "count": 1
+    },
+    "reasons": [],
+    "focus": []
+   },
+   {
+    "id": "build.lighthouse",
+    "status": "no-target",
+    "applied": [],
+    "tried": 0,
+    "ms": 0,
+    "params": {
+     "count": 1,
+     "height": 7
+    },
+    "layer3d": "lighthouse",
+    "reasons": [],
+    "focus": []
+   },
+   {
+    "id": "build.assembly",
+    "status": "no-target",
+    "applied": [],
+    "tried": 0,
+    "ms": 0,
+    "params": {
+     "kind": "auto",
+     "count": 1,
+     "wallLevels": 2,
+     "deckLevel": 2,
+     "pillar": true,
+     "seed": 1
+    },
+    "reasons": [],
+    "focus": []
+   },
+   {
+    "id": "terrain.shrub-texture",
+    "status": "layer",
+    "layer3d": "shrubtex",
+    "params": {}
+   },
+   {
+    "id": "water.volume",
+    "status": "layer",
+    "layer3d": "watervol",
+    "params": {}
+   },
+   {
+    "id": "build.lighthouse-light",
+    "status": "layer",
+    "layer3d": "lighthouse",
+    "params": {}
+   },
+   {
+    "id": "effects.smoke",
+    "status": "layer",
+    "layer3d": "smoke",
+    "params": {}
+   },
+   {
+    "id": "grid.contours",
+    "status": "layer",
+    "layer3d": "contours",
+    "params": {}
+   },
+   {
+    "id": "world.openness",
+    "status": "layer",
+    "layer3d": "rayvis",
+    "params": {}
+   }
+  ]
+ },
+ "pass": false,
+ "failure": "没有几何能力真正落地：[{\"id\":\"terrain.arch\",\"status\":\"no-target\",\"applied\":[],\"tried\":0,\"ms\":0,\"params\":{\"count\":1,\"minHeight\":4},\"reasons\":[],\"focus\":[]},{\"id\":\"terrain.overhang\",\"status\":\"no-target\",\"applied\":[],\"tried\":0,\"ms\":0,\"params\":{\"count\":1},\"reasons\":[],\"focus\":[]},{\"id\":\"terrain.seastack\",\"status\":\"no-target\",\"applied\":[],\"tried\":0,\"ms\":0,\"params\":{\"count\":1,\"height\":5},\"reasons\":[],\"focus\":[]},{\"id\":\"terrain.tunnel\",\"status\":\"no-target\",\"applied\":[],\"tried\":0,\"ms\":0,\"params\":{\"count\":1},\"reasons\":[],\"focus\":[]},{\"id\":\"terrain.ledge\",\"status\":\"no-target\",\"applied\":[],\"tried\":0,\"ms\":0,\"params\":{\"count\":1},\"reasons\":[],\"focus\":[]},{\"id\":\"build.lighthouse\",\"status\":\"no-target\",\"applied\":[],\"tried\":0,\"ms\":0,\"params\":{\"count\":1,\"height\":7},\"layer3d\":\"lighthouse\",\"reasons\":[],\"focus\":[]},{\"id\":\"build.assembly\",\"status\":\"no-target\",\"applied\":[],\"tried\":0,\"ms\":0,\"params\":{\"kind\":\"auto\",\"count\":1,\"wallLevels\":2,\"deckLevel\":2,\"pillar\":true,\"seed\":1},\"reasons\":[],\"focus\":[]},{\"id\":\"terrain.shrub-texture\",\"status\":\"layer\",\"layer3d\":\"shrubtex\",\"params\":{}},{\"id\":\"water.volume\",\"status\":\"layer\",\"layer3d\":\"watervol\",\"params\":{}},{\"id\":\"build.lighthouse-light\",\"status\":\"layer\",\"layer3d\":\"lighthouse\",\"params\":{}},{\"id\":\"effects.smoke\",\"status\":\"layer\",\"layer3d\":\"smoke\",\"params\":{}},{\"id\":\"grid.contours\",\"status\":\"layer\",\"layer3d\":\"contours\",\"params\":{}},{\"id\":\"world.openness\",\"status\":\"layer\",\"layer3d\":\"rayvis\",\"params\":{}}]"
+}

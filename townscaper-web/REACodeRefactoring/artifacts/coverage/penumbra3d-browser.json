@@ -1,0 +1,79 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "before": {
+        "recv": true,
+        "water": true
+      },
+      "on": {
+        "state": true,
+        "recv": false,
+        "water": true,
+        "receivers": 6876,
+        "multi": 12,
+        "uPenOn": 1,
+        "dims": [
+          78,
+          88,
+          9
+        ],
+        "tex": [
+          78,
+          792
+        ]
+      },
+      "off": {
+        "recv": true,
+        "water": true,
+        "uPenOn": 0,
+        "state": false
+      },
+      "dis": {
+        "tex": null,
+        "uTex": null,
+        "uOn": 0,
+        "key": false,
+        "hasPen": false
+      }
+    },
+    {
+      "kind": "quad",
+      "before": {
+        "recv": true,
+        "water": true
+      },
+      "on": {
+        "state": true,
+        "recv": false,
+        "water": true,
+        "receivers": 5050,
+        "multi": 10,
+        "uPenOn": 1,
+        "dims": [
+          70,
+          72,
+          8
+        ],
+        "tex": [
+          70,
+          576
+        ]
+      },
+      "off": {
+        "recv": true,
+        "water": true,
+        "uPenOn": 0,
+        "state": false
+      },
+      "dis": {
+        "tex": null,
+        "uTex": null,
+        "uOn": 0,
+        "key": false,
+        "hasPen": false
+      }
+    }
+  ],
+  "errors": []
+}

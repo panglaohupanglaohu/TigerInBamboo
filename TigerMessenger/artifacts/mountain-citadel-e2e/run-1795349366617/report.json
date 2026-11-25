@@ -1,0 +1,74 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/mountain-citadel-e2e/run-1795349366617",
+  "steps": {
+    "scan": "扫描完成：2 / 5 个能力能作用。",
+    "site": "采样 101×101 格（3 m）· 陆地 2207 · 建筑 2387 · 轨道 693 格 · 最高 76.5 m",
+    "probeSite": {
+      "n": 101,
+      "step": 3,
+      "half": 150,
+      "land": 2207,
+      "sea": 7994,
+      "structureCells": 2387,
+      "railCells": 693,
+      "top": 76.5,
+      "tris": 31960,
+      "ms": 51,
+      "terrainMeshes": [
+        "citadel-oskar-grid-mountain-surface"
+      ],
+      "vegMeshes": 55,
+      "names": {
+        "structure:surveyed-route-tread": 91,
+        "structure:old-upper-anchor-link-tread-2": 21,
+        "structure:old-radial-alley-0-tread-2": 20,
+        "structure:entry-arch-stone": 17,
+        "structure:blue-dome-panel": 16,
+        "structure:dome-raised-rib": 16,
+        "rail:newShore-double-deck-longitudinal-open-arches": 10,
+        "rail:oldShore-double-deck-longitudinal-open-arches": 9,
+        "structure:facade-quoin": 8,
+        "rail:house-0--1-1-terrace-handrail": 4,
+        "rail:house-1--1-2-terrace-handrail": 4,
+        "rail:house-1-1-1-terrace-handrail": 4,
+        "rail:house-2--1-0-terrace-handrail": 4,
+        "structure:entrance-stair": 4,
+        "structure:rear-court-access-step": 4,
+        "structure:new-city-rear-fountain-stream": 4,
+        "structure:target-footing-new-entrance-stair": 4,
+        "structure:tower-belt": 3,
+        "structure:new-city-enclosure-batch": 3,
+        "rail:connector-side-post": 3,
+        "structure:guardian-left-foot": 3,
+        "structure:guardian-left-knee": 3,
+        "structure:guardian-left-elbow": 3,
+        "structure:guardian-left-shoulder": 3
+      }
+    },
+    "nodes": 5,
+    "cam": [
+      "swampCameraProfile",
+      "rescueCampaign",
+      "cameraRig",
+      "camera"
+    ],
+    "note": "执行失败：PipeLineEngine：能力执行失败：invalid height graph",
+    "candidate": null,
+    "report": [],
+    "checks": [],
+    "shape": "",
+    "state": {
+      "active": true,
+      "id": "citadel",
+      "previewing": false,
+      "comparing": false,
+      "triangles": 0,
+      "hidden": 0,
+      "vegetationMoved": 0
+    }
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#mountain-workshop button').filter({ hasText: '对照原样' })\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-citadel-browser.mjs:39:51",
+  "note": "执行失败：PipeLineEngine：能力执行失败：invalid height graph"
+}

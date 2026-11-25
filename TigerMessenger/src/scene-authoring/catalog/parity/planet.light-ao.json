@@ -1,0 +1,38 @@
+{
+ "capability": "planet.light-ao",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/voxelao.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/light/voxel-ao.js"
+ ],
+ "inputs": {
+  "grid": "9×7",
+  "cells": 63,
+  "faces": 315
+ },
+ "metrics": [
+  {
+   "id": "shade",
+   "name": "faceShading 315 面四维最大差",
+   "original": 0,
+   "refactored": 0
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "validation",
+   "id": "faceShading(非法dir)",
+   "original": "不校验",
+   "refactored": "RangeError"
+  }
+ ],
+ "basis": "同一世界 {cells(cx/cz/edgeNeighbors), top} 喂两边 buildVoxelAO，逐格逐面比 ao/upNormal/dirAo；原版 town.top 截负为 0，这里高度场已非负。"
+}

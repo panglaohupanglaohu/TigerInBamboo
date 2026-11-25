@@ -1,0 +1,52 @@
+{
+ "capability": "scene.oklab-palette",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "scene",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/palette.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/oklab.js"
+ ],
+ "inputs": {
+  "hexes": 8
+ },
+ "metrics": [
+  {
+   "id": "hex",
+   "name": "8 色 hex 解析逐分量（原版/255）",
+   "original": "hexToRgb",
+   "refactored": "hexToSrgb",
+   "equal": true
+  },
+  {
+   "id": "deltaE-sym",
+   "name": "ΔE 对称性（28 色对）",
+   "original": "—",
+   "refactored": "对称",
+   "equal": true
+  },
+  {
+   "id": "rankOrder",
+   "name": "28 色对距离排序与 HSL 一致",
+   "original": "rgbToHsl 距离",
+   "refactored": "deltaE",
+   "equal": false
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "order",
+   "id": "perceptual-vs-hsl",
+   "original": "HSL 距离排序",
+   "refactored": "OKLab ΔE 排序",
+   "note": "感知距离与 HSL 距离的色对排序不同——oklab 层是新增的感知机制，原版 palette.js 没有对应物"
+  }
+ ],
+ "basis": "oklab.js 是 perceptual-capabilities 五能力的落点：hex 解析底层与 palette.hexToRgb 逐位等价登记；srgbToOklab/ΔE/色域裁剪是原版没有的感知层，与 HSL 距离排序差异如实登记（不是移植差异，是新增机制）。"
+}

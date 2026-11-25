@@ -32,3 +32,33 @@ View新增setSunPosition(方位,高度)与setPenumbra，太阳盘、渲染灯光
 兼容性：沿用全局shadows开关控制新层，防止旧catcher叠加；日夜时三场强度随太阳强度缩放。原版三场半影注释/实现与本地改进区分记录，不更改原版文件。
 
 回归：两网格岸浪时间/周期/暂停和线框控制仍通过；首页/pipeline及小镇显示60/285、剩225、134模块。视频清单/本地/README匹配均285，历史笔记243，管线缺0段，diff空白检查通过。
+
+## 本轮补残差（洞/悬挑/形变表面 + 半影宽度口径）· 队列条目重验收
+
+### 裁判可量化参数（REACode/src/penumbra.js composite，只读）
+
+- 三遍：hard(bias=0) / pulled(bias=+0.7 体素高度，是 normal 的子集) / big(3×3 均值降采样→同场投影→3×3 均值模糊，r=1 圆判据 i²+j²≤r²+1 恰取满 9 格=盒式)。
+- 合成：alpha=1−(1−.8·hard)(1−.34·pulled)(1−.44·bigUp)。半影带 .10<alpha<.50，带宽=到最近硬阴影格的 chamfer 距离均值（封顶 12 格）。composite 默认 tanE=.52。
+- 尺度差：裁判在粗格上跑 castShadow 但 tanE 留粗格单位 → 世界空间有效坡率 ÷coarse，第三遍影足迹约 ×4（本例 az=1.1 时 963 vs 36 格 big>0.5），带宽 4.5–5.7 格 vs 正确坡率 1.5–2.0。仍判为裁判 2D 诊断的尺度差，不照抄；threeShadow 加 `bigSlopeScale` 参数化，传 1/coarse 可复现。
+
+### 实现
+
+- core/penumbra.js：`PENUMBRA_THRICE` 导出裁判常数；threeShadow 默认权重/pull/coarse 改裁判值；新增 `bigSlopeScale`；penumbraStats 补 pulled/big 格数（与裁判 hardN/pulledN/bigN 同口径）。
+- light/penumbra.js：bakeWaterPenumbra pull 默认 L*0.7（原 L*0.35）、可覆盖；bakeVoxelPenumbra 权重默认裁判值、pull 默认 L*0.7（0.7 体素层）。
+- world/penumbra-terrain.js：补 dispose()——还原材质 onBeforeCompile/customProgramCacheKey、销毁打包纹理、还原 receiveShadow 与自己打开的水面层，幂等。
+- penumbra.html：新「地形·洞/悬挑三场（体素接收面）」开关 → postExtras.set('penumbra3d')；文案更新。
+
+### 验收
+
+- tests/penumbra-referee.mjs（新，裁判对照）：buildWorld(7) 四方位下 normal/pulled 与裁判 hard/pulled **逐格一致**；stats.hard/pulled 计数相等；bigSlopeScale=1/3 时带宽 ±8%、带格数 ±10%、alpha 平均差 <1%；默认坡率下 big 足迹 <裁判 1/3（刻意的尺度差）；确定性逐字节一致；pull 单调；权重全零→全透；非法 bigSlopeScale 拒绝。
+- tests/penumbra-terrain.mjs：追加 dispose 断言（纹理销毁、材质链还原后不再注入 penumbraTone、cacheKey 还原、幂等）。
+- tests/penumbra.mjs / penumbra-voxel.mjs / penumbra-terrain.mjs：回归 PASS（scaled pull 随新默认改 7）。
+- tests/penumbra-browser.cjs：回归 PASS（水面带 484/403 格，权重变化预期内；编辑/转太阳/释放仍过）。
+- tests/penumbra3d-browser.cjs（新）：penumbra.html 真场景 mixed/quad 各一遍——体素接收者 6876/5050、多接收者柱 12/10（真悬挑）、开替代 PCF 接收+水面层、转太阳重烘、关还原、dispose 纹理+材质补丁通过；pageerror 空；截图 penumbra-3d-{mixed,quad}.png。
+
+### 如实剩余差距
+
+- 侧墙（nW.y<.55）不吃半影，仍由 N·L 明暗负责；形变表面按最近体素层采样（±L/2 近似），不是逐三角形投影。
+- 裁判的 ×3 长影是其实现尺度差：默认不照抄，带宽绝对值因此不与裁判一致（机制与参数口径已对齐，宽度旋钮 bigSlopeScale 可复现）。
+- 原片演示"故意加深"，无源资产可做逐像素宽度对照；只能做到机制+参数口径对齐。
+- TigerMessenger 消费者：游戏实际跑 src/vendor/townscaper-rea-refactoring 旧副本（2026-10-31 vendored），无 penumbra 模块、view.js 仍是 PCFSoftShadowMap+ShadowMaterial 水面——本批改动要再 vendored 同步才会进游戏，本轮未同步。

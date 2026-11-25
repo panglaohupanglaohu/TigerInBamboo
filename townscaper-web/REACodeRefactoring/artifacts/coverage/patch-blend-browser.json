@@ -1,0 +1,190 @@
+{
+  "id": "1781405550061687016",
+  "round": "r156",
+  "field": {
+    "w": 120,
+    "h": 141,
+    "res": 0.1,
+    "loops": 4,
+    "segs": 112
+  },
+  "ab": {
+    "hard": {
+      "seam": {
+        "edgePx": 1444,
+        "bandPx": 4772,
+        "bandShare": 28.2,
+        "gradBand": 0.0666,
+        "gradInner": 0.0214,
+        "ratio": 3.12,
+        "softMeanPx": 0
+      },
+      "jump": {
+        "n": 1034,
+        "meanJump": 0.2543,
+        "maxJump": 0.3324
+      },
+      "covHist": {
+        "1": 13207,
+        "2": 3713,
+        "3": 0
+      },
+      "detailKeptPct": 100,
+      "jumpCutPct": 0
+    },
+    "alpha": {
+      "seam": {
+        "edgePx": 1444,
+        "bandPx": 4772,
+        "bandShare": 28.2,
+        "gradBand": 0.0406,
+        "gradInner": 0.0214,
+        "ratio": 1.9,
+        "softMeanPx": 0
+      },
+      "jump": {
+        "n": 1034,
+        "meanJump": 0.0198,
+        "maxJump": 0.1773
+      },
+      "covHist": {
+        "1": 13207,
+        "2": 3713,
+        "3": 0
+      },
+      "detailKeptPct": 61,
+      "jumpCutPct": 92
+    },
+    "height": {
+      "seam": {
+        "edgePx": 1444,
+        "bandPx": 4772,
+        "bandShare": 28.2,
+        "gradBand": 0.0506,
+        "gradInner": 0.0214,
+        "ratio": 2.36,
+        "softMeanPx": 1.5
+      },
+      "jump": {
+        "n": 1034,
+        "meanJump": 0.094,
+        "maxJump": 0.2213
+      },
+      "covHist": {
+        "1": 13207,
+        "2": 3713,
+        "3": 0
+      },
+      "detailKeptPct": 76,
+      "jumpCutPct": 63
+    }
+  },
+  "shore": {
+    "dotCount": 16,
+    "dotGaps": [
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4,
+      0.4
+    ],
+    "waveVs": [
+      0.32,
+      0.56
+    ]
+  },
+  "uv": {
+    "whiteBands": 2,
+    "whiteRows": 12,
+    "whiteRowYs": [
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      89,
+      90,
+      91,
+      92,
+      93,
+      94
+    ],
+    "bandCenters": [
+      0.418,
+      0.654
+    ],
+    "dotRuns": 21
+  },
+  "cellEdge": {
+    "crossN": 3867,
+    "innerN": 11050,
+    "crossP50": 0.0053,
+    "crossP95": 0.1336,
+    "innerP50": 0.0039,
+    "innerP95": 0.1184
+  },
+  "zoomed": {
+    "texel": 9221,
+    "cx": 101,
+    "cz": 76,
+    "half": 47,
+    "sx": 26,
+    "sz": 29,
+    "scale": 3.375,
+    "sd": 0.06055604666471481,
+    "u": 40.45222091674805
+  },
+  "modDiff": {
+    "n": 41260,
+    "w": 1280,
+    "h": 900,
+    "mean": 25.19
+  },
+  "scene": {
+    "stats": {
+      "on": true,
+      "s": {
+        "w": 191,
+        "h": 173,
+        "loops": 3,
+        "segs": 118,
+        "bakeMs": 53
+      }
+    },
+    "dAB": {
+      "n": 24919,
+      "w": 1280,
+      "h": 900,
+      "mean": 17.81
+    },
+    "dNoise": {
+      "n": 0,
+      "w": 1280,
+      "h": 900,
+      "mean": 0
+    },
+    "dOnNoise": {
+      "n": 0,
+      "w": 1280,
+      "h": 900,
+      "mean": 0
+    },
+    "dBack": {
+      "n": 0,
+      "w": 1280,
+      "h": 900,
+      "mean": 0
+    }
+  },
+  "errors": []
+}

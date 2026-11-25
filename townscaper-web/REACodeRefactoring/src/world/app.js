@@ -11,14 +11,16 @@ import { World, MAX_LEVEL } from '../core/world.js';
 import { PALETTES, withPaletteColors } from '../core/palette.js';
 import { View } from './view.js';
 import { SCENES, buildScene } from './scenes.js';
-import { applyBadNorthTheme } from '../badnorth/theme.js';
+import { applyBadNorthTheme, BN_PAL } from '../badnorth/theme.js';
 import { Battle } from '../badnorth/battle.js';
 import { encodeWorld, decodeWorld, peekGridRadius } from './save.js';
+import { CellSelection } from '../core/cell-selection.js';
 import { mountLearnPanel } from '../ui/learnpanel.js';
 import { replaySnapshots, replayDelay } from '../core/snapshot-replay.js';
 import { mountEnvironmentPanel } from '../ui/environment-panel.js';
 import { mountWalkthrough } from '../ui/walkthrough.js';
 import { toggleSplice } from '../build/splice.js';
+import { caveLightReport } from '../light/cave-light.js';
 
 // 两种网格（共用全部管线）：
 //   quad   Townscaper：三角点阵 → 合并 → 细分 → 松弛，全是四边形（1147881669350891521）
@@ -62,6 +64,10 @@ let tool = 'build';
 let colorIndex = 0;
 let paletteName = 'town';
 const undoStack = [], redoStack = [];
+// 1120036868966502401 缺口 ②：选中态要**逐条**跟着撤销栈走，所以两条平行账本（不把 id 塞进快照，
+// 快照仍是 world.snapshot() 原格式，snapshot-replay / game-ui 的 undoDepth 口径都不受影响）。
+const undoSel = [], redoSel = [];
+const selection = new CellSelection();
 
 /* ---- 界面 ---------------------------------------------------------------- */
 function toast(msg) {
@@ -88,8 +94,55 @@ const refreshPalette = () => [...paletteEl.children].forEach((el, i) => el.class
 function setTool(t) {
   tool = t;
   for (const b of toolsEl.querySelectorAll('.tool[data-tool]')) b.classList.toggle('active', b.dataset.tool === t);
-  canvas.style.cursor = t === 'erase' ? 'not-allowed' : 'crosshair';
+  canvas.style.cursor = t === 'erase' ? 'not-allowed' : t === 'select' ? 'pointer' : 'crosshair';
 }
+// HUD 上那排工具按钮原先只有 title、没有 onclick（点不动）；加「选择」格时一并接上，
+// 否则选中态只有键盘 S 一个入口。
+for (const b of toolsEl.querySelectorAll('.tool[data-tool]')) b.onclick = () => setTool(b.dataset.tool);
+
+/* ---- 选中态（1120036868966502401 缺口 ②：接真编辑器） ---------------------
+ * 原片（frame-0300 / 0445 / 0620）那块白格网补丁是跟着「正在编辑的对象」跑的，画面里还有
+ * 红色（跨多格）和蓝色（单格）两种选择轮廓；第 94–98 轮把「选中态 → 包围盒 → 补丁窗口」
+ * 做完在 view.setGridWindowForSelection，但选中态一直靠外部手灌。
+ * 这里补上编辑器自己的一层：点选 = 单格，Shift/⌘ 点 = 加减（多选），Esc/点空 = 取消；
+ * 选中态进撤销栈旁路（undoSel/redoSel），撤销/重做后补丁跟着回位；世界变了先 prune 再算窗口。
+ */
+const selectionStats = { windows: 0, prunes: 0, prunedCells: 0, undoRestores: 0 };
+const cellById = (id) => grid.cells[id] ?? null;
+const selectionApi = {
+  ids: () => selection.ids(),
+  get size() { return selection.size; },
+  has: (id) => selection.has(id),
+  set: (ids) => { selection.set(ids); return refreshSelection({ prune: true, toastIt: true }); },
+  toggle: (id) => { selection.toggle(id); return refreshSelection({ prune: true, toastIt: true }); },
+  clear: () => clearSelection(),
+  window: () => (view.gridWindow ? { ...view.gridWindow } : null),
+  bounds: () => (view.gridWindowSel ? { ...view.gridWindowSel } : null),
+  stats: () => ({ ...selectionStats, undoDepth: undoStack.length, redoDepth: redoStack.length }),
+};
+
+/** 选中态 → 补丁窗口。等距档没开时没有格距可对齐，只留选中态（不抛错，窗口保持 null）。 */
+function applySelectionWindow() {
+  if (!(view.gridRegular && view.gridLatticeStep > 0)) return null;
+  const sel = selection.toSelection(cellById);
+  if (!sel) { if (view.gridWindow) view.setGridWindowForSelection(null); return null; }
+  view.setGridWindowForSelection(sel);
+  selectionStats.windows++;
+  return view.gridWindow;
+}
+/** 世界变了以后：先把已经没有顶层（top<=0）的格子剔掉。 */
+function pruneSelection() {
+  const r = selection.prune((id) => { const c = cellById(id); return !!c && world.top(c) > 0; });
+  if (r.removed.length) { selectionStats.prunes++; selectionStats.prunedCells += r.removed.length; }
+  return r;
+}
+function refreshSelection({ prune = false, toastIt = false } = {}) {
+  if (prune) pruneSelection();
+  const rect = applySelectionWindow();
+  if (toastIt) toast(selection.empty ? '取消选中' : `选中 ${selection.size} 格`);
+  return rect;
+}
+function clearSelection() { selection.clear(); return refreshSelection(); }
 
 function buildSceneBar() {
   sceneEl.replaceChildren();
@@ -130,14 +183,17 @@ function loadScene(name, record) {
   buildSceneBar();
   setTimeout(syncBadNorth, 0);   // 在学习面板按场景重置图层之后再套北境
   scheduleHash();
+  refreshSelection({ prune: true });   // 换场景后旧选中多半已不存在：剔掉并让补丁跟着走
   window.dispatchEvent(new CustomEvent('scenechange', { detail: name }));
 }
 
 /* ---- 撤销 ---------------------------------------------------------------- */
 function pushUndo(s) {
   undoStack.push(s);
-  if (undoStack.length > 60) { undoStack.shift(); sceneStart = Math.max(0, sceneStart - 1); }
+  undoSel.push(selection.snapshot());          // 这一笔之前「选中了谁」也一起记，撤销时回位
+  if (undoStack.length > 60) { undoStack.shift(); undoSel.shift(); sceneStart = Math.max(0, sceneStart - 1); }
   redoStack.length = 0;
+  redoSel.length = 0;
   refreshUndo();
 }
 function refreshUndo() {
@@ -157,22 +213,49 @@ async function replay() {
   const button = document.getElementById('replay');
   button.textContent = '■'; button.title = '停止回放并恢复（Esc）';
   toast(`回放 ${frames.length - 1} 步 · 再次点击停止`);
+  // 回放帧 = 整笔快照，单笔拖动可超 worldmesh 的 40 格差分上限（超限=该帧特效被静默吞掉）；
+  // 回放期放宽到 600，帧内错拍交给 view.editFx 队列，结束恢复原上限
+  const fxLimit0 = view.worldMesh.editFxLimit;
+  view.worldMesh.editFxLimit = Math.max(fxLimit0 || 0, 600);
   try {
     await replaySnapshots(world, frames, { apply: () => view.changed(), wait: signal => replayDelay(+(params.get('replayMs') ?? 380) || 380, signal), signal: replayAbort.signal });
   } catch (err) { console.error('回放失败', err); toast('回放失败，已恢复当前岛'); }
   finally {
+    view.worldMesh.editFxLimit = fxLimit0;
     replaying = false; replayAbort = null; button.textContent = '⟲';
     button.title = '回放建造过程'; refreshUndo(); scheduleHash();
   }
 }
 
-function undo() { if (replaying || !undoStack.length) return; redoStack.push(world.snapshot()); world.restore(undoStack.pop()); view.changed(); refreshUndo(); scheduleHash(); }
-function redo() { if (replaying || !redoStack.length) return; undoStack.push(world.snapshot()); world.restore(redoStack.pop()); view.changed(); refreshUndo(); scheduleHash(); }
+function undo() {
+  if (replaying || !undoStack.length) return;
+  redoStack.push(world.snapshot()); redoSel.push(selection.snapshot());
+  world.restore(undoStack.pop());
+  selection.restore(undoSel.pop());
+  selectionStats.undoRestores++;
+  view.changed(); refreshSelection({ prune: true }); refreshUndo(); scheduleHash();
+}
+function redo() {
+  if (replaying || !redoStack.length) return;
+  undoStack.push(world.snapshot()); undoSel.push(selection.snapshot());
+  world.restore(redoStack.pop());
+  selection.restore(redoSel.pop());
+  selectionStats.undoRestores++;
+  view.changed(); refreshSelection({ prune: true }); refreshUndo(); scheduleHash();
+}
 
 /* ---- 编辑 ---------------------------------------------------------------- */
 let stroke = null;
 function beginStroke() { stroke = { snap: world.snapshot(), edits: new Set(), changed: false }; }
-function endStroke() { if (stroke?.changed) { pushUndo(stroke.snap); scheduleHash(); } stroke = null; }
+function endStroke() {
+  if (stroke?.changed) {
+    pushUndo(stroke.snap);
+    scheduleHash();
+    // 编辑完了：选中的对象可能变高/变矮/被拆掉 → 先 prune 再把补丁收到新包围盒上
+    if (selection.size) refreshSelection({ prune: true });
+  }
+  stroke = null;
+}
 
 function applyAt(hit, t) {
   if (!hit || !stroke) return;
@@ -232,6 +315,16 @@ canvas.addEventListener('pointerdown', (e) => {
   if (e.button === 2) { mode = 'right'; rightStart = { x: e.clientX, y: e.clientY }; return; }
   if (e.button === 1 || (e.button === 0 && e.altKey)) { mode = 'pan'; return; }
   if (scene === 'badnorth' && e.button === 0 && battle.onPointer(pickAt(e))) { mode = null; return; }
+  if (tool === 'select') {
+    // 点选：无修饰 = 单选（替换），Shift/⌘/Ctrl = 加减（多选）。点空 = 取消（多选时点空不清）。
+    const hit = pickAt(e);
+    const additive = e.shiftKey || e.metaKey || e.ctrlKey;
+    mode = 'select';
+    if (!hit?.cell) { if (!additive) clearSelection(); return; }
+    if (additive) selection.toggle(hit.cell.id); else selection.set([hit.cell.id]);
+    refreshSelection({ prune: true, toastIt: true });
+    return;
+  }
   mode = 'stroke';
   beginStroke();
   applyAt(pickAt(e), activeTool(e));
@@ -265,7 +358,8 @@ canvas.addEventListener('pointermove', (e) => {
   }
   const hit = pickAt(e);
   if (mode === 'stroke') applyAt(hit, activeTool(e));
-  view.updateHover(hit, mode === 'stroke' ? activeTool(e) : tool);
+  // 选择工具不该出现「建造幽灵块」（那是 build 的预览），点到空处就收起来
+  view.updateHover(tool === 'select' ? null : hit, mode === 'stroke' ? activeTool(e) : tool);
 });
 function endPointer(e) {
   pointers.delete(e.pointerId);
@@ -303,12 +397,14 @@ addEventListener('keydown', (e) => {
   if (k === 'b') setTool('build');
   else if (k === 'e') setTool('erase');
   else if (k === 'p') setTool('paint');
+  else if (k === 's') { setTool('select'); toast('选择：点选 / Shift 多选 / Esc 取消'); }
+  else if (k === 'escape') { if (!selection.empty) clearSelection(); }
   else if (k === 'i') { setTool('splice'); toast('嵌入房子：点裸露岩顶嵌入 / 再点移除'); }
   else if (k === 'z') undo();
   else if (k === 'y') redo();
   else if (k === 'n') cycleTime();
   else if (k === 'r') { seed = (Math.random() * 1e6) | 0; loadScene(scene, true); toast('换了一个种子'); }
-  else if (k === 'c') { pushUndo(world.snapshot()); world.reset(); view.changed(); scheduleHash(); }
+  else if (k === 'c') { pushUndo(world.snapshot()); world.reset(); view.changed(); refreshSelection({ prune: true }); scheduleHash(); }
   else if (k === 't') loadScene('town', true);
   else if (k === 'g') loadScene('terrain', true);
   else if (k === 'f') loadScene('fusion', true);
@@ -316,10 +412,93 @@ addEventListener('keydown', (e) => {
 });
 
 /* ---- 地址栏存档 ------------------------------------------------------------ */
+/* 1198957499027795969 残差补全：分享串第三可选尾段（save.js meta）——自定义/预设调色板 +
+ * 玩法天气状态（光照时段、北境主题、flatRoofs 等世界开关、雪雾/雾参数/风向）一起入档。
+ * 编码侧 palette/开关直接读 world；视图侧字段由这里现取现传，不走 world.saveMeta 回落
+ * （那是「上次导入的状态」，活动窗口的真实状态以 view/atmosphere 为准）。 */
+const bnThemeKey = () => Object.keys(BN_PAL).find((k) => BN_PAL[k] === view.bnTheme) ?? null;
+// 分享串 UI 尾段带最近 8 条撤销 + 8 条重做（save.js HISTORY_MAX 上限；整快照入档的体量取舍，
+// 更早的步数不随链接走，truncated 位如实记）。
+const HISTORY_SHARE = 8;
+function historyMeta() {
+  const cut = (stack, selStack) => {
+    const k = Math.min(HISTORY_SHARE, stack.length);
+    return {
+      entries: stack.slice(-k).map((snapshot, i) => ({ snapshot, selection: selStack[selStack.length - k + i] ?? [] })),
+      truncated: stack.length > k,
+    };
+  };
+  const u = cut(undoStack, undoSel), r = cut(redoStack, redoSel);
+  return u.entries.length || r.entries.length
+    ? { undo: u.entries, undoTruncated: u.truncated, redo: r.entries, redoTruncated: r.truncated }
+    : null;
+}
+function currentSaveMeta() {
+  const a = view.atmosphere;
+  return {
+    palette: true,
+    state: {
+      timeOfDay: view.timeOfDay ?? 'day',
+      bnTheme: bnThemeKey(),
+      weather: a ? {
+        snow: !!a.snow?.visible,
+        fog: !!a.fog?.visible,
+        fogOpacity: a.fogOpacity?.value ?? .35,
+        fogSpeed: a.fogSpeed?.value ?? 1,
+        windDeg: Math.round((Math.atan2(a.uWind.value.z, a.uWind.value.x) * 180 / Math.PI + 360) % 360),
+      } : null,
+    },
+    ui: {
+      tool,
+      colorIndex,
+      camera: { target: [view.target.x, view.target.y, view.target.z], yaw: view.yaw, pitch: view.pitch, distance: view.distance },
+      selection: selection.ids(),
+      history: historyMeta(),
+    },
+  };
+}
+/** 读档落进来的视图侧状态：world.palette/世界开关 save.js 已直接回写；这里应用时段/主题/天气。 */
+function applySaveMeta(meta) {
+  if (!meta) return;
+  const st = meta.state;
+  if (st) {
+    if (scene === 'badnorth' && st.bnTheme) applyBadNorthTheme(view, st.bnTheme);
+    else if (st.timeOfDay && st.timeOfDay !== 'bn') view.setTimeOfDay(st.timeOfDay);
+    const w = st.weather;
+    if (w && view.atmosphere) {
+      view.setDebug('snow', w.snow);
+      view.setDebug('fog', w.fog);
+      view.atmosphere.setFogAppearance({ opacity: w.fogOpacity, speed: w.fogSpeed });
+      view.atmosphere.setWindDirection(w.windDeg);
+    }
+  }
+  if (meta.palette) buildPalette();   // world.palette 已被 decode 换掉，刷新色槽排
+  const ui = meta.ui;                 // v5 尾段 4：工具/色槽/镜头/选中态/撤销栈随档回位
+  if (ui) {
+    if (ui.tool) setTool(ui.tool);
+    if (ui.colorIndex != null) { colorIndex = Math.min(ui.colorIndex, world.palette.colors.length - 1); refreshPalette(); }
+    if (ui.camera) {
+      const c = ui.camera;
+      view.target.set(c.target[0], c.target[1], c.target[2]);
+      view.yaw = c.yaw;
+      view.pitch = clamp(c.pitch, 0.1, 1.45);
+      view.distance = clamp(c.distance, 6, 90);
+      view.updateCamera();
+    }
+    if (ui.selection) { selection.set(ui.selection); refreshSelection({ prune: true }); }
+    if (ui.history) {
+      undoStack.length = 0; redoStack.length = 0; undoSel.length = 0; redoSel.length = 0;
+      for (const e of ui.history.undo) { undoStack.push(e.snapshot); undoSel.push(e.selection ?? []); }
+      for (const e of ui.history.redo) { redoStack.push(e.snapshot); redoSel.push(e.selection ?? []); }
+      sceneStart = 0;               // 入档历史即本岛建造史，回放从栈底放起
+      refreshUndo();
+    }
+  }
+}
 function scheduleHash() {
   clearTimeout(scheduleHash.t);
   scheduleHash.t = setTimeout(() => {
-    try { history.replaceState(null, '', location.pathname + location.search + '#' + encodeWorld(world, scene)); } catch { /* 忽略 */ }
+    try { history.replaceState(null, '', location.pathname + location.search + '#' + encodeWorld(world, scene, currentSaveMeta())); } catch { /* 忽略 */ }
   }, 350);
 }
 
@@ -330,7 +509,7 @@ view.onFrame = (dt) => battle.update(dt);
 let bnOn = false;
 function syncBadNorth() {
   if (scene === 'badnorth') {
-    applyBadNorthTheme(view, 'summer');
+    applyBadNorthTheme(view, bnThemeKey() ?? 'summer');   // 分享串带回的主题优先，没有再 summer
     // 北境没有云、海鸥、观光船、彩旗绳（官网截图里都没有）
     for (const k of ['clouds', 'birds', 'boats', 'wires', 'flags', 'butterflies']) view.setDebug(k, false);
     // 等植被 / 导航刷新完（view 里是 450 ms 的防抖）再开局
@@ -348,7 +527,7 @@ function syncBadNorth() {
 const params = new URLSearchParams(location.search);
 let restored = false;
 if (location.hash.length > 1) {
-  try { scene = decodeWorld(decodeURIComponent(location.hash.slice(1)), world); restored = true; } catch (err) { console.warn('存档读取失败：', err.message); }
+  try { scene = decodeWorld(decodeURIComponent(location.hash.slice(1)), world); applySaveMeta(world.saveMeta); restored = true; } catch (err) { console.warn('存档读取失败：', err.message); }
 }
 if (!restored) { scene = SCENES[params.get('scene')] ? params.get('scene') : 'town'; buildScene(world, scene, seed); }
 view.changed();
@@ -363,10 +542,11 @@ document.getElementById('undo').onclick = undo;
 document.getElementById('redo').onclick = redo;
 document.getElementById('replay').onclick = replay;
 document.getElementById('exportobj').onclick = async () => { const { downloadOBJ } = await import('../tools/objexport.js'); downloadOBJ(view.worldMesh.geometry, `town-${Date.now() % 1e6}.obj`); };
+document.getElementById('exportscene').onclick = async () => { const { downloadSceneOBJ } = await import('../tools/objexport.js'); downloadSceneOBJ(view, `town-scene-${Date.now() % 1e6}`); };
 document.getElementById('demo').onclick = () => { if (replaying) return; seed = (Math.random() * 1e6) | 0; loadScene(scene, true); toast(`新的${SCENES[scene].name}`); };
-document.getElementById('clear').onclick = () => { if (replaying) return; pushUndo(world.snapshot()); world.reset(); view.changed(); scheduleHash(); toast('已清空'); };
+document.getElementById('clear').onclick = () => { if (replaying) return; pushUndo(world.snapshot()); world.reset(); view.changed(); refreshSelection({ prune: true }); scheduleHash(); toast('已清空'); };
 document.getElementById('share').onclick = async () => {
-  const code = encodeWorld(world, scene);
+  const code = encodeWorld(world, scene, currentSaveMeta());
   const url = `${location.origin}${location.pathname}?grid=${gridKind}#${code}`;
   try { await navigator.clipboard.writeText(url); toast(`分享链接已复制（${code.length} 字符）`); } catch { toast('复制失败，链接已写入地址栏'); }
   history.replaceState(null, '', '#' + code);
@@ -402,17 +582,29 @@ const walk = mountWalkthrough({
 });
 if (params.get('walk')) walk.open();
 const setWallPalette=(colors)=>{if(replaying)return;world.palette=withPaletteColors(world.palette,colors);view.changed();buildPalette();};
-window.rea = { world, grid, gridKind, view, walk, setWallPalette, get battle() { return battle; }, loadScene: (s) => loadScene(s, true), get scene() { return scene; }, get replaying() { return replaying; }, encodeWorld, decodeWorld };
+window.rea = { world, grid, gridKind, view, walk, setWallPalette, selection: selectionApi, setTool, get battle() { return battle; }, loadScene: (s) => loadScene(s, true), get scene() { return scene; }, get replaying() { return replaying; }, encodeWorld, decodeWorld,
+  // 906416813810049025：洞内光照（world.caveLight）的只读读数 —— 每条隧道的洞口/洞身系数、被压暗的顶点数
+  caveLight: () => ({ plan: world.caveLight, report: caveLightReport(world.caveLight), shadedVerts: view.worldMesh.caveShadeVerts ?? 0, faceRejected: view.worldMesh.caveShadeStats?.rejected ?? 0 }) };
 
 mountEnvironmentPanel(view, { getScene: () => scene });
+// 1120036868966502401（第 161 轮）：`?gridwin=1` 打开「等距格 + 窗口补丁」调试层 ——
+// 选中态的补丁窗口要看见就先得有这张格网。**必须放在面板挂载之后**：学习面板/环境面板挂载时
+// 会按自己的勾选状态重放一遍 setDebug，提前打开会被它们改回 false（本轮实测：debugState.grid 变回 false，
+// 格线几何在、画面上一根都没有）。
+if (params.get('gridwin')) { view.setDebug('gridregular', true); view.setDebug('grid', true); }
 // 第 56 批 C03 · 807256278154301441 便宜的群体寻路（紫色螃蟹点沿屋顶/台阶成群走）：默认关，?crabs=1 打开
 // 第 56 批 C03 · 793545297376972801 多格 WFC 解写进共享 World（外观交给共享建筑管线）：默认关，?multitile=<种子> 打开
 if (params.get('multitile')) import('../build/multitile-world.js').then((m) => { window.rea.multitile = m.buildMultitileTower(world, index, { seed: Number(params.get('multitile')) || 3, size: [5, Number(params.get('mth')) || 8, 5] }); view.changed(); });
+// r201 · 807256278154301441 平顶平台档（多层砖塔每层顶面 = 平台 + 临空矮护墙 + 檐下白腰线 + 坐地烟囱）：
+// 片内没有一处坡顶/山墙，默认关（默认档几何与本档逐字节无关），?flatroof=1 打开
+if (params.get('flatroof') && params.get('flatroof') !== '0') { world.flatRoofs = true; world.touch(); view.worldMesh?.invalidate?.(); }
 if (params.get('crabs')) import('../life/crab-swarm.js').then((m) => { window.rea.crabs = m.attachCrabSwarm(view, world); });
 // 1246074663546916873 道具出现/消失弹簧动画（world/prop-anim-layer.js）：默认关，?propanim=1 打开
 if (params.get('propanim')) import('./prop-anim-layer.js').then((m) => { window.rea.propAnim = m.attachPropAnim(view, world); });
-// r56 C05·C：1205422438437273601 门窗模板挖洞（?punch=1）；1275089608758484992 教堂高拱龛（?churchDoors=1）；806904557502464000 运河拱桥（?canalBridges=1）——默认全关
-if (params.get('punch')) import('../render/opening-punch-layer.js').then((m) => { window.rea.punch = m.attachOpeningPunch(view); });
+// r56 C05·C：1205422438437273601 门窗模板挖洞 —— 第 132 轮起**主场景默认开**（片子里门窗就是 zbuffer 挖洞 + 洞侧壁，
+// 不是贴片；本仓门窗在 buildings.js 里只画了玻璃/门板一片薄面，默认关 = 全岛门窗都没有洞深），`?punch=0` 关档；
+// 1275089608758484992 教堂高拱龛（?churchDoors=1）；806904557502464000 运河拱桥（?canalBridges=1）——这两项默认仍关
+if (params.get('punch') !== '0') import('../render/opening-punch-layer.js').then((m) => { window.rea.punch = m.attachOpeningPunch(view); });
 for (const f of ['churchDoors', 'canalBridges']) if (params.get(f)) { world[f] = true; world.touch(); view.worldMesh?.invalidate?.(); }
 // 1371460793032716290 Palette.png 热重载（world/palette-png.js，C05 r56）：默认关，?palettePng=[url] 打开，下行 = 墙色槽
 if (params.get('palettePng') !== null) import('./palette-png.js').then((m) => { window.rea.palettePng = m.watchPalettePng(params.get('palettePng') || 'palettes/Palette.png', (row) => setWallPalette(world.palette.colors.map((c, i) => row[i] ?? c)), { getColors: () => world.palette.colors, wallRow: +(params.get('paletteRow') ?? 1) }); });
@@ -420,11 +612,23 @@ if (params.get('palettePng') !== null) import('./palette-png.js').then((m) => { 
 for (const f of ['steelFrame', 'yardWalls']) if (params.get(f)) { world[f] = true; world.touch(); view.worldMesh?.invalidate?.(); }
 if (params.get('yardanim')) import('./prop-anim-yard-r56.js').then((m) => { window.rea.yardAnim = m.attachYardPropAnim(view, world); });
 // r56 C06：图标工具条/倾斜菜单/实时存档串（?gameui=1）+ 拓扑直线手柄光标/连刷（?topoline=1）——ui/game-ui-c06.js，默认关
-if (params.get('gameui') || params.get('topoline')) import('../ui/game-ui-c06.js').then((m) => { window.rea.gameUI = m.mountGameUI({ world, grid, view, setTool, undo, redo, pushUndo, encodeWorld, decodeWorld, getScene: () => scene, scheduleHash }, { toolbar: !!params.get('gameui'), menu: !!params.get('gameui'), savestring: !!params.get('gameui'), topoline: !!params.get('topoline') }); });
+if (params.get('gameui') || params.get('topoline')) import('../ui/game-ui-c06.js').then((m) => { window.rea.gameUI = m.mountGameUI({ world, grid, view, setTool, undo, redo, pushUndo, encodeWorld: (w, s) => encodeWorld(w, s, currentSaveMeta()), decodeWorld: (s, w) => { const r = decodeWorld(s, w); applySaveMeta(w.saveMeta); return r; }, getScene: () => scene, scheduleHash, undoDepth: () => undoStack.length, redoDepth: () => redoStack.length }, { toolbar: !!params.get('gameui'), menu: !!params.get('gameui'), savestring: !!params.get('gameui'), topoline: !!params.get('topoline') }); });
 // r56 C06：1313837640366596096 完美环飞岛（?flying=1，默认关）：环内整列体素抬高 + 细腿 + 外沿小构件——world/flying-town-c06.js
 if (params.get('flying')) import('./flying-town-c06.js').then((m) => { window.rea.flying = m.attachFlyingTown(view, world, grid, { lift: Number(params.get('lift')) || 3, loop: Number(params.get('loop')) || 0 }); });
 // r56 C10：1849732997945110651 全局水面泡沫遮罩（?c10=foammask）+ 1664565063552847873 绕岛染料流（?c10=fluid）——world/view-c10.js，默认关
 if (params.get('c10')) import('./view-c10.js').then((m) => { window.rea.c10 = m.installC10(view, params.get('c10')); });
+// 1991099314714902634（545 帧·岸浪）：岸线白带**是分段的**（有浪的岸段亮、段间留缝、缝隙随时间扫过并胀缩），
+// 本仓原裙带沿全岸常亮 100% → 第 180 轮起默认分段，`?skirt=plain` 回旧档；强度/漂移可用 uniform 调
+if (params.get('skirt') === 'plain') view.skirtMaterial.uniforms.uSkirtBreak.value = 0;
+// 1260586697538113537 编辑特效层（撤销/重做/回放的弹出·水花·灰尘·音效错拍）：默认开，?editfx=0 整层关
+if (params.get('editfx') === '0') view.setDebug('editfx', false);
+// 1727324352264474664 快速转镜拖抹：拖尾长度档。默认钉子 32px（既有像素账不变）；
+// `?whiplen=auto` 改按本帧外圈位移自适应（片内快速转镜的拖影长到画面宽 1/3，慢转几乎为零），`?whiplen=<px>` 钉死。
+if (params.get('whiplen') !== null) {
+  const wl = params.get('whiplen');
+  view.smearCap = wl === 'auto' ? 0 : Math.max(1, Number(wl) || 32);
+  if (view.smearStats) view.smearStats.maxPx = view.smearCap === 0 ? 'auto' : view.smearCap;
+}
 
 // Keep HUD edits out of the read-only playback; the same button stops it.
 document.getElementById('hud').addEventListener('click', e => {

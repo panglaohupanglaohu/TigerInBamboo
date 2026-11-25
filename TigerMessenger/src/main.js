@@ -26,7 +26,8 @@ import {installSwampWhaleCalves} from './world/swampWhaleCalves.js';
 import {installSwampHarborScene} from './world/swampHarborScene.js';
 import {applySwampTargetPass} from './world/swampTargetPass.js';
 import {installSwampAirHaze} from './world/swampAirHaze.js';
-import {canyonOffsetDir as swampGuardCanyonOffset} from './world/canyon.js';
+import {CANYON, canyonOffsetDir as swampGuardCanyonOffset} from './world/canyon.js';
+import {latLonToDir as swampGuardLatLonToDir} from './world/sphereMath.js';
 import {citadelWalkLiftDir as swampGuardCitadelLift} from './world/citadelRange.js';
 import {createSwampCameraOccluders} from './world/swampCameraOcclusion.js';
 import {createTargetCityProductionOptions} from './world/citadel/targetCityProductionOptions.js';
@@ -61,7 +62,7 @@ import { Timer } from "three/addons/misc/Timer.js";
 import * as THREE from "three";
 import { createStage } from "./core/stage.js";
 import { createPerfProbe } from "./tools/perfProbe.js?v=remote-clearance-20261025";
-import { installUiLayers, setCaptureMode, isCaptureMode, onUiLayersChange } from "./ui/uiLayers.js?v=ui-layers-r4-release-edit";
+import { installUiLayers, setCaptureMode, isCaptureMode, onUiLayersChange } from "./ui/uiLayers.js?v=ui-layers-r5-scenejump";
 import { createSceneCensus } from "./tools/sceneCensus.js";
 import { createInput } from "./core/input.js";
 import { createCameraRig } from "./core/camera.js?v=airship-down15-20261025";
@@ -1736,7 +1737,10 @@ function batianTarget(id,label,object){
 scene.userData.batianBattleScope='sequential';scene.userData.batianCommandMode=true;
 const batianTargets=[batianTarget('bookshop','书店镇',entryBookshop),batianTarget('apostles','十二门徒',scene.getObjectByName('g30-far-mountain')),batianTarget('moss','苔庭',sceneHandles.find(h=>h.id==='saihoji')?.group||scene.getObjectByName('SaihojiSixScenes')),batianTarget('citadel','高山圣城',messenger.landmarks.odysseyCitadel),batianTarget('old-port','旧港湾',messenger.landmarks.oldHarbor?.root||messenger.landmarks.harbor),batianTarget('swamp','湖沼',messenger.landmarks.moebiusSwamp),batianTarget('moon-lake','月湖',messenger.moonLake?.group),batianTarget('gate','叹息之门',messenger.landmarks.abandonedGate)].filter(Boolean);
 // 系统工坊（pipeline.html）场景选择：只读暴露各场景的方向与根对象，用于镜头定位；不改场景
-globalThis.__tmSceneTargets=()=>{const list=batianTargets.map(t=>({id:t.id,label:t.label,dir:t.dir,root:t.surfaceRoot}));const crystal=messenger?.landmarks?.moebius?.group;if(crystal?.isObject3D&&!list.some(t=>t.id==='crystal'))list.push({id:'crystal',label:'水晶城',dir:crystal.getWorldPosition(new THREE.Vector3()).normalize(),root:crystal});return list;};
+// 水晶城 group 挂在原点（子级全是世界坐标），getWorldPosition 恒为 (0,0,0)——
+// 必须显式给谷心方向，否则建筑采样 / 镜头 / 游玩落点全退化。
+const crystalSceneDir=()=>swampGuardLatLonToDir(CANYON.lat,CANYON.lon,new THREE.Vector3());
+globalThis.__tmSceneTargets=()=>{const list=batianTargets.map(t=>({id:t.id,label:t.label,dir:t.dir,root:t.surfaceRoot}));const crystal=messenger?.landmarks?.moebius?.group;if(crystal?.isObject3D&&!list.some(t=>t.id==='crystal'))list.push({id:'crystal',label:'水晶城',dir:crystalSceneDir(),root:crystal});return list;};
 // 系统工坊「游玩检验」：非莫西斯湖场景先把玩家放到该场景附近的陆地上（与玩家物理同一套地面 / 水面采样），再由工坊回到玩家视角。
 // 只移动玩家，不改场景；载具上不移动。见 scene-authoring/playtest-target.js
 globalThis.__tmPlaytestAt=id=>{const t=globalThis.__tmSceneTargets().find(x=>x.id===id);if(!t?.dir)return {placed:false,id,reason:'找不到场景'};if(player.riding)return {placed:false,id,label:t.label,reason:'玩家在载具上'};
@@ -1931,19 +1935,22 @@ const baseCameraOccluders=(position,reach)=>[...(bookshopCameraOccluders?.(posit
 let robotOperations=null;
 let vikingBoarding=null,vikingCargoRide=null,vikingCampaign=null,vikingBoardingLoading=false,vikingMusterWanted=new URLSearchParams(location.search).get('vikingMuster')==='1',vikingAutoMusterArmed=new URLSearchParams(location.search).get('vikingAuto')!=='0';
 globalThis.__tmStartVikingMuster=()=>{vikingMusterWanted=true;return 'muster';};
-// 正式战役：估算距苔庭开战 ≤ 离港提前(10min)+集结预算(6min) 时自动集结（用户 2026-11-10：战前约 10 分钟离港；可跨铁轨）
+// 正式战役：估算距主战场开战 ≤ 离港提前(10min)+集结预算(6min) 时自动集结（用户 2026-11-10：战前约 10 分钟离港；可跨铁轨）
+// 2026-11-16 用户：维京战役主场从苔庭改到十二门徒（resolveVikingSite：?vikingSite=moss 可切回）。
 let vikingVoyageTimingMod=null,vikingAutoMusterCheckAt=0;
-// 2026-11-10 用户：霸天出征顺序改为 书店镇→十二门徒→苔庭→高山圣城→…（苔庭在圣城前，维京人与霸天同场打圣城）。
-// 霸天下一站是苔庭时，等维京船队到苔庭锚地（hold-moss 或之后）才出征，保证维京人在苔庭开战前已到控制位；兜底 20 分钟。?vikingAuto=0 且未手动集结时不等。
+const vikingBattleSiteParam=new URLSearchParams(location.search).get('vikingSite')==='moss'?'moss':'apostles';
+// 2026-11-10 用户：霸天出征顺序改为 书店镇→十二门徒→苔庭→高山圣城→…；2026-11-16 维京主战场改十二门徒（霸天顺序里本来就在苔庭前，窗口更顺）。
+// 霸天下一站是主战场（默认十二门徒）时，等维京船队到锚地（hold-<site> 或之后）才出征，保证维京人在主战场开战前已到控制位；兜底 20 分钟。?vikingAuto=0 且未手动集结时不等。
 let batianMossWaitSince=0;
 function batianMossGate(){
   try{
     if(!vikingAutoMusterArmed&&!vikingCampaign&&!vikingMusterWanted)return true;
     const done=batianFleet?.snapshot?.().completedTargets||[];
     const next=batianTargets.find(t=>!done.includes(t.id));
-    if(next?.id!=='moss'){batianMossWaitSince=0;return true;}
+    const site=vikingCampaign?.battleSite||vikingBattleSiteParam;
+    if(next?.id!==site){batianMossWaitSince=0;return true;}
     const ph=vikingCampaign?.phase;
-    if(ph&&ph!=='muster'&&ph!=='sail-moss')return true;
+    if(ph&&ph!=='muster'&&ph!=='sail-'+site)return true;
     batianMossWaitSince||=performance.now();
     return performance.now()-batianMossWaitSince>20*60*1000;
   }catch{return true;}
@@ -1955,13 +1962,13 @@ async function maybeAutoVikingMuster(nowMs){
   vikingAutoMusterCheckAt=(nowMs||performance.now())+2000; // 每 2 s 估一次
   try{
     vikingVoyageTimingMod ||= await import('./world/vikings/vikingVoyage.js');
-    const { estimateMossBattleEtaSec, VOYAGE_TIMING, scheduleBeforeMoss } = vikingVoyageTimingMod;
-    const eta = estimateMossBattleEtaSec(batianFleet.snapshot(), batianTargets, VOYAGE_TIMING);
+    const { estimateSiteBattleEtaSec, VOYAGE_TIMING, scheduleBeforeBattle } = vikingVoyageTimingMod;
+    const eta = estimateSiteBattleEtaSec(batianFleet.snapshot(), batianTargets, VOYAGE_TIMING, vikingBattleSiteParam);
     if(eta==null)return;
     const need = VOYAGE_TIMING.departBeforeMossSec + VOYAGE_TIMING.musterBudgetSec; // 600+360=960s
     if(eta <= need){
       vikingMusterWanted=true;
-      console.info('[vikingMuster] auto-start', scheduleBeforeMoss(eta), { eta, need });
+      console.info('[vikingMuster] auto-start', scheduleBeforeBattle(eta), { eta, need, site: vikingBattleSiteParam });
     }
   }catch(e){ console.warn('[vikingMuster-auto]', e); }
 }
@@ -2103,10 +2110,17 @@ function samplePlayerLocalGround(position){
   // Other authored regions have older radial support providers. They must not
   // fill the lake excavation after a lower tread passes below their height.
   if(swampOwnsPhysics(position))return sampleSwampStairGround(swampGroundZone,position) ?? sampleSwampAuthoredGround(swampGroundZone,position) ?? sampleSwampGround(position) ?? -Infinity;
-  return targetCityPlayerNavigation?.ground(position) ?? highlandGateRuntime?.userData.sampleGroundRadius?.(position) ?? sampleSwampStairGround(swampGroundZone,position) ?? sampleSwampAuthoredGround(swampGroundZone,position) ?? swampWalkAidGround(position) ?? sampleSwampRimGround(swampGroundZone,position) ?? messenger?.landmarks?.moebius?.v7Shores?.userData.sampleGroundRadius(position) ?? junctionPlayerSupport.ground(position) ?? gatePlayerGround(position) ?? (targetCityPlayerNavigation ? null : citadelPlayerGround?.(position)) ?? sampleSwampGround(position);
+  return mountainGroundOverride(position, targetCityPlayerNavigation?.ground(position) ?? highlandGateRuntime?.userData.sampleGroundRadius?.(position) ?? sampleSwampStairGround(swampGroundZone,position) ?? sampleSwampAuthoredGround(swampGroundZone,position) ?? swampWalkAidGround(position) ?? sampleSwampRimGround(swampGroundZone,position) ?? messenger?.landmarks?.moebius?.v7Shores?.userData.sampleGroundRadius(position) ?? junctionPlayerSupport.ground(position) ?? gatePlayerGround(position) ?? (targetCityPlayerNavigation ? null : citadelPlayerGround?.(position)) ?? sampleSwampGround(position));
 }
 function sampleSwampGround(position) {
   return swampGroundZone?.userData?.sampleGroundRadius(position) ?? null;
+}
+// R25 山形管线：工坊预览 / 采用的高山圣城山形接管自由地形格的玩家地面（world/rea/mountainCandidate.js installGround）；
+// 没有预览、对照原样或不在山形网格里时原样返回 base。建筑 / 轨道格仍以原地面链为准。
+function mountainGroundOverride(position, base) {
+  const override = globalThis.__tmMountainGround;
+  if (typeof override !== 'function') return base;
+  try { const r = override(position, base); return r == null || Number.isFinite(r) ? r : base; } catch { return base; }
 }
 
 let citadelBgmCity=null;
@@ -2288,14 +2302,16 @@ try{const ink=installCitadelInkOutline({scene,castle:messenger?.landmarks?.odyss
   // transforms before player visuals and the camera are synchronized.
   if (tramRide.isRiding()) tramRide.update(0);
   robotOperations?.update(dt);
-  // 维京远征：?vikingMuster=1 / __tmStartVikingMuster()；正式战役下距苔庭开战 ≤16 分钟自动集结（离港=战前10分钟）
+  // 维京远征：?vikingMuster=1 / __tmStartVikingMuster()；正式战役下距主战场（默认十二门徒，?vikingSite=moss 切回苔庭）开战 ≤16 分钟自动集结（离港=战前10分钟）
   maybeAutoVikingMuster(performance.now());
   if(vikingMusterWanted&&!vikingBoarding&&!vikingBoardingLoading&&robotOperations?.pedestrians){vikingBoardingLoading=true;import('./world/vikings/bookshopBoarding.js').then(m=>{const get=n=>{let hit=null;scene.traverse(o=>{if(!hit&&o.name===n&&o.visible)hit=o;});return hit;};vikingBoarding=m.createBookshopBoarding({scene,pedestrians:robotOperations.pedestrians,duke:get('duke-coastal-steam-freighter'),leebai:get('bookshop-steam-parts-freighter'),dukeGangway:get('duke-gangway'),onDepart:()=>{if(vikingCargoRide)vikingCargoRide.departed=true;}}).start();import('./world/vikings/campaignDirector.js').then(c=>{vikingCampaign=c.createVikingCampaign({scene,camera,boarding:vikingBoarding,targets:()=>globalThis.__tmSceneTargets?.()||[],getFleet:()=>batianFleet,syncBatian:new URLSearchParams(location.search).get('vikingSyncBatian')!=='0'});}).catch(e=>console.warn('[vikingCampaign]',e));return import('./player/cargoRide.js').then(c=>{vikingCargoRide=c.createCargoRide({player,scene,cargo:get('harbor-suspended-cargo'),trolley:get('harbor-cargo-trolley'),leebai:get('bookshop-steam-parts-freighter'),duke:get('duke-coastal-steam-freighter'),dukeGangway:get('duke-gangway'),isMustering:()=>!!vikingBoarding?.active&&!vikingBoarding.departed,toast:showToast});});}).catch(e=>console.warn('[vikingBoarding]',e));}
   vikingBoarding?.update(dt);
   vikingCargoRide?.update(dt);
   vikingCampaign?.update(dt);
-  // 场景战役（?battleAt=apostles）：把 Bad North 玩法层接到任意已注册场景，只在该参数下生效
-  if(globalThis.__tmBattleAt===undefined)globalThis.__tmBattleAt=new URLSearchParams(location.search).get('battleAt');
+  // 场景战役（?battleAt=apostles）：把 Bad North 玩法层接到任意已注册场景。
+  // 无参数时按工坊已采用的作战计划自动部署（battle.commit 写入 tm.battle.adopted.v1:<场景>）。
+  if(globalThis.__tmBattleAt===undefined){globalThis.__tmBattleAt=new URLSearchParams(location.search).get('battleAt');
+    if(!globalThis.__tmBattleAt){try{for(const id of['apostles','moss','citadel','bookshop'])if(localStorage.getItem('tm.battle.adopted.v1:'+id)){globalThis.__tmBattleAt=id;break;}globalThis.__tmBattleAt||=null;}catch{globalThis.__tmBattleAt=null;}}}
   if(globalThis.__tmBattleAt&&!globalThis.__tmBattleStarted&&globalThis.__tmStartup?.status==='ready'){globalThis.__tmBattleStarted=true;import('./world/rea/sceneBattle.js').then(m=>{const r=m.startSceneBattle({scene,camera,id:globalThis.__tmBattleAt,scale:new URLSearchParams(location.search).get('battleScale'),gridRadius:new URLSearchParams(location.search).get('battleRadius')});if(r?.ok&&r.focus&&!player.riding&&new URLSearchParams(location.search).get('battleFocus')!=='0'){const bp=new THREE.Vector3().fromArray(r.focus);player.position.copy(bp);player.velocity.set(0,0,0);player.onGround=true;player.groundR=bp.length();player.checkpoint?.copy(bp);playerGroup.position.copy(bp);}}).catch(e=>console.warn('[sceneBattle]',e));}
   frameCpuMark("robotsAndGuardian");
   robotGreeting.update();
@@ -2717,3 +2733,18 @@ window.__tm = {
   setCaptureMode, // CartonBook / 截屏：隐藏全部 HUD·菜单；?cartonCapture=1 等价
   isCaptureMode,
 };
+// R28 山形：用户在工坊里点过「采用」（本机 v2 记录）才会自动换上；没有采用记录 = 原山形。?mountainAdopted=0 本次不换。
+import('./world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.autoDeployAdoptedMountain({getScene:()=>scene})).catch(e=>console.warn('[mountain-auto] 山形自动部署模块加载失败',e));
+// R-A6 / P-R57-01 建筑自动摆上：采用记录里 autoDeploy=true（默认总栏「进游戏自动摆上」写的）才摆；
+// 站在山形候选上算的布局会等山形自动部署并对指纹；不一致 / 失败只写 __tmBuildingAuto_<id>，不碰场景。
+import('./world/rea/buildingCandidate.js?v=building-r1').then(m=>{for(const id of m.BUILDING_SCENES||['citadel','crystal']){let rec=null;try{rec=JSON.parse(localStorage.getItem('tm.building.adopted.v1:'+id)||'null');}catch{}if(rec?.autoDeploy)m.autoDeployAdoptedBuilding({getScene:()=>scene,id});}}).catch(e=>console.warn('[building-auto] 建筑自动摆上模块加载失败',e));
+// R-A4 通用默认加载钩子：启动时对 tm.defaults.v1 里每个有记录的场景跑一遍一致性核对（只读登记与层记录，不改任何东西；
+// 进场景后工坊可用 defaults.apply 重跑）。结果在 globalThis.__tmDefaultsHook。
+import('./world/rea/defaultsHook.js?v=defaults-r2').then(async m=>{
+  try {
+    const { listAll } = await import('./system-workshop/defaults.js?v=defaults-r2');
+    const scenes = [...new Set(Object.keys(listAll(localStorage)).map((k) => k.slice(0, k.indexOf(':'))))];
+    for (const s of scenes) m.applyDefaultsForScene(s);
+    console.info('[defaults-hook]', JSON.stringify(globalThis.__tmDefaultsHook?.results || {}));
+  } catch (e) { console.warn('[defaults-hook] 默认登记核对失败', e); }
+}).catch(e=>console.warn('[defaults-hook] 模块加载失败',e));

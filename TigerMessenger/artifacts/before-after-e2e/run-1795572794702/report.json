@@ -1,0 +1,69 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/before-after-e2e/run-1795572794702",
+  "steps": {
+    "scan": "扫描完成：6 / 6 个能力能作用。 已按「高山圣城」自动预装 6 个能力（保护带、山体隆起、沟谷侵蚀、连绵圆润 等），点 ▶ 执行管线一键跑完整条。",
+    "panels": {
+      "mountain": 1,
+      "building": 1
+    },
+    "run": {
+      "h4": "候选 · 通过（需留意）"
+    },
+    "compareHook": {
+      "afterRun": {
+        "previewing": true,
+        "comparing": false
+      },
+      "compareOn": true,
+      "compareOff": false
+    },
+    "entry": {
+      "layer": "mountain",
+      "scene": "citadel",
+      "candidate": "mountain-mwvhqa9f",
+      "steps": [
+        "mountain.protect",
+        "mountain.massif",
+        "mountain.erode",
+        "mountain.rolling",
+        "mountain.talus",
+        "mountain.lowpoly"
+      ],
+      "verify": "warn",
+      "diff": {
+        "mean": 0.004,
+        "changed": 0.017,
+        "pixels": 43008
+      },
+      "pose": "当前镜头",
+      "beforeLen": 662410,
+      "afterLen": 658354
+    },
+    "pixelDiff": {
+      "status": "PASS",
+      "mean": 0.004,
+      "changed": 0.017,
+      "pixels": 43008
+    },
+    "endState": {
+      "previewing": true
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "1-candidate-preview.png",
+    "ba-1-before-original.png",
+    "ba-2-after-candidate.png",
+    "3-ba-panel-pair.png",
+    "4-after-shoot-state.png"
+  ],
+  "pass": true
+}

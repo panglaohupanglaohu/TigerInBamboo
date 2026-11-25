@@ -1,4 +1,4 @@
-// 第 55 批 G1：十二个着色模块接 View 主材质（src/world/view-shading.js）。node 里验证：
+// 第 55 批 G1：着色模块接 View 主材质（src/world/view-shading.js；现 13 键，fieldplots 为 1798310423554658732 批后加入）。node 里验证：
 // onBeforeCompile 链式补丁（不吃掉 View 自己的补丁、锚点都在）、每个开关的烘焙数据（共享 World）、
 // uniform 开关、World 编辑后按 version 重烘、体素场开关临时关 CPU 烘焙并恢复、体素软法线写回/还原、
 // 扩展纹理阴影（贴形变网格 + 洞内地面 + 竖面）、色体角点编辑、?shade= 解析。GLSL 编译在浏览器里验（shots-r55/g1-*）。
@@ -31,7 +31,7 @@ const view = { town: world, index, levelHeight: 0.5, material, sunDir: new THREE
   mesh: { geometry: wm.geometry }, worldMesh: { get bake() { return wm.bake; }, set bake(v) { wm.bake = v; }, invalidate() { invalidated++; }, get shape() { return wm.shape; } } };
 view.groundSurfaceShadow = new GroundSurfaceShadow(view);
 const sx = new ShadingExtras(view);
-assert.equal(SHADING_KEYS.length, 12);
+assert.equal(SHADING_KEYS.length, 13);   // 12 个第 55 批开关 + fieldplots（1798310423554658732 批次后加入）
 
 // ① 着色器补丁：链在 View 的补丁之后，View 的修改保留，所有锚点替换到位
 const shader = { uniforms: {}, vertexShader: THREE.ShaderLib.standard.vertexShader, fragmentShader: THREE.ShaderLib.standard.fragmentShader };

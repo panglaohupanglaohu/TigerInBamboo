@@ -1,6 +1,7 @@
 <!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>重心坐标教学 gizmo · 真实 World · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:0;font:14px system-ui;background:#eef2f2;color:#20343c}header{padding:10px 14px}iframe{width:100%;height:calc(100vh - 150px);border:0}label{margin-right:12px}input[type=range]{width:110px;vertical-align:middle}code{background:#dde7e6;padding:0 4px;border-radius:4px}#st{font:12px ui-monospace,monospace}</style>
 <header><b>重心坐标 gizmo · 974564862729838592 / 974579499802202113</b> · <a href="index.html" target="_top">首页</a> · <a href="grids.html?t=infinite">无限网格里的 XZ 预计算</a> · <a href="artifacts/coverage/r56-C04-bn-world.md">本批报告</a>
-<p style="margin:4px 0">真实共享 World 里一格的导航三角（白边）；白球 = 查询点（RGB 箭头），小白点 = 它在三角面上的投影；红/绿/蓝线与顶点球大小 = 三个权重（暗 = 负权重，点在三角形外）。权重由 <code>baryPrep3</code> 预算的两条对偶向量得到：<b>1 次减法 + 每坐标 1 次点积</b>，每帧与 Cramer 对账。</p>
+<p style="margin:4px 0">真实共享 World 里一格的导航三角（白边）；白球 = 查询点（RGB 箭头），小白点 = 它在三角面上的投影；红/绿/蓝线与顶点球大小 = 三个权重（暗 = 负权重，点在三角形外）。权重由 <code>baryPrep3</code> 预算的两条对偶向量得到：<b>1 次减法 + 每坐标 1 次点积</b>，每帧与 Cramer 对账。
+<b>交互（照片子里一直按在白球上的光标）</b>：直接在下面的画面里拖白球 = 改 u/v（可拖出三角形、露出负权重），拖第三个顶点 = 把三角形拉窄 / 张开。</p>
 <label><input id="auto" type="checkbox" checked>自动绕行</label><label>u <input id="u" type="range" min="-0.6" max="1.4" step="0.01" value="0.3"></label><label>v <input id="v" type="range" min="-0.6" max="1.4" step="0.01" value="0.3"></label><label>离面高 h <input id="h" type="range" min="0" max="0.8" step="0.01" value="0.2"></label><label>张开 <input id="spread" type="range" min="0.3" max="1.8" step="0.01" value="1"></label><button id="mixed">混合网格</button><button id="quad">四边网格</button>
 <div id="st">加载…</div></header><iframe id="scene"></iframe><script type="module">
 const $ = (s) => document.querySelector(s), q = new URLSearchParams(location.search), f = $('#scene');
@@ -9,15 +10,55 @@ f.src = 'index.html?scene=terrain&grid=' + grid;
 for (const g of ['mixed', 'quad']) $('#' + g).onclick = () => { location.search = '?grid=' + g; };
 if (q.get('u') !== null) { $('#auto').checked = false; for (const k of ['u', 'v', 'h', 'spread']) if (q.get(k) !== null) $('#' + k).value = q.get(k); }
 let gizmo = null;
+/* 原片那种"整片地被三角网铺满"的背景：把 gizmo 格附近的格的扇三角边画成深色线。
+   本仓世界本来就是一格一扇三角（四边格 = 4 角 2 三角，混合网格还有 3 角格），所以直接数格画边即可。 */
+function cellWire(r, THREE, c, radius = 6.5) {
+  const v = r.view, L = v.levelHeight, pts = [];
+  for (const o of r.world.cells) {
+    if (Math.hypot(o.cx - c.cx, o.cz - c.cz) > radius || r.world.top(o) !== r.world.top(c)) continue;
+    const y = r.world.top(o) * L + .012, p = o.pts.map((pt) => [pt.x, y, pt.z]);
+    for (let i = 0; i < o.n; i++) { const a = p[i], b = p[(i + 1) % o.n]; pts.push(...a, ...b); if (o.n > 3) pts.push(...a, ...p[(i + 2) % o.n]); }
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+  const m = new THREE.LineBasicMaterial({ color: 0x2a2f3a, transparent: true, opacity: .34, depthTest: false, depthWrite: false });
+  const l = new THREE.LineSegments(g, m); l.renderOrder = 3; l.frustumCulled = false;
+  l.name = 'cellWire'; l.userData.cells = pts.length / 6;
+  return l;
+}
 async function boot() {
   const r = f.contentWindow?.rea; if (!r?.view?.worldMesh || !r.world.cells.some((c) => r.world.top(c) > 0)) return setTimeout(boot, 300);
-  const m = await f.contentWindow.Function('return import("./src/world/bary-gizmo.js")')();
+  const w = f.contentWindow, doc = w.document;
+  const m = await w.Function('return import("./src/world/bary-gizmo.js")')();
+  const THREE = await w.Function('return import("./vendor/three.module.js")')();
   gizmo = new m.BaryGizmo(r.view, r.world);
   const v = r.view, c = gizmo.cell; v.target.set(c.cx, r.world.top(c) * v.levelHeight + .2, c.cz); v.distance = +(q.get('dist') ?? 3.2); v.pitch = +(q.get('pitch') ?? .62); v.updateCamera();
-  f.contentWindow.document.querySelectorAll('details').forEach((d) => (d.open = false));
-  if (q.get('clean') !== '0') { v.setDebug('vegetation', false); }   // 植被会挡住 gizmo（白球白线在白模上看不见，所以不开只看光照）
-  const prev = v.onFrame; v.onFrame = (dt) => { prev?.(dt); if ($('#auto').checked) { gizmo.manual = null; gizmo.update(dt); } else gizmo.set({ u: +$('#u').value, v: +$('#v').value, h: +$('#h').value, spread: +$('#spread').value }); const s = gizmo.stats; $('#st').textContent = `格 ${s.cell} · w = [${s.w.join(', ')}] · Σ=${(s.w[0] + s.w[1] + s.w[2]).toFixed(4)} · ${s.inside ? '三角形内' : '三角形外（有负权重）'} · 离面 ${s.height} · 与 Cramer 差 ${s.cramerErr.toExponential(1)} · 运算 ${s.ops.sub} 减 + ${s.ops.dotPerWeight} 点积/坐标`; };
-  window.baryGizmoReview = { rea: r, gizmo };
+  doc.querySelectorAll('details').forEach((d) => (d.open = false));
+  if (q.get('clean') !== '0') v.setDebug('vegetation', false);          // 植被会挡住 gizmo（白模上看不见白球白线）
+  if (q.get('hud') === '0') { const s = doc.createElement('style'); s.textContent = 'body *{visibility:hidden!important} #view,#view *{visibility:visible!important}'; doc.head.append(s); }
+  if (q.get("wire") !== "0") { const wl = cellWire(r, THREE, c, +(q.get('wireR') ?? 6.5)); v.scene.add(wl); window.baryGizmoWire = wl; }
+  // 片子里光标一直按在白球上 → 真指针拖拽（抓球改 u/v，抓第三顶点改 spread）
+  const canvas = doc.getElementById('view');
+  gizmo.onDragStart = () => { $('#auto').checked = false; };
+  // 拖完把滑杆同步成"拖出来的参数"——否则下一帧滑杆的旧值会把结果覆盖回去（headless 帧率低时必现）
+  gizmo.onDragEnd = (p) => { for (const k of ['u', 'v', 'h', 'spread']) $('#' + k).value = p[k]; };
+  gizmo.attach(canvas);
+  // 世界是异步生成的，boot 之后还会 fit 一次相机 → 机位每帧钉住（否则 dist 被重置成"全岛视角"，
+  // 三角形只剩几十像素，白球升 0.6 也看不出来）
+  const dist = +(q.get('dist') ?? 3.4), pitch = +(q.get('pitch') ?? .72);
+  // 世界异步生成 + app 自己也会 fit 相机，onFrame 里争不过 → 直接按 120ms 钉一次机位
+  window.baryGizmoCamPin = setInterval(() => { const vv = r.view; if (Math.abs(vv.distance - dist) > 1e-6 || Math.abs(vv.pitch - pitch) > 1e-6) { vv.distance = dist; vv.pitch = pitch; vv.updateCamera(); } }, 120);
+  const prev = v.onFrame; v.onFrame = (dt) => {
+    prev?.(dt);
+    if (Math.abs(v.distance - dist) > 1e-6 || Math.abs(v.pitch - pitch) > 1e-6) { v.distance = dist; v.pitch = pitch; v.target.set(c.cx, r.world.top(c) * v.levelHeight + .2, c.cz); v.updateCamera(); }
+    if ($('#auto').checked) { gizmo.manual = null; gizmo.update(dt); }
+    else if (gizmo.drag) { const p = gizmo.params(); for (const k of ['u', 'v', 'h', 'spread']) $('#' + k).value = p[k]; }   // 拖动时滑杆跟手（别把拖出来的值覆盖回去）
+    else gizmo.set({ u: +$('#u').value, v: +$('#v').value, h: +$('#h').value, spread: +$('#spread').value });
+    const s = gizmo.stats;
+    $('#st').textContent = `格 ${s.cell} · u=${s.u} v=${s.v} h=${s.h} 张开=${s.spread} · w = [${s.w.join(', ')}] · Σ=${(s.w[0] + s.w[1] + s.w[2]).toFixed(4)} · ${s.inside ? '三角形内' : '三角形外（有负权重）'} · 离面 ${s.height} · 面积 ${s.area} · 与 Cramer 差 ${s.cramerErr.toExponential(1)} · 运算 ${s.ops.sub} 减 + ${s.ops.dotPerWeight} 点积/坐标` + (s.drag ? ` · 拖拽 ${s.drag.mode} 起${s.drag.starts}/移${s.drag.moves}/收${s.drag.ends ?? 0}` : '');
+  };
+  window.baryGizmoReview = { rea: r, gizmo, THREE, gizmoState: m.gizmoState, triArea: m.triArea, params: () => gizmo.params(), state: () => gizmo.state() };
 }
 f.onload = () => setTimeout(boot, 500);
+// iframe 命中缓存时 onload 可能在脚本之前就烧掉了 → 这里补一次（曾经的"页面偶发不启动"根因）
+if (f.contentWindow?.rea) setTimeout(boot, 500), setTimeout(boot, 1500);
 </script></html>

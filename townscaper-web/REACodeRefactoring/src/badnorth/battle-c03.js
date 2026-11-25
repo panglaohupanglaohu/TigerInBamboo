@@ -10,7 +10,9 @@
  *   plunge   995034777756536833：指挥官能力 Plunge——底部三颗圆形能力键（亮的那颗带冷却环），施放先做目标校验：
  *            目标点附近没有敌人 → 顶部黑条「No valid targets」，不进冷却；有 → 全队跃起落到目标，落地一圈白色冲击环 + 范围伤害。
  *   confirm  1016680972610359298「This is what the confirm popup looks like」：选中小队后点地面不再立刻走——
- *            空地：目标处一个 Move 确认（+ 地面标记）；目标处已有别的小队：Select / Move / Swap 三项横排。Swap = 两队互换阵地。
+ *            空地：目标处一个 Move 确认（+ 地面标记环）；目标处已有别的小队：Select / Move / Swap 三项横排。Swap = 两队互换阵地。
+ *            确认经 confirmAction 重放 battle.onPointer 原点击——和直接下令走同一条 navigation.pick/plan → goal/goalFloor 路径；
+ *            Esc / cancelPopup() 取消（不下令），弹窗期间的队伍阵亡或被顶替自动收。
  *   distIso  902103473365417984「Distances this time」：沿**渲染网格表面**（台地 + 崖壁 + 台阶，三维）从海平面做测地距离，
  *            按等间距抽等值线（marching triangles），线会爬上崖壁、绕过小屋——不是逐层平面距离场。
  *   tierUp   827215002448846848「Looking at unit tiers」：小队守住一波 → 升一级（unit-tier 色阶：蓝灰→银白→金），三级加金色盔饰。
@@ -58,7 +60,7 @@ export class BattleC03 {
     this.#dropSmokes(true); this.#restoreChar();
     if (this.isoLines) { this.group.remove(this.isoLines); this.isoLines.geometry.dispose(); this.isoLines = null; }
     if (this.banner) { this.group.remove(this.banner); this.banner = null; }
-    this.#closePopup(); this.hud?.remove(); this.hud = null; this.toastEl?.remove(); this.toastEl = null;
+    this.#closePopup(); this.#dropEsc(); this.hud?.remove(); this.hud = null; this.toastEl?.remove(); this.toastEl = null;
     for (const f of this.flairs) f.el.remove(); this.flairs = [];
     this.crests.count = 0; this.sparkPoints.geometry.setDrawRange(0, 0);
   }
@@ -68,6 +70,7 @@ export class BattleC03 {
     if (this.on.kpow) this.#ensureBanner(); else if (this.banner) this.banner.visible = false;
     if (this.on.plunge) this.#ensureHud(); else if (this.hud) this.hud.style.display = 'none';
     if (!this.on.confirm) this.#closePopup();
+    if (this.on.confirm) this.#ensureEsc(); else this.#dropEsc();
     if (!this.on.tierUp) this.crests.count = 0;
   }
 
@@ -207,12 +210,23 @@ export class BattleC03 {
     if (!hasDom()) return;
     if (this.hud) { this.hud.style.display = 'flex'; return; }
     const el = document.createElement('div');
-    el.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:7;display:flex;gap:16px;align-items:flex-end;font:600 12px/1 system-ui,-apple-system,"PingFang SC",sans-serif';
+    // bottom:72px —— 本仓 index.html 页脚本来就有一条白色工具条（撤销/旋转/重铸那几个键）占着 bottom 18px；
+    // 片子里的能力键虽然贴到画幅下沿，但把三条键压在自家工具条上既读不清也会挡住工具条的点击，
+    // 所以抬高到工具条之上，容器 pointer-events:none、只有可点的键收事件（不再吞掉页脚点击）。
+    el.style.cssText = 'position:fixed;left:50%;bottom:72px;transform:translateX(-50%);z-index:7;display:flex;gap:16px;align-items:flex-end;pointer-events:none;font:600 12px/1 system-ui,-apple-system,"PingFang SC",sans-serif';
+    // 995034777756536833（第 195 轮）：片 0200 的底部裁切（artifacts/coverage/995034777756536833-ui-crop.png）
+    // 里那份形制是「牌在上、钮在下」—— 名字牌挂在亮键**上方**并带一枚朝下的小三角指针，
+    // 亮键外面套一圈**黄色高亮环**（比冷白色描边还粗）。原来名字常驻在钮下方、没有高亮环，
+    // 于是「哪一颗被选中」只能靠冷却弧变白来猜。这里补齐：标签默认隐藏（片里另两颗钮没有牌），
+    // 高亮环 `.hl` 只在 armed 时露出来。
     const slot = (key, label, color, enabled) => {
-      const d = document.createElement('div'); d.style.cssText = `display:flex;flex-direction:column;align-items:center;gap:5px;opacity:${enabled ? 1 : .45};cursor:${enabled ? 'pointer' : 'default'}`;
-      d.innerHTML = `<svg width="58" height="58" viewBox="0 0 58 58"><circle cx="29" cy="29" r="25" fill="${color}" stroke="#f4eee0" stroke-width="3"/><path d="M29 14 L36 33 L29 29 L22 33 Z" fill="#fff" opacity=".92"/><circle class="cd" cx="29" cy="29" r="27" fill="none" stroke="#ffd34d" stroke-width="3.5" stroke-dasharray="169.6" stroke-dashoffset="0" transform="rotate(-90 29 29)" opacity="0"/></svg><span style="background:#1b1d22;color:#fff;padding:3px 6px;border-radius:3px">${label}</span>`;
+      const d = document.createElement('div');
+      d.style.cssText = `display:flex;flex-direction:column-reverse;align-items:center;gap:6px;opacity:${enabled ? 1 : .45};cursor:${enabled ? 'pointer' : 'default'};pointer-events:${enabled ? 'auto' : 'none'}`;
+      d.dataset.ability = key; d.dataset.enabled = enabled ? '1' : '0';
+      d.innerHTML = `<svg width="58" height="58" viewBox="0 0 58 58"><circle cx="29" cy="29" r="25" fill="${color}" stroke="#f4eee0" stroke-width="3"/><path d="M29 14 L36 33 L29 29 L22 33 Z" fill="#fff" opacity=".92"/><circle class="hl" cx="29" cy="29" r="27.5" fill="none" stroke="#ffd34d" stroke-width="3" opacity="0"/><circle class="cd" cx="29" cy="29" r="27" fill="none" stroke="#ffd34d" stroke-width="3.5" stroke-dasharray="169.6" stroke-dashoffset="0" transform="rotate(-90 29 29)" opacity="0"/></svg>`
+        + `<span class="tag" style="display:none;position:relative;background:#2a2118;color:#fff;padding:4px 9px;border-radius:2px;font:600 12px/1 system-ui,-apple-system,'PingFang SC',sans-serif;white-space:nowrap">${label}<i style="position:absolute;left:50%;bottom:-5px;transform:translateX(-50%);width:0;height:0;border:5px solid transparent;border-top-color:#2a2118;border-bottom:0"></i></span>`;
       if (enabled) d.addEventListener('pointerdown', (ev) => { ev.stopPropagation(); ev.preventDefault(); this.arm(); });
-      if (d.dataset) d.dataset.ability = key; el.appendChild(d); return d;
+      el.appendChild(d); return d;
     };
     this.slotPlunge = slot('plunge', 'Plunge', '#8a4fc0', true); slot('volley', 'Volley', '#4f6f8f', false); slot('brace', 'Brace', '#4f6f8f', false);
     document.body.appendChild(el); this.hud = el;
@@ -222,7 +236,37 @@ export class BattleC03 {
     if (!this.toastEl) { const t = document.createElement('div'); t.style.cssText = 'position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:8;background:#111;color:#fff;font:600 14px/1 system-ui,sans-serif;padding:7px 120px;border-radius:2px;pointer-events:none;display:none'; document.body.appendChild(t); this.toastEl = t; }
     this.toastEl.textContent = msg; this.toastEl.style.display = 'block'; this.toast = { msg, t: secs };
   }
-  arm() { if (!this.on.plunge || this.cooldown > 0) return false; this.armed = true; this.b.scale = .15; return true; }
+  arm() {
+    if (!this.on.plunge || this.cooldown > 0) return false;
+    this.armed = true; this.b.scale = .15;
+    // 片 0200 里「黄圈高亮」与顶部黑条「No valid targets」是同一时刻的两件事：
+    // 亮键即进入目标选择态，附近没敌人就当场出条，而不是等玩家点地面才提示（原来只在地面点击里提示）。
+    if (!this.plungeHasTargets()) { this.stats.noTargets++; this.#toast('No valid targets'); }
+    return true;
+  }
+  /** 与 castPlunge 同一判定口径（range 内有无敌方活口），只读：arm 时就地校验用。 */
+  plungeHasTargets(sq = null, range = 3.6) {
+    const b = this.b;
+    const target = sq ?? b.selected ?? b.squads.find((s) => s.alive && !s.archer);
+    const ctr = target && this.#squadCenter(target); if (!ctr) return false;
+    return b.units.some((v) => v.team === 1 && !v.dead && !v.onBoat && !v.fall && Math.hypot(v.x - ctr.x, v.z - ctr.z) <= range);
+  }
+  /** 只读探针：HUD 的可见态 / 高亮环 / 冷却弧 / 提示条 / 计数，供浏览器验收读数。 */
+  plungeProbe() {
+    const q = (sel) => this.hud?.querySelector?.(sel) ?? null;
+    const cd = q('[data-ability="plunge"] .cd'), hl = q('[data-ability="plunge"] .hl'), tag = q('[data-ability="plunge"] .tag');
+    const slots = this.hud ? [...this.hud.querySelectorAll('[data-ability]')].map((d) => {
+      const r = d.getBoundingClientRect(), svg = d.querySelector('svg')?.getBoundingClientRect();
+      return { key: d.dataset.ability, enabled: d.dataset.enabled === '1', opacity: +getComputedStyle(d).opacity, box: [Math.round(r.width), Math.round(r.height)], svg: svg ? [Math.round(svg.width), Math.round(svg.height)] : null, bottom: Math.round(r.bottom) };
+    }) : [];
+    const r = this.hud?.getBoundingClientRect?.();
+    return {
+      on: this.on.plunge, armed: this.armed, cooldown: +this.cooldown.toFixed(4), cooldownMax: this.cooldownMax,
+      hud: { present: !!this.hud, visible: !!this.hud && this.hud.style.display !== 'none', viewport: [globalThis.innerWidth, globalThis.innerHeight], rect: r ? [Math.round(r.x), Math.round(r.y), Math.round(r.width), Math.round(r.height)] : null, slots, hlOpacity: +(hl?.getAttribute('opacity') ?? 0), cdDash: +(cd?.getAttribute('stroke-dashoffset') ?? 0), cdOpacity: +(cd?.getAttribute('opacity') ?? 0), cdStroke: cd?.getAttribute('stroke') ?? null, tagVisible: tag ? tag.style.display !== 'none' : false, tagText: tag?.textContent ?? null },
+      banner: { text: this.toast?.msg ?? null, visible: !!this.toastEl && this.toastEl.style.display === 'block', elText: this.toastEl?.textContent ?? null, t: this.toast ? +this.toast.t.toFixed(2) : 0 },
+      shocks: this.shocks.length, stats: { ...this.stats },
+    };
+  }
   #squadCenter(sq) { const a = sq.members.filter((u) => !u.dead && !u.onBoat); if (!a.length) return null; return { x: a.reduce((s, u) => s + u.x, 0) / a.length, y: a.reduce((s, u) => s + u.y, 0) / a.length, z: a.reduce((s, u) => s + u.z, 0) / a.length, a }; }
   /** 施放：sq 跳到 point。返回 'ok' | 'cooldown' | 'no-target' | 'blocked'。 */
   castPlunge(sq, point, { range = 3.6, radius = .6 } = {}) {
@@ -304,6 +348,15 @@ export class BattleC03 {
     this.popup.style.left = (r.left + (v.x + 1) / 2 * r.width) + 'px'; this.popup.style.top = (r.top + (1 - v.y) / 2 * r.height) + 'px';
   }
   #closePopup() { this.popup?.remove(); this.popup = null; this.pending = null; if (this.marker) this.marker.visible = false; }
+  /** Esc / 外部取消：弹窗或 pending 还开着 → 收掉（含地面标记）并返回 true；没开返回 false。 */
+  cancelPopup() { if (!this.popup && !this.pending) return false; this.#closePopup(); return true; }
+  /** confirm 开着时挂全局 Esc；只在有 DOM 的环境挂（Node 验收里没有 addEventListener，不挂也不影响 cancelPopup）。 */
+  #ensureEsc() {
+    if (this._escKey || typeof globalThis.addEventListener !== 'function' || !hasDom()) return;
+    this._escKey = (e) => { if (e?.key === 'Escape' && this.cancelPopup()) e.stopImmediatePropagation?.(); };
+    globalThis.addEventListener('keydown', this._escKey);
+  }
+  #dropEsc() { if (this._escKey) { globalThis.removeEventListener?.('keydown', this._escKey); this._escKey = null; } }
   /** 弹窗按钮（测试里直接调）。 */
   confirmAction(key) {
     const P = this.pending, b = this.b; if (!P || !P.options.includes(key)) return false;
@@ -424,8 +477,13 @@ export class BattleC03 {
     if (this.on.plunge) {
       this.cooldown = Math.max(0, this.cooldown - dt);
       const cd = this.slotPlunge?.querySelector?.('.cd'); if (cd) { const f = this.cooldownMax ? this.cooldown / this.cooldownMax : 0; cd.setAttribute('opacity', f > 0 || this.armed ? 1 : 0); cd.setAttribute('stroke-dashoffset', String(169.6 * (1 - f))); /* 亮弧 = 剩余冷却 */ cd.setAttribute('stroke', this.armed ? '#ffffff' : '#ffd34d'); }
+      // 选中态形制（见 #ensureHud 注释）：黄高亮环 + 上方名字牌，只在 armed 时露；落地即收。
+      const hl = this.slotPlunge?.querySelector?.('.hl'); if (hl) hl.setAttribute('opacity', this.armed ? 1 : 0);
+      const tag = this.slotPlunge?.querySelector?.('.tag'); if (tag) tag.style.display = this.armed ? 'block' : 'none';
     }
     if (this.toast) { this.toast.t -= dtReal; if (this.toast.t <= 0) { this.toast = null; if (this.toastEl) this.toastEl.style.display = 'none'; } }
+    // 弹窗挂着的队伍被歼灭 / 选中被换成别队 → 这次确认作废，收回弹窗与地面标记
+    if (this.pending && (!this.pending.squad.alive || b.selected !== this.pending.squad)) this.#closePopup();
     if (this.popup) this.#placePopup();
     if (this.on.distIso) this.#buildIso();
     if (this.on.tierUp || this.on.flair) this.#waveCheck();

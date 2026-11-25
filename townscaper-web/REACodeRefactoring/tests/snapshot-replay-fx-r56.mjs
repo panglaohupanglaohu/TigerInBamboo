@@ -47,5 +47,8 @@ for (const k of ['solid', 'color', 'rock', 'river']) assert.deepEqual(Array.from
 assert.throws(() => replayDelay(-1), RangeError);
 const t0 = Date.now(); await replayDelay(60); assert.ok(Date.now() - t0 >= 50);
 assert.match(readFileSync(join(root, 'src/world/app.js'), 'utf8'), /replayDelay\(\+\(params\.get\('replayMs'\) \?\? 380\) \|\| 380/);
-assert.match(readFileSync(join(root, 'src/world/view.js'), 'utf8'), /for \(const e of this\.worldMesh\.edits \|\| \[\]\) \{ this\.effects\.onEdit\(/, 'View 把 edits 喂给 effects/sound');
+// 第 N 轮起 edits 先过 view.editFx 错拍队列（core/edit-fx-schedule.js 径向波确定序），到期仍喂同一对 onEdit
+const viewSrc = readFileSync(join(root, 'src/world/view.js'), 'utf8');
+assert.match(viewSrc, /this\.editFx\.push\(this\.worldMesh\.edits, this\.waterUniforms\.uTime\.value\)/, 'View 把 edits 排进错拍队列');
+assert.match(viewSrc, /this\.editFx\.drain\(this\.waterUniforms\.uTime\.value, \(e\) => \{ this\.effects\.onEdit\(e\.cell, e\.before, e\.after, this\.levelHeight\); this\.sound\.onEdit\(/, '到期仍喂 effects/sound');
 console.log(`PASS snapshot-replay-fx r56: ${frames.length} 帧回放 → 弹出 ${fx.pop} / 水花 ${fx.splash} / 灰尘 ${fx.dust}，每帧 edits ${JSON.stringify(fx.perFrame)}；结束恢复最终态；?replayMs 挂钩在`);

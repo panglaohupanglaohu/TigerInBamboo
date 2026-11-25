@@ -38,17 +38,17 @@
   </div>
   <div class="row">
     <button id="stagesbtn">阶段动画</button><button id="floorsbtn">多层房子</button><button id="mapbtn">世界贴图</button><button id="focusbtn">看房子</button>
-    <label>解法 <select id="solver"><option value="spring">边弹簧（旧）</option><option value="shape">整片相似收缩（r55）</option></select></label>
+    <label>解法 <select id="solver"><option value="spring">边弹簧（旧）</option><option value="shape">整片相似收缩（r55）</option><option value="joint">多格联合拟合（r207）</option></select></label>
   </div>
   <div id="stagelabel" style="font-size:12.5px;color:#2f7f8a"></div>
-  <p>784847933686575104 / 784847588893814785：球壳不是一次出现的——一小片起，沿前沿铺满整球。下列滑杆控制装配进度。</p>
+  <p>784847933686575104 / 784847588893814785：球壳不是一次出现的——一小片起，沿前沿铺满整球。下列滑杆控制装配进度；「起点：点格」亮起后点球面任一处，最近的陆地格成为新起点（也可用 ?root=<格id>）。</p>
   <div class="row">
     <input id="asm" type="range" min="0" max="1" step="0.01" value="1" style="flex:1" />
-    <button id="play">装配播放</button><button id="clay">白模</button><button id="shell">薄壳</button>
+    <button id="play">装配播放</button><button id="clay">白模</button><button id="shell">薄壳</button><button id="pickroot">起点：点格</button>
   </div>
   <p>1791049306213912823：可选16²×6面高度贴图，顶点单次查询的本地光照实验。</p>
   <label>收缩约束 <select id="modules"><option value="all">所有高地（旧代理）</option><option value="one">显式选择最高一格</option><option value="none">无模块格</option></select></label>
-  <p>边弹簧（旧）：多格约束在共享角点互相矛盾（见下方「共享角点分歧」）。r55「整片相似收缩」：每层每片相连的高地整体按 R/r 收缩，共享角点一致、形状不变；大小与墙倾斜冲突时墙优先（≤30°），宽大高原剩余的蘑菇化如实列出。星球已是共享 World（rock / BUILT 位），游戏玩法未接入。</p>
+  <p>边弹簧（旧）：多格约束在共享角点互相矛盾（见下方「共享角点分歧」）。r55「整片相似收缩」：每层每片相连的高地整体按 R/r 收缩，共享角点一致、形状不变；大小与墙倾斜冲突时墙优先（≤30°），宽大高原剩余的蘑菇化如实列出。r207「多格联合拟合」：多格模块整组共享一个相似变换 + 有界逐边精修（最差边只降不升），逐边误差与超阈值回退见 module-group-fit.js 报告；尺寸与墙倾斜的冲突仍在，如实报不消除。星球已是共享 World（rock / BUILT 位），游戏玩法未接入。</p>
   <p><a href="artifacts/coverage/sphere-relax-review.md">本轮708帧核验与差距</a></p><div id="stat"></div>
   <p>源码：<code>src/core/trigraph.js</code> <code>src/sphere/planet.js</code></p>
 </div>
@@ -105,8 +105,11 @@ cubeLight.attach(mat);
 document.getElementById('cube-light').onclick=e=>{const on=cubeLight.uniforms.uCubeHeightStrength.value===0;cubeLight.uniforms.uCubeHeightStrength.value=on?1:0;e.target.classList.toggle('on',on)};
 window.planetLighting={cubeLight,planet,get land(){return land},renderer,scene,camera};
 
-let moduleCells=null, sizeReport, currentAt, solver = Q.get('solver') === 'shape' ? 'shape' : 'spring', conflict = null;
-const order = assemblyOrder(planet, { mode: 'frontier', seed: 7 });
+let moduleCells=null, sizeReport, currentAt, solver = ['shape', 'joint'].includes(Q.get('solver')) ? Q.get('solver') : 'spring', conflict = null;
+// r216 装配起点可指定：?root=<陆地格id> 或「起点：点格」点选（784847933686575104 / 784847588893814785 残差）
+const qRootRaw = Q.get('root'), qRoot = qRootRaw === null ? null : +qRootRaw;
+let asmRoot = Number.isInteger(qRoot) && planet.cells[qRoot] && planet.H[qRoot] > 0 ? qRoot : null;
+let order = assemblyOrder(planet, { mode: 'frontier', seed: 7, root: asmRoot });
 let asm = 1, clayOn = false, shellOn = false, playing = false, onlyNow = null;
 function buildLand(relax) {
   const at = cornerPositions(planet, { relax, moduleCells, solver });currentAt=at;
@@ -207,7 +210,7 @@ function show() {
     `${sphere.pts.length} 点 · ${sphere.tris.length} 三角（球面应为 2n−4 = ${2 * sphere.pts.length - 4}）· ${topology ? `球面拓扑 ${topology.closed ? '✓' : '待查'}（Euler ${topology.euler}）` : '点云阶段（未套用后续三角网）'}· 投影平面抽查 ${c.checkedTriangles}/${c.tris} 面 ${c.manifold && c.delaunay ? '✓' : '待查'} · ${tBuild.toFixed(0)} ms<br>` +
     `高台（≥4 层）格子面积 / 海平面面积：relax 关 <b>${ratio.off.toFixed(2)}</b> → 开 <b>${ratio.on.toFixed(2)}</b>（仅面积汇总，不能代表每格形状）<br>` +
     `当前约束${sizeReport.count}格 · 单格面积比范围 ${sizeReport.minAreaRatio.toFixed(3)}–${sizeReport.maxAreaRatio.toFixed(3)} · 最差边长误差 ${(100*sizeReport.maxEdgeError).toFixed(1)}%<br>` +
-    `装配 ${onlyNow ? onlyNow.size : order.length}/${order.length} 格（${onlyNow ? '生长中' : '已铺满'}${clayOn ? ' · 白模' : ''}${shellOn ? ' · 薄壳（无海核）' : ''}）<br>` +
+    `装配 ${onlyNow ? onlyNow.size : order.length}/${order.length} 格（${onlyNow ? '生长中' : '已铺满'} · 起点格 #${order[0]}${clayOn ? ' · 白模' : ''}${shellOn ? ' · 薄壳（无海核）' : ''}）<br>` +
     `多格约束冲突（${solver === 'shape' ? '整片相似收缩' : '边弹簧'}）：共享角点分歧 均 ${conflict.disagreeMean.toFixed(3)} / 最大 ${conflict.disagreeMax.toFixed(2)} 边长 · 形状误差 ${conflict.shapeErrMean.toFixed(3)} · 大小误差 ${conflict.sizeErrMean.toFixed(2)} · 墙倾斜 ≤${conflict.leanMaxDeg.toFixed(0)}° · 翻折 ${conflict.folded}` +
     (fusionOn && fusionInfo ? `<br>World 融合：${fusionInfo.houses} 栋（层数 ${[...new Set(fusionInfo.floors)].sort().join('/')}）· BUILT 位 ${fusionInfo.builtBits} · 建筑区 ${fusionInfo.regions} · 河道 ${fusionInfo.rivers} 格` : '') +
     (mapUniforms ? `<br>世界贴图 ${worldTex.map.w}×${worldTex.map.h} · 陆地 ${worldTex.map.stats.landPct}% · 海岸 ${worldTex.map.stats.coastPx}px · 坡 ${worldTex.colors.roles.slope}px` : '');
@@ -226,6 +229,30 @@ const setAssembly = (p) => {
   document.getElementById('asm').value = String(asm);
   buildLand(relaxOn); show(); return asm;
 };
+// r216 装配起点可指定：只有合法陆地格才换根（海格/越界返回 null 不动现状），换根后前沿从新起点重新生长
+const setAssemblyRoot = (id) => {
+  if (!Number.isInteger(id) || !planet.cells[id] || planet.H[id] <= 0) return null;
+  asmRoot = id;
+  order = assemblyOrder(planet, { mode: 'frontier', seed: 7, root: id });
+  buildLand(relaxOn); show(); return asmRoot;
+};
+// 「起点：点格」亮起后点球面任一处 → 视线方向最近的陆地格成为新起点（与 planet-wfc.html 同一套点选语义）
+const pickBall = new THREE.Mesh(new THREE.SphereGeometry(planet.R + 6 * planet.L, 48, 32), new THREE.MeshBasicMaterial({ visible: false }));
+scene.add(pickBall);
+const pickRay = new THREE.Raycaster();
+let pickRootOn = false;
+const pickRootAt = (e) => {
+  const r = canvas.getBoundingClientRect();
+  pickRay.setFromCamera(new THREE.Vector2(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1), camera);
+  const hit = pickRay.intersectObject(pickBall)[0];
+  if (!hit) return false;
+  world.updateMatrixWorld();
+  const d = world.worldToLocal(hit.point.clone()).normalize();   // 去掉 world 自转 → 未旋转的胞元方向
+  let best = -1, bd = -2;
+  for (const c of planet.cells) { if (planet.H[c.id] <= 0) continue; const v = c.c[0] * d.x + c.c[1] * d.y + c.c[2] * d.z; if (v > bd) { bd = v; best = c.id; } }
+  return best >= 0 && setAssemblyRoot(best) !== null;
+};
+document.getElementById('pickroot').onclick = (e) => { pickRootOn = !pickRootOn; e.target.classList.toggle('on', pickRootOn); };
 document.getElementById('asm').oninput = (e) => setAssembly(Number(e.target.value));
 document.getElementById('play').onclick = (e) => {
   playing = !playing; e.target.classList.toggle('on', playing);
@@ -236,7 +263,7 @@ document.getElementById('clay').onclick = (e) => {
   mat.vertexColors = !clayOn; mat.color.set(clayOn ? 0xd9d6ce : 0xffffff); mat.needsUpdate = true; show();
 };
 document.getElementById('shell').onclick = (e) => { shellOn = !shellOn; e.target.classList.toggle('on', shellOn); show(); };
-window.planetAssembly = { set: setAssembly, get asm() { return asm; }, get order() { return order; }, assemblyOrder, assemblySlice };
+window.planetAssembly = { set: setAssembly, setRoot: setAssemblyRoot, get asm() { return asm; }, get root() { return asmRoot; }, get order() { return order; }, assemblyOrder, assemblySlice };
 const pc = document.getElementById('proj');
 document.getElementById('projbtn').onclick = (e) => {
   const on = pc.style.display !== 'block'; pc.style.display = on ? 'block' : 'none'; e.target.classList.toggle('on', on);
@@ -264,7 +291,10 @@ if (Q.get('smoothcoast') === '1') import('./src/sphere/planet-smooth-c08.js').th
 
 // 拖动旋转
 let drag = null, rx = 0.35, ry = 0;
-canvas.addEventListener('pointerdown', (e) => { drag = [e.clientX, e.clientY]; });
+canvas.addEventListener('pointerdown', (e) => {
+  if (pickRootOn) { pickRootOn = false; document.getElementById('pickroot').classList.remove('on'); pickRootAt(e); return; }   // 点格选起点优先于拖动
+  drag = [e.clientX, e.clientY];
+});
 addEventListener('pointerup', () => (drag = null));
 addEventListener('pointermove', (e) => { if (!drag) return; ry += (e.clientX - drag[0]) * 0.008; rx += (e.clientY - drag[1]) * 0.008; drag = [e.clientX, e.clientY]; });
 canvas.addEventListener('wheel', (e) => { camera.position.multiplyScalar(e.deltaY > 0 ? 1.08 : 0.93); }, { passive: true });

@@ -1,0 +1,83 @@
+{
+  "url": "http://localhost:8769/index.html?scene=fusion&punch=0",
+  "pass": true,
+  "fail": [],
+  "errors": [],
+  "shader": {
+    "hasMode3": true,
+    "hasFeatSample": true,
+    "hasCvQuant": true,
+    "featVolMinLen": 3,
+    "featVolMaxLen": 3,
+    "programDiagnostics": []
+  },
+  "stable": 3,
+  "modeState": {
+    "on": 3,
+    "featOn": [
+      1,
+      1,
+      1
+    ],
+    "steps": 0
+  },
+  "mode3Effect": 91505,
+  "baselineHash": "30cb3f69b51cae1d15e70f83788bc84bda840957b88240d0b759f5d016acce02",
+  "defaultState": {
+    "mods": {
+      "surfaceShadow": 0.55,
+      "shrubtex": 1,
+      "cloudShadow": true
+    },
+    "roofChanged": 22670,
+    "roofOutsideMask": 0
+  },
+  "maskPx": {
+    "ground": 35076,
+    "roof": 22670,
+    "cliff": 33759
+  },
+  "maskOverlap": {
+    "groundRoof": 0,
+    "groundCliff": 0,
+    "roofCliff": 0
+  },
+  "isol": {
+    "roof": {
+      "changed": 22670,
+      "maskPx": 22670,
+      "outsideMask": 0,
+      "leakedIntoOtherFeatureMasks": 0
+    },
+    "cliff": {
+      "changed": 33759,
+      "maskPx": 33759,
+      "outsideMask": 0,
+      "leakedIntoOtherFeatureMasks": 0
+    },
+    "ground": {
+      "changed": 35076,
+      "maskPx": 35076,
+      "outsideMask": 0,
+      "leakedIntoOtherFeatureMasks": 0
+    }
+  },
+  "steps": {
+    "unionMaskPx": 91505,
+    "uniq0": 2614,
+    "uniq4": 35,
+    "uniq4per": {
+      "ground": 12,
+      "roof": 13,
+      "cliff": 10
+    },
+    "uniq12": 221
+  },
+  "determinism": {
+    "reRender": 0,
+    "reSet": 0
+  },
+  "worldIntact": true,
+  "crossPageDiffPx": 0,
+  "crossPageDiffCount": 0
+}

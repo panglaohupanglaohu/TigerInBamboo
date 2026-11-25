@@ -1,9 +1,23 @@
 {
   "stats": {
     "segments": 85,
-    "dots": 182,
-    "candidateDots": 182,
-    "version": 406
+    "dots": 173,
+    "candidateDots": 173,
+    "version": 406,
+    "occluded": 52,
+    "roofs": 4,
+    "mode": "world",
+    "size": 0.13,
+    "sizeAttenuation": true,
+    "nearPx": 7,
+    "farPx": 7,
+    "floorCss": 7,
+    "floorPx": 7,
+    "clamped": 173,
+    "clampedShare": 1,
+    "depthMin": 19.7,
+    "depthMax": 27.14,
+    "pixelRatio": 1
   },
   "errors": [],
   "shots": [

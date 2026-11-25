@@ -63,6 +63,61 @@ export function sampleWorldVisibilityExact(world,index,origin,{count=32,maxDist=
  for(const d of fibonacciDirections(count)){const t=castWorldRay(world,index,origin,d,{maxDist,levelHeight});sum+=t/maxDist;rays.push({x:origin.x+d.x*t,y:origin.y+d.y*t,z:origin.z+d.z*t,distance:t,hit:t<maxDist});}
  return{value:sum/count,rays,insideSolid:false};
 }
+/* 第 57 批残差：798580832906739712「非精确光学视线」—— 柱格穿行只能表达整层实心/空，
+ * 斜屋顶、洞口装饰面、坡崖这类"网格上有、体素上没有"的面挡不住。这里对实际渲染用的三角汤
+ * 做 Möller–Trumbore 求交：命中距离 = 与最近三角形的交点，没有步长，永远不会"跨漏薄墙"。
+ * positions 与 bakeVertexOpenness 同款（Float32Array 每顶点 xyz，非索引网格按 9 个数一三角形）。 */
+function triHit(ax,ay,az,bx,by,bz,cx,cy,cz,ox,oy,oz,dx,dy,dz){
+ const e1x=bx-ax,e1y=by-ay,e1z=bz-az,e2x=cx-ax,e2y=cy-ay,e2z=cz-az;
+ const px=dy*e2z-dz*e2y,py=dz*e2x-dx*e2z,pz=dx*e2y-dy*e2x;
+ const det=e1x*px+e1y*py+e1z*pz;
+ if(Math.abs(det)<1e-12)return -1;                      // 射线与三角形平行（含落在面内），不算命中
+ const inv=1/det,tx=ox-ax,ty=oy-ay,tz=oz-az;
+ const u=(tx*px+ty*py+tz*pz)*inv;
+ if(u<-1e-9||u>1+1e-9)return -1;
+ const qx=ty*e1z-tz*e1y,qy=tz*e1x-tx*e1z,qz=tx*e1y-ty*e1x;
+ const v=(dx*qx+dy*qy+dz*qz)*inv;
+ if(v<-1e-9||u+v>1+1e-9)return -1;
+ const t=(e2x*qx+e2y*qy+e2z*qz)*inv;
+ return t>1e-9?t:-1;                                    // 双面命中：背面也挡（诊断用，不做朝向剔除）
+}
+/** 单条射线对三角汤求最近命中距离；没命中返回 maxDist。indices 可选（索引网格）。 */
+export function castMeshRay(positions,origin,dir,{maxDist=5,indices=null,maxTris=400000}={}){
+ if(!(positions?.length>=9&&positions.length%3===0))throw new RangeError('positions xyz triplets');
+ if(indices&&indices.length%3)throw new RangeError('indices triplets');
+ const n=indices?indices.length:positions.length/3;
+ if(n%3||n/3>maxTris)throw new RangeError('mesh triangle count');
+ if(![origin?.x,origin?.y,origin?.z,dir?.x,dir?.y,dir?.z,maxDist].every(Number.isFinite)||maxDist<=0)throw new RangeError('ray settings');
+ const L=Math.hypot(dir.x,dir.y,dir.z);if(L<1e-12)throw new RangeError('zero direction');
+ const dx=dir.x/L,dy=dir.y/L,dz=dir.z/L;
+ let best=maxDist;
+ for(let i=0;i<n;i+=3){
+  const a=(indices?indices[i]:i)*3,b=(indices?indices[i+1]:i+1)*3,c=(indices?indices[i+2]:i+2)*3;
+  const t=triHit(positions[a],positions[a+1],positions[a+2],positions[b],positions[b+1],positions[b+2],positions[c],positions[c+1],positions[c+2],origin.x,origin.y,origin.z,dx,dy,dz);
+  if(t>=0&&t<best)best=t;
+ }
+ return best;
+}
+/** 网格级光学开阔度：与 sampleWorldVisibilityExact 同形输出，但打在真实三角形上（斜面/洞口都挡）。 */
+export function sampleMeshVisibility(positions,origin,{count=32,maxDist=5,indices=null,maxTris=400000}={}){
+ if(!Number.isInteger(count)||count<1||count>512)throw new RangeError('direction count 1..512');
+ const rays=[];let sum=0;
+ for(const d of fibonacciDirections(count)){
+  const t=castMeshRay(positions,origin,d,{maxDist,indices,maxTris});
+  sum+=t/maxDist;rays.push({x:origin.x+d.x*t,y:origin.y+d.y*t,z:origin.z+d.z*t,distance:t,hit:t<maxDist});
+ }
+ return{value:sum/count,rays};
+}
+/** 「Might use it for visibility when indoors」：一个点的室内判定。
+ * covered = 同列头顶还有实心层（桥底/楼内/洞道都算）；indoor = covered 或开阔度低于阈值。
+ * 返回 covered 与 value 两个分量，消费者可按需取——默认判据同时接住"有顶"与"被围住没顶"。 */
+export function indoorAt(world,index,point,{threshold=.35,count=32,maxDist=4,levelHeight=.5,exact=true}={}){
+ if(![point?.x,point?.y,point?.z,threshold,levelHeight].every(Number.isFinite)||threshold<0||threshold>1||levelHeight<=0)throw new RangeError('indoor settings');
+ const c=index.cellAt(point.x,point.z),pl=Math.floor(point.y/levelHeight)+1;
+ const covered=!!(c&&point.y>=0&&world.top(c)>pl);
+ const r=exact?sampleWorldVisibilityExact(world,index,point,{count,maxDist,levelHeight}):sampleWorldVisibility(world,index,point,{count,maxDist,levelHeight});
+ return{indoor:covered||r.value<threshold,covered,value:r.value,insideSolid:!!r.insideSolid};
+}
 /** 整楼烘焙：每格顶面、以及每个「头顶还有实心层」的室内/洞道地面，各算一次开阔度。 */
 export function bakeWorldVisibility(world,index,{count=32,maxDist=4,levelHeight=.5,exact=true,lift=.12}={}){
  const L=levelHeight,samples=[];

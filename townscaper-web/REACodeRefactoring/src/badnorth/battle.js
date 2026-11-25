@@ -1,9 +1,9 @@
-import {planLanding} from './landing-plan.js';
-import { PROJECTILE_GRAVITY, defaultBallisticTable, createBallisticTable, projectileState } from '../core/ballistic-table.js';
+import {planLanding,corridorBlocked,steerBoat} from './landing-plan.js';
+import { PROJECTILE_GRAVITY, defaultBallisticTable, createBallisticTable, createShotContract, pickBallisticShot, projectileState } from '../core/ballistic-table.js';
 import { samplePath } from '../core/path-samples.js';
 import { atHouseDoor } from '../core/house-door-presence.js';
 import { easeUnitGroundHeight, easeUnitToHeight } from '../core/unit-ground-height.js';
-import { unitTierAppearance } from '../core/unit-tier.js';
+import { unitTierAppearance, setUnitAppearanceTier, creditUnitKill } from '../core/unit-tier.js';
 import { createBannerTexture } from '../life/banner.js';
 import { UnitShadowBatch } from '../life/unit-shadow-batch.js';
 import { UnitSpriteBatch } from '../life/unit-sprites.js';
@@ -11,12 +11,15 @@ import { capturePlatformAnchor, resolvePlatformAnchor } from '../core/platform-a
 import { stunUnit, stepStun, resolveFallLanding } from '../core/combat-state.js';
 import { configureCombatUnit, damageCombatUnit } from '../core/combat-profile.js';
 import { beginSpearThrust, stepSpearThrust } from '../core/spear-thrust.js';
+import { hitShove, shouldFallIntoWater, beginKnockoff, beginDrown, DROWN_SINK_SEC, stepSplashes } from '../core/knockoff-water.js';   // opt-in：view.knockoffWater=true 才接击退落水（缺省行为不变）
 import { narrowCells, leftLaneTarget, passageMarkers, localSeparation, heightRaster, sightFade } from '../world/traffic.js';
+import { installPointFloor, syncPointFloor, pointPx } from '../world/point-floor.js';
 import { damageValue, addDamageNumber, stepDamageNumbers, styleFor, KILL_VALUE } from './damage-numbers.js';
 import { InfoGraph } from './info-graph.js';
+import { footprintBoundary } from './squad-footprint.js';
 import { UnitBatchLod } from './unit-batch-lod.js';
 import { BattleG3 } from './battle-g3.js';   // 第 55 批 G3：精细门户 / 连续流 / 竖旗盾纹 / 扫掠盾推 / 梯子 / 影子贴合 / 指令条（默认全关）
-import { BattleC01 } from './battle-c01.js';  // 第 56 批 C01：血量槽 / 节点图 / 黄竖条 / 血迹老化堆厚 / 火光 / 成列行军 / 常驻路线 / 沿岸泡沫（默认全关）
+import { BattleC01, C01_FLAGS } from './battle-c01.js';  // 第 56 批 C01：血量槽 / 节点图 / 黄竖条 / 血迹老化堆厚 / 火光 / 成列行军 / 常驻路线 / 沿岸泡沫（默认全关）
 import { BattleC03 } from './battle-c03.js';  // 第 56 批 C03：爆炸编排 / 小屋焦黑 / 抛火团 / Plunge 能力 / 确认弹窗 / 三维距离等值线 / 升级 / UI flair（默认全关）
 import { BattleC02 } from './battle-c02.js';  // 第 56 批 C02：不规则血泊 / 焦痕 / 飘字甩出 / 流场底网格面 / 翻滚扬尘 / 船迹 / 导航面 / 雨 / 挥砍弧 / 小队轮廓 / 点线世界尺寸（默认全关）
 /**
@@ -49,18 +52,27 @@ import { buildLayeredFlowField } from './flowfield.js';
  * 弹道查找表（987267068495003648 "live tweak the cost function of my projectile trajectory lookup tables"）：
  * 预先对 (水平距离, 高差) 的网格，在一排出射角里找能打到、且代价最小的那一个（代价 = 飞行时间 + 落角偏离 45° 的惩罚）；
  * 射箭时查表得到出射角和速度，按真实抛物线飞。画面里是一扇扇抛物线 + Inspector 里的 Cost Function。
+ * Validity 契约（同一条记录的补学残差）：`battle.shotContract` 装上后，#shoot 射前按射程环/沿弧遮挡/落点地表
+ * 逐条拦；表达式表会在 ranked 候选里自动换放得行的弧（高抛越墙），解析表只有唯一解、契约不过就不射。
+ * 契约只拦「射前」，飞行中的 clearSegment 与落点命中判定不动。
  */
 const G = PROJECTILE_GRAVITY;
 
 const MAX = 260;
 const TEAM = { DEF: 0, VIK: 1 };
-const COL = { hullWood: new THREE.Color('#6a4a52'), hullBlood: new THREE.Color('#7a1c22'), spearShaft: new THREE.Color('#e2a59c'), spearTip: new THREE.Color('#f7f4ee'), def: new THREE.Color('#3f5f8f'), defArcher: new THREE.Color('#4d6fa0'), vik: new THREE.Color('#8e3b3b'), cream: new THREE.Color('#e8dcc0'), shieldV: new THREE.Color('#f0a35e'), shieldD: new THREE.Color('#d9e2ec'), corpse: new THREE.Color('#5a4048') };
+const COL = { hullWood: new THREE.Color('#6a4a52'), hullBlood: new THREE.Color('#7a1c22'), spearShaft: new THREE.Color('#e2a59c'), spearTip: new THREE.Color('#f7f4ee'), def: new THREE.Color('#3f5f8f'), defArcher: new THREE.Color('#4d6fa0'), vik: new THREE.Color('#8e3b3b'), cream: new THREE.Color('#e8dcc0'), shieldV: new THREE.Color('#f0a35e'), shieldD: new THREE.Color('#d9e2ec'), corpse: new THREE.Color('#5a4048'), boatCorpse: new THREE.Color('#efe9dd') };
 const FLAG = ['#7fc6e0', '#f0a35e', '#9be0c8'];
 
 export class Battle {
   constructor(view) {
     this.view = view;
     this.L = view.levelHeight;
+    // [opt-in] 单位 / 长船整体放大（舞台 1 格 = 几米由接入方定）：只改画的大小与船上座位间距，战斗逻辑格距不变
+    this.unitScale = view.unitScale ?? 1; this.boatScale = view.boatScale ?? this.unitScale;
+    // [opt-in] 击退落水（core/knockoff-water.js，REACode combatfx 移植）：view.knockoffWater=true 才有矛轴推 0.12 /
+    //   推水判定 / 空中翻滚 / 溺水下沉 / 水花 / drownStats；缺省走旧路径（击退 0.05、落水只标记死亡），库侧行为不变。
+    this.knockoff = view.knockoffWater === true;
+    this.splashes = []; this.splashGeo = new THREE.RingGeometry(0.82, 1, 24); this.drownStats = { knocked: 0, drowned: 0, vik: 0, def: 0 };
     this.group = new THREE.Group();
     view.scene.add(this.group);
     const mk = (geo, color) => { const m = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.85, flatShading: true }), MAX); m.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(MAX * 3), 3); m.castShadow = true; m.frustumCulled = false; m.count = 0; this.group.add(m); return m; };
@@ -68,6 +80,10 @@ export class Battle {
     const head = new THREE.SphereGeometry(0.035, 8, 6); head.translate(0, 0.145, 0);
     const shield = new THREE.CylinderGeometry(0.04, 0.04, 0.01, 10); shield.rotateX(Math.PI / 2); shield.translate(0, 0.07, 0.05);
     this.unitShadows = new UnitShadowBatch(MAX);
+    // 第 130 轮：接触软盘**默认开**。821321422140309504 / 821680056514781186 两条片子里，单位脚下那块暗斑
+    // 一直都在（灰模地面上最清楚的只有它），但此前 only `g3 shadowFit` 顺带把 enabled 置 true —— 默认战斗
+    // 一片软盘都不画（本轮探针：24 个活单位 count=0 / drawRange 0）。`?unitShadows=0` 保留关档给像素 A/B。
+    this.unitShadows.enabled = new URLSearchParams(globalThis.location?.search ?? '').get('unitShadows') !== '0';
     this.group.add(this.unitShadows.mesh);
     this.spriteBatch = new UnitSpriteBatch(MAX);
     this.spriteBatch.enabled = !!view.debugState?.unitsprites;
@@ -76,27 +92,43 @@ export class Battle {
     // 皮肤空间的血迹（999185422403055616 "the splatter on the face follows the actual motion of the head"）：
     // 血斑按物体空间坐标的噪声画，所以跟着身体动；每个单位一个 aSoak（0…1），越大斑越多（血浸透 = 血量）。
     // 身体和**头**都要吃同一份血：片子里的血点在脸/头盔上，头一动血点跟着动（物体空间 = 头的局部坐标）。
-    // 高度门限做成 uniform（每个网格自己的局部 y 区间不同），两份材质共用一份着色器源码。
+    // 高度门限做成 uniform（每个网格自己的局部 y 区间不同），三份材质共用一份着色器源码。
+    // 第 N 轮补残差（同片 0096 棋盘格分界）：原作是**两套坐标空间**——躯干上的血斑图案固定在躯干
+    // （皮肤 UV 静态，原文叫 sprite-space map），盔与手臂上的斑跟着那部分的实际运动走（skin-space）。
+    // 这里对应成：躯干 = 单位空间坐标（pivot=0，图案钉在身体框架上）；头/盾 = **部件局部空间**
+    // （position − uSoakPivot，部件自己动起来时斑纹跟着部件框架走，不再沿用单位框架坐标）。
+    // uSoakDebug=1 时画棋盘格调试层：躯干蓝棋盘、头/盾红白棋盘——就是原片 0096 那张分界图。
+    // 另补高频碎斑层（原片血点是细碎溅斑不是整面色块）：主噪声只定覆盖面，173 倍频噪声再把覆盖碎成点。
     this.aSoak = new THREE.InstancedBufferAttribute(new Float32Array(MAX), 1);
-    const installSoak = (mesh, y0, ys) => {
+    const installSoak = (mesh, y0, ys, pivot) => {
       mesh.geometry.setAttribute('aSoak', this.aSoak);
-      const uniforms = { uSoakY0: { value: y0 }, uSoakYS: { value: ys } };
+      const uniforms = { uSoakY0: { value: y0 }, uSoakYS: { value: ys },
+        uSoakPivot: { value: new THREE.Vector3(...(pivot || [0, 0, 0])) },
+        uSoakSpace: { value: pivot ? 1 : 0 },      // 0=单位空间（躯干/sprite-space），1=部件空间（皮肤/skin-space）
+        uSoakDebug: { value: 0 } };
       mesh.material.onBeforeCompile = (sh) => {
         Object.assign(sh.uniforms, uniforms);
-        sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aSoak;\nvarying float vSoak;\nvarying vec3 vObj;')
-          .replace('#include <begin_vertex>', '#include <begin_vertex>\nvSoak = aSoak; vObj = position;');
-        sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vSoak;\nvarying vec3 vObj;\nuniform float uSoakY0;\nuniform float uSoakYS;')
-          .replace('#include <color_fragment>', '#include <color_fragment>\nfloat bn = fract(sin(dot(floor(vObj * 55.0), vec3(12.9898, 78.233, 37.719))) * 43758.5453);\nfloat bl = step(bn, vSoak * 0.85) * step(vObj.y, uSoakY0 + vSoak * uSoakYS);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.42, 0.06, 0.08), bl);');
+        sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aSoak;\nvarying float vSoak;\nvarying vec3 vObj;\nvarying vec3 vPart;\nuniform vec3 uSoakPivot;')
+          .replace('#include <begin_vertex>', '#include <begin_vertex>\nvSoak = aSoak; vObj = position; vPart = position - uSoakPivot;');
+        sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vSoak;\nvarying vec3 vObj;\nvarying vec3 vPart;\nuniform vec3 uSoakPivot;\nuniform float uSoakY0;\nuniform float uSoakYS;\nuniform float uSoakSpace;\nuniform float uSoakDebug;')
+          .replace('#include <color_fragment>', '#include <color_fragment>\nvec3 sp = mix(vObj, vPart, uSoakSpace);\nfloat bn = fract(sin(dot(floor(sp * 55.0), vec3(12.9898, 78.233, 37.719))) * 43758.5453);\nfloat bl = step(bn, vSoak * 0.85) * step(vObj.y, uSoakY0 + vSoak * uSoakYS);\nfloat bn2 = fract(sin(dot(floor(sp * 173.0), vec3(26.651, 39.247, 11.313))) * 43758.5453);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.42, 0.06, 0.08), bl * (0.55 + 0.45 * step(bn2, 0.55)));\nif (uSoakDebug > 0.5) { vec3 cp = mix(vObj, vPart, uSoakSpace); float ck = mod(floor(cp.x * 60.0) + floor(cp.y * 60.0) + floor(cp.z * 60.0), 2.0); diffuseColor.rgb = uSoakSpace > 0.5 ? mix(vec3(0.85, 0.12, 0.12), vec3(0.95, 0.92, 0.88), ck) : mix(vec3(0.12, 0.25, 0.85), vec3(0.05, 0.1, 0.45), ck); }');
       };
-      // 三个网格的门限各不相同，缓存键必须带上区间，否则会共用同一个 program 而读到别人的 uSoakY0。
-      mesh.material.customProgramCacheKey = () => `soak:${y0}:${ys}`;
+      // 三个网格的门限与空间各不相同，缓存键必须带上区间+空间，否则会共用同一个 program 而读到别人的 uniforms。
+      mesh.material.customProgramCacheKey = () => `soak:${y0}:${ys}:${pivot ? 'part' : 'unit'}`;
       mesh.userData.soak = uniforms;
     };
-    installSoak(this.mBody, 0.05, 0.12);   // 身体：局部 y 0…0.12，血从头往下浸
-    installSoak(this.mHead, 0.115, 0.07);  // 头：局部 y 0.11…0.18，先糊下巴/颈再糊到盔顶
+    installSoak(this.mBody, 0.05, 0.12);              // 躯干：单位空间（原片躯干=sprite-space，图案钉在躯干上）
+    installSoak(this.mHead, 0.115, 0.07, [0, 0.145, 0]); // 头/盔：部件空间（局部 y 0.11…0.18 浸到盔顶；斑纹跟头走）
     // 984813819280191488（第 54 轮）：盾面原来完全不吃血——片子里盾牌跟身体一起糊红。
     // 盾是绕 X 转 90° 的圆柱，局部 y 区间是半径 ±0.04 再抬到 0.07，所以从 0.03 浸到 0.11。
-    installSoak(this.mShield, 0.030, 0.080);
+    installSoak(this.mShield, 0.030, 0.080, [0, 0.07, 0.05]); // 手臂/盾：部件空间（跟手臂走）
+    // 0096 棋盘格分界调试层（opt-in）：view.debugState.soakChecker 或 ?soakChecker=1 或 setSoakDebug(true)
+    this.setSoakDebug = (on) => { for (const mm of [this.mBody, this.mHead, this.mShield]) mm.userData.soak.uSoakDebug.value = on ? 1 : 0; };
+    if (this.view.debugState?.soakChecker || new URLSearchParams(globalThis.location?.search ?? '').get('soakChecker') === '1') this.setSoakDebug(true);
+    // [opt-in] 头有自己的局部姿态：u.headYaw/u.headRoll 外部驱动；view.headLag=true 时僵直期间头滞后身体
+    // （"splatter on the face follows the actual motion of the head"——部件空间斑纹 + 头部局部运动才算闭环）。
+    this.headLag = this.view.headLag === true;
+    this._headMat = new THREE.Matrix4(); this._headRot = new THREE.Matrix4(); this._headRotY = new THREE.Matrix4();
     // Unit-length local +Z shaft; each instance scales to its active collision reach.
     const spear = new THREE.BoxGeometry(0.006, 0.006, 1); spear.translate(0, 0, 0.5);
     this.mSpear = mk(spear);
@@ -125,9 +157,20 @@ export class Battle {
     const arrow = new THREE.BoxGeometry(0.008, 0.008, 0.16);
     this.arrowGeo = arrow;
     this.arrowMat = new THREE.MeshBasicMaterial({ color: '#efe6d4' });
+    // 883447205176238083 f0430：箭飞过时画面上有一道很细的白线（箭的轨迹），不是只有那个小箭头。
+    this.arrowTrailMat = new THREE.LineBasicMaterial({ color: '#f7f4ea', transparent: true, opacity: 0.62, depthTest: false });
     // 选中圈 + 目标虚线
     this.ring = new THREE.Mesh(new THREE.RingGeometry(0.42, 0.5, 32).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.85, depthTest: false }));
     this.ring.renderOrder = 30; this.ring.visible = false; this.group.add(this.ring);
+    // 883447205176238083：选中小队脚下的**格边界线网**（轮廓 + 辐条 + 角标）。
+    // 原来的 this.ring 是 959530111187013632 的目标圈；本片要的是沿占位格边界走的一圈折线，
+    // 凹形占位（少站一格）时线要往里凹，所以不用凸包。
+    this.footprintMat = new THREE.LineBasicMaterial({ color: '#eaffff', transparent: true, opacity: 0.92, depthTest: false });
+    this.footprintLines = new THREE.LineSegments(new THREE.BufferGeometry(), this.footprintMat);
+    this.footprintLines.renderOrder = 31; this.footprintLines.frustumCulled = false; this.footprintLines.visible = false;
+    this.footprintNet = new THREE.Group(); this.footprintNet.add(this.footprintLines); this.group.add(this.footprintNet);
+    this.footprintOn = typeof location === 'undefined' ? true : new URLSearchParams(location.search).get('footprint') !== '0';
+    this.footprintStats = null; this._fpStamp = -1e9; this._fpSel = null;
     this.path = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ color: '#ffffff', size: 5, sizeAttenuation: false, depthTest: false }));
     this.path.renderOrder = 30; this.group.add(this.path);
     this.hud = document.createElement('div');
@@ -162,13 +205,21 @@ export class Battle {
     const dotCanvas=document.createElement('canvas');dotCanvas.width=dotCanvas.height=8;
     const dc=dotCanvas.getContext('2d');dc.fillStyle='#fff';dc.beginPath();dc.arc(4,4,3.4,0,Math.PI*2);dc.fill();
     // alphaTest 去掉：原片里点被山脊挡住时是**逐渐淡出**，带 alphaTest 会在 0.3 处硬切。
-    const dotMat=new THREE.PointsMaterial({color:'#ffffff',size:7,sizeAttenuation:false,map:new THREE.CanvasTexture(dotCanvas),transparent:true,alphaTest:0,depthWrite:false,toneMapped:false});
+    const dotMat=new THREE.PointsMaterial({color:'#ffffff',size:0.13,sizeAttenuation:true,map:new THREE.CanvasTexture(dotCanvas),transparent:true,alphaTest:0,depthWrite:false,toneMapped:false});
     dotMat.onBeforeCompile=(sh)=>{
       sh.vertexShader='attribute float aFade;\nvarying float vFade;\n'+sh.vertexShader
         .replace('#include <begin_vertex>','#include <begin_vertex>\n\tvFade = aFade;');
       sh.fragmentShader='varying float vFade;\n'+sh.fragmentShader
         .replace('#include <color_fragment>','#include <color_fragment>\n\tdiffuseColor.a *= vFade;');
     };
+    // 886199305522085890（第 164 轮）：默认改成**世界尺寸点 + 物理像素下限**。
+    // 片子里同一条窄道上的「点距 : 点径」在近景/远景都 ≈ 2.2（点数得清、一颗颗分开），
+    // 固定 7px 屏幕点在近景会把这个比值拉到 3.3（显疏）；纯世界尺寸点又在远景缩到 3–4px（看不见）。
+    // 所以 size 走世界尺寸（0.13 ≈ 点距 0.28 的 1/2.15），再用 `installPointFloor` 在顶点着色器里
+    // 逐点把 gl_PointSize 托到 `minPx`（CSS 像素 × devicePixelRatio = 物理像素）。
+    // 旧口径仍在：`battle.setPassageDots('screen')` / `?c02=passageScreen` 可切回固定 7px 对照。
+    installPointFloor(dotMat,{minPx:7});
+    this.passageDotStyle={mode:'world',world:0.13,screen:7,minPx:7};
     this.passageDots=new THREE.Points(new THREE.BufferGeometry(),dotMat);
     this.passageDots.renderOrder=4;this.group.add(this.passageDots);this.passageDots.visible=false;
     this.passageFade=new Float32Array(0);this._passageFadeAt=new THREE.Vector3(1e9,1e9,1e9);
@@ -176,11 +227,37 @@ export class Battle {
     // 903647529203634176：挨打时被真正打到的那个单位头顶跳「+4」（白色带阴影、屏幕正立、不同单位不合并）
     this.damageNumbers=[];this.damageSprites=[];this.damageTexCache=new Map();
     this.damageStats={spawned:0,live:0,lastValue:0,lastUnit:-1,hitSet:0,merged:0,kills:0,lastKind:'damage',thrustFrames:0,lastThrustHits:0,lastThrustPopups:0,lastThrustKills:0};
+    // [opt-in] 击杀升级（827215002448846848 残差）：view.unitPromotion=true 或 ?unitPromotion=1。
+    // 本地最小机制（非原作复现）：击杀数 → 等级 → 头盔/盾色阶；库侧缺省关，缺省行为不变。
+    this.promotion = view.unitPromotion === true || new URLSearchParams(globalThis.location?.search ?? '').get('unitPromotion') === '1';
+    this.promotionStats = { credited: 0, promoted: 0, last: null };
     this.running = false;
     this.g3 = new BattleG3(this);
     this.c01 = new BattleC01(this);
+    // 第 173 轮：battle-c01 文件头写的 URL 入口（`?c01=all` / `?c01=column,routePreview` / `?c01=-houseChar`）
+    // 之前**只存在于注释里**，全仓没有一处解析 → 这些层只能从控制台开。这里补上真正的入口。
+    this.applyC01Param();
     this.c02 = new BattleC02(this);
     this.c03 = new BattleC03(this);
+  }
+
+  /**
+   * `?c01=column` / `?c01=all` / `?c01=column,routePreview` / `?c01=-houseChar`。
+   * 认不出的名字直接忽略（URL 写错不该炸场景）；`all` 先全开，`-x` 再单项关。
+   */
+  applyC01Param(search = (typeof location !== 'undefined' ? location.search : '')) {
+    const raw = new URLSearchParams(search).get('c01');
+    this.c01Param = raw || '';
+    if (!raw) return this.c01Param;
+    let touched = 0;
+    for (const k of raw.split(',').map((s) => s.trim()).filter(Boolean)) {
+      const neg = k.startsWith('-'), name = neg ? k.slice(1) : k;
+      if (!neg && (name === 'all' || name === 'none')) { for (const f of C01_FLAGS) { this.c01.set(f, name === 'all'); touched++; } continue; }
+      if (!C01_FLAGS.includes(name)) continue;
+      this.c01.set(name, !neg); touched++;
+    }
+    this.c01ParamApplied = touched;
+    return this.c01Param;
   }
 
   /* ------------------------------------------------------------ 开局 */
@@ -194,12 +271,15 @@ export class Battle {
     this.running = true;
     this.t = 0; this.scale = 1; this.paused = false; this.wave = 0; this.nextWave = 3; this.selected = null;
     this.units = []; this.squads = []; this.boats = []; this.arrows = []; this.houses = [];
+    // 974325184525201409：动态避让/岸礁接线的运行计数（hold/侧偏按帧计，originBlocked 按发船次计）
+    this.trafficStats = { holdFrames: 0, sidestepFrames: 0, originBlocked: 0 };
     this.blood.count = 0;
     this.poolGrow = [];
     this.drops = []; this.dropPoints.geometry.setDrawRange(0, 0);
     this.damageNumbers = [];
     for (const sp of this.damageSprites) sp.visible = false;
     this.damageStats = { spawned: 0, live: 0, lastValue: 0, lastUnit: -1, hitSet: 0, merged: 0, kills: 0, lastKind: 'damage', thrustFrames: 0, lastThrustHits: 0, lastThrustPopups: 0, lastThrustKills: 0 };
+    this.promotionStats = { credited: 0, promoted: 0, last: null };   // [opt-in] unitPromotion 计数随新开局重置
     this.navCache = new Map();
     this._trafficVersion = -1;
     this.refreshPassages();
@@ -240,7 +320,7 @@ export class Battle {
       cloth.geometry.dispose();cloth.material.map?.dispose();cloth.material.dispose();
     }
     for (const b of this.boats) this.group.remove(b.mesh);
-    for (const a of this.arrows) a.mesh.parent?.remove(a.mesh);
+    for (const a of this.arrows) { a.mesh.parent?.remove(a.mesh); a.trail?.parent?.remove(a.trail); }
     this.spriteBatch.clear();
     this.unitShadows.clear();
     this.mBody.count = this.mHead.count = this.mShield.count = this.mSpear.count = this.mSpearTip.count = this.mStun.count = 0;
@@ -257,6 +337,45 @@ export class Battle {
 
   /* ------------------------------------------------------------ 工具 */
   setPassagesVisible(on) { this.showPassages=!!on;this.passageDots.visible=this.running&&this.showPassages; }
+  /** 886199：点径口径。`world` = 世界尺寸 + 物理像素下限（默认）；`screen` = 旧口径固定 7px 屏幕点。 */
+  setPassageDots(mode='world'){
+    if(mode!=='world'&&mode!=='screen')throw new RangeError('unknown passage dot mode '+mode);
+    const m=this.passageDots.material,s=this.passageDotStyle;
+    s.mode=mode;
+    if(mode==='screen'){m.size=s.screen;m.sizeAttenuation=false;syncPointFloor(m.userData.pointFloor,0);}
+    else{m.size=s.world;m.sizeAttenuation=true;syncPointFloor(m.userData.pointFloor,s.minPx,this.#pixelRatio());}
+    m.needsUpdate=true;
+    return s.mode;
+  }
+  #pixelRatio(){const r=this.view?.renderer;const p=typeof r?.getPixelRatio==='function'?r.getPixelRatio():1;return p>0?p:1;}
+  #passageHeightCss(){const el=this.view?.renderer?.domElement;return (el?.clientHeight||globalThis.innerHeight||900);}
+  /** 逐点读「这个机位下点会画多大」：近/远端的 CSS 像素直径 + 有多少点被下限托住。
+   *  公式与 three 的 `sizeAttenuation` 同口径（`size·(H_css/2)/depth`），**不带** 1/tan(fov/2) 因子。 */
+  passageDotPx(){
+    const m=this.passageDots.material,pos=this.passageDots.geometry.getAttribute('position');
+    const s=this.passageDotStyle,floor=m.userData.pointFloor;
+    const pr=this.#pixelRatio(),H=this.#passageHeightCss();
+    if(!pos||!pos.count)return{mode:s.mode,size:m.size,sizeAttenuation:m.sizeAttenuation,nearPx:0,farPx:0,
+      floorCss:s.mode==='world'?s.minPx:0,floorPx:s.mode==='world'?+(s.minPx*pr).toFixed(2):0,clamped:0,dots:0,pixelRatio:pr};
+    const cam=this.view.camera;cam.updateMatrixWorld(true);
+    const inv=cam.matrixWorldInverse,v=new THREE.Vector3();
+    let minPx=Infinity,maxPx=0,minDepth=Infinity,maxDepth=0,clamped=0;
+    for(let i=0;i<pos.count;i++){
+      v.set(pos.getX(i),pos.getY(i),pos.getZ(i)).applyMatrix4(inv);
+      const depth=-v.z;if(!(depth>0))continue;
+      const r=s.mode==='world'?pointPx(m.size,depth,H,s.minPx):{px:s.screen,clamped:false};
+      if(r.clamped)clamped++;
+      if(r.px<minPx)minPx=r.px;if(r.px>maxPx)maxPx=r.px;
+      if(depth<minDepth)minDepth=depth;if(depth>maxDepth)maxDepth=depth;
+    }
+    const n=pos.count||1;
+    return{mode:s.mode,size:m.size,sizeAttenuation:m.sizeAttenuation,
+      nearPx:+maxPx.toFixed(2),farPx:+(Number.isFinite(minPx)?minPx:0).toFixed(2),
+      floorCss:s.mode==='world'?s.minPx:0,floorPx:s.mode==='world'?+(s.minPx*pr).toFixed(2):0,
+      clamped,clampedShare:+(clamped/n).toFixed(3),
+      depthMin:+(Number.isFinite(minDepth)?minDepth:0).toFixed(2),depthMax:+maxDepth.toFixed(2),
+      dots:n,pixelRatio:pr};
+  }
   refreshPassages() {
     if(!this.world||this.view.worldMesh.builtVersion!==this.world.version)return;
     const nav=buildNav(this.world), markers=passageMarkers(this.world,nav,{levelHeight:this.L});
@@ -294,6 +413,8 @@ export class Battle {
     this.passageRaster=heightRaster(this.world,{levelHeight:this.L,roofs});
     this._passageFadeAt.set(1e9,1e9,1e9);
     this.#updatePassageFade(0,true);
+    this.setPassageDots(this.passageDotStyle.mode);
+    Object.assign(this.passageStats,this.passageDotPx());
     this.passageDots.visible=this.running&&this.showPassages;
     this._passageGeometry=this.view.mesh.geometry;
     this._passageStairs=this.view.navLayer?.stairs.geometry;
@@ -346,6 +467,32 @@ export class Battle {
     return n;
   }
   #cellAt(x, z) { return this.view.index.cellAt(x, z); }
+  /**
+   * 816743289500106752（第 174 轮）：推进 = 「整步 → 去分离整步 → 逐级缩步」，不再全有或全无。
+   *
+   * 旧写法只有前两次尝试，两次都被拒就整帧不动。真实卡点：单位走到格子**拐角**、身体圆盘压到
+   * 斜向格（`discFits` 的转角规则：顶点 0.055 内要求所有共点格都可走）时，**任何**朝目标的
+   * 整步终点都被拒 → 位置永远不变（实测：到位方块 3/8 人钉在离落位 0.31–0.37 的同一坐标 120 帧不动）。
+   * 缩步不会让位置变非法：每个候选点仍逐点过 `move()`/`discFits`，只是慢；绕开拐角后自动恢复原速。
+   * 记 `this.crawlSteps`（只读探针，给 `c01.columnStats().crawls` 用），不改任何渲染。
+   */
+  #step(u, dx, dz, sep, plan) {
+    const nav = this.navigation;
+    if (!nav) return 0;
+    if (nav.move(u, u.x + dx + (sep?.x ?? 0), u.z + dz + (sep?.z ?? 0), plan)) return 1;
+    if (nav.move(u, u.x + dx, u.z + dz, plan)) return 1;
+    // 沿 ±45°/±90° 侧滑：贴住拐角顶点时直行全被拒，但沿任一可走边滑一步是通的（实测可走满步长）。
+    // 只换方向、不放开合法性检查 —— 侧滑出去后下一帧直行就会通过。
+    for (const a of [Math.PI / 4, -Math.PI / 4, Math.PI / 2, -Math.PI / 2]) {
+      const ca = Math.cos(a), sa = Math.sin(a);
+      if (nav.move(u, u.x + dx * ca - dz * sa, u.z + dx * sa + dz * ca, plan)) { this.slideSteps = (this.slideSteps ?? 0) + 1; return 1; }
+    }
+    for (let k = 2; k <= 16; k *= 2) {
+      if (nav.move(u, u.x + dx / k, u.z + dz / k, plan)) { this.crawlSteps = (this.crawlSteps ?? 0) + 1; return 1 / k; }
+    }
+    this.stuckSteps = (this.stuckSteps ?? 0) + 1;
+    return 0;
+  }
   #groundY(x, z) { const c = this.#cellAt(x, z); return c ? this.world.top(c) * this.L : 0; }
   /**
    * 军旗（926890207298899969 "I build a custom mesh for the flag using a bezier curve along virtual wind particles"；
@@ -371,9 +518,30 @@ export class Battle {
     const cloth = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: '#ffffff', map, alphaTest:.5, side: THREE.DoubleSide }));
     cloth.frustumCulled = false;
     g.add(pole);
+    // 883447205176238083：旗杆顶上方悬着一个白色实心菱形（旋转 45° 的方块），全片都在、总是正对相机。
+    const marker = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.085, 0.085).rotateZ(Math.PI / 4),
+      new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.95, depthTest: false, side: THREE.DoubleSide }),
+    );
+    marker.position.set(0, 0.74, 0); marker.renderOrder = 32; marker.frustumCulled = false;
+    g.add(marker);
     this.group.add(g, cloth);
-    g.userData = { cloth, SEG, parts: null };
+    g.userData = { cloth, SEG, parts: null, marker, scale: this.unitScale }; g.scale.setScalar(this.unitScale);   // [opt-in] 旗随人放大（unitScale=1 时与原样一致）
     return g;
+  }
+  /**
+   * [opt-in] 开局之后再加一队守军（TigerMessenger：旧城补兵 / 龙纛队 / 苔庭罗马方阵；不改原有逻辑）。
+   * 与 start() 里建守军小队完全同一套：#flag + #spawn；可选兵种外观等级（unit-tier）、衣色、体型、旗子放大。
+   */
+  spawnSquad({ cell, archer = false, pike = false, size = 8, tier = null, bodyColor = null, bodyScale = null, flagColor = null, flagStyle = null, flagScale = 1 } = {}) {
+    if (!this.running || !cell) return null;
+    const s = this.squads.length, style = flagStyle ?? (archer ? 2 : pike ? 1 : 0);
+    const squad = { id: s, archer, pike, flag: this.#flag(flagColor || FLAG[style % 3], style), goal: cell, goalFloor: this.world.top(cell), members: [], alive: true };
+    squad.flag.userData.fid = s; squad.flag.userData.scale = flagScale * this.unitScale; squad.flag.scale.setScalar(flagScale * this.unitScale);
+    const col = bodyColor ? new THREE.Color(bodyColor) : null;
+    for (let k = 0; k < size; k++) { const u = this.#spawn(TEAM.DEF, cell, squad, k); if (tier) setUnitAppearanceTier(u, tier); if (col) u.bodyColor = col; if (bodyScale) u.bodyScale = bodyScale * this.unitScale; }
+    this.squads.push(squad);
+    return squad;
   }
   setSquadEmblems(on) {
     on=!!on;if(!!this.squadEmblems===on)return;this.squadEmblems=on;
@@ -385,8 +553,9 @@ export class Battle {
   }
   #updateFlag(f, dt) {
     const { cloth, SEG } = f.userData;
-    const top = new THREE.Vector3(f.position.x, f.position.y + 0.58, f.position.z);
-    const LEN = 0.075;   // 粒子间距
+    const k = f.userData.scale || 1;   // [opt-in] 旗子整体放大（龙纛 ×2.5）；1 = 原样
+    const top = new THREE.Vector3(f.position.x, f.position.y + 0.58 * k, f.position.z);
+    const LEN = 0.075 * k;   // 粒子间距
     if (!f.userData.parts) f.userData.parts = [0, 1, 2].map((i) => top.clone().add(new THREE.Vector3(LEN * (i + 1), 0, 0)));
     const P = f.userData.parts;
     const t = this.t;
@@ -405,7 +574,7 @@ export class Battle {
       prev = p;
     }
     const pos = cloth.geometry.attributes.position;
-    const H = 0.10; // local wider banner proportions, not an exact source measurement
+    const H = 0.10 * k; // local wider banner proportions, not an exact source measurement
     for (let i = 0; i <= SEG; i++) {
       const u = i / SEG, v = 1 - u;
       const b = top.clone().multiplyScalar(v * v * v)
@@ -414,11 +583,14 @@ export class Battle {
       pos.setXYZ(i * 2 + 1, b.x, b.y - H * (1 - 0.25 * u), b.z);   // 旗尾稍窄
     }
     pos.needsUpdate = true;
+    // 883447205176238083：菱形标记是 billboard（片里无论绕到哪一侧都是正菱形，不跟着旗面翻）
+    if (f.userData.marker) f.userData.marker.quaternion.copy(this.view.camera.quaternion);
   }
   #spawn(team, cell, squad, k, pos = null, kind = 'small') {
     const a = (k / 8) * Math.PI * 2, r = 0.12 + (k % 2) * 0.1;
     const u = { uid: (this._uidSeq = (this._uidSeq || 0) + 1), team, squad, k, hp: team === TEAM.DEF ? 3 : 2, max: team === TEAM.DEF ? 3 : 2, x: (pos?.x ?? cell.cx) + Math.cos(a) * r, z: (pos?.z ?? cell.cz) + Math.sin(a) * r, y: 0, cd: Math.random(), dead: false, onBoat: null, face: 0, soak: 0 };
     configureCombatUnit(u, {kind, maxHealth: kind === 'big' ? 6 : team === TEAM.DEF ? 3 : 2});
+    if (this.unitScale !== 1) u.bodyScale = (u.bodyScale ?? 1) * this.unitScale;   // [opt-in]
     u.y = pos?.y ?? this.#groundY(u.x, u.z);
     u.navFloor = pos ? this.world.top(cell) : Math.round(u.y/this.L);
     this.units.push(u);
@@ -518,14 +690,31 @@ export class Battle {
 
   /* ------------------------------------------------------------ 维京长船 */
   #launchWave() {
-    const plan=planLanding(this.world,this.boats);
+    let plan=planLanding(this.world,this.boats);
     this.lastLandingPlan=plan?'reserved':'blocked';
     if(!plan)return;
     this.wave++;
-    const {land,dir,stop,from}=plan;
+    // [opt-in] view.boatOrigins()：长船从母船出发——轮流选母船，几次泊位规划里挑离母船最近的滩，
+    //   起点 = 母船，航向 = 母船 → 泊位（回程沿原路回母船）；inDur 按距离给时长（约 1.5 格/秒）。
+    //   岸礁补齐：母船航线 corridorBlocked（泊位外沿 0.8 → 母船）压陆地的不算干净候选；
+    //   十次采样全压陆地就退回标准直线走廊（plan/from/dir 不改），并记 trafficStats.originBlocked。
+    const origins=this.view.boatOrigins?.()||[];
+    let {land,dir,stop,from}=plan;
+    if(origins.length){
+      const o=origins[(this.wave-1)%origins.length],far=(p)=>Math.hypot(p.stop[0]-o.x,p.stop[1]-o.z);
+      let best=null,bestD=Infinity;
+      for(let k=0;k<10;k++){const p=planLanding(this.world,this.boats);if(!p)break;
+        const d=far(p);if(d<bestD&&!corridorBlocked(this.world,[p.stop[0]+p.dir[0]*.8,p.stop[1]+p.dir[1]*.8],[o.x,o.z],{except:[p.land]})){best=p;bestD=d;}}
+      if(best){plan=best;({land,stop}=plan);from=[o.x,o.z];
+        const dx=o.x-plan.stop[0],dz=o.z-plan.stop[1],l=Math.hypot(dx,dz)||1;dir=[dx/l,dz/l];}
+      else this.trafficStats.originBlocked++;
+    }
+    const bs=this.boatScale;
+    const berth = bs === 1 ? stop : [stop[0] + dir[0] * 0.64 * (bs - 1), stop[1] + dir[1] * 0.64 * (bs - 1)];   // [opt-in] 船放大后往海里退半个船长，船头不扎进岸
     const mesh = this.#longship();
+    mesh.scale.setScalar(bs);   // [opt-in]
     this.group.add(mesh);
-    const boat = { mesh, from, stop, dir, t: 0, state: 'in', land, crew: [], stains: [], trail: [] };
+    const boat = { mesh, from, stop: berth, dir, t: 0, state: 'in', land, crew: [], stains: [], trail: [], x: from[0], z: from[1], avoid: 0, inDur: origins.length ? Math.max(9, Math.hypot(from[0] - berth[0], from[1] - berth[1]) / 1.5) : 9 };
     const n = 6 + Math.min(6, this.wave * 2);
     for (let k = 0; k < n; k++) { const u = this.#spawn(TEAM.VIK, land, null, k, { x: from[0], z: from[1], y: 0.05 }, this.wave >= 3 && k === 0 ? 'big' : 'small'); u.onBoat = boat; u.seat = k; boat.crew.push(u); }
     this.boats.push(boat);
@@ -617,6 +806,43 @@ export class Battle {
     if (!a.length) return [0, 0];
     return [a.reduce((s, u) => s + u.x, 0) / a.length, a.reduce((s, u) => s + u.z, 0) / a.length];
   }
+  /** 883447205176238083：选中队伍脚下的占位线网（轮廓 / 辐条 / 角标），按格边界走。 */
+  setFootprint(on) {
+    this.footprintOn = !!on;
+    if (!on) { this.footprintLines.visible = false; this.footprintStats = null; }
+  }
+  #updateFootprint(force = false) {
+    const sq = this.selected;
+    if (!this.footprintOn || !sq || !sq.alive) { this.footprintLines.visible = false; this.footprintStats = null; this._fpSel = null; return; }
+    if (!force && sq === this._fpSel && this.t - this._fpStamp < 0.1) return;
+    this._fpSel = sq; this._fpStamp = this.t;
+    const men = [], cells = [], seen = new Set();
+    for (const u of sq.members) {
+      if (u.dead || u.onBoat) continue;
+      men.push([u.x, u.z]);
+      const c = this.#cellAt(u.x, u.z); if (!c) continue;
+      if (!seen.has(c.id)) { seen.add(c.id); cells.push(c); }
+    }
+    if (!men.length || !cells.length) { this.footprintLines.visible = false; this.footprintStats = null; return; }
+    const fp = footprintBoundary(men, cells);
+    const pts = [], push = (a, b) => { pts.push(a[0], a[1], a[2], b[0], b[1], b[2]); };
+    // 格角正落在格边界上，取高度时朝中心缩 2%，免得取到邻格的台面
+    const at = ([x, z]) => [x, this.#groundY(x, z) + 0.03, z];
+    const lift = ([x, z]) => at([x + (fp.hub[0] - x) * 0.02, z + (fp.hub[1] - z) * 0.02]);
+    for (const r of (fp.rings ?? [fp.ring])) for (let i = 0; i < r.length; i++) push(lift(r[i]), lift(r[(i + 1) % r.length]));
+    for (const [, p] of fp.spokes) push(lift(p), at(fp.hub));   // 辐条：中心 → 每个角
+    for (const t of fp.ticks) for (let i = 0; i < 4; i++) push(lift(t[i]), lift(t[(i + 1) % 4]));
+    const g = this.footprintLines.geometry;
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pts, 3));
+    g.computeBoundingSphere();
+    this.footprintLines.visible = true;
+    this.footprintStats = {
+      squad: sq.id, men: men.length, cells: cells.length, ring: fp.ring.length, spokes: fp.spokes.length,
+      ticks: fp.ticks.length, tris: fp.tris.length, area: fp.area, cellArea: fp.cellArea, perimeter: fp.perimeter,
+      hullArea: fp.hullArea, notchArea: fp.notchArea, triArea: fp.triArea, segments: pts.length / 6,
+      minLift: (() => { let m = 1e9; const a = g.attributes.position.array; for (let i = 0; i < a.length; i += 3) { const c = this.#cellAt(a[i], a[i + 2]); if (!c) continue; m = Math.min(m, Math.abs(a[i + 1] - (this.world.top(c) * this.L + 0.03))); } return m === 1e9 ? null : m; })(),
+    };
+  }
   #drawPath(sq, goal) {
     const lead=sq.members.find(u=>!u.dead&&!u.onBoat),pts=[];
     const plan=lead?this.navigation.plan(lead,goal,sq.goalFloor??this.world.top(goal)):null;
@@ -650,29 +876,44 @@ export class Battle {
     const w = this.world, L = this.L;
     if(this.passageStats?.version!==w.version||this._passageGeometry!==this.view.mesh.geometry||this._passageStairs!==this.view.navLayer?.stairs.geometry){this.navCache.clear();this.refreshPassages();}
     else if(this.showPassages)this.#updatePassageFade(dtReal);
+    // 同一帧里 devicePixelRatio 可能被改（缩放/换屏）：下限按物理像素跟着走。
+    if(this.passageDotStyle?.mode==='world')syncPointFloor(this.passageDots.material.userData.pointFloor,this.passageDotStyle.minPx,this.#pixelRatio());
     if (this.t > this.nextWave) { this.#launchWave(); this.nextWave = this.t + 26; this.#hud(); }
-    // 长船
-    for (const b of this.boats) {
+    // 长船（974325184525201409 动态避让：in/out 每帧 steerBoat——先直线，压高优先级船的航线就
+    // 按侧偏表找干净走廊，全堵则停船等让；侧偏 b.avoid 缓动，不改 dir/泊位对齐。本地近似，非原片机制）
+    for (let bi = 0; bi < this.boats.length; bi++) {
+      const b = this.boats[bi];
       if (b.state === 'in') {
-        b.t = Math.min(1, b.t + dt / 9);
-        const e = 1 - (1 - b.t) * (1 - b.t);
-        b.x = b.from[0] + (b.stop[0] - b.from[0]) * e; b.z = b.from[1] + (b.stop[1] - b.from[1]) * e;
-        if (b.t >= 1) { b.state = 'unload'; b.wait = 0; }
+        const st = steerBoat(b, this.boats, bi, { world: this.world, except: [b.land] });
+        b.hold = st.hold; this.trafficStats.holdFrames += st.hold ? 1 : 0; this.trafficStats.sidestepFrames += st.offset ? 1 : 0;
+        b.avoid = (b.avoid || 0) + ((st.hold ? b.avoid || 0 : st.offset) - (b.avoid || 0)) * Math.min(1, dt * 3);
+        if (!st.hold) {
+          b.t = Math.min(1, b.t + dt / (b.inDur || 9));   // [opt-in] 从母船出发时按距离给时长
+          const e = 1 - (1 - b.t) * (1 - b.t);
+          b.x = b.from[0] + (b.stop[0] - b.from[0]) * e; b.z = b.from[1] + (b.stop[1] - b.from[1]) * e;
+          if (b.t >= 1) { b.state = 'unload'; b.wait = 0; b.avoid = 0; }
+        }
       } else if (b.state === 'unload') {
+        b.hold = false;
         b.wait += dt;
         for (const u of b.crew) if (u.onBoat && !u.dead && b.wait > 0.3 + u.seat * 0.25) { u.onBoat = null; u.x = b.land.cx + (Math.random() - 0.5) * 0.3; u.z = b.land.cz + (Math.random() - 0.5) * 0.3; }
         if (b.crew.every((u) => !u.onBoat || u.dead) && b.wait > 4) { b.state = 'out'; b.t = 0; }
       } else {
-        b.t += dt / 14;
+        const st = steerBoat(b, this.boats, bi);
+        b.hold = st.hold; this.trafficStats.holdFrames += st.hold ? 1 : 0; this.trafficStats.sidestepFrames += st.offset ? 1 : 0;
+        b.avoid = (b.avoid || 0) + ((st.hold ? b.avoid || 0 : st.offset) - (b.avoid || 0)) * Math.min(1, dt * 3);
+        if (!st.hold) b.t += dt / 14;
         b.x = b.stop[0] + b.dir[0] * b.t * 16; b.z = b.stop[1] + b.dir[1] * b.t * 16;
       }
+      // 侧偏叠加在直线路径上（in：行进方向 = -dir；out：+dir；perp = 行进方向左手）
+      if (b.avoid) { const fx = b.state === 'out' ? b.dir[0] : -b.dir[0], fz = b.state === 'out' ? b.dir[1] : -b.dir[1]; b.x += -fz * b.avoid; b.z += fx * b.avoid; }
       const ang = Math.atan2(b.dir[1], b.dir[0]) + (b.state === 'out' ? 0 : Math.PI);
       const bob = Math.sin(this.t * 2 + b.from[0]) * 0.01;
       b.mesh.position.set(b.x, 0.02 + bob, b.z);
       b.mesh.rotation.set(0, -ang, Math.sin(this.t * 1.5) * 0.03);
       b.mesh.updateMatrixWorld();
       // 尾迹：船尾撒白点，慢慢散开（901469409579061248）
-      if (b.state !== 'unload' && Math.random() < 0.9) b.trail.push({ x: b.x - Math.cos(-b.mesh.rotation.y) * 0.55, z: b.z - Math.sin(-b.mesh.rotation.y) * 0.55, a: 0, s: Math.random() < 0.5 ? 1 : -1 });
+      if (b.state !== 'unload' && !b.hold && Math.random() < 0.9) b.trail.push({ x: b.x - Math.cos(-b.mesh.rotation.y) * 0.55 * this.boatScale, z: b.z - Math.sin(-b.mesh.rotation.y) * 0.55 * this.boatScale, a: 0, s: Math.random() < 0.5 ? 1 : -1 });   // [opt-in] 尾迹随船放大；让行停船不撒
       for (const p of b.trail) { p.a += dt; const px = -Math.sin(-b.mesh.rotation.y) * p.s, pz = Math.cos(-b.mesh.rotation.y) * p.s; p.x += px * dt * 0.12; p.z += pz * dt * 0.12; }
       b.trail = b.trail.filter((p) => p.a < 4).slice(-260);
       b.mesh.userData.wake.geometry.setAttribute('position', new THREE.Float32BufferAttribute(b.trail.flatMap((p) => [p.x, 0.02, p.z]), 3));
@@ -729,11 +970,15 @@ export class Battle {
       if (u.onBoat) {
         u.thrust = u.spearRecovery = null;
         const b = u.onBoat, row = (u.seat % 7) - 3, side = u.seat % 2 ? 1 : -1;
-        const lx = row * 0.12, lz = side * 0.04;
+        const bs = this.boatScale, lx = row * 0.12 * bs, lz = side * 0.04 * bs;   // [opt-in] 座位随船放大
         const ca = Math.cos(-b.mesh.rotation.y), sa = Math.sin(-b.mesh.rotation.y);
-        u.x = b.mesh.position.x + lx * ca - lz * sa; u.z = b.mesh.position.z + lx * sa + lz * ca; u.y = b.mesh.position.y + 0.03;
+        u.x = b.mesh.position.x + lx * ca - lz * sa; u.z = b.mesh.position.z + lx * sa + lz * ca; u.y = b.mesh.position.y + 0.03 * bs;
         continue;
       }
+      // 828984794407170048（G5）：逐人取脚下真实地面（楼梯上是那一级踏面），不只是整层高度。
+      // 所有接地单位每帧都向脚高缓动一次 —— 近战/横扫/刺击/眩晕/待命时层高变化也不许冻在半空；
+      // 坠落/船上/跃起各有自己的 y（上面 continue 掉），dt=0（暂停/零步长）时公式自然冻结。
+      u.y = this.navigation.footHeight ? easeUnitToHeight(u.y, this.navigation.footHeight(u), dt) : easeUnitGroundHeight(u.y, u.navFloor ?? Math.max(0, Math.round(u.y / this.L)), this.L, dt);
       if (stunned) { u.thrust = u.spearRecovery = null; continue; } // Getting hit interrupts the thrust.
       u.cd -= dt;
       if (u.sweep) { this.g3.stepSweep(u, alive, dt); continue; }
@@ -743,7 +988,7 @@ export class Battle {
         const hits = stepSpearThrust(u.thrust, alive, dt, {canHit: v =>
           v.team !== u.team && !v.onBoat && !v.fall && this.navigation.canMelee(u, v)});
         const popupsBefore = this.damageStats.spawned, killsBefore = this.damageStats.kills;
-        for (const target of hits) this.#hit(target, u);
+        for (const target of hits) this.#hit(target, u, u.thrust);   // [opt-in] 传矛轴：knockoffWater 时沿矛「顶着走」
         // 联动度量：每一帧都写 lastThrust*（没命中就是 0），验收里逐帧对数；
         // hitSet 只累加真命中，thrustFrames 记「这一刺有几帧打到了人」。
         this.damageStats.lastThrustHits = hits.length;
@@ -793,6 +1038,7 @@ export class Battle {
         if (!goal && this.infoSharing !== false) { const k = (this.infoGraph ??= new InfoGraph()).goalFor(u, this, alive); if (k) { goal = k.cell; goalFloor = k.floor; } }
         if (!goal && open.length) goal = open.reduce((a, h) => (Math.hypot(h.door.cx - u.x, h.door.cz - u.z) < Math.hypot(a.door.cx - u.x, a.door.cz - u.z) ? h : a)).door;
       }
+      if (u.tmGoal && u.team === TEAM.VIK && !(foe && fd < 0.6 && foe.team === TEAM.DEF)) { goal = u.tmGoal; goalFloor = w.top(goal); }   // [opt-in] 外部导航目标（苔庭：扑向霸天重甲兵），近身守军仍优先
       if (!goal) continue;
       const plan=this.navigation.plan(u,goal,goalFloor??w.top(goal));
       if(!plan)continue; // Never fall back to a straight line through blocked voxels.
@@ -808,19 +1054,20 @@ export class Battle {
       const off = u.team === TEAM.DEF ? 0.16 : 0.12;
       const near = plan.arrived;
       if (near) { const a = (u.k / 8) * Math.PI * 2; tx += Math.cos(a) * off * (1 + (u.k % 2)); tz += Math.sin(a) * off * (1 + (u.k % 2)); }
-      if (this.c01.on.column) ({ tx, tz } = this.c01.steer(u, plan, tx, tz, near));
+      // 816743289500106752（第 173 轮）：列队同时给速度倍率 —— 拐角处按「转角 + 离拐点远近」降速（内圈更慢）。
+      let steerK = 1;
+      if (this.c01.on.column) { const st = this.c01.steer(u, plan, tx, tz, near); tx = st.tx; tz = st.tz; steerK = st.speed ?? 1; }
       const dx = tx - u.x, dz = tz - u.z, d = Math.hypot(dx, dz);
-      const speed = u.team === TEAM.DEF ? 0.9 : 0.75;
+      const speed = (u.team === TEAM.DEF ? 0.9 : 0.75) * steerK;
       if (d > 0.02) {
         const s = Math.min(d, speed * dt) / d;
         // Local overlap separation supplements the stable lane target above.
         const separation = localSeparation(u,alive,dt,{heightTolerance:this.L*.6});
-        if(!this.navigation.move(u,u.x+dx*s+separation.x,u.z+dz*s+separation.z,plan))
-          this.navigation.move(u,u.x+dx*s,u.z+dz*s,plan);
+        this.#step(u, dx * s, dz * s, separation, plan);
         u.face = Math.atan2(dx, dz);
       }
-      // 828984794407170048（G5）：逐人取脚下真实地面（楼梯上是那一级踏面），不只是整层高度
-      u.y = this.navigation.footHeight ? easeUnitToHeight(u.y,this.navigation.footHeight(u),dt) : easeUnitGroundHeight(u.y,u.navFloor,this.L,dt);
+      // 828984794407170048：层高缓动已上移到本循环前段 —— 落地/近战/待命所有接地状态共用同一处，
+      // 走路分支不再单写一遍（写两遍会让移动单位每帧缓动两次、等效速率翻倍，不是已验收的 exp(-10) 解析曲线）。
     }
     // 小屋：维京人在门口站够 4 秒 → 着火
     for (const h of this.houses) {
@@ -837,10 +1084,11 @@ export class Battle {
         this.view.smoke?.sources.push({ x: c.cx, y: y + 0.1, z: c.cz });   // 着火的小屋冒黑烟（1015140880666300416）
         // 第 89 轮（837027901853810688）：这一处是「爆燃」——火先亮、烟被顶起来，两条不同步曲线。
         // 点火的是刚推进去的那个源，别 ignite(0)：0 号是常驻烟囱，点它会让整座岛一起变粗。
-        if (this.view.smoke) {
-          const si = this.view.smoke.sources.length - 1;
-          this.view.smoke.setFireCoupling(true);
-          this.view.smoke.ignite(si);
+        const sm = this.view.smoke;
+        if (sm) {
+          const si = sm.sources.length - 1;
+          sm.setFireCoupling?.(true);   // [opt-in] 桩 view 可以只有 sources：两个调用都按可选处理
+          sm.ignite?.(si);
         }
         this.#hud();
       }
@@ -853,15 +1101,17 @@ export class Battle {
       // 987267068495003648（G5）：无阻力解析 shot 与烘表（带 drag）shot 共用一个求位置函数
       const T = t * a.dur, ps = projectileState(a.from, a.to, a.shot, T, G), x = ps.x, y = ps.y, z = ps.z;
       const from=a.previous??{x:a.from[0],y:a.from[1],z:a.from[2]},to={x,y,z};
-      if(!this.navigation.clearSegment(from,to)){a.stuck=true;a.mesh.position.set(from.x,from.y,from.z);continue;}
+      if (!this.navigation.clearSegment(from,to)) { a.stuck=true; a.mesh.position.set(from.x,from.y,from.z); if(a.trail)a.trail.visible=false; continue; }
       a.previous=to;
       a.mesh.position.set(x, y, z);
+      if (a.trail) { const pa = a.trail.geometry.attributes.position; pa.setXYZ(1, x, y, z); pa.needsUpdate = true; a.trail.geometry.computeBoundingSphere(); }
       a.mesh.lookAt(ps.look[0], ps.look[1], ps.look[2]);
       if (t >= 1) {
         a.stuck = true;
+        if (a.trail) a.trail.visible = false;   // 落定后轨迹线收掉，只留插在地上的箭
         const tg = a.target;
         const bodyScale = tg.bodyScale ?? 1;
-        if (!tg.dead && Math.hypot(tg.x - x, tg.y+.08*bodyScale-y, tg.z - z) < 0.18*bodyScale) { this.#hit(tg, null); a.mesh.visible = false; }
+        if (!tg.dead && Math.hypot(tg.x - x, tg.y+.08*bodyScale-y, tg.z - z) < 0.18*bodyScale) { this.#hit(tg, null); if (tg.dead) this.#creditKill(tg, a.shooter); a.mesh.visible = false; }
         else {
           // 射空：落在船上 → 粘在船上随船走（946660607008403456）；否则插在地上
           const boat = this.boats.find((b) => Math.hypot(b.mesh.position.x - x, b.mesh.position.z - z) < 0.6);
@@ -870,9 +1120,11 @@ export class Battle {
         }
       }
     }
-    if (this.arrows.length > 160) { const old = this.arrows.shift(); old.mesh.parent?.remove(old.mesh); }
+    if (this.arrows.length > 160) { const old = this.arrows.shift(); old.mesh.parent?.remove(old.mesh); old.trail?.parent?.remove(old.trail); }
     // 小队全灭
     for (const sq of this.squads) if (sq.alive && sq.members.every((u) => u.dead)) { sq.alive = false; sq.flag.visible = false; sq.flag.userData.cloth.visible = false; if (this.selected === sq) { this.selected = null; this.scale = 1; } this.#hud(); }
+    // [opt-in] knockoffWater：溺水下沉计时 + 水花扩散
+    if (this.knockoff) { for (const u of this.units) if (u.drown) u.drown.t += dt; stepSplashes(this.splashes, dt); }
     // 血滴：抛物线落地 → 一小摊血
     this.#updateDamageNumbers(dt);
     for (const d of this.drops) { d.vy -= 5 * dt; d.x += d.vx * dt; d.y += d.vy * dt; d.z += d.vz * dt; const gy = this.#groundY(d.x, d.z); if (d.y <= gy) { d.done = true; this.#bleed(d.x, gy, d.z, 0.02 + Math.random() * 0.02); } }
@@ -1165,16 +1417,23 @@ export class Battle {
    * 挨打：扣血、后退一点、喷几滴血（1022573208590057472 / 912691357440978945 "the look and feel of the basic meat and
    * potato melee combat"）；站在崖边的会被打下去（870296307889573889 "Units can now get knocked off ledges"）。
    */
-  #hit(v, by) {
+  #hit(v, by, thrust = null) {
     if (by && !v.onBoat && !v.dead) {
-      const dx = v.x - by.x, dz = v.z - by.z, d = Math.hypot(dx, dz) || 1, nx = dx / d, nz = dz / d;
-      v.x += nx * 0.05; v.z += nz * 0.05;
+      // [opt-in] knockoffWater：长矛沿矛轴「顶着走」0.12（knockoff-water.hitShove），其余同原值 0.05
+      const shove = this.knockoff ? hitShove(v, by, thrust) : (() => { const dx = v.x - by.x, dz = v.z - by.z, d = Math.hypot(dx, dz) || 1; return { nx: dx / d, nz: dz / d, dist: 0.05, spear: false }; })();
+      const nx = shove.nx, nz = shove.nz;
+      v.x += nx * shove.dist; v.z += nz * shove.dist;
       for (let k = 0; k < 4; k++) this.drops.push({ x: v.x, y: v.y + 0.12, z: v.z, vx: nx * (0.5 + Math.random() * 0.7) + (Math.random() - 0.5) * 0.3, vy: 0.2 + Math.random() * 0.35, vz: nz * (0.5 + Math.random() * 0.7) + (Math.random() - 0.5) * 0.3 });
       // 崖边：往后一步就比脚下低 ≥ 2 层 → 被打下去
       const here = this.#cellAt(v.x, v.z), there = this.#cellAt(v.x + nx * 0.3, v.z + nz * 0.3);
       const w = this.world;
       if (here && (!there || this.navigation.supportBelow(v.x+nx*.3,v.z+nz*.3,v.y)/this.L <= (v.navFloor??Math.round(v.y/this.L))-2) && Math.random() < 0.6) {
         v.fall = { vx: nx * 1.2, vz: nz * 1.2, vy: 0.25, from: v.navFloor??w.top(here) };
+      }
+      // [opt-in] 落水（870296307889573889）：推到 / 推向水（top 0 或网格外）→ 上抛翻滚 → 入水即溺水
+      if (this.knockoff && !v.fall && shouldFallIntoWater(this.view.index, w, v, shove)) {
+        beginKnockoff(v, shove, v.navFloor ?? (here ? w.top(here) : 0), shove.spear ? 2.2 : 1.6);
+        this.drownStats.knocked++;
       }
     }
     const hpBefore = v.hp;
@@ -1188,6 +1447,7 @@ export class Battle {
     this.#bleed(v.x, v.y, v.z, 0.04 + Math.random() * 0.03, v.onBoat);
     if (v.hp <= 0 && !v.dead) {
       v.dead = true;
+      this.#creditKill(v, by);   // [opt-in] unitPromotion：击杀记账 → 等级 → 装备档位
       // 第 60 轮：击杀奖励 +10 与伤害数字共用同一套 Sprite 池（原先只有 squad-hud 页另画一套）
       this.#damagePopup(v, KILL_VALUE, 'kill');
       this.#bleed(v.x, v.y, v.z, 0.1 + Math.random() * 0.06, v.onBoat);
@@ -1204,6 +1464,18 @@ export class Battle {
     this.c02.onHit(v, by);
     this.c01.onHit(v, by);   // 第 88 轮：skyBeam 的「单位柱」（912 那根）也走同一处命中钩子，关着就是空操作
   }
+
+  /**
+   * [opt-in] unitPromotion（827215002448846848 残差）：by 记一次击杀 → u.kills/u.level，
+   * 升档时换 appearanceTier（头盔/盾色阶，既有渲染链接管，不回血不重置状态）。
+   * 本地最小机制，非原作复现（原作升级经济未公开）；误伤同队与已死的击杀者不记。
+   */
+  #creditKill(v, by) {
+    if (!this.promotion || !by || by.dead || by.team === v.team) return;
+    const r = creditUnitKill(by);
+    this.promotionStats.credited++;
+    if (r.promoted) { setUnitAppearanceTier(by, r.level); this.promotionStats.promoted++; this.promotionStats.last = { uid: by.uid, level: r.level }; }
+  }
   #fallStep(u, dt) {
     const f = u.fall;
     const previousY = u.y;
@@ -1218,6 +1490,9 @@ export class Battle {
     u.y += f.vy * dt;
     const c = this.#cellAt(u.x, u.z);
     const gy = c ? this.navigation.supportBelow(u.x, u.z, previousY) : -0.3;
+    if (f.spin) f.age = (f.age || 0) + dt;   // [opt-in] knockoffWater 空中翻滚计时（表现）
+    // [opt-in] 落到水面（网格外或 top 0 的海格）→ 溺水：不摔死、不留尸体、不流血（combatfx：y < waterY → DROWN）
+    if (this.knockoff && u.y <= 0 && f.vy < 0 && (!c || this.world.top(c) <= 0)) { this.#drown(u); return; }
     if (u.y <= gy && f.vy < 0) {
       const floorNow = Math.round(gy / this.L);
       // 还被推在出发那一层的沿口上：贴地继续横移，等真的越过后沿再自由落体（片子是被打退两步才踩空）
@@ -1237,9 +1512,26 @@ export class Battle {
       u.fall = null;
       // 870296307889573889（G5）：落进海里 = 溺水沉下去（不再站在海面上卡住）；落地按落差硬直
       const landing = resolveFallLanding({ drop, water: !c || this.world.top(c) === 0 });
-      if (landing.outcome === 'drown') { if (!u.dead) { u.dead = true; u.drowned = true; u.corpseRot = Math.random() * 6; u.y = -0.3; } }
+      if (landing.outcome === 'drown') { if (this.knockoff && !u.dead) this.#drown(u); else if (!u.dead) { u.dead = true; u.drowned = true; u.corpseRot = Math.random() * 6; u.y = -0.3; } }   // [opt-in] knockoffWater 时走带水花/下沉计时的溺水
       else if (landing.outcome === 'dead') { if (!u.dead) { u.dead = true; u.corpseRot = Math.random() * 6; this.#bleed(u.x, u.y, u.z, 0.12); } }
       else { if (landing.outcome === 'hurt' && !u.dead) this.#hit(u, null); if (!u.dead && landing.stun > 0) stunUnit(u, landing.stun); }
+    }
+  }
+
+  /** [opt-in] 入水：溺水 + 两圈水花（knockoff-water.beginDrown：不留尸体、不流血）。 */
+  #drown(u) {
+    beginDrown(u);
+    this.drownStats.drowned++; if (u.team === TEAM.VIK) this.drownStats.vik++; else this.drownStats.def++;
+    for (let k = 0; k < 2; k++) {
+      let s = this.splashes.find((q) => q.t >= q.dur);
+      if (!s) {
+        const mesh = new THREE.Mesh(this.splashGeo, new THREE.MeshBasicMaterial({ color: '#f4fbff', transparent: true, opacity: 0.85, depthWrite: false, side: THREE.DoubleSide }));
+        mesh.rotation.x = -Math.PI / 2; mesh.renderOrder = 3; this.group.add(mesh);
+        s = { mesh, t: 0, dur: 1 }; this.splashes.push(s);
+      }
+      const sc = u.bodyScale ?? 1;
+      Object.assign(s, { t: -k * 0.22, dur: 0.9 + k * 0.3, r0: 0.03 * sc, r1: (0.16 + k * 0.08) * sc });
+      s.mesh.position.set(u.x, 0.012, u.z); s.mesh.visible = false;
     }
   }
 
@@ -1267,6 +1559,15 @@ export class Battle {
     if((this.projectileTable??defaultBallisticTable).impactWeight===impactWeight){this.projectileTable??=defaultBallisticTable;return;}
     const next=createBallisticTable({impactWeight});this.projectileTable=next;
   }
+  /** 弓手 Validity 契约（987267068495003648）：射程环默认取现有 4.5 开火门槛，
+   *  遮挡 = 沿弧线逐点核 world.isSolid（与飞行中 clearSegment 同一条点判据），落点 = 目标站在该格地表 ±容差内。
+   *  默认不装（shotContract=null 保持旧行为）；装上后 #shoot 射前逐条候选拦。 */
+  makeShotContract({ minRange = 0, maxRange = 4.5, landingTolerance = .3, samples = 40 } = {}) {
+    const L = this.L;
+    return createShotContract({ minRange, maxRange, landingTolerance, samples,
+      blockedAt: (x, y, z) => { const c = this.#cellAt(x, z); return !!(c && y >= 0 && this.world.isSolid(c, Math.floor(y / L) + 1)); },
+      groundAt: (x, z) => { const c = this.#cellAt(x, z); return c ? this.world.top(c) * L : null; } });
+  }
   #shoot(u, foe) {
     const m = new THREE.Mesh(this.arrowGeo, this.arrowMat);
     this.group.add(m);
@@ -1274,47 +1575,78 @@ export class Battle {
     const to = [foe.x + (Math.random() - 0.5) * lead, foe.y + 0.08*(foe.bodyScale??1), foe.z + (Math.random() - 0.5) * lead];
     const from = [u.x, u.y + 0.15*(u.bodyScale??1), u.z];
     const dist = Math.hypot(to[0] - from[0], to[2] - from[2]);
-    const shot = (this.projectileTable??defaultBallisticTable).lookup(dist, to[1] - from[1]);
-    if (!shot) { this.group.remove(m); return; }   // 查表没有解：够不着
-    this.arrows.push({ mesh: m, from, to, t: 0, dur: shot.time, shot, target: foe, stuck: false });
+    const contract = this.shotContract;
+    const shot = pickBallisticShot(this.projectileTable??defaultBallisticTable, dist, to[1] - from[1],
+      contract ? (s) => contract.validate(from, to, s, G).ok : null);
+    if (!shot) { this.group.remove(m); return; }   // 查表没有解或契约全拒：够不着/不合法
+    // 轨迹线：从出箭点到箭当前位置，随箭一起长；落定就收掉
+    const tg = new THREE.BufferGeometry();
+    tg.setAttribute('position', new THREE.Float32BufferAttribute([from[0], from[1], from[2], from[0], from[1], from[2]], 3));
+    const trail = new THREE.Line(tg, this.arrowTrailMat);
+    trail.frustumCulled = false; trail.renderOrder = 4; this.group.add(trail);
+    this.arrows.push({ mesh: m, trail, from, to, t: 0, dur: shot.time, shot, target: foe, stuck: false, shooter: u });   // shooter：[opt-in] unitPromotion 箭杀记账
   }
 
   #draw() {
     const m = new THREE.Matrix4(), weapon = new THREE.Matrix4(), q = new THREE.Quaternion(), s = new THREE.Vector3(1, 1, 1), p = new THREE.Vector3(), e = new THREE.Euler();
     const col = new THREE.Color();
+    const vo = this.view.visualOffset ? (x, z) => this.view.visualOffset(x, z) : () => 0;   // [opt-in] 只画的高度修正（实景地面 − REA 层高），逻辑不变
+    // 关掉血腥（999191760944418817）：血/血滴/尸体整层不画；体表浸血也是血——aSoak 与整体发红同样归零
+    const gore = !this.view.goreOff;
     this.unitShadows.update(this.world,this.units,this.navigation,this.L);
-    this.spriteBatch.update(this.units, this.view.camera, {gore:!this.view.goreOff});
+    this.spriteBatch.update(this.units, this.view.camera, {gore});
     let n = 0, nSpear = 0, nStun = 0;
     for (const u of this.units) {
       if (n >= MAX) break;
-      if (u.dead && this.view.goreOff) continue;
-      if (u.dead) {
+      if (u.drown && u.drown.t > DROWN_SINK_SEC) continue;   // [opt-in] 沉下去了，不再画
+      if (u.dead && this.view.goreOff && !u.drown) continue;
+      if (u.drown) {
+        // [opt-in] 溺水：竖着往下沉、慢慢歪倒，衣色压暗
+        const k = Math.min(1, u.drown.t / DROWN_SINK_SEC);
+        e.set(0.5 * k, u.face, u.drown.spin * k);
+        col.copy(u.bodyColor ?? (u.team === TEAM.DEF ? COL.def : COL.vik)).multiplyScalar(1 - 0.45 * k);
+      } else if (u.fall?.spin) {
+        // [opt-in] 被打飞：空中翻滚（combatfx knockback spin）
+        e.set(u.fall.spin * (u.fall.age || 0) * 0.6, u.face, u.fall.spin * (u.fall.age || 0));
+        col.copy(u.bodyColor ?? (u.team === TEAM.DEF ? (u.squad?.archer ? COL.defArcher : COL.def) : COL.vik));
+      } else if (u.dead) {
         // 尸体：躺倒；死在船上的跟着船
         e.set(Math.PI / 2, u.corpseRot, 0);
         col.copy(u.team === TEAM.DEF ? COL.def : COL.vik).lerp(COL.corpse, 0.45);
+        // 946660607008403456（第 185 轮）：原片 0430 的 8× 裁切是「整片暗红舱底 + 上面压一片近白的尸体」，
+        // 尸体若只按队伍色去饱和，在暗红底上根本读不出来（船上的白色是这条片子的识别点）。
+        if (u.onBoat) col.lerp(COL.boatCorpse, 0.58);
       } else {
         e.set(0, u.face, 0);
         if (u.stunRemaining > 0) {
           e.z = Math.sin(this.t * 28) * 0.13;
-          const bs = u.bodyScale ?? 1, hy = u.y + (this.view.visualOffset ? this.view.visualOffset(u.x, u.z) : 0) + 0.21 * bs;
+          const bs = u.bodyScale ?? 1, hy = u.y + vo(u.x, u.z) + 0.21 * bs;
           for (let k = 0; k < 3 && nStun < MAX * 3; k++) { const a = this.t * 6 + k * 2.094; weapon.makeRotationY(a * 2).setPosition(u.x + Math.cos(a) * 0.05 * bs, hy + Math.sin(a * 2) * 0.006 * bs, u.z + Math.sin(a) * 0.05 * bs); weapon.scale(s.set(bs, bs, bs)); this.mStun.setMatrixAt(nStun++, weapon); }
           s.set(1, 1, 1);
         }
-        col.copy(u.team === TEAM.DEF ? (u.squad?.archer ? COL.defArcher : COL.def) : COL.vik);
-        // 血量改由皮肤空间的血斑表达（aSoak），整体只略微发红
-        col.lerp(new THREE.Color('#9e1f24'), u.soak * 0.15);
+        col.copy(u.bodyColor ?? (u.team === TEAM.DEF ? (u.squad?.archer ? COL.defArcher : COL.def) : COL.vik));   // [opt-in] u.bodyColor：单位衣色覆盖（龙纛队黄金战衣 / 罗马红）
+        // 血量改由皮肤空间的血斑表达（aSoak），整体只略微发红（goreOff 时连这层也不画）
+        if (gore) col.lerp(new THREE.Color('#9e1f24'), u.soak * 0.15);
       }
       s.setScalar(this.spriteBatch.enabled && !u.dead ? 0 : u.bodyScale??1);
       q.setFromEuler(e);
-      m.compose(p.set(u.x, u.y + (u.dead ? 0.05*(u.bodyScale??1) : 0), u.z), q, s);
+      m.compose(p.set(u.x, u.drown ? -0.22 * (u.bodyScale ?? 1) * Math.min(1, u.drown.t / DROWN_SINK_SEC) : u.y + vo(u.x, u.z) + (u.dead ? 0.05*(u.bodyScale??1) : 0), u.z), q, s);   // [opt-in] 溺水下沉
       if (u.dead && u.onBoat && u.corpseAnchor) {
         m.copy(resolvePlatformAnchor(u.onBoat.mesh.matrix, u.corpseAnchor));
         p.setFromMatrixPosition(m); u.x = p.x; u.y = p.y - 0.05*(u.bodyScale??1); u.z = p.z;
       }
       this.mBody.setMatrixAt(n, m); this.mBody.setColorAt(n, col);
-      this.aSoak.setX(n, u.dead ? 0.9 : u.soak);
+      this.aSoak.setX(n, gore ? (u.dead ? 0.9 : u.soak) : 0);
       const appearance = u.appearanceTier == null ? null : unitTierAppearance(u.appearanceTier);
-      this.mHead.setMatrixAt(n, m); this.mHead.setColorAt(n, appearance ? col.set(appearance.helmet) : u.team === TEAM.DEF ? COL.shieldD : COL.cream);
+      // 头有独立局部姿态（u.headYaw/u.headRoll，默认 0 → 与身体同矩阵）；[opt-in] headLag：僵直时头滞后身体。
+      // 右乘局部旋转只转几何体，矩阵平移列不变——血斑（部件空间坐标）钉在头上跟头走。
+      const hp_ = u.headYaw || u.headRoll || (this.headLag && u.stunRemaining > 0);
+      if (hp_) {
+        this._headRot.makeRotationZ((u.headRoll || 0) + (this.headLag && u.stunRemaining > 0 ? Math.sin(this.t * 28 - 0.9) * 0.10 : 0));
+        if (u.headYaw) this._headRot.multiply(this._headRotY.makeRotationY(u.headYaw));
+        this.mHead.setMatrixAt(n, this._headMat.copy(m).multiply(this._headRot));
+      } else this.mHead.setMatrixAt(n, m);
+      this.mHead.setColorAt(n, appearance ? col.set(appearance.helmet) : u.team === TEAM.DEF ? COL.shieldD : COL.cream);
       this.mShield.setMatrixAt(n, m); this.mShield.setColorAt(n, appearance ? col.set(appearance.shield) : u.team === TEAM.DEF ? COL.shieldD : COL.shieldV);
       if (u.squad?.pike && !u.dead && !this.spriteBatch.enabled) {
         const phase = u.thrust ?? u.spearRecovery, idle = .32;
@@ -1330,7 +1662,7 @@ export class Battle {
             : idlePitch;
         const shaft = braced ? .38 : length;   // 架矛时略往前探
         // A tiny render-only minimum avoids a singular instance normal transform at age 0.
-        weapon.compose(p.set(u.x, u.y+.1, u.z), q.setFromEuler(e.set(-pitch, angle, 0, 'YXZ')), s.set(1, 1, Math.max(1e-6, shaft)));
+        weapon.compose(p.set(u.x, u.y + vo(u.x, u.z) + .1, u.z), q.setFromEuler(e.set(-pitch, angle, 0, 'YXZ')), s.set(1, 1, Math.max(1e-6, shaft)));
         this.mSpear.setMatrixAt(nSpear, weapon); this.mSpear.setColorAt(nSpear, COL.spearShaft);
         const dir = new THREE.Vector3(0, 0, 1).applyQuaternion(q);
         weapon.compose(p.addScaledVector(dir, shaft), q, s.set(1, 1, 1));
@@ -1341,8 +1673,7 @@ export class Battle {
     this.mStun.count = nStun; this.mStun.instanceMatrix.needsUpdate = true;
     for (const mm of [this.mSpear, this.mSpearTip]) { mm.count = nSpear; mm.instanceMatrix.needsUpdate = true; if (mm.instanceColor) mm.instanceColor.needsUpdate = true; }
     this.aSoak.needsUpdate = true;
-    // 关掉血腥（999191760944418817）：不画血、不留尸体
-    const gore = !this.view.goreOff;
+    // 关掉血腥：不画血、不留尸体（aSoak/体表发红已在上面归过零）
     this.blood.visible = gore;
     this.dropPoints.visible = gore;
     for (const mm of [this.mBody, this.mHead, this.mShield]) { mm.count = n; mm.instanceMatrix.needsUpdate = true; if (mm.instanceColor) mm.instanceColor.needsUpdate = true; }
@@ -1350,10 +1681,11 @@ export class Battle {
     for (const sq of this.squads) {
       if (!sq.alive) continue;
       const [x, z] = this.#centroid(sq);
-      sq.flag.position.set(x, this.#squadY(sq), z);
+      sq.flag.position.set(x, this.#squadY(sq) + vo(x, z), z);   // [opt-in] 旗位同样吃 visualOffset
       this.#updateFlag(sq.flag, this._dt ?? 0);
     }
     if (this.selected) { const [x, z] = this.#centroid(this.selected); this.ring.visible = true; this.ring.position.set(x, this.#squadY(this.selected) + 0.03, z); }
     else this.ring.visible = false;
+    this.#updateFootprint();
   }
 }

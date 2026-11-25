@@ -1,43 +1,58 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>移动路线预览 · 逐帧覆盖实验页</title><link rel="icon" href="data:,"><style>
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>移动路线预览 · 拖检查点 / 累积轨迹 · 逐帧覆盖实验页</title><link rel="icon" href="data:,"><style>
 body{margin:24px;background:#eef2ee;color:#22333a;font:15px/1.6 system-ui,"PingFang SC"}
 h1{font-size:20px;margin:0 0 6px}p.lead{margin:0 0 14px;color:#3c565e;max-width:1080px}
 .row{display:flex;gap:18px;flex-wrap:wrap}.card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 1px 3px rgba(34,51,58,.12)}
 figure{margin:0}figcaption{font-size:13px;color:#4a656e;margin-top:6px}
-canvas{display:block;background:#cfdcd2;border-radius:8px;max-width:100%}
+canvas{display:block;background:#cfdcd2;border-radius:8px;max-width:100%;touch-action:none}
 label{font:inherit;margin-right:16px}input[type=range]{vertical-align:middle}
 #stats{font-size:13px;color:#3c565e;margin:10px 0 14px;font-variant-numeric:tabular-nums}
 a{color:#276e86}
 </style>
-<h1>移动路线预览 → 落崖弧 + 圆角</h1>
-<p class="lead">对照片子 995043346778415104「The pathfinding in some levels does get a bit convoluted」：点 Move 之后满屏白点，先沿台地横走，到崖沿往下折，再沿下一层横走，折角是圆的。<br>
-左边是现在的做法（导航图节点直连成折线，再按等弧长撒点）：跨层那一段是斜的，点串从台地中心斜插到下层中心，中间埋在崖体里。右边把跨层段换成「沿口外抛弧」：从崖沿（红虚线）水平出去、陡落，落到下层台地上，平地拐角再补二次贝塞尔圆角。整条弧都浮在下层地面之上，天然不进岩体。</p>
+<h1>移动路线预览 → 拖检查点重采样 + 块面剖分线 + 累积轨迹</h1>
+<p class="lead">对照片子 810157485638189056（俯视路线调试视图）：棕色块顶面一直画着三角剖分对角线；一个带红/绿/蓝三轴方柄沿路线滑动，红曲线先画出来、黑点再沿它铺开且只增不减。<br>
+左栏是原来的做法（导航图节点直连 + 等弧长撒点）：跨层段斜穿崖体、点串埋在岩体里。右栏把跨层段换成落崖弧、平地补圆角，并且可以用鼠标拖任意检查点——松手即重采样，读数给出点数与总长。</p>
 <div>
 <label>圆角半径 <input id="radius" type="range" min="0.05" max="0.9" step="0.05" value="0.35"></label>
 <label>点间距 <input id="spacing" type="range" min="0.08" max="0.5" step="0.02" value="0.16"></label>
 <label><input id="nodes" type="checkbox" checked> 显示导航节点与折线</label>
+<label><input id="tri" type="checkbox" checked> 块面三角剖分线</label>
+<label><input id="acc" type="checkbox"> 累积轨迹（只增不减）</label>
 </div>
 <div id="stats"></div>
 <div class="row">
 <figure class="card"><canvas id="left" width="470" height="380"></canvas><figcaption>现状：节点直连 + 等弧长撒点（斜穿崖体）</figcaption></figure>
-<figure class="card"><canvas id="right" width="470" height="380"></canvas><figcaption>改后：沿口外抛弧 + 圆角（从崖沿抛出去再落到下层）</figcaption></figure>
+<figure class="card"><canvas id="right" width="470" height="380"></canvas><figcaption>改后：落崖弧 + 圆角 + 可拖检查点（鼠标拖方柄）</figcaption></figure>
 </div>
-<p><a href="index.html?scene=badnorth" target="_top">Bad North 实景</a> · <a href="artifacts/coverage/995043346778415104-review.md">逐帧记录</a></p>
+<p><a href="index.html?scene=badnorth" target="_top">Bad North 实景</a> · <a href="artifacts/coverage/810157485638189056-review.md">逐帧记录</a> · <a href="artifacts/coverage/995043346778415104-review.md">995043346778415104</a></p>
 <script type="module">
-import { buildRoutePreview, buriedSamples } from './src/core/route-preview.js';
+import { buildRoutePreview, buriedSamples, moveCheckpoint, accumulateTrail, quadTriDiagonals, editRouteStats } from './src/core/route-preview.js';
 import { samplePath } from './src/core/path-samples.js';
 
-// 手搭一座三级台地小岛（与片子同构：两道崖、三个高度）
+// 手搭三级台地（与片子同构：两道崖、三个高度）
 const SURFACE = (x) => (x < 4 ? 2 : x < 8 ? 1 : 0);
 const CLIFF_X = [4, 8];
-// 导航图节点：三片区域的中心，跨层那两段就是片子里的"绕路"
-const NODES = [[1.4, 2, 1.6], [5.6, 1, 1.8], [5.6, 1, 7.4], [9.6, 0, 7.0]];
+const NODES0 = [[1.4, 2, 1.6], [5.6, 1, 1.8], [5.6, 1, 7.4], [9.6, 0, 7.0]];
 const cliffAt = (a, b) => {
   const cliff = a[1] === 2 ? CLIFF_X[0] : CLIFF_X[1];
-  return (cliff - a[0]) / (b[0] - a[0]);
+  const d = b[0] - a[0];
+  if (Math.abs(d) < 1e-9) return 0.5;
+  return Math.min(0.92, Math.max(0.08, (cliff - a[0]) / d));
 };
+
+// 顶面矩形（给剖分线用）：三片台地各切成几块，和片子里的棕色块同量级
+const RECTS = [];
+for (const [x0, x1, y] of [[0, 4, 2], [4, 8, 1], [8, 11, 0]]) {
+  for (let z = 0; z < 10; z += 2.5) RECTS.push({ x0, x1, z0: z, z1: z + 2.5, y });
+}
 
 const S = 26, OX = 40, OY = 250, KZ = 0.30, KY = 0.92;
 const proj = ([x, y, z]) => [OX + x * S + z * S * KZ, OY - z * S * 0.62 - y * S * KY];
+// 屏幕位移 → 世界位移（proj 的线性部分可逆；y 不参与横移）
+const unprojXZ = (dxs, dys) => {
+  const dz = -dys / (S * 0.62);
+  const dx = (dxs - dz * S * KZ) / S;
+  return [dx, dz];
+};
 
 function poly(ctx, pts, fill, stroke) {
   ctx.beginPath();
@@ -47,115 +62,251 @@ function poly(ctx, pts, fill, stroke) {
   if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1; ctx.stroke(); }
 }
 
-function drawIsland(ctx) {
-  // 地面（水下）底板
+function drawIsland(ctx, triOn) {
   poly(ctx, [[-0.6, -0.35, -0.6], [11.6, -0.35, -0.6], [11.6, -0.35, 10.6], [-0.6, -0.35, 10.6]], '#a9bdb2');
   for (const [x0, x1, h, top, face] of [
     [8, 11, 0, '#9aa88f', '#6b7a72'],
     [4, 8, 1, '#8fa07e', '#69786a'],
     [0, 4, 2, '#84a070', '#5f6f5d'],
   ]) {
-    // 朝 +z 的侧壁（从前沿看过去的立面）
     poly(ctx, [[x0, h, 10], [x1, h, 10], [x1, -0.3, 10], [x0, -0.3, 10]], face);
-    // 崖口立面：朝 -x 的一侧
     poly(ctx, [[x0, h, 0], [x0, h, 10], [x0, -0.3, 10], [x0, -0.3, 0]], face);
-    // 顶面
     poly(ctx, [[x0, h, 0], [x1, h, 0], [x1, h, 10], [x0, h, 10]], top, '#5c6b5a');
   }
-  // 崖沿线（真实落崖位置）
+  if (triOn) {
+    const { segments } = quadTriDiagonals(RECTS, { mode: 'alt' });
+    ctx.save();
+    ctx.strokeStyle = 'rgba(246,242,232,.62)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (const [a, b] of segments) {
+      const p = proj(a), q = proj(b);
+      ctx.moveTo(p[0], p[1]); ctx.lineTo(q[0], q[1]);
+    }
+    ctx.stroke();
+    ctx.restore();
+  }
   for (const cx of CLIFF_X) {
     ctx.save();
     ctx.setLineDash([5, 4]);
     ctx.strokeStyle = 'rgba(180,60,40,.75)';
     ctx.beginPath();
-    const a = proj([cx, SURFACE(cx) , 0]), b = proj([cx, SURFACE(cx), 10]);
+    const a = proj([cx, SURFACE(cx), 0]), b = proj([cx, SURFACE(cx), 10]);
     ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
     ctx.restore();
   }
 }
 
-function drawDots(ctx, pts, showNodes, progress) {
+// style: 'light' = 游戏内白色点串（995043346778415104）· 'dark' = 调试视图黑色点串（810157485638189056）
+function drawDots(ctx, pts, progress, style = 'light') {
   const n = Math.max(1, Math.round(pts.length * progress));
   for (let i = 0; i < n; i++) {
     const [sx, sy] = proj(pts[i]);
     const buried = pts[i][1] < SURFACE(pts[i][0]) - 0.02;
     ctx.beginPath();
-    ctx.arc(sx, sy, buried ? 2.6 : 2.4, 0, Math.PI * 2);
-    ctx.fillStyle = buried ? '#ff4d3a' : '#ffffff';
+    ctx.arc(sx, sy, buried ? 3.0 : 2.8, 0, Math.PI * 2);
+    ctx.fillStyle = buried ? '#ff4d3a' : style === 'dark' ? '#1a1a1a' : '#ffffff';
     ctx.fill();
-    ctx.strokeStyle = buried ? 'rgba(120,20,10,.9)' : 'rgba(40,60,50,.55)';
+    ctx.strokeStyle = buried ? 'rgba(120,20,10,.9)' : style === 'dark' ? '#f4f1e8' : 'rgba(40,60,50,.55)';
     ctx.lineWidth = 1;
     ctx.stroke();
   }
-  if (showNodes) {
-    ctx.save();
-    ctx.setLineDash([3, 3]);
-    ctx.strokeStyle = 'rgba(30,50,60,.45)';
+}
+
+function drawNodes(ctx, nodes, sel) {
+  ctx.save();
+  ctx.setLineDash([3, 3]);
+  ctx.strokeStyle = 'rgba(30,50,60,.45)';
+  ctx.beginPath();
+  nodes.forEach((p, i) => { const q = proj(p); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); });
+  ctx.stroke();
+  ctx.restore();
+  nodes.forEach((p, i) => {
+    const q = proj(p);
+    ctx.beginPath(); ctx.arc(q[0], q[1], i === sel ? 4.6 : 3.2, 0, Math.PI * 2);
+    ctx.fillStyle = i === sel ? '#f2b134' : '#1d3a45'; ctx.fill();
+  });
+}
+
+// 三轴 gizmo（片子里的红上 / 绿右 / 蓝左）
+function drawGizmo(ctx, p) {
+  const q = proj(p), L = 26;
+  const axis = (dx, dy, col) => {
+    ctx.strokeStyle = col; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(q[0], q[1]); ctx.lineTo(q[0] + dx * L, q[1] + dy * L); ctx.stroke();
     ctx.beginPath();
-    NODES.forEach((p, i) => { const q = proj(p); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); });
-    ctx.stroke();
-    ctx.restore();
-    for (const p of NODES) {
-      const q = proj(p);
-      ctx.beginPath(); ctx.arc(q[0], q[1], 3.4, 0, Math.PI * 2);
-      ctx.fillStyle = '#1d3a45'; ctx.fill();
-    }
-  }
+    ctx.moveTo(q[0] + dx * L, q[1] + dy * L);
+    ctx.lineTo(q[0] + dx * L - dx * 6 - dy * 3, q[1] + dy * L - dy * 6 + dx * 3);
+    ctx.lineTo(q[0] + dx * L - dx * 6 + dy * 3, q[1] + dy * L - dy * 6 - dx * 3);
+    ctx.closePath(); ctx.fillStyle = col; ctx.fill();
+  };
+  axis(0, -1, '#d93a2b');   // 上
+  axis(0.94, 0.34, '#3fae49'); // 右
+  axis(-0.94, 0.34, '#2f6fd0'); // 左
+  ctx.strokeStyle = 'rgba(255,255,255,.95)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(q[0], q[1], 5.5, 0, Math.PI * 2); ctx.stroke();
 }
 
 const left = document.querySelector('#left'), right = document.querySelector('#right');
 const lc = left.getContext('2d'), rc = right.getContext('2d');
-const state = { radius: 0.35, spacing: 0.16, showNodes: true, t0: performance.now() };
+const qs = new URLSearchParams(location.search);
+const state = {
+  radius: 0.35, spacing: 0.16, showNodes: true,
+  tri: qs.get('tri') !== '0',
+  ink: qs.get('ink') === '1',
+  acc: qs.get('acc') === '1',
+  nodes: NODES0.map((p) => p.slice()),
+  sel: Math.max(0, Math.min(NODES0.length - 1, Number(qs.get('cp') ?? 1) || 0)),
+  trail: [],
+  drag: null,
+  t0: performance.now(),
+};
 
 function compute() {
-  const naive = samplePath(NODES, { spacing: state.spacing });
-  const fixed = buildRoutePreview(NODES, { spacing: state.spacing, radius: state.radius, at: cliffAt });
+  const naive = samplePath(state.nodes, { spacing: state.spacing });
+  const fixed = buildRoutePreview(state.nodes, { spacing: state.spacing, radius: state.radius, at: cliffAt });
+  const edited = editRouteStats(state.nodes, { spacing: state.spacing, radius: state.radius, at: cliffAt, surface: SURFACE });
+  let trail = state.trail;
+  if (state.acc) {
+    state.trail = accumulateTrail(state.trail, fixed.points, { cell: 0.14, max: 900 }).points;
+    trail = state.trail;
+  }
   return {
     naive: naive.points,
     fixed: fixed.points,
+    trail: trail.slice(),
     buriedLeft: buriedSamples(naive.points, SURFACE, 0.02).length,
     buriedRight: buriedSamples(fixed.points, SURFACE, 0.02).length,
-    arcs: fixed.arcs,
-    hops: fixed.hops,
-    corners: fixed.corners,
-    lengthLeft: naive.length,
-    lengthRight: fixed.length,
+    arcs: fixed.arcs, hops: fixed.hops, corners: fixed.corners,
+    lengthLeft: naive.length, lengthRight: fixed.length,
+    count: edited.count, trailCount: trail.length,
+    nodes: state.nodes.map((p) => p.slice()), sel: state.sel,
   };
 }
 
 let last = null;
 function frame() {
-  const now = performance.now();
-  const progress = Math.min(1, (now - state.t0) / 900);
+  const progress = state.drag ? 1 : Math.min(1, (performance.now() - state.t0) / 900);
   last = compute();
   lc.clearRect(0, 0, left.width, left.height);
   rc.clearRect(0, 0, right.width, right.height);
-  drawIsland(lc); drawIsland(rc);
-  drawDots(lc, last.naive, state.showNodes, progress);
-  drawDots(rc, last.fixed, state.showNodes, progress);
+  drawIsland(lc, false); drawIsland(rc, state.tri);
+  drawDots(lc, last.naive, progress, 'light');
+  if (state.acc) drawDots(rc, last.trail, 1, state.ink ? 'dark' : 'light');
+  drawDots(rc, last.fixed, progress, state.ink ? 'dark' : 'light');
+  if (state.showNodes) { drawNodes(lc, state.nodes, -1); drawNodes(rc, state.nodes, state.sel); }
+  drawGizmo(rc, state.nodes[state.sel]);
   document.querySelector('#stats').textContent =
-    `直连折线 ${last.naive.length} 点，埋在崖体里 ${last.buriedLeft} 点（红点）；改后 ${last.fixed.length} 点，埋住 ${last.buriedRight} 点；` +
-    `落崖弧 ${last.arcs} 段（跨层 ${last.hops} 段）、圆角 ${last.corners} 处；路径长 ${last.lengthLeft.toFixed(2)} → ${last.lengthRight.toFixed(2)}`;
+    `直连折线 ${last.naive.length} 点，埋在崖体里 ${last.buriedLeft} 点（红点）；改后 ${last.fixed.length} 点，埋住 ${last.buriedRight} 点；`
+    + `落崖弧 ${last.arcs} 段（跨层 ${last.hops} 段）、圆角 ${last.corners} 处；路径长 ${last.lengthLeft.toFixed(2)} → ${last.lengthRight.toFixed(2)}；`
+    + `采样点数 ${last.count}、拖动中的累积点数 ${last.trailCount}（检查点 ${last.sel}）`;
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
 
+// —— 拖检查点：按下落在某个检查点附近就抓住它 ——
+function nearestHandle(sx, sy) {
+  let best = -1, bd = 14;
+  state.nodes.forEach((p, i) => {
+    const q = proj(p), d = Math.hypot(q[0] - sx, q[1] - sy);
+    if (d < bd) { bd = d; best = i; }
+  });
+  return best;
+}
+right.addEventListener('pointerdown', (e) => {
+  const r = right.getBoundingClientRect();
+  const sx = (e.clientX - r.left) * (right.width / r.width);
+  const sy = (e.clientY - r.top) * (right.height / r.height);
+  const i = nearestHandle(sx, sy);
+  if (i < 0) return;
+  state.sel = i;
+  state.drag = { i, sx, sy, x: state.nodes[i][0], z: state.nodes[i][2] };
+  right.setPointerCapture(e.pointerId);
+  state.t0 = performance.now() - 5000;
+});
+right.addEventListener('pointermove', (e) => {
+  if (!state.drag) return;
+  const r = right.getBoundingClientRect();
+  const sx = (e.clientX - r.left) * (right.width / r.width);
+  const sy = (e.clientY - r.top) * (right.height / r.height);
+  const [dx, dz] = unprojXZ(sx - state.drag.sx, sy - state.drag.sy);
+  const i = state.drag.i;
+  const nx = state.drag.x + dx, nz = state.drag.z + dz;
+  const moved = moveCheckpoint(state.nodes, i, [nx - state.nodes[i][0], SURFACE(nx) - state.nodes[i][1], nz - state.nodes[i][2]]);
+  state.nodes = moved.nodes;
+  state.t0 = performance.now() - 5000;
+});
+const release = () => { state.drag = null; state.t0 = performance.now() - 5000; };
+right.addEventListener('pointerup', release);
+right.addEventListener('pointercancel', release);
+
+window.routeEditor = {
+  ready: true,
+  get stats() { return last; },
+  handles: () => state.nodes.map((p) => proj(p)),
+  node: (i) => state.nodes[i].slice(),
+  /** 世界单位拖拽（等价于鼠标拖）：返回拖后的读数 */
+  drag(index, dx, dz) {
+    const i = Number.isInteger(index) ? index : state.sel;
+    if (i < 0 || i >= state.nodes.length) throw new RangeError('index out of range');
+    const nx = state.nodes[i][0] + dx, nz = state.nodes[i][2] + dz;
+    const moved = moveCheckpoint(state.nodes, i, [dx, SURFACE(nx) - state.nodes[i][1], dz]);
+    state.nodes = moved.nodes;
+    state.sel = i;
+    state.t0 = performance.now() - 5000;
+    last = compute();
+    return last;
+  },
+  reset() {
+    state.nodes = NODES0.map((p) => p.slice());
+    state.trail = [];
+    state.t0 = performance.now() - 5000;
+    last = compute();
+    return last;
+  },
+  set(opts = {}) {
+    if (opts.radius != null) state.radius = opts.radius;
+    if (opts.spacing != null) state.spacing = opts.spacing;
+    if (opts.showNodes != null) state.showNodes = opts.showNodes;
+    if (opts.tri != null) state.tri = !!opts.tri;
+    if (opts.ink != null) state.ink = !!opts.ink;
+    if (opts.acc != null) {
+      state.acc = !!opts.acc;
+      if (!state.acc) state.trail = [];
+    }
+    state.t0 = performance.now() - 5000;
+    last = compute();
+    return last;
+  },
+  /** 累积轨迹：把当前采样点铺进去，返回 {added, trailCount} */
+  spill() {
+    const before = state.trail.length;
+    state.trail = accumulateTrail(state.trail, last.fixed, { cell: 0.14, max: 900 }).points;
+    last = compute();
+    return { added: state.trail.length - before, trailCount: state.trail.length };
+  },
+  /** 剖分线读数（页面侧同一份矩形） */
+  triStats(mode = 'a') {
+    const r = quadTriDiagonals(RECTS, { mode });
+    return { quads: r.quads, segments: r.segments.length, a: r.a, b: r.b, mode };
+  },
+};
+
+// 旧验收页 API 保留（tests/route-preview-browser.cjs 仍在用 routePreviewDemo）
 window.routePreviewDemo = {
   ready: true,
   get stats() { return last; },
   recompute: compute,
-  set(opts) {
-    if (opts.radius != null) state.radius = opts.radius;
-    if (opts.spacing != null) state.spacing = opts.spacing;
-    if (opts.showNodes != null) state.showNodes = opts.showNodes;
-    state.t0 = performance.now() - 5000;
-    last = compute();
-  },
+  set: (opts) => window.routeEditor.set(opts),
 };
 
 const bind = (id, key) => document.querySelector('#' + id).addEventListener('input', (e) => {
   state[key] = e.target.type === 'checkbox' ? e.target.checked : Number(e.target.value);
+  if (key === 'acc' && !state.acc) state.trail = [];
   state.t0 = performance.now() - 5000;
 });
 bind('radius', 'radius'); bind('spacing', 'spacing'); bind('nodes', 'showNodes');
+bind('tri', 'tri'); bind('acc', 'acc');
+document.querySelector('#acc').checked = state.acc;
+document.querySelector('#tri').checked = state.tri;
 </script>

@@ -1,0 +1,25 @@
+{
+ "capability": "fx.sediment",
+ "line": "fx",
+ "schemaVersion": 1,
+ "pass": true,
+ "basis": "本能力在固定舞台考场（fx.json）真实跑过 match→run，成绩见共享表——判定规则写在表头，不手改。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/arena/fx.json#fx.sediment",
+ "runner": "TigerMessenger/tools/refactor/record-fx-arena.mjs（实算）",
+ "test": "TigerMessenger/tests/planet-caps.test.mjs 同款执行面",
+ "arena": {
+  "fixture": "36 格舞台"
+ },
+ "result": {
+  "verdict": "擂过",
+  "targets": 1,
+  "applied": 1,
+  "planKeys": [
+   "sediment"
+  ],
+  "changed": 1,
+  "error": null,
+  "ms": 1
+ },
+ "recordedAt": "2026-11-25"
+}

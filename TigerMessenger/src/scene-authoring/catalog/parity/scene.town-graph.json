@@ -1,0 +1,51 @@
+{
+ "capability": "scene.town-graph",
+ "verdict": "diff-registered",
+ "line": "grid",
+ "generatedAt": "2026-11-23T18:26:01.288Z",
+ "generator": "TigerMessenger/tools/refactor/lightlife-parity.mjs",
+ "basis": "本能力在光影与生命管线里真实调用 townscaper-web/REACodeRefactoring/src/core/town-graph.js（meta.modules）；这份是它对原版 townscaper-web/REACode/src/town.js 的对照登记，完整内容见 town.json。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/parity/town.json",
+ "sameCriteriaEqual": true,
+ "original": [
+  "townscaper-web/REACode/src/town.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/town-graph.js",
+  "townscaper-web/REACodeRefactoring/src/core/world.js",
+  "townscaper-web/REACodeRefactoring/src/core/spatial.js",
+  "townscaper-web/REACodeRefactoring/src/core/palette.js"
+ ],
+ "inputs": {
+  "n": 14,
+  "seed": 9,
+  "ops": 220
+ },
+ "gaps": 0,
+ "diffs": [
+  {
+   "id": "town.library.regions",
+   "metric": "regions",
+   "kind": "design",
+   "original": 75,
+   "refactored": 52,
+   "note": "重构库原有 World.regions() 只连顶部是建筑的格子、不分走道；原版 Town.regions() 连所有顶部同高的柱子（含 1 层走道 isWalkway）。两种都留：town-graph.js 给需要原版口径的消费者。"
+  },
+  {
+   "id": "town.library.TERRAIN",
+   "metric": "TERRAIN",
+   "kind": "design",
+   "original": 14,
+   "refactored": 14,
+   "note": "原版 town.js 的 TERRAIN 是灰泥 / 屋顶 / 路面 / 码头等城镇材质色，重构库 core/palette.js 的同名 TERRAIN 是岩石 / 沙 / 草等地形色——同名不同物，共有键 1 个（grass）。"
+  },
+  {
+   "id": "town.library.decorateCells",
+   "metric": "size",
+   "kind": "design",
+   "original": "对角线一半的均值",
+   "refactored": "角到格心平均距离 × 0.7",
+   "note": "decorateCells 的 cell.size 口径不同（方格时接近）；包围盒相同。"
+  }
+ ]
+}

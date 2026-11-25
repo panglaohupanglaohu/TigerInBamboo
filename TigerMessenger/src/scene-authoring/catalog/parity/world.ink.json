@@ -1,0 +1,65 @@
+{
+ "capability": "world.ink",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "world",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/engine/backlit.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/world/outline.js"
+ ],
+ "inputs": {
+  "dirs": 100,
+  "views": 3,
+  "suns": 3,
+  "threshold": 0.05
+ },
+ "metrics": [
+  {
+   "id": "agree",
+   "name": "亮边激活区一致率",
+   "original": "—",
+   "refactored": "0.4%（2/455 样本格）"
+  },
+  {
+   "id": "coverage",
+   "name": "各自激活格数",
+   "original": "31",
+   "refactored": "426"
+  },
+  {
+   "id": "mean",
+   "name": "平均强度",
+   "original": 0.0058,
+   "refactored": 0.3365
+  },
+  {
+   "id": "factors",
+   "name": "因子分解",
+   "original": "intoSun(全向量) × away(n·s) × graze(掠射²·²)",
+   "refactored": "into(水平方位,俯视修正) × facing(n·s×.8+.35) × lit(朝下=影)"
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "顶太阳判定",
+   "original": "-dot(v,s) 全 3D 向量",
+   "refactored": "水平方位对齐（注释：俯视 30–40° 下全向量法恒 0 不出亮边，改判水平）",
+   "note": "本侧为真实机位修正——同一意图不同实现"
+  },
+  {
+   "kind": "value",
+   "id": "掠射权重",
+   "original": "pow(1−|n·v|,2.2) 明确掠射项",
+   "refactored": "BackSide 壳宽度即掠射近似，片元无 graze 因子",
+   "note": "激活区一致率 0.4% 如实登记"
+  }
+ ],
+ "basis": "同为「inverted mesh outline」逆光层（1751945034851570056）：两公式在 n×v×s 采样格上求值对拍，激活区一致 0.4%，因子分解差异如实登记。"
+}

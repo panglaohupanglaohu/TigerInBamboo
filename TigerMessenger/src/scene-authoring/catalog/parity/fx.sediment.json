@@ -1,0 +1,33 @@
+{
+ "capability": "fx.sediment",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T15:27:35.730Z",
+ "generator": "TigerMessenger/tools/refactor/fx-parity.mjs",
+ "verdict": "equivalent",
+ "line": "fx",
+ "basis": "engine/surface.js 的 sHash/sNoise/sWobble/sWarp 在本工具内按 GLSL 逐式移植成 JS（同一份公式），再与重构 sediment.js 同点采样对拍。",
+ "metrics": [
+  {
+   "id": "wobble",
+   "name": "GLSL sWobble 逐式移植 vs JS sWobble 2000 点最大差",
+   "original": 0,
+   "refactored": 0
+  },
+  {
+   "id": "warp",
+   "name": "GLSL sWarp vs sedimentDisplace 2000 点×3 分量最大差",
+   "original": 0,
+   "refactored": 0
+  }
+ ],
+ "inputs": {
+  "points": 2000,
+  "uSedAmp": 0.24,
+  "uSedFreq": 0.52,
+  "map": "本地 amplitude = uSedAmp/2"
+ },
+ "diffs": [],
+ "gaps": 0,
+ "skipped": []
+}

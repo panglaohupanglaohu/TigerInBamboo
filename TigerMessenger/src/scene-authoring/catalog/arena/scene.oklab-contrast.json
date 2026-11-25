@@ -1,0 +1,22 @@
+{
+ "capability": "scene.oklab-contrast",
+ "line": "palette",
+ "schemaVersion": 1,
+ "pass": true,
+ "basis": "本能力在固定 MATS 考场（gscene.json）真实跑过 match→run，成绩见共享表——判定规则写在表头，不手改。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/arena/gscene.json#scene.oklab-contrast",
+ "runner": "TigerMessenger/tools/refactor/record-gscene-arena.mjs（实算）",
+ "test": "TigerMessenger/tests/workshop-caps.test.mjs",
+ "arena": {
+  "fixture": "MATS×8"
+ },
+ "result": {
+  "verdict": "擂过",
+  "targets": 1,
+  "colors": 8,
+  "moved": 7,
+  "maxMove": 8.66,
+  "ms": 0
+ },
+ "recordedAt": "2026-11-25"
+}

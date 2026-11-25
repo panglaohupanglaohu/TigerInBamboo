@@ -18,7 +18,7 @@
  * So, per shoreline loop:
  *   - the yellow line is the quay foot (where the stone meets the water),
  *   - the blue line is that loop pushed out to a fixed distance — measured on
- *     a distance field so bays don't fold — then smoothed along the loop,
+ *     an approximate distance field (not a guarantee against folds) — then smoothed along the loop,
  *   - K wave ribbons follow the loop. Every vertex stores its yellow point,
  *     its blue point and a time offset; the vertex shader walks it from blue
  *     to yellow and back a little, on its own clock. Nothing is simulated.
@@ -26,7 +26,10 @@
  */
 
 import * as THREE from 'three';
+import { traceShoreLoops } from '../core/shore-loops.js';
 import { pointInQuad } from '../core/spatial.js';
+import { bakeWaveMotion, waveCycleGLSL, waveCrest } from '../core/wave-cycle.js';
+import { sampleShoreline, marchShore } from '../core/shore-profile.js';
 
 const hash01 = (n) => {
   let x = Math.imul((n | 0) ^ 0x9e3779b9, 0x85ebca6b);
@@ -38,45 +41,6 @@ const hash01 = (n) => {
 
 /** Land = columns that touch the water (solid at level 1). */
 function isLand(town, cell) { return cell !== null && town.isSolid(cell, 1); }
-
-/** Chain the outward-facing boundary edges of the land into closed loops. */
-function traceLoops(town, grid) {
-  const cells = grid.cells;
-  const out = new Map(); // start vertex id -> [segments]
-  for (const cell of cells) {
-    if (!isLand(town, cell)) continue;
-    for (let i = 0; i < cell.pts.length; i++) {
-      const nid = cell.edgeNeighbors[i];
-      const nb = nid >= 0 ? cells[nid] : null;
-      if (isLand(town, nb)) continue;
-      const a = cell.pts[i], b = cell.pts[(i + 1) % cell.pts.length];
-      let nx = -(b.z - a.z), nz = b.x - a.x;
-      const l = Math.hypot(nx, nz) || 1;
-      nx /= l; nz /= l;
-      if (nx * ((a.x + b.x) / 2 - cell.cx) + nz * ((a.z + b.z) / 2 - cell.cz) < 0) { nx = -nx; nz = -nz; }
-      const seg = { a, b, nx, nz, used: false };
-      const list = out.get(a.id);
-      if (list) list.push(seg); else out.set(a.id, [seg]);
-    }
-  }
-  const loops = [];
-  for (const list of out.values()) {
-    for (const start of list) {
-      if (start.used) continue;
-      const loop = [];
-      let cur = start;
-      let guard = 0;
-      while (cur && !cur.used && guard++ < 200000) {
-        cur.used = true;
-        loop.push(cur);
-        const next = out.get(cur.b.id);
-        cur = next ? next.find((s) => !s.used) ?? next[0] : null;
-      }
-      if (cur === start && loop.length >= 3) loops.push(loop);
-    }
-  }
-  return loops;
-}
 
 /** Chamfer distance to land, rasterised from the real quads. */
 function distanceField(town, grid, index, ptsOf, res = 0.07, pad = 2.5) {
@@ -92,6 +56,7 @@ function distanceField(town, grid, index, ptsOf, res = 0.07, pad = 2.5) {
   minX -= pad; minZ -= pad; maxX += pad; maxZ += pad;
   const W = Math.ceil((maxX - minX) / res) + 1;
   const H = Math.ceil((maxZ - minZ) / res) + 1;
+  if (!Number.isSafeInteger(W * H) || W * H > 4000000) throw new RangeError('shore distance-field budget');
   const d = new Float32Array(W * H).fill(1e9);
   for (const c of grid.cells) {
     if (!isLand(town, c)) continue;
@@ -131,66 +96,49 @@ function distanceField(town, grid, index, ptsOf, res = 0.07, pad = 2.5) {
   };
   /** walk from (x,z) along n until the field reads `target` */
   const march = (x, z, nx, nz, target, max = 3) => {
-    let hi = 0;
-    const step = res * 0.7;
-    while (hi < max && sample(x + nx * hi, z + nz * hi) < target) hi += step;
-    let lo = Math.max(0, hi - step);
-    for (let it = 0; it < 10; it++) {
-      const m = (lo + hi) / 2;
-      if (sample(x + nx * m, z + nz * m) < target) lo = m; else hi = m;
-    }
-    return (lo + hi) / 2;
+    return marchShore(sample, x, z, nx, nz, target, max, res * 0.7);
   };
   return { sample, march };
-}
-
-function chaikin(pts, iterations) {
-  let p = pts;
-  for (let it = 0; it < iterations; it++) {
-    const o = [];
-    for (let i = 0; i < p.length; i++) {
-      const a = p[i], b = p[(i + 1) % p.length];
-      const mixp = (t) => {
-        let nx = a.nx * (1 - t) + b.nx * t, nz = a.nz * (1 - t) + b.nz * t;
-        const l = Math.hypot(nx, nz) || 1;
-        return { x: a.x * (1 - t) + b.x * t, z: a.z * (1 - t) + b.z * t, nx: nx / l, nz: nz / l };
-      };
-      o.push(mixp(0.25), mixp(0.75));
-    }
-    p = o;
-  }
-  return p;
 }
 
 /**
  * @returns {{skirt: THREE.BufferGeometry, waves: THREE.BufferGeometry}}
  */
-export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves = 2, foot = 0.075, shape = null } = {}) {
+export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves = 2, foot = 0.075, shape = null, skirtWidth = 1 } = {}) {
+  if (![reach, foot].every(Number.isFinite) || reach <= 0 || foot < 0 || !Number.isInteger(waves) || waves < 0 || waves > 32) throw new RangeError('shore options');
+  // 1215644531221311488 "(Also, the wave skirt stretches further this time)"：
+  // 裙带宽度是**尺度**参数（片内那圈三角裙伸到约一个建筑进深），默认 1 = 旧窄带，原片宽档约 1.6。
+  if (!Number.isFinite(skirtWidth) || skirtWidth < 0.5 || skirtWidth > 3) throw new RangeError('skirt width');
   // 地形变形后海岸在切面 0（水面）上的真实位置；没有 shape 时就是网格原位
   const posOf = shape ? (p) => { const [x, z] = shape.at(p, 0); return { x, z }; } : (p) => p;
   const ptsOf = shape ? (c) => c.pts.map(posOf) : (c) => c.pts;
-  const loops = traceLoops(town, grid);
+  const loops = traceShoreLoops(grid.cells,c=>isLand(town,c));
   const field = distanceField(town, grid, index, ptsOf);
 
   // skirt: rim + halo (alpha, colour-mix) ; waves: per-vertex shore/sea/phase
-  const sPos = [], sA = [], sIdx = [];
+  const sPos = [], sA = [], sArc = [], sIdx = [];
   const yLine = [], bLine = [];   // debug: the yellow and blue lines of 1849732997945110651
   const wShore = [], wSea = [], wPhase = [], wRow = [], wIdx = [];
+  const wIn = [], wOut = [], wPeriod = [], wCrest = [], wWidth = [];
   let sv = 0, wv = 0;
 
   for (const loop of loops) {
     if (!field) break;
-    // loop vertices with averaged outward normals
-    const raw = loop.map((seg, i) => {
-      const prev = loop[(i + loop.length - 1) % loop.length];
-      let nx = seg.nx + prev.nx, nz = seg.nz + prev.nz;
-      const l = Math.hypot(nx, nz) || 1;
-      const q = posOf(seg.a);
-      return { x: q.x, z: q.z, nx: nx / l, nz: nz / l };
+    // Recompute edge normals after shape.at: anisotropic deformation changes them.
+    const edges = loop.map(seg => {
+      const a = posOf(seg.a), b = posOf(seg.b);
+      const sign = seg.nx * (-(seg.b.z-seg.a.z)) + seg.nz * (seg.b.x-seg.a.x) >= 0 ? 1 : -1;
+      const length = Math.hypot(b.x-a.x,b.z-a.z) || 1;
+      return {x:a.x,z:a.z,nx:sign*-(b.z-a.z)/length,nz:sign*(b.x-a.x)/length};
     });
-    const pts = chaikin(raw, 2);
+    const raw = edges.map((p,i) => {
+      const prev = edges[(i+edges.length-1)%edges.length];
+      const nx=p.nx+prev.nx,nz=p.nz+prev.nz,l=Math.hypot(nx,nz);
+      return {...p,nx:l>1e-9?nx/l:p.nx,nz:l>1e-9?nz/l:p.nz};
+    });
+    const pts = sampleShoreline(raw);
     const N = pts.length;
-    if (N < 6) continue;
+    if (N < 3) continue;
 
     // yellow line: the quay foot. blue line: pushed out on the field, smoothed.
     const shore = pts.map((p) => ({ x: p.x + p.nx * foot, z: p.z + p.nz * foot }));
@@ -201,7 +149,9 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
     for (let pass = 0; pass < 6; pass++) {
       sea = sea.map((p, i) => {
         const a = sea[(i + N - 1) % N], b = sea[(i + 1) % N];
-        return { x: p.x * 0.5 + (a.x + b.x) * 0.25, z: p.z * 0.5 + (a.z + b.z) * 0.25 };
+        const q = { x: p.x * 0.5 + (a.x + b.x) * 0.25, z: p.z * 0.5 + (a.z + b.z) * 0.25 };
+        // Reject smoothing that puts the sea endpoint back in the rasterised land.
+        return field.sample(q.x,q.z) >= 0.035 ? q : p;
       });
     }
 
@@ -214,17 +164,22 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
     // arc length for the travelling time offset
     const arc = new Float32Array(N);
     for (let i = 1; i < N; i++) arc[i] = arc[i - 1] + Math.hypot(shore[i].x - shore[i - 1].x, shore[i].z - shore[i - 1].z);
+    const perimeter = arc[N-1] + Math.hypot(shore[0].x-shore[N-1].x,shore[0].z-shore[N-1].z);
     const seed = hash01(N * 7919 + Math.round(shore[0].x * 100));
 
     // ---- static skirt: [rim inner, rim outer, halo outer]
+    // 1991099314714902634：片内岸线白带**不是**沿全岸常亮 —— 只在有浪的岸段亮起，
+    // 段与段之间留缝，缝隙随时间沿岸移动、宽度来回胀缩（分段展开 / 聚散）。
+    // 故给裙带烘一个弧长相位 aArc，遮挡强度由 skirtCoverage(aArc, t) 调制（见 skirtBreakGLSL）。
     const base = sv;
     for (let i = 0; i < N; i++) {
       const s = shore[i], b = sea[i];
       const dx = b.x - s.x, dz = b.z - s.z;
-      sPos.push(s.x - dx * 0.06, 0.006, s.z - dz * 0.06); sA.push(0.95);
-      sPos.push(s.x + dx * 0.12, 0.006, s.z + dz * 0.12); sA.push(0.0);
-      sPos.push(s.x + dx * 0.04, 0.004, s.z + dz * 0.04); sA.push(-0.42);   // halo: negative = tint
-      sPos.push(s.x + dx * 1.35, 0.004, s.z + dz * 1.35); sA.push(-0.0);
+      const u = arc[i] / Math.max(perimeter, 1e-9) * Math.PI * 2;
+      sPos.push(s.x - dx * 0.06 * skirtWidth, 0.006, s.z - dz * 0.06 * skirtWidth); sA.push(0.95); sArc.push(u);
+      sPos.push(s.x + dx * 0.12 * skirtWidth, 0.006, s.z + dz * 0.12 * skirtWidth); sA.push(0.0); sArc.push(u);
+      sPos.push(s.x + dx * 0.04 * skirtWidth, 0.004, s.z + dz * 0.04 * skirtWidth); sA.push(-0.42); sArc.push(u);   // halo: negative = tint
+      sPos.push(s.x + dx * 1.35 * skirtWidth, 0.004, s.z + dz * 1.35 * skirtWidth); sA.push(-0.0); sArc.push(u);
       sv += 4;
     }
     for (let i = 0; i < N; i++) {
@@ -239,12 +194,19 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
       const wb = wv;
       const ks = seed * 10 + k * 1.7;
       for (let i = 0; i < N; i++) {
-        const s = arc[i];
+        const s = arc[i] / Math.max(perimeter,1e-9) * Math.PI * 2;
+        const crest = waveCrest(s, ks);
+        const motion = bakeWaveMotion(shore[i],sea[i],pts[i]);
         // smooth along the shore so crests arrive at an angle, never in lockstep
-        const phase = k / waves + 0.14 * Math.sin(s * 0.7 + ks) + 0.05 * Math.sin(s * 1.9 + ks * 2.1);
+        const phase = k / waves + 0.14 * Math.sin(s * 2 + ks) + 0.05 * Math.sin(s * 5 + ks * 2.1);
         for (let row = 0; row < 2; row++) {
           wShore.push(shore[i].x, shore[i].z);
           wSea.push(sea[i].x, sea[i].z);
+          wIn.push(...motion.incoming);
+          wOut.push(...motion.outgoing);
+          wCrest.push(crest.coverage);
+          wWidth.push(crest.width);
+          wPeriod.push(0.90 + 0.22 * hash01(N * 109 + k * 7919));
           wPhase.push(phase);
           wRow.push(row);
           wv++;
@@ -278,6 +240,7 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
   const skirt = new THREE.BufferGeometry();
   skirt.setAttribute('position', new THREE.Float32BufferAttribute(sPos, 3));
   skirt.setAttribute('aA', new THREE.Float32BufferAttribute(sA, 1));
+  skirt.setAttribute('aArc', new THREE.Float32BufferAttribute(sArc, 1));
   skirt.setIndex(sIdx);
   skirt.computeBoundingSphere();
 
@@ -289,6 +252,11 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
   wavesGeo.setAttribute('aShore', new THREE.Float32BufferAttribute(wShore, 2));
   wavesGeo.setAttribute('aSea', new THREE.Float32BufferAttribute(wSea, 2));
   wavesGeo.setAttribute('aPhase', new THREE.Float32BufferAttribute(wPhase, 1));
+  wavesGeo.setAttribute('aIn', new THREE.Float32BufferAttribute(wIn, 2));
+  wavesGeo.setAttribute('aOut', new THREE.Float32BufferAttribute(wOut, 2));
+  wavesGeo.setAttribute('aCrest', new THREE.Float32BufferAttribute(wCrest, 1));
+  wavesGeo.setAttribute('aWidth', new THREE.Float32BufferAttribute(wWidth, 1));
+  wavesGeo.setAttribute('aPeriod', new THREE.Float32BufferAttribute(wPeriod, 1));
   wavesGeo.setAttribute('aRow', new THREE.Float32BufferAttribute(wRow, 1));
   wavesGeo.setIndex(wIdx);
   wavesGeo.computeBoundingSphere();
@@ -306,22 +274,109 @@ export function makeSkirtMaterial(waterTint) {
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: false,
-    uniforms: { uFoam: { value: new THREE.Color('#f7fbfa') }, uTint: { value: waterTint } },
+    // 裙带是贴在水面上的一层薄条：环向绕序让法线朝下，FrontSide 从上往下看几乎全被剔除
+    // （同机位实测可读像素只有双面的 6%）→ 必须双面，否则「静态白边 + 淡晕」只画出零星几段。
+    side: THREE.DoubleSide,
+    uniforms: {
+      uFoam: { value: new THREE.Color('#f7fbfa') },
+      uTint: { value: waterTint },
+      uTime: { value: 0 },
+      uSkirtBreak: { value: 1 },     // 1 = 岸段分段（片内形制）；0 = 沿全岸常亮的旧档
+      uSkirtDrift: { value: 0.35 },  // 缝隙沿岸扫过的角速度（弧度/秒）
+      uSkirtGap: { value: 0.14 },    // 缝隙里残留的湿痕强度（不是全黑）
+    },
     vertexShader: /* glsl */ `
       attribute float aA;
+      attribute float aArc;
+      uniform float uTime;
+      uniform float uSkirtBreak;
+      uniform float uSkirtDrift;
+      uniform float uSkirtGap;
       varying float vA;
-      void main() { vA = aA; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      varying float vCover;
+      ${skirtBreakGLSL}
+      void main() {
+        float cover = skirtCoverage(aArc - uTime * uSkirtDrift);
+        vCover = mix(1.0, mix(uSkirtGap, 1.0, cover), clamp(uSkirtBreak, 0.0, 1.0));
+        vA = aA;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`,
     fragmentShader: /* glsl */ `
       uniform vec3 uFoam;
       uniform vec3 uTint;
       varying float vA;
+      varying float vCover;
       void main() {
         // positive: foam rim; negative: the pale halo ("the skirt stretches further")
-        if (vA >= 0.0) gl_FragColor = vec4(uFoam, vA * vA);
-        else gl_FragColor = vec4(uTint, -vA);
+        if (vA >= 0.0) gl_FragColor = vec4(uFoam, vA * vA * vCover);
+        else gl_FragColor = vec4(uTint, -vA * vCover);
         #include <colorspace_fragment>
       }`,
   });
+}
+
+/**
+ * 岸段分段覆盖率：u 是沿闭合岸线的弧长相位（0..2π），整数谐波保证绕一圈接缝连续。
+ * `amp` 随时间呼吸 → 白段变宽（聚）/ 变窄、缝隙张开（散），即片内 0010–0140 的展开与聚拢。
+ * 与 skirtBreakGLSL 逐式同源；JS 版供测试做 CPU 孪生。
+ */
+export function skirtCoverage(u, time = 0, { breathe = 0.16, base = 0.34 } = {}) {
+  const amp = base + breathe * Math.sin(0.55 * time);
+  const raw = 0.54 + amp * Math.sin(3 * u + 1.1 - 0.35 * time) + 0.14 * Math.sin(7 * u + 2.3 - 0.62 * time);
+  const t = Math.min(1, Math.max(0, (raw - 0.24) / 0.40));
+  return t * t * (3 - 2 * t);
+}
+
+export const skirtBreakGLSL = /* glsl */ `
+float skirtCoverage(float u) {
+  float amp = 0.34 + 0.16 * sin(0.55 * uTime);
+  float raw = 0.54 + amp * sin(3.0 * u + 1.1 - 0.35 * uTime)
+                  + 0.14 * sin(7.0 * u + 2.3 - 0.62 * uTime);
+  return smoothstep(0.24, 0.64, raw);
+}`;
+
+/**
+ * 裙带分段的量具：把笔直的「亮段 / 缝」按 aArc 回放成 run。
+ * 每条闭合岸线一圈从 u=0 起算（aArc 会回跳），按 `thr` 切亮/缝，报段数、缝隙占比与最长缝。
+ */
+export function skirtStats(geometry, time = 0, thr = 0.5, drift = 0.35, brk = 1) {
+  const arc = geometry?.getAttribute?.('aArc');
+  const aA = geometry?.getAttribute?.('aA');
+  if (!arc || !aA) return { loops: 0, runs: 0, gaps: 0, gapShare: 0, longestGapDeg: 0, coveredShare: 0 };
+  const step = arc.count / aA.count === 1 ? 1 : 4;   // 每个岸点 4 个顶点（rim in/out + halo in/out）
+  const loops = [];
+  let cur = null, prev = -1;
+  for (let i = 0; i < arc.count; i += step) {
+    const u = arc.getX(i);
+    if (u < prev - 1e-6) { cur = []; loops.push(cur); }
+    else if (!cur) { cur = []; loops.push(cur); }
+    cur.push(u); prev = u;
+  }
+  let runs = 0, gaps = 0, covered = 0, total = 0, longest = 0;
+  for (const loop of loops) {
+    // 亮段 = 覆盖串；绕一圈因此要看「首尾是否都亮」（否则跨接缝的那一段会被切成两段）
+    let inGap = false, gapStart = 0, gapSpan = 0, anyGap = false, firstCovered = false;
+    for (let i = 0; i < loop.length; i++) {
+      // 与顶点着色器同口径：相位先减去 uTime·uSkirtDrift（缝隙沿岸扫过），再按 uSkirtBreak 混回常亮
+      const c = 1 - brk * (1 - skirtCoverage(loop[i] - time * drift, time));
+      total++;
+      if (c >= thr) covered++;
+      const g = c < thr;
+      if (i === 0) firstCovered = !g;
+      if (g && !inGap) { inGap = true; anyGap = true; gaps++; gapStart = loop[i]; gapSpan = 0; }
+      if (g) gapSpan = loop[i] - gapStart;
+      if (!g && inGap) { inGap = false; runs++; }
+      if (g) longest = Math.max(longest, gapSpan);
+    }
+    if (!anyGap) runs++;            // 整圈常亮 = 1 段
+    else if (firstCovered && inGap) runs++;   // 首端亮、末端缝：跨接缝那段单独算一段
+  }
+  return {
+    loops: loops.length, runs, gaps,
+    gapShare: total ? +(1 - covered / total).toFixed(4) : 0,
+    coveredShare: total ? +(covered / total).toFixed(4) : 0,
+    longestGapDeg: +(longest * 180 / Math.PI).toFixed(1),
+  };
 }
 
 /**
@@ -332,6 +387,7 @@ export function makeSkirtMaterial(waterTint) {
  * Because the wave is invisible at both ends of the loop, the wrap is seamless.
  */
 export function makeWaveMaterial({ period = 4.6 } = {}) {
+  if (!Number.isFinite(period) || period <= 0) throw new RangeError('wave period');
   return new THREE.ShaderMaterial({
     transparent: true,
     depthWrite: false,
@@ -339,6 +395,7 @@ export function makeWaveMaterial({ period = 4.6 } = {}) {
     uniforms: {
       uTime: { value: 0 },
       uPeriod: { value: period },
+      uCrestBreakup: { value: 1 },
       uFoam: { value: new THREE.Color('#fbfeff') },
     },
     vertexShader: /* glsl */ `
@@ -346,30 +403,26 @@ export function makeWaveMaterial({ period = 4.6 } = {}) {
       attribute vec2 aSea;
       attribute float aPhase;
       attribute float aRow;
+      attribute vec2 aIn;
+      attribute vec2 aOut;
+      attribute float aPeriod;
+      attribute float aCrest;
+      attribute float aWidth;
+      uniform float uCrestBreakup;
       uniform float uTime;
       uniform float uPeriod;
       varying float vA;
+      ${waveCycleGLSL}
       void main() {
-        float t = fract(uTime / uPeriod + aPhase);
-        const float tIn = 0.68;
-        float f;      // 1 = at the blue line, 0 = on the stones
-        float a;
-        if (t < tIn) {
-          float u = t / tIn;
-          f = 1.0 - u * u * (3.0 - 2.0 * u) * (0.6 + 0.4 * u);
-          a = smoothstep(0.05, 0.55, u) * (0.12 + 0.78 * u * u);
-        } else {
-          float u = (t - tIn) / (1.0 - tIn);
-          f = 0.22 * sin(u * 1.5707963);
-          a = 0.85 * (1.0 - u) * (1.0 - u);
-        }
-        vec2 dir = aSea - aShore;
-        float len = max(length(dir), 1e-4);
-        // ribbon width: broad offshore, a thin lip when it hits the stone
-        float w = mix(0.07, 0.24, f) / len;
-        float g = clamp(f + aRow * w, 0.0, 1.15);
-        vec2 p = aShore + dir * g;
-        vA = a * (1.0 - aRow) * 0.62;
+        float t = fract(uTime / (uPeriod * aPeriod) + aPhase);
+        vec3 cycle = shoreCycle(t);
+        float f = cycle.x + cycle.y;
+        float a = cycle.z;
+        vec2 center = aShore + aIn * cycle.x + aOut * cycle.y;
+        float len = max(length(aIn), 1e-4);
+        float w = mix(0.07, 0.24, f) * mix(1.0, aWidth, uCrestBreakup) / len;
+        vec2 p = center + aIn * (aRow * w);
+        vA = a * (1.0 - aRow) * 0.62 * mix(1.0, aCrest, uCrestBreakup);
         gl_Position = projectionMatrix * modelViewMatrix * vec4(p.x, 0.012 + 0.004 * (1.0 - f), p.y, 1.0);
       }`,
     fragmentShader: /* glsl */ `

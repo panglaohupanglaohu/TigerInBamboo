@@ -1,0 +1,23 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "scan": "扫描完成：4 / 4 个能力能作用。",
+  "pipelineNodes": 4,
+  "run": {
+   "checks": [
+    "✓ 数值192 个物件改动有效",
+    "✓ 作用范围整个场景",
+    "✓ 手工改动保留手工改过的物件未动",
+    "✓ 位移预算最大移动 0.35（上限 0.35）",
+    "✓ 占地重叠56 对 → 24 对",
+    "✓ 不出场景都在原分布范围内",
+    "✓ 显示 / 隐藏未改变"
+   ],
+   "note": "候选已预览。确认前不会写入。"
+  }
+ },
+ "pass": false,
+ "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/object-caps-e2e/run-1795556711394"
+}

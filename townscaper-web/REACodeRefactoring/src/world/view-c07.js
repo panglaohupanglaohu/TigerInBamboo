@@ -8,6 +8,7 @@
  *   decalboil  1427721874490933250 每帧往地形图集累加方块贴花 → line boil；图集 chart 带 padding（core/decal-accum.js）
  *   splash     1258421104756097029 冠状水帘 + 3 圈长寿命不规则泡沫环 + 10–12 颗竖直飞沫（life/splash-c07.js）
  *   gardenplots 1178731576982724611 草地块石沿 + 1290997501332525056 门优先细石板小径 / 中心圆台（build/garden-plots-c07.js，world.gardenPlots）
+ *   quayyards  1178731576982724611 临水那条边按码头护墙算封边 → 岸边空地也成院（core/courtyards.js quayWalls，world.quayYards）
  *   aolayers   1298689301488775169 第四视图「AO baking mesh」的半透明层叠画法：白模（只看光照）+ 三层外扩的半透明烘焙壳
  *   aotex      1168571866405097472「occlusion lives in a layered mesh that's reprojected to a texture at each change. That texture is
  *              then blurred, and sampled in the vertex shader」：左侧面板逐层画出同一份 light/bake.js 分层栅格（上 = 投影后的 0/1 占用，
@@ -18,11 +19,10 @@
 import * as THREE from 'three';
 import { TownSkinLayer } from './town-skin-layer.js';
 import { DecalAtlas, BOIL_CHARTS, DECAL_FRAG_PARS } from '../core/decal-accum.js';
-import { CrownSplash } from '../life/splash-c07.js';
 import { buildBakeShellGeometry } from './ao-mesh-debug.js';
 import { bakeLighting } from '../light/bake.js';
 
-export const C07_KEYS = Object.freeze(['townskin', 'decalboil', 'splash', 'gardenplots', 'aolayers', 'aotex', 'sungizmo']);
+export const C07_KEYS = Object.freeze(['townskin', 'decalboil', 'splash', 'gardenplots', 'quayyards', 'aolayers', 'aotex', 'sungizmo']);
 export function parseC07(search) {
   const p = new URLSearchParams(search || '');
   return new Set((p.get('c07') || '').split(',').map((s) => s.trim()).filter((s) => C07_KEYS.includes(s)));
@@ -155,22 +155,13 @@ export function installC07(view, { search = globalThis.location?.search ?? '' } 
   if (view.c07) return view.c07;
   const state = Object.fromEntries(C07_KEYS.map((k) => [k, false])), stats = {};
   let skin = null, boil = null, crown = null, ao = null, sun = null, aotex = null;
-  // 水花：包一层 effects.onEdit —— 触发口径不变；打开时原 1 圈 1.1s 的环 / 外抛飞沫换成冠状水帘
-  const fx = view.effects, rawEdit = fx.onEdit.bind(fx);
-  fx.onEdit = (cell, before, after, L) => {
-    rawEdit(cell, before, after, L);
-    if (!state.splash) return;
-    if ((after > before && before === 0) || (after < before && after === 0)) {
-      for (let i = 0; i < fx.N; i++) if (fx.kind[i] === 0 && fx.life[i] > 0) fx.life[i] = 0;
-      crown.spawn(cell);
-    }
-  };
+  // 水花：126 轮起 effects.js 默认就带冠状水帘（splash-c07），这里只切形制，不再自己 spawn/update（否则双份）。
+  const fx = view.effects;
   const origRender = view.render.bind(view);
   view.render = (dt) => {
     origRender(dt);
     if (state.townskin) { skin.refresh(); stats.townskin = skin.stats; }
     if (state.decalboil) boil.step();
-    if (state.splash) crown.update(dt);
     if (state.aolayers) { ao.refresh(); stats.aolayers = ao.stats; }
     if (state.aotex) { aotex.refresh(); stats.aotex = aotex.stats; }
   };
@@ -180,8 +171,9 @@ export function installC07(view, { search = globalThis.location?.search ?? '' } 
     switch (name) {
       case 'townskin': skin ??= new TownSkinLayer(view); skin.set(on); stats.townskin = skin.stats; break;
       case 'decalboil': boil ??= new DecalBoil(view); boil.set(on); break;
-      case 'splash': crown ??= new CrownSplash({ scene: view.scene, uTime: view.waterUniforms.uTime }); fx.rings.visible = !on; crown.group.visible = on; break;
+      case 'splash': crown ??= fx.crown; fx.setSplashStyle(on ? 'crown' : 'plain'); break;
       case 'gardenplots': view.town.gardenPlots = on; view.worldMesh.invalidate(); break;
+      case 'quayyards': view.town.quayYards = on; view.worldMesh.invalidate(); stats.quayYards = { on }; break;   // 1178731576982724611 临水空地也成院
       case 'aolayers': ao ??= new AOLayers(view); ao.set(on); break;
       case 'aotex': aotex ??= new AOTexPanel(view); aotex.set(on); break;
       case 'sungizmo': sun ??= new SunGizmo(view); sun.set(on); break;
@@ -190,5 +182,8 @@ export function installC07(view, { search = globalThis.location?.search ?? '' } 
   }
   view.c07 = { state, stats, set, get skin() { return skin; }, get boil() { return boil; }, get crown() { return crown; }, get ao() { return ao; }, get sun() { return sun; } };
   for (const k of parseC07(search)) set(k, true);
+  // 第 194 轮：1178731576982724611 的大田规则 A/B —— `?bigplot=0` 退回「全部 2–5 格」的旧形制（默认 0.55 出大田）
+  const bp = new URLSearchParams(search).get('bigplot');
+  if (bp !== null) { view.town.gardenRules = { ...(view.town.gardenRules || {}), bigField: Number(bp) || 0 }; view.worldMesh.invalidate(); }
   return view.c07;
 }

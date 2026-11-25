@@ -313,6 +313,31 @@ def workshop_learning_snapshot(request: Request) -> Response:
     return JSONResponse(snapshot, headers=headers)
 
 
+EXPERIENCE_PATH = TIGER_MESSENGER / "src" / "scene-authoring" / "catalog" / "experience-rows.json"
+EXPERIENCE_ROW_LIMIT = 20000
+
+
+@app.post("/api/workshop/experience")
+def workshop_experience(payload: dict = Body(...)) -> JSONResponse:
+    rows = payload.get("rows")
+    if not isinstance(rows, list) or len(rows) > EXPERIENCE_ROW_LIMIT:
+        return JSONResponse({"error": "ROWS_INVALID"}, status_code=400)
+    rows = [r for r in rows if isinstance(r, dict) and r.get("id") and isinstance(r.get("at"), (int, float))]
+    if len(rows) > 4000:
+        rows = rows[-4000:]
+    existing: list = []
+    if EXPERIENCE_PATH.exists():
+        try:
+            existing = json.loads(EXPERIENCE_PATH.read_text("utf-8")).get("rows") or []
+        except (ValueError, OSError):
+            existing = []
+    seen = {(r.get("id"), r.get("at")) for r in existing}
+    added = [r for r in rows if (r.get("id"), r.get("at")) not in seen]
+    merged = (existing + added)[-EXPERIENCE_ROW_LIMIT:]
+    EXPERIENCE_PATH.write_text(json.dumps({"schemaVersion": 1, "rows": merged}, ensure_ascii=False), "utf-8")
+    return JSONResponse({"ok": True, "added": len(added), "total": len(merged)})
+
+
 @app.get("/api/workshop/code-library")
 def workshop_code_library() -> Response:
     from .code_library import code_library_snapshot
@@ -1242,6 +1267,9 @@ if TIGER_MESSENGER.is_dir():
 # 只开放工坊使用的库与来源视频，不开放整个仓库或 REACode 原版。
 for url_path, directory, mount_name in (
     ("/townscaper-web/REACodeRefactoring", ROOT / "townscaper-web" / "REACodeRefactoring", "rea_capability_library"),
+    # 原版只读裁判源：工坊页内的「原版当裁判」对照（nav-parity 等）要在浏览器里 import 这几个原版文件。
+    # 只开放 src/（代码），不开放 REACode 其余部分或整个仓库。
+    ("/townscaper-web/REACode/src", ROOT / "townscaper-web" / "REACode" / "src", "rea_original_judge"),
     ("/REA-agent/gifs", ROOT / "REA-agent" / "gifs", "rea_source_videos"),
 ):
     if directory.is_dir():

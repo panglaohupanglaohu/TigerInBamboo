@@ -4,6 +4,19 @@
  * hull cells close at their source vertex rather than extrapolating to infinity.
  */
 import{pointInQuad}from'./spatial.js';
+/**
+ * 959752525867036672 片内量出来的脉动曲线（31 帧 / 21.53fps）。
+ * 逐帧数同一裁剪框里的白线像素（亮度>200）：3035→2154（f0013 谷）→3153（f0027 峰）。
+ * 面积 ∝ 线性²，对整段做 a·cos(ωt)+b 最小二乘（扫周期）得：周期 1.296s、峰谷比 √((b+a)/(b−a)) = 1.206。
+ * uPulse=1 就是真对偶尺寸（拟合的相位说明片内 f0000 正在峰上），谷 = 1/1.206 ≈ 0.829。
+ * 旧写死 .72..1.00（峰谷比 1.39、周期 2.09s）比片内深且慢。
+ */
+export const DUAL_PULSE = { min: 0.829, max: 1, period: 1.3 };
+/** 顶点格脉动：t 秒 → 缩放。t=0 在峰上（片内 f0000 接近满尺寸）。 */
+export function dualPulse(t, p = DUAL_PULSE) {
+  if (!Number.isFinite(t)) throw new RangeError('invalid pulse time');
+  return p.min + (p.max - p.min) * (0.5 + 0.5 * Math.cos((2 * Math.PI * t) / p.period));
+}
 export function vertexDual(points,triangles){
  if(!Array.isArray(points)||!Array.isArray(triangles)||points.length>10000||triangles.length>20000||points.some(p=>!p||![p.x,p.z].every(Number.isFinite)))throw new RangeError('invalid dual input');
  const cells=points.map((p,id)=>({id,source:p,wedges:[],boundary:false})),edgeUse=new Map(),midpoints=new Map(),centroids=[];let next=0;

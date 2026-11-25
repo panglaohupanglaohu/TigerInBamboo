@@ -22,13 +22,14 @@ L.update(2); L.sync(row(4), 2); L.update(2.001);
 assert.deepEqual(row(4).map((p) => L.slotOf(p.key)), slots, 'stable identity across rebuilds');
 assert.ok(Math.abs(sc('door:0') - 1) < .01, 'no animation restart');
 // remove door:3 → its slot keeps the old geometry and shrinks, then frees
-L.sync(row(3), 3); L.update(3.05);
+L.sync(row(3), 3); L.update(3.012);   // 第 192 轮：片内消失只一帧 → 收缩中点在首个半帧内
 assert.equal(L.slotOf('door:3'), slots[3]); assert.ok(sc('door:3') < 1 && sc('door:3') > 0, 'vanishing prop still drawn, shrinking');
-assert.ok(L.records[slots[3] * 4] === 3, 'root kept for the shrink');
+L.update(3.05); assert.equal(sc('door:3'), 0, 'one-frame collapse, slot still held');
+assert.ok(L.records[slots[3] * 4] === 3, 'root kept for the residual frames');
 L.update(3.5); assert.equal(L.slotOf('door:3'), -1, 'slot released after shrink');
 assert.equal(L.records[slots[3] * 4 + 3], 0);
 // re-adding while vanishing regrows in the same slot
-L.sync(row(2), 4); L.update(4.05); L.sync(row(3), 4.05); L.update(4.1);
+L.sync(row(2), 4); L.update(4.05); L.sync(row(3), 4.05); L.update(4.06);
 assert.equal(L.slotOf('door:2'), slots[2]); assert.ok(sc('door:2') < 1, 'regrows');
 assert.throws(() => L.sync([{ key: 'a', x: 0, y: 0, z: 0 }, { key: 'a', x: 0, y: 0, z: 0 }], 5));
 const big = new PropLifecycle({ capacity: 2 }); assert.throws(() => big.sync(row(3), 0), /capacity/);

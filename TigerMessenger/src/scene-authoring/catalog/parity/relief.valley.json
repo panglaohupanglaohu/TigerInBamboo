@@ -1,0 +1,98 @@
+{
+ "capability": "relief.valley",
+ "line": "terrain",
+ "verdict": "diff-registered",
+ "measured": {
+  "at": "2026-11-24T18:35:11.373Z",
+  "total": 43,
+  "byPath": {
+   "rivers.cells[]": 38,
+   "rivers.levels[]": 5
+  },
+  "unregisteredCount": 0,
+  "used": [
+   "rivers.cells*",
+   "rivers.levels*"
+  ],
+  "unused": [
+   "rivers.painted",
+   "depfill.flood.lift.*",
+   "depfill.flood.drainPct",
+   "depfill.lakeCells",
+   "depfill.lakes"
+  ],
+  "ms": 46
+ },
+ "status": "measured",
+ "note": "Quick 预填（读码推断，2026-11-23 R41–R50）：verdict / measured 为 null = 还没实算；由 Kiro 跑 tools/refactor/record-relief-evidence.mjs 写入（唯一写入方）。登记的 diffs 是「已知会不同、原因已查明」的差异；实算出现登记外的差异 → tests/relief-parity.test.mjs 红。",
+ "original": "townscaper-web/REACode/engine/rivers.js",
+ "alsoOriginal": [
+  "townscaper-web/REACode/src/depfill.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/generate.js",
+  "townscaper-web/REACodeRefactoring/src/terrain/river-valley.js",
+  "townscaper-web/REACodeRefactoring/src/terrain/depfill-grid.js",
+  "townscaper-web/REACodeRefactoring/src/core/depression-fill.js"
+ ],
+ "inputs": {
+  "rivers": {
+   "grid": "40×40 整数层测试岛 riverIsland(40, 20261123)（最高格是孤峰）",
+   "seed": 11,
+   "count": 1,
+   "maxSteps": 4000,
+   "depth": 2
+  },
+  "depfill": {
+   "seed": 7,
+   "grid": "64×64",
+   "sweep": "tools/refactor/depfill-parity.mjs：seeds 1..10 + 20261123 逐格裁判（输入场逐值相同、PF 全格 |Δ|≤1.4e-3 < 容差 0.02）"
+  }
+ },
+ "diffs": [
+  {
+   "path": "rivers.levels*",
+   "kind": "value",
+   "reason": "原版不开凿源头格、并把入海口那一格海抬成陆地（瑕疵）；重构 generate.js 从源头起切、河口不动，所以河床各格的层不同"
+  },
+  {
+   "path": "rivers.cells*",
+   "reason": "河格集合：重构含源头格、不含入海口海格；原版相反"
+  },
+  {
+   "path": "rivers.painted",
+   "kind": "value",
+   "reason": "标色的格数随河格集合差 0–2 格"
+  },
+  {
+   "path": "depfill.flood.lift.*",
+   "reason": "原版被困格抬到「水位 + EPS」并链式累加；EPS 链沿「与溢出面等高」的沿格继续外溢（沿格 H=溢出面 > 4·EPS 的链段被计入抬升/湖格），重构 depressionFill.filled 抬到溢出面本身、沿格不动。实测 sweep（depfill-parity.mjs）：seed 8 raised 177 vs 95、seed 6 103 vs 97、seed 9 67 vs 63——多出的全部是与溢出面等高的沿格（seed 8 全部 H=5.1），PF 高度本身 |Δ|≤1.4e-3"
+  },
+  {
+   "path": "depfill.flood.drainPct",
+   "kind": "value",
+   "reason": "原版排水判定带 8·EPS 容差、填出的面带 EPS 链；重构是精确溢出面"
+  },
+  {
+   "path": "depfill.lakeCells",
+   "kind": "value",
+   "reason": "同 lift：EPS 链让原版多数几格「湖格」（seed 8：177 vs 95，seed 6：103 vs 97，seed 9：67 vs 63）"
+  },
+  {
+   "path": "depfill.lakes",
+   "kind": "value",
+   "reason": "原版把相连的被抬格不分水位并成一个湖；core lakeClusters 按同一溢出面分湖。seed 9 原版 20 vs 重构 19：EPS 外溢格在 4.5 溢面沿上独立成一簇"
+  }
+ ],
+ "flaws": [
+  "原版 DFS 没把源头放进 seen：源头只比邻格高 1 层时会走回源头（对照岛把源头做成孤峰来避开）",
+  "原版把入海口海格抬成陆地",
+  "原版 EPS 链沿与溢出面等高的沿格外溢：本不需要填的沿格被抬 k·EPS，超过 4·EPS 后计入湖格/抬升统计（seed 8 多报 82 格，PF 高程差仍 ≤1.4e-3）"
+ ],
+ "extensions": [
+  "carveValleys：汇流成河 + V 形两岸 + 填洼成湖（方格），paintRivers 补原版导出，depfill-grid 补原版方格诊断"
+ ],
+ "harness": "TigerMessenger/src/system-workshop/terrain/parity-cases.js + parity.js",
+ "test": "TigerMessenger/tests/relief-parity.test.mjs",
+ "recordedBy": "record-relief-evidence.mjs（实算）"
+}

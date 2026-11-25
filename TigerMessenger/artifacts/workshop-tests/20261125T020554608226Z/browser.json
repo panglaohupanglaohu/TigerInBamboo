@@ -1,0 +1,474 @@
+{
+  "startedAt": "2026-11-25T02:06:01.408Z",
+  "base": "http://localhost:8931",
+  "isolated": true,
+  "cases": [
+    {
+      "id": "L13 synchronous IndexedDB open denial keeps learning usable",
+      "status": "PASS",
+      "ms": 451,
+      "detail": {
+        "iframe": "learning-only isolated",
+        "nativeStorage": "SecurityError",
+        "onlineLearning": "current"
+      }
+    },
+    {
+      "id": "S01 initial pipeline",
+      "status": "PASS",
+      "ms": 37
+    },
+    {
+      "id": "S02 scan real library and search",
+      "status": "PASS",
+      "ms": 900,
+      "detail": "扫描完成（实际文件）：重构源码 409 个模块，执行注册入口 13 个；新增 0 个。没有新变化。"
+    },
+    {
+      "id": "S03 scan HTTP404 and recovery",
+      "status": "PASS",
+      "ms": 5285
+    },
+    {
+      "id": "S12 scene categories subgroups and method shelf",
+      "status": "PASS",
+      "ms": 317
+    },
+    {
+      "id": "S14 ordered scene-layer board selects config and inserts inside its layer",
+      "status": "PASS",
+      "ms": 459
+    },
+    {
+      "id": "S04 add remove undo redo and reorder",
+      "status": "PASS",
+      "ms": 12411
+    },
+    {
+      "id": "S05 goal save and exported JSON",
+      "status": "PASS",
+      "ms": 4737
+    },
+    {
+      "id": "L01 learning loads source records",
+      "status": "PASS",
+      "ms": 7144,
+      "detail": "正在保存学习缓存…"
+    },
+    {
+      "id": "L06 shared snapshot matches upstream and outage preserves old data",
+      "status": "PASS",
+      "ms": 2944
+    },
+    {
+      "id": "L07 verified refresh updates all learning views and keeps recipe iframe",
+      "status": "PASS",
+      "ms": 7200
+    },
+    {
+      "id": "L08 progress evidence history and next are folded with reachable learning tabs",
+      "status": "PASS",
+      "ms": 1602
+    },
+    {
+      "id": "L09 offline full reload uses verified learning cache then recovers",
+      "status": "PASS",
+      "ms": 784
+    },
+    {
+      "id": "L10 cache quota failure leaves live learning and scene stores usable",
+      "status": "PASS",
+      "ms": 510
+    },
+    {
+      "id": "L11 unavailable IndexedDB keeps online learning and reports offline error",
+      "status": "PASS",
+      "ms": 865,
+      "detail": {
+        "iframe": "learning-only isolated",
+        "online": "current without persistence",
+        "offline": "explicit error",
+        "recovered": true
+      }
+    },
+    {
+      "id": "L12 corrupt offline cache never activates and online refresh repairs it",
+      "status": "PASS",
+      "ms": 967,
+      "detail": {
+        "iframe": "learning-only isolated",
+        "corruption": "rejected",
+        "onlineRepair": "hash verified"
+      }
+    },
+    {
+      "id": "L14 video notes and pipeline methods show genuine thumbnails and missing-image fallback",
+      "status": "PASS",
+      "ms": 3486
+    },
+    {
+      "id": "L02 module search and source links",
+      "status": "PASS",
+      "ms": 323
+    },
+    {
+      "id": "L03 add method to scene locate no duplicate",
+      "status": "PASS",
+      "ms": 598
+    },
+    {
+      "id": "L04 videos search play close",
+      "status": "PASS",
+      "ms": 2145
+    },
+    {
+      "id": "S06 saved recipe refresh",
+      "status": "PASS",
+      "ms": 21243
+    },
+    {
+      "id": "S07 real game connection and editor docking",
+      "status": "PASS",
+      "ms": 61761
+    },
+    {
+      "id": "S18 real plane trees select focus clear without scene or storage edits",
+      "status": "PASS",
+      "ms": 29929,
+      "detail": {
+        "trees": 4,
+        "bridgeTree": "located and highlighted",
+        "objectEditing": "not connected",
+        "worldRecipeStorage": "unchanged"
+      }
+    },
+    {
+      "id": "S19 object switching refresh learning roundtrip and editor exit release helpers",
+      "status": "PASS",
+      "ms": 12012,
+      "detail": {
+        "switchedTree": "lake tree 2",
+        "selectionAcrossLearning": "retained",
+        "singleHelper": true,
+        "disposedGeometry": 2,
+        "disposedMaterials": 2,
+        "editorExit": "cleared without scene edits"
+      }
+    },
+    {
+      "id": "S20 canvas picks resolve real batched tree and cypress ownership",
+      "status": "PASS",
+      "ms": 13253,
+      "detail": {
+        "input": "real canvas pointer clicks",
+        "picked": [
+          "桥边悬铃树",
+          "柏树 1"
+        ],
+        "kinds": [
+          "plane-tree",
+          "cypress"
+        ],
+        "worldRecipeStorage": "unchanged"
+      }
+    },
+    {
+      "id": "S21 detached Three fixture resolves batch ranges and distinct instance bounds",
+      "status": "PASS",
+      "ms": 1539,
+      "detail": {
+        "scope": "detached Three fixture, no game bootstrap",
+        "owners": [
+          "fixture:tree",
+          "fixture:cypress"
+        ],
+        "idsDistinct": true,
+        "minX": [
+          2.5,
+          11.5
+        ],
+        "positionsUnchanged": true,
+        "kind": "实例物件（只读）"
+      }
+    },
+    {
+      "id": "S08 editor tools palette help collapse",
+      "status": "PASS",
+      "ms": 4064
+    },
+    {
+      "id": "S13 approved light blue toolbar contrast and focus",
+      "status": "PASS",
+      "ms": 1877,
+      "detail": {
+        "background": "rgb(227, 243, 251)",
+        "foreground": "rgb(23, 55, 68)",
+        "borderRadius": "14px",
+        "contrast": 11.08957390102491,
+        "buttons": 9
+      }
+    },
+    {
+      "id": "S09 actual parameter preview baseline and snapshot",
+      "status": "PASS",
+      "ms": 4947
+    },
+    {
+      "id": "S15 canonical actions save actual manual parameters once and locate versions in-page",
+      "status": "PASS",
+      "ms": 4050,
+      "detail": {
+        "savedActualTime": "dusk",
+        "recipeTime": "day",
+        "newVersions": 1
+      }
+    },
+    {
+      "id": "S16 draft quota failure preserves world settings recipe and all stored versions",
+      "status": "PASS",
+      "ms": 4341,
+      "detail": {
+        "failedWrite": "reported without mutation",
+        "retryVersions": 1,
+        "existingFinalPreserved": true,
+        "geometrySettingsRecipe": "unchanged"
+      }
+    },
+    {
+      "id": "S10 stale finalize reject restore and isolated final",
+      "status": "PASS",
+      "ms": 5992
+    },
+    {
+      "id": "S17 fixed-version game loads exact data settings and missing ID reports fallback",
+      "status": "PASS",
+      "ms": 162257,
+      "detail": {
+        "pinnedDataSettings": "exact",
+        "workspaceMarker": "different encoded scene mode",
+        "missing": "explicit failure and workspace fallback",
+        "versions": "unchanged"
+      }
+    },
+    {
+      "id": "S11 play mode and service outage independence",
+      "status": "PASS",
+      "ms": 2234
+    },
+    {
+      "id": "L05 mobile overflow and preserved scene iframe",
+      "status": "PASS",
+      "ms": 460
+    },
+    {
+      "id": "G01 clean game startup and remote controls",
+      "status": "PASS",
+      "ms": 48929
+    }
+  ],
+  "errors": [],
+  "learningFixture": {
+    "initial": "sha256:0f25734a6564039df7d42ef6d2da675dab02908ef5611965a5d21cd692093128",
+    "fixture": "sha256:6b491d7896276422a55f898da17501049638bceefd32750c40481920a04472e3",
+    "phase": "restore",
+    "requests": 1
+  },
+  "cachePreparation": [
+    {
+      "at": "2026-11-25T02:06:45.008Z",
+      "initial": "已缓存上次成功学习资料；场景存档独立保存。",
+      "retried": false
+    },
+    {
+      "at": "2026-11-25T02:06:45.797Z",
+      "initial": "已缓存上次成功学习资料；场景存档独立保存。",
+      "retried": false
+    }
+  ],
+  "responsivenessBeforeGameExit": [
+    {
+      "url": "/TigerMessenger/pipeline.html",
+      "ageMs": 309643,
+      "readyState": "complete",
+      "visibility": "visible",
+      "longTasks": [
+        {
+          "start": 16043,
+          "duration": 9614
+        },
+        {
+          "start": 67286,
+          "duration": 7929
+        },
+        {
+          "start": 9160,
+          "duration": 6865
+        },
+        {
+          "start": 25822,
+          "duration": 4479
+        },
+        {
+          "start": 62202,
+          "duration": 3911
+        },
+        {
+          "start": 30317,
+          "duration": 3104
+        },
+        {
+          "start": 2846,
+          "duration": 2942
+        },
+        {
+          "start": 58086,
+          "duration": 2157
+        },
+        {
+          "start": 76509,
+          "duration": 2121
+        },
+        {
+          "start": 50433,
+          "duration": 2009
+        },
+        {
+          "start": 55658,
+          "duration": 1770
+        },
+        {
+          "start": 52459,
+          "duration": 1629
+        },
+        {
+          "start": 7129,
+          "duration": 1555
+        },
+        {
+          "start": 75232,
+          "duration": 1257
+        },
+        {
+          "start": 66130,
+          "duration": 1139
+        },
+        {
+          "start": 1760,
+          "duration": 1068
+        },
+        {
+          "start": 60261,
+          "duration": 1019
+        },
+        {
+          "start": 54133,
+          "duration": 991
+        },
+        {
+          "start": 35098,
+          "duration": 988
+        },
+        {
+          "start": 49463,
+          "duration": 936
+        }
+      ],
+      "unsupported": false
+    },
+    {
+      "url": "/TigerMessenger/index.html",
+      "ageMs": 309583,
+      "readyState": "complete",
+      "visibility": "visible",
+      "longTasks": [
+        {
+          "start": 15982,
+          "duration": 9614
+        },
+        {
+          "start": 67226,
+          "duration": 7929
+        },
+        {
+          "start": 9099,
+          "duration": 6865
+        },
+        {
+          "start": 25761,
+          "duration": 4479
+        },
+        {
+          "start": 62142,
+          "duration": 3911
+        },
+        {
+          "start": 30257,
+          "duration": 3104
+        },
+        {
+          "start": 2786,
+          "duration": 2942
+        },
+        {
+          "start": 58026,
+          "duration": 2157
+        },
+        {
+          "start": 76449,
+          "duration": 2121
+        },
+        {
+          "start": 50373,
+          "duration": 2009
+        },
+        {
+          "start": 55598,
+          "duration": 1770
+        },
+        {
+          "start": 52399,
+          "duration": 1629
+        },
+        {
+          "start": 7069,
+          "duration": 1555
+        },
+        {
+          "start": 75172,
+          "duration": 1257
+        },
+        {
+          "start": 66070,
+          "duration": 1139
+        },
+        {
+          "start": 1700,
+          "duration": 1068
+        },
+        {
+          "start": 60201,
+          "duration": 1019
+        },
+        {
+          "start": 54073,
+          "duration": 991
+        },
+        {
+          "start": 35038,
+          "duration": 988
+        },
+        {
+          "start": 49403,
+          "duration": 936
+        }
+      ],
+      "unsupported": false
+    }
+  ],
+  "finishedAt": "2026-11-25T02:13:14.409Z",
+  "summary": {
+    "passed": 36,
+    "failed": 0,
+    "pageErrors": 0
+  }
+}

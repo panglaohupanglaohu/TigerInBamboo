@@ -1,0 +1,262 @@
+{
+  "report": {
+    "params0": {
+      "on": true,
+      "atlasSize": 128,
+      "rimCells": 459,
+      "rimRes": 128,
+      "maxDist": 1,
+      "topSpan": 5,
+      "scale": 0.09,
+      "strength": 1,
+      "bleed": 0.14,
+      "streak": 0.75,
+      "density": 0.55,
+      "swirl": 2.3,
+      "segments": 0.12,
+      "tongue": {
+        "on": false,
+        "depth": 0.55,
+        "mix": 0.85,
+        "lobe": 2.2,
+        "topReach": 0.32,
+        "color": "#9fbf5a"
+      }
+    },
+    "fixture": {
+      "cell": 1456,
+      "lowCell": 1967,
+      "yUp": 4,
+      "at": [
+        -2.745,
+        -1.476
+      ],
+      "cpuCoverage": 0.463,
+      "cpuAnt": 1,
+      "cpuBelow": 0.05,
+      "cpuRimDist": 0,
+      "cpuCold": 0.515,
+      "rimCells": 459,
+      "inner": {
+        "cell": 36,
+        "y": 3
+      }
+    },
+    "cpuPred": {
+      "bleed14": 0.115,
+      "bleed30": 0.265,
+      "tongueDepth": 0.55
+    },
+    "prof14": [
+      {
+        "dy": 0.03,
+        "base": 0.7239,
+        "cur": 0.7239,
+        "drop": 0,
+        "cpu": 0.391
+      },
+      {
+        "dy": 0.08,
+        "base": 0.771,
+        "cur": 0.771,
+        "drop": 0,
+        "cpu": 0.339
+      },
+      {
+        "dy": 0.13,
+        "base": 0.771,
+        "cur": 0.771,
+        "drop": 0,
+        "cpu": 0.016
+      },
+      {
+        "dy": 0.18,
+        "base": 0.7453,
+        "cur": 0.7453,
+        "drop": 0,
+        "cpu": 0
+      },
+      {
+        "dy": 0.25,
+        "base": 0.7393,
+        "cur": 0.7613,
+        "drop": -0.03,
+        "cpu": 0
+      },
+      {
+        "dy": 0.4,
+        "base": 0.7459,
+        "cur": 0.7788,
+        "drop": -0.044,
+        "cpu": 0
+      },
+      {
+        "dy": 0.6,
+        "base": 0.7393,
+        "cur": 0.771,
+        "drop": -0.043,
+        "cpu": 0
+      },
+      {
+        "dy": 0.9,
+        "base": 0.7533,
+        "cur": 0.7827,
+        "drop": -0.039,
+        "cpu": 0
+      }
+    ],
+    "prof30": [
+      {
+        "dy": 0.03,
+        "base": 0.7239,
+        "cur": 0.7239,
+        "drop": 0,
+        "cpu": 0.391
+      },
+      {
+        "dy": 0.08,
+        "base": 0.771,
+        "cur": 0.771,
+        "drop": 0,
+        "cpu": 0.463
+      },
+      {
+        "dy": 0.13,
+        "base": 0.771,
+        "cur": 0.771,
+        "drop": 0,
+        "cpu": 0.442
+      },
+      {
+        "dy": 0.18,
+        "base": 0.7453,
+        "cur": 0.7453,
+        "drop": 0,
+        "cpu": 0.31
+      },
+      {
+        "dy": 0.25,
+        "base": 0.7393,
+        "cur": 0.7393,
+        "drop": 0,
+        "cpu": 0.076
+      },
+      {
+        "dy": 0.4,
+        "base": 0.7459,
+        "cur": 0.7731,
+        "drop": -0.036,
+        "cpu": 0
+      },
+      {
+        "dy": 0.6,
+        "base": 0.7393,
+        "cur": 0.771,
+        "drop": -0.043,
+        "cpu": 0
+      },
+      {
+        "dy": 0.9,
+        "base": 0.7533,
+        "cur": 0.7827,
+        "drop": -0.039,
+        "cpu": 0
+      }
+    ],
+    "profTongue": [
+      {
+        "dy": 0.03,
+        "base": 0.7239,
+        "cur": 0.7239,
+        "drop": 0,
+        "cpu": 0.391
+      },
+      {
+        "dy": 0.08,
+        "base": 0.771,
+        "cur": 0.771,
+        "drop": 0,
+        "cpu": 0.339
+      },
+      {
+        "dy": 0.13,
+        "base": 0.4732,
+        "cur": 0.4732,
+        "drop": 0,
+        "cpu": 0.016
+      },
+      {
+        "dy": 0.18,
+        "base": 0.4698,
+        "cur": 0.4698,
+        "drop": 0,
+        "cpu": 0
+      },
+      {
+        "dy": 0.25,
+        "base": 0.4698,
+        "cur": 0.4712,
+        "drop": -0.003,
+        "cpu": 0
+      },
+      {
+        "dy": 0.4,
+        "base": 0.4698,
+        "cur": 0.4755,
+        "drop": -0.012,
+        "cpu": 0
+      },
+      {
+        "dy": 0.6,
+        "base": 0.4698,
+        "cur": 0.4732,
+        "drop": -0.007,
+        "cpu": 0
+      },
+      {
+        "dy": 0.9,
+        "base": 0.7533,
+        "cur": 0.7827,
+        "drop": -0.039,
+        "cpu": 0
+      }
+    ],
+    "depth": {
+      "bleed14": 0,
+      "bleed30": 0,
+      "tongue": 0
+    },
+    "clean": {
+      "b14below018": true,
+      "b30below040": true,
+      "tongueBelow070": true
+    },
+    "bleed0": {
+      "deepest": 0
+    },
+    "noise": 0,
+    "topAbs": {
+      "onMean": 0.208,
+      "offMean": 0.21
+    },
+    "top": {
+      "tintedPct": 10,
+      "runs09": 6,
+      "runs45": 0
+    },
+    "main": {
+      "offOn": 4352,
+      "offOnStrict": 1518,
+      "onTongue": 19269,
+      "noise": 0,
+      "px": 172800
+    },
+    "fail": [
+      "bleed .14 deepest 0",
+      "bleed .30 deepest 0",
+      "tongue not deeper: 0 vs 0"
+    ],
+    "ratio": null
+  },
+  "errors": []
+}

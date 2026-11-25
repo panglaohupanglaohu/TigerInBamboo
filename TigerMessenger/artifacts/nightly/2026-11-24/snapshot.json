@@ -1,0 +1,1582 @@
+{
+ "schemaVersion": 1,
+ "date": "2026-11-24",
+ "generatedAt": "2026-11-23T16:23:18.694Z",
+ "generator": "TigerMessenger/tools/nightly/run-nightly.mjs",
+ "flags": [
+  "--no-jev"
+ ],
+ "node": "v24.22.3",
+ "steps": [
+  {
+   "id": "drift",
+   "label": "§5.1 漂移检查（4 个测试）",
+   "status": "fail",
+   "code": 1,
+   "ms": 859,
+   "cwd": ".",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test --test-reporter=tap TigerMessenger/tests/reacode-file-status.test.mjs TigerMessenger/tests/capability-tree.test.mjs TigerMessenger/tests/capability-lineage.test.mjs TigerMessenger/tests/capability-evolution.test.mjs",
+   "note": "21/23 通过，2 红"
+  },
+  {
+   "id": "r1",
+   "label": "① 原版逐文件状态",
+   "status": "pass",
+   "code": 0,
+   "ms": 285,
+   "cwd": ".",
+   "cmd": "python3 TigerMessenger/tools/scene-authoring/build_reacode_file_status.py",
+   "note": "{\"total\": 317, \"extensions\": {\".html\": 116, \".js\": 189, \".mjs\": 12}, \"states\": {\"待页面核验\": 127, \"待运行验收\": 41, \"已迁移待完整核验\": 122, \"本轮代码验证通过\": 4, \"待工具/数据核验\": 16, \"待补动作/美术\": 1, \"已迁移待跨GPU验收\": 1, \"已迁移待集成/性能验收\":"
+  },
+  {
+   "id": "r2",
+   "label": "② 系统目录",
+   "status": "pass",
+   "code": 0,
+   "ms": 416,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/build-system-catalog.mjs ../townscaper-web/REACode ../townscaper-web/REACodeRefactoring",
+   "note": "}"
+  },
+  {
+   "id": "r3",
+   "label": "③ 重构库扫描",
+   "status": "pass",
+   "code": 0,
+   "ms": 368,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/scan-code-library.mjs",
+   "note": "{\"sourceModules\":388,\"sourceFiles\":396,\"rootHtml\":141,\"testCode\":690,\"originalFiles\":317,\"missingTargets\":34}"
+  },
+  {
+   "id": "r4",
+   "label": "④ 场景依赖扫描",
+   "status": "pass",
+   "code": 0,
+   "ms": 152,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/scan-scene-consumers.mjs",
+   "note": "[[\"莫西斯湖\",{\"modules\":240,\"direct\":22,\"identical\":216,\"different\":24,\"absent\":0}],[\"战斗场\",{\"modules\":42,\"direct\":6,\"identical\":21,\"different\":20,\"absent\":1}],[\"十二门徒\",{\"modules\":18,\"direct\":11,\"identical\""
+  },
+  {
+   "id": "jev",
+   "label": "JEV 归线（§5.4）",
+   "status": "skipped",
+   "note": "--no-jev"
+  },
+  {
+   "id": "r5",
+   "label": "⑤ 能力谱系",
+   "status": "pass",
+   "code": 0,
+   "ms": 529,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/build-capability-lineage.mjs",
+   "note": "{\"sources\":285,\"lines\":27,\"generations\":104,\"gaps\":72,\"gapRows\":75,\"highGaps\":9,\"adapt\":0,\"modules\":388,\"ownedModules\":316,\"inferredModules\":70,\"executables\":81,\"linkedExecutables\":71,\"linesWithExecut"
+  },
+  {
+   "id": "goals",
+   "label": "目标路径各跑一次（Node，进程内）",
+   "status": "fail",
+   "ms": 738,
+   "note": "2/7 条在 Node 里跑了，4 条 NOT_RUN，出错：battle；指标 30 条"
+  },
+  {
+   "id": "r6",
+   "label": "⑥ 补学队列（含指标差距分）",
+   "status": "pass",
+   "code": 0,
+   "ms": 490,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/export-learn-queue.mjs",
+   "note": "写入 /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scene-authoring/catalog/learn-queue.json（72 项补学 · 0 条适配）"
+  },
+  {
+   "id": "r7",
+   "label": "⑦ 九级成熟度",
+   "status": "pass",
+   "code": 0,
+   "ms": 390,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/build-capability-maturity.mjs",
+   "note": "已写 TigerMessenger/src/scene-authoring/catalog/capability-maturity.json：72 个能力"
+  },
+  {
+   "id": "unit",
+   "label": "单元测试（test_workshops.py 清单）",
+   "status": "fail",
+   "code": 1,
+   "ms": 3406,
+   "cwd": ".",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test --test-reporter=tap TigerMessenger/tests/capability-evolution.test.mjs TigerMessenger/tests/capability-lineage.test.mjs TigerMessenger/tests/capability-tree.test.mjs TigerMessenger/tests/battle-pipeline.test.mjs TigerMessenger/tests/nav-vendor-swap.test.mjs TigerMessenger/tests/nav-parity.test.mjs TigerM",
+   "note": "398/409 通过，11 红"
+  }
+ ],
+ "tests": {
+  "drift": {
+   "tests": 23,
+   "pass": 21,
+   "fail": 2,
+   "skipped": 0,
+   "failures": [
+    "every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations",
+    "whole directory has exactly one reviewed row per actual code file, including HTML and tools"
+   ]
+  },
+  "unit": {
+   "tests": 409,
+   "pass": 398,
+   "fail": 11,
+   "skipped": 0,
+   "failures": [
+    "接线：能力树 / 左栏 / 管线页 / 桥接命令都登记了",
+    "building layer: registered in worker-host, adapters, studio, lineage, bridge (§7.2 \\#4 \\#5)",
+    "every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations",
+    "通过：新山形的地面与画面一致、没有洞，轨道 / 保护区地面 = 原高",
+    "楼梯：一架，踏面一级 L/3，比不插值的一整层小",
+    "逐帧：穿洞那段脚贴洞底，上楼梯那段脚高的最大跳变小于不插值",
+    "窄道 / 弯道 / 岔口：考场上逐格数对",
+    "完整山体：一条管线跑完，四类特征都在（软坡粗糙度降、有台面、河谷后没坑、有岩檐、有梯子）",
+    "游戏侧只是候选：不写 localStorage / 存档，persist ≠ false 拒绝预览，能拆回，原地形只隐藏不删",
+    "执行 + 独立验证：完整山体（软坡 + 硬崖 + 河谷 + 悬垂 + 梯子 + 等高线），不写存档，复算通过",
+    "接线：能力树（collectExecutables）/ Worker / 左栏 / 管线页 / 桥接命令都登记了，版本号已加"
+   ]
+  }
+ },
+ "tree": {
+  "lines": 27,
+  "fruit": 27,
+  "frontier": [],
+  "executablesUnique": 81,
+  "goals": 7
+ },
+ "capabilities": [
+  {
+   "id": "battle.garrison",
+   "name": "守军布防",
+   "line": "combat",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "battle.navFinePortals",
+   "name": "拱洞精细门户",
+   "line": "navigation",
+   "level": 6,
+   "label": "L6"
+  },
+  {
+   "id": "battle.navFooting",
+   "name": "穿洞与脚高插值",
+   "line": "navigation",
+   "level": 6,
+   "label": "L6"
+  },
+  {
+   "id": "battle.navTraffic",
+   "name": "窄道会车",
+   "line": "navigation",
+   "level": 6,
+   "label": "L6"
+  },
+  {
+   "id": "battle.stage",
+   "name": "部署战斗舞台",
+   "line": "combat",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "battle.waves",
+   "name": "登陆波次",
+   "line": "combat",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "fx.camera",
+   "name": "环绕镜头路径",
+   "line": "camera",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "fx.campaign",
+   "name": "岛屿分区与前线",
+   "line": "campaign",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "fx.fire",
+   "name": "小屋点火",
+   "line": "fire",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "fx.hallway",
+   "name": "涂鸦走廊样板",
+   "line": "hallway",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "fx.ornament",
+   "name": "界面装饰面板",
+   "line": "ui-decoration",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "fx.projectiles",
+   "name": "守军箭雨弹道",
+   "line": "projectiles",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "fx.replay",
+   "name": "管线回放图",
+   "line": "tools",
+   "level": 6,
+   "label": "L6（缺 ①②④）"
+  },
+  {
+   "id": "fx.sediment",
+   "name": "崖面沉积层带",
+   "line": "sediment",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "fx.wake",
+   "name": "船尾迹",
+   "line": "water-effects",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "mountain.erode",
+   "name": "沟谷侵蚀",
+   "line": "terrain",
+   "level": 6,
+   "label": "L6（缺 ①④⑤）"
+  },
+  {
+   "id": "mountain.lowpoly",
+   "name": "低面片着色",
+   "line": "lines",
+   "level": 6,
+   "label": "L6（缺 ①④⑤）"
+  },
+  {
+   "id": "mountain.massif",
+   "name": "山体隆起",
+   "line": "terrain",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "mountain.protect",
+   "name": "保护带",
+   "line": "terrain",
+   "level": 6,
+   "label": "L6（缺 ①②③④）"
+  },
+  {
+   "id": "mountain.rolling",
+   "name": "连绵圆润",
+   "line": "terrain",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  {
+   "id": "mountain.talus",
+   "name": "岩屑坡",
+   "line": "terrain",
+   "level": 6,
+   "label": "L6（缺 ①③④）"
+  },
+  {
+   "id": "animals.birds",
+   "name": "动物层 · 飞鸟",
+   "line": "animals",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  {
+   "id": "effects.fire",
+   "name": "特效层 · 火",
+   "line": "fire",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  {
+   "id": "effects.smoke",
+   "name": "特效层 · 烟",
+   "line": "smoke",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  {
+   "id": "grid.contours",
+   "name": "网格等值线与层区域边界",
+   "line": "grid",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  {
+   "id": "life.layers",
+   "name": "植物与飞鸟",
+   "line": "animals",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  {
+   "id": "object.path-spacing",
+   "name": "沿现有排布等距",
+   "line": "tools",
+   "level": 5,
+   "label": "L5（缺 ①④）"
+  },
+  {
+   "id": "object.scale-variety",
+   "name": "同类尺寸变化",
+   "line": "tools",
+   "level": 5,
+   "label": "L5（缺 ②③④）"
+  },
+  {
+   "id": "object.spacing-relax",
+   "name": "间距松弛",
+   "line": "tools",
+   "level": 5,
+   "label": "L5（缺 ②③④）"
+  },
+  {
+   "id": "object.yaw-variety",
+   "name": "朝向变化",
+   "line": "tools",
+   "level": 5,
+   "label": "L5（缺 ②③④）"
+  },
+  {
+   "id": "planet.grid-subdivision",
+   "name": "网格细分",
+   "line": "grid",
+   "level": 5,
+   "label": "L5（缺 ①②③④）"
+  },
+  {
+   "id": "planet.sea-level",
+   "name": "海平面",
+   "line": "shore",
+   "level": 5,
+   "label": "L5（缺 ①②③④）"
+  },
+  {
+   "id": "scene.oklab-contrast",
+   "name": "感知明暗层次",
+   "line": "palette",
+   "level": 5,
+   "label": "L5（缺 ②④）"
+  },
+  {
+   "id": "scene.oklab-palette",
+   "name": "感知色板归并",
+   "line": "palette",
+   "level": 5,
+   "label": "L5（缺 ②④）"
+  },
+  {
+   "id": "scene.tone",
+   "name": "整体色调",
+   "line": "palette",
+   "level": 5,
+   "label": "L5（缺 ①②③④）"
+  },
+  {
+   "id": "terrain.arch",
+   "name": "石拱 / 天桥",
+   "line": "wfc",
+   "level": 5,
+   "label": "L5（缺 ②④）"
+  },
+  {
+   "id": "vegetation.layers",
+   "name": "植被层",
+   "line": "plants",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  {
+   "id": "water.surface",
+   "name": "水面与岸浪",
+   "line": "shore",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  {
+   "id": "weather.atmosphere",
+   "name": "天气与风场",
+   "line": "wind",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  {
+   "id": "build.lighthouse",
+   "name": "海边灯塔",
+   "line": "building",
+   "level": 3,
+   "label": "L3（缺 ②）"
+  },
+  {
+   "id": "build.lighthouse-light",
+   "name": "灯塔灯室与光束",
+   "line": "building",
+   "level": 3,
+   "label": "L3（缺 ②）"
+  },
+  {
+   "id": "building.edit",
+   "name": "建筑与空间",
+   "line": "light",
+   "level": 3,
+   "label": "L3"
+  },
+  {
+   "id": "light.time",
+   "name": "光照与时间",
+   "line": "shadows",
+   "level": 3,
+   "label": "L3"
+  },
+  {
+   "id": "terrain.overhang",
+   "name": "崖顶悬垂",
+   "line": "terrain",
+   "level": 3,
+   "label": "L3（缺 ②）"
+  },
+  {
+   "id": "terrain.preserve",
+   "name": "地形与承托",
+   "line": "terrain",
+   "level": 3,
+   "label": "L3"
+  },
+  {
+   "id": "terrain.seastack",
+   "name": "海中石柱",
+   "line": "terrain",
+   "level": 3,
+   "label": "L3（缺 ②）"
+  },
+  {
+   "id": "terrain.shrub-texture",
+   "name": "纯纹理灌木（台地边）",
+   "line": "plants",
+   "level": 3,
+   "label": "L3（缺 ②）"
+  },
+  {
+   "id": "terrain.tunnel",
+   "name": "穿山隧道",
+   "line": "navigation",
+   "level": 3,
+   "label": "L3（缺 ②）"
+  },
+  {
+   "id": "water.volume",
+   "name": "体积浅水（SDF 叠层）",
+   "line": "reflection",
+   "level": 3,
+   "label": "L3（缺 ②）"
+  },
+  {
+   "id": "world.ink",
+   "name": "世界接口 · 描线与网格",
+   "line": "lines",
+   "level": 3,
+   "label": "L3"
+  },
+  {
+   "id": "planet.light-ambient-bounce",
+   "name": "天光与反弹色",
+   "line": "light",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.light-ao",
+   "name": "环境遮蔽（AO）",
+   "line": "shadows",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.light-ink-rim",
+   "name": "墨线与逆光亮边",
+   "line": "lines",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.light-rock",
+   "name": "山岩明暗与岩层",
+   "line": "light",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.light-sun-shadow",
+   "name": "太阳与投影",
+   "line": "shadows",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.light-time",
+   "name": "时刻与太阳",
+   "line": "light",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.light-view-grade",
+   "name": "视图与调色",
+   "line": "palette",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.sea-foam",
+   "name": "岸边白沫与光晕",
+   "line": "shore",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.sea-reflection",
+   "name": "彩色中间倒影",
+   "line": "reflection",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.sea-shore-field",
+   "name": "岸带距离场",
+   "line": "shore",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.sea-tint",
+   "name": "莫西斯湖水色",
+   "line": "water-effects",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.sea-waves",
+   "name": "外推浪带",
+   "line": "water-effects",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.weather-clouds",
+   "name": "云（阴云与云影）",
+   "line": "wind",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.weather-fog",
+   "name": "天气雾",
+   "line": "wind",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.weather-kind",
+   "name": "天气类型",
+   "line": "wind",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.weather-snow-cover",
+   "name": "积雪（雪后的建筑）",
+   "line": "wind",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.weather-wind",
+   "name": "风",
+   "line": "wind",
+   "level": 1,
+   "label": "L1"
+  },
+  {
+   "id": "planet.chart-split",
+   "name": "切图数",
+   "line": "sphere",
+   "level": 0,
+   "label": "L0（无证据）"
+  },
+  {
+   "id": "planet.reseed",
+   "name": "重解地形",
+   "line": "terrain",
+   "level": 0,
+   "label": "L0（无证据）"
+  },
+  {
+   "id": "planet.surface-detail",
+   "name": "地表分辨率",
+   "line": "grid",
+   "level": 0,
+   "label": "L0（无证据）"
+  },
+  {
+   "id": "scene.palette-unify",
+   "name": "风格统一（主色归并）",
+   "line": "palette",
+   "level": 0,
+   "label": "L0（无证据）"
+  },
+  {
+   "id": "scene.style-pack",
+   "name": "套用风格包",
+   "line": "palette",
+   "level": 0,
+   "label": "L0（无证据）"
+  }
+ ],
+ "lines": {
+  "grid": {
+   "name": "网格",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "wfc": {
+   "name": "模块约束",
+   "level": 5,
+   "label": "L5（缺 ②④）"
+  },
+  "terrain": {
+   "name": "地形",
+   "level": 6,
+   "label": "L6（缺 ①④⑤）"
+  },
+  "sphere": {
+   "name": "球面",
+   "level": 3,
+   "label": "L3"
+  },
+  "shore": {
+   "name": "岸线",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  "reflection": {
+   "name": "倒影",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  "light": {
+   "name": "光照",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "shadows": {
+   "name": "阴影",
+   "level": 3,
+   "label": "L3"
+  },
+  "lines": {
+   "name": "描线与纹理",
+   "level": 6,
+   "label": "L6（缺 ①④⑤）"
+  },
+  "plants": {
+   "name": "植被",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  "atlas": {
+   "name": "精灵表示",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  "wind": {
+   "name": "共享风",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  "navigation": {
+   "name": "导航",
+   "level": 6,
+   "label": "L6"
+  },
+  "building": {
+   "name": "建筑",
+   "level": 6,
+   "label": "L6"
+  },
+  "sediment": {
+   "name": "岩层",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "projectiles": {
+   "name": "弹道",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "smoke": {
+   "name": "烟火",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "tools": {
+   "name": "工具",
+   "level": 6,
+   "label": "L6（缺 ①②④）"
+  },
+  "campaign": {
+   "name": "战役",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "fire": {
+   "name": "火焰",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "ui-decoration": {
+   "name": "界面装饰",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "palette": {
+   "name": "配色",
+   "level": 5,
+   "label": "L5（缺 ②④）"
+  },
+  "camera": {
+   "name": "镜头",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "animals": {
+   "name": "生物与装饰",
+   "level": 5,
+   "label": "L5（缺 ④）"
+  },
+  "combat": {
+   "name": "战斗反馈",
+   "level": 6,
+   "label": "L6"
+  },
+  "water-effects": {
+   "name": "水的消费者",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  },
+  "hallway": {
+   "name": "建筑纹理",
+   "level": 6,
+   "label": "L6（缺 ①④）"
+  }
+ },
+ "goals": [
+  {
+   "id": "battle",
+   "name": "场景战役：Bad North 玩法层",
+   "needs": 3,
+   "status": "error",
+   "reason": "没有导航采样（site.nav）：先在实景里扫描战斗舞台"
+  },
+  {
+   "id": "mountain",
+   "name": "圣城山形：有山的模样",
+   "needs": 6,
+   "status": "run",
+   "ms": 78,
+   "report": [
+    {
+     "id": "mountain.protect",
+     "status": "applied",
+     "changed": [
+      "保护 3712 格，可塑陆地 2849 格（25641 m²）"
+     ]
+    },
+    {
+     "id": "mountain.massif",
+     "status": "applied",
+     "changed": [
+      "隆起 2722 格 · 最高点 50.8 m"
+     ]
+    },
+    {
+     "id": "mountain.erode",
+     "status": "applied",
+     "changed": [
+      "下切 2051 格 · 最深 6.3 m · 5 轮"
+     ]
+    },
+    {
+     "id": "mountain.rolling",
+     "status": "applied",
+     "changed": [
+      "连脊填谷 918 格 · 圆润 17061 次 · 起伏 2849 格"
+     ]
+    },
+    {
+     "id": "mountain.talus",
+     "status": "applied",
+     "changed": [
+      "松弛 9840 次 · 休止角 49°"
+     ]
+    },
+    {
+     "id": "mountain.lowpoly",
+     "status": "applied",
+     "changed": [
+      "草坡 5498 · 岩壁 473 · 碎石 573 · 雪 96 · 滩 / 台地 6160 面"
+     ]
+    }
+   ],
+   "verify": {
+    "status": "pass",
+    "summary": "建筑与保护带不动✓ 轨道净空保留✓ 海岸线不变✓ 有主峰✓ 山坡而非方台✓ 竖崖占比✓ 面数预算✓ 着色数据完整✓ 玩家地面与山形一致✓ 山上能走✓"
+   },
+   "metrics": 23
+  },
+  {
+   "id": "fx",
+   "name": "fx",
+   "needs": 9,
+   "status": "run",
+   "ms": 157,
+   "report": [
+    {
+     "id": "fx.campaign",
+     "status": "applied",
+     "changed": [
+      "图 441 点 · 分区 3 · 前线 119 点"
+     ]
+    },
+    {
+     "id": "fx.camera",
+     "status": "applied",
+     "changed": [
+      "环绕 1 圈 · 97 点 · 峰值 30°/s（限 45）"
+     ]
+    },
+    {
+     "id": "fx.wake",
+     "status": "applied",
+     "changed": [
+      "尾迹 134 片泡沫 · 半角 0.69°（Kelvin 上限 19.47°）"
+     ]
+    },
+    {
+     "id": "fx.ornament",
+     "status": "applied",
+     "changed": [
+      "面板 48² · 砖块 16 · 曲线 10 段"
+     ]
+    },
+    {
+     "id": "fx.fire",
+     "status": "applied",
+     "changed": [
+      "点火 3 处（小屋）· 火光 0.18s 剩 58% · 0.39s 剩 23% · 烟面积 ×2.232 · 爆燃 16 张"
+     ]
+    },
+    {
+     "id": "fx.hallway",
+     "status": "applied",
+     "changed": [
+      "走廊展开面 7.4×5.79 · 7 块板 · 3 条竖带 · 纹样 845 个（镜像）"
+     ]
+    },
+    {
+     "id": "fx.sediment",
+     "status": "applied",
+     "changed": [
+      "崖面 38 面 · 层带 372 条（宽窄变异 0.29）· 细深线 256 条 · 弯层"
+     ]
+    },
+    {
+     "id": "fx.projectiles",
+     "status": "applied",
+     "changed": [
+      "箭 8 支 · 解析表 · 平均飞行 0.981s · 最大落点偏差 0 格"
+     ]
+    },
+    {
+     "id": "fx.replay",
+     "status": "applied",
+     "changed": [
+      "图 10 节点 9 边 · 执行 10 帧"
+     ]
+    }
+   ],
+   "verify": {
+    "status": "warn",
+    "summary": "分区覆盖✓ 前线连通且有净空✓ 镜头路径✓ 角速度上限✓ 泡沫数量✓ V 形半角与对称✓ 面板与镜像✓ 回放图可复算✓ 点火处在格网上✓ 火光衰减与烟放大✓ 爆燃团分层✓ 版式可独立复算✓ 板覆盖整面墙✓ 样板落点✓ 崖面可独立重数✓ 层带岩性与首尾✓ 层带宽窄相间! 落点命中✓ 弹道是弧✓"
+   },
+   "metrics": 7
+  },
+  {
+   "id": "apostles-terrain",
+   "name": "apostles-terrain",
+   "needs": 2,
+   "status": "NOT_RUN",
+   "reason": "这一层的输入要浏览器实景采样，只能在端到端里跑"
+  },
+  {
+   "id": "lightlife",
+   "name": "lightlife",
+   "needs": 8,
+   "status": "NOT_RUN",
+   "reason": "这一层的输入要浏览器实景采样，只能在端到端里跑"
+  },
+  {
+   "id": "building",
+   "name": "building",
+   "needs": 3,
+   "status": "NOT_RUN",
+   "reason": "这一层的输入要浏览器实景采样，只能在端到端里跑"
+  },
+  {
+   "id": "relief",
+   "name": "relief",
+   "needs": 6,
+   "status": "NOT_RUN",
+   "reason": "这一层的输入要浏览器实景采样，只能在端到端里跑"
+  }
+ ],
+ "metrics": [
+  {
+   "key": "mountain:metrics.before.cells",
+   "goal": "mountain",
+   "name": "metrics.before.cells",
+   "value": 2849,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.before.flat",
+   "goal": "mountain",
+   "name": "metrics.before.flat",
+   "value": 0.6381186381186381,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.before.mid",
+   "goal": "mountain",
+   "name": "metrics.before.mid",
+   "value": 0.3618813618813619,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.before.cliff",
+   "goal": "mountain",
+   "name": "metrics.before.cliff",
+   "value": 0,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.before.top",
+   "goal": "mountain",
+   "name": "metrics.before.top",
+   "value": 38,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.before.prominence",
+   "goal": "mountain",
+   "name": "metrics.before.prominence",
+   "value": 30,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.after.cells",
+   "goal": "mountain",
+   "name": "metrics.after.cells",
+   "value": 2849,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.after.flat",
+   "goal": "mountain",
+   "name": "metrics.after.flat",
+   "value": 0.006318006318006318,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.after.mid",
+   "goal": "mountain",
+   "name": "metrics.after.mid",
+   "value": 0.9255879255879256,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.after.cliff",
+   "goal": "mountain",
+   "name": "metrics.after.cliff",
+   "value": 0,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.after.top",
+   "goal": "mountain",
+   "name": "metrics.after.top",
+   "value": 45.32,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.after.prominence",
+   "goal": "mountain",
+   "name": "metrics.after.prominence",
+   "value": 28.240000000000002,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.tris",
+   "goal": "mountain",
+   "name": "metrics.ground.tris",
+   "value": 7816,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.maxErr",
+   "goal": "mountain",
+   "name": "metrics.ground.maxErr",
+   "value": 3.197442310920451e-14,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.holes",
+   "goal": "mountain",
+   "name": "metrics.ground.holes",
+   "value": 0,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.railCells",
+   "goal": "mountain",
+   "name": "metrics.ground.railCells",
+   "value": 59,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.railDiff",
+   "goal": "mountain",
+   "name": "metrics.ground.railDiff",
+   "value": 0,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.keepCells",
+   "goal": "mountain",
+   "name": "metrics.ground.keepCells",
+   "value": 501,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.keepDiff",
+   "goal": "mountain",
+   "name": "metrics.ground.keepDiff",
+   "value": 0,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.freeTris",
+   "goal": "mountain",
+   "name": "metrics.ground.freeTris",
+   "value": 5310,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.walkShare",
+   "goal": "mountain",
+   "name": "metrics.ground.walkShare",
+   "value": 0.9192090395480226,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.walkConnected",
+   "goal": "mountain",
+   "name": "metrics.ground.walkConnected",
+   "value": 0.6500941619585687,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "mountain:metrics.ground.maxSlope",
+   "goal": "mountain",
+   "name": "metrics.ground.maxSlope",
+   "value": 45,
+   "scene": "合成舞台",
+   "source": "nightly",
+   "untracked": true,
+   "gapScore": null
+  },
+  {
+   "key": "fx:campaign-frontier",
+   "goal": "fx",
+   "check": "campaign-frontier",
+   "capability": "fx.campaign",
+   "line": "campaign",
+   "name": "前线段净空",
+   "value": 3.399,
+   "threshold": 0.5,
+   "direction": "min",
+   "unit": "格",
+   "status": "pass",
+   "scene": "合成舞台",
+   "source": "nightly",
+   "gapScore": 0
+  },
+  {
+   "key": "fx:camera-speed",
+   "goal": "fx",
+   "check": "camera-speed",
+   "capability": "fx.camera",
+   "line": "camera",
+   "name": "镜头峰值角速度",
+   "value": 30.2,
+   "threshold": 45,
+   "direction": "max",
+   "unit": "°/s",
+   "status": "pass",
+   "scene": "合成舞台",
+   "source": "nightly",
+   "gapScore": 0
+  },
+  {
+   "key": "fx:wake-angle",
+   "goal": "fx",
+   "check": "wake-angle",
+   "capability": "fx.wake",
+   "line": "water-effects",
+   "name": "尾迹半角",
+   "value": 0.69,
+   "threshold": 19.47,
+   "direction": "max",
+   "unit": "°",
+   "status": "pass",
+   "scene": "合成舞台",
+   "source": "nightly",
+   "gapScore": 0
+  },
+  {
+   "key": "fx:fire-curve",
+   "goal": "fx",
+   "check": "fire-curve",
+   "capability": "fx.fire",
+   "line": "fire",
+   "name": "0.39s 火光残留",
+   "value": 0.226,
+   "threshold": 0.35,
+   "direction": "max",
+   "unit": "相对峰值",
+   "status": "pass",
+   "scene": "合成舞台",
+   "source": "nightly",
+   "gapScore": 0
+  },
+  {
+   "key": "fx:hallway-cover",
+   "goal": "fx",
+   "check": "hallway-cover",
+   "capability": "fx.hallway",
+   "line": "hallway",
+   "name": "走廊板覆盖率",
+   "value": 1,
+   "threshold": 0.98,
+   "direction": "min",
+   "unit": "比例",
+   "status": "pass",
+   "scene": "合成舞台",
+   "source": "nightly",
+   "gapScore": 0.8
+  },
+  {
+   "key": "fx:sediment-variety",
+   "goal": "fx",
+   "check": "sediment-variety",
+   "capability": "fx.sediment",
+   "line": "sediment",
+   "name": "层带宽度变异系数",
+   "value": 0.293,
+   "threshold": 0.3,
+   "direction": "min",
+   "unit": "",
+   "status": "warn",
+   "scene": "合成舞台",
+   "source": "nightly",
+   "gapScore": 2.23
+  },
+  {
+   "key": "fx:projectile-hit",
+   "goal": "fx",
+   "check": "projectile-hit",
+   "capability": "fx.projectiles",
+   "line": "projectiles",
+   "name": "弹道最大落点偏差",
+   "value": 0.0003,
+   "threshold": 0.06,
+   "direction": "max",
+   "unit": "格",
+   "status": "pass",
+   "scene": "合成舞台",
+   "source": "nightly",
+   "gapScore": 0
+  }
+ ],
+ "learnQueue": {
+  "generatedAt": "2026-11-23T16:23:14.888Z",
+  "metricFormula": "指标差距分（创新 5）：相对差距 g = 方向「上限」时 (值 − 阈值) / |阈值|，「下限」时 (阈值 − 值) / |阈值|（|阈值| 至少按 1e-6 算）。g > 0（越过阈值）记 min(6, 2 + 10·g)；−0.1 < g ≤ 0（离阈值不到一成，临界）记 10·(g + 0.1)，即 0–1 分；其余 0。一条能力线取它所有指标里的最高分（不累加，免得检查项多的线占便宜），加到补学队列里本线（含 alsoIn 交叉线，取最高）每一行的得分上，再按新得分重排（同分保持原名次）。",
+  "inputs": {
+   "experienceRows": 0,
+   "demand": 2,
+   "metrics": 7
+  },
+  "head": [
+   {
+    "rank": 1,
+    "score": 59,
+    "line": "navigation",
+    "lineName": "导航",
+    "generation": "A",
+    "title": "洞内多层可站点、净空与门户边（已接入战斗，精细碰撞待补齐）",
+    "metricGap": null
+   },
+   {
+    "rank": 2,
+    "score": 50,
+    "line": "navigation",
+    "lineName": "导航",
+    "generation": "A+++",
+    "title": "\"瑞士奶酪\"一样的多洞岛（画面：拱门、洞口很多的紫色岩岛）。重构版有悬垂和石拱的造型，但单位不能穿洞",
+    "metricGap": null
+   },
+   {
+    "rank": 3,
+    "score": 48,
+    "line": "grid",
+    "lineName": "网格",
+    "generation": "A+5",
+    "title": "2 显式双格房屋：原子放置/整体替换/移除与撤销；身份持久化、预制socket/联合WFC待补",
+    "metricGap": null
+   },
+   {
+    "rank": 4,
+    "score": 42,
+    "line": "navigation",
+    "lineName": "导航",
+    "generation": "A++",
+    "title": "窄道会车（简化：互相让开）",
+    "metricGap": null
+   },
+   {
+    "rank": 5,
+    "score": 42,
+    "line": "navigation",
+    "lineName": "导航",
+    "generation": "A+++",
+    "title": "顶点对偶：31帧核验，重心对偶/边界闭合与共享World脉动；植被统一待补",
+    "metricGap": null
+   },
+   {
+    "rank": 6,
+    "score": 42,
+    "line": "wfc",
+    "lineName": "模块约束",
+    "generation": "A+9",
+    "title": "指定模块patch：几何复核→共享World整体体量放置/撤回；完整prefab待续",
+    "metricGap": null
+   }
+  ]
+ },
+ "e2e": [
+  {
+   "dir": "apostles-compare-e2e",
+   "run": "run-1795448498132",
+   "pass": false,
+   "capabilities": null
+  },
+  {
+   "dir": "apostles-surface-e2e",
+   "run": "run-1795448109721",
+   "pass": false,
+   "capabilities": null
+  },
+  {
+   "dir": "apostles-terrain-pipeline-e2e",
+   "run": "run-1795448110184",
+   "pass": false,
+   "capabilities": [
+    "apostles.soft",
+    "apostles.palette"
+   ]
+  },
+  {
+   "dir": "auto-assemble-e2e",
+   "run": "run-1795450519915",
+   "pass": false,
+   "capabilities": []
+  },
+  {
+   "dir": "auto-preload-e2e",
+   "run": "run-1795446126764",
+   "pass": false,
+   "capabilities": null
+  },
+  {
+   "dir": "battle-apostles-e2e",
+   "run": "run-1795257527979",
+   "pass": true,
+   "capabilities": null
+  },
+  {
+   "dir": "building-citadel-e2e",
+   "run": "run-1795450886745",
+   "pass": false,
+   "capabilities": []
+  },
+  {
+   "dir": "building-joint-wfc-e2e",
+   "run": "run-1795450688689",
+   "pass": false,
+   "capabilities": []
+  },
+  {
+   "dir": "building-layer-e2e",
+   "run": "run-1795450805735",
+   "pass": false,
+   "capabilities": []
+  },
+  {
+   "dir": "building-prefab-e2e",
+   "run": "run-1795450604452",
+   "pass": true,
+   "capabilities": [
+    {
+     "id": "building.prefabs",
+     "prefab": "cottage",
+     "cells": 1,
+     "label": "小屋 · 1 格"
+    },
+    {
+     "id": "building.prefabs",
+     "prefab": "hall",
+     "cells": 2,
+     "label": "长屋 · 2 格"
+    },
+    {
+     "id": "building.prefabs",
+     "prefab": "lhouse",
+     "cells": 3,
+     "label": "L 形宅 · 3 格"
+    },
+    {
+     "id": "building.prefabs",
+     "prefab": "chapel",
+     "cells": 3,
+     "label": "礼拜堂 · 3 格"
+    },
+    {
+     "id": "building.prefabs",
+     "prefab": "manor",
+     "cells": 4,
+     "label": "大宅 · 4 格"
+    }
+   ]
+  },
+  {
+   "dir": "capability-contracts-e2e",
+   "run": "run-1795450320904",
+   "pass": false,
+   "capabilities": []
+  },
+  {
+   "dir": "capability-maturity-e2e",
+   "run": "run-1795445570124",
+   "pass": false,
+   "capabilities": null
+  },
+  {
+   "dir": "contract-verify-e2e",
+   "run": "run-1795450406985",
+   "pass": false,
+   "capabilities": []
+  },
+  {
+   "dir": "fx-apostles-e2e",
+   "run": "run-1795446358250",
+   "pass": true,
+   "capabilities": null
+  },
+  {
+   "dir": "fx-camera-flight-e2e",
+   "run": "run-1795450690412",
+   "pass": false,
+   "capabilities": [
+    "fx.camera"
+   ]
+  },
+  {
+   "dir": "fx-fire-e2e",
+   "run": "run-1795450067559",
+   "pass": false,
+   "capabilities": [
+    "fx.fire"
+   ]
+  },
+  {
+   "dir": "fx-hallway-e2e",
+   "run": "run-1795450280545",
+   "pass": false,
+   "capabilities": [
+    "fx.hallway"
+   ]
+  },
+  {
+   "dir": "fx-sediment-projectiles-e2e",
+   "run": "run-1795450513003",
+   "pass": false,
+   "capabilities": [
+    "fx.sediment",
+    "fx.projectiles"
+   ]
+  },
+  {
+   "dir": "layer-focus-e2e",
+   "run": "run-1795445719705",
+   "pass": true,
+   "capabilities": null
+  },
+  {
+   "dir": "mountain-adopt-e2e",
+   "run": "run-1795447938271",
+   "pass": false,
+   "capabilities": null
+  },
+  {
+   "dir": "mountain-citadel-e2e",
+   "run": "run-1795389675502",
+   "pass": true,
+   "capabilities": null
+  },
+  {
+   "dir": "mountain-evolve-e2e",
+   "run": "run-1795438239115",
+   "pass": true,
+   "capabilities": null
+  },
+  {
+   "dir": "mountain-ground-e2e",
+   "run": "run-1795447161575",
+   "pass": false,
+   "capabilities": null
+  },
+  {
+   "dir": "mountain-palette-e2e",
+   "run": "run-1795447584156",
+   "pass": true,
+   "capabilities": null
+  },
+  {
+   "dir": "mountain-views-e2e",
+   "run": "run-1795447380939",
+   "pass": true,
+   "capabilities": null
+  },
+  {
+   "dir": "nightly-panel-e2e",
+   "run": "run-1795450990483",
+   "pass": true,
+   "capabilities": []
+  },
+  {
+   "dir": "recent-additions-e2e",
+   "run": "run-1795445719130",
+   "pass": false,
+   "capabilities": null
+  }
+ ]
+}

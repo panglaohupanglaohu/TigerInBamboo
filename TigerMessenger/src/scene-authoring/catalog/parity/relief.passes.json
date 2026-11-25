@@ -1,0 +1,38 @@
+{
+ "capability": "relief.passes",
+ "line": "terrain",
+ "verdict": "equivalent",
+ "measured": {
+  "at": "2026-11-24T18:35:11.373Z",
+  "total": 0,
+  "byPath": {},
+  "unregisteredCount": 0,
+  "used": [],
+  "unused": [],
+  "ms": 10
+ },
+ "status": "measured",
+ "note": "Quick 预填（读码推断，2026-11-23 R41–R50）：verdict / measured 为 null = 还没实算；由 Kiro 跑 tools/refactor/record-relief-evidence.mjs 写入（唯一写入方）。登记的 diffs 是「已知会不同、原因已查明」的差异；实算出现登记外的差异 → tests/relief-parity.test.mjs 红。",
+ "original": "townscaper-web/REACode/src/islandpasses.js",
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/island-passes.js",
+  "townscaper-web/REACodeRefactoring/src/terrain/terrace-field.js"
+ ],
+ "alsoOriginal": [
+  "townscaper-web/REACode/src/terracecliff.js"
+ ],
+ "inputs": {
+  "grid": "terracecliff heights(terrace) 34×34",
+  "compare": "等高线段 / 环 / 线框 / 岸线 / 插值对照 / levelOf / measure；terracecliff measure(smooth / terrace)"
+ },
+ "diffs": [],
+ "flaws": [
+  "Guide §10 把 islandpasses 记作「岛屿通道」；原文是 passes = 同一套格边画三遍（等高线 / 线框 / 成图），不是航道"
+ ],
+ "extensions": [
+  "cfg 参数：可对任意米制高度场 + 层高画等高线（rowsOf）"
+ ],
+ "harness": "TigerMessenger/src/system-workshop/terrain/parity-cases.js + parity.js",
+ "test": "TigerMessenger/tests/relief-parity.test.mjs",
+ "recordedBy": "record-relief-evidence.mjs（实算）"
+}

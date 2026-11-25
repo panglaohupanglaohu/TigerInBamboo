@@ -70,10 +70,10 @@ export function propVerts(p, L = .5) {
 }
 
 export class PropAnimLayer {
-  constructor(world, { L = .5, capacity = 1024, spread = .35, collect = collectWorldProps, verts = propVerts } = {}) {
+  constructor(world, { L = .5, capacity = 1024, spread = .35, collect = collectWorldProps, verts = propVerts, timing, curve = 'clip', outLife } = {}) {
     this.world = world; this.L = L; this.capacity = capacity;
     this.collect = collect; this.verts = verts;   // r56 C05：可换道具来源/模板（world/prop-anim-yard-r56.js 用后院真实树木）
-    this.life = new PropLifecycle({ capacity, spread });
+    this.life = new PropLifecycle({ capacity, spread, timing, curve, outLife });
     this.version = -1; this.kindOf = new Map();
     const g = new THREE.BufferGeometry();
     this.pos = new Float32Array(capacity * V * 3); this.nrm = new Float32Array(capacity * V * 3); this.col = new Float32Array(capacity * V * 3);
@@ -140,6 +140,20 @@ export class PropAnimLayer {
     return live;
   }
   scaleOf(key) { const s = this.life.slotOf(key); return s < 0 ? null : this.life.records[s * 4 + 3]; }
+  /** 验收读数（第 192 轮）：曲线档 + 计时 + 缩放极值 + 正在出现/消失的件数。页面探针与浏览器测试共用。 */
+  probe() {
+    const sc = []; let vanishing = 0, appearing = 0;
+    for (const e of this.life.byKey.values()) {
+      const s = this.life.records[e.slot * 4 + 3]; sc.push(s);
+      if (e.hideAt !== undefined) vanishing++; else if (s < .999) appearing++;
+    }
+    return {
+      ...this.stats, curve: this.life.curve, timing: { ...this.life.timing }, outLife: this.life.outLife,
+      live: sc.length, vanishing, appearing,
+      minScale: sc.length ? Math.min(...sc) : null, maxScale: sc.length ? Math.max(...sc) : null,
+      keys: [...this.life.byKey.keys()].slice(0, 8),
+    };
+  }
   dispose() { this.geometry.dispose(); this.material.dispose(); this.recTex.dispose(); this.mesh.removeFromParent(); }
 }
 

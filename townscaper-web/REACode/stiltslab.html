@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>悬空建筑的两样东西：水上支柱 + 落位前的白 24% 幽灵块</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:11px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:118ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; inset:118px 340px 46px 16px; display:flex; gap:10px; }
+  .col { flex:1; display:flex; flex-direction:column; gap:5px; min-width:0; }
+  .col > span { font-size:11.5px; color:var(--muted); }
+  canvas { display:block; width:100%; border-radius:10px; border:1px solid var(--line); }
+  #panel { position:fixed; right:16px; top:118px; width:310px; bottom:46px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:10px 12px; display:flex;
+    flex-direction:column; gap:7px; overflow:auto; box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.03em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:#b23a2a; }
+  button { font:inherit; font-size:12px; padding:4px 8px; border-radius:6px; border:1px solid var(--line);
+    background:#fff; color:var(--ink); cursor:pointer; }
+  button:hover { border-color:#9fb6bd; }
+  button.on { background:#1d2f36; color:#fff; border-color:#1d2f36; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; }
+  #foot { position:fixed; left:18px; bottom:10px; right:340px; font-size:11.5px; color:var(--muted); }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+  hr { border:0; border-top:1px solid var(--line); margin:2px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>悬空建筑：水上支柱（含 6px 入水倒影）+ 落位幽灵块（白 24%）</h1>
+  <p>片子 <b>1209519206233968641</b>「A very merry Christmas to you all」只有贺词。全部数值来自 f016 逐像素：
+  柱宽 <b>9.5px</b>、柱色上 <b>#182e4e</b> 下 <b>#091f3f</b>（比水更冷、不是等比变暗）、水面处硬断 + <b>6px</b> 倒影爬回水色、
+  幽灵块 = <b>白 24%</b>（三通道独立算出 0.228/0.247/0.238）。下面的"反测"是把渲染结果再量一遍，不是抄常量。</p>
+</header>
+
+<div id="stage">
+  <div class="col"><span>本期实现：支柱 + 倒影 + 幽灵块</span><canvas id="cvA"></canvas></div>
+  <div class="col"><span>反例：无支柱（楼像贴纸浮着）/ 无幽灵块</span><canvas id="cvB"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测：从渲染结果里再量一次</h2>
+  <div class="row" id="rW"><span>柱宽 px（目标 9.5）</span><b>—</b></div>
+  <div class="row" id="rRefl"><span>倒影长 px（目标 6）</span><b>—</b></div>
+  <div class="row" id="rAlpha"><span>幽灵 α（目标 0.24）</span><b>—</b></div>
+  <div class="row" id="rAlphaCh"><span>　三通道</span><b>—</b></div>
+  <hr />
+  <h2>片中量到的</h2>
+  <div class="row"><span>水</span><b>#315192</b></div>
+  <div class="row"><span>柱 上 / 下</span><b>#182e4e / #091f3f</b></div>
+  <div class="row"><span>柱长（f016）</span><b>≈70 px</b></div>
+  <div class="row"><span>柱宽 / 帧宽</span><b>9.5 / 512</b></div>
+  <h2>A/B 同机位</h2>
+  <div class="row"><span>全画面差</span><b id="vAll">—</b></div>
+  <div class="row"><span>楼底→水面这条带内</span><b id="vBand">—</b></div>
+  <h2>控制</h2>
+  <div class="chips">
+    <button id="bStilt" class="on">支柱</button>
+    <button id="bGhost" class="on">幽灵块</button>
+    <button id="bHoliday" class="on">假日配色</button>
+  </div>
+  <div class="row"><span>柱宽倍数</span><b id="vScale">1.00×</b></div>
+  <input id="scale" type="range" min="50" max="220" step="5" value="100" />
+</div>
+
+<div id="foot">模型 <code>src/stilts.js</code>。柱子<b>不</b>从水色等比推 —— 实测蓝通道只掉到 0.43、红通道掉到 0.18，
+所以是"往冷 navy 压"而不是"等比变暗"；这条写进 <code>legShade()</code> 的注释里了。</div>
+
+<script type="module">
+import {
+  MEASURED, HOLIDAY, rgbCss, legShade, makePost, postsForFootprint,
+  ghostFill, ghostEdge, solveAlpha, paintWater, paintPost, paintIsoBox,
+} from './src/stilts.js';
+
+const A = document.getElementById('cvA'), B = document.getElementById('cvB');
+const ctxA = A.getContext('2d', { willReadFrequently: true });
+const ctxB = B.getContext('2d', { willReadFrequently: true });
+
+let useStilts = true, useGhost = true, holiday = true, scale = 1;
+
+function sizeCanvases() {
+  const w = Math.max(300, Math.floor(A.parentElement.clientWidth));
+  const h = Math.max(260, Math.floor(window.innerHeight - 118 - 46 - 22));
+  for (const cv of [A, B]) { cv.width = w; cv.height = h; cv.style.height = h + 'px'; }
+}
+
+/** 场景几何：一栋悬空房子 + 一个待落位的邻格。两个画布用**完全相同**的几何。 */
+function scene(W, H) {
+  const waterY = Math.round(H * 0.70);
+  const cy = Math.round(H * 0.24);
+  const w = Math.round(W * 0.26), d = Math.round(W * 0.26), hh = Math.round(H * 0.22);
+  const hw = w / 2, hd = d / 2;
+  const halfW = (hw + hd) * 0.866;              // 菱形在屏幕上的一半宽
+  const floorY = cy + (hw + hd) * 0.5;          // 菱形最低那条边的 y = 柱顶
+  return {
+    waterY, cx: Math.round(W * 0.42), cy, w, d, h: hh, floorY, halfW,
+    ghost: { cx: Math.round(W * 0.42 + halfW * 1.18), cy: cy + Math.round(H * 0.17), w: w * 0.58, d: d * 0.58, h: hh * 0.36 },
+  };
+}
+
+function draw(ctx, cv, opts) {
+  const W = cv.width, H = cv.height;
+  const S = scene(W, H);
+  const pal = holiday ? HOLIDAY : { wall: [196, 200, 205], wallLit: [214, 218, 222], wallDark: [150, 158, 166], roof: [176, 120, 92], roofDark: [140, 92, 70], trim: [60, 60, 64] };
+  paintWater(ctx, W, H, S.waterY);
+
+  // 支柱：楼底菱形最低边往下，到水面硬断
+  const posts = [];
+  if (opts.stilts) {
+    posts.push(...postsForFootprint({
+      x0: S.cx - S.halfW * 0.55, x1: S.cx + S.halfW * 0.55,
+      floorY: S.floorY, waterY: S.waterY, legW: MEASURED.legW * scale, span: 1,
+    }));
+  }
+  for (const p of posts) paintPost(ctx, p);
+
+  // 房子：墙一段 + 屋顶一段（屋顶略外扩，片子里屋檐是伸出来的）
+  const wallH = S.h * 0.72, roofH = S.h * 0.28;
+  paintIsoBox(ctx, {
+    cx: S.cx, cy: S.cy, w: S.w, d: S.d, h: wallH,
+    top: rgbCss(pal.wallLit), left: rgbCss(pal.wallDark), right: rgbCss(pal.wall),
+  });
+  paintIsoBox(ctx, {
+    cx: S.cx, cy: S.cy - wallH, w: S.w * 1.08, d: S.d * 1.08, h: roofH,
+    top: rgbCss(pal.roof), left: rgbCss(pal.roofDark), right: rgbCss(pal.roof),
+  });
+
+  // 幽灵块（待落位的邻格）：白 24% over
+  if (opts.ghost) {
+    const g = S.ghost;
+    paintIsoBox(ctx, {
+      cx: g.cx, cy: g.cy, w: g.w, d: g.d, h: g.h,
+      top: ghostFill(), left: ghostEdge(0.12), right: ghostFill(),
+    });
+  }
+  return { S, posts };
+}
+
+/* ── 反测 ───────────────────────────────────────────────────────────── */
+
+function measureLeg() {
+  const W = A.width, H = A.height;
+  const S = scene(W, H);
+  const y = Math.round((S.floorY + S.waterY) / 2);
+  const row = ctxA.getImageData(0, y, W, 1).data;
+  const runs = [];
+  let cur = 0;
+  const isLeg = (i) => {
+    const r = row[i * 4], g = row[i * 4 + 1], b = row[i * 4 + 2];
+    // 柱比水暗得多：亮度差 > 40
+    return (49 - r) + (81 - g) + (146 - b) > 120;
+  };
+  for (let x = 0; x < W; x++) {
+    if (isLeg(x)) cur++;
+    else { if (cur) runs.push(cur); cur = 0; }
+  }
+  if (cur) runs.push(cur);
+  return {
+    widths: runs,
+    median: runs.length ? runs.slice().sort((a, b) => a - b)[Math.floor(runs.length / 2)] : 0,
+    want: MEASURED.legW * scale,
+    y,
+  };
+}
+
+function measureRefl() {
+  const W = A.width, H = A.height;
+  const S = scene(W, H);
+  const leg = measureLeg();
+  if (!leg.widths.length) return { len: 0, want: MEASURED.reflLen * scale };
+  // 找一根柱的中心 x
+  let x = 0, seen = 0, best = 0, bestX = 0;
+  const row = ctxA.getImageData(0, leg.y, W, 1).data;
+  for (let i = 0; i < W; i++) {
+    const r = row[i * 4], g = row[i * 4 + 1], b = row[i * 4 + 2];
+    const dark = (49 - r) + (81 - g) + (146 - b) > 120;
+    if (dark) { seen++; if (seen > best) { best = seen; bestX = i; } } else seen = 0;
+  }
+  x = bestX - Math.floor(best / 2);
+  const col = ctxA.getImageData(x, S.waterY, 1, Math.min(30, H - S.waterY)).data;
+  let n = 0;
+  for (let i = 0; i < col.length / 4; i++) {
+    const d = Math.abs(col[i * 4] - 49) + Math.abs(col[i * 4 + 1] - 81) + Math.abs(col[i * 4 + 2] - 146);
+    if (d > 12) n++; else break;
+  }
+  return { len: n, want: MEASURED.reflLen * scale, x, waterY: S.waterY };
+}
+
+function measureGhost() {
+  // 同一位置：A 有幽灵块，B 没有 → 解 alpha
+  const W = A.width, H = A.height;
+  const S = scene(W, H);
+  const gx = Math.round(S.ghost.cx), gy = Math.round(S.ghost.cy - S.h * 0.25);
+  const a = ctxA.getImageData(gx, gy, 1, 1).data;
+  const b = ctxB.getImageData(gx, gy, 1, 1).data;
+  return { ...solveAlpha([a[0], a[1], a[2]], [b[0], b[1], b[2]]), at: [gx, gy], px: [a[0], a[1], a[2]], behind: [b[0], b[1], b[2]] };
+}
+
+function diffPct() {
+  const W = A.width, H = A.height;
+  const da = ctxA.getImageData(0, 0, W, H).data;
+  const db = ctxB.getImageData(0, 0, W, H).data;
+  const S = scene(W, H);
+  let n = 0, tot = 0, band = 0, bandTot = 0;
+  for (let y = 0; y < H; y++) {
+    const inBand = y >= S.floorY - 2 && y <= S.waterY + 8;
+    for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * 4;
+      const d = Math.abs(da[i] - db[i]) + Math.abs(da[i + 1] - db[i + 1]) + Math.abs(da[i + 2] - db[i + 2]);
+      tot++;
+      if (inBand) bandTot++;
+      if (d > 6) { n++; if (inBand) band++; }
+    }
+  }
+  return { whole: (n / tot) * 100, band: bandTot ? (band / bandTot) * 100 : 0 };
+}
+
+function updatePanel() {
+  const L = measureLeg(), R = measureRefl(), G = useGhost ? measureGhost() : null, D = diffPct();
+  const setRow = (id, txt, ok) => {
+    const el = document.getElementById(id);
+    el.querySelector('b').textContent = txt;
+    el.className = 'row ' + (ok === undefined ? '' : ok ? 'good' : 'bad');
+  };
+  setRow('rW', `${L.median} px（${L.widths.length} 根）`, Math.abs(L.median - L.want) <= 1.5);
+  setRow('rRefl', `${R.len} px`, Math.abs(R.len - R.want) <= 2);
+  if (G) {
+    setRow('rAlpha', G.alpha.toFixed(3), Math.abs(G.alpha - MEASURED.ghostAlpha) < 0.03);
+    setRow('rAlphaCh', G.per.map((v) => v.toFixed(3)).join(' / '), undefined);
+  } else {
+    setRow('rAlpha', '关掉了', undefined);
+    setRow('rAlphaCh', '—', undefined);
+  }
+  document.getElementById('vAll').textContent = D.whole.toFixed(2) + ' %';
+  document.getElementById('vBand').textContent = D.band.toFixed(2) + ' %';
+  document.getElementById('vScale').textContent = scale.toFixed(2) + '×';
+}
+
+function render() {
+  draw(ctxA, A, { stilts: useStilts, ghost: useGhost });
+  draw(ctxB, B, { stilts: false, ghost: false });
+  updatePanel();
+}
+
+/* ── 控件 ── */
+const tog = (id, get, set, label) => {
+  const b = document.getElementById(id);
+  b.onclick = () => { set(!get()); b.classList.toggle('on', get()); render(); };
+  b.classList.toggle('on', get());
+};
+tog('bStilt', () => useStilts, (v) => { useStilts = v; }, '支柱');
+tog('bGhost', () => useGhost, (v) => { useGhost = v; }, '幽灵块');
+tog('bHoliday', () => holiday, (v) => { holiday = v; }, '假日配色');
+document.getElementById('scale').oninput = (e) => { scale = +e.target.value / 100; render(); };
+
+sizeCanvases();
+render();
+window.stilts = {
+  measured: () => ({ leg: measureLeg(), refl: measureRefl(), ghost: useGhost ? measureGhost() : null, diff: diffPct() }),
+  constants: () => MEASURED,
+  legShade: (t) => legShade(t),
+};
+window.addEventListener('resize', () => { sizeCanvases(); render(); });
+</script>
+</body>
+</html>

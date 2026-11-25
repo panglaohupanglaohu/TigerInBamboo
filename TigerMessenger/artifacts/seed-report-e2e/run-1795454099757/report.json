@@ -1,0 +1,33 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/seed-report-e2e/run-1795454099757",
+  "scene": "moss",
+  "panels": {
+    "battle": {
+      "state": "done",
+      "count": 6,
+      "best": 1,
+      "typical": 1,
+      "worst": 5,
+      "metricRows": 4,
+      "picks": [
+        "1",
+        "1",
+        "5"
+      ],
+      "text": "多种子分布 · 战役种子含义：种子 s 生成舞台采样（陆地 / 层数 / 小屋数）；预装全部能匹配的能力；输入：合成舞台 battleFixture(s)跑 6 个种子战役：6 个种子 · 4 个没判失败 · 最好 1 · 最典型 1 · 最差 5指标最小p10中位p90最大分布检查通过占比 ↑80.0%80.0%100.0%100.0%100.0%提醒项 ↓00000失败项 ↓00011执行了的能力 ↑22333最好 · 种子 1分数 100 · pass最典型 · 种子 1分数 100 · pass最差 · 种子 5分数 -1 · fail",
+      "height": 714
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "capabilities": [],
+  "failure": "locator.scrollIntoViewIfNeeded: Timeout 29731.331000000006ms exceeded.\nCall log:\n  - attempting scroll into view action\n    2 × waiting for element to be stable\n      - element is not visible\n    - retrying scroll into view action\n    - waiting 20ms\n    2 × waiting for element to be stable\n      - element is not visible\n    - retrying scroll into view action\n      - waiting 100ms\n    27 × waiting for element to be stable\n       - element is not visible\n     - retrying scroll into view action\n       - waiting 500ms\n"
+}

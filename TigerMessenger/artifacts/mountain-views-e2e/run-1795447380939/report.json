@@ -1,0 +1,183 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/mountain-views-e2e/run-1795447380939",
+  "steps": {
+    "scan": "扫描完成：6 / 6 个能力能作用。 已按「高山圣城」自动预装 6 个能力（保护带、山体隆起、沟谷侵蚀、连绵圆润 等），点 ▶ 执行管线一键跑完整条。",
+    "views": {
+      "front": {
+        "ok": true,
+        "view": "front",
+        "label": "正面",
+        "stage": {
+          "pos": [
+            0,
+            150,
+            310
+          ],
+          "at": [
+            0,
+            25,
+            0
+          ]
+        }
+      },
+      "side": {
+        "ok": true,
+        "view": "side",
+        "label": "侧面",
+        "stage": {
+          "pos": [
+            310,
+            135,
+            0
+          ],
+          "at": [
+            0,
+            25,
+            0
+          ]
+        }
+      },
+      "top": {
+        "ok": true,
+        "view": "top",
+        "label": "俯视",
+        "stage": {
+          "pos": [
+            0,
+            520,
+            0.5
+          ],
+          "at": [
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "oblique": {
+        "ok": true,
+        "view": "oblique",
+        "label": "斜后",
+        "stage": {
+          "pos": [
+            -230,
+            190,
+            -230
+          ],
+          "at": [
+            0,
+            25,
+            0
+          ]
+        }
+      }
+    },
+    "run": {
+      "h4": "候选 · 通过（需留意）",
+      "checks": [
+        "✓ 建筑与保护带不动保护区最大高差 0.00 m",
+        "✓ 轨道净空保留轨道 616 格下方地形高差 0.00 m · 轨旁 24 m 内新增山体超出 1.6 坡比包络 0.0 m",
+        "✓ 海岸线不变陆地与海的格子没有翻转",
+        "✓ 有主峰峰顶高出可塑陆地中位 52.2 m（原 52.4 m）· 最高 67.6 m",
+        "✓ 山坡而非方台中等坡 52%（原 47%）· 平顶 1%（原 0%）",
+        "! 竖崖占比>62° 竖崖 14%（原 34%）",
+        "✓ 面数预算20000 个三角面（low poly 预算 9 万）",
+        "✓ 着色数据完整每个三角面都有材质与烘焙明暗",
+        "✓ 玩家地面与山形一致12444 个三角重心复查：地面与画面最大差 0.000 m · 洞 0 个 · 轨道 616 格地面高差 0.00 m · 保护区 703 格 0.00 m",
+        "! 山上能走自由陆地 ≤45° 可走坡 24% · 最大连通片 7%"
+      ]
+    },
+    "eye": {
+      "ok": true,
+      "view": "eye",
+      "label": "玩家视角（站在新山上，眼高 1.7 m，朝最高处）",
+      "stage": {
+        "pos": [
+          51,
+          69.08574688127517,
+          27
+        ],
+        "at": [
+          57,
+          68.76,
+          15
+        ]
+      }
+    },
+    "same": [],
+    "registryShown": 1,
+    "arena": {
+      "beats": true,
+      "rows": [
+        {
+          "key": "mid",
+          "label": "中等坡占比",
+          "prev": 0.9207,
+          "cur": 0.9238,
+          "better": "higher",
+          "gain": 0.0031,
+          "verdict": "same"
+        },
+        {
+          "key": "cliff",
+          "label": "竖崖占比",
+          "prev": 0.0002,
+          "cur": 0,
+          "better": "lower",
+          "gain": 0.0002,
+          "verdict": "same"
+        },
+        {
+          "key": "drain",
+          "label": "排水率",
+          "prev": 0.3665,
+          "cur": 0.7467,
+          "better": "higher",
+          "gain": 0.3802,
+          "verdict": "better"
+        },
+        {
+          "key": "hardEdge",
+          "label": "硬边位移（米）",
+          "prev": 2.7101,
+          "cur": 1.5961,
+          "better": "lower",
+          "gain": 1.114,
+          "verdict": "better"
+        }
+      ],
+      "original": {
+        "mid": 0.5542,
+        "cliff": 0.0126,
+        "drain": 0.0827,
+        "hardEdge": 0,
+        "cells": 4134,
+        "edgePairs": 216,
+        "prominence": 42,
+        "top": 56
+      },
+      "ms": 96
+    },
+    "arenaText": "本页实算（96 ms）：赢了：排水率、硬边位移（米）更好，其余不差"
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R26-front-0-original.png",
+    "R26-side-0-original.png",
+    "R26-top-0-original.png",
+    "R26-oblique-0-original.png",
+    "R26-front-1-candidate.png",
+    "R26-side-1-candidate.png",
+    "R26-top-1-candidate.png",
+    "R26-oblique-1-candidate.png",
+    "R26-eye-1-candidate.png",
+    "R26-arena-panel.png",
+    "R26-page.png"
+  ],
+  "pass": true
+}

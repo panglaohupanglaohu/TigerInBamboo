@@ -9,8 +9,7 @@
  *
  * 这里补「舌头」：
  *   amt(x,z)   = 与顶面同一张笔触图集（R 通道）按世界 XZ 采样的色块强度（不套漩涡，沿崖边连续变化 → 舌头圆头、长短不一）；
- *   崖面：below = 本崖所属上层格顶面高 − y（rim 场 G 通道，向墙内偏 0.18 取上层格），
- *         舌头 = below < maxDepth·amt，边缘一圈细深描边；
+ *   崖面：below = **崖肩顶面高**（rim 场 B 通道 = 邻域最高顶面）− y，舌头 = below < maxDepth·amt，边缘一圈细深描边；
  *   顶面：aEdge（terrainmesh 顶面扇形到崖边距离）< 0.32·amt 的一条色块带 —— 与舌头在崖边同一 amt，连续翻过去。
  * 颜色是统一的程序化草色（没有原作调色板）；默认关（view-shading key `blotchtongue`，开它会顺带开 blotchatlas）。
  */
@@ -57,9 +56,9 @@ vec3 blotchTongueApply(vec3 col, vec3 wp, vec3 nIn, float edgeD, float isTop){
     col=mix(col,tc,m); return mix(col,col*.55,ink*.75*step(.08,amt));
   }
   if(steep<.05) return col;
-  vec2 dn=length(n.xz)>1e-3?normalize(n.xz):vec2(0.);
-  vec2 q=wp.xz-dn*.18;
-  float top=texture2D(uBlotchRim,clamp((q-uBlotchRimX.xy)*uBlotchRimX.zw,0.,1.)).g*uBlotchRimP.y;
+  // r170：原来向墙内偏 0.18 取 G（上层格顶）在纹素≈0.21 时仍会掺下格、且顶带前 0.05 被吃掉；
+  // 改用 rim 场 B 通道（邻域 max = 崖肩顶面），below 从崖肩 0 起算，与 bleedMask 同一口径
+  float top=texture2D(uBlotchRim,clamp((wp.xz-uBlotchRimX.xy)*uBlotchRimX.zw,0.,1.)).b*uBlotchRimP.y;
   float below=top-wp.y;
   if(below< -.02) return col;
   float depth=uBlotchTongue.y*amt, aa=fwidth(below)*1.2+.004;

@@ -1,0 +1,27 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/lightlife-moss-e2e/run-1795550455349",
+  "scene": "moss",
+  "steps": {
+    "mount": "ok"
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "capabilities": [
+    "scene.town-graph",
+    "scene.plateau-diag",
+    "light.voxel-ao",
+    "light.bounce",
+    "light.megatex",
+    "life.plant-atlas",
+    "life.wind",
+    "life.smoke",
+    "life.animals"
+  ],
+  "failure": "page.waitForFunction: Timeout 300000ms exceeded.\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lightlife-browser.mjs:38:14"
+}

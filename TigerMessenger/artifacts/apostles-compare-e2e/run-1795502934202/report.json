@@ -1,0 +1,217 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-compare-e2e/run-1795502934202",
+  "manifest": null,
+  "steps": {
+    "initial": {
+      "cards": [
+        {
+          "scheme": "approved",
+          "current": true,
+          "shots": [
+            {
+              "view": "overview",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "side",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "top",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "cliff-foot",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            }
+          ],
+          "surface": "还没有破面 / 植被 / 白沫检查结果"
+        },
+        {
+          "scheme": "soft",
+          "current": false,
+          "shots": [
+            {
+              "view": "overview",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "side",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "top",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "cliff-foot",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            }
+          ],
+          "surface": "还没有破面 / 植被 / 白沫检查结果"
+        },
+        {
+          "scheme": "soft+palette",
+          "current": false,
+          "shots": [
+            {
+              "view": "overview",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "side",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "top",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "cliff-foot",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            }
+          ],
+          "surface": "还没有破面 / 植被 / 白沫检查结果"
+        }
+      ],
+      "pending": "待你决定：「十二门徒采用哪套」——三套都没有设成默认；看完下面的图和实景后告诉我采用哪一套（记录在 docs/PENDING_USER_DECISIONS.md）。不决定时游戏保持认可现状。",
+      "note": "还没有对照截图：跑一次 tests/apostles-look-views-browser.mjs 后这里出现三套 × 四机位。",
+      "live": "approved",
+      "storage": null
+    },
+    "note": "没有 R29 截图清单：卡片应显示「未拍」，只验证切换（先跑 apostles-look-views-browser.mjs）",
+    "soft": {
+      "stable": {
+        "ok": true,
+        "look": "soft",
+        "count": 6
+      },
+      "cards": [
+        {
+          "scheme": "approved",
+          "current": false,
+          "shots": [
+            {
+              "view": "overview",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "side",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "top",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "cliff-foot",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            }
+          ],
+          "surface": "还没有破面 / 植被 / 白沫检查结果"
+        },
+        {
+          "scheme": "soft",
+          "current": true,
+          "shots": [
+            {
+              "view": "overview",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "side",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "top",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "cliff-foot",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            }
+          ],
+          "surface": "还没有破面 / 植被 / 白沫检查结果"
+        },
+        {
+          "scheme": "soft+palette",
+          "current": false,
+          "shots": [
+            {
+              "view": "overview",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "side",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "top",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            },
+            {
+              "view": "cliff-foot",
+              "img": false,
+              "loaded": false,
+              "missing": true
+            }
+          ],
+          "surface": "还没有破面 / 植被 / 白沫检查结果"
+        }
+      ],
+      "pending": "待你决定：「十二门徒采用哪套」——三套都没有设成默认；看完下面的图和实景后告诉我采用哪一套（记录在 docs/PENDING_USER_DECISIONS.md）。不决定时游戏保持认可现状。",
+      "note": "还没有对照截图：跑一次 tests/apostles-look-views-browser.mjs 后这里出现三套 × 四机位。",
+      "live": "soft",
+      "storage": null
+    }
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "page.waitForFunction: Target crashed "
+}

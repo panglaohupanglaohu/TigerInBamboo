@@ -1,0 +1,38 @@
+{
+ "capability": "mountain.massif",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "mountain",
+ "sameCriteriaEqual": true,
+ "verdict": "equivalent",
+ "original": [
+  "townscaper-web/REACode/engine/noise.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/noise.js"
+ ],
+ "inputs": {
+  "samples": "5 点×3 种子×4 函数",
+  "rng": "makeRng(7) 前 64 发"
+ },
+ "metrics": [
+  {
+   "id": "value",
+   "name": "valueNoise/fbm/ridged/smoothstep 60 采样最大差",
+   "original": 0,
+   "refactored": 0,
+   "equal": true
+  },
+  {
+   "id": "rng",
+   "name": "makeRng 前 64 发最大差",
+   "original": 0,
+   "refactored": 0,
+   "equal": true
+  }
+ ],
+ "diffs": [],
+ "basis": "mountain.massif 的脊线噪声直接调 core/noise.js 的 fbm/ridged；同采样点逐位对拍。"
+}

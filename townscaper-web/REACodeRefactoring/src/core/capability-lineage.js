@@ -196,6 +196,7 @@ export function buildCapabilityLineage(evolution, { modules = [], executables = 
       if (l.executables.length) { score += 2; why.push('本线已有可执行能力在用'); }
       const dm = demandByClip.get(id); if (dm) { score += 8; why.push('管线已放入但不能执行：' + dm.map((d) => d.name).join('、')); }
       if (failures) { score += Math.min(8, failures * 4); why.push(`本线执行验证失败 ${failures} 次`); }
+      if (/无可执行残差|永久卡点|卡点·C，永久/.test(c.nextAction || '')) { score -= 15; why.push('已标注无可执行残差（永久卡点，需新证据再立项）'); }
       queue.push({ id, line: l.id, lineName: l.name, generation: g.label, date: e.date, title: (e.methods[0]?.name && e.methods[0].name !== '（无原文）' ? e.methods[0].name : e.text || e.note || id).slice(0, 110), priority: c.priority || '待评估', current: c.current !== false, score, why,
         gap: c.sourceGap || '', nextAction: c.nextAction || '', acceptance: c.acceptance || '', modules: e.modules, isTarget, afterTarget: !firstOpen && !isTarget });
       firstOpen = false;

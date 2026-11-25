@@ -1,0 +1,109 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "too3d": {
+        "edgeShare": 0.9977203647416414,
+        "roofShare": 0,
+        "elsewhere": 3,
+        "holeShadowed": 0,
+        "coveragePct": 14.27951388888889,
+        "hits": 1316,
+        "receivers": "top"
+      },
+      "tuned": {
+        "edgeShare": 0.9980119284294234,
+        "roofShare": 0,
+        "elsewhere": 1,
+        "holeShadowed": 0,
+        "coveragePct": 5.457899305555555,
+        "hits": 503,
+        "receivers": "top"
+      },
+      "tunedPixels": {
+        "strength": 0.3,
+        "hits": 503,
+        "eligible": 240,
+        "res": 96,
+        "version": 672
+      },
+      "allRecv": {
+        "edgeShare": 0.9598893499308437,
+        "roofShare": 0,
+        "elsewhere": 58,
+        "holeShadowed": 143,
+        "coveragePct": 8.82568359375,
+        "hits": 1446,
+        "receivers": "all"
+      },
+      "roofUp": {
+        "edgeShare": 0.9598893499308437,
+        "roofShare": 0,
+        "elsewhere": 58,
+        "holeShadowed": 143,
+        "coveragePct": 8.82568359375,
+        "hits": 1446,
+        "receivers": "all"
+      },
+      "gpu": {
+        "changed": 12325,
+        "noise": 0
+      }
+    },
+    {
+      "grid": "quad",
+      "too3d": {
+        "edgeShare": 0.9991423670668954,
+        "roofShare": 0,
+        "elsewhere": 1,
+        "holeShadowed": 0,
+        "coveragePct": 12.651909722222221,
+        "hits": 1166,
+        "receivers": "top"
+      },
+      "tuned": {
+        "edgeShare": 0.9980119284294234,
+        "roofShare": 0,
+        "elsewhere": 1,
+        "holeShadowed": 0,
+        "coveragePct": 5.457899305555555,
+        "hits": 503,
+        "receivers": "top"
+      },
+      "tunedPixels": {
+        "strength": 0.3,
+        "hits": 503,
+        "eligible": 196,
+        "res": 96,
+        "version": 781
+      },
+      "allRecv": {
+        "edgeShare": 0.9737704918032787,
+        "roofShare": 0,
+        "elsewhere": 32,
+        "holeShadowed": 65,
+        "coveragePct": 7.4462890625,
+        "hits": 1220,
+        "receivers": "all"
+      },
+      "roofUp": {
+        "edgeShare": 0.9737704918032787,
+        "roofShare": 0,
+        "elsewhere": 32,
+        "holeShadowed": 65,
+        "coveragePct": 7.4462890625,
+        "hits": 1220,
+        "receivers": "all"
+      },
+      "gpu": {
+        "changed": 8325,
+        "noise": 0
+      }
+    }
+  ],
+  "errors": [],
+  "shots": [
+    "artifacts/coverage/surface-shadow-landing-mixed-r203.png",
+    "artifacts/coverage/surface-shadow-landing-quad-r203.png"
+  ]
+}

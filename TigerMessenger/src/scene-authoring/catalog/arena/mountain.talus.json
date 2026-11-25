@@ -1,0 +1,79 @@
+{
+ "capability": "mountain.talus",
+ "line": "terrain",
+ "schemaVersion": 1,
+ "basis": "本能力真实参与 arena 代际管线（见 inGenerations），成绩与判定登记在共享表 terrain.json——判定按 arena.js 写死的规则，不手改。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/arena/terrain.json#mountain.talus",
+ "runner": "TigerMessenger/tools/refactor/record-terrain-arena.mjs（实算）",
+ "test": "TigerMessenger/tests/mountain-arena.test.mjs",
+ "arena": {
+  "seed": 20261123,
+  "tolerance": {
+   "mid": 0.005,
+   "cliff": 0.005,
+   "drain": 0.005,
+   "hardEdge": 0.05
+  }
+ },
+ "inGenerations": [
+  {
+   "id": "terrain.mountain.g1",
+   "label": "上一代：隆起 + 侵蚀 + 岩屑坡",
+   "metrics": {
+    "mid": 0.9207,
+    "cliff": 0.0002,
+    "drain": 0.3665,
+    "hardEdge": 2.7101
+   }
+  },
+  {
+   "id": "terrain.mountain.g2",
+   "label": "这一代：+ 连绵圆润（mountain.rolling）",
+   "metrics": {
+    "mid": 0.9238,
+    "cliff": 0,
+    "drain": 0.7467,
+    "hardEdge": 1.5961
+   }
+  }
+ ],
+ "verdict": {
+  "current": "terrain.mountain.g2",
+  "previous": "terrain.mountain.g1",
+  "beats": true,
+  "text": "赢了：排水率、硬边位移（米）更好，其余不差",
+  "rows": [
+   {
+    "key": "mid",
+    "prev": 0.9207,
+    "cur": 0.9238,
+    "gain": 0.0031,
+    "verdict": "same"
+   },
+   {
+    "key": "cliff",
+    "prev": 0.0002,
+    "cur": 0,
+    "gain": 0.0002,
+    "verdict": "same"
+   },
+   {
+    "key": "drain",
+    "prev": 0.3665,
+    "cur": 0.7467,
+    "gain": 0.3802,
+    "verdict": "better"
+   },
+   {
+    "key": "hardEdge",
+    "prev": 2.7101,
+    "cur": 1.5961,
+    "gain": 1.114,
+    "verdict": "better"
+   }
+  ]
+ },
+ "recordedAt": "2026-11-24",
+ "pass": true,
+ "status": "measured"
+}

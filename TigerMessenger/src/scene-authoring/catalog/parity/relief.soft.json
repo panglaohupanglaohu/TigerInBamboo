@@ -1,0 +1,38 @@
+{
+ "capability": "relief.soft",
+ "line": "terrain",
+ "verdict": "equivalent",
+ "measured": {
+  "at": "2026-11-24T18:35:11.373Z",
+  "total": 0,
+  "byPath": {},
+  "unregisteredCount": 0,
+  "used": [],
+  "unused": [],
+  "ms": 7
+ },
+ "status": "measured",
+ "note": "Quick 预填（读码推断，2026-11-23 R41–R50）：verdict / measured 为 null = 还没实算；由 Kiro 跑 tools/refactor/record-relief-evidence.mjs 写入（唯一写入方）。登记的 diffs 是「已知会不同、原因已查明」的差异；实算出现登记外的差异 → tests/relief-parity.test.mjs 红。",
+ "original": "townscaper-web/REACode/src/overhangterrain.js",
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/overhang-terrain.js"
+ ],
+ "inputs": {
+  "seeds": [
+   7,
+   20261123
+  ],
+  "grid": "56×56",
+  "compare": "陡崖省掩码 sharp；缓坡省连续原值（passes = 0）"
+ },
+ "diffs": [],
+ "flaws": [
+  "原版上分位变量名 p72、实取 58% 分位（改名 pHi，数值不变）"
+ ],
+ "extensions": [
+  "softenField：缓坡省多轮邻域平均（原版缓坡省只保留原值，不平滑）——新增行为，不在对照范围内，用擂台验"
+ ],
+ "harness": "TigerMessenger/src/system-workshop/terrain/parity-cases.js + parity.js",
+ "test": "TigerMessenger/tests/relief-parity.test.mjs",
+ "recordedBy": "record-relief-evidence.mjs（实算）"
+}

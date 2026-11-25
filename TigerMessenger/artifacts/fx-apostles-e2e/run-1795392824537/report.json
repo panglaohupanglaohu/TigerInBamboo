@@ -1,0 +1,31 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/artifacts/fx-apostles-e2e/run-1795392824537",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描完成：5 / 5 个能力能作用。",
+    "siteInfo": "舞台格网 239 格 · 最高 8 层 · 小屋 4",
+    "baseColors": 1,
+    "pipelineNodes": 5,
+    "candidate": "候选 · 验证未通过",
+    "checks": [
+      "✓ 分区覆盖239 格分成 3 区",
+      "! 前线连通且有净空前线 92 点 · 段净空 —",
+      "✓ 镜头路径97 点 · 半径 8",
+      "✓ 角速度上限峰值 30.2°/s（限 45）",
+      "✓ 泡沫数量134 片",
+      "✓ V 形半角与对称半角 0.69°（重算 0.69° · ≤Kelvin 19.47°）",
+      "✓ 面板与镜像面板 48² · 镜像 UV 对称",
+      "✗ 回放图可复算计划 6 节点 · 独立重建 不一致 · 轨迹收敛"
+    ],
+    "candColors": 81,
+    "compareColors": 7
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#fx-workshop button').filter({ hasText: '存为本机草稿' })\n    - locator resolved to <button disabled type=\"button\" class=\"primary\">✓ 存为本机草稿</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not enabled\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not enabled\n    - retrying click action\n      - waiting 100ms\n    35 × waiting for element to be visible, enabled and stable\n       - element is not enabled\n     - retrying click action\n       - waiting 500ms\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-apostles-browser.mjs:54:63",
+  "state": {
+    "status": "fx 候选：分区覆盖✓ 前线连通且有净空! 镜头路径✓ 角速度上限✓ 泡沫数量✓ V 形半角与对称✓ 面板与镜像✓ 回放图可复算✗",
+    "note": "候选验证未通过：不能写入。调整参数后重试，或放弃。"
+  }
+}

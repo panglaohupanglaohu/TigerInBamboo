@@ -9,10 +9,16 @@ const{chromium}=require('playwright'),fs=require('fs'),assert=require('node:asse
   const png=a=>{const c=document.createElement('canvas');c.width=600;c.height=450;const ctx=c.getContext('2d'),img=ctx.createImageData(600,450);for(let y=0;y<450;y++)img.data.set(a.subarray(y*2400,(y+1)*2400),(449-y)*2400);ctx.putImageData(img,0,0);return c.toDataURL('image/png').split(',')[1]};
   try{
    // Deterministic fixture: one real baked cloud; sun-ray intercept near town centre.
-   const center=f.material.uniforms.uCenter.value,y=12,s=5,yaw=f.yaw.getX(0),time=v.waterUniforms.uTime.value,drift=((time*.12+yaw*7)%40+40)%40-20;
-   const m=new T.Matrix4().makeScale(s,s,s);m.setPosition(v.sunDir.x/v.sunDir.y*y-drift-center.x*s,y-center.y*s,v.sunDir.z/v.sunDir.y*y-center.z*s);f.mesh.setMatrixAt(0,m);f.mesh.instanceMatrix.needsUpdate=true;f.mesh.count=1;f.mesh.visible=true;f.mesh.layers.set(2); // exclude foreground card, isolate receiving surfaces
+   // r214：近云位移 = (cloudDrift + cloudWindBob)/cd，bob 相位又依赖实例平移 → 定点迭代解放置点。
+   const CM=await import('/src/core/cloud-motion.js');
+   const center=f.material.uniforms.uCenter.value,y=12,s=5,yaw=f.yaw.getX(0),time=v.waterUniforms.uTime.value,drift=CM.cloudDrift(time,yaw),cd=1+f.material.uniforms.uCloudParallax.value*Math.max(0,f.depth.getX(0)-1),amt=f.material.uniforms.uWindAmt.value;
+   const tx=v.sunDir.x/v.sunDir.y*y,tz=v.sunDir.z/v.sunDir.y*y;
+   let px=tx-center.x*s,pz=tz-center.z*s,bob=[0,0,0];
+   for(let k=0;k<10;k++){bob=CM.cloudWindBob(time,px,pz,amt);px=tx-center.x*s-(drift+bob[0])/cd;pz=tz-center.z*s-bob[2]/cd;}
+   const m=new T.Matrix4().makeScale(s,s,s);m.setPosition(px,y-center.y*s-bob[1]/cd,pz);f.mesh.setMatrixAt(0,m);f.mesh.instanceMatrix.needsUpdate=true;f.mesh.count=1;f.mesh.visible=true;f.mesh.layers.set(2); // exclude foreground card, isolate receiving surfaces
    v.cloudShadow.setEnabled(false);const off=read();v.cloudShadow.setEnabled(true);const on=read();const a=u.uCloudPuffs.value[0].clone();v.waterUniforms.uTime.value+=10;v.cloudShadow.update();const dx=u.uCloudPuffs.value[0].x-a.x;v.waterUniforms.uTime.value=time;v.cloudShadow.setEnabled(false);const restored=read();let changed=0,darker=0,restore=0;for(let i=0;i<on.length;i+=4){const d=off[i]+off[i+1]+off[i+2]-on[i]-on[i+1]-on[i+2];if(d>3)darker++;if(Math.abs(d)>3)changed++;if(off[i]!==restored[i]||off[i+1]!==restored[i+1]||off[i+2]!==restored[i+2])restore++}
-   if(changed<100||darker!==changed||restore!==0||Math.abs(dx-1.2)>1e-5||w.version!==version)throw Error(JSON.stringify({changed,darker,restore,dx,version:w.version}));
+   const expected=(CM.cloudDrift(time+10,yaw)-CM.cloudDrift(time,yaw)+CM.cloudWindBob(time+10,px,pz,amt)[0]-CM.cloudWindBob(time,px,pz,amt)[0])/cd;
+   if(changed<100||darker!==changed||restore!==0||Math.abs(dx-expected)>1e-5||w.version!==version)throw Error(JSON.stringify({changed,darker,restore,dx,expected,version:w.version}));
    f.mesh.visible=false;v.cloudShadow.setEnabled(true);if(u.uCloudStrength.value!==0)throw Error('Hidden cloud casts');f.mesh.visible=true;const parentVisible=f.mesh.parent.visible;f.mesh.parent.visible=false;v.cloudShadow.update();const parentStrength=u.uCloudStrength.value;f.mesh.parent.visible=parentVisible;if(parentStrength!==0)throw Error('Hidden parent cloud casts');
    return{report:{grid:rea.gridKind,fixture:true,changed,darker,restore,dx,worldUnchanged:true,sharedAtlas:u.uCloudAtlas.value===f.material.uniforms.uTex.value},off:png(off),on:png(on)};
   }finally{v.cloudShadow.setEnabled(false);f.mesh.setMatrixAt(0,orig);f.mesh.instanceMatrix.needsUpdate=true;f.mesh.count=count;f.mesh.layers.mask=layer;f.mesh.visible=visible;v.renderer.setRenderTarget(old);rt.dispose()}

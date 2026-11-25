@@ -11,10 +11,12 @@
  *   - 每 checkEvery 步：增量重建 vs 同一 World 的全新整体重建，位置做顺序无关摘要必须逐三角相同
  *     （这是 WorldMesh 分块缓存最容易坏的地方：块哈希/脏区判断漏了就会留下旧几何）；
  *   - 结束：restore 回起点快照，重建后位置摘要必须等于起点摘要（编辑可逆、无残留）。
- * 不声称原作 QA 工具或流程；也不检查流形/漏面（本仓几何本身不是流形）。
+ *   - r222：每个核对点与最后一步再跑 qa-replay 的外露墙带采样覆盖 + 悬空体块底部/钢柱核查
+ *     （漏面或失支撑即抛错；surfaceAudit 可关）。
+ * 不声称原作 QA 工具或流程；也不检查流形（本仓几何本身不是流形）或视觉等价。
  */
 import { MAX_LEVEL } from './world.js';
-import { auditQAGeometry } from './qa-replay.js';
+import { auditQAGeometry, auditSurfaceCoverage, auditUndersideSupport, triangleIndex } from './qa-replay.js';
 
 export function mulberry32(seed) {
   let a = seed >>> 0;
@@ -68,12 +70,13 @@ export function positionDigest(geometry, q = 1e-4) {
  * 主循环。api = {world, view}；freshGeometry(world) → 同一 World 的全新整体重建几何（页面注入 new WorldMesh）。
  * 无论成功、失败还是中途抛错，finally 都恢复体素/色槽/河道/配色。
  */
-export async function runMonkeyQA(api, { seed = 1, steps = 120, checkEvery = 10, region = 28, freshGeometry = null, afterStep = async () => {} } = {}) {
+export async function runMonkeyQA(api, { seed = 1, steps = 120, checkEvery = 10, region = 28, freshGeometry = null, surfaceAudit = true, afterStep = async () => {} } = {}) {
   const { world, view } = api, saved = world.snapshot(), palette = world.palette;
   view.changed(); view.render(0);
   const startDigest = positionDigest(view.worldMesh.geometry);
-  const cells = monkeyRegion(world, region), rng = mulberry32(seed), log = [], checks = [];
+  const cells = monkeyRegion(world, region), rng = mulberry32(seed), log = [], checks = [], surfaceChecks = [];
   const counts = {}; let maxDegenerate = 0, floating = 0;
+  const L = view.worldMesh?.L ?? 0.5;
   try {
     for (let s = 0; s < steps; s++) {
       const rec = monkeyStep(world, cells, rng); log.push(rec); counts[rec.op] = (counts[rec.op] ?? 0) + 1;
@@ -81,10 +84,19 @@ export async function runMonkeyQA(api, { seed = 1, steps = 120, checkEvery = 10,
       const a = auditQAGeometry(view.worldMesh.geometry);
       if (!a.valid) throw Error(`step ${s} ${rec.op}: ${a.errors.join('; ')}`);
       maxDegenerate = Math.max(maxDegenerate, a.degenerateTriangles);
-      if (freshGeometry && ((s + 1) % checkEvery === 0 || s === steps - 1)) {
+      const atCheckpoint = (s + 1) % checkEvery === 0 || s === steps - 1;
+      if (freshGeometry && atCheckpoint) {
         const inc = positionDigest(view.worldMesh.geometry), full = positionDigest(freshGeometry(world));
         checks.push({ step: s + 1, inc, full, same: inc === full });
         if (inc !== full) throw Error(`step ${s + 1}: incremental mesh ≠ full rebuild (${inc} vs ${full})`);
+      }
+      // r222：核对点先过增量=整体，再核当前网格的墙带覆盖与悬空支撑（乱序编辑中的漏面/失托也要抓）
+      if (surfaceAudit && atCheckpoint) {
+        const geometry = view.worldMesh.geometry, index = triangleIndex(geometry);
+        const walls = auditSurfaceCoverage(world, geometry, { L, index }), support = auditUndersideSupport(world, geometry, { L, index });
+        surfaceChecks.push({ step: s + 1, faces: walls.faces, uncovered: walls.uncovered.length, floating: support.floating, unsupported: support.unsupported.length });
+        if (!walls.valid) throw Error(`step ${s + 1}: wall band uncovered ${walls.uncovered.length} (cell ${walls.uncovered[0]?.cell} edge ${walls.uncovered[0]?.edge} lv ${walls.uncovered[0]?.level})`);
+        if (!support.valid) throw Error(`step ${s + 1}: underside unsupported ${support.unsupported.length} (cell ${support.unsupported[0]?.cell} lv ${support.unsupported[0]?.level} ${support.unsupported[0]?.reason})`);
       }
       await afterStep({ step: s + 1, rec, audit: a });
     }
@@ -94,8 +106,8 @@ export async function runMonkeyQA(api, { seed = 1, steps = 120, checkEvery = 10,
     world.restore(saved); world.palette = palette; view.changed(); view.render(0);
     const backDigest = positionDigest(view.worldMesh.geometry);
     if (backDigest !== startDigest) throw Error(`restore digest mismatch ${backDigest} vs ${startDigest}`);
-    return { valid: true, seed, steps, counts, checks, maxDegenerate, startDigest, backDigest, endState, log,
-      scope: '有限属性/索引、增量=整体重建（位置逐三角）、编辑后还原零残留；不含流形/漏面/视觉等价' };
+    return { valid: true, seed, steps, counts, checks, surfaceChecks, maxDegenerate, startDigest, backDigest, endState, log,
+      scope: '有限属性/索引、增量=整体重建（位置逐三角）、核对点墙带覆盖+悬空支撑、编辑后还原零残留；不含流形/视觉等价' };
   } finally {
     world.restore(saved); world.palette = palette; view.changed(); view.render(0);
   }

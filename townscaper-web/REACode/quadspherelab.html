@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>整张网格铺到球上：cube-sphere vs 经纬</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:110ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; inset:96px 320px 56px 16px; display:flex; gap:12px;
+    align-items:center; justify-content:center; background:#75808a; border-radius:12px;
+    border:1px solid var(--line); padding:8px; }
+  .col { display:flex; flex-direction:column; align-items:center; gap:5px; }
+  .col span { color:#e8eef0; font-size:11.5px; letter-spacing:.02em; }
+  canvas { display:block; border-radius:8px; background:#75808a; }
+  #panel { position:fixed; right:16px; top:96px; width:294px; bottom:56px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:11px 13px; display:flex;
+    flex-direction:column; gap:8px; overflow:auto; box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.03em; }
+  .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.bad b { color:#b23a2a; }
+  .row.good b { color:#1d7a4f; }
+  label.chk { display:flex; gap:7px; align-items:center; font-size:12.5px; cursor:pointer; }
+  input[type=range] { width:100%; margin:0; }
+  #foot { position:fixed; left:18px; bottom:12px; right:320px; font-size:11.5px; color:var(--muted); }
+  table { border-collapse:collapse; font-size:11.5px; width:100%; }
+  td,th { border-bottom:1px solid var(--line); padding:3px 4px; text-align:right;
+    font-variant-numeric:tabular-nums; }
+  th:first-child, td:first-child { text-align:left; color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>把整张四边形网格铺到球上 — cube-sphere（右）vs 经纬映射（左）</h1>
+  <p>原文只说 “<b>I've gone and put this on a sphere</b>”，算法是推断的：片子里球顶没有经纬映射那种格子收成一点的扇面，
+  所以选 cube-sphere。下面的数字是<b>现算</b>的，不是抄的常数。</p>
+</header>
+
+<div id="stage">
+  <div class="col"><span>经纬映射（lat/lon）</span><canvas id="cvA" width="384" height="384"></canvas></div>
+  <div class="col"><span>cube-sphere（tan 变形）</span><canvas id="cvB" width="384" height="384"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>现算畸变</h2>
+  <table id="tbl"><thead><tr><th></th><th>经纬</th><th>cube</th></tr></thead><tbody></tbody></table>
+  <h2>控制</h2>
+  <div class="row"><span>每面细分 n</span><b id="vn">12</b></div>
+  <input id="n" type="range" min="4" max="24" step="1" value="12" />
+  <div class="row"><span>自转</span><b id="vt">0.0°</b></div>
+  <input id="t" type="range" min="0" max="360" step="1" value="0" />
+  <label class="chk"><input id="warp" type="checkbox" checked /> tan 变形（关掉就是裸立方体归一化）</label>
+  <label class="chk"><input id="island" type="checkbox" /> 贴地形起伏（片子的配色 + −16%/+20% R）</label>
+</div>
+<div id="foot">轮廓半径 213–306px / 中位 254（640 画幅）→ 起伏 −16%/+20% R。轮廓折线段间距 3°–98.5°（cv 1.11），
+被地形支配、反推不出格子数，所以 n 是选的。</div>
+
+<script type="module">
+import { pointOnSphere, pointLatLon, buildSphereGrid, distortionReport, latLonReport,
+         PALETTE } from './src/quadsphere.js';
+
+const cvA = document.getElementById('cvA');
+const cvB = document.getElementById('cvB');
+const ctxA = cvA.getContext('2d');
+const ctxB = cvB.getContext('2d');
+
+const light = (() => { const v = [-0.45, 0.62, 0.65]; const l = Math.hypot(...v); return v.map(x => x / l); })();
+
+function rot(p, ry, rx) {
+  const cy = Math.cos(ry), sy = Math.sin(ry);
+  const cx = Math.cos(rx), sx = Math.sin(rx);
+  let [x, y, z] = p;
+  let x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
+  let y1 = y * cx - z1 * sx, z2 = y * sx + z1 * cx;
+  return [x1, y1, z2];
+}
+
+// 确定性"岛"高度场：球面上取几个正弦，避开随机，保证两帧可 A/B。
+function islandHeight(p) {
+  const [x, y, z] = p;
+  // 三层不同频率叠起来，峰≈0.19、典型≈0.07 —— 直接拿单个 sin 当高度会出大片
+  // 饱和的"融蜡"块（第一版就是这样），因为低频道数太少、幅度又被 clamp 住。
+  let h = 0.105 * Math.sin(2.7 * x + 1.3) * Math.cos(2.2 * y - 0.7) * Math.sin(3.1 * z + 2.0)
+        + 0.055 * Math.sin(5.3 * z - 1.1) * Math.cos(4.1 * x)
+        + 0.026 * Math.sin(7.9 * x + 0.4) * Math.cos(8.3 * y + 1.2);
+  return Math.max(-0.16, Math.min(0.20, h));
+}
+
+function quadOf(corners, nrm) {
+  const c = corners.map((p, i) => rot(p, RY, RX));
+  const nn = rot(nrm, RY, RX);
+  const depth = c.reduce((s, p) => s + p[2], 0) / 4;
+  return { c, n: nn, depth };
+}
+
+function drawGlobe(ctx, quads, W, H, opts) {
+  ctx.save();
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = opts.clear; ctx.fillRect(0, 0, W, H);
+  const S = opts.scale, cx = W / 2, cy = H / 2;
+  const list = [];
+  for (const q of quads) {
+    const r = quadOf(q.corners, q.normal || q.center);
+    if (r.n[2] < 0.02) continue;              // 背面剔除
+    r.src = q;                                 // 着色要用**未旋转**的法线取高度场
+    list.push(r);
+  }
+  list.sort((a, b) => a.depth - b.depth);
+  for (const q of list) {
+    const pts = q.c.map((p) => [cx + p[0] * S, cy - p[1] * S]);
+    const lam = Math.max(0, q.n[0] * light[0] + q.n[1] * light[1] + q.n[2] * light[2]);
+    const base = opts.color(q.src);
+    const k = 0.70 + 0.46 * lam;               // 下限 0.70：否则背光面会融进背景色
+    ctx.beginPath();
+    pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+    ctx.closePath();
+    ctx.fillStyle = `rgb(${Math.min(255, base[0] * k) | 0},${Math.min(255, base[1] * k) | 0},${Math.min(255, base[2] * k) | 0})`;
+    ctx.fill();
+    if (opts.wire) {
+      ctx.strokeStyle = 'rgba(10,20,25,0.30)';
+      ctx.lineWidth = 0.7;
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
+}
+
+// —— 两种网格 ——
+let RY = 0.6, RX = 0.32;
+function buildAll() {
+  const n = +nEl.value;
+  const warp = warpEl.checked;
+  // A：经纬（cols=2n 让总格数接近 6n²）
+  const qA = [];
+  const rows = n, cols = 2 * n;
+  for (let j = 0; j < rows; j++) {
+    for (let i = 0; i < cols; i++) {
+      const c = [
+        pointLatLon(i, j, rows, cols), pointLatLon(i + 1, j, rows, cols),
+        pointLatLon(i + 1, j + 1, rows, cols), pointLatLon(i, j + 1, rows, cols),
+      ];
+      const mid = c.reduce((s, p) => [s[0] + p[0] / 4, s[1] + p[1] / 4, s[2] + p[2] / 4], [0, 0, 0]);
+      qA.push({ corners: c, normal: mid, center: mid });
+    }
+  }
+  // B：cube-sphere
+  const qB0 = buildSphereGrid({ n, radius: 1, warp });
+  let qB = qB0;
+  if (islandEl.checked) {
+    // 半径按高度场缩放（片子：湖和陆共球心、半径不同）
+    // 高度按**顶点方向**取，不能按格子取：相邻格子共享顶点，
+    // 用格子高度去缩放自己的四个角，邻居算出来的半径不一样 → 球面会裂开
+    // （第一版就是这样，碎成一地补丁）。着色用的 h 才按格心取。
+    qB = qB0.map((q) => {
+      const h = islandHeight(q.normal);
+      return {
+        ...q,
+        corners: q.corners.map((p) => {
+          const l = Math.hypot(p[0], p[1], p[2]) || 1;
+          const n = [p[0] / l, p[1] / l, p[2] / l];
+          const r = 1 + islandHeight(n);
+          return [n[0] * r, n[1] * r, n[2] * r];
+        }),
+        center: (() => { const r = 1 + h; return [q.center[0] * r, q.center[1] * r, q.center[2] * r]; })(),
+        height: h,
+      };
+    });
+  }
+  return { qA, qB };
+}
+
+function colorFor(q, isA) {
+  if (!islandEl.checked) return isA ? [208, 214, 210] : [206, 212, 208];
+  const h = q.height ?? islandHeight(q.normal);
+  if (h < -0.005) return PALETTE.lake;
+  if (h < 0.012) return PALETTE.shore;
+  return PALETTE.land;
+}
+
+const nEl = document.getElementById('n');
+const tEl = document.getElementById('t');
+const warpEl = document.getElementById('warp');
+const islandEl = document.getElementById('island');
+const tbl = document.querySelector('#tbl tbody');
+
+function render() {
+  RY = (+tEl.value) * Math.PI / 180;
+  document.getElementById('vt').textContent = (+tEl.value).toFixed(1) + '°';
+  document.getElementById('vn').textContent = nEl.value;
+
+  const { qA, qB } = buildAll();
+  drawGlobe(ctxA, qA, 384, 384, { scale: 158, clear: '#75808a', wire: true, color: (q) => colorFor(q, true) });
+  drawGlobe(ctxB, qB, 384, 384, { scale: 158, clear: '#75808a', wire: true, color: (q) => colorFor(q, false) });
+
+  // 现算数字（与画面同一组 n）
+  const n = +nEl.value;
+  const a = latLonReport({ rows: n, cols: 2 * n });
+  const b = distortionReport({ n, warp: warpEl.checked });
+  const rows = [
+    ['格子数', a.quads, b.quads],
+    ['边长 max/min', a.edgeRatio > 1e6 ? '∞（极点退化）' : a.edgeRatio.toFixed(2) + '×', b.edgeRatio.toFixed(2) + '×'],
+    ['面积 max/min', a.areaRatio.toFixed(1) + '×', b.areaRatio.toFixed(2) + '×'],
+    ['最小格 / 平均格', (a.areaMinRel * 100).toFixed(1) + '%', (b.areaMinRel * 100).toFixed(1) + '%'],
+  ];
+  tbl.innerHTML = rows.map((r) => `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('');
+  window.__report = { latlon: a, cube: b };
+}
+
+nEl.oninput = render;
+tEl.oninput = render;
+warpEl.onchange = render;
+islandEl.onchange = render;
+render();
+window.__ready = true;
+</script>
+</body>
+</html>

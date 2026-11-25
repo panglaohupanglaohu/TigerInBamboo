@@ -1,0 +1,83 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/seed-report-e2e/run-1795569458684",
+  "scene": "moss",
+  "panels": {
+    "battle": {
+      "state": "done",
+      "count": 6,
+      "best": 1,
+      "typical": 1,
+      "worst": 5,
+      "metricRows": 4,
+      "picks": [
+        "1",
+        "1",
+        "5"
+      ],
+      "text": "多种子分布 · 战役种子含义：种子 s 生成舞台采样（陆地 / 层数 / 小屋数）；预装全部能匹配的能力；输入：合成舞台 battleFixture(s)跑 6 个种子战役：6 个种子 · 4 个没判失败 · 最好 1 · 最典型 1 · 最差 5指标最小p10中位p90最大分布检查通过占比 ↑80.0%80.0%100.0%100.0%100.0%提醒项 ↓00000失败项 ↓00011执行了的能力 ↑22333最好 · 种子 1分数 100 · pass最典型 · 种子 1分数 100 · pass最差 · 种子 5分数 -1 · fail",
+      "height": 714
+    },
+    "fx": {
+      "state": "done",
+      "count": 6,
+      "best": 1,
+      "typical": 1,
+      "worst": 4,
+      "metricRows": 4,
+      "picks": [
+        "1",
+        "1",
+        "4"
+      ],
+      "text": "多种子分布 · 表现层种子含义：种子 s 生成舞台格网；预装全部能匹配的能力；输入：合成舞台格网 fxFixture(s)跑 6 个种子表现层：6 个种子 · 5 个没判失败 · 最好 1 · 最典型 1 · 最差 4指标最小p10中位p90最大分布检查通过占比 ↑94.7%97.4%100.0%100.0%100.0%提醒项 ↓00000失败项 ↓0000.51执行了的能力 ↑99999最好 · 种子 1分数 100 · pass最典型 · 种子 1分数 100 · pass最差 · 种子 4分数 -1 · fail",
+      "height": 714
+    },
+    "lightlife": {
+      "state": "done",
+      "count": 6,
+      "best": 4,
+      "typical": 4,
+      "worst": 1,
+      "metricRows": 12,
+      "picks": [
+        "4",
+        "4",
+        "1"
+      ],
+      "text": "多种子分布 · 光影与生命种子含义：合成岛种子 s；9 个能力默认参数全跑；输入：实景采样（当前场景）/ 未连上时用 合成岛 syntheticSite(s)（28×28 格，地形 + 房子 + 植物）跑 6 个种子光影与生命：6 个种子 · 2 个没判失败 · 最好 4 · 最典型 4 · 最差 1指标最小p10中位p90最大分布检查通过占比 ↑92.9%92.9%92.9%100.0%100.0%提醒项 ↓00000失败项 ↓00111平均压暗25.3%25.3%25.3%25.8%26.0%凹角压暗 ↑27.0%27.1%27.5%28.0%28.1%开阔顶面压暗 ↓6.5%6.6%7.7%8.3%8.4%多跳改色0.0470.0480.0490.0510.051大纹理占空比 ↑5.6%5.7%6.0%7.0%7.6%植物认出率 ↑100.0%100.0%100.0%100.0%10",
+      "height": 1481
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true,
+  "capabilities": [],
+  "mountainGenericPanel": false,
+  "localStorage": {
+    "before": [
+      "tm-ui-layers-v1",
+      "tm.citadelEditor.collapsed",
+      "tm.citadelEditor.dropToGround",
+      "tm.defaults.v1",
+      "tm.equatorialClouds.enabled",
+      "tm.morris.panel.collapsed",
+      "tm.questPanel.collapsed",
+      "tm.startup.profile.v1"
+    ],
+    "after": [
+      "tm-ui-layers-v1",
+      "tm.citadelEditor.collapsed",
+      "tm.citadelEditor.dropToGround",
+      "tm.defaults.v1",
+      "tm.equatorialClouds.enabled",
+      "tm.morris.panel.collapsed",
+      "tm.questPanel.collapsed",
+      "tm.startup.profile.v1"
+    ]
+  }
+}

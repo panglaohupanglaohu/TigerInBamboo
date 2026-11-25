@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>拱洞精细门户 · 演示（R34）</title>
+<style>
+ body{margin:0;padding:18px;font:14px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif;background:#f4f1ea;color:#1d2f36}
+ h1{font-size:18px;margin:0 0 4px} p{margin:4px 0}
+ .row{display:flex;gap:18px;flex-wrap:wrap;margin-top:12px}
+ figure{margin:0;background:#fff;border-radius:10px;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+ figcaption{font-weight:600;margin-bottom:6px} canvas{display:block;border-radius:6px}
+ .legend span{display:inline-block;margin-right:14px} .sw{display:inline-block;width:12px;height:12px;border-radius:2px;vertical-align:-1px;margin-right:4px}
+ button{margin-top:10px;padding:5px 12px;border-radius:8px;border:1px solid #9aa;background:#fff;cursor:pointer}
+</style>
+</head>
+<body>
+<h1>拱洞精细门户（battle.navFinePortals · R34）</h1>
+<p>一道 6 层高的墙把小岛隔成南北两半，只有两个拱洞能过。同一个兵从拱南边斜着进拱，走到拱北边。导航全部是游戏实际用的 vendor 副本 BattleNavigation（R33 换成最新库）。</p>
+<p class="legend"><span><i class="sw" style="background:#6b5f7a"></i>墙</span><span><i class="sw" style="background:#b9a9c9"></i>拱洞（第 2 层空）</span><span><i class="sw" style="background:#2e9b57"></i>收窄后的门户</span><span><i class="sw" style="background:#e08a2e"></i>形变侧壁</span><span><i class="sw" style="background:#d33"></i>身体擦进拱脚（按「开」的判据）</span></p>
+<p id="stat-all"></p>
+<div class="row">
+ <figure><figcaption>关精细门户（换件前的行为）</figcaption><canvas id="cv-off"></canvas><p id="stat-off"></p></figure>
+ <figure><figcaption>开精细门户（R34）</figcaption><canvas id="cv-on"></canvas><p id="stat-on"></p></figure>
+</div>
+<button id="replay" type="button">↻ 重放</button>
+<script type="module" src="src/system-workshop/battle/nav-arch-demo.js?v=nav-r1"></script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+{
+  "solvers": {
+    "spring": {
+      "solver": "spring",
+      "conflict": {
+        "cellLevels": 2116,
+        "shapeErrMax": 0.34145500912376103,
+        "shapeErrMean": 0.060387220312965846,
+        "sizeErrMax": 0.9892547970246761,
+        "sizeErrMean": 0.2619211043558024,
+        "topSizeErrMean": 0.2697146578219619,
+        "driftMax": 0.7307313673169181,
+        "driftMean": 0.13065918266410448,
+        "disagreeMax": 0.5045195284549637,
+        "disagreeMean": 0.09531824013441233,
+        "sharedCorners": 4180,
+        "folded": 0,
+        "leanMaxDeg": 44.636256718588896,
+        "unresolved": 0,
+        "capped": 0
+      },
+      "count": 618,
+      "tris": 24765,
+      "fin": true
+    },
+    "shape": {
+      "solver": "shape",
+      "conflict": {
+        "cellLevels": 2116,
+        "shapeErrMax": 0.012356683211395256,
+        "shapeErrMean": 0.00031573755301027355,
+        "sizeErrMax": 0.9133975683156705,
+        "sizeErrMean": 0.40159706381571436,
+        "topSizeErrMean": 0.47732248794535537,
+        "driftMax": 2.4689961878119266,
+        "driftMean": 0.07557820864071965,
+        "disagreeMax": 0.036279977528080286,
+        "disagreeMean": 0.00748168742915759,
+        "sharedCorners": 4180,
+        "folded": 0,
+        "leanMaxDeg": 28.43287359716722,
+        "unresolved": 6,
+        "capped": 28
+      },
+      "count": 618,
+      "tris": 24765,
+      "fin": true
+    },
+    "joint": {
+      "solver": "joint",
+      "conflict": {
+        "cellLevels": 2116,
+        "shapeErrMax": 0.2065235411940594,
+        "shapeErrMean": 0.003128141069615562,
+        "sizeErrMax": 0.9133975683156736,
+        "sizeErrMean": 0.3943412362031605,
+        "topSizeErrMean": 0.4651627295989568,
+        "driftMax": 2.5171800987607593,
+        "driftMean": 0.07908828559646022,
+        "disagreeMax": 0.3425475356824965,
+        "disagreeMean": 0.011147030559538513,
+        "sharedCorners": 4180,
+        "folded": 0,
+        "leanMaxDeg": 28.43720176345489,
+        "unresolved": 6,
+        "capped": 27
+      },
+      "count": 618,
+      "tris": 24765,
+      "fin": true
+    }
+  },
+  "errors": []
+}

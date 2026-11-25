@@ -1,0 +1,113 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/light-bounce-bake-20261125011009/run-1795569009613",
+  "steps": {
+    "townSetup": {
+      "injected": true,
+      "builtCells": 101,
+      "vertsBefore": 0
+    },
+    "stageInfo": {
+      "hasSetBakeLighting": true,
+      "bake": true,
+      "bakeOptions": "default(单跳)",
+      "verts": 22497,
+      "tris": 7499,
+      "garden": {
+        "yards": {},
+        "paths": {},
+        "openings": []
+      },
+      "grassPlan": {
+        "enclosed": 1,
+        "grassCells": 46,
+        "openComponents": 0,
+        "openCellsSkipped": 0,
+        "lowWallEdges": 0
+      },
+      "worldVersion": 103,
+      "cells": 10132
+    },
+    "baselineProbe": {
+      "earlyReturn": true,
+      "stillSame": true,
+      "options": "default"
+    },
+    "set3": {
+      "invalidated": true,
+      "options": {
+        "strength": 0.62,
+        "bounce": 0.62,
+        "bounces": 3,
+        "airGain": 0.55,
+        "aoMode": "vertex",
+        "sunShadow": null
+      }
+    },
+    "rebuild3": {
+      "rebuilt": true,
+      "ms": 49
+    },
+    "vertexDiff": {
+      "sameLength": true,
+      "verts": 22497,
+      "changed": 21746,
+      "changedPct": 96.66,
+      "warmShifted": 21055,
+      "warmShiftedPct": 93.59,
+      "maxDelta": 0.4014,
+      "meanDelta": 0.1216,
+      "meanWarmShift": 0.0744
+    },
+    "rebuildBack": {
+      "rebuilt": true,
+      "ms": 42
+    },
+    "roundtrip": {
+      "sameLength": true,
+      "diffFloats": 0,
+      "restored": true
+    },
+    "pixelNoiseFloor": {
+      "tag": "noise",
+      "pixels": 624120,
+      "mismatched": 1686,
+      "mismatchPct": 0.27,
+      "meanAbsPerChannel": 0.968,
+      "warmedPixels": 1166,
+      "warmedPct": 0.187
+    },
+    "pixelBounce": {
+      "tag": "b1vs3",
+      "pixels": 624120,
+      "mismatched": 15059,
+      "mismatchPct": 2.413,
+      "meanAbsPerChannel": 8.898,
+      "warmedPixels": 24918,
+      "warmedPct": 3.993
+    },
+    "pixelRestore": {
+      "tag": "restore",
+      "pixels": 624120,
+      "mismatched": 1417,
+      "mismatchPct": 0.227,
+      "meanAbsPerChannel": 0.758,
+      "warmedPixels": 1182,
+      "warmedPct": 0.189
+    },
+    "verdict": {
+      "bakeApiUsable": true,
+      "grassOnMesh": true,
+      "multiHopVertexObservable": true,
+      "multiHopPixelObservable": true,
+      "roundtripExact": true
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true,
+  "capabilities": [
+    "light.bounce"
+  ]
+}

@@ -1,0 +1,153 @@
+{
+  "base": {
+    "surfPx": 457354,
+    "bgPx": 0,
+    "inkSurf": 41825,
+    "inkBg": 0,
+    "inkPer1000": 91.45,
+    "bgInkPer1000": 0,
+    "widthP50": 2,
+    "widthP90": 3,
+    "bandPct": 18.19,
+    "bgColor": [
+      92,
+      156,
+      164
+    ]
+  },
+  "on": {
+    "surfPx": 453923,
+    "bgPx": 0,
+    "inkSurf": 78123,
+    "inkBg": 0,
+    "inkPer1000": 172.11,
+    "bgInkPer1000": 0,
+    "widthP50": 2,
+    "widthP90": 3,
+    "bandPct": 23.41,
+    "bgColor": [
+      108,
+      172,
+      180
+    ]
+  },
+  "off": {
+    "surfPx": 457903,
+    "bgPx": 0,
+    "inkSurf": 41905,
+    "inkBg": 0,
+    "inkPer1000": 91.52,
+    "bgInkPer1000": 0,
+    "widthP50": 2,
+    "widthP90": 3,
+    "bandPct": 18.47,
+    "bgColor": [
+      92,
+      156,
+      164
+    ]
+  },
+  "on2": {
+    "surfPx": 454882,
+    "bgPx": 0,
+    "inkSurf": 78202,
+    "inkBg": 0,
+    "inkPer1000": 171.92,
+    "bgInkPer1000": 0,
+    "widthP50": 2,
+    "widthP90": 3,
+    "bandPct": 22.41,
+    "bgColor": [
+      108,
+      172,
+      180
+    ]
+  },
+  "off2": {
+    "surfPx": 458292,
+    "bgPx": 0,
+    "inkSurf": 42088,
+    "inkBg": 0,
+    "inkPer1000": 91.84,
+    "bgInkPer1000": 0,
+    "widthP50": 2,
+    "widthP90": 3,
+    "bandPct": 18.21,
+    "bgColor": [
+      92,
+      156,
+      164
+    ]
+  },
+  "film": [
+    {
+      "f": "frame-0100.jpg",
+      "st": {
+        "surfPx": 163987,
+        "bgPx": 0,
+        "inkSurf": 11940,
+        "inkBg": 0,
+        "inkPer1000": 72.81,
+        "bgInkPer1000": 0,
+        "widthP50": 2,
+        "widthP90": 3,
+        "bandPct": 24.09,
+        "bgColor": [
+          60,
+          84,
+          92
+        ]
+      }
+    },
+    {
+      "f": "frame-0125.jpg",
+      "st": {
+        "surfPx": 159777,
+        "bgPx": 0,
+        "inkSurf": 10222,
+        "inkBg": 0,
+        "inkPer1000": 63.98,
+        "bgInkPer1000": 0,
+        "widthP50": 2,
+        "widthP90": 3,
+        "bandPct": 20.89,
+        "bgColor": [
+          60,
+          84,
+          92
+        ]
+      }
+    },
+    {
+      "f": "frame-0300.jpg",
+      "st": {
+        "surfPx": 124816,
+        "bgPx": 0,
+        "inkSurf": 9195,
+        "inkBg": 0,
+        "inkPer1000": 73.67,
+        "bgInkPer1000": 0,
+        "widthP50": 2,
+        "widthP90": 3,
+        "bandPct": 19.23,
+        "bgColor": [
+          60,
+          84,
+          92
+        ]
+      }
+    }
+  ],
+  "statsOn": {
+    "on": true,
+    "ndLo": 0.025,
+    "ndHi": 0.09,
+    "depthMix": 0,
+    "paintedNormalPass": true,
+    "paintScale": 4,
+    "noNormalHidden": null,
+    "outOfScope": null,
+    "scopeSize": 1
+  },
+  "errors": []
+}

@@ -1,0 +1,11 @@
+{
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "scan": "扫描完成：5 / 5 个能力能作用。 已按「书店镇」自动预装 5 个能力（感知明暗层次、感知色板归并、风格统一（主色归并）、整体色调 等），点 ▶ 执行管线一键跑完整条。"
+ },
+ "pass": false,
+ "scene": "bookshop",
+ "failure": "Error: 侧栏没有能力卡片：scene.oklab-contrast\n    at addCaps (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/object-gscene-browser.mjs:36:20)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/object-gscene-browser.mjs:101:7",
+ "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/gscene-caps-e2e/run-1795556591198"
+}

@@ -1,0 +1,28 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/artifacts/fx-apostles-e2e/run-1795393054337",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描完成：5 / 5 个能力能作用。",
+    "siteInfo": "舞台格网 239 格 · 最高 8 层 · 小屋 4",
+    "baseColors": 1,
+    "pipelineNodes": 5,
+    "candidate": "候选 · 验证通过",
+    "checks": [
+      "✓ 分区覆盖239 格分成 3 区",
+      "✓ 前线连通且有净空前线 92 点 · 段净空 3.47",
+      "✓ 镜头路径97 点 · 半径 8",
+      "✓ 角速度上限峰值 30.2°/s（限 45）",
+      "✓ 泡沫数量134 片",
+      "✓ V 形半角与对称半角 0.69°（重算 0.69° · ≤Kelvin 19.47°）",
+      "✓ 面板与镜像面板 48² · 镜像 UV 对称",
+      "✓ 回放图可复算计划 6 节点 · 独立重建 一致 · 轨迹收敛"
+    ],
+    "candColors": 81,
+    "compareColors": 7,
+    "adoptedNote": "扫描完成：5 / 5 个能力能作用。",
+    "draft": "pass"
+  },
+  "errors": [],
+  "pass": true
+}

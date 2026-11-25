@@ -35,6 +35,22 @@ const view = { scene: new THREE.Scene(), levelHeight: .5, changed() { this.n = (
 const w2 = new World(grid);
 const f = attachFlyingTown(view, w2, grid, { lift: 3 });
 assert.ok(f.ok && f.cells === ids.length && f.legs >= 3 && view.n === 1);
-const g = view.scene.getObjectByName('flying-town-c06'); assert.ok(g && g.children.length >= f.legs * 3);
+const g = view.scene.getObjectByName('flying-town-c06');
+assert.ok(g, '飞岛组应挂进 scene');
+// 第 127 轮形制：腿 / 斜撑 / 短舱 / 桨叶 / 舷窗 / 船壳带 全都要在几何里
+const P = f.parts;
+assert.equal(P.legs, f.legs, '腿数应与 supportLegs 一致');
+assert.equal(P.braces, P.legs * 2, '每根腿两条斜撑');
+assert.ok(P.props >= 2 && P.blades === P.props * 4, '每个短舱 4 片桨叶');
+assert.ok(P.portholes > 0 && P.bandTris > 0 && P.rimTris > 0, '船壳带/舷缘/舷窗都要有三角');
+assert.ok(P.bandH > 0 && P.rimH > 0);
+assert.equal(P.cradleBars, P.cradleBays * 3, '每榀摇篮三根杆');
+const legGroup = g.getObjectByName('legs');
+const inst = legGroup.children.filter((o) => o.isInstancedMesh);
+assert.ok(inst.length >= 3, '腿/涟漪/斜撑都用 InstancedMesh');
+assert.equal(inst[0].count, f.legs);
+assert.equal(inst.at(-1).count, P.braces);
+assert.ok(g.getObjectByName('hull'));
+
 f.dispose(); assert.ok(!view.scene.getObjectByName('flying-town-c06'));
-console.log('PASS flying-town-c06', JSON.stringify({ loops: loops.length, cells: ids.length, legs: f.legs, moved }));
+console.log('PASS flying-town-c06', JSON.stringify({ loops: loops.length, cells: ids.length, legs: f.legs, moved, parts: P }));

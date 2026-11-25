@@ -1,0 +1,20 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/battle-apostles-e2e/run-1795256870583",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描失败：场景响应超时"
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "Error: probe scan failed: 扫描失败：场景响应超时\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/battle-apostles-browser.mjs:31:52",
+  "state": {
+    "ds": {
+      "tier": "scene",
+      "sceneEdit": "view",
+      "sceneBattle": "1"
+    },
+    "status": "实景切到：十二门徒",
+    "note": "扫描失败：场景响应超时"
+  }
+}

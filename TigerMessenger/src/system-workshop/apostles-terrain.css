@@ -1,0 +1,26 @@
+/* 十二门徒地形工坊（R31）与三套方案并排对照（R32）。只在「场景管线」页、当前场景是十二门徒时显示。
+   与 studio.css 的战役 / 表现层规则同一写法；直达页签（data-layer-focus）时让位给被直达的那一块。 */
+#apostles-terrain-workshop{display:none}
+body[data-tier=scene][data-scene-edit=view][data-scene-apostles="1"] #apostles-terrain-workshop{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;margin-top:16px;min-height:420px}
+body[data-tier=scene][data-scene-edit=view][data-scene-apostles="1"] .tier-side[data-tier=apostles-terrain]{display:block}
+body[data-layer-focus] #apostles-terrain-workshop,body[data-layer-focus] .tier-side[data-tier=apostles-terrain]{display:none!important}
+#apostles-terrain-workshop .apt-compare{grid-column:1/-1;border:1px solid var(--line,#d8d3c6);border-radius:10px;padding:12px 14px;background:var(--panel,#fbfaf6)}
+.apt-compare-head{display:flex;align-items:center;gap:10px}.apt-compare-head h3{margin:0;font-size:15px}.apt-compare-head button{margin-left:auto}
+.apt-note{margin:6px 0}.apt-pending{margin:6px 0 10px;padding:6px 10px;border-radius:6px;background:#fff4d6;border:1px solid #e8cf86;font-size:13px}
+.apt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.apt-card{border:1px solid var(--line,#d8d3c6);border-radius:8px;padding:8px;background:#fff;display:flex;flex-direction:column;gap:6px}
+.apt-card.current{border-color:#3d8b6a;box-shadow:0 0 0 2px #3d8b6a33}
+.apt-card header{display:flex;flex-wrap:wrap;align-items:center;gap:6px}.apt-card header code{font-size:11px;color:var(--muted,#777)}
+.apt-card header button{margin-left:auto}.apt-badge{color:#2f7a59;font-size:12px;font-weight:600}
+.apt-card p{margin:0;font-size:12px}
+.apt-shots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+.apt-shots figure{margin:0;position:relative}.apt-shots img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:4px;display:block;background:#e9ecef}
+.apt-shots figure.invalid img{outline:2px solid #d9534f}.apt-shots figcaption{font-size:11px;color:var(--muted,#777)}
+.apt-empty{aspect-ratio:1/1;display:grid;place-items:center;border:1px dashed #ccc;border-radius:4px;color:#999;font-size:12px}
+.apt-surface{color:#3b4a43}.apt-surface.worse{color:#b0413e}
+.apt-side .apt-checks{margin-top:6px}.apt-side #apt-recheck{margin:4px 0}
+/* R-A5 按实测选优区块：与三套对照同宽整行 */
+#apostles-terrain-workshop .apt-measure{grid-column:1/-1;border:1px solid var(--line,#d8d3c6);border-radius:10px;padding:12px 14px;background:var(--panel,#fbfaf6)}
+.apt-measure-state{margin:6px 0;font-size:13px}.apt-measure-state[data-measure-state=winner]{color:#2f7a59;font-weight:600}
+.apt-measure-results{margin:6px 0;padding-left:20px;font-size:12px}.apt-measure-results li{margin:2px 0}
+@media (max-width:1100px){.apt-grid{grid-template-columns:minmax(0,1fr)}}

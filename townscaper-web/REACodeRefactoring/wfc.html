@@ -1,5 +1,5 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>确定性WFC · REACode重构版</title><style>body{margin:24px;background:#edf4f0;color:#20343c;font:15px/1.6 system-ui}input,button{font:inherit;margin:6px;padding:5px}canvas{background:#d4e5e0;max-width:100%;border-radius:12px}a{color:#276e86}</style><h1>确定性 WFC · 多边形接口约束</h1><p>同一网格与种子，即使倒序输入格子和tile也得到同一解。接口按真实半边配对，支持三角形与四边形。可选将四边形沿对角线切为四个三角子格，保留父格对应；此页的子格独立求解（对照），四子格联合约束（含 3D 分层、跨两层模块）见 <a href="joint3d.html">joint3d.html</a>。另见：<a href="slots.html">SLOTS 槽位缩略页 + 时序动画</a> · <a href="prefab.html">合成网格块缝进 + 3D prefab</a> · <a href="assembly.html">加权熵拼装动画</a>。</p><label><input type="checkbox" id="mixed" checked>混合网格</label><label><input type="checkbox" id="subtiles">四边形切四三角</label><label>种子<input id="seed" type="number" value="7"></label><button id="solve">求解</button><button id="pin">固定首格全1接口</button><button id="repair">改中间一格并局部修复</button><button id="diag">诊断 tile 存活</button><button id="frontier">枚举已固定格周边</button><button id="reset">清除约束</button><div id="stats"></div><pre id="frontier-stats"></pre><pre id="diag-stats"></pre><canvas width="1000" height="650"></canvas><p><a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <a href="coverage.html">映射</a> · <a href="adjacency.html">几何邻接审核</a> · <a href="artifacts/coverage/wfc-review.md">逐帧记录</a></p><script type="module">
-import{frontierCandidates}from'./src/core/frontier-candidates.js';
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>确定性WFC · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:24px;background:#edf4f0;color:#20343c;font:15px/1.6 system-ui}input,button{font:inherit;margin:6px;padding:5px}canvas{background:#d4e5e0;max-width:100%;border-radius:12px}a{color:#276e86}</style><h1>确定性 WFC · 多边形接口约束</h1><p>同一网格与种子，即使倒序输入格子和tile也得到同一解。接口按真实半边配对，支持三角形与四边形。可选将四边形沿对角线切为四个三角子格，保留父格对应；此页的子格独立求解（对照），四子格联合约束（含 3D 分层、跨两层模块）见 <a href="joint3d.html">joint3d.html</a>。另见：<a href="slots.html">SLOTS 槽位缩略页 + 时序动画</a> · <a href="prefab.html">合成网格块缝进 + 3D prefab</a> · <a href="assembly.html">加权熵拼装动画</a>。</p><label><input type="checkbox" id="mixed" checked>混合网格</label><label><input type="checkbox" id="subtiles">四边形切四三角</label><label>种子<input id="seed" type="number" value="7"></label><button id="solve">求解</button><button id="pin">固定首格全1接口</button><button id="repair">改中间一格并局部修复</button><button id="diag">诊断 tile 存活</button><button id="frontier">枚举已固定格周边</button><button id="expand">增量扩边 + 简化导航（158229）</button><button id="expandPlay">回放扩边</button><label><input type="checkbox" id="twofronts" checked>双锋面（两组轮流推进）</label><label><input type="checkbox" id="navview">只看导航图（原片口径）</label><button id="reset">清除约束</button><div id="stats"></div><pre id="frontier-stats"></pre><pre id="expand-stats"></pre><pre id="diag-stats"></pre><canvas width="1000" height="650"></canvas><p><a href="index.html" target="_top">首页</a> · <a href="pipeline.html" target="_top">管线</a> · <a href="coverage.html">映射</a> · <a href="adjacency.html">几何邻接审核</a> · <a href="artifacts/coverage/wfc-review.md">逐帧记录</a></p><script type="module">
+import{frontierCandidates,expandFrontier}from'./src/core/frontier-candidates.js';
 import{selfCheck}from'./src/core/adjacency.js';import{solveWFC,repairWFC,diagnoseTiles}from'./src/core/wfc.js';import{buildMixedGrid,buildQuadGrid,buildTriangularSubgrid}from'./src/core/grid.js';import{World}from'./src/core/world.js';
 const tiles=[3,4].flatMap(n=>Array.from({length:2**n},(_,i)=>({id:n+':'+i,edges:Array.from({length:n},(_,e)=>(i>>e)&1)}))),byTile=new Map(tiles.map(t=>[t.id,t]));let pins={},world;
 function run({repair=false}={}){window.frontierReview=null;document.querySelector('#frontier-stats').textContent='';const previous=window.wfcReview?.result;const mixed=document.querySelector('#mixed').checked,base=mixed?buildMixedGrid({radius:6,seed:5}):buildQuadGrid({radius:4,seed:5});const grid=document.querySelector('#subtiles').checked?buildTriangularSubgrid(base):base;world=new World(grid);const adjacency=selfCheck(grid,world);if(adjacency.mismatched)throw Error('Geometry adjacency mismatch');const seed=Number(document.querySelector('#seed').value)||0,t0=performance.now(),options={tiles,seed,pins};let result,reverse;if(repair&&previous?.ok){const c=grid.cells[Math.floor(grid.cells.length/2)],old=Number(previous.tiles[c.id].split(':')[1]),edits={...pins,[c.id]:c.n+':'+((old+1)%(2**c.n))};result=repairWFC(grid,{tiles,seed,current:previous.tiles,edits});reverse=repairWFC({...grid,cells:[...grid.cells].reverse()},{tiles:[...tiles].reverse(),seed,current:previous.tiles,edits});}else{result=solveWFC(grid,options);reverse=solveWFC({...grid,cells:[...grid.cells].reverse()},{tiles:[...tiles].reverse(),seed,pins});}const deterministic=JSON.stringify(result.tiles)===JSON.stringify(reverse.tiles);window.wfcReview={world,result,deterministic,pins,adjacency,subdivision:grid.subdivision??null};
@@ -23,5 +23,80 @@ document.querySelector('#repair').onclick=()=>run({repair:true});document.queryS
   document.querySelector('#diag-stats').textContent=lines.join('\n');
 }
 document.querySelector('#diag').onclick=diagTilesPanel;
+/* ---- 1582293326815862786「只在坍缩边缘评估候选 + 增量放置 + 简化导航互连」运行入口 ----
+   expandFrontier（src/core/frontier-candidates.js）早已实现并有 tests/frontier-expand.mjs，
+   但页面此前只有只读候选探针，拍不到「图在长 / 两组种子并成一组」。此处补入口与回放。 */
+const hSum=t=>t.edges.reduce((a,b)=>a+b,0),walkable=(a,ea,b,eb)=>a.edges[ea]===b.edges[eb]&&Math.abs(hSum(a)-hSum(b))<=1,preferH=(c,t)=>Math.abs(hSum(t)-Math.round(c.n/2));
+const C={a:'#bcbc6c',b:'#4acb79',other:'#dbe7e4',bg:'#375a5e',cell:'#2b4a4d',dead:'#c2564a',front:'#ffffff'};
+let expandState=null,playToken=0;
+function farPair(grid){// 两粒种子取格网图上的最远一对（确定性），让「两组先各自长、后并成一组」看得见
+ const byId=new Map(grid.cells.map(c=>[c.id,c])),inner=grid.cells.filter(c=>c.edgeNeighbors.every(n=>n>=0));
+ const bfs=s=>{const d=new Map([[s,0]]),q=[s];for(let i=0;i<q.length;i++){const c=byId.get(q[i]);for(const n of c.edgeNeighbors){if(n<0||d.has(n))continue;d.set(n,d.get(c.id)+1);q.push(n)}}return d};
+ let best=[inner[0].id,inner[0].id,-1];for(const s of inner.slice(0,48))for(const[id,dist]of bfs(s.id))if(dist>best[2])best=[s.id,id,dist];return best;}
+function tileFor(c){return tiles.find(t=>t.edges.length===c.n&&hSum(t)===Math.min(c.n,Math.round(c.n/2)));}
+function timelineOf(grid,result,seedIds){// 逐步重放 union-find：group 0=种子A(黄) 1=种子B(绿) 2=无种子连通块
+ const byId=new Map(grid.cells.map(c=>[c.id,c])),fixed=new Set(),steps=[],parent=new Map(),group=new Map();
+ const find=x=>{while(parent.get(x)!==x){parent.set(x,parent.get(parent.get(x)));x=parent.get(x)}return x};
+ const union=(x,y)=>{const a=find(x),b=find(y);if(a===b)return false;const ga=group.get(a),gb=group.get(b);parent.set(b,a);const g=Math.min(ga,gb);group.set(a,g);group.set(b,g);return ga<2&&gb<2&&ga!==gb};
+ for(const o of result.order){const c=byId.get(o.cell);parent.set(c.id,c.id);group.set(c.id,o.candidates===null?(o.cell===seedIds[0]?0:1):2);fixed.add(c.id);
+  const links=[];for(let e=0;e<c.n;e++){const nid=c.edgeNeighbors[e];if(nid<0||!fixed.has(nid))continue;const j=c.edgeTwins[e],t=byTile.get(o.tile),ot=byTile.get(result.assignment[nid]);if(t&&ot&&Number.isInteger(j)&&walkable(t,e,ot,j)){const m=union(nid,c.id);links.push({from:c.id,to:nid,merge:!!m})}}
+  const frontier=[];for(const id of fixed)for(const nid of byId.get(id).edgeNeighbors)if(nid>=0&&!fixed.has(nid)&&!frontier.includes(nid))frontier.push(nid);
+  steps.push({cell:c.id,tile:o.tile,candidates:o.candidates,links,frontier:frontier.length,placed:fixed.size,group:find(c.id),merge:links.some(l=>l.merge)});}
+ return{steps,groupOf:id=>group.get(find(id))??2};}
+function groupAt(k){// 第 k 步时的连通块划分（颜色随时间变：合并后两组同色，与原片「绿→黄」一致）
+ const st=expandState,parent=new Map(),group=new Map(),byId=st.byId;
+ const find=x=>{while(parent.get(x)!==x){parent.set(x,parent.get(parent.get(x)));x=parent.get(x)}return x};
+ const union=(x,y)=>{const a=find(x),b=find(y);if(a===b)return;const g=Math.min(group.get(a),group.get(b));parent.set(b,a);group.set(a,g);group.set(b,g)};
+ for(const s of st.steps.slice(0,k)){const c=byId.get(s.cell);parent.set(c.id,c.id);group.set(c.id,s.candidates===null?(s.cell===st.seedIds[0]?0:1):2);
+  for(let e=0;e<c.n;e++){const nid=c.edgeNeighbors[e];if(nid<0||!parent.has(nid))continue;const j=c.edgeTwins[e],t=byTile.get(s.tile),ot=byTile.get(st.result.assignment[nid]);if(t&&ot&&Number.isInteger(j)&&walkable(t,e,ot,j))union(nid,c.id);}}
+ return id=>group.get(find(id))??2;}
+function drawExpand(k,{navOnly=true}={}){
+ const st=expandState;if(!st)return null;const canvas=document.querySelector('canvas'),ctx=canvas.getContext('2d'),grid=st.grid,pts=grid.verts,
+  minX=Math.min(...pts.map(p=>p.x)),maxX=Math.max(...pts.map(p=>p.x)),minZ=Math.min(...pts.map(p=>p.z)),maxZ=Math.max(...pts.map(p=>p.z)),
+  scale=Math.min(900/(maxX-minX),550/(maxZ-minZ)),P=p=>[500+(p.x-(minX+maxX)/2)*scale,325+(p.z-(minZ+maxZ)/2)*scale];
+ ctx.clearRect(0,0,1000,650);
+ if(navOnly){ctx.fillStyle=C.bg;ctx.fillRect(0,0,1000,650);}
+ for(const c of grid.cells){ctx.beginPath();c.pts.forEach((p,i)=>{const[x,y]=P(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath();
+  if(navOnly){ctx.strokeStyle=C.cell;ctx.lineWidth=1;ctx.stroke();}}
+ const shown=st.steps.slice(0,k),gOf=groupAt(k),gcol=g=>g===0?C.a:g===1?C.b:C.other;
+ for(const s of shown){const c=st.byId.get(s.cell),g=gOf(s.cell);ctx.beginPath();c.pts.forEach((p,i)=>{const[x,y]=P(p);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.closePath();ctx.fillStyle=gcol(g);ctx.globalAlpha=0.10;ctx.fill();ctx.globalAlpha=1;}
+ for(const s of shown){const g=gOf(s.cell),c=st.byId.get(s.cell);for(const l of s.links){const a=P(c.pts[0]),b=P(st.byId.get(l.to).pts[0]);const m=P({x:(c.pts[0].x+st.byId.get(l.to).pts[0].x)/2,z:(c.pts[0].z+st.byId.get(l.to).pts[0].z)/2});
+  ctx.strokeStyle=gcol(g);ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(m[0],m[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();}}
+ for(const id of st.seedIds){const c=st.byId.get(id),p=P(c.pts[0]);ctx.fillStyle=C.front;ctx.beginPath();ctx.arc(p[0],p[1],3.2,0,Math.PI*2);ctx.fill();}
+ return{placed:shown.filter(s=>s.candidates!==null).length,navEdges:shown.reduce((n,s)=>n+s.links.length,0),frontier:k?shown.at(-1).frontier:st.steps[0].frontier,merges:shown.filter(s=>s.merge).length};
+}
+function runExpand(){
+ playToken++;const mixed=document.querySelector('#mixed').checked,navOnly=document.querySelector('#navview').checked,
+  base=mixed?buildMixedGrid({radius:6,seed:5}):buildQuadGrid({radius:4,seed:5}),grid=document.querySelector('#subtiles').checked?buildTriangularSubgrid(base):base,
+  [seedA,seedB,seedHops]=farPair(grid),seedIds=[seedA,seedB],seeds={},byId=new Map(grid.cells.map(c=>[c.id,c]));
+ for(const id of seedIds)seeds[id]=tileFor(byId.get(id)).id;
+ const result=expandFrontier(grid,{tiles,seeds,walkable,prefer:preferH,seed:Number(document.querySelector('#seed').value)||1,twoFronts:document.querySelector('#twofronts').checked});
+ const tl=timelineOf(grid,result,seedIds);
+ expandState={grid,byId,steps:tl.steps,groupOf:tl.groupOf,result,seedIds};
+ // 只在坍缩边缘：每一步要评估的格数 = 未放格中与已放格相邻者；对照是全部未放格
+ const widths=expandState.steps.map(s=>s.frontier),opens=expandState.steps.map(s=>grid.cells.length-s.placed),
+  mean=a=>a.reduce((x,y)=>x+y,0)/a.length;
+ const drawn=drawExpand(result.order.length,{navOnly});
+ window.frontierExpand={result,seedIds,seedHops,grid:mixed?'mixed':'quad',cells:grid.cells.length,twoFronts:document.querySelector('#twofronts').checked,
+  width:{mean:+mean(widths).toFixed(2),max:Math.max(...widths),openMean:+mean(opens).toFixed(1)},
+  mergeAt:result.merges.length?result.merges[0].at:null,merges:result.merges,steps:expandState.steps.length,
+  groups:k=>{const f=groupAt(k),c={};for(const s of expandState.steps.slice(0,k))c[f(s.cell)]=(c[f(s.cell)]||0)+1;return c;},
+  replay:k=>{const col={};for(const s of expandState.steps.slice(0,k))col[s.cell]=s.tile;return frontierCandidates(grid,{tiles,collapsed:col});},
+  draw:(k,nav)=>drawExpand(k,{navOnly:nav===undefined?true:!!nav}),drawn};
+ document.querySelector('#expand-stats').textContent='1582293326815862786「只在坍缩边缘评估候选 → 增量放置 → 简化导航互连」：\n'+
+  `${grid.cells.length}格 · 种子 ${seedIds.join(' / ')}（格距 ${seedHops} 跳）· 放置${result.stats.placed} · 死格${result.dead.length} · 候选检验${result.stats.tests}次 · ${window.frontierExpand.twoFronts?'双锋面轮流推进':'单锋面（最小候选优先）'}\n`+
+  `每步要看的格数 均${mean(widths).toFixed(2)}/峰${Math.max(...widths)} vs 未放格 均${mean(opens).toFixed(1)}（这就是「坍缩边缘附近的候选其实很少」）\n`+
+  `每格可行候选 均${result.stats.meanCandidates.toFixed(2)}（目录 ${tiles.length}）· 简化导航边 ${result.nav.length} · 连通块 ${result.components.join('/')}\n`+
+  `两粒种子互连于第 ${window.frontierExpand.mergeAt ?? '—'} 步（之后只剩一组颜色）· 画到第${result.order.length}步：${drawn?.navEdges ?? 0} 条导航边`;
+ return window.frontierExpand;
+}
+function playExpand(){playToken++;const token=playToken,total=expandState?.steps.length??0;let k=0;
+ const tick=()=>{if(token!==playToken)return;drawExpand(k);k+=Math.max(1,Math.round(total/90));if(k<=total)setTimeout(tick,40);else drawExpand(total)};
+ drawExpand(0);tick();}
+document.querySelector('#expand').onclick=()=>{expandState=null;playToken++;runExpand();};
+document.querySelector('#expandPlay').onclick=()=>{if(!expandState)runExpand();playExpand();};
+document.querySelector('#navview').onchange=()=>{if(expandState)drawExpand(expandState.steps.length,{navOnly:document.querySelector('#navview').checked});};
 document.querySelector('#subtiles').checked=new URLSearchParams(location.search).get('subtiles')==='1';run();
+const Q=new URLSearchParams(location.search);
+if(Q.get('expand')==='1'){document.querySelector('#navview').checked=Q.get('nav')!=='0';if(Q.get('twofronts')==='0')document.querySelector('#twofronts').checked=false;expandState=null;runExpand();const k=Q.has('step')?Math.max(0,Math.min(expandState.steps.length,Number(Q.get('step'))||0)):expandState.steps.length;drawExpand(k,{navOnly:document.querySelector('#navview').checked});}
 </script></html>

@@ -1,0 +1,272 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/auto-assemble-e2e/run-1795456006404",
+  "capabilities": [
+    {
+      "id": "mountain.protect",
+      "assembledBy": "goal"
+    },
+    {
+      "id": "mountain.massif",
+      "assembledBy": "goal"
+    },
+    {
+      "id": "mountain.erode",
+      "assembledBy": "goal"
+    },
+    {
+      "id": "mountain.rolling",
+      "assembledBy": "goal"
+    },
+    {
+      "id": "mountain.talus",
+      "assembledBy": "goal"
+    },
+    {
+      "id": "building.sites",
+      "assembledBy": "goal"
+    },
+    {
+      "id": "building.prefabs",
+      "assembledBy": "goal"
+    },
+    {
+      "id": "building.joint-wfc",
+      "assembledBy": "goal"
+    }
+  ],
+  "steps": {
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「高山圣城（通用插件 + 构建面板）」自动预装 3 个能力（建筑选址、多格 prefab 目录、联合 WFC 摆建筑群），点 ▶ 执行管线一键跑完整条。",
+    "both": {
+      "mode": "goal",
+      "ok": true,
+      "scene": "citadel",
+      "steps": [
+        "mountain.protect",
+        "mountain.massif",
+        "mountain.erode",
+        "mountain.rolling",
+        "mountain.talus",
+        "building.sites",
+        "building.prefabs",
+        "building.joint-wfc"
+      ],
+      "stages": [
+        {
+          "layer": "mountain",
+          "ids": [
+            "mountain.protect",
+            "mountain.massif",
+            "mountain.erode",
+            "mountain.rolling",
+            "mountain.talus"
+          ]
+        },
+        {
+          "layer": "building",
+          "ids": [
+            "building.sites",
+            "building.prefabs",
+            "building.joint-wfc"
+          ]
+        }
+      ],
+      "unmet": 0,
+      "links": 20,
+      "reasoning": 12,
+      "why": [
+        {
+          "kind": "keyword",
+          "text": "目标里的「建筑」→ 直接拉进 保护带（mountain.protect）"
+        },
+        {
+          "kind": "keyword",
+          "text": "目标里的「山」→ 直接拉进 山体隆起（mountain.massif）"
+        },
+        {
+          "kind": "keyword",
+          "text": "目标里的「建筑」→ 直接拉进 建筑选址（building.sites）"
+        },
+        {
+          "kind": "keyword",
+          "text": "目标里的「建筑群」→ 直接拉进 联合 WFC 摆建筑群（building.joint-wfc）"
+        },
+        {
+          "kind": "goal",
+          "text": "目标「建筑」→ 要「候选建筑群」→ 联合 WFC 摆建筑群（building.joint-wfc） 写它"
+        },
+        {
+          "kind": "goal",
+          "text": "目标「山」→ 要「高度场」→ 山体隆起（mountain.massif） 写它"
+        },
+        {
+          "kind": "goal",
+          "text": "目标「山」→ 要「高度场」→ 沟谷侵蚀（mountain.erode） 写它"
+        },
+        {
+          "kind": "goal",
+          "text": "目标「山」→ 要「高度场」→ 连绵圆润（mountain.rolling） 写它"
+        },
+        {
+          "kind": "goal",
+          "text": "目标「山」→ 要「高度场」→ 岩屑坡（mountain.talus） 写它"
+        },
+        {
+          "kind": "requires",
+          "text": "联合 WFC 摆建筑群（building.joint-wfc） requires → 多格 prefab 目录（building.prefabs）"
+        },
+        {
+          "kind": "order",
+          "text": "山形 → 建筑：建筑选址（building.sites） 读的「高度场」用 岩屑坡（mountain.talus） 改过的，所以排在它后面"
+        },
+        {
+          "kind": "order",
+          "text": "山形 → 建筑：联合 WFC 摆建筑群（building.joint-wfc） 读的「高度场」用 岩屑坡（mountain.talus） 改过的，所以排在它后面"
+        }
+      ]
+    },
+    "buildingOnly": {
+      "mode": "goal",
+      "ok": true,
+      "scene": "citadel",
+      "steps": [
+        "building.sites",
+        "building.prefabs",
+        "building.joint-wfc"
+      ],
+      "stages": [
+        {
+          "layer": "building",
+          "ids": [
+            "building.sites",
+            "building.prefabs",
+            "building.joint-wfc"
+          ]
+        }
+      ],
+      "unmet": 0,
+      "links": 2,
+      "reasoning": 4,
+      "why": [
+        {
+          "kind": "keyword",
+          "text": "目标里的「房子」→ 直接拉进 多格 prefab 目录（building.prefabs）"
+        },
+        {
+          "kind": "keyword",
+          "text": "目标里的「房」→ 直接拉进 联合 WFC 摆建筑群（building.joint-wfc）"
+        },
+        {
+          "kind": "goal",
+          "text": "目标「房子」→ 要「候选建筑群」→ 联合 WFC 摆建筑群（building.joint-wfc） 写它"
+        },
+        {
+          "kind": "requires",
+          "text": "联合 WFC 摆建筑群（building.joint-wfc） requires → 建筑选址（building.sites）"
+        }
+      ]
+    },
+    "noGoal": {
+      "mode": "preload",
+      "ok": true,
+      "scene": "citadel",
+      "steps": [
+        "mountain.protect",
+        "mountain.massif",
+        "mountain.erode",
+        "mountain.rolling",
+        "mountain.talus",
+        "mountain.lowpoly",
+        "building.sites",
+        "building.prefabs",
+        "building.joint-wfc",
+        "battle.stage",
+        "battle.garrison",
+        "battle.waves",
+        "battle.navFinePortals",
+        "battle.navTraffic",
+        "battle.navFooting",
+        "fx.campaign",
+        "fx.camera",
+        "fx.wake",
+        "fx.ornament",
+        "fx.fire",
+        "fx.hallway",
+        "fx.sediment",
+        "fx.projectiles",
+        "fx.replay"
+      ],
+      "stages": [
+        {
+          "layer": "mountain",
+          "ids": [
+            "mountain.protect",
+            "mountain.massif",
+            "mountain.erode",
+            "mountain.rolling",
+            "mountain.talus",
+            "mountain.lowpoly"
+          ]
+        },
+        {
+          "layer": "building",
+          "ids": [
+            "building.sites",
+            "building.prefabs",
+            "building.joint-wfc"
+          ]
+        },
+        {
+          "layer": "battle",
+          "ids": [
+            "battle.stage",
+            "battle.garrison",
+            "battle.waves",
+            "battle.navFinePortals",
+            "battle.navTraffic",
+            "battle.navFooting"
+          ]
+        },
+        {
+          "layer": "fx",
+          "ids": [
+            "fx.campaign",
+            "fx.camera",
+            "fx.wake",
+            "fx.ornament",
+            "fx.fire",
+            "fx.hallway",
+            "fx.sediment",
+            "fx.projectiles",
+            "fx.replay"
+          ]
+        }
+      ],
+      "unmet": 0,
+      "links": 0,
+      "reasoning": 1,
+      "why": [
+        {
+          "kind": "preload",
+          "text": "没有写目标：沿用 R22「按场景预装」（扫描里有对象的能力 + 它们的 requires）：山形 6 个、建筑 3 个、战役 6 个、表现层 9 个"
+        }
+      ]
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R53-1-mountain-then-building.png",
+    "R53-2-building-only.png",
+    "R53-3-no-goal-preload.png"
+  ],
+  "pass": true
+}

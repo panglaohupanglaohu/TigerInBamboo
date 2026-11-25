@@ -1,0 +1,11 @@
+{
+ "capability": "planet.light-ambient-bounce",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "verdict": "diff-registered",
+ "line": "planet",
+ "basis": "本能力落点 src/light/bake.js 已在 lighting.json 与原版 lighting.js/bouncegi 链路实算对照；完整内容见该文件。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/parity/lighting.json"
+}

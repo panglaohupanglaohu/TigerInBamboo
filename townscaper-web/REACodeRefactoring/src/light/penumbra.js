@@ -1,7 +1,8 @@
-import {threeShadow,penumbraStats} from '../core/penumbra.js';
+import {threeShadow,penumbraStats,PENUMBRA_THRICE} from '../core/penumbra.js';
 import {firstVoxelHit} from '../core/voxel-ray.js';
-/** Derived sampling of the existing editable World, never a second World. */
-export function bakeWaterPenumbra(world,index,sun,{L=.5,res=.3,coarse=3,pool='mean',onTerrain=false}={}) {
+/** Derived sampling of the existing editable World, never a second World.
+ * pull 默认 L*裁判值.7（原 bias=0.7 个体素高度；世界单位场 = L*0.7），weights 默认 PENUMBRA_THRICE。 */
+export function bakeWaterPenumbra(world,index,sun,{L=.5,res=.3,coarse=3,pool='mean',onTerrain=false,pull=null}={}) {
   let minX=Infinity,maxX=-Infinity,minZ=Infinity,maxZ=-Infinity,maxH=0;
   for(const c of world.cells)if(world.top(c)){minX=Math.min(minX,c.minX);maxX=Math.max(maxX,c.maxX);minZ=Math.min(minZ,c.minZ);maxZ=Math.max(maxZ,c.maxZ);maxH=Math.max(maxH,world.top(c)*L)}
   if(!Number.isFinite(minX))return null;
@@ -9,7 +10,7 @@ export function bakeWaterPenumbra(world,index,sun,{L=.5,res=.3,coarse=3,pool='me
   const pad=Math.min(12,Math.max(2,maxH*Math.hypot(sun[0],sun[2])/sun[1]));minX-=pad;minZ-=pad;maxX+=pad;maxZ+=pad;
   const nx=Math.ceil((maxX-minX)/res),nz=Math.ceil((maxZ-minZ)/res);if(nx*nz>100000)throw new RangeError('water penumbra size');
   const heights=new Float32Array(nx*nz);for(let z=0;z<nz;z++)for(let x=0;x<nx;x++){const c=index.cellAt(minX+(x+.5)*res,minZ+(z+.5)*res);if(c)heights[z*nx+x]=world.top(c)*L;}
-  const field={nx,nz,res,heights,minX,minZ},r=threeShadow(field,sun,{coarse,pull:L*.35,pool,onTerrain});return {...field,...r,stats:penumbraStats(field,r),version:world.version};
+  const field={nx,nz,res,heights,minX,minZ},r=threeShadow(field,sun,{coarse,pull:pull??L*PENUMBRA_THRICE.pull,pool,onTerrain});return {...field,...r,stats:penumbraStats(field,r),version:world.version};
 }
 
 /**
@@ -19,7 +20,7 @@ export function bakeWaterPenumbra(world,index,sun,{L=.5,res=.3,coarse=3,pool='me
  *   normal: DDA from the receiver toward the sun;  pulled: same ray started `pull` higher;
  *   big: occupancy mean-pooled over coarse×coarse columns (≥0.5 solid), marched, then 3×3 blurred per level.
  */
-export function bakeVoxelPenumbra(world,index,sun,{L=.5,res=.25,coarse=3,pull=null,weights=[.65,.25,.3],pad=null,maxVoxels=1500000}={}){
+export function bakeVoxelPenumbra(world,index,sun,{L=.5,res=.25,coarse=3,pull=null,weights=PENUMBRA_THRICE.weights,pad=null,maxVoxels=1500000}={}){
   if(!Array.isArray(sun)||sun.length!==3||!sun.every(Number.isFinite)||sun[1]<=0)throw new RangeError('voxel penumbra sun');
   if(!(L>0)||!(res>0)||!Number.isInteger(coarse)||coarse<1||coarse>8)throw new RangeError('voxel penumbra options');
   let minX=Infinity,maxX=-Infinity,minZ=Infinity,maxZ=-Infinity,top=0;
@@ -33,7 +34,7 @@ export function bakeVoxelPenumbra(world,index,sun,{L=.5,res=.25,coarse=3,pull=nu
   const receivers=[];for(let z=0;z<nz;z++)for(let x=0;x<nx;x++)for(let y=0;y<ny;y++){if(solid[id(x,y,z)])continue;if(y===0||solid[id(x,y-1,z)])receivers.push({x,y,z,cell:colCell[z*nx+x],wy:y*L})}
   const vd=[S[0]/res,S[1]/L,S[2]/res],far=(ny+1)/vd[1];
   const ray=(x,y0,z)=>firstVoxelHit(solid,{nx,ny,nz},[x+.5,y0,z+.5],[x+.5+vd[0]*far,y0+vd[1]*far,z+.5+vd[2]*far])>=0?1:0;
-  const pullV=(pull??L*.35)/L;
+  const pullV=(pull??L*PENUMBRA_THRICE.pull)/L;
   // big voxels: mean pooled occupancy per coarse column block, same vertical levels
   const cx=Math.ceil(nx/coarse),cz=Math.ceil(nz/coarse),big=new Uint8Array(cx*ny*cz),bid=(x,y,z)=>(z*ny+y)*cx+x;
   for(let z=0;z<cz;z++)for(let x=0;x<cx;x++)for(let y=0;y<ny;y++){let s=0,n=0;for(let j=0;j<coarse;j++)for(let i=0;i<coarse;i++){const xx=x*coarse+i,zz=z*coarse+j;if(xx<nx&&zz<nz){s+=solid[id(xx,y,zz)];n++}}big[bid(x,y,z)]=n&&s/n>=.5?1:0}

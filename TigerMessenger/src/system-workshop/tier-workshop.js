@@ -3,15 +3,16 @@
  * 球系统工坊、物件工坊都用它；层的差异由 agent hooks 与 preview 组件提供。
  */
 import { loadCatalog, onCatalogChange, renderNodeDetail, EXEC } from './catalog-view.js?v=code-r2';
-import { makeDropZone } from './capability-sidebar.js?v=lineage-r1';
+import { makeDropZone } from './capability-sidebar.js?v=cap-detail-r1';
 import { saveSet } from './capability-sets.js?v=sys-r4';
-import { createTierAgent } from './tier-agent.js?v=engine-r1';
+import { createTierAgent } from './tier-agent.js?v=engine-r2';
+import { planPreload, preloadNote } from './auto-preload.js?v=preload-r1';
 
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 const btn = (text, fn, cls) => { const b = el('button', text, cls); b.type = 'button'; b.onclick = (e) => { e.stopPropagation(); fn(); }; return b; };
 const ICON = { pass: '✓', warn: '!', fail: '✗' };
 
-export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, storageKey, caps, agentConfig, preview, openSource, status = () => {}, intro = '', goalHint = '', actions = {}, scopeText = () => '' }) {
+export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, storageKey, caps, agentConfig, preview, openSource, status = () => {}, intro = '', goalHint = '', actions = {}, scopeText = () => '', domains = null, autoPreload = false, sceneLabel = () => '', beforeAfter = true, seedReport = 'auto' }) {
   // 管线 = 拖进来的可执行节点（顺序按分区泳道）；只放能执行的能力，占位方法留在左栏能力库
   const KEY = `tm.${storageKey || tier}.pipeline.v2`;
   let pipe; try { pipe = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch {}
@@ -103,6 +104,10 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
   const side = el('div', undefined, 'tier-side'); side.dataset.tier = sideTier;
   side.append(el('p', intro, 'muted'), preview?.root || el('div'), detail);
   (sideHost || left).append(side);
+  // R70 之前 / 之后 · 同机位对照（通用：任何层的候选都能拍；beforeAfter=false 关）
+  if (beforeAfter !== false) import('./before-after-panel.js?v=ba-r70').then((m) => { const p = m.mountBeforeAfterPanel({ host: side, layer: storageKey || tier, agent }); side.insertBefore(p.root, detail); }).catch(() => {});
+  // R62 多种子分布面板（创新 6）：按 seed-layers.js 登记表 opt-in；seedReport=false 关，对象 = 显式给 { layer, input }
+  if (seedReport !== false) { const so = seedReport && typeof seedReport === 'object' ? seedReport : {}; import('./seed-report-panel.js?v=seeds-r62').then((m) => { const p = m.maybeMountSeedPanel({ host: side, key: so.layer || storageKey || tier, input: so.input || null, explicit: seedReport !== 'auto' }); if (p) side.insertBefore(p.root, detail); }).catch(() => {}); }
 
   const note = el('p', '先扫描：在当前' + ({ planet: '星球', object: '场景物件', scene: '场景材质' }[tier] || '对象') + '上逐个匹配能力。', 'agent-note');
   const routeBox = el('div', undefined, 'agent-route'), result = el('div', undefined, 'agent-result'), act = el('div', undefined, 'agent-actions');
@@ -146,7 +151,9 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
     head.append(el('b', `管线 · ${pipe.nodes.filter((n) => n.enabled && !n.pending).length} 个节点可执行${nPend ? ` · ${nPend} 个待完成` : ''}`), el('small', '从左栏拖入 ⚙ 能力或 ▣ 能力集合；执行顺序按分区从上到下', 'muted'));
     if (pipe.nodes.length) {
       head.append(btn('存为能力集合', () => { const s2 = saveSet(tier, pipe.goal ? pipe.goal.slice(0, 16) : '', sorted().filter((n) => n.enabled || n.pending).map((n) => n.pending ? { id: n.id, name: n.name, domain: n.domain, params: { ...n.params } } : { id: n.id, params: { ...n.params } })); setNote(`已存为能力集合「${s2.name}」，在左栏能力集合里，可整组拖入。`); }, 'small'));
-      head.append(btn('清空管线', () => { pipe.nodes = []; save(); renderPipeline(); renderRoute(); }, 'small'));
+      head.append(btn('清空管线', () => { pipe.nodes = []; if (autoPreload) pipe.preloadDismissed = true; delete pipe.preloaded; save(); renderPipeline(); renderRoute(); }, 'small'));
+    } else if (autoPreload) {
+      head.append(btn('按场景预装', () => { const r = preloadFromScan({ force: true }); if (!r) setNote(agent.lastScan() ? '这个场景里没有能作用的能力。' : '还没扫描：先点 ⟳ 扫描。'); }, 'small'));
     }
     lanes.append(head);
     const pendingCard = (n) => {
@@ -247,9 +254,21 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
     for (const k of v.checks) { const li = el('li', undefined, 'check-' + k.status); li.append(el('b', ICON[k.status] + ' ' + k.name), el('small', k.detail)); checks.append(li); }
     result.append(checks);
   }
+  // R22：扫描后管线为空 → 按 match 结果自动预装（清空过管线的不再自动填）
+  function preloadFromScan(opt = {}) {
+    if (!autoPreload) return 0;
+    const plan = planPreload(pipe, agent.lastScan(), caps, opt);
+    if (!plan.ids.length) return 0;
+    if (opt.force) delete pipe.preloadDismissed;
+    for (const id of plan.ids) add(id, {}, { quiet: true });
+    pipe.preloaded = { ids: plan.ids, at: Date.now(), scene: globalThis.__tmCurrentScene || null };
+    save(); renderPipeline(); renderRoute();
+    setNote(preloadNote(plan.ids, caps, sceneLabel()));
+    return plan.ids.length;
+  }
   async function doScan() {
     if (busy) return; busy = true; renderActions(); setNote('扫描中…');
-    try { const s = await agent.scan(); preview?.onScan?.(s); const n = s.matches.filter((m) => m.count).length; setNote(`扫描完成：${n} / ${s.matches.length} 个能力能作用。${preview?.scanNote?.(s) || ''}`); renderRoute(); }
+    try { const s = await agent.scan(); preview?.onScan?.(s); const n = s.matches.filter((m) => m.count).length; setNote(`扫描完成：${n} / ${s.matches.length} 个能力能作用。${preview?.scanNote?.(s) || ''}`); renderRoute(); const pre = preloadFromScan(); if (pre) setNote(`扫描完成：${n} / ${s.matches.length} 个能力能作用。${preview?.scanNote?.(s) || ''} ` + preloadNote(pipe.preloaded.ids, caps, sceneLabel())); }
     catch (e) { setNote('扫描失败：' + e.message); }
     finally { busy = false; renderActions(); }
   }
@@ -262,8 +281,9 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
     catch (e) { if (run) finishRun(null, e.message); setNote('执行失败：' + e.message); }
     finally { busy = false; renderActions(); }
   }
-  onCatalogChange((cat) => { workshop = cat.workshops.find((w) => w.id === tier); renderPipeline(); });
-  loadCatalog().then((cat) => { workshop = cat.workshops.find((w) => w.id === tier); renderPipeline(); }).catch((e) => { lanes.textContent = e.message; });
+  const pickWorkshop = (cat) => cat.workshops.find((w) => w.id === tier) || (domains ? { id: tier, domains: domains.map((d) => ({ nodes: [], counts: { refactored: 0, partial: 0, original: 0 }, ...d })) } : null);
+  onCatalogChange((cat) => { workshop = pickWorkshop(cat); renderPipeline(); });
+  loadCatalog().then((cat) => { workshop = pickWorkshop(cat); renderPipeline(); }).catch((e) => { lanes.textContent = e.message; });
   renderActions(); renderScope();
-  return { agent, scan: doScan, generate, add, addSet, addPending, renderScope, setNote, btn, showDetail: (node) => { renderNodeDetail(detail, node, { openSource }); detail.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, get pipeline() { return pipe; }, setGoal(g) { pipe.goal = goal.value = g; save(); renderRoute(); } };
+  return { agent, scan: doScan, generate, preloadFromScan, add, addSet, addPending, renderScope, setNote, btn, showDetail: (node) => { renderNodeDetail(detail, node, { openSource }); detail.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }, get pipeline() { return pipe; }, setGoal(g) { pipe.goal = goal.value = g; save(); renderRoute(); } };
 }

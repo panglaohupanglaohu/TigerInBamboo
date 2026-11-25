@@ -15,7 +15,7 @@ export async function engineHash(value){const data=new TextEncoder().encode(cano
 function normalizeParams(meta,given={}){
  if(!given||typeof given!=='object'||Array.isArray(given))bad(meta.id+' 参数无效');const schema=meta.params||{},out={};
  for(const key of Object.keys(given))if(!Object.hasOwn(schema,key))bad(meta.id+' 未声明参数 '+key);
- for(const [key,s]of Object.entries(schema)){let value=given[key]??s.default;if(s.type==='bool'){if(typeof value!=='boolean')bad(meta.id+'.'+key+' 必须是布尔值');}else{if(typeof value!=='number'||!Number.isFinite(value))bad(meta.id+'.'+key+' 必须是有限数值');value=Math.max(s.min??-Infinity,Math.min(s.max??Infinity,value));if(s.step===1||s.type==='int')value=Math.round(value);}out[key]=value;}return out;
+ for(const [key,s]of Object.entries(schema)){let value=given[key]??s.default;if(s.type==='bool'){if(typeof value!=='boolean')bad(meta.id+'.'+key+' 必须是布尔值');}else if(s.type==='choice'){if(!Array.isArray(s.options)||!s.options.includes(value))bad(meta.id+'.'+key+' 必须是 '+JSON.stringify(s.options||[])+' 之一');}else{if(typeof value!=='number'||!Number.isFinite(value))bad(meta.id+'.'+key+' 必须是有限数值');value=Math.max(s.min??-Infinity,Math.min(s.max??Infinity,value));if(s.step===1||s.type==='int')value=Math.round(value);}out[key]=value;}return out;
 }
 export function executionContext(tier,sceneId){return{tier,sceneId:tier==='planet'?'planet':String(sceneId||'morris-lake')};}
 export function assertEngineContext(expected,context){if(canonical(expected)!==canonical(context))bad('执行目标已经切换，请回到原场景或重新生成候选');}

@@ -1,0 +1,119 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "versionKept": true,
+      "countMatch": true,
+      "nonFinite": 0,
+      "outOfRange": 0,
+      "loops": 3,
+      "monotonic": true,
+      "glslOk": true,
+      "seamErr": 2.33e-15,
+      "stats0": {
+        "loops": 3,
+        "runs": 9,
+        "gaps": 9,
+        "gapShare": 0.4293,
+        "coveredShare": 0.5707,
+        "longestGapDeg": 59.8
+      },
+      "statsT": {
+        "loops": 3,
+        "runs": 12,
+        "gaps": 12,
+        "gapShare": 0.2779,
+        "coveredShare": 0.7221,
+        "longestGapDeg": 28
+      },
+      "alwaysOn": {
+        "gapShare": 0,
+        "runs": 3
+      },
+      "clockMoved": {
+        "disagree": 97,
+        "of": 342,
+        "share": 0.284
+      },
+      "pixel": {
+        "noise": 0,
+        "onVsOff": 21675,
+        "diffShare": 0.655,
+        "diffRuns": 7,
+        "diffTotal": 362,
+        "bucket": {
+          "on": {
+            "lowN": 130,
+            "highN": 176,
+            "lowMean": 32.6,
+            "highMean": 98.8
+          },
+          "off": {
+            "lowN": 130,
+            "highN": 176,
+            "lowMean": 128.6,
+            "highMean": 115.8
+          }
+        }
+      }
+    },
+    {
+      "kind": "quad",
+      "versionKept": true,
+      "countMatch": true,
+      "nonFinite": 0,
+      "outOfRange": 0,
+      "loops": 4,
+      "monotonic": true,
+      "glslOk": true,
+      "seamErr": 2.33e-15,
+      "stats0": {
+        "loops": 4,
+        "runs": 12,
+        "gaps": 12,
+        "gapShare": 0.4335,
+        "coveredShare": 0.5665,
+        "longestGapDeg": 58.8
+      },
+      "statsT": {
+        "loops": 4,
+        "runs": 13,
+        "gaps": 13,
+        "gapShare": 0.2821,
+        "coveredShare": 0.7179,
+        "longestGapDeg": 28.2
+      },
+      "alwaysOn": {
+        "gapShare": 0,
+        "runs": 4
+      },
+      "clockMoved": {
+        "disagree": 3,
+        "of": 8,
+        "share": 0.375
+      },
+      "pixel": {
+        "noise": 0,
+        "onVsOff": 28144,
+        "diffShare": 0.651,
+        "diffRuns": 9,
+        "diffTotal": 436,
+        "bucket": {
+          "on": {
+            "lowN": 156,
+            "highN": 213,
+            "lowMean": 38.6,
+            "highMean": 105.2
+          },
+          "off": {
+            "lowN": 156,
+            "highN": 213,
+            "lowMean": 115,
+            "highMean": 115.6
+          }
+        }
+      }
+    }
+  ],
+  "errors": []
+}

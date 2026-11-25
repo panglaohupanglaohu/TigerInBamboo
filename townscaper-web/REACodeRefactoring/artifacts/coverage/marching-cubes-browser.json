@@ -1,0 +1,86 @@
+{
+  "results": [
+    {
+      "mode": "cubes",
+      "k": 420,
+      "total": 420,
+      "triangles": 3716,
+      "vertices": 1832,
+      "volume": 47.885,
+      "cellsTouched": 1038,
+      "closed": true,
+      "euler": -26,
+      "genus": 14,
+      "onLevel": 604,
+      "onVertical": 502,
+      "downLevels": 13,
+      "cells": 634
+    },
+    {
+      "growth": [
+        {
+          "t": 0.02,
+          "k": 8,
+          "tris": 104,
+          "closed": true,
+          "vol": 0.362
+        },
+        {
+          "t": 0.15,
+          "k": 63,
+          "tris": 656,
+          "closed": true,
+          "vol": 5.625
+        },
+        {
+          "t": 0.35,
+          "k": 147,
+          "tris": 1316,
+          "closed": true,
+          "vol": 15.375
+        },
+        {
+          "t": 0.6,
+          "k": 252,
+          "tris": 2264,
+          "closed": true,
+          "vol": 27.709
+        },
+        {
+          "t": 0.85,
+          "k": 357,
+          "tris": 3164,
+          "closed": true,
+          "vol": 39.376
+        },
+        {
+          "t": 1,
+          "k": 420,
+          "tris": 3716,
+          "closed": true,
+          "vol": 47.885
+        }
+      ]
+    },
+    {
+      "pixels": {
+        "redEmpty": 0,
+        "redFull": 152226,
+        "noise": 0
+      }
+    },
+    {
+      "mode": "slab",
+      "cells": 72,
+      "triangles": 672,
+      "walls": 120,
+      "caps": 552,
+      "slanted": 0,
+      "minY": 0.01,
+      "maxY": 0.46,
+      "closed": true,
+      "volume": 30.342
+    }
+  ],
+  "errors": []
+}

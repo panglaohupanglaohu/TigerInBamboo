@@ -1,0 +1,39 @@
+{
+ "capability": "planet.sea-shore-field",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/engine/shorefield.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/water/shorefield.js"
+ ],
+ "inputs": {
+  "grid": "12×9 L形陆",
+  "res": 0.15,
+  "pad": 2,
+  "samples": 1271
+ },
+ "metrics": [
+  {
+   "id": "sample",
+   "name": "sample() 1271 点最大差",
+   "original": 0,
+   "refactored": 0
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "validation",
+   "id": "buildShoreDistance(null)",
+   "original": "TypeError",
+   "refactored": "RangeError"
+  }
+ ],
+ "basis": "重构模块自述「独立原版 buildShoreDistance API 的逐式移植，裁判=engine/shorefield.js」——同一 town.top+grid 喂两边，sample 逐点比。"
+}

@@ -23,6 +23,7 @@ import { openingFootprint, OPENING_FRAME, WINDOW_SILL_SCALE, placeProps } from '
  */
 
 import { classifyCourtyards } from '../core/courtyards.js';
+import { planCourtyardGrass } from './courtyard-grass.js';
 import { gardenPaths } from '../core/garden-paths.js';
 import { BUILD } from '../core/palette.js';
 import { hash01, mix, clamp } from '../core/noise.js';
@@ -111,6 +112,10 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
     const plan = gardenPaths(comp, c => Array.from({length:c.n},(_,i)=>nbr(c,i)));
     for (const id of plan.path) path[id] = 1;
   }
+
+  // 1197909675443916803「grass in the gardens」：草地规划 = 裁判口径——封闭组件全格
+  // 长草（含矮墙子区），开口组件一格不铺；小径叠在草上面（片里草地先整片铺好）。
+  const grassPlan = planCourtyardGrass(world, courtyard, { path });
 
   /* ---- 墙面零件 ------------------------------------------------------------- */
   const plinth = (c, i) => {
@@ -434,9 +439,9 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
         const y = L + 0.006;
         if (gardenC07 && yard[c.id]) drawGardenCellC07(w, c, y, gardenC07, K, nbr);   // r56 C07
         else if (yard[c.id] && path[c.id]) {
-          // 小径：浅色石板，四周留一道缝
-          w.poly(c.pts.map((p) => [p.x, y, p.z]), UP, K.pavingAlt, 0.82);
-          w.poly(c.pts.map((p) => [mix(p.x, c.cx, 0.1), y + 0.003, mix(p.z, c.cz, 0.1)]), UP, K.stone, 1.12 + 0.06 * hash01(c.id));
+          // 裁判：草地先整片铺上、小径网络后叠——草底 + 暖浅灰小径内缩面（四周露出草边）
+          w.poly(c.pts.map((p) => [p.x, y, p.z]), UP, hash01(c.id * 5) < 0.5 ? K.lawn : K.lawnAlt, 0.97 + 0.06 * hash01(c.id));
+          w.poly(c.pts.map((p) => [mix(p.x, c.cx, 0.14), y + 0.003, mix(p.z, c.cz, 0.14)]), UP, K.path, 1.12 + 0.06 * hash01(c.id));
         } else if (yard[c.id]) {
           w.poly(c.pts.map((p) => [p.x, y, p.z]), UP, hash01(c.id * 5) < 0.5 ? K.lawn : K.lawnAlt, 0.97 + 0.06 * hash01(c.id));
         } else {
@@ -618,7 +623,7 @@ export function buildBuildings(w, world, { L, debugModules = false }) {
   const yardWalls = world.yardWalls ? drawYardWalls(w, world, planYardWalls(world, { components: yardComps, path }), { L, K }) : null;
   const yardCells = new Set(), pathCells = new Set();
   for (let i = 0; i < n; i++) { if (yard[i]) yardCells.add(i); if (path[i]) pathCells.add(i); }
-  return { canalBridges, churchDoors: churchDoorLog, openings: openingLog, steel, yardWalls, lintels, archHoles, archCuts, facadeRuns: facadeRunList,yardProps,roofStats,archBudgets,archWedges,archVoussoirLog,decoPlacements,decoDrawn,decoDropped,decoSolved,decoFailures,archCount,archSegments,decorationGroups: decoration.components.length, posts, yards, yardCells, pathCells, yardOpenings: courtyard.openComponents, chimneys, modules: moduleSigs.size, doors: door.size };
+  return { canalBridges, churchDoors: churchDoorLog, openings: openingLog, steel, yardWalls, lintels, archHoles, archCuts, facadeRuns: facadeRunList,yardProps,roofStats,grassPlan,archBudgets,archWedges,archVoussoirLog,decoPlacements,decoDrawn,decoDropped,decoSolved,decoFailures,archCount,archSegments,decorationGroups: decoration.components.length, posts, yards, yardCells, pathCells, yardOpenings: courtyard.openComponents, chimneys, modules: moduleSigs.size, doors: door.size };
 }
 
 /**
@@ -639,6 +644,9 @@ function buildRoofs(w, world, { L, tops, K, wallColor, chimneys = [], roofStats 
     // r55 housekit: per-region pitch from the REACode 8-step pool (village spec or hashed pool); default keeps 1.3.
     const spec = roofSpecFor(world, region);
     const slopeR = spec ? Math.tan(spec.pitch * Math.PI / 180) : slope;
+    // r201 flatroofs（807256278154301441）：多层砖塔每层顶面是**平挑台 + 临空矮护栏 + 檐下白腰线**，
+    // 片里没有一处坡顶/山墙。默认关（world.flatRoofs 未设时走原坡顶路径，几何零变化）。
+    if (world.flatRoofs) { flatRegionRoof(w, world, region, { L, base, K, chimneys, roofStats, tops, inRegion }); continue; }
     if (world.hipSkeleton) { skeletonRegionRoof(w, world, region, { L, base, slope: slopeR, spec, cap: world.hipSkeletonCap ?? cap, overhang, thick, K, chimneys, roofStats, inRegion }); continue; }
 
     // 每条边：1 = 檐口，2 = 山墙，0 = 内部 / 贴着更高的墙
@@ -797,6 +805,75 @@ function buildRoofs(w, world, { L, tops, K, wallColor, chimneys = [], roofStats 
       chimneys.push({ x: ctr.x + 0.05, y: ctr.y + 0.13, z: ctr.z });   // 火的发射点（effects.js）
     }
   }
+}
+
+/**
+ * r201 flatroofs（807256278154301441）：**平顶平台**档。
+ *
+ * 片内读数（frame-0030/0300 的 4× 裁切逐层数）：五层砖塔的每一层顶面都是**平台**（同一个暖橙面、无脊线、
+ * 无两面明暗差），临空边一圈**矮护墙**（高约 0.06 格、厚约 0.05 格、顶面一道浅色压顶），
+ * 护墙下面一道**白色腰线**外挑；平台上直接坐烟囱，没有山墙面。
+ * 所以这一档不做坡面 / 山墙 / 檐口外伸，只出：平台板 + 沿临空边的护墙 + 白腰线 + 坐地烟囱。
+ *
+ * 护墙与腰线用 `w.beam`（闭合棱柱）而不是手写四边形：beam 不受面绕序影响，
+ * 侧视/俯视都不会被背面剔除吃掉（第 56 条坑的反面用法）。
+ */
+function flatRegionRoof(w, world, region, { L, base, K, chimneys, roofStats, tops, inRegion }) {
+  const h = region.h;
+  const rimH = world.flatRimHeight ?? 0.062;
+  const rimT = world.flatRimThickness ?? 0.05;
+  const corniceH = world.flatCorniceHeight ?? 0.05;
+  const corniceO = world.flatCorniceOffset ?? 0.03;
+  const chimneyRate = world.flatChimneyRate ?? 0.34;
+  let rimSegments = 0, rimLength = 0, deckArea = 0, flatChimneys = 0;
+  const minId = Math.min(...region.cells.map((c) => c.id));
+  const rec = { h, cells: region.cells.length, base, minId, rimSegments: 0, rimLength: 0, deckArea: 0, chimneys: 0, gables: 0, minY: Infinity, maxY: -Infinity };
+  for (const c of region.cells) {
+    w.at?.(c);
+    const shade = 0.96 + 0.08 * hash01(c.id * 977 + 11);
+    const roof = hash01(c.id * 13) < 0.5 ? K.roof : K.roofAlt;
+    // 平台板：整格顶面（与一层院落铺面同一个 poly 口径）
+    w.poly(c.pts.map((p) => [p.x, base, p.z]), UP, roof, shade);
+    rec.minY = Math.min(rec.minY, base); rec.maxY = Math.max(rec.maxY, base + rimH);
+    let area = 0;
+    for (let i = 0; i < c.n; i++) { const a = c.pts[i], b = c.pts[(i + 1) % c.n]; area += a.x * b.z - b.x * a.z; }
+    deckArea += Math.abs(area) / 2;
+    // 临空边：邻格不在本 region（或更低 / 更外）→ 需要护墙。与坡顶的檐口判据同一套。
+    for (let i = 0; i < c.n; i++) {
+      const nb = world.neighbor(c, i);
+      if (nb && inRegion.has(nb.id)) continue;
+      if (nb && tops[nb.id] > h) continue;
+      const a = c.pts[i], b = c.pts[(i + 1) % c.n];
+      const len = Math.hypot(b.x - a.x, b.z - a.z);
+      if (len < 1e-4) continue;
+      // 护墙本体（坐平台面）+ 浅色压顶
+      w.beam([a.x, base + rimH / 2, a.z], [b.x, base + rimH / 2, b.z], rimT, roof, 1.0);
+      w.beam([a.x, base + rimH + 0.006, a.z], [b.x, base + rimH + 0.006, b.z], rimT * 0.82, K.plaster, 1.06);
+      // 檐下白腰线（外挑一点点，压在平台板下面那道）
+      const [nx, nz] = edgeOut(c, i);
+      const ox = nx * corniceO, oz = nz * corniceO;
+      w.beam([a.x + ox, base - corniceH / 2 + 0.004, a.z + oz], [b.x + ox, base - corniceH / 2 + 0.004, b.z + oz], corniceH, K.plaster, 1.02);
+      rimSegments++; rimLength += len;
+    }
+    // 平台上坐烟囱（坡顶那份 seatChimney 找坡面，平台不需要）
+    if (hash01(c.id * 4099 + h) < chimneyRate) {
+      const x = c.cx + (hash01(c.id * 31 + 7) - 0.5) * 0.12, z = c.cz + (hash01(c.id * 37 + 9) - 0.5) * 0.12;
+      const hgt = 0.16 + 0.06 * hash01(c.id * 53 + 3);
+      w.box(x, base + rimH, z, 0.075, hgt, 0.075, K.chimney, 1);
+      w.box(x, base + rimH + hgt, z, 0.095, 0.025, 0.095, K.pavingAlt, 1);
+      chimneys.push({ x, y: base + rimH + hgt + 0.03, z, cell: c.id, flat: true });
+      flatChimneys++;
+      rec.maxY = Math.max(rec.maxY, base + rimH + hgt + 0.03);
+    }
+  }
+  rec.rimSegments = rimSegments; rec.rimLength = rimLength; rec.deckArea = deckArea; rec.chimneys = flatChimneys;
+  (roofStats.flatTerraces ??= []).push(rec);
+  roofStats.flatRegions = (roofStats.flatRegions ?? 0) + 1;
+  roofStats.flatCells = (roofStats.flatCells ?? 0) + region.cells.length;
+  roofStats.flatRimSegments = (roofStats.flatRimSegments ?? 0) + rimSegments;
+  roofStats.flatRimLength = (roofStats.flatRimLength ?? 0) + rimLength;
+  roofStats.flatDeckArea = (roofStats.flatDeckArea ?? 0) + deckArea;
+  roofStats.flatChimneys = (roofStats.flatChimneys ?? 0) + flatChimneys;
 }
 
 /** Region roof spec: explicit village spec (world.roofSpecs, cellId → {pitch, thatch}) wins,

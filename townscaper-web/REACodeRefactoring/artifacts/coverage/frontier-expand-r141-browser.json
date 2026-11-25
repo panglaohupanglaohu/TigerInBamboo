@@ -1,0 +1,203 @@
+{
+  "mixed": {
+    "cells": 147,
+    "placed": 145,
+    "dead": 0,
+    "total": 147,
+    "comp": [
+      147
+    ],
+    "nav": 236,
+    "drawn": {
+      "placed": 145,
+      "navEdges": 236,
+      "frontier": 0,
+      "merges": 1
+    },
+    "navEdgesSum": 236,
+    "width": {
+      "mean": 17.24,
+      "max": 25,
+      "openMean": 73
+    },
+    "meanCand": 3.72,
+    "tests": 6144,
+    "naive": 1704,
+    "mergeAt": 133,
+    "seedIds": [
+      14,
+      46
+    ],
+    "seedHops": 16,
+    "catalog": 24,
+    "complete": true
+  },
+  "replay": [
+    {
+      "k": 1,
+      "rows": 3,
+      "frontier": 3,
+      "cands": null,
+      "recomputed": null
+    },
+    {
+      "k": 5,
+      "rows": 6,
+      "frontier": 6,
+      "cands": 4,
+      "recomputed": 4
+    },
+    {
+      "k": 20,
+      "rows": 12,
+      "frontier": 12,
+      "cands": 4,
+      "recomputed": 4
+    },
+    {
+      "k": 40,
+      "rows": 19,
+      "frontier": 19,
+      "cands": 4,
+      "recomputed": 4
+    },
+    {
+      "k": 60,
+      "rows": 21,
+      "frontier": 21,
+      "cands": 4,
+      "recomputed": 4
+    },
+    {
+      "k": 80,
+      "rows": 24,
+      "frontier": 24,
+      "cands": 4,
+      "recomputed": 4
+    },
+    {
+      "k": 100,
+      "rows": 21,
+      "frontier": 21,
+      "cands": 4,
+      "recomputed": 4
+    },
+    {
+      "k": 120,
+      "rows": 20,
+      "frontier": 20,
+      "cands": 4,
+      "recomputed": 4
+    }
+  ],
+  "groups": {
+    "0.25": {
+      "0": 19,
+      "1": 18
+    },
+    "0.5": {
+      "0": 37,
+      "1": 37
+    },
+    "0.75": {
+      "0": 55,
+      "1": 55
+    },
+    "merge": {
+      "0": 66,
+      "1": 66
+    },
+    "after": {
+      "0": 133
+    }
+  },
+  "pixels": [
+    [
+      0.1,
+      {
+        "y": 447,
+        "g": 699
+      }
+    ],
+    [
+      0.25,
+      {
+        "y": 1981,
+        "g": 2399
+      }
+    ],
+    [
+      0.4,
+      {
+        "y": 3536,
+        "g": 4747
+      }
+    ],
+    [
+      0.6,
+      {
+        "y": 5927,
+        "g": 6845
+      }
+    ],
+    [
+      0.8,
+      {
+        "y": 8148,
+        "g": 10233
+      }
+    ],
+    [
+      0.9,
+      {
+        "y": 9111,
+        "g": 10526
+      }
+    ],
+    [
+      1,
+      {
+        "y": 23972,
+        "g": 0
+      }
+    ]
+  ],
+  "control": {
+    "twoFrontsAt50": {
+      "0": 37,
+      "1": 37
+    },
+    "mergeAt": 133,
+    "singleFront": {
+      "groups": {
+        "0": 73,
+        "1": 1
+      },
+      "green": 0,
+      "mergeAt": 116,
+      "placed": 145,
+      "nav": 237
+    }
+  },
+  "quad": {
+    "cells": 206,
+    "placed": 204,
+    "dead": 0,
+    "comp": [
+      206
+    ],
+    "nav": 388,
+    "edges": 388,
+    "mergeAt": 191,
+    "width": {
+      "mean": 23.4,
+      "max": 33,
+      "openMean": 102.5
+    },
+    "groups": {
+      "0": 52,
+      "1": 51
+    }
+  },
+  "errors": []
+}

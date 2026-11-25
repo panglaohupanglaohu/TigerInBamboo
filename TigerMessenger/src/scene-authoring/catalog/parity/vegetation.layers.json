@@ -1,0 +1,83 @@
+{
+ "capability": "vegetation.layers",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "life",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/blobrelax.js",
+  "townscaper-web/REACode/engine/bncanopy.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/canopy.js"
+ ],
+ "inputs": {
+  "blobs": 6,
+  "res": 14
+ },
+ "metrics": [
+  {
+   "id": "verts",
+   "name": "网格顶点数",
+   "original": 408,
+   "refactored": 546
+  },
+  {
+   "id": "tris",
+   "name": "三角形数",
+   "original": 812,
+   "refactored": 1088
+  },
+  {
+   "id": "bbox",
+   "name": "包围盒 xyz",
+   "original": [
+    [
+     -1.14,
+     1.13
+    ],
+    [
+     -0.47,
+     1.82
+    ],
+    [
+     -1.18,
+     1.01
+    ]
+   ],
+   "refactored": [
+    [
+     -0.81,
+     0.81
+    ],
+    [
+     -0.1,
+     1.46
+    ],
+    [
+     -0.76,
+     0.83
+    ]
+   ]
+  },
+  {
+   "id": "field",
+   "name": "标量场",
+   "original": "逆方核 Σ(r²/d²)−1",
+   "refactored": "union max(r−d) / Wyvill metaball 可选"
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "等值场核",
+   "original": "逆方核（1/d² 加权求和，阈值 1）",
+   "refactored": "union=max(r−d) 或 Wyvill (1−t²)² 求和",
+   "note": "同 surface-nets + 弹簧松弛管线；核不同 → 等值面形状不同如实登记"
+  }
+ ],
+ "basis": "canopy.js 自标「迁自 foliageblob.js（metaball）/blobrelax（surface nets+seam springs）」：同 6 球堆喂两侧实跑——原版 408 顶点 / 本侧 546 顶点、包围盒与核差异如实登记。"
+}

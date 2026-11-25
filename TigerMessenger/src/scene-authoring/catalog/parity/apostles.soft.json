@@ -1,0 +1,52 @@
+{
+ "capability": "apostles.soft",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "apostles",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/overhangterrain.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/generate.js"
+ ],
+ "inputs": {
+  "cells": 720,
+  "seed": 7
+ },
+ "metrics": [
+  {
+   "id": "chain",
+   "name": "fbm→分位→smoothstep 全链复算",
+   "original": "自复算",
+   "refactored": 0,
+   "equal": true
+  },
+  {
+   "id": "quantiles",
+   "name": "分位阈值口径",
+   "original": "p_idx .30/.58（heightField L87-88）",
+   "refactored": ".30/.58（slopeMask L263-264）",
+   "equal": true
+  },
+  {
+   "id": "maskMean",
+   "name": "掩码均值（域不同，仅参考）",
+   "original": 0.555,
+   "refactored": 0.5819
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "rawSharp 域",
+   "original": "fbm(i*.023+21.3, j*.023+9.4, seed+57, 3) 像素域",
+   "refactored": "fbm(cx/(span*2)*1.3+21.3, …, seed+57, octaves3) 跨度归一域",
+   "note": "同一分位程序（0.30/0.58→smoothstep），噪声域/网格形状不同 → 掩码值不可逐点比"
+  }
+ ],
+ "basis": "slopeMask 注释自标「阈值取本场分位数（REACode/overhangterrain p30/p58）」：全链复算逐位核 + 分位常数 0.30/0.58 与噪声常数 21.3/9.4/+57/oct3 与原版逐字一致登记。"
+}

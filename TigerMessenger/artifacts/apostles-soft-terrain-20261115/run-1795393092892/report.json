@@ -1,0 +1,45 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-soft-terrain-20261115/run-1795393092892",
+  "looks": {
+    "approved": {
+      "errors": [],
+      "state": {
+        "look": {
+          "soft": false,
+          "latest": false,
+          "id": "approved"
+        },
+        "meshes": 0,
+        "triangles": 0,
+        "camera": [
+          51.9,
+          102.7,
+          -189.09
+        ],
+        "softTops": []
+      },
+      "seconds": 101,
+      "pass": true
+    },
+    "soft": {
+      "errors": [],
+      "state": {
+        "look": {
+          "soft": true,
+          "latest": true,
+          "id": "soft"
+        },
+        "meshes": 0,
+        "triangles": 0,
+        "camera": [
+          51.87,
+          102.85,
+          -189.33
+        ],
+        "softTops": []
+      },
+      "seconds": 89,
+      "pass": true
+    }
+  }
+}

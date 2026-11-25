@@ -1,0 +1,141 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/recent-additions-e2e/run-1795445719130",
+  "steps": {
+    "panel": {
+      "source": "maturity",
+      "total": 69,
+      "visible": true,
+      "top": -128,
+      "height": 127,
+      "note": "8 / 69 个可执行能力 · 其中 4 项的日期只是上限（登记文件修改时间或本机首次执行），不是确切加入日。",
+      "items": [
+        {
+          "id": "fx.fire",
+          "target": "#fx",
+          "level": "6",
+          "basis": "meta",
+          "name": "小屋点火",
+          "line": "火焰线",
+          "date": "2026-11-23 · 能力登记写明",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L6"
+        },
+        {
+          "id": "fx.hallway",
+          "target": "#fx",
+          "level": "6",
+          "basis": "meta",
+          "name": "涂鸦走廊样板",
+          "line": "建筑纹理线",
+          "date": "2026-11-23 · 能力登记写明",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L6"
+        },
+        {
+          "id": "fx.projectiles",
+          "target": "#fx",
+          "level": "6",
+          "basis": "meta",
+          "name": "守军箭雨弹道",
+          "line": "弹道线",
+          "date": "2026-11-23 · 能力登记写明",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L6"
+        },
+        {
+          "id": "fx.sediment",
+          "target": "#fx",
+          "level": "6",
+          "basis": "meta",
+          "name": "崖面沉积层带",
+          "line": "岩层线",
+          "date": "2026-11-23 · 能力登记写明",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L6"
+        },
+        {
+          "id": "fx.camera",
+          "target": "#fx",
+          "level": "6",
+          "basis": "file-mtime",
+          "name": "环绕镜头路径",
+          "line": "镜头线",
+          "date": "2026-11-23 · 登记文件修改时间（上限）",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L6"
+        },
+        {
+          "id": "fx.campaign",
+          "target": "#fx",
+          "level": "6",
+          "basis": "file-mtime",
+          "name": "岛屿分区与前线",
+          "line": "战役线",
+          "date": "2026-11-23 · 登记文件修改时间（上限）",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L6"
+        },
+        {
+          "id": "fx.ornament",
+          "target": "#fx",
+          "level": "6",
+          "basis": "file-mtime",
+          "name": "界面装饰面板",
+          "line": "界面装饰线",
+          "date": "2026-11-23 · 登记文件修改时间（上限）",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L6"
+        },
+        {
+          "id": "fx.replay",
+          "target": "#fx",
+          "level": "6",
+          "basis": "file-mtime",
+          "name": "管线回放图",
+          "line": "工具线",
+          "date": "2026-11-23 · 登记文件修改时间（上限）",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L6"
+        }
+      ]
+    },
+    "clickFocus": {
+      "item": {
+        "id": "fx.fire",
+        "target": "#fx",
+        "level": "6",
+        "basis": "meta",
+        "name": "小屋点火",
+        "line": "火焰线",
+        "date": "2026-11-23 · 能力登记写明",
+        "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+        "badge": "L6"
+      },
+      "focus": "fx",
+      "tier": "scene",
+      "scene": "apostles",
+      "hash": "#fx",
+      "selected": [
+        "表现层管线"
+      ],
+      "status": "实景切到：十二门徒",
+      "flash": false
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "failure": "状态栏没说去了哪：实景切到：十二门徒",
+  "state": {
+    "focus": "fx",
+    "tier": "scene",
+    "scene": "apostles",
+    "hash": "#fx",
+    "selected": [
+      "表现层管线"
+    ],
+    "status": "实景切到：十二门徒",
+    "flash": false
+  }
+}

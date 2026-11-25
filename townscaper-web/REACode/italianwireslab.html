@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Italian Wires — 双股淡青白电线，下垂 4.9%</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:104px; right:340px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; object-fit:contain; border-radius:9px;
+    border:1px solid var(--line); background:#5f8ea3; }
+  #panel { position:fixed; right:12px; top:104px; width:316px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:6px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Italian Wires：两股 1px 淡青白线，下垂只有 4.9%，两端有小铁件</h1>
+  <p>原文 <b>1259838941299183619</b>（2020-05-11）只有一句："In code, these are called 'Italian Wires'." —— 只有名字，没有一句实现描述。
+  全部数字来自逐列采样（f016 / f020 / f008 三帧一致）：跨度 <b>41px</b>、亮核 <b>1px</b>、亮核色 <b>(200,225,225)</b>、
+  最大下垂 <b>2px（4.9%）</b>、两股间距 <b>2→4px</b>、远端挂一块 <b>6×8</b> 粉牌。
+  下排是三种错法：垂 15%（晾衣绳）、单股、纯白硬 1px。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>① 正确</b> 双股 · sag 4.9% · 1px + AA · 粉牌</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span><b>② 错法：sag 15%</b> 画成晾衣绳</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>③ 错法：单股</b> 像一道划痕</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span><b>④ 错法：纯白 2px</b> 硬线，跳出色阶</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 渲染后重新量（目标 sag 4.9% / 2 股）</h2>
+  <div class="row" id="rSag"><span>下垂 / 跨度（画布 px）</span><b>—</b></div>
+  <div class="row" id="rRatio"><span>sag / span</span><b>—</b></div>
+  <div class="row" id="rStrand"><span>股数</span><b>—</b></div>
+  <div class="row" id="rSep"><span>远端股间距 px</span><b>—</b></div>
+  <hr />
+  <h2>同机位 A/B（同两点、同色，只差一处）</h2>
+  <div class="row" id="dAB"><span>① 正确 / ② sag15%</span><b>—</b></div>
+  <div class="row" id="dAC"><span>① 正确 / ③ 单股</span><b>—</b></div>
+  <div class="row" id="dAD"><span>① 正确 / ④ 纯白2px</span><b>—</b></div>
+  <hr />
+  <h2>片子实测（f016 逐列采样）</h2>
+  <div class="row"><span>x = 339 → 380</span><b>y = 185 → 193</b></div>
+  <div class="row"><span>弦上中点 y</span><b>189.1</b></div>
+  <div class="row"><span>实测中点 y</span><b>191.0</b></div>
+  <div class="row"><span>背景水色</span><b>(97,146,166)</b></div>
+  <div class="row"><span>线亮核</span><b>(200,225,225)</b></div>
+  <hr />
+  <p style="margin:0;font-size:11px;color:var(--muted)">背景用的是片子里那片水色 (97,146,166)，这样"线比背景亮多少"能直接看出来。
+  两栋楼只是位置参考块，不参与测量。</p>
+</div>
+
+<script type="module">
+import * as IW from './src/italianwires.js';
+
+const S = 4;                 // 放大 4 倍画，好让 1px 线量得准
+const CW = 340, CH = 330;
+const BG = [97, 146, 166];
+
+function setup(id) {
+  const cv = document.getElementById(id);
+  cv.width = CW * S; cv.height = CH * S;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  return { cv, ctx };
+}
+
+// 两点在画布上的位置。跨度定了之后，间距按**比值**给（片中 4.9%→9.8%），
+// 这样"两股张开多少"和缩放无关，可以直接和片子比。
+const A = [560, 340];
+const B = [884, 396];
+const SPAN = Math.hypot(B[0] - A[0], B[1] - A[1]);
+const SEP = [SPAN * 0.049, SPAN * 0.098];
+
+const cells = { A: setup('cvA'), B: setup('cvB'), C: setup('cvC'), D: setup('cvD') };
+
+function walls(ctx) {
+  // 左楼右墙 / 右塔左墙，只作位置参考
+  ctx.fillStyle = 'rgb(196,86,80)';
+  ctx.fillRect(0, 0, A[0], ctx.canvas.height);
+  ctx.fillStyle = 'rgb(150,214,140)';
+  ctx.fillRect(B[0], 0, ctx.canvas.width - B[0], ctx.canvas.height);
+}
+
+function draw(c, opts) {
+  c.ctx.fillStyle = `rgb(${BG.join(',')})`;
+  c.ctx.fillRect(0, 0, c.cv.width, c.cv.height);
+  walls(c.ctx);
+  const sp = IW.makeSpan({ a: A, b: B, ...opts });
+  IW.paintSpan(c.ctx, sp, { scale: opts.scale ?? 2.2, m: opts.m ?? IW.MEASURED });
+  return sp;
+}
+
+const mSoft = { ...IW.MEASURED, width: 1, wireAlpha: 0.82, wire: [200, 225, 225] };
+const sp1 = draw(cells.A, { sagRatio: 0.049, strands: 2, sep: SEP, tag: true, scale: 2.2 });
+const sp2 = draw(cells.B, { sagRatio: 0.15, strands: 2, sep: SEP, tag: true, scale: 2.2 });
+const sp3 = draw(cells.C, { sagRatio: 0.049, strands: 1, sep: [0, 0], tag: true, scale: 2.2 });
+// ④ 错法：纯白 + 2px 硬线（片子里是 (200,225,225) 的淡青白、1px 带 AA）
+const sp4 = draw(cells.D, { sagRatio: 0.049, strands: 2, sep: [2, 4], tag: true, scale: 2.2,
+  m: { ...IW.MEASURED, wire: [255, 255, 255], wireAlpha: 1, width: 2 } });
+
+const setRow = (id, val, ok) => {
+  const el = document.getElementById(id);
+  el.querySelector('b').textContent = val;
+  el.className = 'row' + (ok === true ? ' good' : ok === false ? ' bad' : '');
+};
+
+// 反测量的是 ①——但 ① 的线宽是 2.2px 画布（≈1 片中 px × 2.2），所以除回去
+// 量的是画布像素（scale=1）：这一页是放大 2.2 倍画的，报"片中 px"会多一层换算，
+// 反而容易把 41px 的跨度写成 143px。所以只报**比值**，比值与缩放无关。
+const q = IW.probeSag(cells.A.ctx, sp1, { scale: 1, bg: BG });
+if (q.sag != null) {
+  setRow('rSag', q.sag.toFixed(1) + ' / 跨 ' + q.span.toFixed(0), null);
+  setRow('rRatio', (q.ratio * 100).toFixed(1) + '%（片中 4.9%）', q.ratio > 0.035 && q.ratio < 0.065);
+  setRow('rStrand', q.strands + ' 股', q.strands === 2);
+  setRow('rSep', (q.sepRatio * 100).toFixed(1) + '% 跨（片中 8.5%）', q.sepRatio > 0.05 && q.sepRatio < 0.13);
+} else { setRow('rSag', '量不到（线太淡）', false); }
+
+function diff(a, b) {
+  const A2 = a.getImageData(0, 0, CW * S, CH * S).data;
+  const B2 = b.getImageData(0, 0, CW * S, CH * S).data;
+  let c = 0, n = 0, s = 0;
+  for (let i = 0; i < A2.length; i += 4) {
+    n++;
+    const d = Math.abs(A2[i] - B2[i]) + Math.abs(A2[i + 1] - B2[i + 1]) + Math.abs(A2[i + 2] - B2[i + 2]);
+    s += d;
+    if (d > 18) c++;
+  }
+  return { pct: (100 * c) / n, mean: s / n / 3 };
+}
+const d1 = diff(cells.A.ctx, cells.B.ctx), d2 = diff(cells.A.ctx, cells.C.ctx), d3 = diff(cells.A.ctx, cells.D.ctx);
+setRow('dAB', d1.pct.toFixed(3) + '% · 均值 ' + d1.mean.toFixed(2), null);
+setRow('dAC', d2.pct.toFixed(3) + '% · 均值 ' + d2.mean.toFixed(2), null);
+setRow('dAD', d3.pct.toFixed(3) + '% · 均值 ' + d3.mean.toFixed(2), null);
+
+window.__probe = { q, d1, d2, d3 };
+window.__ready = true;
+</script>
+</body>
+</html>

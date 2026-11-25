@@ -1,0 +1,95 @@
+{
+  "report": {
+    "fixture": {
+      "file": "palette-rows-r213.png",
+      "bytes": 166,
+      "w": 16,
+      "h": 2,
+      "rowsDiffer": 16
+    },
+    "row1": {
+      "slots": [
+        "#f5d5d2",
+        "#faeed3",
+        "#ddebdb",
+        "#d7e4ef",
+        "#e8e0f0",
+        "#f9e5d9",
+        "#eee7df",
+        "#faf6ee",
+        "#dfe4e6",
+        "#f2cfcc",
+        "#f5e0d0",
+        "#f3ebd6",
+        "#d3e5e0",
+        "#e4edf4",
+        "#f2e3ea"
+      ],
+      "world": [
+        "#f5d5d2",
+        "#faeed3",
+        "#ddebdb",
+        "#d7e4ef",
+        "#e8e0f0",
+        "#f9e5d9",
+        "#eee7df",
+        "#faf6ee",
+        "#dfe4e6",
+        "#f2cfcc",
+        "#f5e0d0",
+        "#f3ebd6",
+        "#d3e5e0",
+        "#e4edf4",
+        "#f2e3ea"
+      ],
+      "rows": 2,
+      "iframeSrc": "http://localhost:8769/index.html?scene=town&grid=mixed&palettePng=%2Fartifacts%2Fcoverage%2Fpalette-rows-r213.png&paletteRow=1",
+      "info": "行数：2 · 墙色取第 2 行 · 每行 16 格",
+      "pngInfo": "热更新：v1 · 2 次轮询 · 无错 · 改槽 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14",
+      "strips": [
+        {
+          "row": "0",
+          "on": false,
+          "cells": 16
+        },
+        {
+          "row": "1",
+          "on": true,
+          "cells": 16
+        }
+      ]
+    },
+    "switchDom": {
+      "iframeSrc": "http://localhost:8769/index.html?scene=town&grid=mixed&palettePng=%2Fartifacts%2Fcoverage%2Fpalette-rows-r213.png&paletteRow=0",
+      "info": "行数：2 · 墙色取第 1 行 · 每行 16 格",
+      "strips": [
+        {
+          "row": "0",
+          "on": true,
+          "cells": 16
+        },
+        {
+          "row": "1",
+          "on": false,
+          "cells": 16
+        }
+      ]
+    },
+    "row0scene": {
+      "colors": [
+        "#ecdfc4",
+        "#8b9fa6",
+        "#cf5348",
+        "#dd9057"
+      ],
+      "verts": 32748
+    },
+    "vertexSplit": {
+      "verts": 32748,
+      "onlyRow0": 23521,
+      "onlyRow1": 21944,
+      "shared": 2411
+    }
+  },
+  "errors": []
+}

@@ -5,7 +5,7 @@
       "grid": "quad",
       "width": 1280,
       "height": 900,
-      "changed": 60922,
+      "changed": 61003,
       "sourceMesh": true,
       "materialRestored": true,
       "geometrySame": true,
@@ -13,10 +13,10 @@
       "stats": {
         "mapSize": 128,
         "source": "core/paint-normal.js",
-        "mesh": "f29297ad-8f4e-4434-9922-7efc5d2bdd7f"
+        "mesh": "3e612455-a429-486a-923d-8a34f0f0c197"
       },
       "restored": {
-        "mismatched": 3467,
+        "mismatched": 4033,
         "disposed": 1,
         "sourceCleared": true
       }
@@ -25,7 +25,7 @@
       "grid": "mixed",
       "width": 1280,
       "height": 900,
-      "changed": 73825,
+      "changed": 74127,
       "sourceMesh": true,
       "materialRestored": true,
       "geometrySame": true,
@@ -33,10 +33,10 @@
       "stats": {
         "mapSize": 128,
         "source": "core/paint-normal.js",
-        "mesh": "6c68aad8-f615-4fe6-b081-ae641cb5947b"
+        "mesh": "7c52cb4e-7b6b-4d16-a4e2-bc898da88fb1"
       },
       "restored": {
-        "mismatched": 3617,
+        "mismatched": 4528,
         "disposed": 1,
         "sourceCleared": true
       }
@@ -48,7 +48,7 @@
     "mip-ground.html": "b3dbb3ab2904e8ae13b9942511f37bffef57e9e72c9b0a1a61067c65080f30b3",
     "src/world/outline-pass.js": "d721a09e25b6ed543ca73c925d3f6bc6b1466f18dbc5db3d11187a14236a9a12",
     "src/world/outline-painted-normal.js": "6dde11f4ae9a16f12dac0286ebdbbf92782d0025db215502908b0c198c24ad05",
-    "src/world/view-post-extras.js": "e93063f215c66929835f663670b7d52a809654e53c69a205f7b9279cfde47a84",
+    "src/world/view-post-extras.js": "76515f54b25de6999b0f48885c1bf9a26b7a84d6dbc1f8edb40089c651c4820f",
     "outline-painted.html": "9a318465773a9642c28a750b160b67884b854d8a3ded72bf8b7758acc9e4e331",
     "src/core/atlas.js": "628b497799dd296fbc922a24c9b97d2fab3b9faadfb62788ee8325c7d421faff",
     "src/core/sprite-atlas.js": "a4771d9ce14cf7b0105f4efe9c7a78c90c16dc9a649912159ec7d93a38514306",
@@ -110,9 +110,6 @@
     "free": 15,
     "radial": true
   },
-  "fileList": {
-    "total": 290,
-    "currentDeliveries": 4
-  },
-  "passed": true
+  "passed": false,
+  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n337 !== 294\n\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/source-refactor-browser.mjs:21:190"
 }

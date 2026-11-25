@@ -29,13 +29,15 @@ import { buildScratchAtlas } from '../core/brush-atlas.js';
 import { SURFACE_PATTERN_GLSL, surfacePatternUniformValues } from '../terrain/surface-pattern.js';
 import { worldMountainField, renderMountainShade } from '../core/mountain-bake.js';
 import { surfaceFieldFromWorld, directLight, bounce } from '../light/surface-bounce.js';
-import { bakeLighting } from '../light/bake.js';
+import { LayeredFieldCache } from '../light/field-cache.js';
 import { bakeVoxelSoftNormals, packLayeredField, LAYERED_FIELD_GLSL } from '../light/voxel-field.js';
+import { buildFieldPlotField, fieldPlotUniforms, fieldToneAt, fieldPlotAt } from './field-plot-map.js';
 
 export const SHADING_KEYS = [
   ['cvolume', '八角色体（OKLab）'], ['contrasttex', '对比纹理与细线'], ['paintnormal', '大笔触法线'], ['patchblend', '岸带 patch 高度混合'],
   ['blotchatlas', '图集笔触与崖边渗漏'], ['brushscratch', '方向划痕笔触'], ['surfacepattern', '表面层（格线/层理）'], ['surfaceshadow', '纹理阴影（含墙/洞/形变）'],
   ['mountainatlas', '山体烘焙图集'], ['surfacebounce', '2.5D 表面反弹'], ['voxelfield', '体素场 GPU 顶点采样'], ['voxelnormals', '体素软法线'],
+  ['fieldplots', '地块耕纹（主轴/人字/田埂）'],
 ];
 export const FEATURE_ORDER = ['Grass', 'Roof', 'Cliff', 'Beach', 'Flowers'];
 
@@ -49,6 +51,7 @@ uniform float uShSurf;
 uniform float uShMtn; uniform sampler2D uShMtnMap; uniform vec4 uShMtnX;
 uniform vec2 uShSB; uniform sampler2D uShSBMap; uniform vec4 uShSBX;
 uniform float uShVField; uniform vec2 uShVFP;
+uniform float uShFP; uniform sampler2D uShFPMap; uniform vec4 uShFPX; uniform vec4 uShFPP;
 varying vec4 vShVF;
 vec3 shToLinear(vec3 c){return mix(c/12.92,pow((c+.055)/1.055,vec3(2.4)),step(vec3(.04045),c));}
 bool shIn(vec2 uv){return uv.x>=0.&&uv.y>=0.&&uv.x<=1.&&uv.y<=1.;}
@@ -70,7 +73,8 @@ vec3 shColorVolume(vec3 base,vec3 p,vec3 n){
 vec3 shContrast(vec3 base,vec3 p){vec2 uv=(p.xz-uShCTX.xy)*uShCTX.zw;if(!shIn(uv))return base;vec3 c=texture2D(uShCTMap,uv).rgb;float e=length(fwidth(c));
   vec3 col=mix(base,shToLinear(c),uShCTP.x);return mix(col,col*.32,smoothstep(.035,.11,e)*uShCTP.y);}
 // src/patchblend.js：岸带手工 UV（u=岸线弧长相位 g/b，v=到岸有符号距离 r）与地形顶面（投影 patch）高度混合
-vec3 shShore(float ph,float v,float sd){vec3 c=mix(vec3(.84,.66,.52),vec3(.94,.80,.64),v);if(abs(ph)<.2&&v>.52&&v<.78)c=mix(c,vec3(.97,.97,.95),.85);if(abs(sd-.08)<.03)c=mix(c,vec3(.76,.57,.44),.35);return shToLinear(c);}
+// r156：补与岸平行的两道白浪线（原片图集 Planet.psd 里沙滩外那两条长横线）；场景只画陆侧半幅（sd 0→half_），故 v 用 .70/.86
+vec3 shShore(float ph,float v,float sd){vec3 c=mix(vec3(.84,.66,.52),vec3(.94,.80,.64),v);if(abs(ph)<.2&&v>.50&&v<.62)c=mix(c,vec3(.97,.97,.95),.85);if(abs(v-.70)<.022||abs(v-.86)<.022)c=mix(c,vec3(.97,.98,.98),.88);if(abs(sd-.08)<.03)c=mix(c,vec3(.76,.57,.44),.35);return shToLinear(c);}
 vec3 shPatchBlend(vec3 land,vec3 p){vec2 uv=(p.xz-uShPBX.xy)*uShPBX.zw;if(!shIn(uv))return land;vec4 t=texture2D(uShPBMap,uv);float half_=uShPBP.x,sd=(t.r*2.-1.)*uShPBP.z;
   if(sd>half_||sd<0.)return land;float ph=atan(t.g*2.-1.,t.b*2.-1.)/6.2831853;float a=clamp(sd/half_,0.,1.),cs=cos(1.5707963*a);
   float hShore=sd+uShPBP.w*(cs*cs-.5),hLand=sd;float wl=smoothstep(0.,1.,clamp(.5+(hLand-hShore)/(2.*uShPBP.y),0.,1.));
@@ -84,6 +88,22 @@ vec3 shBrush(vec3 base,vec3 p,vec3 n){if(n.y<.42)return base;vec2 buv=p.xz*uShBr
 // src/mountainlight.js：World 高度场上烘好的山体色（N·L + 白斑 + 脊线墨），运行时不再算法线
 vec4 shMountain(vec3 p){vec2 uv=(p.xz-uShMtnX.xy)*uShMtnX.zw;if(!shIn(uv))return vec4(0.);vec4 t=texture2D(uShMtnMap,uv);return vec4(shToLinear(t.rgb),t.a);}
 vec3 shBounce(vec3 p){vec2 uv=(p.xz-uShSBX.xy)*uShSBX.zw;if(!shIn(uv))return vec3(0.);return texture2D(uShSBMap,uv).rgb*uShSB.y;}
+// world/field-plot-map.js（1798310423554658732）：世界 XZ 图上每纹素写 行号/田埂/地块色调/有效，
+// 浮点纹素自己做四抽头双线性 —— 行号是连续量，插值不会在垄界处翻折（8 位存 fract(row) 会）。
+vec4 shFPat(vec3 p){
+  vec2 uv=(p.xz-uShFPX.xy)*uShFPX.zw;if(!shIn(uv))return vec4(0.);
+  vec2 sz=vec2(uShFPP.x,uShFPP.y),t=uv*sz-.5,i0=floor(t),f=fract(t),tx=1./sz;
+  vec4 a=texture2D(uShFPMap,(i0+.5)*tx),b=texture2D(uShFPMap,(i0+vec2(1.,0.)+.5)*tx),
+       c=texture2D(uShFPMap,(i0+vec2(0.,1.)+.5)*tx),d=texture2D(uShFPMap,(i0+vec2(1.,1.)+.5)*tx);
+  return mix(mix(a,b,f.x),mix(c,d,f.x),f.y);}
+vec3 shFieldPlot(vec3 base,vec3 p){
+  vec4 t=shFPat(p);if(t.a<.5)return base;
+  float band=.5+.5*cos(6.2831853*fract(t.r));      // 宽软带：明暗各一条，与片内 1:1 duty 一致
+  float ink=1.-smoothstep(0.,.22,t.g);             // 田埂：贴地块边界压暗
+  vec3 c=base*(1.+uShFPP.z*(band*2.-1.));
+  c*=1.-uShFPP.w*ink;
+  return c*(1.+(t.b-.5)*.24*.35);                  // 每块地一点整体色调差
+}
 `;
 
 const VERT_PARS = /* glsl */`
@@ -111,6 +131,7 @@ if(uShBrush>.5&&vField.z>.5&&vField.z<1.5)diffuseColor.rgb=shBrush(diffuseColor.
 if(uShSurf>.5&&abs(vField.z)>.5)diffuseColor.rgb=surfacePatternShade(diffuseColor.rgb,vSpPos,shWN);
 if(uSurfaceShadowExt.x>.5&&uSurfaceShadowStrength>0.&&abs(shWN.y)<.3)diffuseColor.rgb*=surfaceShadowToneN(vSpPos+shWN*.06,shWN);
 if(uShMtn>.5&&vField.z< -.5){vec4 shM=shMountain(vSpPos);if(shM.a>.5)diffuseColor.rgb=shM.rgb;}
+if(uShFP>.5&&vField.z>.5&&vField.z<1.5&&shWN.y>.55)diffuseColor.rgb=shFieldPlot(diffuseColor.rgb,vSpPos);
 `;
 const NORMAL_BODY = /* glsl */`
 if(uShPN>0.){vec3 shN=normalize((vec4(normal,0.)*viewMatrix).xyz),shA=abs(shN);vec2 shUV=shA.y>=shA.x&&shA.y>=shA.z?vSpPos.xz:shA.x>=shA.z?vSpPos.zy:vSpPos.xy;
@@ -157,6 +178,7 @@ export class ShadingExtras {
       uBlotchAtlas: { value: blank() }, uBlotchRim: { value: blank() }, uBlotchRimX: { value: V4(0, 0, 1, 1) }, uBlotchRimP: { value: V4(1, 1, 0.09, 1) }, uBlotchRimQ: { value: V4(0.14, 0.75, 0.55, 2.3) }, uBlotchRimSeg: { value: 0.12 },
       uBlotchTongue: { value: V4(0, TONGUE_DEFAULTS.depth, TONGUE_DEFAULTS.mix, TONGUE_DEFAULTS.lobe) }, uBlotchTongueColor: { value: new THREE.Color(TONGUE_DEFAULTS.color) }, uBlotchTongueTop: { value: TONGUE_DEFAULTS.topReach },
       uShSurf: { value: 0 }, uSpA: { value: V4(0.85, 1, 0, 0) }, uSpB: { value: V4(0.24, 0.52, 0, 13.5) }, uSpSlopeGrass: { value: 0 },
+      uShFP: { value: 0 }, uShFPMap: { value: blank() }, uShFPX: { value: V4(0, 0, 1, 1) }, uShFPP: { value: V4(1, 1, 0.2, 0.2) },
       uShMtn: { value: 0 }, uShMtnMap: { value: blank() }, uShMtnX: { value: V4(0, 0, 1, 1) },
       uShSB: { value: new THREE.Vector2(0, 1) }, uShSBMap: { value: blank() }, uShSBX: { value: V4(0, 0, 1, 1) },
       uShVField: { value: 0 }, uShVFP: { value: new THREE.Vector2(0.62, 0.42) },
@@ -178,6 +200,34 @@ export class ShadingExtras {
     if (topReach !== undefined) this.u.uBlotchTongueTop.value = topReach; if (color) this.u.uBlotchTongueColor.value.set(color);
     if (on && !this.on.blotchatlas) this.set('blotchatlas', true);
     return { on: !!on, depth: T.y, mix: T.z, lobe: T.w, topReach: this.u.uBlotchTongueTop.value };
+  }
+
+  /** r169 · 1696864977171189980 / 1696896119794479541：图集笔触与受控跨崖渗漏的运行参数（只改 uniform）。 */
+  setBlotchRim({ scale, strength, bleed, streak, density, swirl, segments } = {}) {
+    const P = this.u.uBlotchRimP.value, Q = this.u.uBlotchRimQ.value, num = (x) => x === undefined || Number.isFinite(x);
+    if (![scale, strength, bleed, streak, density, swirl, segments].every(num)) throw new RangeError('blotch rim options');
+    if (scale !== undefined && !(scale > 0)) throw new RangeError('blotch scale');
+    if (strength !== undefined && !(strength >= 0 && strength <= 1)) throw new RangeError('blotch strength');
+    if (bleed !== undefined && !(bleed >= 0)) throw new RangeError('blotch bleed');
+    if (density !== undefined && !(density >= 0 && density <= 1)) throw new RangeError('blotch density');
+    if (swirl !== undefined && !(swirl >= 0 && swirl <= 6)) throw new RangeError('blotch swirl');
+    if (segments !== undefined && !(segments >= 0 && segments <= 1)) throw new RangeError('blotch segments');
+    if (scale !== undefined) P.z = scale; if (strength !== undefined) P.w = strength;
+    if (bleed !== undefined) Q.x = bleed; if (streak !== undefined) Q.y = streak;
+    if (density !== undefined) Q.z = density; if (swirl !== undefined) Q.w = swirl;
+    if (segments !== undefined) this.u.uBlotchRimSeg.value = segments;
+    return this.blotchParams();
+  }
+
+  /** 只读探针：笔触图集 / 崖肩个数 / 五个运行参数 / 舌头档位。 */
+  blotchParams() {
+    const P = this.u.uBlotchRimP.value, Q = this.u.uBlotchRimQ.value, T = this.u.uBlotchTongue.value;
+    return {
+      on: !!this.on.blotchatlas, atlasSize: this.atlas?.size ?? 0, rimCells: this.stats.rim?.rimCells ?? 0, rimRes: this.stats.rim?.res ?? 0,
+      rimShoulder: this.stats.rim?.shoulder ?? 0,
+      maxDist: P.x, topSpan: P.y, scale: P.z, strength: P.w, bleed: Q.x, streak: Q.y, density: Q.z, swirl: Q.w, segments: this.u.uBlotchRimSeg.value,
+      tongue: { on: T.x > .5, depth: T.y, mix: T.z, lobe: T.w, topReach: this.u.uBlotchTongueTop.value, color: '#' + this.u.uBlotchTongueColor.value.getHexString() },
+    };
   }
 
   #patchMaterial(material) {
@@ -207,6 +257,17 @@ export class ShadingExtras {
   /** 角点编辑（面板取色器）：只改 uniform，不重烘。 */
   setCorner(feature, index, hex) { if (!FEATURE_ORDER.includes(feature)) throw new RangeError('feature'); this.volumes[feature] = setVolumeCorner(this.volumes[feature], index, hex); this.#writeCorners(); return this.volumes[feature].rgb[index]; }
 
+  /** 地块耕纹只读探针（1798310423554658732）：地块表 + 逐点 CPU 孪生（与 GLSL 同一套常数）。 */
+  fieldPlotReport() {
+    const f = this.fp; if (!f) return null;
+    return { w: f.w, h: f.h, texel: f.texel, cells: f.count, filled: f.filled, borders: f.borders, plots: f.plots, bandWidth: f.bandWidth, skew: f.skew, minX: f.minX, minZ: f.minZ };
+  }
+  fieldPlotProbe(x, z) {
+    const f = this.fp; if (!f) return null;
+    const s = fieldPlotAt(f, x, z);
+    return s ? { ...s, tone: +fieldToneAt(f, x, z).toFixed(4) } : null;
+  }
+
   set(key, on) {
     if (!(key in this.on)) return false;
     this.on[key] = !!on;
@@ -220,6 +281,7 @@ export class ShadingExtras {
       case 'brushscratch': u.uShBrush.value = on ? 1 : 0; break;
       case 'surfacepattern': u.uShSurf.value = on ? 1 : 0; break;
       case 'mountainatlas': u.uShMtn.value = on ? 1 : 0; break;
+      case 'fieldplots': u.uShFP.value = on ? 1 : 0; break;
       case 'surfacebounce': u.uShSB.value.x = on ? 1 : 0; break;
       case 'surfaceshadow': v.groundSurfaceShadow.set(on ? { strength: 0.55, receivers: 'all' } : { strength: 0, receivers: 'top' }); break;
       case 'voxelfield':
@@ -241,6 +303,7 @@ export class ShadingExtras {
     const want = {
       cvolume: `${ver}`, contrasttex: `${ver}`, paintnormal: 'static', patchblend: `${ver}`, blotchatlas: `${ver}`, brushscratch: `${ver}`,
       mountainatlas: `${ver}`, surfacebounce: `${ver}|${sunKey}`, voxelfield: `${ver}`, voxelnormals: `${ver}|${v.mesh.geometry.uuid}|${v.mesh.geometry.attributes.normal?.version}`,
+      fieldplots: `${ver}`,
     };
     for (const [key, k] of Object.entries(want)) {
       if (!this.on[key] || this.keys[key] === k) continue;
@@ -294,9 +357,23 @@ export class ShadingExtras {
         if (this.rimVersion !== w.version) {
           const rim = buildBlotchRimField(w, { res: 128, maxDist: 1, levelHeight: L, index: idx }), U = blotchRimUniformValues(rim);
           this.#swap('uBlotchRim', tex(rim.data, rim.res, rim.res)); u.uBlotchRimX.value.fromArray(U.uBlotchRimX); u.uBlotchRimP.value.fromArray(U.uBlotchRimP); u.uBlotchRimQ.value.fromArray(U.uBlotchRimQ); u.uBlotchRimSeg.value = U.uBlotchRimSeg;
-          this.rimVersion = w.version; this.stats.rim = { res: rim.res, rimCells: rim.rimCount };
+          this.rimVersion = w.version; this.stats.rim = { res: rim.res, rimCells: rim.rimCount, shoulder: rim.shoulder };
         }
         this.stats[key] = { atlas: this.atlas.size, scratch: this.scratch?.size ?? null, rim: this.stats.rim }; break;
+      }
+      case 'fieldplots': {
+        const f = buildFieldPlotField(w, { index: idx }); if (!f) break;
+        this.fp = f;
+        const t = tex(f.data, f.w, f.h, { type: THREE.FloatType, filter: THREE.NearestFilter });
+        this.#swap('uShFPMap', t);
+        const U = fieldPlotUniforms(f);
+        u.uShFPX.value.fromArray(U.extent); u.uShFPP.value.fromArray(U.size);
+        this.stats.fieldplots = {
+          w: f.w, h: f.h, texel: f.texel, cells: f.count, filled: f.filled, plots: f.plots.length,
+          axes: f.plots.map((p) => ({ cells: p.cells, deg: p.axisDeg })),
+          bandWidth: f.bandWidth, skew: f.skew, maxRow: +f.maxRow.toFixed(2),
+        };
+        break;
       }
       case 'mountainatlas': {
         const m = worldMountainField(w, idx, { res: 0.2, levelHeight: L }), r = renderMountainShade(m, 'baked'), data = new Uint8Array(m.w * m.h * 4);
@@ -319,12 +396,14 @@ export class ShadingExtras {
       }
       case 'voxelfield': case 'voxelnormals': {
         if (this.fieldVersion !== w.version) {
-          const colorOf = (c, lv) => { if (w.isRock(c, lv)) return new THREE.Color('#9a958c'); const k = w.color[c.id]; return new THREE.Color(k >= 0 && w.palette?.colors?.[k] ? w.palette.colors[k] : '#efe6d4'); };
-          const r = bakeLighting({ pos: [], col: [] }, w, { L, colorOf, shape: v.worldMesh.shape, keepField: true }); this.field = r.field ?? null; this.fieldVersion = w.version;
+          // 1168571866405097472「每次改动重投影成纹理」：场常驻（LayeredFieldCache），
+          // 一次编辑只重投影改动格 + 只重模糊脏矩形，纹理按场重打包（增量统计见 stats.voxelfield.update）。
+          const upd = this.#fieldCache().update(w, { shape: v.worldMesh.shape });
+          this.field = upd.field ?? null; this.fieldVersion = w.version;
           if (this.field) {
             const pack = packLayeredField(this.field); this.#swap('uFieldTex', tex(pack.data, pack.width, pack.height, { type: THREE.FloatType, filter: THREE.NearestFilter }));
             const pu = pack.uniforms; u.uFieldOrigin.value.set(pu.origin[0], pu.origin[1]); u.uFieldRes.value = pu.res; u.uFieldL.value = pu.L; u.uFieldW.value = pu.W; u.uFieldH.value = pu.H; u.uFieldLayers.value = pu.layers;
-            this.stats.voxelfield = { W: pu.W, H: pu.H, layers: pu.layers, texW: pack.width, texH: pack.height, cpuBakeOff: !v.worldMesh.bake };
+            this.stats.voxelfield = { W: pu.W, H: pu.H, layers: pu.layers, texW: pack.width, texH: pack.height, cpuBakeOff: !v.worldMesh.bake, update: { mode: upd.mode, dirty: upd.dirty, ms: upd.ms, blurMs: upd.blurMs ?? null, rect: upd.rect ?? null } };
           }
         }
         if (key === 'voxelnormals' && this.field) this.#applyNormals();
@@ -332,6 +411,17 @@ export class ShadingExtras {
       }
     }
     if (this.stats[key]) this.stats[key].bakeMs = +(performance.now() - t0).toFixed(0);
+  }
+
+  /** voxelfield/voxelnormals 共用的常驻分层场缓存（world/L 变了才重建）。 */
+  #fieldCache() {
+    const v = this.view, w = v.town, L = v.levelHeight;
+    if (!this.fieldCache || this.fieldCacheWorld !== w || this.fieldCache.opts.L !== L) {
+      const colorOf = (c, lv) => { if (w.isRock(c, lv)) return new THREE.Color('#9a958c'); const k = w.color[c.id]; return new THREE.Color(k >= 0 && w.palette?.colors?.[k] ? w.palette.colors[k] : '#efe6d4'); };
+      this.fieldCache = new LayeredFieldCache({ L, colorOf });
+      this.fieldCacheWorld = w;
+    }
+    return this.fieldCache;
   }
 
   #applyNormals() {

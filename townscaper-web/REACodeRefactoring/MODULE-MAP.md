@@ -85,7 +85,7 @@
 | `src/quadgrid.js` | `src/core/grid.js`, `grids.html` | 已合并/迁移（静态确认） | 1068帧已复核；三角合并/共享边中点/细分与松弛主体保留，已有重构不重做。本批未新增完整生成动画、6度顶点启发式或无限拼接运行验收；signedArea/isConvex辅助导出和质量接口待核。 | 1147881669350891521, 1151770831619534848, 1332410042784641026 |
 | `src/quadinf.js` | `src/core/infinite.js`, `grids.html` | 已迁移/增强（本轮验证） | buildInfinite 支持 origin 任意块中心开窗口、windowSeam 实测重叠区 raw/patch/blend 逐位一致；页面里未加平移窗口的交互。 | 1151137783785771008 |
 | `src/quadtex.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1015149712469524480, 999185422403055616 |
-| `src/rayvis.js` | `src/core/space-visibility.js`, `src/world/space-visibility.js` | 已迁移/增强（本轮验证） | （第 53 批）逐格穿行射线（薄墙不漏）+ 整楼明暗烘焙 + 灰点叠加层；未写入地形顶点色。 | 798580832906739712 |
+| `src/rayvis.js` | `src/core/space-visibility.js`, `src/core/vertex-openness.js`, `src/world/space-visibility.js` | 已迁移/增强（本轮验证） | （第 53 批）逐格穿行射线（薄墙不漏）+ 整楼明暗烘焙 + 灰点叠加层；（56 批）逐顶点烘到 WorldMesh + c04 灰度材质；（57 批）三角网格光学 castMeshRay/sampleMeshVisibility + indoorAt 谓词 + 能力库 world.openness 显示层。 | 798580832906739712 |
 | `src/rectpack.js` | `src/core/atlas.js` | 已迁移/增强（本轮验证） | （第 53 批）recursiveFill / 90° 旋转 / shelfPack 基线 / 手指数两口径；非最优、不自动压缩同原作。 | 1764958522398146667, 1593215065423245313, 1765041830461055127, 1765115069837221962 |
 | `src/reflstreak.js` | `src/world/view.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1758250248483278925 |
 | `src/repeatbreak.js` | `textures.html` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 | 1061229717582475264, 1061227418961219585 |
@@ -147,7 +147,7 @@
 | `engine/flags.js` | `src/core/banner.js`, `src/life/banner.js`, `src/badnorth/battle.js`, `src/life/decor.js`, `banners.html` | 已迁移/增强（本轮验证） | 保留已有风粒子/Bezier与暂停修复；54帧新核验后补六种透明旗尾/本地徽记并接入真实Battle，双网格暂停、共享风/曲线/资源释放及GPU alpha通过。原作完整徽记、精确画稿、跨帧率/布料碰撞仍待补；彩旗绳归因单列纠正，非屋顶旗证据。 | 926890207298899969, 926834721392340992, 958410200146497537 |
 | `engine/fog.js` | `src/core/fog-envelope.js`, `src/life/atmosphere.js` | 已迁移/增强（本轮验证） | （第 53 批）贴水雾片随风、遇体素切向绕开、深度遮挡、出圈回卷；未 GPU 验收。 | 906207980802252801 |
 | `engine/impostor.js` | `src/life/impostor.js`, `src/world/view-post-extras.js` | 已迁移/增强（本轮验证） | （第 55 批，浏览器验收）3 行×8 方位多俯仰烘焙 + 球面卡片 + 原 makeBlobCloud 云材质；?fx=impostorpitch。 | 1849427564034498642, 1852334860137849222, 926903893866541057, 1191990107785572352, 1205420678859632640, 1243228419162341379, 1593215065423245313 |
-| `engine/islands.js` | `src/badnorth/island.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |
+| `engine/islands.js` | `src/badnorth/island.js`, `src/terrain/bn-island-field.js` | 已迁移/验证（第 215 批） | 方格高度场管线（buildIsland/findPath/buildIslandGeometry）逐式迁到 bn-island-field.js 并逐位对拍（tests/bn-island-referee.mjs）；badnorth/island.js 为共享 World 上的另一套近似保留。 | 1579474420749725696 |
 | `engine/lightvol.js` | `src/core/voxel-ray.js`, `src/light/lightvolume.js`, `src/world/view.js`, `lightvolume.html` | 已迁移/增强（本轮验证） | 保留点光/太阳DDA与六向RGB；新增可选中心EDT距离场保守步进、DDA兜底、六向距离AO及梯度诊断，两网格与DDA渲染属性对照通过。体素中心距离不是形变表面SDF；笔触法线、命中UV/mega反馈、全方向传播和实时增量仍缺。 | 1580845127207387137, 1582757294672314368, 1580846877855338497, 1168168400155267072, 1168400155267072, 1237305125070426112 |
 | `engine/los.js` | `src/core/nav-visibility.js`, `src/world/visibility.js`, `src/world/view.js`, `visibility.html` | 已迁移/增强（本轮验证） | 分层导航门户的角度采样查询及World诊断已补；导航规则不等于光学遮挡，未接管战斗AI或箭矢精确碰撞。 | 810878197134950401 |
 | `engine/mesa.js` | `src/terrain/generate.js` | 已合并/迁移（静态确认） | 按职责合并到目标模块；保留已有重构成果，具体行为等价性按学习任务验收。 |  |

@@ -1,0 +1,843 @@
+{
+ "generatedAt": "2026-11-25T01:53:59Z",
+ "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+ "threshold": 0.85,
+ "scope": "文字证据分类（路径 / 导出 / 文件头），不是源码审阅；低于阈值待人工复核",
+ "files": 137,
+ "answered": 137,
+ "accepted": 49,
+ "usage": {
+  "items": 137,
+  "requests": 7,
+  "cache_hits": 98,
+  "input": 42463,
+  "output": 8682,
+  "cost_usd": 0.017838,
+  "errors": [],
+  "answered": 137
+ },
+ "assignments": {
+  "o:bloodfieldlab.html": {
+   "line": "none",
+   "confidence": 0.53,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:buildanimlab.html": {
+   "line": "terrain",
+   "confidence": 0.56,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:compare.html": {
+   "line": "none",
+   "confidence": 0.71,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:courtyardlab.html": {
+   "line": "terrain",
+   "confidence": 0.2,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:decalboillab.html": {
+   "line": "lines",
+   "confidence": 0.29,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:engine/mandala.html": {
+   "line": "none",
+   "confidence": 0.87,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:engine/mipfilter.html": {
+   "line": "tools",
+   "confidence": 0.49,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:game.html": {
+   "line": "none",
+   "confidence": 0.95,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:learn/data.js": {
+   "line": "none",
+   "confidence": 1,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:learn/learned.js": {
+   "line": "none",
+   "confidence": 0.99,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:learn/pipeline.js": {
+   "line": "none",
+   "confidence": 0.96,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:learn.html": {
+   "line": "none",
+   "confidence": 1,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:learned.html": {
+   "line": "none",
+   "confidence": 1,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:occmasklab.html": {
+   "line": "wfc",
+   "confidence": 0.54,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:oldclips.html": {
+   "line": "none",
+   "confidence": 1,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:orderbadgelab.html": {
+   "line": "ui-decoration",
+   "confidence": 0.75,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:overview.html": {
+   "line": "none",
+   "confidence": 1,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:pipeline.html": {
+   "line": "none",
+   "confidence": 0.41,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:planetatmolab.html": {
+   "line": "none",
+   "confidence": 0.49,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:quadspherelab.html": {
+   "line": "sphere",
+   "confidence": 0.94,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:src/bloodfield.js": {
+   "line": "combat",
+   "confidence": 0.91,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:src/buildanim.js": {
+   "line": "palette",
+   "confidence": 0.45,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/courtyard.js": {
+   "line": "building",
+   "confidence": 0.55,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/decalfield.js": {
+   "line": "lines",
+   "confidence": 0.29,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/grassedge.js": {
+   "line": "plants",
+   "confidence": 0.92,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:src/mipcustom.js": {
+   "line": "tools",
+   "confidence": 0.33,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/mipfilter.js": {
+   "line": "tools",
+   "confidence": 0.45,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/occmask.js": {
+   "line": "wfc",
+   "confidence": 0.75,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/orderbadge.js": {
+   "line": "ui-decoration",
+   "confidence": 0.91,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:src/partsprites.js": {
+   "line": "atlas",
+   "confidence": 0.96,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:src/planetatmo.js": {
+   "line": "sphere",
+   "confidence": 0.62,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/quadsphere.js": {
+   "line": "sphere",
+   "confidence": 0.96,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:src/stilts.js": {
+   "line": "building",
+   "confidence": 0.76,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/storydatum.js": {
+   "line": "building",
+   "confidence": 0.95,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:storydatumlab.html": {
+   "line": "none",
+   "confidence": 0.61,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:tmp/cap/bsheet.html": {
+   "line": "none",
+   "confidence": 0.91,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:tmp/cap/bsheet2.html": {
+   "line": "none",
+   "confidence": 0.91,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/ab.mjs": {
+   "line": "tools",
+   "confidence": 0.96,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/add.mjs": {
+   "line": "tools",
+   "confidence": 0.92,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/batch-ids.mjs": {
+   "line": "tools",
+   "confidence": 0.98,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/batch.mjs": {
+   "line": "tools",
+   "confidence": 0.99,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/contact-sheet.mjs": {
+   "line": "tools",
+   "confidence": 0.87,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/mark.mjs": {
+   "line": "tools",
+   "confidence": 0.94,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/measure.html": {
+   "line": "tools",
+   "confidence": 0.97,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/measure.mjs": {
+   "line": "tools",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/pixprobe.mjs": {
+   "line": "tools",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/player.html": {
+   "line": "tools",
+   "confidence": 0.96,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/posters.mjs": {
+   "line": "tools",
+   "confidence": 0.99,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/report.mjs": {
+   "line": "tools",
+   "confidence": 0.97,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/shot.mjs": {
+   "line": "tools",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:tools/video-frames.mjs": {
+   "line": "tools",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:Townscaper.html": {
+   "line": "none",
+   "confidence": 0.93,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:vendor/three.module.js": {
+   "line": "none",
+   "confidence": 0.91,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:walkreachlab.html": {
+   "line": "navigation",
+   "confidence": 0.73,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/build/canal-scene-r56.js": {
+   "line": "none",
+   "confidence": 0.54,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/build/scenes-r56.js": {
+   "line": "none",
+   "confidence": 0.57,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/build/village.js": {
+   "line": "building",
+   "confidence": 0.71,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/build/wfc-bitset.js": {
+   "line": "wfc",
+   "confidence": 0.99,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/capabilities/registry.js": {
+   "line": "none",
+   "confidence": 0.94,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/capabilities/verify.js": {
+   "line": "tools",
+   "confidence": 0.87,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/capability-evolution.js": {
+   "line": "none",
+   "confidence": 0.93,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/capability-lineage.js": {
+   "line": "none",
+   "confidence": 0.89,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/capability-tree.js": {
+   "line": "none",
+   "confidence": 0.61,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/color-volume-grid.js": {
+   "line": "palette",
+   "confidence": 0.98,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/sprite-atlas.js": {
+   "line": "atlas",
+   "confidence": 0.99,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/story-datum.js": {
+   "line": "building",
+   "confidence": 0.42,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/swarm-maze.js": {
+   "line": "navigation",
+   "confidence": 0.97,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/terrain-burial.js": {
+   "line": "terrain",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/uv-bake.js": {
+   "line": "tools",
+   "confidence": 0.41,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/video-cycle-metrics.js": {
+   "line": "tools",
+   "confidence": 0.97,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/life/smoke-c01.js": {
+   "line": "smoke",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/life/sprite-pack-c09.js": {
+   "line": "atlas",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/light/mip-chain.js": {
+   "line": "light",
+   "confidence": 0.93,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/light/mip-ground.js": {
+   "line": "light",
+   "confidence": 0.91,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/light/texel-owner.js": {
+   "line": "light",
+   "confidence": 0.76,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/light/voxel-ao.js": {
+   "line": "light",
+   "confidence": 0.83,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/sphere/planet-relax-c08.js": {
+   "line": "sphere",
+   "confidence": 0.98,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/sphere/planet-smooth-c08.js": {
+   "line": "sphere",
+   "confidence": 0.63,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/edge-square-relax.js": {
+   "line": "terrain",
+   "confidence": 0.71,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/mushroom-c04.js": {
+   "line": "terrain",
+   "confidence": 0.46,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/pipeline-job-worker-c08.js": {
+   "line": "tools",
+   "confidence": 0.93,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/walk-reach.js": {
+   "line": "navigation",
+   "confidence": 0.78,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/tools/comparison-pages.js": {
+   "line": "none",
+   "confidence": 0.61,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/tools/obj-parse-c06.js": {
+   "line": "tools",
+   "confidence": 0.64,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/tools/video-cycle-capture.js": {
+   "line": "tools",
+   "confidence": 0.92,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/tools/video-cycle-worker.js": {
+   "line": "tools",
+   "confidence": 0.92,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/capability-evolution.js": {
+   "line": "none",
+   "confidence": 0.87,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/capability-lineage.js": {
+   "line": "none",
+   "confidence": 0.93,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/capability-map.js": {
+   "line": "none",
+   "confidence": 0.85,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/capability-tree.js": {
+   "line": "none",
+   "confidence": 0.79,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/code-library-panel.js": {
+   "line": "none",
+   "confidence": 0.99,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/comparison-page.js": {
+   "line": "none",
+   "confidence": 0.94,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/coverage-progress.js": {
+   "line": "none",
+   "confidence": 0.73,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/flow-markers.js": {
+   "line": "tools",
+   "confidence": 0.63,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/navigation-review.js": {
+   "line": "navigation",
+   "confidence": 0.73,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/passages-review.js": {
+   "line": "tools",
+   "confidence": 0.41,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/ui/view-combinations.js": {
+   "line": "tools",
+   "confidence": 0.28,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/world/float-advect-gpu.js": {
+   "line": "water-effects",
+   "confidence": 0.43,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:blotchpaintlab.html": {
+   "line": "lines",
+   "confidence": 0.8,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:candlelab.html": {
+   "line": "fire",
+   "confidence": 0.67,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:darkcontourlab.html": {
+   "line": "lines",
+   "confidence": 0.98,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:engine/skylab.html": {
+   "line": "tools",
+   "confidence": 0.68,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:engine/timberlab.html": {
+   "line": "building",
+   "confidence": 0.68,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:engine/voxdebug.html": {
+   "line": "tools",
+   "confidence": 0.83,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:lsystemlab.html": {
+   "line": "animals",
+   "confidence": 0.36,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:meshmergelab.html": {
+   "line": "tools",
+   "confidence": 0.42,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:quadmclab.html": {
+   "line": "grid",
+   "confidence": 0.49,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:rimlinelab.html": {
+   "line": "lines",
+   "confidence": 0.91,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:shorelab.html": {
+   "line": "shore",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:src/candleprops.js": {
+   "line": "tools",
+   "confidence": 0.49,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/cascades.js": {
+   "line": "water-effects",
+   "confidence": 0.45,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/darkcontour.js": {
+   "line": "lines",
+   "confidence": 0.48,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/icefringe.js": {
+   "line": "shore",
+   "confidence": 0.47,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/lsystem.js": {
+   "line": "animals",
+   "confidence": 0.6,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/meshmerge.js": {
+   "line": "atlas",
+   "confidence": 0.66,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/paintblotch.js": {
+   "line": "terrain",
+   "confidence": 0.43,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/quadmc.js": {
+   "line": "grid",
+   "confidence": 0.46,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/rimline.js": {
+   "line": "shore",
+   "confidence": 0.28,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/skyfilm.js": {
+   "line": "none",
+   "confidence": 0.21,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/tideflat.js": {
+   "line": "shore",
+   "confidence": 0.62,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "o:src/timberframe.js": {
+   "line": "building",
+   "confidence": 0.95,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:src/voxdebug.js": {
+   "line": "tools",
+   "confidence": 0.96,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "o:stiltslab.html": {
+   "line": "building",
+   "confidence": 0.55,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/capability-maturity.js": {
+   "line": "none",
+   "confidence": 0.82,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/graph-layout.js": {
+   "line": "none",
+   "confidence": 0.4,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/core/town-graph.js": {
+   "line": "grid",
+   "confidence": 0.38,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/light/mega-atlas.js": {
+   "line": "atlas",
+   "confidence": 0.94,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/light/voxel-light.js": {
+   "line": "light",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/render/opening-punch.js": {
+   "line": "building",
+   "confidence": 0.61,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/depfill-grid.js": {
+   "line": "terrain",
+   "confidence": 0.8,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/island-passes.js": {
+   "line": "terrain",
+   "confidence": 0.84,
+   "accepted": false,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/overhang-terrain.js": {
+   "line": "terrain",
+   "confidence": 0.99,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/river-valley.js": {
+   "line": "terrain",
+   "confidence": 0.98,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/terrace-field.js": {
+   "line": "terrain",
+   "confidence": 0.99,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/terrain/terrace-ladder.js": {
+   "line": "terrain",
+   "confidence": 0.93,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/tools/mesh-audit.js": {
+   "line": "tools",
+   "confidence": 1,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  },
+  "m:src/world/float-probe.js": {
+   "line": "tools",
+   "confidence": 0.93,
+   "accepted": true,
+   "model": "jev-1.14.0"
+  }
+ }
+}

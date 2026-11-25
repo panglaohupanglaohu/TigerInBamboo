@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {cloudDrift} from '../core/cloud-motion.js';
+import {cloudDrift,cloudWindBob} from '../core/cloud-motion.js';
 // Fixed first-view silhouette projected in world XZ. Uses the live atlas and
 // instance anchors, never camera orientation. Not volumetric cloud scattering.
 export const CLOUD_SHADOW_GLSL=`
@@ -59,10 +59,15 @@ export class CloudShadow {
   if(!u.uCloudStrength.value)return;
   f.mesh.updateWorldMatrix(true,false);
   const count=Math.min(64,f.mesh.count),time=v.waterUniforms.uTime.value;
+  // 顶点着色器同款位移：cd = mix(1,max(1,aCloudDepth),uCloudParallax)，漂移与风起伏同除 cd
+  const par=f.material.uniforms.uCloudParallax?.value??0,amt=f.material.uniforms.uWindAmt?.value??0;
   for(let i=0;i<count;i++){
    f.mesh.getMatrixAt(i,this.matrix);this.matrix.premultiply(f.mesh.matrixWorld);
    this.center.copy(f.material.uniforms.uCenter.value).applyMatrix4(this.matrix);
-   this.center.x+=cloudDrift(time,f.yaw.getX(i));
+   const e=this.matrix.elements,cd=1+par*Math.max(0,(f.depth?.getX(i)??1)-1);
+   this.center.x+=cloudDrift(time,f.yaw.getX(i))/cd;
+   const[bobX,bobY,bobZ]=cloudWindBob(time,e[12],e[14],amt);
+   this.center.x+=bobX/cd;this.center.y+=bobY/cd;this.center.z+=bobZ/cd;
    this.scale.setFromMatrixScale(this.matrix);
    u.uCloudPuffs.value[i].set(this.center.x,this.center.y,this.center.z,f.material.uniforms.uSize.value*this.scale.x);
   }

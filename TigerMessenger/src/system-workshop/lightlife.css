@@ -1,0 +1,13 @@
+#lightlife-workshop{display:none}
+body[data-tier=scene][data-scene-edit=view] #lightlife-workshop{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;margin-top:16px;min-height:420px}
+body[data-tier=scene][data-scene-edit=view] .tier-side[data-tier=lightlife]{display:block}
+body[data-layer-focus] #lightlife-workshop,body[data-layer-focus] .tier-side[data-tier=lightlife]{display:none!important}
+#lightlife-workshop .ll-compare{grid-column:1/-1;border:1px solid var(--line,#d8d3c6);border-radius:10px;padding:12px 14px;background:var(--panel,#fbfaf6)}
+#lightlife-workshop .ll-pending{background:#fff4c2;border:1px solid #e2c75a;border-radius:8px;padding:6px 10px;margin:6px 0;font-size:13px}
+#lightlife-workshop .ll-poses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#lightlife-workshop .ll-pose{border:1px solid var(--line,#e6e1d4);border-radius:8px;padding:6px}
+#lightlife-workshop .ll-pair{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+#lightlife-workshop .ll-pair figure{margin:0}#lightlife-workshop .ll-pair img{width:100%;display:block;border-radius:4px;background:#ddd}
+#lightlife-workshop .ll-pair figcaption{font-size:11px;color:#666}#lightlife-workshop .ll-missing{height:90px;display:flex;align-items:center;justify-content:center;background:#eee;color:#888;font-size:12px;border-radius:4px}
+.ll-side canvas{width:128px;height:128px;image-rendering:pixelated;border:1px solid #ccc;border-radius:4px;margin-right:6px}
+.ll-side .ll-canvases{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.ll-side .ll-canvases figure{margin:0;font-size:11px;color:#666}

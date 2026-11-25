@@ -1,0 +1,41 @@
+{
+ "capability": "life.plant-atlas",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "life",
+ "sameCriteriaEqual": true,
+ "verdict": "equivalent",
+ "original": [
+  "townscaper-web/REACode/engine/spritepack.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/sprite-atlas.js"
+ ],
+ "inputs": {
+  "items": 7,
+  "sizes": [
+   128,
+   96
+  ]
+ },
+ "metrics": [
+  {
+   "id": "pack-128",
+   "name": "radialPack size=128 放置序列",
+   "original": 7,
+   "refactored": 7,
+   "equal": true
+  },
+  {
+   "id": "pack-96",
+   "name": "radialPack size=96 放置序列",
+   "original": 5,
+   "refactored": 5,
+   "equal": true
+  }
+ ],
+ "diffs": [],
+ "basis": "阿基米德螺旋 + 占据栅格同一式子（stepR=max(2,min(W,H)*.28)、r<size*.75）；重构多 maxCandidates 预算上限，未触发时放置序列应逐位一致。"
+}

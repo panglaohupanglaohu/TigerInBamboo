@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>自己写 mesh merger：draw call N → 1，像素零差</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:104px; right:332px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; border-radius:9px;
+    border:1px solid var(--line); background:#cfdadb; }
+  #panel { position:fixed; right:12px; top:104px; width:308px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:6px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  .chips { display:flex; gap:5px; flex-wrap:wrap; }
+  button { font:inherit; font-size:11.5px; padding:3px 7px; border-radius:5px;
+    border:1px solid var(--line); background:#fff; color:var(--ink); cursor:pointer; }
+  button.on { background:#1d2f36; color:#fff; border-color:#1d2f36; }
+</style>
+</head>
+<body>
+<header>
+  <h1>mesh merger：把 N 个模块焊成 1 张网格（draw call N → 1）</h1>
+  <p>原文 <b>1401145625572425728</b>「Townscaper 的网格故意做小，靠 Unity 动态合批；Switch 上不够快，所以我自己写了个 <b>mesh merger</b>，
+  渲染大约<b>快 3 倍</b>」。片子 f006（1.055s）那帧是<b>每个模块各自一套白线框</b>，叠加前后的着色画面完全一样 ——
+  所以这里的验收是「<b>像素零差 + draw call 降低 + 每帧 CPU 时间下降</b>」，不是"更好看"。
+  左边未合并（一模块一 mesh），右边合并（1 张），同机位同光照。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>未合并</b> 一模块一 mesh，靠动态合批</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span><b>已合并</b> 顶点按 位置+法线+UV 焊接，1 张网格</span><canvas id="cvB"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>几何</h2>
+  <div class="row" id="rMod"><span>模块数</span><b>—</b></div>
+  <div class="row" id="rDraw"><span>draw call 前 → 后</span><b>—</b></div>
+  <div class="row" id="rVert"><span>顶点 前 → 后</span><b>—</b></div>
+  <div class="row" id="rWeld"><span>焊接率</span><b>—</b></div>
+  <div class="row" id="rTri"><span>三角数</span><b>—</b></div>
+  <hr />
+  <h2>每帧（同机位 40 帧均值）</h2>
+  <div class="row" id="rMsA"><span>未合并 ms</span><b>—</b></div>
+  <div class="row" id="rMsB"><span>已合并 ms</span><b>—</b></div>
+  <div class="row" id="rSpeed"><span>加速比 / 原文 3×</span><b>—</b></div>
+  <hr />
+  <h2>画面一致性</h2>
+  <div class="row" id="rDiff"><span>像素差</span><b>—</b></div>
+  <div class="row" id="rCalls"><span>renderer.info.calls 实测</span><b>—</b></div>
+  <hr />
+  <h2>视图</h2>
+  <div class="chips">
+    <button id="bWire">线框叠加（片子 f006）</button>
+    <button id="bOrbit">自动转台</button>
+    <button id="bSize">规模 ×1 / ×2 / ×4</button>
+  </div>
+  <div class="row"><span>密度</span><b id="rGrid">—</b></div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { mergeGeometries, toBufferGeometry, moduleGeometry, townLayout } from './src/meshmerge.js';
+
+const cvA = document.getElementById('cvA');
+const cvB = document.getElementById('cvB');
+
+function makeRenderer(cv) {
+  const r = new THREE.WebGLRenderer({ canvas: cv, antialias: true, preserveDrawingBuffer: true });
+  r.setPixelRatio(1);
+  const w = cv.clientWidth || 480, h = cv.clientHeight || 480;
+  r.setSize(w, h, false);
+  r.shadowMap.enabled = false;
+  return r;
+}
+
+let scaleIdx = 2;                     // ×1 / ×2 / ×4 —— 默认跑 ×4（31×31 ≈ 900 块），小区块量不出 draw call 开销
+const grids = [[16, 16], [22, 22], [31, 31]];
+let wire = false, orbit = true;
+
+let rA, rB, sceneA, sceneB, camA, camB, groupA, groupB, time = 0;
+
+function build() {
+  const [cols, rows] = grids[scaleIdx];
+  const layout = townLayout(cols, rows, 1.14);
+  const proto = moduleGeometry(THREE);
+
+  // ── A：一模块一 mesh ──
+  sceneA = new THREE.Scene();
+  sceneA.background = new THREE.Color(0xcfdadb);
+  groupA = new THREE.Group();
+  for (const [x, , z] of layout) {
+    const m = new THREE.Mesh(proto, matOf());
+    m.position.set(x, 0, z);
+    m.rotation.y = ((x * 13 + z * 7) % 4) * (Math.PI / 2);
+    groupA.add(m);
+  }
+  sceneA.add(groupA);
+  sceneA.add(lightRig());
+
+  // ── B：全部焊成 1 张 ──
+  // 注意：合并要在**世界空间**做，所以先把每个模块的变换烘进顶点（这里用矩阵乘）。
+  const list = [];
+  for (const [x, , z] of layout) {
+    const g = proto.clone();
+    const rot = ((x * 13 + z * 7) % 4) * (Math.PI / 2);
+    g.applyMatrix4(new THREE.Matrix4().makeRotationY(rot));
+    g.translate(x, 0, z);
+    list.push({
+      position: g.attributes.position.array,
+      normal: g.attributes.normal.array,
+      uv: g.attributes.uv.array,
+      index: g.index ? g.index.array : null,
+    });
+  }
+  const merged = mergeGeometries(list);
+  sceneB = new THREE.Scene();
+  sceneB.background = new THREE.Color(0xcfdadb);
+  groupB = new THREE.Group();
+  const mm = new THREE.Mesh(toBufferGeometry(THREE, merged), matOf(true));
+  groupB.add(mm);
+  sceneB.add(groupB);
+  sceneB.add(lightRig());
+
+  // 未合并的顶点数：把每个模块的几何顶点数加起来（不焊接）
+  const raw = list.reduce((n, g) => n + g.position.length / 3, 0);
+  window.__merge = {
+    modules: merged.stats.modules,
+    drawsBefore: merged.stats.drawsBefore,
+    drawsAfter: merged.stats.drawsAfter,
+    vertsIn: raw,
+    vertsOut: merged.stats.vertsOut,
+    weldRatio: merged.stats.weldRatio,
+    tris: merged.stats.tris,
+    grid: `${cols}×${rows}`,
+  };
+  window.__merged = merged;
+}
+
+function matOf(merged) {
+  const m = new THREE.MeshLambertMaterial({ color: 0xd9694f });
+  m.wireframe = false;
+  m.flatShading = true;
+  return m;
+}
+
+let sun;
+function lightRig() {
+  const g = new THREE.Group();
+  sun = new THREE.DirectionalLight(0xfff3e0, 1.05);
+  sun.position.set(-7, 14, 6);
+  g.add(sun);
+  g.add(new THREE.HemisphereLight(0xdff0f5, 0x8a7a66, 0.85));
+  return g;
+}
+
+function setup() {
+  rA = makeRenderer(cvA);
+  rB = makeRenderer(cvB);
+  camA = new THREE.PerspectiveCamera(38, cvA.clientWidth / cvA.clientHeight || 1, 0.1, 400);
+  camB = new THREE.PerspectiveCamera(38, cvB.clientWidth / cvB.clientHeight || 1, 0.1, 400);
+  const [cols] = grids[scaleIdx];
+  const R = cols * 0.95;                 // 机位要装下整片（第一版 R*0.62 拍成了"屋顶特写"）
+  for (const c of [camA, camB]) {
+    c.position.set(R, R * 1.15, R);
+    c.lookAt(0, 0, 0);
+  }
+}
+
+function applyWire() {
+  for (const g of [groupA, groupB]) {
+    g.traverse((o) => {
+      if (o.isMesh) {
+        o.material.wireframe = wire;
+        o.material.color.set(wire ? 0xffffff : 0xd9694f);
+      }
+    });
+  }
+}
+
+/* ───────────────── 量测 ───────────────── */
+
+function frameMs(renderer, scene, cam, n = 40) {
+  // ⚠ 不加 gl.finish() 的话 render() 只是把命令塞进队列就返回，量出来 0.09ms/帧，
+  //   加速比直接变成 19× —— 纯属把"没等 GPU"当成"很快"。这里每帧强制同步一次。
+  // gl.finish() 在 ANGLE/SwiftShader 上并不真的等（量出来还是 0.1ms/帧），
+  // 改成每帧读回 1 个像素：readPixels 一定会把管线抽干，这才是"这一帧真的画完了"。
+  const gl = renderer.getContext();
+  const px = new Uint8Array(4);
+  for (let i = 0; i < 5; i++) { renderer.render(scene, cam); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); }
+  const t0 = performance.now();
+  for (let i = 0; i < n; i++) { renderer.render(scene, cam); gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px); }
+  return (performance.now() - t0) / n;
+}
+
+function pixelDiff() {
+  const w = cvA.width, h = cvA.height;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d', { willReadFrequently: true });
+  // 读回两张画布（preserveDrawingBuffer: true 才能读）
+  ctx.drawImage(cvA, 0, 0);
+  const a = ctx.getImageData(0, 0, w, h).data;
+  ctx.clearRect(0, 0, w, h);
+  ctx.drawImage(cvB, 0, 0);
+  const b = ctx.getImageData(0, 0, w, h).data;
+  let diff = 0, maxd = 0;
+  for (let i = 0; i < a.length; i += 4) {
+    const d = Math.abs(a[i] - b[i]) + Math.abs(a[i + 1] - b[i + 1]) + Math.abs(a[i + 2] - b[i + 2]);
+    if (d > 12) diff++;
+    if (d > maxd) maxd = d;
+  }
+  return { pct: +((diff / (w * h)) * 100).toFixed(3), maxd };
+}
+
+function measure() {
+  setup();
+  build();
+  applyWire();
+  rA.render(sceneA, camA);
+  rB.render(sceneB, camB);
+  const callsA = rA.info.render.calls, callsB = rB.info.render.calls;
+  const msA = frameMs(rA, sceneA, camA), msB = frameMs(rB, sceneB, camB);
+  rA.render(sceneA, camA); rB.render(sceneB, camB);
+  const d = pixelDiff();
+
+  const m = window.__merge;
+  const set = (id, txt, good) => {
+    const el = document.getElementById(id);
+    el.querySelector('b').textContent = txt;
+    el.classList.toggle('good', !!good);
+    el.classList.toggle('bad', good === false);
+  };
+  set('rMod', m.modules + '（理论上界 ' + m.drawsBefore + ' 次）');
+  set('rDraw', `${callsA} → ${callsB}（裁剪后）`, callsB < callsA);
+  set('rVert', `${m.vertsIn.toLocaleString()} → ${m.vertsOut.toLocaleString()}`);
+  // 跨模块没有共享顶点可焊（每块是封闭盒），焊接只在模块内部生效 —— 见模块注释④
+  set('rWeld', (m.weldRatio * 100).toFixed(1) + '%（跨模块无可焊）', null);
+  set('rTri', m.tris.toLocaleString());
+  set('rMsA', msA.toFixed(2) + ' ms');
+  set('rMsB', msB.toFixed(2) + ' ms');
+  const sp = msA / Math.max(msB, 0.001);
+  set('rSpeed', sp.toFixed(2) + '× / 3×', sp >= 1.4);
+  set('rDiff', d.pct.toFixed(3) + '%（max ' + d.maxd + '/765）', d.pct < 2);
+  set('rCalls', `${callsA} → ${callsB}`, callsB < callsA);
+  document.getElementById('rGrid').textContent = m.grid;
+
+  window.__mergeResult = {
+    ...m, callsA, callsB, msA: +msA.toFixed(2), msB: +msB.toFixed(2),
+    speedup: +sp.toFixed(2), diffPct: d.pct, diffMax: d.maxd,
+  };
+}
+
+/* ───────────────── 交互 ───────────────── */
+
+document.getElementById('bWire').onclick = (e) => {
+  wire = !wire; e.target.classList.toggle('on', wire); applyWire();
+  rA.render(sceneA, camA); rB.render(sceneB, camB);
+};
+document.getElementById('bOrbit').onclick = (e) => {
+  orbit = !orbit; e.target.classList.toggle('on', orbit);
+};
+document.getElementById('bSize').onclick = () => {
+  scaleIdx = (scaleIdx + 1) % 3;
+  measure();
+};
+
+measure();
+
+// 自动转台（不重测量，只转）
+function loop() {
+  requestAnimationFrame(loop);
+  if (!orbit) return;
+  time += 0.006;
+  const R = grids[scaleIdx][0] * 0.95;
+  for (const c of [camA, camB]) {
+    c.position.set(Math.cos(time) * R, R * 1.15, Math.sin(time) * R);
+    c.lookAt(0, 0, 0);
+  }
+  rA.render(sceneA, camA);
+  rB.render(sceneB, camB);
+}
+loop();
+</script>
+</body>
+</html>

@@ -18,8 +18,8 @@
  */
 
 import * as THREE from 'three';
-import { fogEnvelopeGLSL, makeFogWisps } from '../core/fog-envelope.js';
-import { traceWind, flagRibbon, packWindField, windFieldGLSL, bakeSoftNormals, particleContactAlpha } from '../core/wind-flow.js';
+import { fogEnvelopeGLSL, makeFogWisps, wispStats } from '../core/fog-envelope.js';
+import { traceWind, traceWindPath, flagRibbon, packWindField, windFieldGLSL, bakeSoftNormals, particleContactAlpha } from '../core/wind-flow.js';
 import { makeWorldProbes } from '../core/world-probes.js';
 import { pointInQuad } from '../core/spatial.js';
 
@@ -119,17 +119,17 @@ export class Atmosphere {
     wg.setAttribute('aShape', new THREE.InterleavedBufferAttribute(this.wispAttr, 3, 3));
     this.fogSheets = new THREE.Mesh(wg, new THREE.ShaderMaterial({
       transparent: true, depthWrite: false, depthTest: true, side: THREE.DoubleSide,
-      uniforms: { uTime, uColor: this.uFog, uOpacity: this.fogOpacity, uBand: { value: 1.35 } },
+      uniforms: { uTime, uColor: this.uFog, uOpacity: this.fogOpacity, uSpeed: this.fogSpeed, uBand: { value: 1.35 } },
       vertexShader: /* glsl */ `attribute vec3 aCenter; attribute vec3 aShape; varying vec2 vUv; varying vec3 vWorld; varying float vSeed;
         void main() { vUv = uv; vSeed = aShape.z; vec3 to = cameraPosition - aCenter; vec2 f = normalize(to.xz + vec2(1e-5, 0.));
           vec3 right = vec3(f.y, 0., -f.x); vec3 p = aCenter + right * position.x * aShape.x + vec3(0., position.y * aShape.y, 0.);
           vWorld = p; gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.); }`,
-      fragmentShader: /* glsl */ `uniform float uTime; uniform vec3 uColor; uniform float uOpacity; uniform float uBand;
+      fragmentShader: /* glsl */ `uniform float uTime; uniform float uSpeed; uniform vec3 uColor; uniform float uOpacity; uniform float uBand;
         varying vec2 vUv; varying vec3 vWorld; varying float vSeed;
         float h(vec2 p) { p = fract(p * vec2(123.34, 456.21) + vSeed); p += dot(p, p + 45.32); return fract(p.x * p.y); }
         float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
         void main() { float soft = 1. - smoothstep(.55, 1., length(vUv - .5) * 2.);
-          vec2 p = vec2(vUv.x * 2.2 + uTime * .05, vUv.y * 4.5) + vSeed * 7.;
+          vec2 p = vec2(vUv.x * 2.2 + uTime * .05 * uSpeed, vUv.y * 4.5) + vSeed * 7.;
           float wisp = smoothstep(.42, .78, n(p) * .55 + n(p * 2.07 + 11.3) * .3 + n(p * 4.13 + 27.7) * .15);
           float band = 1. - smoothstep(uBand, uBand * 2.4, vWorld.y);
           float near = smoothstep(3., 9., distance(cameraPosition, vWorld));
@@ -158,6 +158,14 @@ export class Atmosphere {
     this.fogOpacity.value=opacity;this.fogSpeed.value=speed;
   }
   setFogColor(hex) { this.uFog.value.set(hex).lerp(new THREE.Color('#ffffff'), 0.35); }
+  /** 906207980802252801 read-only census: the disc ring plus the drifting sheet layer. */
+  fogStats() {
+    const s = wispStats(this.fogWisps);
+    const insolid = this.probes ? this.fogWisps.wisps.filter((m) => this.probes.occupied(m.x, m.y, m.z)).length : 0;
+    return { ...s, insolid, band: this.fogSheets.material.uniforms.uBand.value, opacity: this.fogOpacity.value, speed: this.fogSpeed.value,
+      discs: { inner: this.fogParams.value.z, outer: this.fogParams.value.w }, visible: this.fog.visible && this.fogSheets.visible,
+      sheetsVisible: this.fogSheets.visible, discVisible: this.fog.visible, instanceCount: this.fogSheets.geometry.instanceCount };
+  }
 
   /** Change the shared shader direction and rebuild obstacle-aware airflow together. */
   setWindDirection(degrees) {
@@ -227,7 +235,8 @@ export class Atmosphere {
         vy[o] = b * 0.55;                                    // 被挡住的气流往上抬
       }
     }
-    this.field = { x0, z0, W, H, LV, vx, vy, vz, ground, maxTop, worldVersion: world.version };
+    // res 只读暴露（943230624369868800 验收用：世界跨度 = 格数 × res，页面/测试不必再猜常量）
+    this.field = { x0, z0, W, H, LV, res: RES, vx, vy, vz, ground, maxTop, worldVersion: world.version };
     this.#buildArrows();
     const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2, R = Math.max(maxX - minX, maxZ - minZ) / 2;
     this.fogParams.value.set(cx, cz, R + 2.5, R + 22);
@@ -259,6 +268,24 @@ export class Atmosphere {
 
   /** 926890207298899969: virtual wind particle through the shared field and World voxels. */
   trace(start, opts) { if (!this.probes) throw new Error('Atmosphere not built'); return traceWind((x, y, z) => this.sample(x, y, z), this.probes, start, opts); }
+  /** 926903893866541057 完整轨迹接口：种子点→积分轨迹→WindPath（at(t) 任意时刻
+   * 位置、命中洞 hitsHole/throughHole、出界 exitIndex/status、blocked）。
+   * 默认界 = 风场覆盖范围（与雪片重生同口径）；opts.bounds 可覆盖或传 null 关闭。 */
+  tracePath(start, opts = {}) {
+    if (!this.probes || !this.field) throw new Error('Atmosphere not built');
+    const f = this.field;
+    const bounds = opts.bounds !== undefined ? opts.bounds : { x0: f.x0, z0: f.z0, x1: f.x0 + f.W * RES, z1: f.z0 + f.H * RES };
+    return traceWindPath((x, y, z) => this.sample(x, y, z), this.probes, start, { ...opts, bounds, levelHeight: this.L });
+  }
+  /** REACode makeWindField 同形的 {at, trace, dir}：共享分层场上的完整接口。 */
+  windField() {
+    if (!this.field) throw new Error('Atmosphere not built');
+    return {
+      at: (x, y, z) => { const v = this.sample(x, y, z); return [v.x, v.y, v.z]; },
+      trace: (start, opts) => this.tracePath(start, opts),
+      dir: [this.uWind.value.x, this.uWind.value.y, this.uWind.value.z],
+    };
+  }
   /** Flag cloth shape from the traced curve (geometry rows; Decor flags still use the shader wave). */
   flagCurve(pole, opts = {}) { return flagRibbon(this.trace(pole, { steps: opts.steps ?? 10, dt: opts.dt ?? .06 }).points, opts); }
   /** 926903893866541057 "used by all kinds of systems, including shaders": the same field as a texture. */
@@ -332,7 +359,7 @@ export class Atmosphere {
   update(dt) {
     if (!Number.isFinite(dt) || dt < 0) throw new RangeError('Snow timestep must be finite and nonnegative');
     if (this.fogSheets.visible && this.field && dt > 0) {
-      this.fogWisps.step(Math.min(dt, .05), (x, y, z) => this.sample(x, y, z), (x, y, z) => this.probes.occupied(x, y, z), this.uTime.value);
+      this.fogWisps.step(Math.min(dt, .05), (x, y, z) => this.sample(x, y, z), (x, y, z) => this.probes.occupied(x, y, z), this.uTime.value, this.fogSpeed.value);
       this.#writeWisps();
     }
     if (!this.snow.visible || !this.field) return;

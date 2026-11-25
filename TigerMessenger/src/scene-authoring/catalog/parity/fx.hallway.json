@@ -1,0 +1,31 @@
+{
+ "capability": "fx.hallway",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T15:27:35.730Z",
+ "generator": "TigerMessenger/tools/refactor/fx-parity.mjs",
+ "verdict": "diff-registered",
+ "line": "fx",
+ "basis": "原版 drawMotif 只在 canvas ctx 上画，Node 不能执行；颜色/墨色常量按 rgba 数值解析对拍（字面格式 .92/0.92 不算差异），纹样路径差异如实登记。",
+ "metrics": [
+  {
+   "id": "palette",
+   "name": "PANEL_TINTS/INK/PAPER 逐值一致",
+   "original": "6色+墨+纸",
+   "refactored": "一致"
+  }
+ ],
+ "inputs": {
+  "compare": "constants + motif kind coverage"
+ },
+ "diffs": [
+  {
+   "kind": "runtime",
+   "id": "drawMotif",
+   "original": "ctx 画原版鱼/鸟/花/虫/面具路径",
+   "refactored": "ctx 画同族路径+图腾/太阳/卷草等扩展件"
+  }
+ ],
+ "gaps": 0,
+ "skipped": []
+}

@@ -1,0 +1,195 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "stats": {
+        "count": 12,
+        "minY": 0.34237907128053674,
+        "maxY": 1.2887778415990891,
+        "meanY": 0.8871716924650462,
+        "meanSize": 12.871114471618915,
+        "meanHeight": 4.69921660693114,
+        "aspect": 0.3650978800082164,
+        "detours": 0,
+        "blocked": 0,
+        "wraps": 0,
+        "insolid": 0,
+        "band": 1.35,
+        "opacity": 0.35,
+        "speed": 1,
+        "discs": {
+          "inner": 11.267595167349384,
+          "outer": 30.767595167349384
+        },
+        "visible": true,
+        "sheetsVisible": true,
+        "discVisible": true,
+        "instanceCount": 12
+      },
+      "frozen": 0,
+      "oneSpeed": {
+        "mean": 0.9099613759696493,
+        "max": 1.1984755626620558
+      },
+      "align": 1,
+      "twoSpeed": {
+        "mean": 1.8197541899464031,
+        "ratio": 1.9998147591784148
+      },
+      "afterStep": {
+        "count": 12,
+        "minY": 0.34237907128053674,
+        "maxY": 1.2887778415990891,
+        "meanY": 0.8871716924650462,
+        "meanSize": 12.871114471618915,
+        "meanHeight": 4.69921660693114,
+        "aspect": 0.3650978800082164,
+        "detours": 0,
+        "blocked": 0,
+        "wraps": 0,
+        "insolid": 0,
+        "band": 1.35,
+        "opacity": 0.35,
+        "speed": 2,
+        "discs": {
+          "inner": 11.267595167349384,
+          "outer": 30.767595167349384
+        },
+        "visible": true,
+        "sheetsVisible": true,
+        "discVisible": true,
+        "instanceCount": 12
+      },
+      "sheetFrozen": {
+        "px": 0,
+        "any": 0,
+        "max": 0,
+        "mean": 0,
+        "allMean": 0,
+        "share": 0
+      },
+      "sheetDrift": {
+        "px": 0,
+        "any": 1949,
+        "max": 2,
+        "mean": 0,
+        "allMean": 0.030609375,
+        "share": 0
+      },
+      "noise": 0,
+      "isolatedPx": 64000,
+      "layersAB": {
+        "px": 1904,
+        "any": 10304,
+        "max": 5,
+        "mean": 3.41281512605042,
+        "allMean": 0.26709375,
+        "share": 0.02975
+      },
+      "fogAB": {
+        "px": 18612,
+        "any": 27488,
+        "max": 27,
+        "mean": 10.69417580055878,
+        "allMean": 3.30278125,
+        "share": 0.2908125
+      }
+    },
+    {
+      "grid": "quad",
+      "stats": {
+        "count": 12,
+        "minY": 0.34237907128053674,
+        "maxY": 1.2887778415990891,
+        "meanY": 0.8871716924650462,
+        "meanSize": 12.871114471618915,
+        "meanHeight": 4.69921660693114,
+        "aspect": 0.3650978800082164,
+        "detours": 0,
+        "blocked": 0,
+        "wraps": 0,
+        "insolid": 0,
+        "band": 1.35,
+        "opacity": 0.35,
+        "speed": 1,
+        "discs": {
+          "inner": 10.895430252802102,
+          "outer": 30.3954302528021
+        },
+        "visible": true,
+        "sheetsVisible": true,
+        "discVisible": true,
+        "instanceCount": 12
+      },
+      "frozen": 0,
+      "oneSpeed": {
+        "mean": 0.9099613759696491,
+        "max": 1.1984755626620573
+      },
+      "align": 1,
+      "twoSpeed": {
+        "mean": 1.8198814428276737,
+        "ratio": 1.9999546034450304
+      },
+      "afterStep": {
+        "count": 12,
+        "minY": 0.34237907128053674,
+        "maxY": 1.2887778415990891,
+        "meanY": 0.8871716924650462,
+        "meanSize": 12.871114471618915,
+        "meanHeight": 4.69921660693114,
+        "aspect": 0.3650978800082164,
+        "detours": 0,
+        "blocked": 0,
+        "wraps": 0,
+        "insolid": 0,
+        "band": 1.35,
+        "opacity": 0.35,
+        "speed": 2,
+        "discs": {
+          "inner": 10.895430252802102,
+          "outer": 30.3954302528021
+        },
+        "visible": true,
+        "sheetsVisible": true,
+        "discVisible": true,
+        "instanceCount": 12
+      },
+      "sheetFrozen": {
+        "px": 0,
+        "any": 0,
+        "max": 0,
+        "mean": 0,
+        "allMean": 0,
+        "share": 0
+      },
+      "sheetDrift": {
+        "px": 0,
+        "any": 1938,
+        "max": 2,
+        "mean": 0,
+        "allMean": 0.030375,
+        "share": 0
+      },
+      "noise": 0,
+      "isolatedPx": 64000,
+      "layersAB": {
+        "px": 1972,
+        "any": 9610,
+        "max": 5,
+        "mean": 3.4411764705882355,
+        "allMean": 0.25584375,
+        "share": 0.0308125
+      },
+      "fogAB": {
+        "px": 18242,
+        "any": 25984,
+        "max": 25,
+        "mean": 10.517377480539414,
+        "allMean": 3.16590625,
+        "share": 0.28503125
+      }
+    }
+  ],
+  "errors": []
+}

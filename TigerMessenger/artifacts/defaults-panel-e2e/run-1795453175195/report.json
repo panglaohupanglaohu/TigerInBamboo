@@ -1,0 +1,32 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/defaults-panel-e2e/run-1795453175195",
+  "steps": {
+    "A": {
+      "rows": [
+        "citadel:mountain",
+        "old-port:relief"
+      ],
+      "text": "当前默认场景层能力谁定的时间citadelmountainmountain.pipeline手动采用2026/11/24 09:00:00撤回old-portreliefrelief.soft按实测选优代选2026/11/24 10:00:00撤回"
+    },
+    "afterRevert": {
+      "rows": [
+        "old-port:relief"
+      ],
+      "stored": {
+        "old-port:relief": {
+          "capabilityId": "relief.soft",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "auto-test",
+          "at": "2026-11-24T02:00:00.000Z",
+          "source": "auto-test",
+          "note": ""
+        }
+      }
+    },
+    "B": "当前默认场景层能力谁定的时间old-portreliefrelief.soft按实测选优代选2026/11/24 10:00:00撤回"
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "空态文案不对：当前默认场景层能力谁定的时间old-portreliefrelief.soft按实测选优代选2026/11/24 10:00:00撤回"
+}

@@ -1,0 +1,68 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "task": "Choose the fastest capability-library supplement strategy for this game asset category.",
+  "type": "choice",
+  "threshold": 0.75,
+  "usage": {
+    "items": 7,
+    "requests": 1,
+    "cache_hits": 0,
+    "input": 2869,
+    "output": 437,
+    "cost_usd": 0.001205,
+    "errors": [],
+    "answered": 7
+  },
+  "decisions": {
+    "圣城与建筑": {
+      "choice": "wrap-existing-refactored",
+      "confidence": 0.29,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "地形与场景构件": {
+      "choice": "refactor-reacode",
+      "confidence": 0.23,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "载具": {
+      "choice": "synthesize-new",
+      "confidence": 0.56,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "渲染与辅助几何": {
+      "choice": "wrap-existing-refactored",
+      "confidence": 0.29,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "角色与鸟群": {
+      "choice": "synthesize-new",
+      "confidence": 0.45,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "苔庭与植被": {
+      "choice": "wrap-existing-refactored",
+      "confidence": 0.23,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "湖沼与生物": {
+      "choice": "wrap-existing-refactored",
+      "confidence": 0.13,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    }
+  },
+  "scope": "文字证据的批量小判断。不看图、不审源码、不替代硬性检查；未达阈值的交给开发模型复核。"
+}

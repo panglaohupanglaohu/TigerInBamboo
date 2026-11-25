@@ -1,0 +1,222 @@
+{
+ "steps": [
+  {
+   "name": "洞体计划在（多条隧道，都是穿山拱）",
+   "ok": true,
+   "detail": "[{\"len\":0.386,\"floor\":2,\"mouths\":2,\"hw\":0.409},{\"len\":0.452,\"floor\":2,\"mouths\":2,\"hw\":0.373},{\"len\":1.139,\"floor\":2,\"mouths\":2,\"hw\":0.447}]"
+  },
+  {
+   "name": "开档真的压暗了顶点",
+   "ok": true,
+   "detail": "changed=157 shadedVerts=157"
+  },
+  {
+   "name": "面朝向判据挡掉了顶点（不是没算）",
+   "ok": true,
+   "detail": "faceRejected=73"
+  },
+  {
+   "name": "被压暗的顶点全在洞体格内、且法线朝向与所在面一致",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "洞内地面与侧壁都被覆盖（两族都有）",
+   "ok": true,
+   "detail": "{\"floorUp\":34,\"ceilDown\":24,\"wall\":99}"
+  },
+  {
+   "name": "洞口系数=1、洞身最暗=1−strength（渐变两端）",
+   "ok": true,
+   "detail": "[[1,0.5416],[1,0.54],[1,0.54]]"
+  },
+  {
+   "name": "系数落在 [0.5, 1)（一档多，不是全黑）",
+   "ok": true,
+   "detail": "f∈[0.54, 0.949]"
+  },
+  {
+   "name": "再开一次颜色逐位一致（重建幂等）",
+   "ok": true,
+   "detail": "mismatch=0"
+  },
+  {
+   "name": "洞内机位开档压暗、关档不压暗",
+   "ok": true,
+   "detail": "157 / 0"
+  },
+  {
+   "name": "洞内机位开/关差分够大",
+   "ok": true,
+   "detail": "diffPx=99974（32.5%）mean|Δ|=7.65"
+  },
+  {
+   "name": "洞内机位开→关→开回位无噪声",
+   "ok": true,
+   "detail": "diffPx=0"
+  },
+  {
+   "name": "差分均值 5–45 级（一档多，不是全黑）",
+   "ok": true,
+   "detail": "mean|Δ|=7.65"
+  },
+  {
+   "name": "洞口外机位射线覆盖到洞内与洞外两类点",
+   "ok": true,
+   "detail": "outside=2 inside=17"
+  },
+  {
+   "name": "洞外表面像素开/关逐位不变（外立面不再被压暗）",
+   "ok": true,
+   "detail": "changed=0/2 []"
+  },
+  {
+   "name": "洞内表面像素确实变了（对照）",
+   "ok": true,
+   "detail": "changed=16/17"
+  }
+ ],
+ "geo": {
+  "tunnels": [
+   {
+    "len": 0.386,
+    "floor": 2,
+    "mouths": 2,
+    "hw": 0.409
+   },
+   {
+    "len": 0.452,
+    "floor": 2,
+    "mouths": 2,
+    "hw": 0.373
+   },
+   {
+    "len": 1.139,
+    "floor": 2,
+    "mouths": 2,
+    "hw": 0.447
+   }
+  ],
+  "verts": 21714,
+  "changed": 157,
+  "bad": [],
+  "badN": 0,
+  "faceKinds": {
+   "floorUp": 34,
+   "ceilDown": 24,
+   "wall": 99
+  },
+  "fMin": 0.54,
+  "fMax": 0.949,
+  "gapVerts": 24,
+  "maxGap": 0.078,
+  "idemMismatch": 0,
+  "shadedVerts": 157,
+  "rejected": 73,
+  "report": {
+   "tunnels": 3,
+   "strength": 0.46,
+   "ramp": 1.6,
+   "cells": 7,
+   "ts": [
+    {
+     "floor": 2,
+     "cells": 2,
+     "len": 0.386,
+     "ramp": 0.2,
+     "mouths": 2,
+     "halfWidth": 0.409,
+     "atMouth": 1,
+     "atMid": 0.5416,
+     "aboveRoof": 1
+    },
+    {
+     "floor": 2,
+     "cells": 2,
+     "len": 0.452,
+     "ramp": 0.226,
+     "mouths": 2,
+     "halfWidth": 0.373,
+     "atMouth": 1,
+     "atMid": 0.54,
+     "aboveRoof": 1
+    },
+    {
+     "floor": 2,
+     "cells": 3,
+     "len": 1.139,
+     "ramp": 0.569,
+     "mouths": 2,
+     "halfWidth": 0.447,
+     "atMouth": 1,
+     "atMid": 0.54,
+     "aboveRoof": 1
+    }
+   ]
+  }
+ },
+ "readings": {
+  "shadedVerts": {
+   "insideOn": 157,
+   "insideOff": 0,
+   "insideOn2": 157,
+   "outsideOn": 157
+  },
+  "faceRejected": {
+   "insideOn": 73,
+   "outsideOn": 73
+  },
+  "cam": {
+   "inside": [
+    2.599,
+    1.26,
+    -2.021
+   ],
+   "outside": [
+    2.584,
+    1.26,
+    -2.447
+   ]
+  },
+  "tgt": [
+   3.117,
+   1.26,
+   -1.901
+  ],
+  "diffInside": {
+   "n": 99974,
+   "pct": 32.5,
+   "mean": 7.65
+  },
+  "diffInsideRecovery": {
+   "n": 0,
+   "pct": 0,
+   "mean": 0
+  },
+  "diffOutside": {
+   "n": 152845,
+   "pct": 49.8,
+   "mean": 12.98
+  },
+  "bandsInsideOn": [
+   143.52,
+   152.87,
+   161.14
+  ],
+  "bandsInsideOff": [
+   149.31,
+   156.33,
+   162.77
+  ],
+  "outsideRays": {
+   "total": 37,
+   "allIn": 17,
+   "noneIn": 2,
+   "partial": 18,
+   "outsideChanged": 0,
+   "insideChanged": 16
+  },
+  "r240OutsideBaseline": 148839
+ },
+ "errors": []
+}

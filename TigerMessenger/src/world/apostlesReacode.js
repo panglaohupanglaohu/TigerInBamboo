@@ -59,7 +59,7 @@ function lowBlobGeometry(blobs,detail,puff){
 const SHRUB_LOW=lowBlobGeometry([[0,.032,0,.034],[.03,.024,.014,.027],[-.028,.022,-.01,.027],[.008,.05,-.016,.024],[-.01,.026,.03,.024]],0,.5);
 // vegetation.js CROWNS (same blobs) at detail 1 instead of 2: 400 instead of 1600 triangles per tree.
 const CROWNS_LOW=[[[0,.30,0,.16],[.11,.25,.04,.12],[-.1,.26,-.03,.12],[.02,.40,-.02,.11],[0,.24,.11,.1]],[[0,.34,0,.13],[.06,.46,.02,.1],[-.07,.28,.05,.1],[.07,.26,-.06,.09]],[[0,.26,0,.19],[.14,.22,.05,.13],[-.13,.22,.03,.13],[.03,.36,.08,.12],[-.04,.38,-.08,.12],[.08,.2,-.12,.11]]].map(b=>lowBlobGeometry(b,1,.65));
-function withPalette(fn){const saved={...TERRAIN};Object.assign(TERRAIN,APOSTLE_TERRAIN);try{return fn();}finally{Object.assign(TERRAIN,saved);}}
+function withPalette(fn){if(APOSTLES_LOOK.palette)return fn();const saved={...TERRAIN};Object.assign(TERRAIN,APOSTLE_TERRAIN);try{return fn();}finally{Object.assign(TERRAIN,saved);}}
 
 /** Lobe height (metres) at a point: the highest lobe whose (noisy) ellipse contains it. */
 function lobeHeight(lobes,metres,x,z,seed,amp=.34,fq=.09){
@@ -84,10 +84,10 @@ export function* buildTwelveApostlesReacodeSteps({parent,radius=160,railCurves,r
  // shared per-frame state: one clock for waves / plants, distance LOD from the drawing camera
  const uTime={value:0};let lastFrame=-1;
  const rockMat=new THREE.MeshStandardMaterial({vertexColors:true,roughness:.93,metalness:0});
- const skirtMat=makeSkirtMaterial(new THREE.Color('#9fe0d8'));skirtMat.fragmentShader=skirtMat.fragmentShader.replace('vec4(uFoam, vA * vA)','vec4(uFoam, min(1.0, sqrt(vA) * 1.1))').replace('vec4(uTint, -vA)','vec4(uTint, -vA * 1.4)');
+ const skirtMat=makeSkirtMaterial(new THREE.Color('#9fe0d8'));skirtMat.fragmentShader=skirtMat.fragmentShader.replace('vec4(uFoam, vA * vA * vCover)','vec4(uFoam, min(1.0, sqrt(vA) * 1.1) * vCover)').replace('vec4(uTint, -vA * vCover)','vec4(uTint, -vA * 1.4 * vCover)');skirtMat.uniforms.uTime=uTime;
  const waveMat=makeWaveMaterial();waveMat.uniforms.uTime=uTime;waveMat.uniforms.uBend={value:0};
  // waves are positioned in the shader: bend them onto the sphere there (vendor file unchanged)
- waveMat.vertexShader=waveMat.vertexShader.replace('mix(0.07, 0.24, f)','mix(0.16, 0.55, f)').replace('vA = a * (1.0 - aRow) * 0.62;','vA = min(1.0, a * (1.0 - aRow) * 1.15);').replace('uniform float uPeriod;','uniform float uPeriod;\nuniform float uBend;').replace('vec4(p.x, 0.012 + 0.004 * (1.0 - f), p.y, 1.0)','vec4(p.x, 0.03 + 0.004 * (1.0 - f) - uBend * dot(p, p), p.y, 1.0)');
+ waveMat.vertexShader=waveMat.vertexShader.replace('mix(0.07, 0.24, f)','mix(0.16, 0.55, f)').replace('vA = a * (1.0 - aRow) * 0.62 * mix(1.0, aCrest, uCrestBreakup);','vA = min(1.0, a * (1.0 - aRow) * 1.15 * mix(1.0, aCrest, uCrestBreakup));').replace('uniform float uPeriod;','uniform float uPeriod;\nuniform float uBend;').replace('vec4(p.x, 0.012 + 0.004 * (1.0 - f), p.y, 1.0)','vec4(p.x, 0.03 + 0.004 * (1.0 - f) - uBend * dot(p, p), p.y, 1.0)');
  const hoverMat=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.3,depthWrite:false,side:THREE.DoubleSide});
  const states=[],_cam=new THREE.Vector3();
  // distance LOD: grass tufts / flowers only near, bushes and trees until mid range

@@ -1,0 +1,81 @@
+{
+ "ok": 16,
+ "url": {
+  "param": "column,routePreview",
+  "applied": 2,
+  "column": true,
+  "route": true,
+  "houseChar": true
+ },
+ "fix": {
+  "squad": 0,
+  "n": 8,
+  "start": [
+   3.3938041979872953,
+   0.9806408825927296
+  ],
+  "startTop": 4,
+  "goal": [
+   -5.710525698095133,
+   1.7132197204068575
+  ],
+  "goalFloor": 1,
+  "nodes": 395,
+  "dist": 9.134,
+  "L": 0.5
+ },
+ "gaps": {
+  "p50": 0.196,
+  "p90": 0.23,
+  "n": 2041
+ },
+ "vertCols": 63,
+ "straight": {
+  "n": 2622,
+  "mean": 1
+ },
+ "corner": {
+  "n": 53,
+  "mean": 0.815,
+  "min": 0.676,
+  "frames": 37,
+  "straightFrames": 310
+ },
+ "soft": {
+  "n": 17,
+  "mean": 0.882
+ },
+ "hard": {
+  "n": 17,
+  "mean": 0.719
+ },
+ "path": {
+  "n": 126,
+  "p50": 0.12,
+  "p90": 0.12,
+  "arcs": 2,
+  "corners": 26
+ },
+ "arrive": {
+  "cols": 4,
+  "rows": 2,
+  "maxErr": 0.029,
+  "n": 8
+ },
+ "recovery": {
+  "slides": 3113,
+  "crawls": 0,
+  "stuck": 0
+ },
+ "stats": {
+  "waits": 817,
+  "slotted": 16613,
+  "cornerTurns": 131,
+  "cornerSlows": 131,
+  "minSpeedK": 0.591
+ },
+ "shots": [
+  "artifacts/coverage/column-march-r174.png",
+  "artifacts/coverage/column-arrive-r174.png"
+ ]
+}

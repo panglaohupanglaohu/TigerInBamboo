@@ -1,4 +1,4 @@
-import {CLOUD_DRIFT_GLSL} from '../core/cloud-motion.js';
+import {CLOUD_DRIFT_GLSL,CLOUD_WIND_BOB_GLSL} from '../core/cloud-motion.js';
 /**
  * impostor.js — 八方位 impostor（树林）+ 共用 impostor 的云。
  *
@@ -14,6 +14,9 @@ import {CLOUD_DRIFT_GLSL} from '../core/cloud-motion.js';
  * 第 55 批：bake({pitches}) 多俯仰行 + ImpostorField({sphere}) 球面卡片（视角 alpha × 球面叶隙）+ blobCloudGeometry 原云材质；
  * 默认仍是单仰角柱面卡（View 默认画面不变），由 view-post-extras.js 的 impostorpitch 开关切换。
  * 做法：
+ *   图集：整组预留 8 方位 × 俯仰行的格子；满板时按 REACode SpriteAtlas.insert 语义自动翻倍、
+ *         所有存活槽整批重排（core/atlas.js repack），GPU 侧原位放大 render target 并逐槽搬运像素，
+ *         存活烘焙的 frames 就地改写、注册的 ImpostorField 同步 uFrames；扩容失败回滚到扩容前状态。
  *   烘焙：每种网格从水平方向 8 个方位（每 45°，仰角固定）各拍一张，放进图集里分配到的格子；
  *         白色材质 + 固定光照 → 图里存的是"明暗"，实例颜色在着色器里再乘上去（一套图给所有颜色的树用）。
  *   绘制：每棵树一个竖直的四边形（只绕 Y 轴朝向镜头）；按"镜头相对这棵树朝向的方位角"
@@ -30,16 +33,25 @@ const CELL = 128;
 const ELEV = 0.42;   // 烘焙仰角（弧度）：接近游戏镜头的俯角
 
 export class ImpostorBaker {
-  #allocations = new WeakMap();
-  constructor(renderer, size = 1024) {
+  #allocations = new WeakMap();   // baked -> entry {baked, slots, cell}
+  #entries = new Set();         // 槽位仍在图集里的全部烘焙（未 release 的都算存活）
+  #fields = new Set();          // track() 注册的消费方，扩容后 syncFrames()
+  constructor(renderer, size = 1024, { maxSize = 8192 } = {}) {
     this.renderer = renderer;
     this.atlas = new Atlas(size, size);
+    if (!Number.isSafeInteger(maxSize) || maxSize < size) throw new RangeError('maxSize must be an integer >= size');
+    this.maxSize = maxSize;
+    this.growths = 0;
     this.rt = new THREE.WebGLRenderTarget(size, size, { depthBuffer: true });
     // Mipmaps reduce minification flicker; finite padding cannot isolate every mip level.
     this.rt.texture.generateMipmaps = true;
     this.rt.texture.minFilter = THREE.LinearMipmapLinearFilter;
     this.size = size;
     this.cleared = false;
+    // 扩容像素搬运用的整屏 quad 场景（userData 标记给测试/诊断识别）
+    this.blitScene = new THREE.Scene();
+    this.blitScene.userData.atlasBlit = true;
+    this.blitCam = new THREE.OrthographicCamera(-1, 1, 1, -1, -1, 1);
     this.clearScene = new THREE.Scene();
     this.clearCamera = new THREE.Camera();
     this.scene = new THREE.Scene();
@@ -65,9 +77,11 @@ export class ImpostorBaker {
     const bb=geometry.boundingBox,c=bb.getCenter(new THREE.Vector3()),ext=bb.getSize(new THREE.Vector3());
     const half=Math.max(ext.x,ext.y,ext.z)*.62;
     if(!Number.isFinite(half)||half<=0)throw new RangeError('nonempty finite geometry required');
-    const slots=[];
-    try {for(let k=0;k<VIEWS*P;k++){const slot=this.atlas.allocate(CELL+16,CELL+16);if(!slot)throw new Error('impostor 图集满了');slots.push(slot);}}
-    catch(error){for(const slot of slots)this.atlas.free(slot);throw error;}
+    // 自动扩容/重排（REACode SpriteAtlas.insert 语义：满了就翻倍重插）：整组预留失败 →
+    // #grow() 翻倍重排+搬运像素后整组重试，直到 maxSize；扩不动仍抛"图集满了"。
+    if(CELL+16>this.maxSize)throw new Error('impostor 图集满了');   // 永远放不下的尺寸不触发无谓扩容
+    let slots=this.#reserve(VIEWS*P,CELL+16);
+    while(!slots){this.#grow();slots=this.#reserve(VIEWS*P,CELL+16);}
     if(vertexColors&&!this.matVC)this.matVC=new THREE.MeshLambertMaterial({color:0xffffff,vertexColors:true});
     const mesh=new THREE.Mesh(geometry,vertexColors?this.matVC:this.mat),cam=new THREE.OrthographicCamera(-half,half,half,-half,.01,half*8),frames=[];
     this.scene.add(mesh);
@@ -91,8 +105,71 @@ export class ImpostorBaker {
       try{this.#clearSlots(slots)}catch{};
       throw error;
     } finally {this.scene.remove(mesh);}
-    const baked={frames,size:half*2,center:c.clone(),pitches:pitches.slice()};this.#allocations.set(baked,slots);return baked;
+    const baked={frames,size:half*2,center:c.clone(),pitches:pitches.slice()};
+    const entry={baked,slots,cell:CELL};this.#allocations.set(baked,entry);this.#entries.add(entry);return baked;
   }
+  /** 整组预留 count 个 extent² 槽；中途失败全数归还，返回 null。 */
+  #reserve(count,extent) {
+    const slots=[];
+    for(let k=0;k<count;k++){const slot=this.atlas.allocate(extent,extent);if(!slot){for(const s of slots)this.atlas.free(s);return null;}slots.push(slot);}
+    return slots;
+  }
+  /**
+   * 扩容：REACode SpriteAtlas「满了就放大一倍、所有 allotment 重插」（atlas.repack 同语义、确定性排序）。
+   * GPU 半边：旧 RT 先整页备份到同尺寸 scratch，再 this.rt.setSize 原位放大——rt 与 rt.texture
+   * 对象不变，已发给各 ImpostorField 的 uTex、页面里的 material.map 都不用重绑；然后按 repack 的
+   * moved 映射把每个存活槽从 scratch 拷到新位置。最后一次性提交图集/槽位/frames 并 sync 注册的 Field。
+   * 回滚：repack 不动旧图集，resize 之前失败 = 零副作用；resize 之后失败尽力把 scratch 按旧位置
+   * 拷回，无论成败都抛出且 atlas/slots/frames 保持扩容前状态。
+   */
+  #grow() {
+    let plan=null,newSize=0;
+    for(let s=this.size*2;s<=this.maxSize;s*=2){plan=this.atlas.repack(s,s);if(plan){newSize=s;break;}}
+    if(!plan)throw new Error('impostor 图集满了');
+    const oldSize=this.size,r=this.renderer,prev=r.getRenderTarget(),face=r.getActiveCubeFace(),mip=r.getActiveMipmapLevel();
+    const live=this.#entries.size>0,scratch=live?new THREE.WebGLRenderTarget(oldSize,oldSize,{depthBuffer:false}):null;
+    try {
+      if(live){const full={x:0,y:0,w:oldSize,h:oldSize};this.#blit(this.rt.texture,[{from:full,to:full}],oldSize,scratch);}
+      this.rt.setSize(newSize,newSize);
+      try {
+        this.#clearTarget(this.rt);
+        if(live)this.#blit(scratch.texture,[...plan.moved].map(([from,to])=>({from,to})),oldSize,this.rt);
+      } catch(copyError) {
+        // 像素已丢不得不管：尽力缩回去并按旧位置复原，再照样抛出（bookkeeping 未提交，保持一致）。
+        if(live)try{this.rt.setSize(oldSize,oldSize);this.#clearTarget(this.rt);this.#blit(scratch.texture,[...plan.moved.keys()].map(f=>({from:f,to:f})),oldSize,this.rt);}catch{}
+        throw copyError;
+      }
+    } finally {if(scratch)scratch.dispose();r.setRenderTarget(prev,face,mip);}
+    this.atlas=plan.atlas;this.size=newSize;this.cleared=true;this.growths++;
+    for(const e of this.#entries){e.slots=e.slots.map(s=>plan.moved.get(s));const fr=e.baked.frames,c=e.cell;
+      for(let i=0;i<e.slots.length;i++){const s=e.slots[i];fr[i*4]=(s.x+8)/newSize;fr[i*4+1]=(s.y+8)/newSize;fr[i*4+2]=c/newSize;fr[i*4+3]=c/newSize;}}
+    for(const f of this.#fields)f.syncFrames();
+  }
+  /** 整屏 quad 采 source 的 from 矩形，viewport+scissor 钉到 target 的 to 矩形（同 sprite-pack-c09 的搬运法）。 */
+  #blit(texture,pairs,srcSize,target) {
+    const r=this.renderer,geo=new THREE.PlaneGeometry(2,2),uv=geo.getAttribute('uv');
+    const mat=new THREE.MeshBasicMaterial({map:texture,transparent:true,blending:THREE.NoBlending,depthTest:false}),quad=new THREE.Mesh(geo,mat);
+    this.blitScene.add(quad);
+    try {
+      for(const {from,to} of pairs) {
+        const u0=from.x/srcSize,u1=(from.x+from.w)/srcSize,v0=from.y/srcSize,v1=(from.y+from.h)/srcSize;
+        uv.setXY(0,u0,v1);uv.setXY(1,u1,v1);uv.setXY(2,u0,v0);uv.setXY(3,u1,v0);uv.needsUpdate=true;
+        target.viewport.set(to.x,to.y,to.w,to.h);target.scissor.copy(target.viewport);target.scissorTest=true;
+        r.setRenderTarget(target);r.render(this.blitScene,this.blitCam);
+      }
+    } finally {
+      this.blitScene.remove(quad);geo.dispose();mat.dispose();
+      target.scissorTest=false;target.viewport.set(0,0,target.width,target.height);target.scissor.copy(target.viewport);
+    }
+  }
+  #clearTarget(rt) {
+    const r=this.renderer,color=r.getClearColor(new THREE.Color()),alpha=r.getClearAlpha();
+    rt.scissorTest=false;rt.viewport.set(0,0,rt.width,rt.height);rt.scissor.copy(rt.viewport);
+    try{r.setRenderTarget(rt);r.setClearColor(0,0);r.clear(true,true,true);}finally{r.setClearColor(color,alpha);}
+  }
+  /** 注册消费方：扩容重排后 baker 改写 baked.frames 并调 field.syncFrames()；untrack 解除。 */
+  track(field){this.#fields.add(field);return field;}
+  untrack(field){this.#fields.delete(field);}
   #withTarget(fn) {
     const r=this.renderer,target=r.getRenderTarget(),face=r.getActiveCubeFace(),mip=r.getActiveMipmapLevel(),color=r.getClearColor(new THREE.Color()),alpha=r.getClearAlpha();
     const viewport=this.rt.viewport.clone(),scissor=this.rt.scissor.clone(),test=this.rt.scissorTest;
@@ -103,11 +180,19 @@ export class ImpostorBaker {
       // A render finalizes the RT mip chain after clears as well as draws.
       this.renderer.render(this.clearScene,this.clearCamera);});
   }
-  /** Detach consumers before releasing: their UVs become available for reuse. */
-  release(baked) {
-    const slots=baked&&this.#allocations.get(baked);if(!slots)return false;
-    this.#clearSlots(slots); // If GPU clearing fails, keep ownership for a retry.
-    for(const slot of slots)this.atlas.free(slot);this.#allocations.delete(baked);return true;
+  /** 1593215065423245313 残差：原调试画面删掉精灵后槽位留暗淡残影，不是清透明。与 sprite-pack-c09 同参数——RGBA 乘 0.38（opacity .62 的乘性混合）。 */
+  #dimSlots(slots) {
+    if(!this._dim){this._dimScene=new THREE.Scene();this._dimCam=new THREE.OrthographicCamera(-1,1,1,-1,-1,1);
+      this._dim=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.62,depthTest:false,blending:THREE.CustomBlending,blendEquation:THREE.AddEquation,blendSrc:THREE.ZeroFactor,blendDst:THREE.OneMinusSrcAlphaFactor,blendSrcAlpha:THREE.ZeroFactor,blendDstAlpha:THREE.OneMinusSrcAlphaFactor}));
+      this._dimScene.add(this._dim);}
+    this.#withTarget(()=>{for(const slot of slots){this.rt.viewport.set(slot.x,slot.y,slot.w,slot.h);this.rt.scissor.copy(this.rt.viewport);this.rt.scissorTest=true;this.renderer.setRenderTarget(this.rt);const ac=this.renderer.autoClear;this.renderer.autoClear=false;try{this.renderer.render(this._dimScene,this._dimCam);}finally{this.renderer.autoClear=ac;}}});
+  }
+  /** Detach consumers before releasing: their UVs become available for reuse.
+   *  residue=true 时槽位留 ×0.38 压暗残影（sprite-pack-c09 同口径的调试残影），否则清透明。 */
+  release(baked, { residue = false } = {}) {
+    const entry=baked&&this.#allocations.get(baked);if(!entry)return false;
+    if(residue)this.#dimSlots(entry.slots);else this.#clearSlots(entry.slots); // If GPU op fails, keep ownership for a retry.
+    for(const slot of entry.slots)this.atlas.free(slot);this.#allocations.delete(baked);this.#entries.delete(entry);return true;
   }
 
 }
@@ -117,7 +202,7 @@ export class ImpostorBaker {
  * 实例矩阵：平移 = 网格原点所在位置，Y 旋转 = 朝向，缩放 = 大小。
  */
 export class ImpostorField {
-  constructor(texture, baked, max, { cloud = false, horizon = false, uTime = { value: 0 }, uLight = { value: 1 }, sphere = false } = {}) {
+  constructor(texture, baked, max, { cloud = false, horizon = false, uTime = { value: 0 }, uLight = { value: 1 }, sphere = false, baker = null, windAmt = 0, cloudParallax = 0 } = {}) {
     const P = baked.pitches?.length || 1;
     // REACode engine/impostor.js `bend`: a centre vertex pushed toward the camera (shared with
     // shrubcard / 1191990107785572352). position.z marks it; trees bend 0.06, clouds stay flat.
@@ -143,16 +228,21 @@ export class ImpostorField {
         uCenter: { value: baked.center }, uTime, uLight,
         uOrbit: { value: new THREE.Vector3(0, 0, .002) },
         uDepthMotion: { value: 0 },
+        uWindAmt: { value: windAmt },
+        uCloudParallax: { value: cloudParallax },
         uBend: { value: cloud ? 0 : .06 },
         uPitch: { value: new THREE.Vector4(...pitchU) },
       },
       defines: { CLOUD: cloud ? 1 : 0, HORIZON: horizon ? 1 : 0, VIEWS, PITCHES: P, NFRAMES: VIEWS * P, SPHERE: sphere ? 1 : 0 },
       vertexShader: /* glsl */ `
         ${CLOUD_DRIFT_GLSL}
+        ${CLOUD_WIND_BOB_GLSL}
         attribute vec3 aColor;
         attribute float aYaw;
         attribute float aCloudDepth;
         uniform float uDepthMotion;
+        uniform float uWindAmt;
+        uniform float uCloudParallax;
         uniform float uBend;
         uniform float uSize;
         uniform vec3 uCenter;
@@ -188,7 +278,13 @@ export class ImpostorField {
             center.xz = uOrbit.xy + vec2(turn.x*d.x-turn.y*d.y,
                                          turn.y*d.x+turn.x*d.y);
           #else
-            center.x += cloudDrift(uTime,aYaw);   // 沿风向慢慢飘，飘出去从另一边回来
+            // 1852334860137849222 前景云层次：aCloudDepth×uCloudParallax 得 cd，外层云的漂移与
+            // 起伏同除 cd（clouddeck「v ∝ 1/depth」同口径）；parallax=0 时 /1.0 逐位等同旧行为。
+            float cd = mix(1.0, max(1.0, aCloudDepth), uCloudParallax);
+            center.x += cloudDrift(uTime,aYaw) / cd;   // 沿风向慢慢飘，飘出去从另一边回来
+            // REACode engine/impostor.js 的云风材质（uWindAmt：树 0 / 云 0.6）：相位取实例位置，
+            // 三轴异频起伏，整圈云不一块板一起滑。
+            center += cloudWindBob(uTime, im[3].xyz, uWindAmt) / cd;
           #endif
           #endif
           // Orthographic rays are parallel; camera position must not make
@@ -291,7 +387,13 @@ export class ImpostorField {
     this.mesh.frustumCulled = false;
     this.mesh.count = 0;
     if (cloud) this.mesh.renderOrder = 9;
+    // 图集扩容重排时 baker 调 syncFrames()：uFrames 就地改写即随下次渲染上传。
+    this.baked = baked; this.framesAttr = fr;
+    if (baker) baker.track(this);
   }
+
+  /** 扩容/重排后把 baked.frames 的最新 UV 写回 uFrames 各 Vector4。 */
+  syncFrames() { for (let i = 0; i < this.framesAttr.length; i++) this.framesAttr[i].fromArray(this.baked.frames, i * 4); }
 
   set(i, matrix, color, yaw, depth = 1) {
     if(!Number.isFinite(depth)||depth<1)throw new RangeError('cloud depth must be finite and >=1');

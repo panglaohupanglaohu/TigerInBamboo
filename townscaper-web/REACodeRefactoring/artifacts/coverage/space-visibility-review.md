@@ -28,3 +28,12 @@ space-visibility-browser：真实共享四边/混合网格，64线/128顶点。�
 ## 第 56 批（C04）
 
 798580832906739712：新增 core/vertex-openness.js，把固定步长射线开阔度烘到 WorldMesh 每个顶点，`?c04=rayvis` 换灰度材质（室内/峡谷底暗、屋顶白）+ 黄色射线。截图 shots-r56/798580832906739712-rayvis-on.png / -rayvis-fusion.png。判定 done。787319655648100352：r55 assembly.html 已做加权熵逐块落下 + 幽灵候选，本批截 shots-r56/787319655648100352-assembly-mid.png 核实，判定 done（模块美术替代）。 详见 [r56-C04-bn-world.md](r56-C04-bn-world.md)。
+
+## 第 57 批（残差清账）
+
+798580832906739712：旧 note「非灰度烘焙/精确光学视线或游戏AI」+【卡点·C 算法未公开】是过期账——原算法就在本仓 REACode/src/rayvis.js（斐波那契方向+固定步长命中即停+平均距离），已迁且灰度烘焙在 53/56 两批做完。本轮清剩余两条：
+
+- **精确光学视线**：core/space-visibility.js 新增 `castMeshRay`/`sampleMeshVisibility`，对实际渲染三角汤做 Möller–Trumbore 求交，无步长、不漏薄墙，斜屋顶/洞口等柱格表达不出的面都挡。实测：2×2 斜顶房间（y=2.4+0.4x）x=1 处向上射线命中 1.8000（解析值 1.8），室内 0.222 / 屋顶上方 0.906。
+- **游戏 AI（"Might use it for visibility when indoors"）**：新增 `indoorAt` 室内谓词（covered=同列头顶有实心 或 开阔度低于阈值，分量可查）；能力库 `world.openness`（kind2=layer, layer3d=rayvis）注册进 registry，layers.js `rayvis` 工厂把 SpaceVisibilityOverlay 挂进宿主场景——runPlan 返回 'layer'，工坊→capability-runtime→createLayer 是真实消费路径。实测：被覆盖格匹配 1/1，工厂烘出 382 个采样+射线元，dispose 摘除干净。原片本身没拍游戏 AI 用法（原文只是 "Might use"），此处给的是诊断层消费者，不声称等同于原作玩法集成。
+
+验收 `node tests/space-visibility-mesh.mjs` PASS；回归 space-visibility.mjs / space-visibility-bake.mjs / c04-bn-world.mjs 全绿。判定 done（与 56 批复核一致，本轮把状态写回）。

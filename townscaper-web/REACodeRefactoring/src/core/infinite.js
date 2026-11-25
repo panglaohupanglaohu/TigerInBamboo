@@ -33,7 +33,7 @@ const hash = (q, r) => ((Math.imul(q, 73856093) ^ Math.imul(r, 19349663)) >>> 0)
  */
 // 第 56 批 C06（1302686201401442309 复现）：bugPatches = 这些块的格在松弛里绕向取反（模拟原片的平滑/翻折 bug：
 // 翻折块塌成一团，插值时又被拉开，邻块被迫拉长去补缺口）。默认 [] → 与旧行为逐位一致。
-export function buildInfinite({ N = 4, L = 1, rings = 2, passes = 60, origin = [0, 0], bugPatches = [] } = {}) {
+export function buildInfinite({ N = 4, L = 1, rings = 2, passes = 60, origin = [0, 0], bugPatches = [], areaPull = 0.85 } = {}) {
   const dirs = DIRS(N);
   // 块中心（点阵坐标）。origin = 任意一个块中心（第 50 轮，迁自 REACode src/quadinf.js 的「按坐标寻址」）：
   // 每块只由自己的 (q,r) 决定（hash 种子、外圈钉住），所以从哪个原点开窗口，同一块、同一簇算出来都一样 → 窗口可以无限平移拼接。
@@ -87,7 +87,7 @@ export function buildInfinite({ N = 4, L = 1, rings = 2, passes = 60, origin = [
     }
     for (const [k, n] of ecount) if (n === 1) for (const id of k.split(',')) local.get(+id).pinned = true;
     const polys = quads.map((qd) => { const pg = qd.map((v) => local.get(v.id)); return bugQuads.has(qd) ? pg.reverse() : pg; });
-    relaxPolygons(polys, [...local.values()], passes);
+    relaxPolygons(polys, [...local.values()], passes, bugQuads.size ? 0 : areaPull);
     const out = new Map();
     for (const v of vs) { const l = local.get(v.id); out.set(v.id, [l.x, l.z]); }
     return out;
@@ -139,7 +139,7 @@ export function buildInfinite({ N = 4, L = 1, rings = 2, passes = 60, origin = [
     if (mode === 'cluster') { const C=clusters.find(c=>c.patches.includes(pi)&&clusterPos[c.id].has(v.id)); return C ? clusterPos[C.id].get(v.id) : [v.x0,v.z0]; }
     throw new RangeError('unknown infinite grid mode');
   };
-  return { barycentricStats, verts, quads: quadsAll, patches, clusters, versions, weights, blendAt, versionAt };
+  return { barycentricStats, verts, quads: quadsAll, patches, clusters, versions, weights, blendAt, versionAt, areaPull: bugQuads.size ? 0 : areaPull, passes, N, rings };
 }
 
 /** 块中心点阵的第 k 个方向偏移（相邻块中心之差），给 origin 用：任意块中心 = Σ dirs 的整数组合。 */
@@ -197,16 +197,16 @@ export function verify(inf, mode = 'blend', {stretchLimit = 2} = {}) {
       const d=Math.hypot(a[0]-b[0],a[1]-b[1]);if(Number.isFinite(d))seam=Math.max(seam,d);else invalid++;
     }
   }
-  return{quads:inf.quads.length,flipped,invalid,border,seam,comparisons,
+  return{quads:inf.quads.length,areaPull:inf.areaPull??null,flipped,invalid,border,seam,comparisons,
     maxStretch,minShrink,maxEdgeStretch,minEdgeShrink,stretched,shrunk,stretchLimit,worst};
 }
 
 /** Relax one group of quads exactly like buildInfinite's relaxGroup (outer edges pinned). */
-function relaxQuads(quads,passes){
+function relaxQuads(quads,passes,areaPull=0){
   const vs=[...new Set(quads.flat())],local=new Map(vs.map((v,i)=>[v.id,{id:i,x:v.x0,z:v.z0,pinned:false}])),ecount=new Map();
   for(const qd of quads)for(let i=0;i<4;i++){const a=qd[i].id,b=qd[(i+1)%4].id,k=a<b?a+','+b:b+','+a;ecount.set(k,(ecount.get(k)||0)+1);}
   for(const [k,n] of ecount)if(n===1)for(const id of k.split(','))local.get(+id).pinned=true;
-  relaxPolygons(quads.map(qd=>qd.map(v=>local.get(v.id))),[...local.values()],passes);
+  relaxPolygons(quads.map(qd=>qd.map(v=>local.get(v.id))),[...local.values()],passes,areaPull);
   const out=new Map();for(const v of vs){const l=local.get(v.id);out.set(v.id,[l.x,l.z]);}return out;
 }
 
@@ -216,7 +216,7 @@ function relaxQuads(quads,passes){
  * 每块仍只由自己的 hash(q,r) 决定，所以结果与 buildInfinite 窗口内的同一块一致（测试对账）。
  * counters 记录真实生成量：最终化一块要 7 块拓扑（自己 + 6 邻）—— 这就是"3 块一簇"的代价。
  */
-export function createInfiniteStream({N=4,L=1,passes=60,clusterSize=3}={}){
+export function createInfiniteStream({N=4,L=1,passes=60,clusterSize=3,areaPull=0.85}={}){
   if(clusterSize!==3&&clusterSize!==7)throw new RangeError('clusterSize must be 3 or 7');
   if(!Number.isInteger(N)||N<1||N>16||!Number.isFinite(L)||L<=0||!Number.isInteger(passes)||passes<0)throw new RangeError('invalid infinite stream options');
   const dirs=DIRS(N),verts=[],vkey=new Map(),topo=new Map(),patchRelax=new Map(),clusterRelax=new Map(),finals=new Map();
@@ -224,9 +224,9 @@ export function createInfiniteStream({N=4,L=1,passes=60,clusterSize=3}={}){
   const vid=(x,z)=>{const k=Math.round(x*1000)+','+Math.round(z*1000);let v=vkey.get(k);if(!v){v={id:verts.length,x0:x,z0:z};verts.push(v);vkey.set(k,v);}return v;};
   const check=(q,r)=>{if(!Number.isInteger(q)||!Number.isInteger(r))throw new RangeError('integer patch lattice coordinates required');const a=(q-r)/(3*N),b=a+r/N;if(!Number.isInteger(a)||!Number.isInteger(b))throw new RangeError('not a patch centre (use combinations of step(k))');};
   const patch=(q,r)=>{check(q,r);const k=q+','+r;let P=topo.get(k);if(!P){const t=quadPatchTopology({N,L,q0:q,r0:r,seed:hash(q,r)}),map=new Map(t.verts.map(v=>[v.id,vid(v.x,v.z)]));P={q,r,center:t.center,quads:t.quads.map(qd=>qd.map(v=>map.get(v.id)))};topo.set(k,P);counters.patches++;}return P;};
-  const relaxedPatch=(q,r)=>{const k=q+','+r;let m=patchRelax.get(k);if(!m){m=relaxQuads(patch(q,r).quads,passes);patchRelax.set(k,m);counters.patchRelax++;}return m;};
+  const relaxedPatch=(q,r)=>{const k=q+','+r;let m=patchRelax.get(k);if(!m){m=relaxQuads(patch(q,r).quads,passes,areaPull);patchRelax.set(k,m);counters.patchRelax++;}return m;};
   const cluster=ids=>{const sorted=[...ids].sort((a,b)=>a[0]-b[0]||a[1]-b[1]),k=sorted.map(p=>p.join(',')).join('|');let C=clusterRelax.get(k);
-    if(!C){const ps=sorted.map(([q,r])=>patch(q,r)),c=ps.map(P=>P.center);C={key:k,center:[c.reduce((s,p)=>s+p[0],0)/c.length,c.reduce((s,p)=>s+p[1],0)/c.length],pos:relaxQuads(ps.flatMap(P=>P.quads),passes)};clusterRelax.set(k,C);counters.clusterRelax++;}return C;};
+    if(!C){const ps=sorted.map(([q,r])=>patch(q,r)),c=ps.map(P=>P.center);C={key:k,center:[c.reduce((s,p)=>s+p[0],0)/c.length,c.reduce((s,p)=>s+p[1],0)/c.length],pos:relaxQuads(ps.flatMap(P=>P.quads),passes,areaPull)};clusterRelax.set(k,C);counters.clusterRelax++;}return C;};
   /** Final (blended) positions for every vertex of patch (q,r): Map(vertexId → [x,z]). */
   const finalPatch=(q,r)=>{const k=q+','+r;if(finals.has(k))return finals.get(k);
     const P=patch(q,r),pp=relaxedPatch(q,r),clusters=clusterSize===3?dirs.map((d,i)=>cluster([[q,r],[q+d[0],r+d[1]],[q+dirs[(i+1)%6][0],r+dirs[(i+1)%6][1]]])):[[0,0],...dirs].map(([dq,dr])=>{const h=[q+dq,r+dr];return cluster([h,...dirs.map(([eq,er])=>[h[0]+eq,h[1]+er])]);});

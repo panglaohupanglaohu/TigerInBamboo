@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>血迹 = 累积密度场，不是叠贴花</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:108ch; }
+  header b { color:#9c4720; font-weight:650; }
+  #stage { position:fixed; inset:104px 16px 66px 16px; display:flex; gap:14px; align-items:center;
+    justify-content:center; background:#20282b; border-radius:12px; border:1px solid var(--line); padding:12px; }
+  .col { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .col span { color:#9fb3b8; font-size:11.5px; }
+  canvas { display:block; border-radius:8px; image-rendering:auto; }
+  #panel { position:fixed; right:26px; top:118px; width:240px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:11px 13px; display:flex; flex-direction:column; gap:8px; z-index:5;
+    box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #panel label.chk { display:flex; gap:7px; align-items:center; font-size:12.5px; cursor:pointer; }
+  #stats { position:fixed; left:18px; bottom:14px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; z-index:5; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .warn { color:#9c4720; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>血迹是<b>一层层加起来的密度</b>，不是叠很多张贴花<span style="font-size:12px;color:#5c727a;font-weight:400"> · 912691357440978945</span></h1>
+  <p>同一块地面只有一个标量，谁叠上来都只是把它加高 —— 所以重叠处是一团连着的深色，边界只有一条。
+     右图是同一份密度按三档颜色还原：中间档取自片子里的 (128,80,112)，核心档 (59,18,72)。</p>
+</header>
+<div id="stage">
+  <div class="col"><canvas id="off"></canvas><span>地面（无血）</span></div>
+  <div class="col"><canvas id="on"></canvas><span>叠加后</span></div>
+</div>
+<div id="panel">
+  <h2>参数</h2>
+  <label class="chk"><input type="checkbox" id="show" checked> 显示血迹（A/B）</label>
+  <div class="row"><span>摊数</span><b id="vn">90</b></div>
+  <input type="range" id="n" min="0" max="240" value="90" step="1">
+  <div class="row"><span>落点聚集度</span><b id="vsp">0.18</b></div>
+  <input type="range" id="sp" min="0.05" max="0.45" value="0.18" step="0.01">
+  <div class="row"><span>覆盖率</span><b id="vcov">–</b></div>
+  <div class="row"><span>中间档误差</span><b id="verr">–</b></div>
+  <div class="row"><span>核心档误差</span><b id="verr2">–</b></div>
+  <div class="row"><span>A/B 像素差</span><b id="vdiff">–</b></div>
+</div>
+<div id="stats"></div>
+
+<script type="module">
+import { BloodField, scatterFight, GROUND } from './src/bloodfield.js';
+
+const $ = (id) => document.getElementById(id);
+const S = 400;
+const off = $('off'), on = $('on');
+[off, on].forEach((c) => { c.width = S; c.height = S; });
+const octx = off.getContext('2d'), onctx = on.getContext('2d');
+
+/* 一块淡紫灰的岩台 —— 底色用片子量到的 (157,145,160)，再压一点起伏，
+   这样血迹的"乘性因子"能直接对上片子里的像素。 */
+function paintGround(ctx) {
+  const img = ctx.createImageData(S, S);
+  const px = img.data;
+  for (let y = 0; y < S; y++) {
+    for (let x = 0; x < S; x++) {
+      const p = (y * S + x) * 4;
+      // 伪噪声：几层正弦，够看出"地面有结构"就行
+      const n = 0.5 + 0.22 * Math.sin(x * 0.043 + Math.sin(y * 0.021) * 2.1)
+        + 0.16 * Math.sin(y * 0.061 + 0.7) + 0.12 * Math.sin((x + y) * 0.011);
+      // 岸边/路面）：斜带子亮一点
+      const path = Math.max(0, 1 - Math.abs((x * 0.5 + y) - 330) / 70) * 0.10;
+      const k = 0.72 + n * 0.34 + path;
+      px[p] = Math.min(255, GROUND[0] * k);
+      px[p + 1] = Math.min(255, GROUND[1] * k);
+      px[p + 2] = Math.min(255, GROUND[2] * k);
+      px[p + 3] = 255;
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+  return img;
+}
+const groundImg = paintGround(octx);
+
+let field = null;
+let diffPct = null;
+
+function build() {
+  field = new BloodField(S, S);
+  const n = +$('n').value;
+  scatterFight(field, n, { cx: 0.58, cy: 0.66, spread: +$('sp').value });
+  render();
+}
+
+function render() {
+  // 右图：拷一份地面，再把密度乘上去
+  const img = new ImageData(new Uint8ClampedArray(groundImg.data), S, S);
+  const show = $('show').checked;
+  if (show) field.applyTo(img);
+  onctx.putImageData(img, 0, 0);
+
+  const a = field.audit();
+  $('vn').textContent = $('n').value;
+  $('vsp').textContent = (+$('sp').value).toFixed(2);
+  $('vcov').textContent = (a.coverage * 100).toFixed(2) + '%';
+  $('verr').textContent = a.errMid + ' / 通道';
+  $('verr2').textContent = a.errCore + ' / 通道';
+  const cls = a.errMid <= 8 && a.errCore <= 8 ? 'ok' : 'warn';
+  $('verr').className = cls; $('verr2').className = cls;
+
+  // A/B：把"有血/无血"两版逐像素比，给出差异百分比
+  const onData = onctx.getImageData(0, 0, S, S).data;
+  let diff = 0;
+  for (let p = 0; p < onData.length; p += 4) {
+    if (Math.abs(onData[p] - groundImg.data[p]) + Math.abs(onData[p + 1] - groundImg.data[p + 1])
+      + Math.abs(onData[p + 2] - groundImg.data[p + 2]) > 6) diff++;
+  }
+  diffPct = diff / (S * S);
+  $('vdiff').textContent = (diffPct * 100).toFixed(2) + '%';
+
+  $('stats').innerHTML =
+    `<b>${a.stamps}</b> 摊 · 密度场 <b>${(S * S * 4 / 1024 / 1024).toFixed(2)} MB</b>` +
+    ` · 覆盖率 <b>${(a.coverage * 100).toFixed(2)}%</b>` +
+    ` · 中间档 <b>rgb(${a.mid})</b> vs 片子 rgb(${a.targetMid}) → 误差 <span class="${cls}">${a.errMid}</span>` +
+    ` · 核心档 <b>rgb(${a.core})</b> vs rgb(${a.targetCore}) → 误差 <span class="${cls}">${a.errCore}</span>` +
+    ` · 满密度乘性因子 <b>[${field.cfg.full.map((v) => v.toFixed(3))}]</b>` +
+    ` · 淘汰上限 <b>${field.cfg.maxStamps}</b> 摊（片子里 23s 没淡出，所以不做衰减）`;
+
+  // 供 playwright 读的结论
+  window.__blood = { coverage: a.coverage, errMid: a.errMid, errCore: a.errCore, diffPct, mid: a.mid, core: a.core };
+}
+
+$('n').addEventListener('input', build);
+$('sp').addEventListener('input', build);
+$('show').addEventListener('change', render);
+build();
+
+// 让外部脚本能拿到"把摊数推满"的状态
+window.__setStamps = (n) => { $('n').value = n; build(); return window.__blood; };
+</script>
+</body>
+</html>

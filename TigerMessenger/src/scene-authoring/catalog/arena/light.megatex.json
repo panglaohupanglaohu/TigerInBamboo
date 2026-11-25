@@ -1,0 +1,257 @@
+{
+ "capability": "light.megatex",
+ "line": "atlas",
+ "beat": "scene.town-graph+light.voxel-ao+light.bounce",
+ "arena": {
+  "seed": 20261123,
+  "n": 28,
+  "step": 2,
+  "L": 1.2,
+  "generator": "lightlife/scene-voxels.js syntheticSite"
+ },
+ "rule": {
+  "better": [
+   {
+    "key": "megaExact",
+    "dir": 1,
+    "tol": 0.01
+   },
+   {
+    "key": "megaOccupancy",
+    "dir": 1,
+    "tol": 0.01
+   }
+  ],
+  "guard": [
+   {
+    "key": "megaBleed",
+    "dir": -1,
+    "tol": 0.001
+   },
+   {
+    "key": "tintShift",
+    "dir": 1,
+    "tol": 0
+   },
+   {
+    "key": "checksFail",
+    "dir": -1,
+    "tol": 0
+   },
+   {
+    "key": "checksWarn",
+    "dir": -1,
+    "tol": 0
+   }
+  ]
+ },
+ "prev": {
+  "townRegions": 134,
+  "townBuildings": 10,
+  "townWalkways": 18,
+  "townLargest": 105,
+  "townChimneys": 10,
+  "aoMean": 0.248,
+  "aoOpen": 0.091,
+  "aoCorner": 0.268,
+  "aoTouched": 1,
+  "aoContrast": 0.177,
+  "tintShift": 0.048,
+  "hueShifted": 0.006,
+  "megaOccupancy": 0,
+  "megaExact": 0,
+  "megaBleed": 0,
+  "megaMip1": 0,
+  "megaFaces": 0,
+  "plantCoverage": 0,
+  "plantUsed": 0,
+  "plantInstances": 0,
+  "windLines": 0,
+  "windBlocked": 0,
+  "windInside": 0,
+  "windRise": 0,
+  "smokeSources": 0,
+  "smokePuffs": 0,
+  "smokeRise": 0,
+  "animals": 0,
+  "animalsOnLand": 0,
+  "animalsLeft": 0,
+  "animalsTravel": 0,
+  "plateauRuns": 0,
+  "plateauLevels": 0,
+  "plateauLargest": 0,
+  "stepEdges": 0,
+  "stepLand": 0,
+  "stepArea": 0,
+  "checksPass": 8,
+  "checksWarn": 0,
+  "checksFail": 0,
+  "applied": 3
+ },
+ "next": {
+  "townRegions": 134,
+  "townBuildings": 10,
+  "townWalkways": 18,
+  "townLargest": 105,
+  "townChimneys": 10,
+  "aoMean": 0.248,
+  "aoOpen": 0.091,
+  "aoCorner": 0.268,
+  "aoTouched": 1,
+  "aoContrast": 0.177,
+  "tintShift": 0.048,
+  "hueShifted": 0.006,
+  "megaOccupancy": 0.067,
+  "megaExact": 1,
+  "megaBleed": 0,
+  "megaMip1": 0,
+  "megaFaces": 835,
+  "plantCoverage": 0,
+  "plantUsed": 0,
+  "plantInstances": 0,
+  "windLines": 0,
+  "windBlocked": 0,
+  "windInside": 0,
+  "windRise": 0,
+  "smokeSources": 0,
+  "smokePuffs": 0,
+  "smokeRise": 0,
+  "animals": 0,
+  "animalsOnLand": 0,
+  "animalsLeft": 0,
+  "animalsTravel": 0,
+  "plateauRuns": 0,
+  "plateauLevels": 0,
+  "plateauLargest": 0,
+  "stepEdges": 0,
+  "stepLand": 0,
+  "stepArea": 0,
+  "checksPass": 9,
+  "checksWarn": 0,
+  "checksFail": 0,
+  "applied": 4
+ },
+ "judge": {
+  "pass": true,
+  "rows": [
+   {
+    "key": "megaBleed",
+    "prev": 0,
+    "next": 0,
+    "delta": 0,
+    "role": "guard",
+    "tol": 0.001,
+    "ok": true
+   },
+   {
+    "key": "tintShift",
+    "prev": 0.048,
+    "next": 0.048,
+    "delta": 0,
+    "role": "guard",
+    "tol": 0,
+    "ok": true
+   },
+   {
+    "key": "checksFail",
+    "prev": 0,
+    "next": 0,
+    "delta": 0,
+    "role": "guard",
+    "tol": 0,
+    "ok": true
+   },
+   {
+    "key": "checksWarn",
+    "prev": 0,
+    "next": 0,
+    "delta": 0,
+    "role": "guard",
+    "tol": 0,
+    "ok": true
+   },
+   {
+    "key": "megaExact",
+    "prev": 0,
+    "next": 1,
+    "delta": 1,
+    "role": "better",
+    "tol": 0.01,
+    "ok": true,
+    "better": true
+   },
+   {
+    "key": "megaOccupancy",
+    "prev": 0,
+    "next": 0.067,
+    "delta": 0.067,
+    "role": "better",
+    "tol": 0.01,
+    "ok": true,
+    "better": true
+   }
+  ],
+  "why": "赢：megaExact、megaOccupancy 变好，守护指标都没退步"
+ },
+ "pass": true,
+ "status": "measured",
+ "recordedAt": "2026-11-24T06:36:32.730Z",
+ "recordedBy": "record-lightlife-arena.mjs（实算）",
+ "planSummary": {
+  "applied": [
+   "scene.town-graph",
+   "light.voxel-ao",
+   "light.bounce",
+   "light.megatex"
+  ],
+  "steps": [
+   "scene.town-graph",
+   "light.voxel-ao",
+   "light.bounce",
+   "light.megatex"
+  ]
+ },
+ "metrics": {
+  "townRegions": 134,
+  "townBuildings": 10,
+  "townWalkways": 18,
+  "townLargest": 105,
+  "townChimneys": 10,
+  "aoMean": 0.248,
+  "aoOpen": 0.091,
+  "aoCorner": 0.268,
+  "aoTouched": 1,
+  "aoContrast": 0.177,
+  "tintShift": 0.048,
+  "hueShifted": 0.006,
+  "megaOccupancy": 0.067,
+  "megaExact": 1,
+  "megaBleed": 0,
+  "megaMip1": 0,
+  "megaFaces": 835,
+  "plantCoverage": 0,
+  "plantUsed": 0,
+  "plantInstances": 0,
+  "windLines": 0,
+  "windBlocked": 0,
+  "windInside": 0,
+  "windRise": 0,
+  "smokeSources": 0,
+  "smokePuffs": 0,
+  "smokeRise": 0,
+  "animals": 0,
+  "animalsOnLand": 0,
+  "animalsLeft": 0,
+  "animalsTravel": 0,
+  "plateauRuns": 0,
+  "plateauLevels": 0,
+  "plateauLargest": 0,
+  "stepEdges": 0,
+  "stepLand": 0,
+  "stepArea": 0,
+  "checksPass": 9,
+  "checksWarn": 0,
+  "checksFail": 0,
+  "applied": 4
+ }
+}

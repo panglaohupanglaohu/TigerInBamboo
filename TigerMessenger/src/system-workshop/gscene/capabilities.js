@@ -20,8 +20,8 @@ const PACKS = { morris: [...morris.town.walls, ...Object.values(morris.town.buil
 
 export const GSCENE_CAPABILITIES = [
   ...PERCEPTUAL_CAPABILITIES,
-  { meta: { id: 'scene.palette-unify', domain: 'style', name: '风格统一（主色归并）', does: '把场景里散乱的颜色按使用次数聚成几个主色，每种材质向所属主色靠拢；数量越少风格越统一。',
-      keywords: ['统一', '风格', '颜色', '杂乱', '协调', '主色', '调色板', 'palette'], params: { colors: { label: '主色数', min: 3, max: 12, step: 1, default: 6 }, strength: { label: '靠拢程度', min: 0.1, max: 1, step: 0.05, default: 0.6 } } },
+  { meta: { id: 'scene.palette-unify', reads: ['materials'], writes: ['materials', 'palette'], preserves: ['userSaves'], domain: 'style', line: 'palette', name: '风格统一（主色归并）', does: '把场景里散乱的颜色按使用次数聚成几个主色，每种材质向所属主色靠拢；数量越少风格越统一。',
+      related: ['1200520827898343425'], ideas: ['townscaper-web/REACode/src/palette.js'], keywords: ['统一', '风格', '颜色', '杂乱', '协调', '主色', '调色板', 'palette'], params: { colors: { label: '主色数', min: 3, max: 12, step: 1, default: 6 }, strength: { label: '靠拢程度', min: 0.1, max: 1, step: 0.05, default: 0.6 } } },
     match: (M) => M.length >= 4 ? [{ id: 'materials', count: M.length, reason: `${M.length} 种材质，${new Set(M.map((m) => m.color)).size} 种颜色` }] : [],
     run(M, p) {
       const pts = M.map((m) => ({ id: m.id, c: hex2rgb(m.color), w: Math.max(1, m.uses) }));
@@ -36,12 +36,12 @@ export const GSCENE_CAPABILITIES = [
       const colors = {}; pts.forEach((x, j) => { colors[x.id] = rgb2hex(mix(x.c, cent[lab[j]], p.strength)); });
       return { colors, note: `${k} 个主色：${cent.map(rgb2hex).join(' ')}` };
     } },
-  { meta: { id: 'scene.tone', domain: 'atmosphere', name: '整体色调', does: '对场景所有材质做同一组调色：色相旋转、饱和度缩放、明度偏移（像给场景换一种时辰或情绪）。',
-      keywords: ['色调', '氛围', '暖', '冷', '暗', '亮', '饱和', '黄昏', '清晨', 'tone', 'mood'], params: { hue: { label: '色相旋转°', min: -60, max: 60, step: 5, default: 10 }, sat: { label: '饱和度×', min: 0.4, max: 1.6, step: 0.05, default: 1.1 }, light: { label: '明度±', min: -0.2, max: 0.2, step: 0.02, default: 0 } } },
+  { meta: { id: 'scene.tone', reads: ['materials'], writes: ['materials'], preserves: ['userSaves'], domain: 'atmosphere', line: 'palette', name: '整体色调', does: '对场景所有材质做同一组调色：色相旋转、饱和度缩放、明度偏移（像给场景换一种时辰或情绪）。',
+      related: ['1200520827898343425'], ideas: ['townscaper-web/REACode/src/palette.js'], keywords: ['色调', '氛围', '暖', '冷', '暗', '亮', '饱和', '黄昏', '清晨', 'tone', 'mood'], params: { hue: { label: '色相旋转°', min: -60, max: 60, step: 5, default: 10 }, sat: { label: '饱和度×', min: 0.4, max: 1.6, step: 0.05, default: 1.1 }, light: { label: '明度±', min: -0.2, max: 0.2, step: 0.02, default: 0 } } },
     match: (M) => M.length ? [{ id: 'materials', count: M.length, reason: `调整 ${M.length} 种材质的色调` }] : [],
     run(M, p) { const colors = {}; for (const m of M) { const [h, s, l] = rgb2hsl(hex2rgb(m.color)); colors[m.id] = rgb2hex(hsl2rgb([(h + p.hue / 360 + 1) % 1, Math.min(1, s * p.sat), Math.max(0, Math.min(1, l + p.light))])); } return { colors }; } },
-  { meta: { id: 'scene.style-pack', domain: 'style', name: '套用风格包', does: '每种材质靠向风格包色板里最近的颜色（目前：莫里斯色板），把场景拉进同一个风格家族。',
-      keywords: ['风格包', '莫里斯', '挂毯', '统一风格', '套用', 'morris', 'pack'], params: { strength: { label: '靠拢程度', min: 0.1, max: 1, step: 0.05, default: 0.5 } } },
+  { meta: { id: 'scene.style-pack', reads: ['materials'], writes: ['materials', 'palette'], preserves: ['userSaves'], domain: 'style', line: 'palette', name: '套用风格包', does: '每种材质靠向风格包色板里最近的颜色（目前：莫里斯色板），把场景拉进同一个风格家族。',
+      related: ['1200520827898343425'], ideas: ['townscaper-web/REACode/src/palette.js'], keywords: ['风格包', '莫里斯', '挂毯', '统一风格', '套用', 'morris', 'pack'], params: { strength: { label: '靠拢程度', min: 0.1, max: 1, step: 0.05, default: 0.5 } } },
     match: (M) => M.length ? [{ id: 'materials', count: M.length, reason: `莫里斯色板 ${PACKS.morris.length} 色` }] : [],
     run(M, p) { const pal = PACKS.morris.map(hex2rgb), colors = {}; for (const m of M) { const c = hex2rgb(m.color); let best = pal[0], bd = 9; for (const q of pal) { const d = dist(c, q); if (d < bd) { bd = d; best = q; } } colors[m.id] = rgb2hex(mix(c, best, p.strength)); } return { colors }; } },
 ];
@@ -57,7 +57,7 @@ export function runGscenePlan(M, steps, onStep) {
     const cap = GSCENE_CAPABILITIES.find((c) => c.meta.id === s.id); if (!cap) { report.push({ id: s.id, status: 'missing' }); continue; }
     const params = paramsFor(cap, s.params), out = cap.run(params.includeEdited?cur:editable(cur), params);
     let n = 0; cur = cur.map((m) => { const c = out.colors[m.id]; if (c && c !== m.color) { n++; return { ...m, color: c }; } return m; });
-    report.push({ id: s.id, status: n ? 'applied' : 'no-target', params, count: n, changed: out.note ? [out.note] : [] });
+    report.push({ id: s.id, line: cap.meta.line, status: n ? 'applied' : 'no-target', params, count: n, changed: out.note ? [out.note] : [] });
   }
   const colors = {}; for (const m of cur) if (m.color !== M.find((x) => x.id === m.id).color) colors[m.id] = m.color;
   return { colors, report, after: cur };

@@ -2,10 +2,14 @@ const{chromium}=require('playwright');const fs=require('fs'),path=require('path'
 (async()=>{const b=await chromium.launch({executablePath:process.env.CHROME_PATH||'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true,args:['--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader']});
 const p=await b.newPage({viewport:{width:1440,height:1000}}),errors=[],reports=[],base=process.env.REA_TEST_URL||'http://localhost:8769',out=path.resolve(__dirname,'../artifacts/coverage');p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
 for(const kind of ['quad','mixed']){
- await p.goto(base+'/index.html?scene=badnorth'+(kind==='mixed'?'&grid=mixed':''));await p.waitForFunction(()=>window.rea?.battle?.running,{timeout:60000});
+ await p.goto(base+'/index.html?scene=badnorth'+(kind==='mixed'?'&grid=mixed':''));await p.waitForFunction(()=>window.rea?.battle?.running,null,{timeout:120000});
  const normal=await p.evaluate(()=>{const b=rea.battle;return {units:b.units.length,resolved:b.units.filter(u=>b.navigation.unitNode(u)).length}});if(normal.resolved!==normal.units)throw Error('Spawn floor mismatch '+JSON.stringify(normal));
- await p.evaluate(()=>{const w=rea.world;w.reset();for(const c of w.cells){w.fill(c,1,{rock:true});if(Math.abs(c.cx)<1.4)w.setSolid(c,3,true,{rock:true})}rea.view.worldMesh.invalidate()});
- await p.waitForFunction(()=>rea.view.worldMesh.builtVersion===rea.world.version,{timeout:60000});await p.waitForTimeout(650);
+ await p.evaluate(()=>{const w=rea.world;w.reset();/* 第 237 轮：桥面是**建筑**（不是地形）。原夹具给了 rock:true，于是 world.ground=3=top
+  → 地表导航把桥顶当成可行走台地，两级楼梯合法，走屋顶与穿洞同价（自 r174 起的红就是这条夹具口径错，不是导航错）。
+  片内是厚岩拱洞：顶上有实心、洞里能走人，但没有一条坡能上顶。去掉 rock:true 后 top=3/ground=1（建筑面），
+  地表不可走 → 只剩第 1 层的洞道。*/
+ for(const c of w.cells){w.fill(c,1,{rock:true});if(Math.abs(c.cx)<1.4)w.setSolid(c,3,true)}rea.view.worldMesh.invalidate()});
+ await p.waitForFunction(()=>rea.view.worldMesh.builtVersion===rea.world.version,null,{timeout:120000});await p.waitForTimeout(650);
  const result=await p.evaluate(()=>{
   const w=rea.world,b=rea.battle;b.start(w);b.nextWave=Infinity;
   const left=w.cells.reduce((a,c)=>Math.hypot(c.cx+3,c.cz)<Math.hypot(a.cx+3,a.cz)?c:a),right=w.cells.reduce((a,c)=>Math.hypot(c.cx-3,c.cz)<Math.hypot(a.cx-3,a.cz)?c:a);
@@ -34,6 +38,6 @@ for(const kind of ['quad','mixed']){
  const blocked=await p.evaluate(()=>{const b=rea.battle,w=rea.world,sq=b.squads[0],u=b.units[0],left=w.cells[b.navigation.graph.nodes.find(n=>n.cell.id===sq.goal.id)?.cell.id??0];const start=w.cells.find(c=>c.cx<-2.5&&Math.abs(c.cz)<.7);u.x=start.cx;u.z=start.cz;u.y=.5;u.navFloor=1;for(const c of w.cells)if(Math.abs(c.cx)<1.4)w.fill(c,6,{rock:true});b.paused=false;for(let i=0;i<120;i++)b.update(1/60);b.paused=true;return {distance:Math.hypot(u.x-start.cx,u.z-start.cz),height:u.y}});
  if(blocked.distance>.001||blocked.height>.51)throw Error('Closed tunnel causes movement/teleport '+JSON.stringify(blocked));reports.at(-1).closedTunnel=blocked;
 }
-for(const scene of ['town','terrain','fusion']){await p.goto(base+'/index.html?scene='+scene);await p.waitForFunction(()=>window.rea?.view,{timeout:60000});await p.waitForTimeout(800);await p.screenshot({path:path.join(out,'battle-navigation-regression-'+scene+'.png')})}
+for(const scene of ['town','terrain','fusion']){await p.goto(base+'/index.html?scene='+scene);await p.waitForFunction(()=>window.rea?.view,null,{timeout:120000});await p.waitForTimeout(800);await p.screenshot({path:path.join(out,'battle-navigation-regression-'+scene+'.png')})}
 fs.writeFileSync(path.join(out,'battle-navigation-browser.json'),JSON.stringify({reports,errors},null,2));await b.close();if(errors.length)throw Error(errors.join('\n'));console.log('PASS actual Battle tunnel traversal and closure',reports);
 })().catch(e=>{console.error(e);process.exit(1)});

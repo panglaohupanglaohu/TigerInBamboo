@@ -125,6 +125,8 @@ flowchart TD
 
 ## 6. 后续步骤（按顺序）
 
+**2026-11-23 更新**：下面 1、2、3、5、7 步已做（统一经验 `agent/experience.js`、`export-learn-queue.mjs`、适配队列 7 → 2、六层需求回流、回执带能力线）；第 6 步 JEV 归线做了两次；第 4 步只开了头。现状、欠账和后续 70 轮安排见 `CAPABILITY_PIPELINE_GUIDE.md`，以它为准。
+
 进度（2026-11-15）：第 3 步开了头，网格线有了第一项可执行能力 `grid.contours`（显示层，Node 用例通过，真实游戏里尚未验收）；适配队列剩 5 条线。第 1、2、5、7 步未动。新增一项：十二门徒地形按 `APOSTLES_TERRAIN_DIAGNOSIS.md` 的顺序补，起点是库里的地形 A+++（队列 #20）。
 
 

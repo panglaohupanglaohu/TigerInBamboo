@@ -42,6 +42,26 @@ const S2 = make({ arch: true, gap: true, doorCost: 2.5 });
 const r2 = walk(S2, S2.at(0, 1), S2.at(6, 1));
 assert.ok(r2.includes(S2.at(3, 0).id) && !r2.includes(S2.at(3, 1).id), '门价 2.5：拱洞 9 > 绕行 8，改走无顶缺口');
 assert.throws(() => new BattleNavigation(S.world, S.index, { doorCost: .5 }));
+// ③b r238：门价的**计价单位**——一条洞道只算两个洞口，不算每一步。
+// 旧口径按「b 被覆盖」逐格收：3 格长隧道收 3 次；单侧收又让同一棵树里的距离变成方向相关。
+// 这里同时钉住两件事：多格隧道只多收 2 份门价、以及正反向距离相等。
+{
+  const T = (doorCost) => {
+    const S = stripWorld(7, 3);
+    for (const c of S.cells) S.world.fill(c, 1, { rock: true });
+    for (let j = 0; j < 3; j++) for (let i = 3; i <= 5; i++) for (let lv = 2; lv <= 5; lv++) S.world.setSolid(S.at(i, j), lv, true, { rock: true });
+    for (let i = 3; i <= 5; i++) S.world.setSolid(S.at(i, 1), 2, false);          // 3 格长隧道（2 个洞口、1 格洞身）
+    const nav = new BattleNavigation(S.world, S.index, { levelHeight: L, doorCost });
+    nav.refresh();
+    return { nav, S };
+  };
+  const dist = ({ nav, S }, from, to) => nav.graph.treeTo(nav.graph.at(to, 1)).distance[nav.graph.at(from, 1)];
+  const free = T(1), paid = T(1.35);
+  const base = dist(free, free.S.at(0, 1), free.S.at(6, 1)), withDoor = dist(paid, paid.S.at(0, 1), paid.S.at(6, 1));
+  const extra = +(withDoor - base).toFixed(6);
+  assert.equal(extra, .7, `3 格隧道只收两个洞口（+2×0.35=0.7），不按格收（+3×0.35=1.05）；实测 ${extra}`);
+  assert.equal(dist(free, free.S.at(6, 1), free.S.at(0, 1)), base, '正反向同价（单侧收会让树里的距离方向相关）');
+}
 // ④ 797119718477991936：导航跟着几何长——逐格加地板，节点数单调不减、最后全连通
 const G = stripWorld(5, 5); const nav = new BattleNavigation(G.world, G.index); let prev = 0;
 for (const c of G.cells) { G.world.fill(c, 1, { rock: true }); nav.refresh(); const n = nav.graph.nodes.length; assert.ok(n >= prev); prev = n; }

@@ -98,6 +98,47 @@ export function buildFoamMask(raster, { falloff = 0.22, radius = 1.2, gain = 1.6
   return { ...raster, foam, dist, frac, stats: { W, H, foamTexels: n, meanFoam: n ? sum / n : 0 } };
 }
 
+/**
+ * 沿岸泡沫「白花簇」（第 183 轮，片 946660607008403456 · 946660607008403456 frame-0250 的 3× 裁切）：
+ * 遮罩 `buildFoamMask` 给的是一条**连续**的近岸衰减带（距离场 × 暴露度），
+ * 而原片沿岸带里是一簇簇**离散的白点**（看起来像白花），簇内 3–6 点、簇间距几倍点径。
+ * 这里在「泡沫带内」按定种子撒簇：锚点取 band 内 foam 达标的格，簇内点按 spread 散开。
+ * 只读遮罩、不写回 → 连续带与离散簇可以同时存在（A/B 由页面开关决定）。
+ */
+export function foamClusters(mask, { seed = 17, count = 60, inner = 0.06, outer = 0.6, specks = 4, spread = 0.12, minFoam = 0.25 } = {}) {
+  if (!mask || !mask.foam) throw new RangeError('foamClusters needs foam mask');
+  if (![seed, count, inner, outer, specks, spread, minFoam].every(Number.isFinite)) throw new RangeError('foamClusters options');
+  if (count < 1 || specks < 0 || inner < 0 || !(outer > inner) || spread < 0 || minFoam < 0) throw new RangeError('foamClusters ranges');
+  const { W, H, res, minX, minZ, mask: land, foam, dist } = mask;
+  const cand = [];
+  for (let k = 0; k < foam.length; k++) {
+    if (land[k]) continue;
+    const d = dist[k];                             // chamferDistance 末尾已乘过 res，本身就是世界单位
+    if (d < inner || d > outer) continue;
+    if (foam[k] < minFoam) continue;
+    cand.push(k);
+  }
+  if (cand.length === 0) return { clusters: [], stats: { candidates: 0, clusters: 0, specks: 0, band: [inner, outer], meanDist: 0 } };
+  let a = seed >>> 0;
+  const r = () => { a = (a + 0x6d2b79f5) >>> 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const clusters = [];
+  let sumDist = 0;
+  for (let i = 0; i < count; i++) {
+    const k = cand[(r() * cand.length) | 0];
+    const gx = k % W, gz = (k / W) | 0;
+    const x = minX + (gx + 0.5) * res, z = minZ + (gz + 0.5) * res;
+    const d = dist[k];
+    sumDist += d;
+    const pts = [];
+    for (let j = 0; j <= specks; j++) {
+      const ang = r() * Math.PI * 2, rad = j === 0 ? 0 : spread * Math.sqrt(r());
+      pts.push({ x: x + Math.cos(ang) * rad, z: z + Math.sin(ang) * rad, r: res * (0.5 + 0.9 * r()), a: Math.min(1, foam[k] * (0.8 + 0.4 * r())) });
+    }
+    clusters.push({ x, z, dist: d, foam: foam[k], specks: pts });
+  }
+  return { clusters, stats: { candidates: cand.length, clusters: clusters.length, specks: clusters.length * (specks + 1), band: [inner, outer], meanDist: sumDist / clusters.length } };
+}
+
 /** 取遮罩在世界坐标 (x,z) 的双线性值（node 测试与 CPU 调试用）。 */
 export function sampleGrid(g, arr, x, z) {
   const fi = (x - g.minX) / g.res, fj = (z - g.minZ) / g.res;

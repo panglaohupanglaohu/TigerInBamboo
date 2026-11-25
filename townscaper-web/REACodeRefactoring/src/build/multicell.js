@@ -22,6 +22,17 @@ export function enumerateHouseTiles(world,{kinds=[4,3],stories=1}={}){
     }
   }return out.sort((a,b)=>a.cells[0]-b.cells[0]||a.cells[1]-b.cells[1]);
 }
+/** Instance identity (1579483114178768898): every committed footprint carries a
+ * stable `placement.instance` id on its frozen receipt. A replace on the same
+ * cells inherits the id automatically; a move passes the old id explicitly via
+ * `placement.instance`. Minted ids are never reused: world.houseInstances keeps
+ * live entries and null tombstones, rides world.snapshot()/restore() (unified
+ * undo — one stack entry restores voxels and identity together) and is what the
+ * project JSON (ui/house-project.js) round-trips across reloads.
+ */
+const INSTANCE_ID=/^[A-Za-z0-9:_-]{1,80}$/;
+const sameCells=(a,b)=>{if(a.length!==b.length)return false;const x=[...a].sort(order),y=[...b].sort(order);return x.every((v,i)=>v===y[i]);};
+const mintHouseInstance=world=>{const reg=world.houseInstances??(world.houseInstances=new Map());let n=1;while(reg.has(`house:${n}`))n++;return`house:${n}`;};
 /** Validate the entire transaction before writing any voxel. Boundary is derived,
  * never trusted as an occupancy mask. No second editable occupancy field exists.
  */
@@ -44,7 +55,8 @@ const freezeReceipt=entries=>Object.freeze({entries:Object.freeze(entries.map(e=
 /** 1579483114178768898 "multi-cell tiles": remove/replace whole footprints.
  * A receipt can be used after unrelated edits, undo or a voxel save roundtrip,
  * but any edit to its exact columns rejects the entire operation. Receipts are
- * session data; v5 saves encode voxel appearance, not instance identity.
+ * session data; v5 saves encode voxel appearance, not instance identity —
+ * identity lives in world.houseInstances and the project JSON envelope.
  */
 export function editHouseTiles(world,{remove={entries:[]},placements=[],color=0}={}){
   // v5 share saves use 5 bits for color+1, so the representable range is 0..30.
@@ -53,9 +65,23 @@ export function editHouseTiles(world,{remove={entries:[]},placements=[],color=0}
   const removed=new Set();
   for(const entry of entries){
     if(!entry?.placement?.cells||entry.before?.length!==entry.placement.cells.length||entry.after?.length!==entry.before.length)return {ok:false,reason:'receipt'};
+    if(entry.placement.instance!==undefined&&(typeof entry.placement.instance!=='string'||!INSTANCE_ID.test(entry.placement.instance)))return {ok:false,reason:'receipt'};
     for(let i=0;i<entry.after.length;i++){const a=entry.after[i],b=entry.before[i];if(!a||!b||a.id!==b.id||a.id!==entry.placement.cells[i]||!Number.isInteger(a.id)||a.id<0||a.id>=world.solid.length||removed.has(a.id))return {ok:false,reason:'receipt'};
       removed.add(a.id);if(fields.some(k=>world[k][a.id]!==a[k]))return {ok:false,reason:'stale-receipt'};
     }
+  }
+  // Identity resolution before any write: explicit ids may only collide with an
+  // instance being removed in the same transaction (that's a move); two
+  // placements may never claim one id. Unmarked replacements on the exact same
+  // cells inherit the removed instance so edits keep identity.
+  const removedIds=new Set(entries.map(e=>e.placement.instance).filter(Boolean)),claimed=new Set(),resolved=[];
+  for(const p of placements){
+    let id=p.instance;
+    if(id!==undefined){
+      if(typeof id!=='string'||!INSTANCE_ID.test(id))return{ok:false,reason:'instance'};
+      if(claimed.has(id)||(world.houseInstances?.has(id)&&!removedIds.has(id)))return{ok:false,reason:'instance-conflict'};
+    }else id=entries.find(e=>e.placement.instance&&sameCells(e.placement.cells,p.cells))?.placement.instance??null;
+    claimed.add(id);resolved.push(id);
   }
   // Temporary transaction snapshot, like undo: the live World never changes
   // until all support/occupancy checks pass. It shares the original grid.
@@ -63,9 +89,13 @@ export function editHouseTiles(world,{remove={entries:[]},placements=[],color=0}
   for(const entry of entries)for(const b of entry.before)for(const k of fields)staged[k][b.id]=b[k];
   const check=validateHouseTiles(staged,placements);if(!check.ok)return check;
   const next=[];
-  for(const p of placements){const before=p.cells.map(id=>column(staged,id));for(const id of p.cells){const mask=((1<<p.stories)-1)<<p.floor;staged.solid[id]|=mask;staged.color[id]=color;}next.push({placement:p,before,after:p.cells.map(id=>column(staged,id))});}
+  for(let i=0;i<placements.length;i++){const p=placements[i];const before=p.cells.map(id=>column(staged,id));for(const id of p.cells){const mask=((1<<p.stories)-1)<<p.floor;staged.solid[id]|=mask;staged.color[id]=color;}next.push({placement:{...p,instance:resolved[i]??mintHouseInstance(world)},before,after:p.cells.map(id=>column(staged,id))});}
   const changed=new Set([...removed,...placements.flatMap(p=>p.cells)]);for(const id of changed)for(const k of fields)world[k][id]=staged[k][id];
-  if(changed.size)world.touch();return {ok:true,count:placements.length,receipt:freezeReceipt(next)};
+  if(changed.size)world.touch();
+  const receipt=freezeReceipt(next);
+  if(receipt.entries.length||removedIds.size){const reg=world.houseInstances??(world.houseInstances=new Map()),kept=new Set(receipt.entries.map(e=>e.placement.instance));
+    for(const id of removedIds)if(!kept.has(id))reg.set(id,null);for(const e of receipt.entries)reg.set(e.placement.instance,e);}
+  return {ok:true,count:placements.length,receipt};
 }
 export function commitHouseTiles(world,placements,options={}){return editHouseTiles(world,{...options,placements});}
 export function placeHouseTiles(world,{seed=7,count=6,stories=1}={}){
@@ -75,5 +105,7 @@ export function placeHouseTiles(world,{seed=7,count=6,stories=1}={}){
   candidates.sort((a,b)=>score(a)-score(b)||a.cells[0]-b.cells[0]||a.cells[1]-b.cells[1]);
   const placements=[],reserved=new Set(),byId=new Map(world.cells.map(c=>[c.id,c]));
   for(const p of candidates){if(placements.length>=count)break;if(p.cells.some(id=>reserved.has(id)))continue;placements.push(p);for(const id of p.cells){reserved.add(id);for(const nb of byId.get(id).edgeNeighbors)if(nb>=0)reserved.add(nb);}}
-  const committed=commitHouseTiles(world,placements,{color:Math.abs(seed%8)});return {...committed,placements,reserved};
+  const committed=commitHouseTiles(world,placements,{color:Math.abs(seed%8)});
+  if(committed.ok)committed.receipt.entries.forEach((e,i)=>{placements[i].instance=e.placement.instance;});
+  return {...committed,placements,reserved};
 }

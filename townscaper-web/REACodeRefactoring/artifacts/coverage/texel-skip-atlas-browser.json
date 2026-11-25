@@ -1,0 +1,185 @@
+{
+  "atlas": {
+    "size": 128,
+    "slots": 60,
+    "plant": {
+      "x": 96,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "plantMean": 0.5,
+    "plantStd": 0.2495,
+    "level4MaxErr": 1.06,
+    "level4Err": [
+      0.59375,
+      0.625,
+      0.96875,
+      0.375,
+      0.96875,
+      1.0625
+    ]
+  },
+  "magnify": [
+    [
+      {
+        "mag": 8,
+        "mip": true,
+        "show": 2,
+        "w": 512,
+        "h": 512,
+        "mean": 0.47,
+        "mad": 0.00163,
+        "darkFrac": 0.0805,
+        "runP50": 2,
+        "runP90": 2,
+        "runs": 306
+      },
+      {
+        "mag": 8,
+        "mip": false,
+        "show": 2,
+        "w": 512,
+        "h": 512,
+        "mean": 0.47,
+        "mad": 0.00163,
+        "darkFrac": 0.0805,
+        "runP50": 2,
+        "runP90": 2,
+        "runs": 306
+      }
+    ],
+    [
+      {
+        "mag": 4,
+        "mip": true,
+        "show": 2,
+        "w": 512,
+        "h": 512,
+        "mean": 0.4662,
+        "mad": 0.00318,
+        "darkFrac": 0.158,
+        "runP50": 2,
+        "runP90": 2,
+        "runs": 565
+      },
+      {
+        "mag": 4,
+        "mip": false,
+        "show": 2,
+        "w": 512,
+        "h": 512,
+        "mean": 0.4662,
+        "mad": 0.00318,
+        "darkFrac": 0.158,
+        "runP50": 2,
+        "runP90": 2,
+        "runs": 565
+      }
+    ]
+  ],
+  "lineWidth": [
+    {
+      "mag": 12,
+      "mip": true,
+      "show": 0,
+      "w": 512,
+      "h": 512,
+      "mean": 0.4426,
+      "mad": 0.00169,
+      "darkFrac": 0.3323,
+      "runP50": 12,
+      "runP90": 12,
+      "runs": 220
+    },
+    {
+      "mag": 12,
+      "mip": true,
+      "show": 1,
+      "w": 512,
+      "h": 512,
+      "mean": 0.4714,
+      "mad": 0.00118,
+      "darkFrac": 0.0508,
+      "runP50": 2,
+      "runP90": 2,
+      "runs": 235
+    }
+  ],
+  "minify": [
+    [
+      {
+        "mag": 0.35,
+        "mip": false,
+        "show": 2,
+        "w": 512,
+        "h": 512,
+        "mean": 0.4448,
+        "mad": 0.01136,
+        "darkFrac": 0.284,
+        "runP50": 1,
+        "runP90": 1,
+        "runs": 616
+      },
+      {
+        "mag": 0.35,
+        "mip": true,
+        "show": 2,
+        "w": 512,
+        "h": 512,
+        "mean": 0.4427,
+        "mad": 0.00564,
+        "darkFrac": 0,
+        "runP50": 0,
+        "runP90": 0,
+        "runs": 0
+      }
+    ],
+    [
+      {
+        "mag": 0.12,
+        "mip": false,
+        "show": 2,
+        "w": 512,
+        "h": 512,
+        "mean": 0.445,
+        "mad": 0.00631,
+        "darkFrac": 0.2978,
+        "runP50": 2,
+        "runP90": 4,
+        "runs": 1192
+      },
+      {
+        "mag": 0.12,
+        "mip": true,
+        "show": 2,
+        "w": 512,
+        "h": 512,
+        "mean": 0.4426,
+        "mad": 0,
+        "darkFrac": 0,
+        "runP50": 0,
+        "runP90": 0,
+        "runs": 0
+      }
+    ]
+  ],
+  "scene": {
+    "stats": {
+      "vertices": 36555,
+      "skinned": 36555,
+      "slots": 26,
+      "overflow": 0,
+      "mismatch": 0,
+      "ms": 16
+    },
+    "on": true,
+    "sharedLeaf": true,
+    "leafUniform": true,
+    "mipBytes": true
+  },
+  "sceneAB": {
+    "diff": 6595,
+    "backDiff": 0
+  }
+}

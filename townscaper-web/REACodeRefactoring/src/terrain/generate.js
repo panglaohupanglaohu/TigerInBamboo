@@ -18,11 +18,12 @@ import {depressionFill} from '../core/depression-fill.js';
  */
 
 import { addFeatures } from './features.js';
+import { placeLedges, thinLedges } from './thin-platform.js';
 import { fbm, ridged, clamp01, smoothstep, makeRng } from '../core/noise.js';
 
 export function generateTerrain(world, {
   seed = 7, maxLevels = 8, towers = 3, canyons = true, rivers = 2, caves = 2, beach = true, features = true, drainage = false, riverNetwork = false, softSlopes = false,
-  riverRelax = false, lakes = false, erosion = null, basins = 0, softRelax = false,
+  riverRelax = false, lakes = false, erosion = null, basins = 0, softRelax = false, ledges = 0,
 } = {}) {
   // r55: riverRelax = BFS gentle-slope collapse around carved rivers; lakes = joint lake/hole rebuild
   // (water-mode fill + every dangling river and every lake spill re-linked to the sea); erosion = stream power.
@@ -136,6 +137,11 @@ export function generateTerrain(world, {
   const feat = features ? addFeatures(world, { seed }) : null;
   world.features = feat;
 
+  // 8b) 沿墙薄檐（thin-platform.js，781957658597269506，默认关）：高崖腰上挑出一层悬空窄檐，
+  // 可站可走（top==ground 进可走图），落差 ≤2 的邻边 buildNav 放楼梯，ladderContact 判 thinPlatform。
+  world.ledgeReport = ledges > 0 ? placeLedges(world, { seed: seed + 67, count: ledges }) : null;
+  if (world.ledgeReport?.ledges.length) world.thinLedges = thinLedges(world);
+
   world.drainage = drainage ? fillTerrainDepressions(world, drainage===true?{}:drainage) : null;
   let joint = null;
   const holes = basins > 0 ? digBasins(world, { seed: seed + 41, count: basins }) : [];
@@ -150,7 +156,7 @@ export function generateTerrain(world, {
   // 开凿顺序流向只在河格仍是生成时那批时有效（洞窟/特征只改非河格，填洼会清掉被抬的河段）。
   if(world.riverFlow)world.riverFlow.version=world.version;
   if(world.lakes)world.lakes.version=world.version;
-  return { relax, joint, holes, lakes: world.lakes?.lakes.length ?? 0, riverNetwork:network, drainage:world.drainage, rivers: drainage?world.river.reduce((a,b)=>a+b,0):riverCells.length, features: feat };
+  return { relax, joint, holes, lakes: world.lakes?.lakes.length ?? 0, riverNetwork:network, drainage:world.drainage, rivers: drainage?world.river.reduce((a,b)=>a+b,0):riverCells.length, features: feat, ledges: world.ledgeReport };
 }
 
 /**

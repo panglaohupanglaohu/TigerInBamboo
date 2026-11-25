@@ -36,10 +36,15 @@ const path = require('path');
         throw Error('阻力变大射程没有变短：' + JSON.stringify(reports));
       }
     }
-    // drag=0 时射程应等于无阻力解析解（45° 为扇面最大）
+    // drag=0 时射程应对得上「从 0 打到页面地面高度」的解析解：
+    // 平地上是 v²sin2θ/g（45° 最大）；页面地面画在画布下沿（groundY<0），落点还多一段下落，
+    // 最大射程 = (v/g)·√(v²+2g|groundY|)（发射角 <45°）。旧断言按平地 45° 解析射程比，口径错。
     const zero = reports[0];
-    if (Math.abs(zero.maxRange - zero.analytic45) > zero.analytic45 * 0.004) {
-      throw Error(`drag=0 射程与解析解不符：${zero.maxRange} vs ${zero.analytic45}`);
+    const drop = Math.abs(zero.groundY || 0);
+    const v = zero.speed;
+    const expected = (v / zero.gravity) * Math.sqrt(v * v + 2 * zero.gravity * drop);
+    if (Math.abs(zero.maxRange - expected) > expected * 0.005) {
+      throw Error(`drag=0 射程与「落到页面地面」的解析解不符：${zero.maxRange} vs ${expected.toFixed(4)}（groundY ${zero.groundY}）`);
     }
     // 片中 0.83 的扇面比无阻力小很多
     if (!(reports[1].maxRange < zero.maxRange * 0.85)) throw Error('0.83 阻力下扇面应明显收缩');

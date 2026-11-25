@@ -1,0 +1,96 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/nav-arch-through-e2e/run-1795519684390",
+  "capabilities": [
+    "battle.navFinePortals"
+  ],
+  "steps": {
+    "scenes": {
+      "apostles": {
+        "deployed": {
+          "ok": true,
+          "archesOn": true,
+          "archCandidates": 1,
+          "navigation": {
+            "finePortals": true,
+            "unitHeight": 0.34,
+            "arches": 1,
+            "archCandidates": 1,
+            "footing": true,
+            "heavy": 0,
+            "traffic": null
+          }
+        },
+        "route": {
+          "through": false,
+          "reason": "dead-end-arches-only"
+        }
+      },
+      "citadel": {
+        "deployed": {
+          "ok": true,
+          "archesOn": true,
+          "archCandidates": 1,
+          "navigation": {
+            "finePortals": true,
+            "unitHeight": 0.212,
+            "arches": 1,
+            "archCandidates": 1,
+            "footing": true,
+            "heavy": 0,
+            "traffic": null
+          }
+        },
+        "route": {
+          "through": false,
+          "reason": "dead-end-arches-only"
+        }
+      },
+      "moss": {
+        "deployed": {
+          "ok": true,
+          "archesOn": false,
+          "archCandidates": 0,
+          "navigation": {
+            "finePortals": true,
+            "unitHeight": 0.283,
+            "arches": 0,
+            "archCandidates": 0,
+            "footing": true,
+            "heavy": 0,
+            "traffic": null
+          }
+        }
+      },
+      "bookshop": {
+        "deployed": {
+          "ok": true,
+          "archesOn": false,
+          "archCandidates": 0,
+          "navigation": {
+            "finePortals": true,
+            "unitHeight": 0.425,
+            "arches": 0,
+            "archCandidates": 0,
+            "footing": true,
+            "heavy": 0,
+            "traffic": null
+          }
+        }
+      }
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true,
+  "notRun": [
+    "实景穿洞：四个场景都只有死角拱或没有拱候选——开关/挖空在 nav-fine-portals-browser 已验，单位穿洞 NOT_VERIFIED"
+  ]
+}

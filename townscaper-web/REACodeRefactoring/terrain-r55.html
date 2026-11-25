@@ -5,12 +5,16 @@
 <div id="stats">加载中…</div></header>
 <iframe id="scene"></iframe>
 <script type="module">
-/* URL: ?grid=quad|mixed&seed=7&lakes=1&erosion=1&relax=1&soft=1&edges=1&collide=1&cam=lake|soft|wall
- * 默认全关 = 原 generateTerrain 默认参数。所有开关只写 World 字段/生成参数，不改 view.js / worldmesh.js。 */
+/* URL: ?grid=quad|mixed|tri|hex&seed=7&lakes=1&erosion=1&relax=1&soft=1&edges=1&collide=1&cam=lake|soft|wall
+ * 默认全关 = 原 generateTerrain 默认参数。所有开关只写 World 字段/生成参数，不改 view.js / worldmesh.js。
+ * r126：grid 接受 tri|hex —— 1447496205282549761「底图就是一张不规则三角网」要在**三角底图**上跑
+ * 软坡/河道，原来只透传 quad|mixed，等于这一片没有页面入口。 */
 import{generateTerrain}from'./src/terrain/generate.js';
 import{terrainCollider}from'./src/terrain/terrain-collide.js';
 import{meshSlopeProfile}from'./src/core/terrace-profile.js';
-const q=new URLSearchParams(location.search),grid=q.get('grid')==='mixed'?'mixed':'quad',seed=+(q.get('seed')||7);
+import{softCorners}from'./src/terrain/soft-tops.js';
+import{drainedCells,localMinima}from'./src/core/depression-fill.js';
+const q=new URLSearchParams(location.search),grid=['quad','mixed','tri','hex'].includes(q.get('grid'))?q.get('grid'):'quad',seed=+(q.get('seed')||7);
 const keys=['lakes','erosion','relax','soft','softrelax','edges','collide'];for(const k of keys)document.querySelector('#'+k).checked=q.get(k)==='1';
 const f=document.querySelector('#scene');f.src='index.html?scene=terrain&grid='+grid;
 let probe=null;
@@ -20,8 +24,33 @@ async function apply(){const r=f.contentWindow.rea,THREE=await f.contentWindow.e
  r.view.setDebug('terraceedges',on('edges'));
  await new Promise(ok=>setTimeout(ok,1500));
  const surf=w.terrainSurface,stats={grid,seed,opts:opts(),lakes:w.lakes?.lakes.length??0,lakeCells:w.lakes?.lakes.reduce((a,l)=>a+l.area,0)??0,relax:res.relax,joint:res.joint,erosion:w.drainage?.erosion?{lowered:w.drainage.erosion.lowered,volume:w.drainage.erosion.volume}:null,minimaAfter:w.drainage?.minimaAfter??null};
- if(surf&&surf.version===w.version){const p=meshSlopeProfile(surf);stats.slope={flat:+p.top.flat.toFixed(1),soft:+p.top.soft.toFixed(1),steep:+p.top.steep.toFixed(1),wallArea:+p.wallArea.toFixed(1)};}
+ // r126：底图格型与河道台账（1447496205282549761 要在三角底图上量「软坡 + 河道」）
+ {const sides={};for(const c of w.cells)sides[c.n]=(sides[c.n]||0)+1;
+  stats.gridSides=sides;stats.cells=w.cells.length;stats.riverCells=w.river?Array.from(w.river).reduce((a,b)=>a+b,0):0;
+  const f=w.riverFlow?.version===w.version?w.riverFlow:null;
+  stats.riverReaches=f?(f.paths||[]).length:0;stats.riverMouths=f?(f.mouths||[]).length:0;
+  let land=0;const lv=new Set();for(const c of w.cells){const t=w.top(c);if(t>0){land++;lv.add(+t.toFixed(3));}}stats.land=land;stats.levelCount=lv.size;stats.softTops=!!w.softTops;}
+ if(surf&&surf.version===w.version){const p=meshSlopeProfile(surf);stats.slope={flat:+p.top.flat.toFixed(1),soft:+p.top.soft.toFixed(1),steep:+p.top.steep.toFixed(1),wallArea:+p.wallArea.toFixed(1)};
+  // r151：墙按「每个格边叠了几块」分档 —— 每块 = 1 层；1 块=1 层台阶、≥2 块=真崖。
+  {const per=new Map();for(const wq of surf.walls){const k=wq.cell+':'+wq.edge;per.set(k,(per.get(k)||0)+1);}
+   const hist={1:0,2:0,3:0,more:0};for(const n of per.values())if(n===1)hist[1]++;else if(n===2)hist[2]++;else if(n===3)hist[3]++;else hist.more++;
+   stats.walls={edges:per.size,hist,quads:surf.walls.length,fill:surf.walls.filter(wq=>wq.fill).length};}}
  const ov=r.view.terraceEdges;if(on('edges')&&ov.final)stats.edges={drawn:ov.final.segments.length,seamless:ov.final.seamless.length};
+ // r151（1447488323845509121）：软坡/陡崖合流台账 —— 1 层缓坡台阶有几条被真正焊成斜面、≥2 层的崖有没有被动到。
+ // 判据直接取 terrainmesh 用的同一份 softCorners：altered=edge 任一角被焊、seamless=两角都焊且共高（terrainmesh 会整条不画墙）。
+ if(w.softTops){const L=r.view.levelHeight,sc=softCorners(w,{L}),mask=w.slopeMask,sp=id=>!mask||mask[id]<.5;
+  let stepEdges=0,melted=0,seamless=0,stretched=0,cliffEdges=0,cliffShared=0,cliffHorizontal=0;
+  const bySides={};
+  for(const c of w.cells){const g=w.ground(c);if(!g)continue;
+   for(let i=0;i<c.n;i++){const o=w.neighbor(c,i);if(!o||o.id<c.id)continue;const og=w.ground(o);if(!og)continue;
+    const a=c.pts[i],b=c.pts[(i+1)%c.n],d=Math.abs(g-og);
+    const alt=sc.has(c.id,a.id)||sc.has(c.id,b.id)||sc.has(o.id,a.id)||sc.has(o.id,b.id);
+    const same=[a.id,b.id].every(v=>{const ya=sc.y(c.id,v),yb=sc.y(o.id,v);return ya!==undefined&&yb!==undefined&&Math.abs(ya-yb)<1e-9;});
+    if(d===1&&sp(c.id)&&sp(o.id)){stepEdges++;if(alt)melted++;if(same)seamless++;else if(alt)stretched++;
+     const k=c.n+':'+o.n,s=bySides[k]??(bySides[k]={edges:0,melted:0,seamless:0});s.edges++;if(alt)s.melted++;if(same)s.seamless++;}
+    else if(d>=2){cliffEdges++;if(alt)cliffShared++;if(same)cliffHorizontal++;}}}
+  stats.soft={vertices:sc.vertices,groups:sc.groups,stepEdges,melted,seamless,stretched,meltedShare:+(melted/Math.max(1,stepEdges)).toFixed(3),cliffEdges,cliffShared,cliffHorizontal,bySides};}
+ if(w.drainage){const hs=w.cells.map(c=>w.ground(c)),raw=drainedCells(w.cells,hs);stats.water={minimaBefore:w.drainage.minimaBefore??null,minimaAfter:w.drainage.minimaAfter??null,minimaWorld:localMinima(w.cells,hs).length,drainedFill:+(w.drainage.drained??0).toFixed(4),drainedRaw:+raw.share.toFixed(4),raised:w.drainage.raised??null,invalidated:w.drainage.invalidatedRiverCells??null};}
  if(probe){r.view.scene.remove(probe);probe=null;}
  if(on('collide')&&surf){const col=terrainCollider(w),L=r.view.levelHeight;
   // probes: pick wall quads at mid height, put a radius-0.18 cylinder 0.09 into the drawn rock, push it out

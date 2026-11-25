@@ -1,0 +1,53 @@
+{
+ "capability": "water.surface",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "water",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/engine/contour.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/shore-loops.js",
+  "townscaper-web/REACodeRefactoring/src/core/shore-profile.js"
+ ],
+ "inputs": {
+  "grid": "抖动四边形网 r6",
+  "iso": 0.5,
+  "spacing": 0.18
+ },
+ "metrics": [
+  {
+   "id": "segs",
+   "name": "岸线提取量",
+   "original": "101 段（marchGrid iso 线）",
+   "refactored": "2 环 · 268 采样点"
+  },
+  {
+   "id": "proximity",
+   "name": "原版段中点到本侧岸线最近距",
+   "original": "—",
+   "refactored": "mean 0.0677 · max 0.1917",
+   "equal": false
+  },
+  {
+   "id": "corners",
+   "name": "原版角点计数",
+   "original": 1107,
+   "refactored": "—"
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "岸线提取法",
+   "original": "marching-squares 等值线（iso=0.5 on top）",
+   "refactored": "陆/水交界环追踪 + 等距重采样",
+   "note": "同一海岸线两种提取——mean/max 偏差如实登记"
+  }
+ ],
+ "basis": "同岛喂两侧：原版 marchGrid 抽 iso 段 vs 本侧陆水环+重采样；段中点距本侧岸线 mean 0.068/max 0.192。"
+}

@@ -24,7 +24,7 @@ const cells = Array.from({ length: 6 }, (_, id) => ({ id, n: 4, cx: id, cz: 0, p
 const world = new World({ cells }); for (const c of cells) if (c.id) world.fill(c, 1, { rock: true });
 const index = { cellAt(x, z) { return Math.abs(z) <= .5 ? cells.find((c) => Math.abs(x - c.cx) <= .5 && (c.id || x < .5)) ?? null : null; } };
 const scene = new THREE.Group();
-const view = { scene, levelHeight: .5, index, mesh: new THREE.Mesh(new THREE.BufferGeometry()), worldMesh: { chimneys: [], builtVersion: 0 }, navLayer: null, effects: { fireSources: [], showFire() {} }, smoke: { sources: [] }, atmosphere: { sample: () => new THREE.Vector3(1, 0, 0) }, camera: new THREE.PerspectiveCamera(), debugState: {}, goreOff: false };
+const view = { scene, levelHeight: .5, index, mesh: new THREE.Mesh(new THREE.BufferGeometry()), worldMesh: { chimneys: [], builtVersion: 0 }, navLayer: null, effects: { fireSources: [], showFire() {} }, smoke: { sources: [], setFireCoupling() {}, ignite() {} }, atmosphere: { sample: () => new THREE.Vector3(1, 0, 0) }, camera: new THREE.PerspectiveCamera(), debugState: {}, goreOff: false, knockoffWater: true };
 const b = new Battle(view);
 b.start(world); b.nextWave = 1e9;
 const squad = { id: 0, pike: true, archer: false, members: [], alive: true, flag: new THREE.Group(), goal: cells[3], goalFloor: 1 };

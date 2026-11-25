@@ -15,6 +15,7 @@
         "report": [
           {
             "id": "scene.oklab-palette",
+            "line": "palette",
             "status": "applied",
             "params": {
               "colors": 3,
@@ -29,6 +30,7 @@
           },
           {
             "id": "scene.oklab-contrast",
+            "line": "palette",
             "status": "applied",
             "params": {
               "gain": 1.25,
@@ -96,7 +98,50 @@
             "locked": false,
             "shared": false
           }
-        ]
+        ],
+        "engine": {
+          "name": "PipeLineEngine",
+          "version": 1,
+          "status": "executed",
+          "adapter": "materials",
+          "context": {
+            "tier": "materials",
+            "sceneId": null
+          },
+          "catalogHash": "532ac989502538893016217c65b1b5532eb3f9adb472af3a6b0f196b221a1b3e",
+          "planHash": "338f84e52088b1dc6afa7207b49959dee96be34019358aec428866df3f6fc124",
+          "inputHash": "af0d59c9ff81b19c65d78e17e72c507e7d096bbac5f6ae4227457fa20141b5ed",
+          "outputHash": "0e42374a42ff19a70d82a4a769cf727a3e82c63b440629e9a0e02490642d5b3b",
+          "steps": [
+            {
+              "id": "scene.oklab-palette",
+              "params": {
+                "colors": 3,
+                "strength": 0.7,
+                "maxDelta": 5,
+                "includeEdited": false
+              }
+            },
+            {
+              "id": "scene.oklab-contrast",
+              "params": {
+                "gain": 1.25,
+                "maxDelta": 4,
+                "includeEdited": false
+              }
+            }
+          ],
+          "implementations": [
+            {
+              "id": "scene.oklab-palette",
+              "module": "src/system-workshop/gscene/capabilities.js#scene.oklab-palette"
+            },
+            {
+              "id": "scene.oklab-contrast",
+              "module": "src/system-workshop/gscene/capabilities.js#scene.oklab-contrast"
+            }
+          ]
+        }
       },
       "verification": {
         "status": "pass",
@@ -158,12 +203,9 @@
       "restored": true,
       "geometry": true,
       "outside": true
-    },
-    {
-      "name": "parent-source-to-adapter-entry",
-      "pass": true
     }
   ],
   "errors": [],
-  "passed": true
+  "passed": false,
+  "error": "locator.waitFor: Error: strict mode violation: locator('[data-capability-id=\"scene.oklab-contrast\"]') resolved to 2 elements:\n    1) <article draggable=\"true\" data-maturity=\"7\" title=\"拖进管线，或双击加入\" class=\"cap-item exec-code runnable\" data-capability-id=\"scene.oklab-contrast\">…</article> aka locator('article').filter({ hasText: '⚙感知明暗层次（通用场景）?L7' }).first()\n    2) <article draggable=\"true\" data-maturity=\"7\" title=\"拖进管线，或双击加入\" class=\"cap-item exec-code runnable\" data-capability-id=\"scene.oklab-contrast\">…</article> aka locator('article').filter({ hasText: '⚙感知明暗层次（通用场景）?L7' }).nth(1)\n\nCall log:\n  - waiting for locator('[data-capability-id=\"scene.oklab-contrast\"]') to be visible\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/gscene-perceptual-browser.mjs:17:142"
 }

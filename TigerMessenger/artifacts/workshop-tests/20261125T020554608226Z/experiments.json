@@ -1,0 +1,651 @@
+{
+  "versions": [
+    {
+      "id": "9cd78248-79b9-4fc1-9ddd-35c857e15ef7",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "TEST ONLY: protect lake buildings",
+      "validation": {
+        "passed": true,
+        "message": "编码往返不一致",
+        "scope": "codec-only"
+      },
+      "time": 1795572564973,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "TEST ONLY: protect lake buildings",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "day",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": [
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "kind": "共享底座（基础能力）",
+            "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
+            "icon": "◇",
+            "color": "#2f7f8a",
+            "mode": "recipe",
+            "scanned": true,
+            "source": "src/life/boats.js（corridor 切档 + 平行带状边线 + wakeProbe）· src/core/wake-sampling.js（advanceWake corridor / wakeFade / wakeLife / profile）· wake-fog.html ?wake= · src/world/view.js",
+            "description": "扫描登记，尚无场景执行适配。",
+            "checks": "来源 / 接口 / 依赖 / 执行验证",
+            "provenance": {
+              "note": "自动扫描自REACodeRefactoring/learn/pipeline.js；库登记状态不等于当前场景可执行。",
+              "modules": [],
+              "records": [
+                {
+                  "id": "901469409579061248",
+                  "lane": "base",
+                  "laneName": "共享底座（基础能力）",
+                  "group": "水层",
+                  "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
+                  "where": "src/life/boats.js（corridor 切档 + 平行带状边线 + wakeProbe）· src/core/wake-sampling.js（advanceWake corridor / wakeFade / wakeLife / profile）· wake-fog.html ?wake= · src/world/view.js",
+                  "status": "done",
+                  "toggle": "boats",
+                  "project": "以库记录为准"
+                }
+              ]
+            },
+            "controls": []
+          }
+        ],
+        "code": [
+          {
+            "id": "effects.smoke",
+            "layer": "effects",
+            "kind": "烟",
+            "name": "特效层 · 烟（烟囱炊烟）",
+            "summary": "在建筑生成的烟囱口放烟：两遍画（黑描边 + 浅色），沿流向滚动噪声，越往上越模糊。不改体素。",
+            "kind2": "layer",
+            "sources": [
+              "1015140880666300416",
+              "1015142746372366336",
+              "1015149712469524480",
+              "1015151731804721152"
+            ],
+            "targets": "有屋顶的建筑",
+            "keywords": [
+              "烟",
+              "炊烟",
+              "烟囱",
+              "生活",
+              "smoke"
+            ],
+            "params": {},
+            "layer3d": "smoke"
+          }
+        ]
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "day",
+        "outline": false,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": true,
+        "snow": true,
+        "fire": true
+      }
+    },
+    {
+      "id": "53ea94e5-3725-4362-9c0e-c59209805697",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "TEST ONLY: protect lake buildings",
+      "validation": {
+        "passed": true,
+        "message": "编码往返不一致",
+        "scope": "codec-only"
+      },
+      "time": 1795572567635,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "TEST ONLY: protect lake buildings",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "day",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": [
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "kind": "共享底座（基础能力）",
+            "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
+            "icon": "◇",
+            "color": "#2f7f8a",
+            "mode": "recipe",
+            "scanned": true,
+            "source": "src/life/boats.js（corridor 切档 + 平行带状边线 + wakeProbe）· src/core/wake-sampling.js（advanceWake corridor / wakeFade / wakeLife / profile）· wake-fog.html ?wake= · src/world/view.js",
+            "description": "扫描登记，尚无场景执行适配。",
+            "checks": "来源 / 接口 / 依赖 / 执行验证",
+            "provenance": {
+              "note": "自动扫描自REACodeRefactoring/learn/pipeline.js；库登记状态不等于当前场景可执行。",
+              "modules": [],
+              "records": [
+                {
+                  "id": "901469409579061248",
+                  "lane": "base",
+                  "laneName": "共享底座（基础能力）",
+                  "group": "水层",
+                  "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
+                  "where": "src/life/boats.js（corridor 切档 + 平行带状边线 + wakeProbe）· src/core/wake-sampling.js（advanceWake corridor / wakeFade / wakeLife / profile）· wake-fog.html ?wake= · src/world/view.js",
+                  "status": "done",
+                  "toggle": "boats",
+                  "project": "以库记录为准"
+                }
+              ]
+            },
+            "controls": []
+          }
+        ],
+        "code": [
+          {
+            "id": "effects.smoke",
+            "layer": "effects",
+            "kind": "烟",
+            "name": "特效层 · 烟（烟囱炊烟）",
+            "summary": "在建筑生成的烟囱口放烟：两遍画（黑描边 + 浅色），沿流向滚动噪声，越往上越模糊。不改体素。",
+            "kind2": "layer",
+            "sources": [
+              "1015140880666300416",
+              "1015142746372366336",
+              "1015149712469524480",
+              "1015151731804721152"
+            ],
+            "targets": "有屋顶的建筑",
+            "keywords": [
+              "烟",
+              "炊烟",
+              "烟囱",
+              "生活",
+              "smoke"
+            ],
+            "params": {},
+            "layer3d": "smoke"
+          }
+        ]
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "dusk",
+        "outline": false,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": true,
+        "snow": true,
+        "fire": true
+      }
+    },
+    {
+      "id": "e47943bc-ad91-45d5-833c-ac9402d493ce",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "TEST ONLY: protect lake buildings",
+      "validation": {
+        "passed": true,
+        "message": "编码往返不一致",
+        "scope": "codec-only"
+      },
+      "time": 1795572573475,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "TEST ONLY: protect lake buildings",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "day",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": [
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "kind": "共享底座（基础能力）",
+            "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
+            "icon": "◇",
+            "color": "#2f7f8a",
+            "mode": "recipe",
+            "scanned": true,
+            "source": "src/life/boats.js（corridor 切档 + 平行带状边线 + wakeProbe）· src/core/wake-sampling.js（advanceWake corridor / wakeFade / wakeLife / profile）· wake-fog.html ?wake= · src/world/view.js",
+            "description": "扫描登记，尚无场景执行适配。",
+            "checks": "来源 / 接口 / 依赖 / 执行验证",
+            "provenance": {
+              "note": "自动扫描自REACodeRefactoring/learn/pipeline.js；库登记状态不等于当前场景可执行。",
+              "modules": [],
+              "records": [
+                {
+                  "id": "901469409579061248",
+                  "lane": "base",
+                  "laneName": "共享底座（基础能力）",
+                  "group": "水层",
+                  "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
+                  "where": "src/life/boats.js（corridor 切档 + 平行带状边线 + wakeProbe）· src/core/wake-sampling.js（advanceWake corridor / wakeFade / wakeLife / profile）· wake-fog.html ?wake= · src/world/view.js",
+                  "status": "done",
+                  "toggle": "boats",
+                  "project": "以库记录为准"
+                }
+              ]
+            },
+            "controls": []
+          }
+        ],
+        "code": [
+          {
+            "id": "effects.smoke",
+            "layer": "effects",
+            "kind": "烟",
+            "name": "特效层 · 烟（烟囱炊烟）",
+            "summary": "在建筑生成的烟囱口放烟：两遍画（黑描边 + 浅色），沿流向滚动噪声，越往上越模糊。不改体素。",
+            "kind2": "layer",
+            "sources": [
+              "1015140880666300416",
+              "1015142746372366336",
+              "1015149712469524480",
+              "1015151731804721152"
+            ],
+            "targets": "有屋顶的建筑",
+            "keywords": [
+              "烟",
+              "炊烟",
+              "烟囱",
+              "生活",
+              "smoke"
+            ],
+            "params": {},
+            "layer3d": "smoke"
+          }
+        ]
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "dusk",
+        "outline": false,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": true,
+        "snow": true,
+        "fire": true
+      }
+    },
+    {
+      "id": "af492e72-1f65-46f9-b1ca-7c977b599f4e",
+      "scene": "morris-lake",
+      "data": "eu____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________c",
+      "goal": "恢复前自动保护",
+      "validation": null,
+      "time": 1795572577542,
+      "origin": "manual",
+      "recipe": {
+        "version": 1,
+        "scene": "morris-lake",
+        "goal": "TEST ONLY: protect lake buildings",
+        "nodes": [
+          {
+            "id": "terrain.preserve",
+            "enabled": true
+          },
+          {
+            "id": "building.edit",
+            "enabled": true
+          },
+          {
+            "id": "water.surface",
+            "enabled": true
+          },
+          {
+            "id": "light.time",
+            "enabled": true
+          },
+          {
+            "id": "world.ink",
+            "enabled": true
+          },
+          {
+            "id": "weather.atmosphere",
+            "enabled": true
+          },
+          {
+            "id": "vegetation.layers",
+            "enabled": true
+          },
+          {
+            "id": "animals.birds",
+            "enabled": true
+          },
+          {
+            "id": "effects.fire",
+            "enabled": true
+          },
+          {
+            "id": "effects.smoke",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.boats",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.aircraft",
+            "enabled": true
+          },
+          {
+            "id": "vehicles.cars",
+            "enabled": true
+          },
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "enabled": true
+          },
+          {
+            "id": "combat.encounter",
+            "enabled": true
+          }
+        ],
+        "settings": {
+          "waves": false,
+          "reflection": true,
+          "time": "night",
+          "outline": true,
+          "grid": false,
+          "vegetation": true,
+          "birds": true,
+          "fog": false,
+          "snow": false,
+          "fire": true
+        },
+        "discovered": [
+          {
+            "id": "rea.base.901469409579061248.boats",
+            "kind": "共享底座（基础能力）",
+            "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
+            "icon": "◇",
+            "color": "#2f7f8a",
+            "mode": "recipe",
+            "scanned": true,
+            "source": "src/life/boats.js（corridor 切档 + 平行带状边线 + wakeProbe）· src/core/wake-sampling.js（advanceWake corridor / wakeFade / wakeLife / profile）· wake-fog.html ?wake= · src/world/view.js",
+            "description": "扫描登记，尚无场景执行适配。",
+            "checks": "来源 / 接口 / 依赖 / 执行验证",
+            "provenance": {
+              "note": "自动扫描自REACodeRefactoring/learn/pipeline.js；库登记状态不等于当前场景可执行。",
+              "modules": [],
+              "records": [
+                {
+                  "id": "901469409579061248",
+                  "lane": "base",
+                  "laneName": "共享底座（基础能力）",
+                  "group": "水层",
+                  "name": "船迹：固定时间采样/世界轨迹，原片泡沫喷溅仍待补",
+                  "where": "src/life/boats.js（corridor 切档 + 平行带状边线 + wakeProbe）· src/core/wake-sampling.js（advanceWake corridor / wakeFade / wakeLife / profile）· wake-fog.html ?wake= · src/world/view.js",
+                  "status": "done",
+                  "toggle": "boats",
+                  "project": "以库记录为准"
+                }
+              ]
+            },
+            "controls": []
+          }
+        ],
+        "code": [
+          {
+            "id": "effects.smoke",
+            "layer": "effects",
+            "kind": "烟",
+            "name": "特效层 · 烟（烟囱炊烟）",
+            "summary": "在建筑生成的烟囱口放烟：两遍画（黑描边 + 浅色），沿流向滚动噪声，越往上越模糊。不改体素。",
+            "kind2": "layer",
+            "sources": [
+              "1015140880666300416",
+              "1015142746372366336",
+              "1015149712469524480",
+              "1015151731804721152"
+            ],
+            "targets": "有屋顶的建筑",
+            "keywords": [
+              "烟",
+              "炊烟",
+              "烟囱",
+              "生活",
+              "smoke"
+            ],
+            "params": {},
+            "layer3d": "smoke"
+          }
+        ]
+      },
+      "settings": {
+        "waves": false,
+        "reflection": true,
+        "time": "night",
+        "outline": false,
+        "grid": false,
+        "vegetation": true,
+        "birds": true,
+        "fog": true,
+        "snow": true,
+        "fire": true
+      }
+    }
+  ],
+  "finals": {
+    "morris-lake": "e47943bc-ad91-45d5-833c-ac9402d493ce"
+  }
+}

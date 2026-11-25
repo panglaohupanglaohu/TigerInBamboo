@@ -1,0 +1,111 @@
+{
+  "report": {
+    "paintNormalMap": {
+      "size": 128,
+      "chunks": 25,
+      "chunkPx": 25.6,
+      "distinctChunks": 25,
+      "meanChunkArea": 655.4,
+      "chunkWidth": 25.6,
+      "chunkWidthOverSize": 0.2,
+      "areaMin": 416,
+      "areaMax": 842,
+      "tiltMean": 18.46,
+      "tiltMax": 25.87,
+      "withinChunkSpreadP90P10": 1.1
+    },
+    "paintNormalView": {
+      "geometry": {
+        "positions": 49848,
+        "hash": -1648698686
+      },
+      "size": [
+        1440,
+        900
+      ],
+      "noisePx": 0,
+      "noiseMean": 0,
+      "signalPx": 233145,
+      "signalMean": 9.85,
+      "signalMax": 45.7,
+      "backPx": 0,
+      "patches": {
+        "n": 179,
+        "meanArea": 1282.1,
+        "meanWidth": 35.81,
+        "p50Width": 6.78,
+        "maxArea": 150719
+      },
+      "signalShare": 0.1799
+    },
+    "mega": {
+      "voxels": 113880,
+      "texels": 9256,
+      "atlas": [
+        172,
+        164
+      ],
+      "charts": 984,
+      "lvCells": 14652,
+      "lvEmpty": 12146,
+      "raysPerLobe": 5,
+      "rays": 371376,
+      "sphereSteps": 940026,
+      "ddaSteps": 694451,
+      "uvHits": 83777,
+      "uvMatch": 69094,
+      "uvMatchRate": 0.8247370996812968,
+      "ms": 266,
+      "bounceStats": [
+        {
+          "bounce": 1,
+          "relativeChange": 1.22867
+        },
+        {
+          "bounce": 2,
+          "relativeChange": 0.05496
+        },
+        {
+          "bounce": 3,
+          "relativeChange": 0.00975
+        }
+      ]
+    },
+    "megaCanvases": {
+      "c-sdf": {
+        "w": 365,
+        "h": 325,
+        "colors": 54034,
+        "inkShare": 0.96
+      },
+      "c-lv": {
+        "w": 450,
+        "h": 202,
+        "colors": 7350,
+        "inkShare": 0.807
+      },
+      "c-mega": {
+        "w": 172,
+        "h": 164,
+        "colors": 2737,
+        "inkShare": 0.324
+      }
+    },
+    "megaSlow": {
+      "snapshots": 8,
+      "energy": [
+        0,
+        4194.827,
+        4194.827,
+        9348.902,
+        9348.902,
+        9862.693,
+        9862.693,
+        9958.855
+      ],
+      "monotone": true
+    }
+  },
+  "errors": [],
+  "fail": []
+}

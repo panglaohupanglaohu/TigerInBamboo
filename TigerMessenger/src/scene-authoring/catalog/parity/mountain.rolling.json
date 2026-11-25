@@ -1,0 +1,52 @@
+{
+ "capability": "mountain.rolling",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "mountain",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/depfill.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/depression-fill.js"
+ ],
+ "inputs": {
+  "grid": "64×64",
+  "seed": 7,
+  "minima": 9
+ },
+ "metrics": [
+  {
+   "id": "minima",
+   "name": "localMinima 集合一致",
+   "original": 9,
+   "refactored": 9,
+   "equal": true
+  },
+  {
+   "id": "fill",
+   "name": "priorityFlood↔depressionFill 陆地格最大差",
+   "original": 0,
+   "refactored": 0.0002999999999993008
+  },
+  {
+   "id": "lakes",
+   "name": "lakeClusters 湖数",
+   "original": 17,
+   "refactored": 17
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "priorityFlood↔depressionFill",
+   "original": "陆地格 fill 图",
+   "refactored": "最大差 0.0002999999999993008",
+   "note": "原版 EPS 台内递升 vs 重构 microSlope=0 纯平"
+  }
+ ],
+ "basis": "同一高度场：原版走 2D 数组 H[y][x]+NB8，重构走 cells+edgeNeighbors；edgeNeighbors 显式给 8 邻域、海格归 0 后同构，陆地格逐点比。"
+}

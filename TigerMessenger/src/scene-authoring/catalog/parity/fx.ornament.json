@@ -1,0 +1,38 @@
+{
+ "capability": "fx.ornament",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T15:27:35.730Z",
+ "generator": "TigerMessenger/tools/refactor/fx-parity.mjs",
+ "verdict": "diff-registered",
+ "line": "fx",
+ "basis": "fold 与 orientUV 在两库里同名同语义：D4 群 8 向镜像 + 三角折叠，逐点数值对拍。",
+ "metrics": [
+  {
+   "id": "fold",
+   "name": "fold 401 点最大差",
+   "original": 0,
+   "refactored": 0
+  },
+  {
+   "id": "orient",
+   "name": "orientUV 8×121 点最大差",
+   "original": 0,
+   "refactored": 0
+  }
+ ],
+ "inputs": {
+  "foldSamples": 401,
+  "orientGrid": "8 orientation × 11×11 uv"
+ },
+ "diffs": [
+  {
+   "kind": "validation",
+   "id": "orientUV(·,·,9)",
+   "original": "不校验（返回旋转结果）",
+   "refactored": "RangeError"
+  }
+ ],
+ "gaps": 0,
+ "skipped": []
+}

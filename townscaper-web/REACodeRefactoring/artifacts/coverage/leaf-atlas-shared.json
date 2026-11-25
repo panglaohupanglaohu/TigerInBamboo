@@ -1,0 +1,25 @@
+{
+  "singleton": {
+    "sharedFlag": true,
+    "uniformIsTexture": true,
+    "singletonAcrossInstances": true,
+    "singletonAcrossSurfaces": true,
+    "size": [
+      128,
+      128
+    ],
+    "cornerAlpha": 255,
+    "outsideAlpha": 0
+  },
+  "townskin": {
+    "boundIsSkinTex": true,
+    "notOwnAtlas": true,
+    "alphaOutside": 255,
+    "cornerSame": true,
+    "skinned": 28752,
+    "slots": 60,
+    "mismatch": 0,
+    "restored": true,
+    "rebound": true
+  }
+}

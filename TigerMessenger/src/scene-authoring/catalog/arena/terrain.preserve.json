@@ -1,0 +1,56 @@
+{
+ "capability": "terrain.preserve",
+ "schemaVersion": 1,
+ "pass": true,
+ "basis": "本能力在实景竞技场（莫里斯湖真游戏页）跑过 apply/revert 实测——live 竞技场报告见 artifacts/morris-live-e2e/run-1795553807412/report.json，规则不手改。",
+ "see": "TigerMessenger/artifacts/morris-live-e2e/run-1795553807412/report.json#terrain.preserve",
+ "runner": "TigerMessenger/tests/morris-live-browser.mjs（Playwright 实景）",
+ "test": "TigerMessenger/tests/morris-live-browser.mjs",
+ "arena": {
+  "fixture": "莫里斯湖真实游戏页 applyAuthoringSettings→stage.feature 实测"
+ },
+ "result": {
+  "verdict": "擂过",
+  "applied": {
+   "waves": false,
+   "reflection": false,
+   "time": "dusk",
+   "outline": false,
+   "grid": true,
+   "vegetation": false,
+   "birds": false,
+   "fog": true,
+   "snow": true,
+   "fire": false
+  },
+  "checks": {
+   "water.surface": true,
+   "light.time": true,
+   "world.ink": true,
+   "vegetation.layers": true,
+   "animals.birds": true,
+   "weather.atmosphere": true,
+   "effects.fire": true,
+   "life.layers": true
+  },
+  "flipBack": {
+   "waves": true,
+   "reflection": true,
+   "time": "night",
+   "outline": true,
+   "grid": false,
+   "vegetation": true,
+   "birds": true,
+   "fog": false,
+   "snow": false,
+   "fire": true
+  },
+  "editorPath": {
+   "encode": 319,
+   "preview": "candidate",
+   "reverted": true
+  },
+  "pass": true
+ },
+ "recordedAt": "2026-11-25"
+}

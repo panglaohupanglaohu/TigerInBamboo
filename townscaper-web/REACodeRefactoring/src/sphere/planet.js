@@ -15,6 +15,7 @@
 
 import { TriGraph } from '../core/trigraph.js';
 import { makeRng, fbm } from '../core/noise.js';
+import { fitModuleGroup, moduleConflictReport } from './module-group-fit.js';
 
 /** 球面三角网：返回 { pts:[[x,y,z]], tris:[[a,b,c]], steps } */
 export function buildSphere({ n = 900, seed = 3, spacing = 40, relax = 30, history = false } = {}) {
@@ -156,7 +157,7 @@ export function buildPlanet(sphere, { seed = 3, R = 4, L = 0.32, maxH = 6 } = {}
  * relax = true：有东西的格子把角点往"期望大小"拉（1769641473895432220）。
  * 返回 at(cornerId, level) → [x, y, z]
  */
-export function cornerPositions(planet, { relax = true, iters = 40, moduleCells = null, solver = 'spring', maxLean = 30 } = {}) {
+export function cornerPositions(planet, { relax = true, iters = 40, moduleCells = null, solver = 'spring', maxLean = 30, moduleGroups = null, edgeTol = Infinity, moduleCheck = false } = {}) {
   const { cells, corners, H, R, L } = planet;
   if (!Number.isFinite(R) || R <= 0 || !Number.isFinite(L) || L < 0 ||
       !Number.isInteger(iters) || iters < 0 || iters > 1000 || H.length !== cells.length ||
@@ -165,7 +166,29 @@ export function cornerPositions(planet, { relax = true, iters = 40, moduleCells 
   // Explicit selection is a hook for real module ownership, not another voxel field.
   // null preserves the historical all-land proxy. [] means no module constraints.
   if (moduleCells !== null && !Array.isArray(moduleCells)) throw new TypeError('moduleCells must be cell IDs');
-  if (!['spring', 'shape'].includes(solver) || !(maxLean >= 0 && maxLean < 90)) throw new RangeError('Invalid relax solver');
+  if (!['spring', 'shape', 'joint'].includes(solver) || !(maxLean >= 0 && maxLean < 90)) throw new RangeError('Invalid relax solver');
+  // 'joint' 的模块组划分：每组一格 id 列表、互不重叠（1769641473895432220 多格模块联合拟合）。
+  if (moduleGroups !== null) {
+    if (!Array.isArray(moduleGroups)) throw new TypeError('moduleGroups must be arrays of cell ids');
+    const owned = new Set();
+    for (const g of moduleGroups) {
+      if (!Array.isArray(g) || !g.length) throw new RangeError('Invalid module group');
+      for (const id of g) {
+        if (!Number.isInteger(id) || !cells[id] || cells[id].id !== id) throw new RangeError('Invalid module group cell ID');
+        if (owned.has(id)) throw new RangeError('Cell in two module groups');
+        owned.add(id);
+      }
+    }
+    // r213 拒绝规则：moduleCheck 先跑 moduleConflictReport，拒绝级冲突（非法/重复/重叠/
+    // 不连通/角距超限）一次性枚举后 RangeError；warn 级（sea/uneven/装配切断）不拦。
+    if (moduleCheck) {
+      const rep = moduleConflictReport({ cells, corners, H, R, L }, moduleGroups);
+      if (!rep.ok) {
+        const bad = rep.groups.flatMap((e) => e.reasons.filter((x) => x.severity === 'reject').map((x) => 'g' + e.index + ':' + x.code));
+        throw new RangeError('Module group conflicts: ' + bad.join(', '));
+      }
+    }
+  }
   const selected = moduleCells === null ? null : new Set(moduleCells);
   if (selected && [...selected].some(id => !Number.isInteger(id) || !cells[id] || cells[id].id !== id)) throw new RangeError('Invalid module cell ID');
   const active = (id,l) => H[id] >= l && (!selected || selected.has(id));
@@ -182,7 +205,8 @@ export function cornerPositions(planet, { relax = true, iters = 40, moduleCells 
   const pos = [];
   for (let l = 0; l <= maxH; l++) {
     let D = corners.map((d) => d.slice());
-    if (relax && l > 0 && solver === 'shape') D = componentScaleLevel(cells, corners, pos[l - 1], (id) => active(id, l), R, L, l, maxLean);
+    if (relax && l > 0 && solver === 'joint') D = jointGroupLevel(planet, cells, corners, pos[l - 1], (id) => active(id, l), l, { iters, maxLean, moduleGroups, edgeTol });
+    else if (relax && l > 0 && solver === 'shape') D = componentScaleLevel(cells, corners, pos[l - 1], (id) => active(id, l), R, L, l, maxLean);
     else if (relax && l > 0) {
       const r = R + l * L, s = R / r;   // 期望：这一层的格子和海平面一样大 → 单位球上的边长缩 s 倍
       // 弹簧：至少一侧是"有东西的格子"的边；只碰到空格子的角点钉住不动
@@ -350,6 +374,49 @@ function componentScaleLevel(cells, base, prev, isActive, R, L, l, maxLean) {
     comps.push({ level: l, cells: comp.length, want, f, farAng, capped: f > want + 1e-9, unresolved: farAng > 1.2 });
   }
   D.components = comps;
+  return D;
+}
+
+/* 'joint' solver (1769641473895432220 多格模块联合拟合)：每层先找活动格连通组件，
+ * 组件再按 moduleGroups 切成联合单元（声明的组 ∩ 组件 = 一个单元；未被任何组覆盖的
+ * 剩余格按连通性再分）。每个单元用 fitModuleGroup 联合拟合（共享相似变换 + 有界逐边
+ * 精修 + 墙倾斜上限 + edgeTol 回退）；单元之间的共享角点取各单元提案平均——多格模块
+ * 内部的共享角点天然一致（同一相似变换），协商只发生在模块边界上。未被任何活动格
+ * 触及的角点保持上一层位置（该层不画）。per-unit 报告挂在 D.components 供诊断。 */
+function jointGroupLevel(planet, cells, corners, prev, isActive, l, { iters, maxLean, moduleGroups, edgeTol }) {
+  const D = prev.map((d) => d.slice()), seen = new Uint8Array(cells.length), reports = [];
+  for (const c0 of cells) {
+    if (seen[c0.id] || !isActive(c0.id)) continue;
+    const comp = [], stack = [c0.id]; seen[c0.id] = 1;
+    while (stack.length) { const id = stack.pop(); comp.push(id); for (const o of cells[id].nb) if (o >= 0 && !seen[o] && isActive(o)) { seen[o] = 1; stack.push(o); } }
+    // 切联合单元：声明组 ∩ 组件优先，剩余格按连通性成组
+    const compSet = new Set(comp), covered = new Set(), units = [];
+    if (moduleGroups) for (const g of moduleGroups) {
+      const part = g.filter((id) => compSet.has(id));
+      if (part.length) units.push(part);
+      for (const id of part) covered.add(id);
+    }
+    const restSet = new Set(comp.filter((id) => !covered.has(id))), rseen = new Set();
+    for (const id of restSet) {
+      if (rseen.has(id)) continue;
+      const unit = [], st = [id]; rseen.add(id);
+      while (st.length) { const u = st.pop(); unit.push(u); for (const o of cells[u].nb) if (o >= 0 && restSet.has(o) && !rseen.has(o)) { rseen.add(o); st.push(o); } }
+      units.push(unit);
+    }
+    const props = new Map();
+    for (const unit of units) {
+      const res = fitModuleGroup(planet, unit, prev, { level: l, iters, maxLean, edgeTol });
+      for (const [k, d] of res.dirs) { const list = props.get(k) || []; list.push(d); props.set(k, list); }
+      reports.push({ level: l, cells: unit, unitCells: res.report.cells.length, f: res.report.f, want: res.report.want,
+        worst: res.report.worst, mean: res.report.mean, rejected: res.report.rejected,
+        unresolved: res.report.unresolved, capped: res.report.capped, pieces: res.report.pieces });
+    }
+    for (const [k, ds] of props) {
+      const m = ds.reduce((a, p) => [a[0] + p[0] / ds.length, a[1] + p[1] / ds.length, a[2] + p[2] / ds.length], [0, 0, 0]);
+      D[k] = norm(m);
+    }
+  }
+  D.components = reports;
   return D;
 }
 

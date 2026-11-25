@@ -1,0 +1,214 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/layer-focus-e2e/run-1795568901443",
+  "steps": {
+    "before": {
+      "focus": null,
+      "tier": "scene",
+      "scene": "morris-lake",
+      "hash": "#scene",
+      "vh": 1000,
+      "selected": [
+        "场景管线"
+      ],
+      "panes": {
+        "scene-pane": {
+          "shown": true,
+          "height": 1403,
+          "nodes": 0
+        },
+        "gscene-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "battle-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "mountain-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "fx-workshop": {
+          "shown": true,
+          "height": 420,
+          "nodes": 0
+        }
+      },
+      "status": "真实场景已连接。扫描场景能力后，按改造方向生成候选。"
+    },
+    "battle": {
+      "focus": "battle",
+      "tier": "scene",
+      "scene": "apostles",
+      "hash": "#battle",
+      "vh": 1000,
+      "selected": [
+        "战役管线"
+      ],
+      "panes": {
+        "scene-pane": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "gscene-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "battle-workshop": {
+          "shown": true,
+          "height": 600,
+          "nodes": 0
+        },
+        "mountain-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "fx-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        }
+      },
+      "status": "实景切到：十二门徒",
+      "clicks": 1
+    },
+    "mountain": {
+      "focus": "mountain",
+      "tier": "scene",
+      "scene": "citadel",
+      "hash": "#mountain",
+      "vh": 1000,
+      "selected": [
+        "山形管线"
+      ],
+      "panes": {
+        "scene-pane": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "gscene-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 4
+        },
+        "battle-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 6
+        },
+        "mountain-workshop": {
+          "shown": true,
+          "height": 600,
+          "nodes": 0
+        },
+        "fx-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 9
+        }
+      },
+      "status": "实景切到：高山圣城",
+      "clicks": 1
+    },
+    "fx": {
+      "focus": "fx",
+      "tier": "scene",
+      "scene": "citadel",
+      "hash": "#fx",
+      "vh": 1000,
+      "selected": [
+        "表现层管线"
+      ],
+      "panes": {
+        "scene-pane": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "gscene-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 4
+        },
+        "battle-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 6
+        },
+        "mountain-workshop": {
+          "shown": false,
+          "height": 0,
+          "nodes": 6
+        },
+        "fx-workshop": {
+          "shown": true,
+          "height": 865,
+          "nodes": 9
+        }
+      },
+      "status": "表现层管线：当前场景「高山圣城」可直接运行。",
+      "clicks": 1
+    },
+    "backToScene": {
+      "focus": null,
+      "tier": "scene",
+      "scene": "citadel",
+      "hash": "#scene",
+      "vh": 1000,
+      "selected": [
+        "场景管线"
+      ],
+      "panes": {
+        "scene-pane": {
+          "shown": false,
+          "height": 0,
+          "nodes": 0
+        },
+        "gscene-workshop": {
+          "shown": true,
+          "height": 946,
+          "nodes": 4
+        },
+        "battle-workshop": {
+          "shown": true,
+          "height": 664,
+          "nodes": 6
+        },
+        "mountain-workshop": {
+          "shown": true,
+          "height": 646,
+          "nodes": 6
+        },
+        "fx-workshop": {
+          "shown": true,
+          "height": 865,
+          "nodes": 9
+        }
+      },
+      "status": "表现层管线：当前场景「高山圣城」可直接运行。"
+    },
+    "hashBattle": {
+      "scene": "apostles",
+      "height": 600,
+      "vh": 1000
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": true
+}

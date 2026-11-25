@@ -70,6 +70,7 @@ export class PenumbraTerrain {
     };
     this.version = -1; this.sun = new THREE.Vector3();
     const mat = view.material, prev = mat.onBeforeCompile, prevKey = mat.customProgramCacheKey;
+    this._prevCompile = prev; this._prevKey = prevKey; this._mat = mat;
     mat.onBeforeCompile = (sh, r) => {
       prev?.call(mat, sh, r);
       Object.assign(sh.uniforms, this.uniforms);
@@ -121,5 +122,18 @@ export class PenumbraTerrain {
     u.uPenOn.value = 1;
     this.field = f;
     this.stats = { ...f.stats, ms: +(performance.now() - t0).toFixed(1), texture: [p.width, p.height] };
+  }
+
+  /** 真释放：还原材质补丁 / 接收影状态 / 水面半影层，销毁打包纹理。可重复调用。 */
+  dispose() {
+    const v = this.view;
+    if (this.enabled) this.setEnabled(false);
+    else if (this.hadWater !== undefined) { v.mesh.receiveShadow = this.prevReceive ?? v.mesh.receiveShadow; if (!this.hadWater && v.penumbra) v.setPenumbra(false); }
+    this.uniforms.uPenOn.value = 0; this.uniforms.uPenTex.value = null;
+    // Material 原型上这两个钩子恒有默认实现，构造时 prev/prevKey 必然取到函数
+    this._mat.onBeforeCompile = this._prevCompile;
+    this._mat.customProgramCacheKey = this._prevKey;
+    this._mat.needsUpdate = true;
+    this.texture?.dispose(); this.texture = null;
   }
 }

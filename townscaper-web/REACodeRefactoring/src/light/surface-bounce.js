@@ -144,9 +144,14 @@ export function samplePattern({ maxRad = 10, spacing = 1.2 } = {}) {
   return out;
 }
 
-export function bounce(f, E0, { maxDist = 4, maxRad = Math.max(4, Math.round(maxDist / f.pitch)), spacing = 1.2, bounces = 1, gain = 1, model = 'split', calibration = model === 'split' ? 1 : 4, wallMin = null } = {}) {
+export function bounce(f, E0, { maxDist = 4, maxRad = Math.max(4, Math.round(maxDist / f.pitch)), spacing = 1.2, bounces = 1, gain = 1, model = 'split', calibration = model === 'split' ? 1 : 4, wallMin = null, inPlace = false } = {}) {
   if (!Number.isInteger(bounces) || bounces < 0 || bounces > 6) throw new RangeError('bounces');
   if (!['legacy', 'split'].includes(model)) throw new RangeError('bounce model');
+  // inPlace（裁判对拍档）：裁判 bouncegi.js 第 2 跳起 src 与 E 是同一数组（src=E 别名），
+  // 读 src[j] 会拿到本轮已写回的新值 —— 相当于 Gauss–Seidel 就地更新，比本侧默认的
+  // Jacobi（每跳独立 next 数组）收敛快一拍，res40 峡谷上 added 最大差实测 0.13。
+  // 复现裁判语义时传 inPlace:true（tests/surface-bounce-referee.mjs 对拍逐位一致）；
+  // 默认 false 保持既有行为不变。
   const t0 = performance.now(), { nx, nz, pitch, h } = f, n = nx * nz, split = model === 'split';
   // 接收端几何与暴力参考一致：格顶点 + 中心差分法线
   const N = new Float32Array(n * 3), P = new Float32Array(n * 3), A = new Float32Array(n);
@@ -179,7 +184,10 @@ export function bounce(f, E0, { maxDist = 4, maxRad = Math.max(4, Math.round(max
   };
   let src = Float32Array.from(E0), E = Float32Array.from(E0);
   for (let b = 0; b < bounces; b++) {
-    const next = new Float32Array(n * 3);
+    // 第 1 跳总是从独立 src 读（与裁判一致）；inPlace 时第 2 跳起 next===src 就地写回。
+    const inPlacePass = inPlace && b > 0;
+    const next = inPlacePass ? src : new Float32Array(n * 3);
+    let change = 0;
     for (let y = 0; y < nz; y++) for (let x = 0; x < nx; x++) {
       const i = y * nx + x;
       let ar = 0, ag = 0, ab = 0;
@@ -200,11 +208,12 @@ export function bounce(f, E0, { maxDist = 4, maxRad = Math.max(4, Math.round(max
         if (!F) continue;
         ar += src[j * 3] * F; ag += src[j * 3 + 1] * F; ab += src[j * 3 + 2] * F;
       }
-      next[i * 3] = E0[i * 3] + ar * k * f.albedo[i * 3];
-      next[i * 3 + 1] = E0[i * 3 + 1] + ag * k * f.albedo[i * 3 + 1];
-      next[i * 3 + 2] = E0[i * 3 + 2] + ab * k * f.albedo[i * 3 + 2];
+      const vr = E0[i * 3] + ar * k * f.albedo[i * 3], vg = E0[i * 3 + 1] + ag * k * f.albedo[i * 3 + 1], vb = E0[i * 3 + 2] + ab * k * f.albedo[i * 3 + 2];
+      // 就地写回时 next===src：先在覆盖前取旧值计入 change（后处理循环会读出 0）。
+      if (inPlacePass) change += Math.abs(vr - next[i * 3]) + Math.abs(vg - next[i * 3 + 1]) + Math.abs(vb - next[i * 3 + 2]);
+      next[i * 3] = vr; next[i * 3 + 1] = vg; next[i * 3 + 2] = vb;
     }
-    let change = 0; for (let q = 0; q < n * 3; q++) change += Math.abs(next[q] - E[q]);
+    if (!inPlacePass) { for (let q = 0; q < n * 3; q++) change += Math.abs(next[q] - E[q]); }
     history.push(change / (n * 3));
     E = next; src = next;
   }

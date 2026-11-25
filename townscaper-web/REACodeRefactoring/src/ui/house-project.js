@@ -26,7 +26,7 @@ function instances(world,records){
       if((old.solid>>>p.floor)!==0||!(old.rock&(1<<(p.floor-1)))||old.river!==0||now.river!==0||now.solid!==(old.solid|built)||now.rock!==old.rock||now.color<0||fields.some(k=>world[k][now.id]!==now[k]))throw Error('Receipt does not match saved house');
       used.add(now.id);
     }
-    const placement=Object.freeze({id:`${p.cells.join('+')}@${p.floor}:${p.stories}`,cells:Object.freeze([...p.cells]),floor:p.floor,stories:p.stories,kinds:Object.freeze([a.n,b.n])});
+    const placement=Object.freeze({id:`${p.cells.join('+')}@${p.floor}:${p.stories}`,cells:Object.freeze([...p.cells]),floor:p.floor,stories:p.stories,kinds:Object.freeze([a.n,b.n]),instance:record.id});
     return Object.freeze({id:record.id,entry:Object.freeze({placement,before:Object.freeze(before),after:Object.freeze(after)})});
   });
 }
@@ -38,7 +38,10 @@ function decodeVoxels(world,voxel,scene){
 }
 export function exportHouseProject(world,entries,{scene='fusion',instanceIds}={}){
   if(!Array.isArray(entries))throw Error('Invalid project instances');
-  instanceIds??=entries.map((_,i)=>`house:${i+1}`);
+  // Native receipts already carry their stable id on placement.instance
+  // (build/multicell.js); the explicit list stays as an override / for entries
+  // minted before identity existed.
+  instanceIds??=entries.map((e,i)=>e?.placement?.instance??`house:${i+1}`);
   if(!Array.isArray(instanceIds)||entries.length!==instanceIds.length)throw Error('Invalid project instances');
   const voxel=encodeWorld(world,scene),staged=decodeVoxels(world,voxel,scene);
   if(fields.some(k=>world[k].some((v,i)=>v!==staged[k][i])))throw Error('World cannot roundtrip through v5');
@@ -55,5 +58,8 @@ export function importHouseProject(world,text,{expectedScene=null}={}){
   const staged=decodeVoxels(world,data.voxel,data.scene),records=instances(staged,data.instances);
   // Every parse/geometry/receipt check finishes before the single live commit.
   world.restore(staged.snapshot());
+  // Identity comes back into the World itself: live entries and tombstones so
+  // later placements never reuse a retired id after a reload.
+  world.houseInstances=new Map(records.map(r=>[r.id,r.entry]));
   return {scene:data.scene,entries:records.map(r=>r.entry),instanceIds:records.map(r=>r.id)};
 }

@@ -1,0 +1,206 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/capability-maturity-e2e/run-1795568775971",
+  "steps": {
+    "json": {
+      "rows": 95,
+      "byLevel": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 1,
+        "7": 94,
+        "8": 0,
+        "9": 0
+      },
+      "missingEverywhere": [
+        8,
+        9
+      ],
+      "counts": [
+        {
+          "id": "sidebar",
+          "value": 49,
+          "seen": 39
+        },
+        {
+          "id": "lineage",
+          "value": 85,
+          "seen": 55
+        },
+        {
+          "id": "tree-script",
+          "value": 151,
+          "seen": 64
+        },
+        {
+          "id": "tree-page",
+          "value": 151,
+          "seen": 105
+        },
+        {
+          "id": "unique",
+          "value": 95,
+          "seen": null
+        }
+      ]
+    },
+    "tree": {
+      "maturity": "loaded",
+      "execUnique": "49",
+      "execPerLine": "93",
+      "lines": 27,
+      "withExec": 22,
+      "badged": [
+        {
+          "line": "grid",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "wfc",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "sphere",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "tools",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "terrain",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "shore",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "sediment",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "water-effects",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "building",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "light",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "shadows",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "reflection",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "lines",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "palette",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "atlas",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "plants",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "animals",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "wind",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "smoke",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "fire",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "navigation",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "combat",
+          "level": "7",
+          "text": "L7"
+        }
+      ],
+      "pill": "49可执行（去重）",
+      "dist": "九级成熟度① 来源 0② 原版 0③ 重构 0④ 等价 0⑤ 单测 0⑥ 实景 1⑦ 擂台 94⑧ 采用 0⑨ 默认 095 个能力（去重）· 没有任何能力达到：⑧ 用户采用、⑨ 默认进游戏 · 生成于 2026-11-25T00:58"
+    },
+    "drawer": {
+      "line": "terrain",
+      "buttons": [
+        {
+          "text": "⚙ 地形与承托L7",
+          "level": "7"
+        },
+        {
+          "text": "⚙ 崖顶悬垂L7",
+          "level": "7"
+        },
+        {
+          "text": "⚙ 海中石柱L7",
+          "level": "7"
+        },
+        {
+          "text": "⚙ 穿山隧道L7",
+          "level": "7"
+        },
+        {
+          "text": "⚙ 沿墙薄檐 / 薄平台L7",
+          "level": "7"
+        },
+        {
+          "text": "⚙ 重解地形L7",
+          "level": "7"
+        }
+      ]
+    }
+  },
+  "errors": [
+    "p1 console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#capability-sidebar .cap-line[data-line=\"terrain\"] summary').first()\n    - locator resolved to <summary>…</summary>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    33 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n"
+}

@@ -1,0 +1,55 @@
+{
+ "capability": "terrain.ledge",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "terrain",
+ "sameCriteriaEqual": true,
+ "verdict": "equivalent",
+ "original": [
+  "townscaper-web/REACode/src/terraceladder.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/ladder-profile.js",
+  "townscaper-web/REACodeRefactoring/src/terrain/thin-platform.js"
+ ],
+ "inputs": {
+  "ladders": 3,
+  "H": 1,
+  "OVER": 0.12,
+  "RUNG": 0.26
+ },
+ "metrics": [
+  {
+   "id": "len",
+   "name": "梯梁长 L（3 梯逐字）",
+   "original": "1.0239/1.077/1.1766",
+   "refactored": "1.0239/1.077/1.1766",
+   "equal": true
+  },
+  {
+   "id": "rungs",
+   "name": "踏棍数 floor((L+OVER)/RUNG)",
+   "original": "4/4/4",
+   "refactored": "4/4/4",
+   "equal": true
+  },
+  {
+   "id": "rungPos",
+   "name": "踏棍沿梁距离最大差",
+   "original": 0,
+   "refactored": 4.440892098500626e-16,
+   "equal": true
+  },
+  {
+   "id": "shortGap",
+   "name": "「层高当梯长」短差 L−H",
+   "original": "0.0239/0.077/0.1766",
+   "refactored": "ladderContact.shortGap = profile.length − rise·L 同口径",
+   "equal": true
+  }
+ ],
+ "diffs": [],
+ "basis": "梯梁沿真实 foot→lip 锚点（永不取层高）——原版 ladder(spec) 与本侧 ladderProfile 同锚点跑：梯长/踏棍数/踏棍位逐字对拍；thinPlatform 判定（supportDepth<rise）与原版「薄平台挑空」机制同。"
+}

@@ -1,0 +1,74 @@
+{
+ "capability": "planet.weather-wind",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/wind.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/wind-flow.js"
+ ],
+ "inputs": {
+  "grid": "9×9×3 采样点·groundY=.1",
+  "opts": {
+   "dir": [
+    0.86,
+    0.12,
+    0.5
+   ],
+   "lift": 0.55,
+   "swirl": 0.42,
+   "seed": 7
+  },
+  "curvePts": 6
+ },
+ "metrics": [
+  {
+   "id": "at",
+   "name": "at() 729 点最大差",
+   "original": 0,
+   "refactored": 0
+  },
+  {
+   "id": "curve",
+   "name": "sampleCurve 101 点最大差",
+   "original": 0,
+   "refactored": 0
+  },
+  {
+   "id": "trace",
+   "name": "trace 12 步终点差",
+   "original": 0,
+   "refactored": 0.8454472546329999
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "trace()12步终点",
+   "original": [
+    1.8454,
+    0.6029,
+    1.2205
+   ],
+   "refactored": [
+    1,
+    0.5,
+    1
+   ],
+   "note": "重构改走 traceWindPath（minY 贴地约束口径不同）"
+  },
+  {
+   "kind": "validation",
+   "id": "makeWindField(dir非法)",
+   "original": "不校验",
+   "refactored": "RangeError"
+  }
+ ],
+ "basis": "makeWindField 同一组 (dir,lift,swirl,seed) 喂两边，at() 逐点比；trace 原版是朴素欧拉积分，重构走共享 traceWindPath，差异登记。"
+}

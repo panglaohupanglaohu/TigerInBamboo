@@ -1,0 +1,44 @@
+{
+ "capability": "fx.camera",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T15:27:35.730Z",
+ "generator": "TigerMessenger/tools/refactor/fx-parity.mjs",
+ "verdict": "diff-registered",
+ "line": "fx",
+ "basis": "同一组 (ω,r,dt) 喂两边 smearLengthPx；合法域上原版 |ω|·r·dt 与重构 |ω|·|r|·dt 的差别只在负半径与非法输入的处理。",
+ "metrics": [
+  {
+   "id": "smear-grid",
+   "name": "smearLengthPx 1428 点网格最大差",
+   "original": 0,
+   "refactored": 0
+  }
+ ],
+ "inputs": {
+  "omegas": 21,
+  "radii": 17,
+  "dts": [
+   0.041666666666666664,
+   0.03333333333333333,
+   0.016666666666666666,
+   0.008333333333333333
+  ]
+ },
+ "diffs": [
+  {
+   "kind": "validation",
+   "id": "smearLengthPx(NaN)",
+   "original": "NaN",
+   "refactored": "RangeError"
+  },
+  {
+   "kind": "value",
+   "id": "smearLengthPx(2,-100,dt)",
+   "original": -3.3333333333333335,
+   "refactored": 3.3333333333333335
+  }
+ ],
+ "gaps": 0,
+ "skipped": []
+}

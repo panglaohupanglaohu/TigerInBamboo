@@ -18,6 +18,9 @@
  */
 
 import * as THREE from 'three';
+import { fogEnvelopeGLSL, makeFogWisps, wispStats } from '../core/fog-envelope.js';
+import { traceWind, traceWindPath, flagRibbon, packWindField, windFieldGLSL, bakeSoftNormals, particleContactAlpha } from '../core/wind-flow.js';
+import { makeWorldProbes } from '../core/world-probes.js';
 import { pointInQuad } from '../core/spatial.js';
 
 const RES = 0.45;
@@ -43,19 +46,35 @@ export class Atmosphere {
     const sg = new THREE.BufferGeometry();
     this.snowPos = new Float32Array(this.snowN * 3);
     sg.setAttribute('position', new THREE.BufferAttribute(this.snowPos, 3));
-    this.snow = new THREE.Points(sg, new THREE.PointsMaterial({ color: 0xffffff, size: 0.055, sizeAttenuation: true, transparent: true, opacity: 0.9, depthWrite: false }));
+    // 943230624369868800 + 823848950553780226 (REACode engine/snow.js): round soft flakes,
+    // per-flake size, contact AO from the actual World support below (not column tops).
+    this.snowAlpha = new Float32Array(this.snowN).fill(.6);
+    this.snowSize = Float32Array.from({ length: this.snowN }, (_, k) => .55 + .9 * ((k * .618034) % 1));
+    sg.setAttribute('aAlpha', new THREE.BufferAttribute(this.snowAlpha, 1));
+    sg.setAttribute('aSize', new THREE.BufferAttribute(this.snowSize, 1));
+    this.snow = new THREE.Points(sg, new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, uniforms: { uColor: { value: new THREE.Color(0xf7fbff) } },
+      vertexShader: /* glsl */ `attribute float aAlpha; attribute float aSize; varying float vAlpha;
+        void main() { vAlpha = aAlpha; vec4 mv = modelViewMatrix * vec4(position, 1.0); gl_PointSize = aSize * 42.0 / max(.001, -mv.z); gl_Position = projectionMatrix * mv; }`,
+      fragmentShader: /* glsl */ `uniform vec3 uColor; varying float vAlpha;
+        void main() { float r = length(gl_PointCoord - .5); if (r > .5) discard; gl_FragColor = vec4(uColor, vAlpha * smoothstep(.5, .28, r));
+          #include <colorspace_fragment>
+        }`,
+    }));
     this.snow.visible = false;
     this.snow.frustumCulled = false;
     this.group.add(this.snow);
 
     // 雾：一张大圆盘
+    this.fogOpacity = { value: .35 };
+    this.fogSpeed = { value: 1 };
     this.uFog = { value: new THREE.Color('#dfe6e8') };
     this.fogParams = { value: new THREE.Vector4(0, 0, 8, 24) };   // 中心 x, z, 内半径, 外半径
     const fg = new THREE.CircleGeometry(1, 96);
     fg.rotateX(-Math.PI / 2);
     this.fog = new THREE.Mesh(fg, new THREE.ShaderMaterial({
       transparent: true, depthWrite: false,
-      uniforms: { uTime, uColor: this.uFog, uP: this.fogParams },
+      uniforms: { uTime, uColor: this.uFog, uP: this.fogParams, uOpacity: this.fogOpacity, uSpeed: this.fogSpeed },
       vertexShader: /* glsl */ `
         uniform vec4 uP;
         varying vec2 vXZ;
@@ -69,14 +88,17 @@ export class Atmosphere {
         uniform vec3 uColor;
         uniform vec4 uP;
         varying vec2 vXZ;
+        uniform float uOpacity;
+        uniform float uSpeed;
+        ${fogEnvelopeGLSL}
         float h(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
         float n2(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
           return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
         void main() {
           float r = length(vXZ - uP.xy);
-          float ring = smoothstep(uP.z, uP.w, r);
-          float drift = n2(vXZ * 0.18 + vec2(uTime * 0.05, uTime * 0.02)) * 0.6 + n2(vXZ * 0.45 - vec2(uTime * 0.03, 0.0)) * 0.4;
-          float a = ring * (0.55 + 0.45 * drift) * 0.85;     // 背景效果，宁淡勿浓
+          float ring = fogEnvelope(r, uP.z, uP.w);
+          float drift = n2(vXZ * 0.18 + vec2(uTime * 0.05, uTime * 0.02) * uSpeed) * 0.6 + n2(vXZ * 0.45 - vec2(uTime * 0.03, 0.0) * uSpeed) * 0.4;
+          float a = ring * (0.55 + 0.45 * drift) * uOpacity;     // 背景效果，宁淡勿浓
           gl_FragColor = vec4(uColor, a);
           #include <colorspace_fragment>
         }`,
@@ -85,15 +107,78 @@ export class Atmosphere {
     this.fog.frustumCulled = false;
     this.fog.visible = false;
     this.group.add(this.fog);
+
+    // 906207980802252801 / REACode engine/fog.js: wispy sheets near the water, advected by
+    // the shared wind and steered around World voxels; depthTest lets the island hide them.
+    this.fogWisps = makeFogWisps();
+    const wg = new THREE.InstancedBufferGeometry().copy(new THREE.PlaneGeometry(1, 1));
+    wg.instanceCount = this.fogWisps.wisps.length;
+    this.wispData = new Float32Array(this.fogWisps.wisps.length * 6);
+    this.wispAttr = new THREE.InstancedInterleavedBuffer(this.wispData, 6);
+    wg.setAttribute('aCenter', new THREE.InterleavedBufferAttribute(this.wispAttr, 3, 0));
+    wg.setAttribute('aShape', new THREE.InterleavedBufferAttribute(this.wispAttr, 3, 3));
+    this.fogSheets = new THREE.Mesh(wg, new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, depthTest: true, side: THREE.DoubleSide,
+      uniforms: { uTime, uColor: this.uFog, uOpacity: this.fogOpacity, uSpeed: this.fogSpeed, uBand: { value: 1.35 } },
+      vertexShader: /* glsl */ `attribute vec3 aCenter; attribute vec3 aShape; varying vec2 vUv; varying vec3 vWorld; varying float vSeed;
+        void main() { vUv = uv; vSeed = aShape.z; vec3 to = cameraPosition - aCenter; vec2 f = normalize(to.xz + vec2(1e-5, 0.));
+          vec3 right = vec3(f.y, 0., -f.x); vec3 p = aCenter + right * position.x * aShape.x + vec3(0., position.y * aShape.y, 0.);
+          vWorld = p; gl_Position = projectionMatrix * viewMatrix * vec4(p, 1.); }`,
+      fragmentShader: /* glsl */ `uniform float uTime; uniform float uSpeed; uniform vec3 uColor; uniform float uOpacity; uniform float uBand;
+        varying vec2 vUv; varying vec3 vWorld; varying float vSeed;
+        float h(vec2 p) { p = fract(p * vec2(123.34, 456.21) + vSeed); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+        float n(vec2 p) { vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f); return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y); }
+        void main() { float soft = 1. - smoothstep(.55, 1., length(vUv - .5) * 2.);
+          vec2 p = vec2(vUv.x * 2.2 + uTime * .05 * uSpeed, vUv.y * 4.5) + vSeed * 7.;
+          float wisp = smoothstep(.42, .78, n(p) * .55 + n(p * 2.07 + 11.3) * .3 + n(p * 4.13 + 27.7) * .15);
+          float band = 1. - smoothstep(uBand, uBand * 2.4, vWorld.y);
+          float near = smoothstep(3., 9., distance(cameraPosition, vWorld));
+          float a = soft * (.25 + .75 * wisp) * band * near * uOpacity * .12;
+          if (a < .002) discard; gl_FragColor = vec4(uColor, a);
+          #include <colorspace_fragment>
+        }`,
+    }));
+    this.fogSheets.frustumCulled = false;
+    this.fogSheets.visible = false;
+    this.fogSheets.renderOrder = 8;
+    this.group.add(this.fogSheets);
+    this.#writeWisps();
+  }
+
+  #writeWisps() {
+    this.fogWisps.wisps.forEach((m, k) => this.wispData.set([m.x, m.y, m.z, m.w, m.h, m.seed], k * 6));
+    this.wispAttr.needsUpdate = true;
   }
 
   set showArrows(on) { this.arrows.visible = on; }
   set showSnow(on) { this.snow.visible = on; if (on) this.#seedSnow(); }
-  set showFog(on) { this.fog.visible = on; }
+  set showFog(on) { this.fog.visible = on; this.fogSheets.visible = on; }
+  setFogAppearance({opacity=this.fogOpacity.value,speed=this.fogSpeed.value}={}) {
+    if(!Number.isFinite(opacity)||opacity<0||opacity>1||!Number.isFinite(speed)||speed<0||speed>2)throw new RangeError('Fog appearance');
+    this.fogOpacity.value=opacity;this.fogSpeed.value=speed;
+  }
   setFogColor(hex) { this.uFog.value.set(hex).lerp(new THREE.Color('#ffffff'), 0.35); }
+  /** 906207980802252801 read-only census: the disc ring plus the drifting sheet layer. */
+  fogStats() {
+    const s = wispStats(this.fogWisps);
+    const insolid = this.probes ? this.fogWisps.wisps.filter((m) => this.probes.occupied(m.x, m.y, m.z)).length : 0;
+    return { ...s, insolid, band: this.fogSheets.material.uniforms.uBand.value, opacity: this.fogOpacity.value, speed: this.fogSpeed.value,
+      discs: { inner: this.fogParams.value.z, outer: this.fogParams.value.w }, visible: this.fog.visible && this.fogSheets.visible,
+      sheetsVisible: this.fogSheets.visible, discVisible: this.fog.visible, instanceCount: this.fogSheets.geometry.instanceCount };
+  }
+
+  /** Change the shared shader direction and rebuild obstacle-aware airflow together. */
+  setWindDirection(degrees) {
+    if (!Number.isFinite(degrees)) throw new TypeError('Wind direction must be finite');
+    const angle = degrees * Math.PI / 180;
+    this.uWind.value.set(Math.cos(angle), 0, Math.sin(angle));
+    if (this.world && this.index) this.rebuild(this.world, this.index);
+  }
 
   /** 城镇 / 地形变了：重算风场、箭头、雾的范围。 */
   rebuild(world, index) {
+    this.world = world; this.index = index;
+    this.probes = makeWorldProbes(world, index, { levelHeight: this.L });
     const cells = world.cells;
     let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity, maxTop = 0;
     for (const c of cells) {
@@ -106,11 +191,13 @@ export class Atmosphere {
     const x0 = minX - pad, z0 = minZ - pad, x1 = maxX + pad, z1 = maxZ + pad;
     const W = Math.ceil((x1 - x0) / RES) + 1, H = Math.ceil((z1 - z0) / RES) + 1, LV = maxTop + 4;
     const cellAt = (x, z) => { for (const c of index.at(x, z)) if (pointInQuad(c.pts, x, z)) return c; return null; };
-    // 地面高度图（格子顶），雪和风都要
+    // Column-top diagnostic cache; never use it to fill cavities for collision.
     const ground = new Float32Array(W * H);
+    const cellIds = new Int32Array(W * H).fill(-1);
     for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
       const c = cellAt(x0 + i * RES, z0 + j * RES);
       ground[j * W + i] = c ? world.top(c) * this.L : 0;
+      cellIds[j * W + i] = c?.id ?? -1;
     }
     // 每层阻挡度：实心 = 1，再模糊两遍
     const vx = new Float32Array(W * H * LV), vz = new Float32Array(W * H * LV), vy = new Float32Array(W * H * LV);
@@ -124,8 +211,10 @@ export class Atmosphere {
       }
     };
     for (let lv = 0; lv < LV; lv++) {
-      const y = (lv + 0.5) * this.L;
-      for (let k = 0; k < W * H; k++) occ[k] = ground[k] > y ? 1 : 0;
+      // 931196707236392960: "virtual voxel space ... wind simulation".
+      // A roof above a tunnel is not solid air below it. Read this layer's bit.
+      // The top-height cache remains available only for diagnostics.
+      for (let k = 0; k < W * H; k++) occ[k] = cellIds[k] >= 0 && world.isSolid(cells[cellIds[k]], lv + 1) ? 1 : 0;
       blur(occ);
       for (let j = 0; j < H; j++) for (let i = 0; i < W; i++) {
         const k = j * W + i;
@@ -146,10 +235,16 @@ export class Atmosphere {
         vy[o] = b * 0.55;                                    // 被挡住的气流往上抬
       }
     }
-    this.field = { x0, z0, W, H, LV, vx, vy, vz, ground, maxTop };
+    // res 只读暴露（943230624369868800 验收用：世界跨度 = 格数 × res，页面/测试不必再猜常量）
+    this.field = { x0, z0, W, H, LV, res: RES, vx, vy, vz, ground, maxTop, worldVersion: world.version };
     this.#buildArrows();
     const cx = (minX + maxX) / 2, cz = (minZ + maxZ) / 2, R = Math.max(maxX - minX, maxZ - minZ) / 2;
     this.fogParams.value.set(cx, cz, R + 2.5, R + 22);
+    this.fogWisps = makeFogWisps({ radius: R + 22, inner: R + 1, center: [cx, cz], seed: 5 });
+    for (const m of this.fogWisps.wisps) while (this.probes.occupied(m.x, m.y, m.z)) m.y += this.L;
+    this.#writeWisps();
+    this.windPacked?.texture.dispose();
+    this.windPacked = null;
     if (this.snow.visible) this.#seedSnow();
   }
 
@@ -171,6 +266,47 @@ export class Atmosphere {
     return out.set(g(f.vx), g(f.vy), g(f.vz));
   }
 
+  /** 926890207298899969: virtual wind particle through the shared field and World voxels. */
+  trace(start, opts) { if (!this.probes) throw new Error('Atmosphere not built'); return traceWind((x, y, z) => this.sample(x, y, z), this.probes, start, opts); }
+  /** 926903893866541057 完整轨迹接口：种子点→积分轨迹→WindPath（at(t) 任意时刻
+   * 位置、命中洞 hitsHole/throughHole、出界 exitIndex/status、blocked）。
+   * 默认界 = 风场覆盖范围（与雪片重生同口径）；opts.bounds 可覆盖或传 null 关闭。 */
+  tracePath(start, opts = {}) {
+    if (!this.probes || !this.field) throw new Error('Atmosphere not built');
+    const f = this.field;
+    const bounds = opts.bounds !== undefined ? opts.bounds : { x0: f.x0, z0: f.z0, x1: f.x0 + f.W * RES, z1: f.z0 + f.H * RES };
+    return traceWindPath((x, y, z) => this.sample(x, y, z), this.probes, start, { ...opts, bounds, levelHeight: this.L });
+  }
+  /** REACode makeWindField 同形的 {at, trace, dir}：共享分层场上的完整接口。 */
+  windField() {
+    if (!this.field) throw new Error('Atmosphere not built');
+    return {
+      at: (x, y, z) => { const v = this.sample(x, y, z); return [v.x, v.y, v.z]; },
+      trace: (start, opts) => this.tracePath(start, opts),
+      dir: [this.uWind.value.x, this.uWind.value.y, this.uWind.value.z],
+    };
+  }
+  /** Flag cloth shape from the traced curve (geometry rows; Decor flags still use the shader wave). */
+  flagCurve(pole, opts = {}) { return flagRibbon(this.trace(pole, { steps: opts.steps ?? 10, dt: opts.dt ?? .06 }).points, opts); }
+  /** 926903893866541057 "used by all kinds of systems, including shaders": the same field as a texture. */
+  windTexture() {
+    if (!this.field) throw new Error('Atmosphere not built');
+    if (!this.windPacked || this.windPacked.version !== this.field) {
+      const p = packWindField(this.field), tex = new THREE.DataTexture(p.data, p.width, p.height, THREE.RGBAFormat, THREE.FloatType);
+      tex.magFilter = tex.minFilter = THREE.LinearFilter; tex.needsUpdate = true;
+      this.windPacked?.texture.dispose();
+      this.windPacked = { version: this.field, packed: p, texture: tex, uniforms: { uWindField: { value: tex }, uWindGrid: { value: new THREE.Vector4(p.x0, p.z0, RES, this.L) }, uWindDims: { value: new THREE.Vector3(p.W, p.H, p.LV) } } };
+    }
+    return { ...this.windPacked, glsl: windFieldGLSL };
+  }
+  /** 931196707236392960 soft normals: write World-occupancy normals into a non-indexed mesh, keeping hard edges. */
+  bakeSoftNormals(geometry, opts) {
+    if (!this.probes) throw new Error('Atmosphere not built');
+    const pos = geometry.getAttribute('position'), nrm = geometry.getAttribute('normal');
+    const r = bakeSoftNormals(pos.array, nrm.array, (x, y, z) => this.probes.normalAt(x, y, z), opts);
+    nrm.needsUpdate = true; return r;
+  }
+
   groundAt(x, z) {
     const f = this.field;
     if (!f) return 0;
@@ -186,7 +322,8 @@ export class Atmosphere {
       const y = (lv + 0.5) * this.L;
       for (let j = 0; j < f.H; j += 2) for (let i = 0; i < f.W; i += 2) {
         const x = f.x0 + i * RES, z = f.z0 + j * RES;
-        if (this.groundAt(x, z) > y) continue;
+        const c = this.index.cellAt(x, z);
+        if (c && this.world.isSolid(c, lv + 1)) continue;
         this.sample(x, y, z, v);
         const s = 0.32;
         pos.push(x, y, z, x + v.x * s, y + v.y * s, z + v.z * s);
@@ -211,12 +348,22 @@ export class Atmosphere {
       if (Math.random() < Math.abs(w.x) / (Math.abs(w.x) + Math.abs(w.z))) x = w.x > 0 ? f.x0 : f.x0 + spanX;
       else z = w.z > 0 ? f.z0 : f.z0 + spanZ;
     }
-    this.snowPos[k * 3] = x; this.snowPos[k * 3 + 1] = Math.random() * (f.maxTop + 4) * this.L + 0.3; this.snowPos[k * 3 + 2] = z;
+    let y = Math.random() * (f.maxTop + 4) * this.L + 0.3;
+    // 943230624369868800: "snow flakes ... affected by the wind system".
+    // Initial/reseeded snow may be under a roof, but never inside an actual bit.
+    if (this.probes.occupied(x, y, z)) y = this.probes.supportBelow(x, z).y + 0.3;
+    this.snowPos[k * 3] = x; this.snowPos[k * 3 + 1] = y; this.snowPos[k * 3 + 2] = z;
   }
   #seedSnow() { for (let k = 0; k < this.snowN; k++) this.#spawn(k, true); }
 
   update(dt) {
+    if (!Number.isFinite(dt) || dt < 0) throw new RangeError('Snow timestep must be finite and nonnegative');
+    if (this.fogSheets.visible && this.field && dt > 0) {
+      this.fogWisps.step(Math.min(dt, .05), (x, y, z) => this.sample(x, y, z), (x, y, z) => this.probes.occupied(x, y, z), this.uTime.value, this.fogSpeed.value);
+      this.#writeWisps();
+    }
     if (!this.snow.visible || !this.field) return;
+    if (dt === 0) return;
     dt = Math.min(dt, 0.05);
     const v = new THREE.Vector3(), f = this.field, P = this.snowPos, t = this.uTime.value;
     for (let k = 0; k < this.snowN; k++) {
@@ -224,9 +371,14 @@ export class Atmosphere {
       this.sample(x, y, z, v);
       const flutter = Math.sin(t * 2.3 + k * 1.7) * 0.15;
       const nx = x + (v.x * 0.9 + flutter) * dt, ny = y + (v.y * 0.6 - 0.32) * dt, nz = z + (v.z * 0.9 + Math.cos(t * 1.9 + k) * 0.12) * dt;
-      if (ny < this.groundAt(nx, nz) + 0.02 || ny < 0 || nx < f.x0 || nz < f.z0 || nx > f.x0 + f.W * RES || nz > f.z0 + f.H * RES) { this.#spawn(k, false); continue; }
+      // Shared World occupancy, not column height: a cave below a roof is air.
+      // Endpoint collision is a voxel approximation, not a swept deformed mesh.
+      if (ny < 0.02 || nx < f.x0 || nz < f.z0 || nx > f.x0 + f.W * RES || nz > f.z0 + f.H * RES || this.probes.occupied(nx, ny, nz)) { this.#spawn(k, false); continue; }
       P[k * 3] = nx; P[k * 3 + 1] = ny; P[k * 3 + 2] = nz;
+      const sup = this.probes.supportBelow(nx, nz, ny), half = Math.max(f.W, f.H) * RES * .5;
+      this.snowAlpha[k] = particleContactAlpha(sup ? ny - sup.y : null, Math.hypot(nx - (f.x0 + f.W * RES / 2), nz - (f.z0 + f.H * RES / 2)) / half);
     }
     this.snow.geometry.attributes.position.needsUpdate = true;
+    this.snow.geometry.attributes.aAlpha.needsUpdate = true;
   }
 }

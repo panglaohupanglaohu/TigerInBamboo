@@ -1,0 +1,389 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/mountain-citadel-e2e/run-1795350249180",
+  "steps": {
+    "scan": "扫描完成：5 / 5 个能力能作用。",
+    "site": "采样 101×101 格（3 m）· 陆地 2207 · 建筑 481 · 轨道 616 格 · 最高 76.5 m",
+    "probeSite": {
+      "n": 101,
+      "step": 3,
+      "half": 150,
+      "land": 2207,
+      "free": 1735,
+      "sea": 7994,
+      "overlays": [
+        "citadel-voxel-mountain",
+        "target-bench-turf-surface"
+      ],
+      "structureCells": 481,
+      "railCells": 616,
+      "top": 76.5,
+      "tris": 31960,
+      "ms": 76,
+      "terrainMeshes": [
+        "citadel-oskar-grid-mountain-surface"
+      ],
+      "big": [
+        {
+          "k": "overlay",
+          "name": "citadel-voxel-mountain<citadel-continuous-mountain-terrain-system<cast",
+          "tris": 12136,
+          "box": [
+            -135,
+            102,
+            -99,
+            102
+          ]
+        },
+        {
+          "k": "overlay",
+          "name": "target-bench-turf-surface<target-continuous-bench-turf<citadel-target-",
+          "tris": 38648,
+          "box": [
+            -85,
+            83,
+            -90,
+            45
+          ]
+        },
+        {
+          "k": "rail",
+          "name": "newShore-double-deck-lower-slab<citadel-target-double-deck-bridge<clif",
+          "tris": 2604,
+          "box": [
+            -130,
+            -9,
+            -111,
+            -50
+          ]
+        },
+        {
+          "k": "rail",
+          "name": "oldShore-double-deck-lower-slab<citadel-target-double-deck-bridge<clif",
+          "tris": 2328,
+          "box": [
+            28,
+            137,
+            -53,
+            12
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "new-city-enclosure-batch-0<target-new-city-walled-enclosure<citadel-ta",
+          "tris": 664,
+          "box": [
+            -84,
+            -44,
+            -57,
+            -12
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "new-city-enclosure-batch-1<target-new-city-walled-enclosure<citadel-ta",
+          "tris": 1848,
+          "box": [
+            -84,
+            -45,
+            -56,
+            -12
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "new-city-enclosure-batch-2<target-new-city-walled-enclosure<citadel-ta",
+          "tris": 32,
+          "box": [
+            -83,
+            -45,
+            -56,
+            -13
+          ]
+        },
+        {
+          "k": "rail",
+          "name": "central-double-deck-lower-slab<citadel-target-double-deck-bridge<cliff",
+          "tris": 852,
+          "box": [
+            -20,
+            29,
+            -60,
+            -30
+          ]
+        },
+        {
+          "k": "rail",
+          "name": "central-cliff-gallery-track-protective-ceiling<gallery-upper-public-wa",
+          "tris": 572,
+          "box": [
+            -19,
+            29,
+            -60,
+            -30
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "plaza-level-wall-stone<plaza-level-retaining-walls<target-new-city-pav",
+          "tris": 1096,
+          "box": [
+            -77,
+            -34,
+            -89,
+            -63
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "plaza-level-wall-dark<plaza-level-retaining-walls<target-new-city-pave",
+          "tris": 832,
+          "box": [
+            -77,
+            -34,
+            -89,
+            -63
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "central-cliff-gallery-continuous-walk-deck<gallery-upper-public-walkwa",
+          "tris": 572,
+          "box": [
+            -16,
+            28,
+            -59,
+            -34
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "plaza-level-wall-coping<plaza-level-retaining-walls<target-new-city-pa",
+          "tris": 1328,
+          "box": [
+            -76,
+            -35,
+            -89,
+            -63
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "central-cliff-gallery-edge-curbs<gallery-upper-public-walkway<cliff-tr",
+          "tris": 1056,
+          "box": [
+            -15,
+            27,
+            -58,
+            -34
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "central-cliff-gallery-handrails<gallery-upper-public-walkway<cliff-tra",
+          "tris": 1056,
+          "box": [
+            -15,
+            27,
+            -58,
+            -34
+          ]
+        },
+        {
+          "k": "rail",
+          "name": "central-cliff-gallery-rail-posts<gallery-upper-public-walkway<cliff-tr",
+          "tris": 504,
+          "box": [
+            -15,
+            26,
+            -57,
+            -34
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "main-window-batch-right-frames<citadel-target-new-city-main<citadel-ta",
+          "tris": 4340,
+          "box": [
+            -75,
+            -48,
+            -52,
+            -19
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "main-window-batch-right-panes<citadel-target-new-city-main<citadel-tar",
+          "tris": 62,
+          "box": [
+            -75,
+            -48,
+            -52,
+            -19
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "target-plaza-paving-surface<target-new-city-paved-plaza<citadel-target",
+          "tris": 1239,
+          "box": [
+            -73,
+            -36,
+            -88,
+            -64
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "main-window-batch-left-frames<citadel-target-new-city-main<citadel-tar",
+          "tris": 4340,
+          "box": [
+            -74,
+            -48,
+            -51,
+            -18
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "main-window-batch-left-panes<citadel-target-new-city-main<citadel-targ",
+          "tris": 62,
+          "box": [
+            -74,
+            -48,
+            -51,
+            -18
+          ]
+        },
+        {
+          "k": "rail",
+          "name": "central-double-deck-longitudinal-open-arches-0<citadel-target-double-d",
+          "tris": 864,
+          "box": [
+            -19,
+            6,
+            -60,
+            -35
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "new-city-link-treads<new-city-cliff-link<citadel-target-cliff-transit-",
+          "tris": 864,
+          "box": [
+            -42,
+            -13,
+            -59,
+            -40
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "surveyed-route-side-parapets<target-new-city-surveyed-stair-route<cita",
+          "tris": 2064,
+          "box": [
+            -47,
+            -30,
+            -76,
+            -44
+          ]
+        },
+        {
+          "k": "structure",
+          "name": "surveyed-route-side-copings<target-new-city-surveyed-stair-route<citad",
+          "tris": 2064,
+          "box": [
+            -47,
+            -30,
+            -76,
+            -44
+          ]
+        },
+        {
+          "k": "rail",
+          "name": "central-double-deck-longitudinal-open-arches-1<citadel-target-double-d",
+          "tris": 864,
+          "box": [
+            1,
+            29,
+            -46,
+            -30
+          ]
+        }
+      ],
+      "vegMeshes": 55,
+      "names": {
+        "structure:surveyed-route-tread": 91,
+        "structure:old-upper-anchor-link-tread-2": 21,
+        "structure:old-radial-alley-0-tread-2": 20,
+        "structure:entry-arch-stone": 17,
+        "structure:blue-dome-panel": 16,
+        "structure:dome-raised-rib": 16,
+        "rail:newShore-double-deck-longitudinal-open-arches": 10,
+        "rail:oldShore-double-deck-longitudinal-open-arches": 9,
+        "structure:facade-quoin": 8,
+        "structure:house-0--1-1-terrace-handrail": 4,
+        "structure:house-1--1-2-terrace-handrail": 4,
+        "structure:house-1-1-1-terrace-handrail": 4,
+        "structure:house-2--1-0-terrace-handrail": 4,
+        "structure:entrance-stair": 4,
+        "structure:rear-court-access-step": 4,
+        "structure:new-city-rear-fountain-stream": 4,
+        "structure:target-footing-new-entrance-stair": 4,
+        "structure:tower-belt": 3,
+        "structure:new-city-enclosure-batch": 3,
+        "structure:connector-side-post": 3,
+        "structure:guardian-left-foot": 3,
+        "structure:guardian-left-knee": 3,
+        "structure:guardian-left-elbow": 3,
+        "structure:guardian-left-shoulder": 3
+      }
+    },
+    "nodes": 5,
+    "cam": [
+      "swampCameraProfile",
+      "rescueCampaign",
+      "cameraRig",
+      "camera"
+    ],
+    "note": "候选已预览。确认前不会写入。",
+    "candidate": "候选 · 通过（需留意）",
+    "report": [
+      "保护带：执行保护 8733 格，可塑陆地 1468 格（13212 m²）",
+      "山体隆起：执行隆起 1343 格 · 最高点 82.9 m",
+      "沟谷侵蚀：执行下切 1314 格 · 最深 6.3 m · 5 轮",
+      "岩屑坡：执行松弛 168899 次 · 休止角 49°",
+      "低面片着色：执行草坡 602 · 岩壁 3032 · 碎石 236 · 雪 96 · 滩 / 台地 16034 面"
+    ],
+    "checks": [
+      "✓ 建筑与保护带不动保护区最大高差 0.00 m",
+      "✓ 轨道净空保留轨道 616 格下方地形高差 0.00 m · 轨旁 24 m 内新增山体超出 1.6 坡比包络 0.0 m",
+      "✓ 海岸线不变陆地与海的格子没有翻转",
+      "✓ 有主峰峰顶高出可塑陆地中位 52.4 m（原 52.4 m）· 最高 67.7 m",
+      "✓ 山坡而非方台中等坡 53%（原 47%）· 平顶 0%（原 0%）",
+      "! 竖崖占比>62° 竖崖 14%（原 34%）",
+      "✓ 面数预算20000 个三角面（low poly 预算 9 万）",
+      "✓ 着色数据完整每个三角面都有材质与烘焙明暗"
+    ],
+    "shape": "山形：中等坡 47% → 53% · 平顶 0% → 0% · 峰高 77 → 68 m",
+    "state": {
+      "active": true,
+      "id": "citadel",
+      "previewing": true,
+      "comparing": false,
+      "triangles": 12444,
+      "hidden": 3,
+      "vegetationMoved": 8
+    },
+    "compare": {
+      "active": true,
+      "id": "citadel",
+      "previewing": true,
+      "comparing": true,
+      "triangles": 12444,
+      "hidden": 3,
+      "vegetationMoved": 8
+    }
+  },
+  "errors": [],
+  "pass": true
+}

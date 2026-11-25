@@ -10,8 +10,10 @@
  * height (the mean of its levels), so linked neighbours meet edge-to-edge with no wall: the 1-level
  * terrace steps melt into a continuous piecewise-linear slope, while unlinked steps (≥2 levels or
  * sharp province) keep their vertical cliff, stretched to the new corner heights.
- * Vertices touching anything that is not a plain top keep the exact level heights, so coastlines,
- * river banks, lakes and buildings are untouched.
+ * Vertices touching water or an open map border keep the exact level heights, so coastlines are
+ * untouched. Land cells that are not plain tops (river, lake, spliced, partial column) keep their own
+ * corner heights but no longer veto the whole vertex: plain cells around them still melt, and the
+ * terrain-mesh wall pass fills the resulting same-level gaps.
  */
 import { liveLakes } from './drainage.js';
 
@@ -22,8 +24,8 @@ export function softCorners(world, { L = 0.5 } = {}) {
   for (const c of cells) {
     const g = world.ground(c);
     if (!g || world.river[c.id] || lakeCell.has(c.id) || world.splicedHouses?.get?.(c.id)) continue;
-    const full = (1 << g) - 1;
-    if (world.solid[c.id] !== full || world.rock[c.id] !== full) continue;   // contiguous bare rock column only
+    const top = 1 << (g - 1);
+    if (!(world.solid[c.id] & top) || !(world.rock[c.id] & top)) continue;   // bare rock top layer only (hollows below are walls' business)
     plain[c.id] = 1;
   }
   const soft = (id) => !mask || mask[id] < 0.5;
@@ -35,11 +37,12 @@ export function softCorners(world, { L = 0.5 } = {}) {
   const Y = new Map(), key = (cid, vid) => cid * 1048576 + vid;
   let vertices = 0, groups = 0;
   for (const [vid, ids] of grid.vertexCells) {
-    if (ids.length < 2 || ids.some((id) => !plain[id])) continue;
+    if (ids.length < 2 || ids.some((id) => !world.ground(cells[id]))) continue;   // water/void at the vertex: keep coastline exact
     if (ids.some((id) => { const c = cells[id]; return c.edgeNeighbors.some((o, i) => o < 0 && (c.pts[i].id === vid || c.pts[(i + 1) % c.n].id === vid)); })) continue;
     // all cells around this vertex must exist (no open map border) for a closed fan
-    const vcells = ids.map((id) => cells[id]);
-    const par = new Map(ids.map((id) => [id, id]));
+    const vcells = ids.filter((id) => plain[id]).map((id) => cells[id]);
+    if (!vcells.length) continue;
+    const par = new Map(vcells.map((c) => [c.id, c.id]));
     const find = (x) => { while (par.get(x) !== x) { par.set(x, par.get(par.get(x))); x = par.get(x); } return x; };
     for (const c of vcells) for (let i = 0; i < c.n; i++) {
       const o = c.edgeNeighbors[i];
@@ -49,7 +52,7 @@ export function softCorners(world, { L = 0.5 } = {}) {
       if (linked(c, cells[o])) par.set(find(c.id), find(o));
     }
     const byRoot = new Map();
-    for (const id of ids) { const r = find(id); if (!byRoot.has(r)) byRoot.set(r, []); byRoot.get(r).push(id); }
+    for (const id of par.keys()) { const r = find(id); if (!byRoot.has(r)) byRoot.set(r, []); byRoot.get(r).push(id); }
     let touched = false;
     for (const members of byRoot.values()) {
       const lv = members.map((id) => world.ground(cells[id]));

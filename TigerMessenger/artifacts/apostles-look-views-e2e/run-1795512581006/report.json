@@ -1,0 +1,4174 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-look-views-e2e/run-1795512581006",
+  "capabilities": [],
+  "looks": {
+    "approved": {
+      "look": "approved",
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "views": [
+        {
+          "ok": true,
+          "view": "overview",
+          "label": "全景",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.84,
+            35.64,
+            -140.63
+          ],
+          "distance": 207.8,
+          "heightAboveSea": 179.2,
+          "look": {
+            "id": "approved",
+            "soft": false,
+            "palette": false,
+            "latest": false
+          },
+          "file": "approved-overview.png"
+        },
+        {
+          "ok": true,
+          "view": "side",
+          "label": "侧面",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.84,
+            35.64,
+            -140.63
+          ],
+          "distance": 207.8,
+          "heightAboveSea": 179.2,
+          "look": {
+            "id": "approved",
+            "soft": false,
+            "palette": false,
+            "latest": false
+          },
+          "file": "approved-side.png"
+        },
+        {
+          "ok": true,
+          "view": "top",
+          "label": "俯视",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.84,
+            35.64,
+            -140.63
+          ],
+          "distance": 232.2,
+          "heightAboveSea": 225.1,
+          "look": {
+            "id": "approved",
+            "soft": false,
+            "palette": false,
+            "latest": false
+          },
+          "file": "approved-top.png"
+        },
+        {
+          "ok": true,
+          "view": "cliff-foot",
+          "label": "崖脚特写",
+          "valid": true,
+          "tries": 1,
+          "occluder": null,
+          "target": [
+            25.82,
+            70.44,
+            -141.69
+          ],
+          "distance": 26,
+          "heightAboveSea": 1.9,
+          "look": {
+            "id": "approved",
+            "soft": false,
+            "palette": false,
+            "latest": false
+          },
+          "file": "approved-cliff-foot.png"
+        }
+      ],
+      "stable": {
+        "ok": true,
+        "samples": 3,
+        "resets": 0,
+        "ms": 4552,
+        "sample": {
+          "sceneKey": "1a4c036c-14f6-4c4d-aa12-c8ea82109297",
+          "count": 6,
+          "look": "approved",
+          "massIds": [
+            "back-left",
+            "back-right",
+            "bay-1",
+            "bay-2",
+            "front-left",
+            "front-right"
+          ],
+          "orbit": true,
+          "planetCamera": "apostles"
+        },
+        "reason": null
+      },
+      "surface": {
+        "ok": true,
+        "look": {
+          "id": "approved",
+          "soft": false,
+          "palette": false,
+          "latest": false
+        },
+        "masses": [
+          {
+            "id": "back-left",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 12760,
+              "considered": 12368,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 8076,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.928,
+                  3.789,
+                  0.27
+                ],
+                [
+                  0.779,
+                  3.81,
+                  0.442
+                ],
+                [
+                  0.93,
+                  3.811,
+                  0.272
+                ],
+                [
+                  1.079,
+                  3.79,
+                  0.1
+                ],
+                [
+                  0.99,
+                  5.312,
+                  0.348
+                ],
+                [
+                  0.811,
+                  5.333,
+                  0.545
+                ],
+                [
+                  0.991,
+                  5.334,
+                  0.348
+                ],
+                [
+                  1.17,
+                  5.312,
+                  0.151
+                ],
+                [
+                  1.156,
+                  6.088,
+                  0.193
+                ],
+                [
+                  1.187,
+                  6.087,
+                  0.161
+                ],
+                [
+                  1.154,
+                  6.005,
+                  0.192
+                ],
+                [
+                  1.093,
+                  6.089,
+                  0.258
+                ],
+                [
+                  1.09,
+                  5.894,
+                  0.256
+                ],
+                [
+                  1.03,
+                  6.09,
+                  0.322
+                ],
+                [
+                  1.027,
+                  5.849,
+                  0.32
+                ],
+                [
+                  0.968,
+                  6.09,
+                  0.387
+                ],
+                [
+                  0.965,
+                  5.867,
+                  0.385
+                ],
+                [
+                  0.905,
+                  6.091,
+                  0.452
+                ],
+                [
+                  0.904,
+                  5.915,
+                  0.45
+                ],
+                [
+                  0.811,
+                  6.09,
+                  0.548
+                ],
+                [
+                  0.842,
+                  6.091,
+                  0.516
+                ],
+                [
+                  0.842,
+                  6.01,
+                  0.516
+                ],
+                [
+                  1.002,
+                  6.037,
+                  0.356
+                ],
+                [
+                  0.835,
+                  6.065,
+                  0.56
+                ]
+              ]
+            },
+            "plants": {
+              "count": 372,
+              "ok": 336,
+              "floating": 0,
+              "buried": 36,
+              "offSurface": 0,
+              "badShare": 0.0968,
+              "p95": 1.044,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.001,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 3000,
+              "coast": 588,
+              "strayed": 3,
+              "uncovered": 0,
+              "strayShare": 0.001,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 8076 · 退化 0 · 非有限 0（水线以上 12368 / 12760 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "372 株抽样：悬空 0 · 埋入 36 · 脚下无岩面 0 · |高差| p95 1.044 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 3/3000 · 水线 3 米内无白沫 0/588"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "back-right",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 25054,
+              "considered": 24598,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 19532,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.065,
+                  9.971,
+                  0.815
+                ],
+                [
+                  0.235,
+                  9.963,
+                  0.707
+                ],
+                [
+                  0.065,
+                  9.993,
+                  0.815
+                ],
+                [
+                  -0.105,
+                  10,
+                  0.923
+                ],
+                [
+                  0.045,
+                  11.495,
+                  0.785
+                ],
+                [
+                  0.236,
+                  11.487,
+                  0.705
+                ],
+                [
+                  0.044,
+                  11.517,
+                  0.784
+                ],
+                [
+                  -0.147,
+                  11.525,
+                  0.864
+                ],
+                [
+                  0.224,
+                  9.95,
+                  0.521
+                ],
+                [
+                  0.207,
+                  9.96,
+                  0.344
+                ],
+                [
+                  0.223,
+                  9.972,
+                  0.52
+                ],
+                [
+                  0.24,
+                  9.963,
+                  0.697
+                ],
+                [
+                  0.192,
+                  11.474,
+                  0.512
+                ],
+                [
+                  0.143,
+                  11.484,
+                  0.329
+                ],
+                [
+                  0.192,
+                  11.496,
+                  0.513
+                ],
+                [
+                  0.241,
+                  11.487,
+                  0.696
+                ],
+                [
+                  0.234,
+                  12.189,
+                  0.665
+                ],
+                [
+                  0.242,
+                  12.188,
+                  0.695
+                ],
+                [
+                  0.234,
+                  12.066,
+                  0.665
+                ],
+                [
+                  0.219,
+                  12.19,
+                  0.604
+                ],
+                [
+                  0.218,
+                  11.901,
+                  0.604
+                ],
+                [
+                  0.204,
+                  12.19,
+                  0.543
+                ],
+                [
+                  0.202,
+                  11.832,
+                  0.543
+                ],
+                [
+                  0.189,
+                  12.191,
+                  0.482
+                ]
+              ]
+            },
+            "plants": {
+              "count": 372,
+              "ok": 304,
+              "floating": 4,
+              "buried": 64,
+              "offSurface": 0,
+              "badShare": 0.1828,
+              "p95": 1.393,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.001,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 3000,
+              "coast": 684,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 19532 · 退化 0 · 非有限 0（水线以上 24598 / 25054 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "372 株抽样：悬空 4 · 埋入 64 · 脚下无岩面 0 · |高差| p95 1.393 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/3000 · 水线 3 米内无白沫 0/684"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "front-left",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 16022,
+              "considered": 15622,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 10508,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  1.634,
+                  6.715,
+                  1.81
+                ],
+                [
+                  1.76,
+                  6.715,
+                  1.755
+                ],
+                [
+                  1.633,
+                  6.737,
+                  1.808
+                ],
+                [
+                  1.507,
+                  6.737,
+                  1.864
+                ],
+                [
+                  1.595,
+                  8.241,
+                  1.742
+                ],
+                [
+                  1.732,
+                  8.24,
+                  1.702
+                ],
+                [
+                  1.595,
+                  8.263,
+                  1.742
+                ],
+                [
+                  1.457,
+                  8.264,
+                  1.782
+                ],
+                [
+                  1.906,
+                  6.718,
+                  1.678
+                ],
+                [
+                  2.044,
+                  6.745,
+                  1.603
+                ],
+                [
+                  1.905,
+                  6.741,
+                  1.676
+                ],
+                [
+                  1.767,
+                  6.714,
+                  1.751
+                ],
+                [
+                  1.877,
+                  8.245,
+                  1.604
+                ],
+                [
+                  2.014,
+                  8.271,
+                  1.51
+                ],
+                [
+                  1.877,
+                  8.267,
+                  1.604
+                ],
+                [
+                  1.739,
+                  8.24,
+                  1.698
+                ],
+                [
+                  1.594,
+                  9.056,
+                  1.738
+                ],
+                [
+                  1.738,
+                  9.081,
+                  1.677
+                ],
+                [
+                  1.604,
+                  9.109,
+                  1.693
+                ],
+                [
+                  1.46,
+                  9.085,
+                  1.753
+                ],
+                [
+                  1.874,
+                  9.053,
+                  1.599
+                ],
+                [
+                  1.989,
+                  9.078,
+                  1.493
+                ],
+                [
+                  1.831,
+                  9.106,
+                  1.582
+                ],
+                [
+                  1.716,
+                  9.081,
+                  1.689
+                ]
+              ]
+            },
+            "plants": {
+              "count": 372,
+              "ok": 302,
+              "floating": 4,
+              "buried": 66,
+              "offSurface": 0,
+              "badShare": 0.1882,
+              "p95": 1.427,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.001,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 3000,
+              "coast": 600,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 10508 · 退化 0 · 非有限 0（水线以上 15622 / 16022 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "372 株抽样：悬空 4 · 埋入 66 · 脚下无岩面 0 · |高差| p95 1.427 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/3000 · 水线 3 米内无白沫 0/600"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "front-right",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 15556,
+              "considered": 15188,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 10868,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  1.098,
+                  7.587,
+                  1.935
+                ],
+                [
+                  1.076,
+                  8.29,
+                  1.973
+                ],
+                [
+                  0.956,
+                  8.328,
+                  1.875
+                ],
+                [
+                  1.076,
+                  8.312,
+                  1.974
+                ],
+                [
+                  1.196,
+                  8.273,
+                  2.072
+                ],
+                [
+                  1.098,
+                  7.527,
+                  1.935
+                ],
+                [
+                  1.171,
+                  7.554,
+                  1.997
+                ],
+                [
+                  1.025,
+                  7.559,
+                  1.872
+                ],
+                [
+                  1.346,
+                  8.256,
+                  2.036
+                ],
+                [
+                  1.188,
+                  8.273,
+                  2.074
+                ],
+                [
+                  1.347,
+                  8.278,
+                  2.037
+                ],
+                [
+                  1.505,
+                  8.261,
+                  1.999
+                ],
+                [
+                  1.666,
+                  8.229,
+                  2.076
+                ],
+                [
+                  1.513,
+                  8.261,
+                  1.997
+                ],
+                [
+                  1.666,
+                  8.251,
+                  2.076
+                ],
+                [
+                  1.82,
+                  8.22,
+                  2.156
+                ],
+                [
+                  1.496,
+                  9.104,
+                  2.013
+                ],
+                [
+                  1.522,
+                  9.103,
+                  1.999
+                ],
+                [
+                  1.493,
+                  8.975,
+                  2.01
+                ],
+                [
+                  1.445,
+                  9.104,
+                  2.041
+                ],
+                [
+                  1.438,
+                  8.811,
+                  2.033
+                ],
+                [
+                  1.394,
+                  9.104,
+                  2.07
+                ],
+                [
+                  1.384,
+                  8.747,
+                  2.052
+                ],
+                [
+                  1.343,
+                  9.104,
+                  2.098
+                ]
+              ]
+            },
+            "plants": {
+              "count": 372,
+              "ok": 324,
+              "floating": 14,
+              "buried": 34,
+              "offSurface": 0,
+              "badShare": 0.129,
+              "p95": 1.243,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.001,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 2944,
+              "coast": 552,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 10868 · 退化 0 · 非有限 0（水线以上 15188 / 15556 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "372 株抽样：悬空 14 · 埋入 34 · 脚下无岩面 0 · |高差| p95 1.243 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/2944 · 水线 3 米内无白沫 0/552"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "bay-1",
+            "scale": 1.25,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 4344,
+              "considered": 4172,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 3088,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  -1.979,
+                  3.769,
+                  3.523
+                ],
+                [
+                  -1.979,
+                  3.791,
+                  3.523
+                ],
+                [
+                  -2.163,
+                  3.76,
+                  3.398
+                ],
+                [
+                  -2.127,
+                  5.059,
+                  3.394
+                ],
+                [
+                  -2.159,
+                  5.059,
+                  3.372
+                ],
+                [
+                  -2.128,
+                  4.848,
+                  3.398
+                ],
+                [
+                  -2.061,
+                  5.059,
+                  3.436
+                ],
+                [
+                  -2.066,
+                  4.509,
+                  3.447
+                ],
+                [
+                  -1.995,
+                  5.059,
+                  3.479
+                ],
+                [
+                  -2.004,
+                  4.373,
+                  3.492
+                ],
+                [
+                  -1.93,
+                  5.059,
+                  3.522
+                ],
+                [
+                  -1.939,
+                  4.422,
+                  3.533
+                ],
+                [
+                  -1.864,
+                  5.059,
+                  3.565
+                ],
+                [
+                  -1.874,
+                  4.52,
+                  3.574
+                ],
+                [
+                  -1.766,
+                  5.058,
+                  3.63
+                ],
+                [
+                  -1.798,
+                  5.059,
+                  3.608
+                ],
+                [
+                  -1.803,
+                  4.81,
+                  3.612
+                ],
+                [
+                  -1.96,
+                  5.007,
+                  3.499
+                ],
+                [
+                  -1.744,
+                  5.033,
+                  3.615
+                ],
+                [
+                  -1.922,
+                  5.06,
+                  3.474
+                ],
+                [
+                  -2.138,
+                  5.034,
+                  3.358
+                ],
+                [
+                  -1.838,
+                  6.329,
+                  2.806
+                ],
+                [
+                  -1.837,
+                  6.351,
+                  2.805
+                ],
+                [
+                  -2.038,
+                  6.407,
+                  2.67
+                ]
+              ]
+            },
+            "plants": {
+              "count": 226,
+              "ok": 226,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.136,
+              "status": "pass"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 2,
+                "ok": 2,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 1376,
+              "coast": 258,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 3088 · 退化 0 · 非有限 0（水线以上 4172 / 4344 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "pass",
+                "detail": "226 株抽样：悬空 0 · 埋入 0 · 脚下无岩面 0 · |高差| p95 0.136 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/1376 · 水线 3 米内无白沫 0/258"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "bay-2",
+            "scale": 1.25,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 3124,
+              "considered": 2992,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 2322,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.963,
+                  6.348,
+                  2.625
+                ],
+                [
+                  1.151,
+                  6.286,
+                  2.557
+                ],
+                [
+                  0.963,
+                  6.37,
+                  2.624
+                ],
+                [
+                  0.775,
+                  6.431,
+                  2.692
+                ],
+                [
+                  0.942,
+                  8.909,
+                  2.558
+                ],
+                [
+                  0.942,
+                  8.931,
+                  2.558
+                ],
+                [
+                  0.731,
+                  8.993,
+                  2.639
+                ],
+                [
+                  0.772,
+                  10.213,
+                  2.633
+                ],
+                [
+                  0.737,
+                  10.212,
+                  2.647
+                ],
+                [
+                  0.771,
+                  9.933,
+                  2.632
+                ],
+                [
+                  0.841,
+                  10.213,
+                  2.604
+                ],
+                [
+                  0.839,
+                  9.579,
+                  2.602
+                ],
+                [
+                  0.91,
+                  10.213,
+                  2.576
+                ],
+                [
+                  0.908,
+                  9.417,
+                  2.574
+                ],
+                [
+                  0.979,
+                  10.213,
+                  2.547
+                ],
+                [
+                  0.978,
+                  9.363,
+                  2.546
+                ],
+                [
+                  1.049,
+                  10.213,
+                  2.518
+                ],
+                [
+                  1.048,
+                  9.528,
+                  2.518
+                ],
+                [
+                  1.118,
+                  10.213,
+                  2.49
+                ],
+                [
+                  1.118,
+                  9.937,
+                  2.49
+                ],
+                [
+                  0.945,
+                  10.161,
+                  2.558
+                ],
+                [
+                  1.153,
+                  10.187,
+                  2.449
+                ],
+                [
+                  0.946,
+                  10.214,
+                  2.512
+                ],
+                [
+                  0.738,
+                  10.187,
+                  2.621
+                ]
+              ]
+            },
+            "plants": {
+              "count": 226,
+              "ok": 226,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.1,
+              "status": "pass"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 2,
+                "ok": 2,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 1056,
+              "coast": 198,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 2322 · 退化 0 · 非有限 0（水线以上 2992 / 3124 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "pass",
+                "detail": "226 株抽样：悬空 0 · 埋入 0 · 脚下无岩面 0 · |高差| p95 0.1 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/1056 · 水线 3 米内无白沫 0/198"
+              }
+            ],
+            "status": "warn"
+          }
+        ],
+        "totals": {
+          "masses": 6,
+          "considered": 74940,
+          "inverted": 0,
+          "openEdges": 54394,
+          "transparentRock": 0,
+          "plants": 1940,
+          "plantBad": 222,
+          "foam": 14376,
+          "foamStray": 3,
+          "coast": 2880,
+          "foamUncovered": 0,
+          "plantBadShare": 0.1144,
+          "foamStrayShare": 0.0002,
+          "foamUncoveredShare": 0
+        },
+        "defect": null,
+        "status": "warn"
+      },
+      "stableAfter": {
+        "ok": true,
+        "same": true
+      },
+      "seconds": 95,
+      "pass": true
+    },
+    "soft": {
+      "look": "soft",
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "views": [
+        {
+          "ok": true,
+          "view": "overview",
+          "label": "全景",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.86,
+            35.73,
+            -140.58
+          ],
+          "distance": 208.2,
+          "heightAboveSea": 179.6,
+          "look": {
+            "id": "soft",
+            "soft": true,
+            "palette": false,
+            "latest": true
+          },
+          "file": "soft-overview.png"
+        },
+        {
+          "ok": true,
+          "view": "side",
+          "label": "侧面",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.86,
+            35.73,
+            -140.58
+          ],
+          "distance": 208.2,
+          "heightAboveSea": 179.6,
+          "look": {
+            "id": "soft",
+            "soft": true,
+            "palette": false,
+            "latest": true
+          },
+          "file": "soft-side.png"
+        },
+        {
+          "ok": true,
+          "view": "top",
+          "label": "俯视",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.86,
+            35.73,
+            -140.58
+          ],
+          "distance": 232.7,
+          "heightAboveSea": 225.6,
+          "look": {
+            "id": "soft",
+            "soft": true,
+            "palette": false,
+            "latest": true
+          },
+          "file": "soft-top.png"
+        },
+        {
+          "ok": true,
+          "view": "cliff-foot",
+          "label": "崖脚特写",
+          "valid": true,
+          "tries": 1,
+          "occluder": null,
+          "target": [
+            25.78,
+            69.26,
+            -142.28
+          ],
+          "distance": 26,
+          "heightAboveSea": 1.6,
+          "look": {
+            "id": "soft",
+            "soft": true,
+            "palette": false,
+            "latest": true
+          },
+          "file": "soft-cliff-foot.png"
+        }
+      ],
+      "stable": {
+        "ok": true,
+        "samples": 3,
+        "resets": 0,
+        "ms": 4707,
+        "sample": {
+          "sceneKey": "67ed5cd4-334c-4448-b666-a220ed3fcbbd",
+          "count": 6,
+          "look": "soft",
+          "massIds": [
+            "back-left",
+            "back-right",
+            "bay-1",
+            "bay-2",
+            "front-left",
+            "front-right"
+          ],
+          "orbit": true,
+          "planetCamera": "apostles"
+        },
+        "reason": null
+      },
+      "surface": {
+        "ok": true,
+        "look": {
+          "id": "soft",
+          "soft": true,
+          "palette": false,
+          "latest": true
+        },
+        "masses": [
+          {
+            "id": "back-left",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 15636,
+              "considered": 15232,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 11391,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.899,
+                  3.789,
+                  0.29
+                ],
+                [
+                  0.76,
+                  3.81,
+                  0.51
+                ],
+                [
+                  0.9,
+                  3.811,
+                  0.291
+                ],
+                [
+                  1.039,
+                  3.79,
+                  0.07
+                ],
+                [
+                  0.93,
+                  5.312,
+                  0.329
+                ],
+                [
+                  0.776,
+                  5.333,
+                  0.562
+                ],
+                [
+                  0.93,
+                  5.334,
+                  0.329
+                ],
+                [
+                  1.084,
+                  5.314,
+                  0.096
+                ],
+                [
+                  1.066,
+                  6.09,
+                  0.139
+                ],
+                [
+                  1.092,
+                  6.088,
+                  0.1
+                ],
+                [
+                  1.065,
+                  6.006,
+                  0.139
+                ],
+                [
+                  1.065,
+                  6.091,
+                  0.138
+                ],
+                [
+                  1.091,
+                  6.089,
+                  0.1
+                ],
+                [
+                  1.064,
+                  6.051,
+                  0.138
+                ],
+                [
+                  1.013,
+                  6.09,
+                  0.216
+                ],
+                [
+                  1.012,
+                  5.895,
+                  0.215
+                ],
+                [
+                  1.012,
+                  6.091,
+                  0.216
+                ],
+                [
+                  1.011,
+                  6.001,
+                  0.215
+                ],
+                [
+                  0.961,
+                  6.091,
+                  0.293
+                ],
+                [
+                  0.959,
+                  5.85,
+                  0.292
+                ],
+                [
+                  0.959,
+                  6.092,
+                  0.293
+                ],
+                [
+                  0.958,
+                  5.981,
+                  0.292
+                ],
+                [
+                  0.908,
+                  6.091,
+                  0.371
+                ],
+                [
+                  0.907,
+                  5.867,
+                  0.37
+                ]
+              ]
+            },
+            "plants": {
+              "count": 312,
+              "ok": 281,
+              "floating": 22,
+              "buried": 9,
+              "offSurface": 0,
+              "badShare": 0.0994,
+              "p95": 1.48,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.001,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 2156,
+              "coast": 606,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 11391 · 退化 0 · 非有限 0（水线以上 15232 / 15636 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "312 株抽样：悬空 22 · 埋入 9 · 脚下无岩面 0 · |高差| p95 1.48 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/2156 · 水线 3 米内无白沫 0/606"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "back-right",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 28102,
+              "considered": 27642,
+              "degenerate": 6,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 23245,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.084,
+                  9.97,
+                  0.817
+                ],
+                [
+                  0.343,
+                  9.962,
+                  0.759
+                ],
+                [
+                  0.083,
+                  9.992,
+                  0.816
+                ],
+                [
+                  -0.176,
+                  10.001,
+                  0.874
+                ],
+                [
+                  0.073,
+                  11.494,
+                  0.801
+                ],
+                [
+                  0.343,
+                  11.486,
+                  0.758
+                ],
+                [
+                  0.073,
+                  11.516,
+                  0.801
+                ],
+                [
+                  -0.197,
+                  11.525,
+                  0.844
+                ],
+                [
+                  0.263,
+                  9.95,
+                  0.538
+                ],
+                [
+                  0.178,
+                  9.96,
+                  0.327
+                ],
+                [
+                  0.263,
+                  9.972,
+                  0.538
+                ],
+                [
+                  0.348,
+                  9.962,
+                  0.75
+                ],
+                [
+                  0.247,
+                  11.474,
+                  0.534
+                ],
+                [
+                  0.146,
+                  11.484,
+                  0.319
+                ],
+                [
+                  0.247,
+                  11.496,
+                  0.534
+                ],
+                [
+                  0.348,
+                  11.486,
+                  0.749
+                ],
+                [
+                  0.332,
+                  12.188,
+                  0.713
+                ],
+                [
+                  0.349,
+                  12.187,
+                  0.749
+                ],
+                [
+                  0.332,
+                  12.065,
+                  0.713
+                ],
+                [
+                  0.334,
+                  12.189,
+                  0.712
+                ],
+                [
+                  0.35,
+                  12.188,
+                  0.748
+                ],
+                [
+                  0.334,
+                  12.132,
+                  0.712
+                ],
+                [
+                  0.299,
+                  12.189,
+                  0.641
+                ],
+                [
+                  0.299,
+                  11.901,
+                  0.641
+                ]
+              ]
+            },
+            "plants": {
+              "count": 312,
+              "ok": 268,
+              "floating": 35,
+              "buried": 9,
+              "offSurface": 0,
+              "badShare": 0.141,
+              "p95": 1.559,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.186,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 2408,
+              "coast": 690,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 23245 · 退化 6 · 非有限 0（水线以上 27642 / 28102 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "312 株抽样：悬空 35 · 埋入 9 · 脚下无岩面 0 · |高差| p95 1.559 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/2408 · 水线 3 米内无白沫 0/690"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "front-left",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 15974,
+              "considered": 15570,
+              "degenerate": 3,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 10553,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.536,
+                  8.378,
+                  -0.021
+                ],
+                [
+                  0.262,
+                  8.413,
+                  -0.013
+                ],
+                [
+                  0.536,
+                  8.4,
+                  -0.02
+                ],
+                [
+                  0.809,
+                  8.364,
+                  -0.029
+                ],
+                [
+                  0.775,
+                  9.141,
+                  -0.004
+                ],
+                [
+                  0.823,
+                  9.139,
+                  -0.005
+                ],
+                [
+                  0.774,
+                  9.074,
+                  -0.006
+                ],
+                [
+                  0.775,
+                  9.142,
+                  -0.006
+                ],
+                [
+                  0.823,
+                  9.14,
+                  -0.007
+                ],
+                [
+                  0.775,
+                  9.11,
+                  -0.007
+                ],
+                [
+                  0.679,
+                  9.142,
+                  -0.002
+                ],
+                [
+                  0.677,
+                  8.978,
+                  -0.007
+                ],
+                [
+                  0.679,
+                  9.143,
+                  -0.004
+                ],
+                [
+                  0.678,
+                  9.067,
+                  -0.006
+                ],
+                [
+                  0.582,
+                  9.143,
+                  0
+                ],
+                [
+                  0.582,
+                  8.94,
+                  -0.006
+                ],
+                [
+                  0.582,
+                  9.144,
+                  -0.002
+                ],
+                [
+                  0.582,
+                  9.05,
+                  -0.004
+                ],
+                [
+                  0.486,
+                  9.143,
+                  0.002
+                ],
+                [
+                  0.487,
+                  8.954,
+                  -0.004
+                ],
+                [
+                  0.486,
+                  9.144,
+                  0
+                ],
+                [
+                  0.486,
+                  9.057,
+                  -0.002
+                ],
+                [
+                  0.389,
+                  9.144,
+                  0.004
+                ],
+                [
+                  0.391,
+                  9,
+                  0
+                ]
+              ]
+            },
+            "plants": {
+              "count": 312,
+              "ok": 239,
+              "floating": 46,
+              "buried": 27,
+              "offSurface": 0,
+              "badShare": 0.234,
+              "p95": 1.629,
+              "status": "fail"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.442,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 2128,
+              "coast": 606,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 10553 · 退化 3 · 非有限 0（水线以上 15570 / 15974 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "fail",
+                "detail": "312 株抽样：悬空 46 · 埋入 27 · 脚下无岩面 0 · |高差| p95 1.629 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/2128 · 水线 3 米内无白沫 0/606"
+              }
+            ],
+            "status": "fail"
+          },
+          {
+            "id": "front-right",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 20778,
+              "considered": 20410,
+              "degenerate": 5,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 16765,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  1.068,
+                  7.585,
+                  2.019
+                ],
+                [
+                  1.059,
+                  8.288,
+                  2.037
+                ],
+                [
+                  0.891,
+                  8.327,
+                  1.938
+                ],
+                [
+                  1.058,
+                  8.31,
+                  2.037
+                ],
+                [
+                  1.226,
+                  8.271,
+                  2.136
+                ],
+                [
+                  1.068,
+                  7.525,
+                  2.019
+                ],
+                [
+                  1.212,
+                  7.551,
+                  2.1
+                ],
+                [
+                  0.925,
+                  7.559,
+                  1.938
+                ],
+                [
+                  1.364,
+                  8.257,
+                  2.008
+                ],
+                [
+                  1.218,
+                  8.271,
+                  2.138
+                ],
+                [
+                  1.365,
+                  8.279,
+                  2.009
+                ],
+                [
+                  1.511,
+                  8.264,
+                  1.879
+                ],
+                [
+                  1.698,
+                  8.231,
+                  1.978
+                ],
+                [
+                  1.519,
+                  8.264,
+                  1.877
+                ],
+                [
+                  1.698,
+                  8.253,
+                  1.979
+                ],
+                [
+                  1.876,
+                  8.22,
+                  2.08
+                ],
+                [
+                  1.493,
+                  9.106,
+                  1.904
+                ],
+                [
+                  1.517,
+                  9.106,
+                  1.879
+                ],
+                [
+                  1.492,
+                  8.977,
+                  1.903
+                ],
+                [
+                  1.492,
+                  9.108,
+                  1.904
+                ],
+                [
+                  1.516,
+                  9.106,
+                  1.878
+                ],
+                [
+                  1.491,
+                  9.047,
+                  1.903
+                ],
+                [
+                  1.445,
+                  9.106,
+                  1.956
+                ],
+                [
+                  1.442,
+                  8.813,
+                  1.951
+                ]
+              ]
+            },
+            "plants": {
+              "count": 312,
+              "ok": 271,
+              "floating": 30,
+              "buried": 11,
+              "offSurface": 0,
+              "badShare": 0.1314,
+              "p95": 1.629,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.001,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 1980,
+              "coast": 552,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 16765 · 退化 5 · 非有限 0（水线以上 20410 / 20778 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "312 株抽样：悬空 30 · 埋入 11 · 脚下无岩面 0 · |高差| p95 1.629 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/1980 · 水线 3 米内无白沫 0/552"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "bay-1",
+            "scale": 1.25,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 5236,
+              "considered": 5064,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 4107,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  -1.987,
+                  3.77,
+                  3.499
+                ],
+                [
+                  -1.821,
+                  3.799,
+                  3.674
+                ],
+                [
+                  -1.987,
+                  3.792,
+                  3.499
+                ],
+                [
+                  -2.153,
+                  3.762,
+                  3.324
+                ],
+                [
+                  -2.123,
+                  5.061,
+                  3.34
+                ],
+                [
+                  -2.152,
+                  5.06,
+                  3.311
+                ],
+                [
+                  -2.124,
+                  4.849,
+                  3.342
+                ],
+                [
+                  -2.124,
+                  5.062,
+                  3.341
+                ],
+                [
+                  -2.153,
+                  5.061,
+                  3.312
+                ],
+                [
+                  -2.124,
+                  4.965,
+                  3.342
+                ],
+                [
+                  -2.065,
+                  5.06,
+                  3.399
+                ],
+                [
+                  -2.068,
+                  4.51,
+                  3.405
+                ],
+                [
+                  -2.067,
+                  5.061,
+                  3.4
+                ],
+                [
+                  -2.068,
+                  4.812,
+                  3.403
+                ],
+                [
+                  -2.008,
+                  5.06,
+                  3.459
+                ],
+                [
+                  -2.012,
+                  4.374,
+                  3.465
+                ],
+                [
+                  -2.009,
+                  5.061,
+                  3.459
+                ],
+                [
+                  -2.011,
+                  4.75,
+                  3.462
+                ],
+                [
+                  -1.951,
+                  5.059,
+                  3.518
+                ],
+                [
+                  -1.956,
+                  4.422,
+                  3.523
+                ],
+                [
+                  -1.952,
+                  5.06,
+                  3.518
+                ],
+                [
+                  -1.954,
+                  4.771,
+                  3.521
+                ],
+                [
+                  -1.893,
+                  5.058,
+                  3.577
+                ],
+                [
+                  -1.898,
+                  4.52,
+                  3.581
+                ]
+              ]
+            },
+            "plants": {
+              "count": 166,
+              "ok": 163,
+              "floating": 0,
+              "buried": 2,
+              "offSurface": 1,
+              "badShare": 0.0181,
+              "p95": 0.249,
+              "status": "pass"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 2,
+                "ok": 2,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 960,
+              "coast": 258,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 4107 · 退化 0 · 非有限 0（水线以上 5064 / 5236 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "pass",
+                "detail": "166 株抽样：悬空 0 · 埋入 2 · 脚下无岩面 1 · |高差| p95 0.249 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/960 · 水线 3 米内无白沫 0/258"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "bay-2",
+            "scale": 1.25,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 3264,
+              "considered": 3132,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 2515,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.933,
+                  6.348,
+                  2.621
+                ],
+                [
+                  0.933,
+                  6.37,
+                  2.621
+                ],
+                [
+                  0.718,
+                  6.433,
+                  2.652
+                ],
+                [
+                  0.923,
+                  8.909,
+                  2.587
+                ],
+                [
+                  0.923,
+                  8.931,
+                  2.587
+                ],
+                [
+                  0.696,
+                  8.993,
+                  2.625
+                ],
+                [
+                  0.737,
+                  10.213,
+                  2.623
+                ],
+                [
+                  0.699,
+                  10.212,
+                  2.63
+                ],
+                [
+                  0.736,
+                  9.933,
+                  2.622
+                ],
+                [
+                  0.736,
+                  10.214,
+                  2.624
+                ],
+                [
+                  0.699,
+                  10.213,
+                  2.631
+                ],
+                [
+                  0.736,
+                  10.086,
+                  2.624
+                ],
+                [
+                  0.812,
+                  10.213,
+                  2.61
+                ],
+                [
+                  0.811,
+                  9.579,
+                  2.608
+                ],
+                [
+                  0.812,
+                  10.214,
+                  2.611
+                ],
+                [
+                  0.811,
+                  9.927,
+                  2.611
+                ],
+                [
+                  0.887,
+                  10.213,
+                  2.596
+                ],
+                [
+                  0.886,
+                  9.417,
+                  2.595
+                ],
+                [
+                  0.887,
+                  10.214,
+                  2.598
+                ],
+                [
+                  0.886,
+                  9.854,
+                  2.597
+                ],
+                [
+                  0.962,
+                  10.212,
+                  2.583
+                ],
+                [
+                  0.961,
+                  9.362,
+                  2.582
+                ],
+                [
+                  0.962,
+                  10.213,
+                  2.585
+                ],
+                [
+                  0.961,
+                  9.829,
+                  2.584
+                ]
+              ]
+            },
+            "plants": {
+              "count": 166,
+              "ok": 133,
+              "floating": 23,
+              "buried": 10,
+              "offSurface": 0,
+              "badShare": 0.1988,
+              "p95": 1.677,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 2,
+                "ok": 2,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 728,
+              "coast": 198,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 2515 · 退化 0 · 非有限 0（水线以上 3132 / 3264 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "166 株抽样：悬空 23 · 埋入 10 · 脚下无岩面 0 · |高差| p95 1.677 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/728 · 水线 3 米内无白沫 0/198"
+              }
+            ],
+            "status": "warn"
+          }
+        ],
+        "totals": {
+          "masses": 6,
+          "considered": 87050,
+          "inverted": 0,
+          "openEdges": 68576,
+          "transparentRock": 0,
+          "plants": 1580,
+          "plantBad": 225,
+          "foam": 10360,
+          "foamStray": 0,
+          "coast": 2910,
+          "foamUncovered": 0,
+          "plantBadShare": 0.1424,
+          "foamStrayShare": 0,
+          "foamUncoveredShare": 0
+        },
+        "defect": null,
+        "status": "fail"
+      },
+      "stableAfter": {
+        "ok": true,
+        "same": true
+      },
+      "seconds": 96,
+      "pass": true
+    },
+    "soft+palette": {
+      "look": "soft,palette",
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "views": [
+        {
+          "ok": true,
+          "view": "overview",
+          "label": "全景",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.86,
+            35.73,
+            -140.58
+          ],
+          "distance": 208.2,
+          "heightAboveSea": 179.6,
+          "look": {
+            "id": "palette+soft",
+            "soft": true,
+            "palette": true,
+            "latest": true
+          },
+          "file": "soft+palette-overview.png"
+        },
+        {
+          "ok": true,
+          "view": "side",
+          "label": "侧面",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.86,
+            35.73,
+            -140.58
+          ],
+          "distance": 208.2,
+          "heightAboveSea": 179.6,
+          "look": {
+            "id": "palette+soft",
+            "soft": true,
+            "palette": true,
+            "latest": true
+          },
+          "file": "soft+palette-side.png"
+        },
+        {
+          "ok": true,
+          "view": "top",
+          "label": "俯视",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.86,
+            35.73,
+            -140.58
+          ],
+          "distance": 232.7,
+          "heightAboveSea": 225.6,
+          "look": {
+            "id": "palette+soft",
+            "soft": true,
+            "palette": true,
+            "latest": true
+          },
+          "file": "soft+palette-top.png"
+        },
+        {
+          "ok": true,
+          "view": "cliff-foot",
+          "label": "崖脚特写",
+          "valid": true,
+          "tries": 1,
+          "occluder": null,
+          "target": [
+            25.78,
+            69.26,
+            -142.28
+          ],
+          "distance": 26,
+          "heightAboveSea": 1.6,
+          "look": {
+            "id": "palette+soft",
+            "soft": true,
+            "palette": true,
+            "latest": true
+          },
+          "file": "soft+palette-cliff-foot.png"
+        }
+      ],
+      "stable": {
+        "ok": true,
+        "samples": 3,
+        "resets": 0,
+        "ms": 4615,
+        "sample": {
+          "sceneKey": "e95a8127-f403-45b6-90e5-bac52154770c",
+          "count": 6,
+          "look": "palette+soft",
+          "massIds": [
+            "back-left",
+            "back-right",
+            "bay-1",
+            "bay-2",
+            "front-left",
+            "front-right"
+          ],
+          "orbit": true,
+          "planetCamera": "apostles"
+        },
+        "reason": null
+      },
+      "surface": {
+        "ok": true,
+        "look": {
+          "id": "palette+soft",
+          "soft": true,
+          "palette": true,
+          "latest": true
+        },
+        "masses": [
+          {
+            "id": "back-left",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 15636,
+              "considered": 15232,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 11391,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.899,
+                  3.789,
+                  0.29
+                ],
+                [
+                  0.76,
+                  3.81,
+                  0.51
+                ],
+                [
+                  0.9,
+                  3.811,
+                  0.291
+                ],
+                [
+                  1.039,
+                  3.79,
+                  0.07
+                ],
+                [
+                  0.93,
+                  5.312,
+                  0.329
+                ],
+                [
+                  0.776,
+                  5.333,
+                  0.562
+                ],
+                [
+                  0.93,
+                  5.334,
+                  0.329
+                ],
+                [
+                  1.084,
+                  5.314,
+                  0.096
+                ],
+                [
+                  1.066,
+                  6.09,
+                  0.139
+                ],
+                [
+                  1.092,
+                  6.088,
+                  0.1
+                ],
+                [
+                  1.065,
+                  6.006,
+                  0.139
+                ],
+                [
+                  1.065,
+                  6.091,
+                  0.138
+                ],
+                [
+                  1.091,
+                  6.089,
+                  0.1
+                ],
+                [
+                  1.064,
+                  6.051,
+                  0.138
+                ],
+                [
+                  1.013,
+                  6.09,
+                  0.216
+                ],
+                [
+                  1.012,
+                  5.895,
+                  0.215
+                ],
+                [
+                  1.012,
+                  6.091,
+                  0.216
+                ],
+                [
+                  1.011,
+                  6.001,
+                  0.215
+                ],
+                [
+                  0.961,
+                  6.091,
+                  0.293
+                ],
+                [
+                  0.959,
+                  5.85,
+                  0.292
+                ],
+                [
+                  0.959,
+                  6.092,
+                  0.293
+                ],
+                [
+                  0.958,
+                  5.981,
+                  0.292
+                ],
+                [
+                  0.908,
+                  6.091,
+                  0.371
+                ],
+                [
+                  0.907,
+                  5.867,
+                  0.37
+                ]
+              ]
+            },
+            "plants": {
+              "count": 312,
+              "ok": 281,
+              "floating": 22,
+              "buried": 9,
+              "offSurface": 0,
+              "badShare": 0.0994,
+              "p95": 1.48,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.001,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 2156,
+              "coast": 606,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 11391 · 退化 0 · 非有限 0（水线以上 15232 / 15636 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "312 株抽样：悬空 22 · 埋入 9 · 脚下无岩面 0 · |高差| p95 1.48 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/2156 · 水线 3 米内无白沫 0/606"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "back-right",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 28102,
+              "considered": 27642,
+              "degenerate": 6,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 23245,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.084,
+                  9.97,
+                  0.817
+                ],
+                [
+                  0.343,
+                  9.962,
+                  0.759
+                ],
+                [
+                  0.083,
+                  9.992,
+                  0.816
+                ],
+                [
+                  -0.176,
+                  10.001,
+                  0.874
+                ],
+                [
+                  0.073,
+                  11.494,
+                  0.801
+                ],
+                [
+                  0.343,
+                  11.486,
+                  0.758
+                ],
+                [
+                  0.073,
+                  11.516,
+                  0.801
+                ],
+                [
+                  -0.197,
+                  11.525,
+                  0.844
+                ],
+                [
+                  0.263,
+                  9.95,
+                  0.538
+                ],
+                [
+                  0.178,
+                  9.96,
+                  0.327
+                ],
+                [
+                  0.263,
+                  9.972,
+                  0.538
+                ],
+                [
+                  0.348,
+                  9.962,
+                  0.75
+                ],
+                [
+                  0.247,
+                  11.474,
+                  0.534
+                ],
+                [
+                  0.146,
+                  11.484,
+                  0.319
+                ],
+                [
+                  0.247,
+                  11.496,
+                  0.534
+                ],
+                [
+                  0.348,
+                  11.486,
+                  0.749
+                ],
+                [
+                  0.332,
+                  12.188,
+                  0.713
+                ],
+                [
+                  0.349,
+                  12.187,
+                  0.749
+                ],
+                [
+                  0.332,
+                  12.065,
+                  0.713
+                ],
+                [
+                  0.334,
+                  12.189,
+                  0.712
+                ],
+                [
+                  0.35,
+                  12.188,
+                  0.748
+                ],
+                [
+                  0.334,
+                  12.132,
+                  0.712
+                ],
+                [
+                  0.299,
+                  12.189,
+                  0.641
+                ],
+                [
+                  0.299,
+                  11.901,
+                  0.641
+                ]
+              ]
+            },
+            "plants": {
+              "count": 312,
+              "ok": 268,
+              "floating": 35,
+              "buried": 9,
+              "offSurface": 0,
+              "badShare": 0.141,
+              "p95": 1.559,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.186,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 2408,
+              "coast": 690,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 23245 · 退化 6 · 非有限 0（水线以上 27642 / 28102 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "312 株抽样：悬空 35 · 埋入 9 · 脚下无岩面 0 · |高差| p95 1.559 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/2408 · 水线 3 米内无白沫 0/690"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "front-left",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 15974,
+              "considered": 15570,
+              "degenerate": 3,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 10553,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.536,
+                  8.378,
+                  -0.021
+                ],
+                [
+                  0.262,
+                  8.413,
+                  -0.013
+                ],
+                [
+                  0.536,
+                  8.4,
+                  -0.02
+                ],
+                [
+                  0.809,
+                  8.364,
+                  -0.029
+                ],
+                [
+                  0.775,
+                  9.141,
+                  -0.004
+                ],
+                [
+                  0.823,
+                  9.139,
+                  -0.005
+                ],
+                [
+                  0.774,
+                  9.074,
+                  -0.006
+                ],
+                [
+                  0.775,
+                  9.142,
+                  -0.006
+                ],
+                [
+                  0.823,
+                  9.14,
+                  -0.007
+                ],
+                [
+                  0.775,
+                  9.11,
+                  -0.007
+                ],
+                [
+                  0.679,
+                  9.142,
+                  -0.002
+                ],
+                [
+                  0.677,
+                  8.978,
+                  -0.007
+                ],
+                [
+                  0.679,
+                  9.143,
+                  -0.004
+                ],
+                [
+                  0.678,
+                  9.067,
+                  -0.006
+                ],
+                [
+                  0.582,
+                  9.143,
+                  0
+                ],
+                [
+                  0.582,
+                  8.94,
+                  -0.006
+                ],
+                [
+                  0.582,
+                  9.144,
+                  -0.002
+                ],
+                [
+                  0.582,
+                  9.05,
+                  -0.004
+                ],
+                [
+                  0.486,
+                  9.143,
+                  0.002
+                ],
+                [
+                  0.487,
+                  8.954,
+                  -0.004
+                ],
+                [
+                  0.486,
+                  9.144,
+                  0
+                ],
+                [
+                  0.486,
+                  9.057,
+                  -0.002
+                ],
+                [
+                  0.389,
+                  9.144,
+                  0.004
+                ],
+                [
+                  0.391,
+                  9,
+                  0
+                ]
+              ]
+            },
+            "plants": {
+              "count": 312,
+              "ok": 239,
+              "floating": 46,
+              "buried": 27,
+              "offSurface": 0,
+              "badShare": 0.234,
+              "p95": 1.629,
+              "status": "fail"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.442,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 2128,
+              "coast": 606,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 10553 · 退化 3 · 非有限 0（水线以上 15570 / 15974 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "fail",
+                "detail": "312 株抽样：悬空 46 · 埋入 27 · 脚下无岩面 0 · |高差| p95 1.629 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/2128 · 水线 3 米内无白沫 0/606"
+              }
+            ],
+            "status": "fail"
+          },
+          {
+            "id": "front-right",
+            "scale": 2.1,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 20778,
+              "considered": 20410,
+              "degenerate": 5,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 16765,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  1.068,
+                  7.585,
+                  2.019
+                ],
+                [
+                  1.059,
+                  8.288,
+                  2.037
+                ],
+                [
+                  0.891,
+                  8.327,
+                  1.938
+                ],
+                [
+                  1.058,
+                  8.31,
+                  2.037
+                ],
+                [
+                  1.226,
+                  8.271,
+                  2.136
+                ],
+                [
+                  1.068,
+                  7.525,
+                  2.019
+                ],
+                [
+                  1.212,
+                  7.551,
+                  2.1
+                ],
+                [
+                  0.925,
+                  7.559,
+                  1.938
+                ],
+                [
+                  1.364,
+                  8.257,
+                  2.008
+                ],
+                [
+                  1.218,
+                  8.271,
+                  2.138
+                ],
+                [
+                  1.365,
+                  8.279,
+                  2.009
+                ],
+                [
+                  1.511,
+                  8.264,
+                  1.879
+                ],
+                [
+                  1.698,
+                  8.231,
+                  1.978
+                ],
+                [
+                  1.519,
+                  8.264,
+                  1.877
+                ],
+                [
+                  1.698,
+                  8.253,
+                  1.979
+                ],
+                [
+                  1.876,
+                  8.22,
+                  2.08
+                ],
+                [
+                  1.493,
+                  9.106,
+                  1.904
+                ],
+                [
+                  1.517,
+                  9.106,
+                  1.879
+                ],
+                [
+                  1.492,
+                  8.977,
+                  1.903
+                ],
+                [
+                  1.492,
+                  9.108,
+                  1.904
+                ],
+                [
+                  1.516,
+                  9.106,
+                  1.878
+                ],
+                [
+                  1.491,
+                  9.047,
+                  1.903
+                ],
+                [
+                  1.445,
+                  9.106,
+                  1.956
+                ],
+                [
+                  1.442,
+                  8.813,
+                  1.951
+                ]
+              ]
+            },
+            "plants": {
+              "count": 312,
+              "ok": 271,
+              "floating": 30,
+              "buried": 11,
+              "offSurface": 0,
+              "badShare": 0.1314,
+              "p95": 1.629,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 8,
+                "ok": 8,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0.001,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 1980,
+              "coast": 552,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 16765 · 退化 5 · 非有限 0（水线以上 20410 / 20778 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "312 株抽样：悬空 30 · 埋入 11 · 脚下无岩面 0 · |高差| p95 1.629 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/1980 · 水线 3 米内无白沫 0/552"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "bay-1",
+            "scale": 1.25,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 5236,
+              "considered": 5064,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 4107,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  -1.987,
+                  3.77,
+                  3.499
+                ],
+                [
+                  -1.821,
+                  3.799,
+                  3.674
+                ],
+                [
+                  -1.987,
+                  3.792,
+                  3.499
+                ],
+                [
+                  -2.153,
+                  3.762,
+                  3.324
+                ],
+                [
+                  -2.123,
+                  5.061,
+                  3.34
+                ],
+                [
+                  -2.152,
+                  5.06,
+                  3.311
+                ],
+                [
+                  -2.124,
+                  4.849,
+                  3.342
+                ],
+                [
+                  -2.124,
+                  5.062,
+                  3.341
+                ],
+                [
+                  -2.153,
+                  5.061,
+                  3.312
+                ],
+                [
+                  -2.124,
+                  4.965,
+                  3.342
+                ],
+                [
+                  -2.065,
+                  5.06,
+                  3.399
+                ],
+                [
+                  -2.068,
+                  4.51,
+                  3.405
+                ],
+                [
+                  -2.067,
+                  5.061,
+                  3.4
+                ],
+                [
+                  -2.068,
+                  4.812,
+                  3.403
+                ],
+                [
+                  -2.008,
+                  5.06,
+                  3.459
+                ],
+                [
+                  -2.012,
+                  4.374,
+                  3.465
+                ],
+                [
+                  -2.009,
+                  5.061,
+                  3.459
+                ],
+                [
+                  -2.011,
+                  4.75,
+                  3.462
+                ],
+                [
+                  -1.951,
+                  5.059,
+                  3.518
+                ],
+                [
+                  -1.956,
+                  4.422,
+                  3.523
+                ],
+                [
+                  -1.952,
+                  5.06,
+                  3.518
+                ],
+                [
+                  -1.954,
+                  4.771,
+                  3.521
+                ],
+                [
+                  -1.893,
+                  5.058,
+                  3.577
+                ],
+                [
+                  -1.898,
+                  4.52,
+                  3.581
+                ]
+              ]
+            },
+            "plants": {
+              "count": 166,
+              "ok": 163,
+              "floating": 0,
+              "buried": 2,
+              "offSurface": 1,
+              "badShare": 0.0181,
+              "p95": 0.249,
+              "status": "pass"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 2,
+                "ok": 2,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 960,
+              "coast": 258,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 4107 · 退化 0 · 非有限 0（水线以上 5064 / 5236 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "pass",
+                "detail": "166 株抽样：悬空 0 · 埋入 2 · 脚下无岩面 1 · |高差| p95 0.249 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/960 · 水线 3 米内无白沫 0/258"
+              }
+            ],
+            "status": "warn"
+          },
+          {
+            "id": "bay-2",
+            "scale": 1.25,
+            "materials": {
+              "rock": 1,
+              "transparentRock": [],
+              "expectedTransparent": [
+                "apostle-reacode-shore-skirt",
+                "apostle-reacode-shore-waves",
+                "hover"
+              ],
+              "otherTransparent": [],
+              "status": "pass"
+            },
+            "integrity": {
+              "triangles": 3264,
+              "considered": 3132,
+              "degenerate": 0,
+              "nonFinite": 0,
+              "inverted": 0,
+              "openEdges": 2515,
+              "invertedAt": [],
+              "openAt": [
+                [
+                  0.933,
+                  6.348,
+                  2.621
+                ],
+                [
+                  0.933,
+                  6.37,
+                  2.621
+                ],
+                [
+                  0.718,
+                  6.433,
+                  2.652
+                ],
+                [
+                  0.923,
+                  8.909,
+                  2.587
+                ],
+                [
+                  0.923,
+                  8.931,
+                  2.587
+                ],
+                [
+                  0.696,
+                  8.993,
+                  2.625
+                ],
+                [
+                  0.737,
+                  10.213,
+                  2.623
+                ],
+                [
+                  0.699,
+                  10.212,
+                  2.63
+                ],
+                [
+                  0.736,
+                  9.933,
+                  2.622
+                ],
+                [
+                  0.736,
+                  10.214,
+                  2.624
+                ],
+                [
+                  0.699,
+                  10.213,
+                  2.631
+                ],
+                [
+                  0.736,
+                  10.086,
+                  2.624
+                ],
+                [
+                  0.812,
+                  10.213,
+                  2.61
+                ],
+                [
+                  0.811,
+                  9.579,
+                  2.608
+                ],
+                [
+                  0.812,
+                  10.214,
+                  2.611
+                ],
+                [
+                  0.811,
+                  9.927,
+                  2.611
+                ],
+                [
+                  0.887,
+                  10.213,
+                  2.596
+                ],
+                [
+                  0.886,
+                  9.417,
+                  2.595
+                ],
+                [
+                  0.887,
+                  10.214,
+                  2.598
+                ],
+                [
+                  0.886,
+                  9.854,
+                  2.597
+                ],
+                [
+                  0.962,
+                  10.212,
+                  2.583
+                ],
+                [
+                  0.961,
+                  9.362,
+                  2.582
+                ],
+                [
+                  0.962,
+                  10.213,
+                  2.585
+                ],
+                [
+                  0.961,
+                  9.829,
+                  2.584
+                ]
+              ]
+            },
+            "plants": {
+              "count": 166,
+              "ok": 133,
+              "floating": 23,
+              "buried": 10,
+              "offSurface": 0,
+              "badShare": 0.1988,
+              "p95": 1.677,
+              "status": "warn"
+            },
+            "plantsByMesh": {
+              "plants": {
+                "count": 2,
+                "ok": 2,
+                "floating": 0,
+                "buried": 0,
+                "offSurface": 0,
+                "badShare": 0,
+                "p95": 0,
+                "status": "pass"
+              }
+            },
+            "foam": {
+              "foam": 728,
+              "coast": 198,
+              "strayed": 0,
+              "uncovered": 0,
+              "strayShare": 0,
+              "uncoveredShare": 0,
+              "status": "pass"
+            },
+            "checks": [
+              {
+                "id": "material",
+                "name": "岩体材质不透明",
+                "status": "pass",
+                "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+              },
+              {
+                "id": "integrity",
+                "name": "水线以上破面",
+                "status": "warn",
+                "detail": "反面三角 0 · 开口边 2515 · 退化 0 · 非有限 0（水线以上 3132 / 3264 面；与 approved 同机位比才下结论）"
+              },
+              {
+                "id": "plants",
+                "name": "植被贴地",
+                "status": "warn",
+                "detail": "166 株抽样：悬空 23 · 埋入 10 · 脚下无岩面 0 · |高差| p95 1.677 米"
+              },
+              {
+                "id": "foam",
+                "name": "岸线白沫跟随",
+                "status": "pass",
+                "detail": "白沫离水线超 3 米 0/728 · 水线 3 米内无白沫 0/198"
+              }
+            ],
+            "status": "warn"
+          }
+        ],
+        "totals": {
+          "masses": 6,
+          "considered": 87050,
+          "inverted": 0,
+          "openEdges": 68576,
+          "transparentRock": 0,
+          "plants": 1580,
+          "plantBad": 225,
+          "foam": 10360,
+          "foamStray": 0,
+          "coast": 2910,
+          "foamUncovered": 0,
+          "plantBadShare": 0.1424,
+          "foamStrayShare": 0,
+          "foamUncoveredShare": 0
+        },
+        "defect": null,
+        "status": "fail"
+      },
+      "stableAfter": {
+        "ok": true,
+        "same": true
+      },
+      "seconds": 96,
+      "pass": true
+    }
+  },
+  "regressions": {
+    "soft": [
+      {
+        "id": "open",
+        "name": "开口边变多",
+        "before": 54394,
+        "after": 68576,
+        "detail": "水线以上网格出现新的洞"
+      }
+    ],
+    "soft+palette": [
+      {
+        "id": "open",
+        "name": "开口边变多",
+        "before": 54394,
+        "after": 68576,
+        "detail": "水线以上网格出现新的洞"
+      }
+    ]
+  },
+  "errors": [],
+  "pass": true
+}

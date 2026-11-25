@@ -1,0 +1,12 @@
+{
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "scan": "扫描完成：5 / 5 个能力能作用。 已按「书店镇」自动预装 5 个能力（感知明暗层次、感知色板归并、风格统一（主色归并）、整体色调 等），点 ▶ 执行管线一键跑完整条。",
+  "pipelineNodes": 5
+ },
+ "pass": false,
+ "scene": "bookshop",
+ "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#gscene-workshop button').filter({ hasText: '执行管线' })\n    - locator resolved to <button type=\"button\" class=\"primary\">▶ 执行管线</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    31 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n\n    at runPipe (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/object-gscene-browser.mjs:41:58)\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/object-gscene-browser.mjs:106:25",
+ "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/gscene-caps-e2e/run-1795556711394"
+}

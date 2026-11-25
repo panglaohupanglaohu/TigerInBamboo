@@ -1,0 +1,234 @@
+{
+  "defaults": {
+    "nodes": 7,
+    "quads": 1,
+    "tris": 1,
+    "gradients": 1,
+    "facets": 144,
+    "div": 8,
+    "triDiv": 4,
+    "quadSpace": "oklab",
+    "triSpace": "oklab",
+    "gradSpace": "okhsl",
+    "stats": {
+      "nodes": 7,
+      "facets": 144,
+      "palette": 156,
+      "gpm": {
+        "res": 320,
+        "hits": 18544,
+        "wall": false,
+        "version": 672,
+        "facetsUsed": 104
+      }
+    },
+    "distinctFacetColors": 144
+  },
+  "strip": {
+    "cssW": 168,
+    "w": 168,
+    "h": 18,
+    "blocks": 12,
+    "blockWidths": [
+      11,
+      12
+    ],
+    "gaps": 2
+  },
+  "discreteness": {
+    "sameFacetEqual": true,
+    "neighbourDiffers": true,
+    "facetCount": 128,
+    "centroidMismatch": 0
+  },
+  "canvas": {
+    "w": 440,
+    "h": 520,
+    "paintedPx": 228451,
+    "quantizedColors": 455
+  },
+  "canvasBox": {
+    "cssW": 440,
+    "cssH": 520,
+    "scale": 1
+  },
+  "drag": {
+    "x": 1.4033333333333333,
+    "y": 0.2,
+    "selectedText": "节点 2",
+    "sliders": 3,
+    "dx": 0.4033333333333333,
+    "dy": 0.2
+  },
+  "tabs": {
+    "rgb": {
+      "rows": 3,
+      "texts": [
+        "0.8745",
+        "0.6627",
+        "0.3333"
+      ],
+      "ranges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "lab": {
+      "rows": 3,
+      "texts": [
+        "0.7688",
+        "0.0282",
+        "0.1161"
+      ],
+      "ranges": [
+        [
+          0,
+          1
+        ],
+        [
+          -0.4,
+          0.4
+        ],
+        [
+          -0.4,
+          0.4
+        ]
+      ]
+    },
+    "hsl": {
+      "rows": 3,
+      "texts": [
+        "0.2121",
+        "0.7182",
+        "0.7311"
+      ],
+      "ranges": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ]
+    },
+    "nodeColorChanged": true
+  },
+  "menu_node": {
+    "items": [
+      "New node",
+      "New gradient",
+      "New triangle"
+    ],
+    "label": "New node"
+  },
+  "menu_triangle": {
+    "items": [
+      "New node",
+      "New gradient",
+      "New triangle"
+    ],
+    "label": "New triangle"
+  },
+  "menu": {
+    "before": {
+      "n": 7,
+      "t": 1,
+      "f": 144
+    },
+    "after": {
+      "n": 9,
+      "t": 2,
+      "f": 160
+    }
+  },
+  "spaces": {
+    "okhsl": {
+      "space": "okhsl",
+      "distinct": 128,
+      "mid": [
+        0.2826268348143444,
+        0.5675132647268378,
+        0.6624386502739098
+      ]
+    },
+    "oklab": {
+      "space": "oklab",
+      "distinct": 128,
+      "mid": [
+        0.5328054555895655,
+        0.5273637471707685,
+        0.4692030352931836
+      ]
+    },
+    "srgb": {
+      "space": "srgb",
+      "distinct": 128,
+      "mid": [
+        0.5047898912624795,
+        0.5170602630329626,
+        0.44918579680450305
+      ]
+    },
+    "changed": 3
+  },
+  "export": {
+    "format": "rea-palette-graph",
+    "version": 1,
+    "nodes": 9,
+    "palette": 156,
+    "swatches": 156,
+    "roundTripNodes": 9,
+    "roundTripFacets": 160,
+    "roundTripQuads": 1,
+    "roundTripTris": 2,
+    "roundTripGradients": 1,
+    "roundTripSpaces": [
+      "oklab"
+    ],
+    "maxNodeErr": 4.7058823532397653e-7,
+    "paletteOverlap": 156,
+    "paletteUnion": 156,
+    "paletteMatch": 1
+  },
+  "apply": {
+    "on": true,
+    "gpm": {
+      "res": 320,
+      "hits": 18544,
+      "wall": false,
+      "version": 672,
+      "facetsUsed": 104
+    },
+    "stats": {
+      "nodes": 9,
+      "facets": 160,
+      "palette": 156,
+      "gpm": {
+        "res": 320,
+        "hits": 18544,
+        "wall": false,
+        "version": 672,
+        "facetsUsed": 104
+      }
+    },
+    "worldVersion": 672,
+    "gridKind": "mixed"
+  },
+  "errors": []
+}

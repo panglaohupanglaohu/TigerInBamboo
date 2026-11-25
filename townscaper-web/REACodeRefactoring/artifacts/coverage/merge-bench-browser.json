@@ -1,0 +1,138 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "bench": {
+        "split": {
+          "ms": 19.681250005960464,
+          "calls": 270,
+          "triangles": 17224,
+          "meshes": 270
+        },
+        "merged": {
+          "ms": 18.625,
+          "calls": 1,
+          "triangles": 17224,
+          "meshes": 1
+        },
+        "callRatio": 270,
+        "speedup": 1.0567114097159982,
+        "sameTriangles": true,
+        "mergeMs": 60.8,
+        "chunks": 35,
+        "triangles": 17224,
+        "scope": "World 主体（地形+建筑），不含水/植被/阴影；8×8 视口只测提交开销"
+      },
+      "sweep": [
+        {
+          "trisPerMesh": 16,
+          "calls": 1077,
+          "ms": 24.79374998807907,
+          "mergedMs": 18.61250001192093,
+          "speedup": 1.33210208044052
+        },
+        {
+          "trisPerMesh": 64,
+          "calls": 270,
+          "ms": 19.53125,
+          "mergedMs": 18.6875,
+          "speedup": 1.0451505016722409
+        },
+        {
+          "trisPerMesh": 256,
+          "calls": 68,
+          "ms": 18.375,
+          "mergedMs": 18.600000023841858,
+          "speedup": 0.9879032245401372
+        },
+        {
+          "trisPerMesh": 512,
+          "calls": 34,
+          "ms": 18.206249982118607,
+          "mergedMs": 18.599999994039536,
+          "speedup": 0.9788306445135964
+        }
+      ],
+      "slopeUsPerSubmit": 6.32,
+      "rebuild": {
+        "ms": 54.8,
+        "triangles": 17224,
+        "chunks": 35
+      },
+      "wire": {
+        "on": 8718,
+        "back": 0,
+        "segments": 34392,
+        "triangles": 17224
+      }
+    },
+    {
+      "grid": "quad",
+      "bench": {
+        "split": {
+          "ms": 20.33125001192093,
+          "calls": 330,
+          "triangles": 21092,
+          "meshes": 330
+        },
+        "merged": {
+          "ms": 19.006249994039536,
+          "calls": 1,
+          "triangles": 21092,
+          "meshes": 1
+        },
+        "callRatio": 330,
+        "speedup": 1.069713910860739,
+        "sameTriangles": true,
+        "mergeMs": 69.9,
+        "chunks": 36,
+        "triangles": 21092,
+        "scope": "World 主体（地形+建筑），不含水/植被/阴影；8×8 视口只测提交开销"
+      },
+      "sweep": [
+        {
+          "trisPerMesh": 16,
+          "calls": 1319,
+          "ms": 26.30000001192093,
+          "mergedMs": 18.993750005960464,
+          "speedup": 1.384666008748545
+        },
+        {
+          "trisPerMesh": 64,
+          "calls": 330,
+          "ms": 20.318750023841858,
+          "mergedMs": 19.006249994039536,
+          "speedup": 1.069056233092479
+        },
+        {
+          "trisPerMesh": 256,
+          "calls": 83,
+          "ms": 19.91874998807907,
+          "mergedMs": 19.056250005960464,
+          "speedup": 1.045260740274127
+        },
+        {
+          "trisPerMesh": 512,
+          "calls": 42,
+          "ms": 19.83125001192093,
+          "mergedMs": 19.01875001192093,
+          "speedup": 1.0427209989873534
+        }
+      ],
+      "slopeUsPerSubmit": 5.07,
+      "rebuild": {
+        "ms": 61.2,
+        "triangles": 21092,
+        "chunks": 36
+      },
+      "wire": {
+        "on": 9065,
+        "back": 0,
+        "segments": 41732,
+        "triangles": 21092
+      }
+    }
+  ],
+  "status": "合并对照：小网格 330 个 330.0 次提交 20.39ms；合并 1 个 1.0 次 19.08ms；提交比 330× 耗时比 1.07×；三角一致 true；整片重建 64.8ms（36 块 21092 三角）",
+  "errors": []
+}

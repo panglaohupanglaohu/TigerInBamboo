@@ -8,6 +8,7 @@ import { WaterVolume } from '../water/watervol.js';
 import { Smoke } from '../life/smoke.js';
 import * as THREE from 'three';
 import { ContourOverlay } from '../world/contour-overlay.js';
+import { SpaceVisibilityOverlay } from '../world/space-visibility.js';
 import { top as topOf } from './ops.js';
 import { BLOTCH_GLSL } from '../terrain/blotch-pattern.js';
 import { SHRUB_LAYER_VERT, SHRUB_LAYER_FRAG, SHRUB_DEFAULT_STYLE } from '../terrain/shrub-texture.js';
@@ -57,6 +58,18 @@ const FACTORIES = {
       update: (dt) => s.update(dt),
       dispose: () => { host.scene.remove(s.back, s.front); },
       get count() { return s.sources.length; },
+    };
+  },
+  // 三维空间开阔度（798580832906739712）：黄色射线 + 整楼灰度场；宿主 world/index 就是库里的 World/索引，直接挂
+  rayvis(host) {
+    const o = new SpaceVisibilityOverlay(host.world, host.index, { levelHeight: host.levelHeight });
+    host.scene.add(o.group);
+    o.setVisible(true); o.setFieldVisible(true);
+    return {
+      refresh() { o.version = -1; o.bakedVersion = -1; o.setFieldVisible(true); o.refresh(); },
+      update() { o.refresh(); },
+      dispose() { host.scene.remove(o.group); o.dispose(); },
+      get count() { return (o.baked?.samples.length || 0) + (o.result?.rays.length || 0); },
     };
   },
 };

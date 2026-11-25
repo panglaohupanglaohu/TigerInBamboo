@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — 阴云实测模型（1243228419162341379）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1b1d21; overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; gap: 18px; }
+  canvas { display: block; box-shadow: 0 8px 30px rgba(0,0,0,.55); }
+  #hud {
+    color: #e8ebef; font: 12px/1.65 ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: pre; padding: 12px 14px; background: #14161a; border-radius: 8px;
+    border: 1px solid #262b33; min-width: 330px;
+  }
+  #hud b { color: #7fd3a0; font-weight: 600; }
+  #hud .bad { color: #e8796b; }
+  #hud .dim { color: #8b94a3; }
+</style>
+</head>
+<body>
+<canvas id="c" width="512" height="512"></canvas>
+<div id="hud">量测中…</div>
+
+<script type="module">
+/**
+ * skylab.html — src/skyfilm.js 的验证页（闭环：模型 → 渲染 → 用同一套量法量回来）。
+ *
+ * 参考片 1243228419162341379：512²，29.34s，静态机位，天空占上半屏。
+ * 片子上的三个数（Python 量出）：
+ *   亮度 std 4.91 / 团块自相关半宽 25px / f000→f023 最佳平移 (-49,-4) 相关 0.864
+ * 这里把模型渲成两张 512²（t=0 与 t=11.08），用**同一个 probeDrift**量，
+ * 三个数要落在同一档；落不进就在 HUD 里标红 —— 不许"看着像"就算过。
+ */
+import { renderSky, probeDrift, autocorrHalfWidth, lumStats, FILM } from '../src/skyfilm.js';
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const W = 512, H = 512, SKY = 230; // 片子里的天空带（0..229 行）
+const hud = document.getElementById('hud');
+
+const lumOf = (img) => {
+  const a = new Float32Array(W * SKY);
+  for (let y = 0; y < SKY; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = (y * W + x) * 4;
+      a[y * W + x] = 0.299 * img.data[i] + 0.587 * img.data[i + 1] + 0.114 * img.data[i + 2];
+    }
+  }
+  return a;
+};
+
+// 先渲 t=11.08（探针的结果帧），再渲 t=0 留在画布上给人看
+const imgB = renderSky(ctx, W, H, 11.08);
+const imgA = renderSky(ctx, W, H, 0);
+
+const A = lumOf(imgA), B = lumOf(imgB);
+const s = lumStats(A);
+const drift = probeDrift(A, B, W, SKY, 60, 20);
+const half = autocorrHalfWidth(A, W, SKY);
+
+// 行均值：验证"顶亮底灰、单调"
+const rowMean = (y) => { let m = 0; for (let x = 0; x < W; x++) m += A[y * W + x]; return m / W; };
+const top = rowMean(0), hor = rowMean(SKY - 5);
+
+const ok = (cond) => (cond ? '<b>OK</b>' : '<span class="bad">✗</span>');
+const pct = (a, b) => (100 * Math.abs(a - b) / b).toFixed(1) + '%';
+
+hud.innerHTML = [
+  '<b>片子（实测）</b>          <b>模型</b>',
+  `亮度 std   ${FILM.ampStd.toFixed(2)}      ${s.std.toFixed(2)}  ${ok(Math.abs(s.std - FILM.ampStd) / FILM.ampStd < 0.2)} (${pct(s.std, FILM.ampStd)})`,
+  `团块半宽   25 px      ${half} px  ${ok(Math.abs(half - 25) <= 6)}`,
+  `顶/地平线  ${FILM.top.toFixed(1)}/${FILM.horizon.toFixed(1)}  ${top.toFixed(1)}/${hor.toFixed(1)}  ${ok(top > hor)}`,
+  `漂移@11.08s  (-49,-4)   (${drift.dx},${drift.dy})  ${ok(Math.abs(drift.dx + 49) <= 10)}`,
+  `最佳相关   0.864    ${drift.corr.toFixed(3)}  ${ok(Math.abs(drift.corr - 0.864) < 0.15)}`,
+  '',
+  '<span class="dim">─────────────────────────</span>',
+  '<span class="dim">片子 f000↔f023 相关衰减</span>',
+  `<span class="dim">  Δt 5.9s 0.516 / 7.8s 0.379 / 11.0s 0.170</span>`,
+  '<span class="dim">单一平移就能解释 86% → 只有一片云</span>',
+  '<span class="dim">不是 3 层视差（clouddeck 原注释）</span>',
+].join('\n');
+</script>
+</body>
+</html>

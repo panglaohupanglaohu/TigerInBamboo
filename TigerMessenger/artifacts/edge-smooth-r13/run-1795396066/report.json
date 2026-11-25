@@ -1,0 +1,68 @@
+{
+  "quad": {
+    "kind": "quad",
+    "seed": 3,
+    "vrank": [
+      265,
+      122,
+      0,
+      488
+    ],
+    "metrics": {
+      "none": {
+        "regularity": 26.840193704600484,
+        "regularityFree": 26.92622950819672,
+        "tileKink": 73.22834654734942,
+        "hardShift": 0,
+        "landAreaDrift": 0
+      },
+      "dumb": {
+        "regularity": 13.674557395193556,
+        "regularityFree": 12.663531464061645,
+        "tileKink": 65.78647108669104,
+        "hardShift": 0.12139702854219893,
+        "landAreaDrift": 0.004147536785880015
+      },
+      "hierarchical": {
+        "regularity": 19.53257354487965,
+        "regularityFree": 14.149312259139165,
+        "tileKink": 73.0861575126051,
+        "hardShift": 0.012963145477124153,
+        "landAreaDrift": 1.8625353775839152e-15
+      }
+    }
+  },
+  "mixed": {
+    "kind": "mixed",
+    "seed": 3,
+    "vrank": [
+      96,
+      9,
+      0,
+      112
+    ],
+    "metrics": {
+      "none": {
+        "regularity": 14.805194805194805,
+        "regularityFree": 15.589123867069487,
+        "tileKink": 54.0000004665106,
+        "hardShift": 0,
+        "landAreaDrift": 0
+      },
+      "dumb": {
+        "regularity": 9.89912361071551,
+        "regularityFree": 9.438609016578207,
+        "tileKink": 53.494699672880856,
+        "hardShift": 0.11642612384757182,
+        "landAreaDrift": 2.223335283135118e-16
+      },
+      "hierarchical": {
+        "regularity": 11.683490872194747,
+        "regularityFree": 9.786812474456957,
+        "tileKink": 54.55411715273497,
+        "hardShift": 0.02059521760210358,
+        "landAreaDrift": 1.0005008774108031e-15
+      }
+    }
+  }
+}

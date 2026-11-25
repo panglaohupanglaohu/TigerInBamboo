@@ -1,0 +1,178 @@
+{
+ "capability": "megatex",
+ "generatedAt": "2026-11-23T18:26:01.288Z",
+ "generator": "TigerMessenger/tools/refactor/lightlife-parity.mjs",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "line": "atlas",
+ "verdict": "diff-registered",
+ "sameCriteriaEqual": true,
+ "original": [
+  "townscaper-web/REACode/src/megatex.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/light/mega-atlas.js",
+  "townscaper-web/REACodeRefactoring/src/light/texel-owner.js",
+  "townscaper-web/REACodeRefactoring/src/core/atlas.js"
+ ],
+ "clips": [
+  "1481661852887265288"
+ ],
+ "inputs": {
+  "faces": 150,
+  "seed": 7,
+  "size": 512,
+  "pads": [
+   0,
+   2
+  ]
+ },
+ "cases": {
+  "pad0": {
+   "original": {
+    "fail": 37,
+    "usedH": 512,
+    "faceArea": 240944,
+    "padArea": 0,
+    "occupancy": 0.919128,
+    "padShare": 0,
+    "checked": 27970,
+    "exact": 27970,
+    "exactRate": 1,
+    "maxUV": 0,
+    "edgeSamples": 5424,
+    "bleed": 5100,
+    "bleedRate": 0.940265,
+    "meanErr": 23.896358
+   },
+   "shelf": {
+    "fail": 37,
+    "usedH": 512,
+    "faceArea": 240944,
+    "padArea": 0,
+    "occupancy": 0.919128,
+    "padShare": 0,
+    "checked": 27970,
+    "exact": 27970,
+    "exactRate": 1,
+    "maxUV": 0,
+    "edgeSamples": 5424,
+    "bleed": 5100,
+    "bleedRate": 0.940265,
+    "meanErr": 23.896358
+   },
+   "atlas": {
+    "fail": 33,
+    "usedH": 512,
+    "faceArea": 238460,
+    "padArea": 0,
+    "occupancy": 0.909653,
+    "padShare": 0,
+    "checked": 27703,
+    "exact": 27703,
+    "exactRate": 1,
+    "maxUV": 0,
+    "edgeSamples": 5616,
+    "bleed": 5304,
+    "bleedRate": 0.944444,
+    "meanErr": 25.185662
+   },
+   "mipOwnerSame": true
+  },
+  "pad2": {
+   "original": {
+    "fail": 61,
+    "usedH": 499,
+    "faceArea": 205117,
+    "padArea": 35688,
+    "occupancy": 0.782459,
+    "padShare": 0.148203,
+    "checked": 23806,
+    "exact": 23806,
+    "exactRate": 1,
+    "maxUV": 0,
+    "edgeSamples": 4272,
+    "bleed": 0,
+    "bleedRate": 0,
+    "meanErr": 0.373804
+   },
+   "shelf": {
+    "fail": 61,
+    "usedH": 499,
+    "faceArea": 205117,
+    "padArea": 35688,
+    "occupancy": 0.782459,
+    "padShare": 0.148203,
+    "checked": 23806,
+    "exact": 23806,
+    "exactRate": 1,
+    "maxUV": 0,
+    "edgeSamples": 4272,
+    "bleed": 0,
+    "bleedRate": 0,
+    "meanErr": 0.373804
+   },
+   "atlas": {
+    "fail": 59,
+    "usedH": 512,
+    "faceArea": 203107,
+    "padArea": 35836,
+    "occupancy": 0.774792,
+    "padShare": 0.149977,
+    "checked": 23571,
+    "exact": 23571,
+    "exactRate": 1,
+    "maxUV": 0,
+    "edgeSamples": 4368,
+    "bleed": 0,
+    "bleedRate": 0,
+    "meanErr": 0.384758
+   },
+   "mipOwnerSame": true
+  }
+ },
+ "diffs": [
+  {
+   "id": "megatex.library.pad0.fail",
+   "metric": "fail",
+   "kind": "design",
+   "original": 37,
+   "refactored": 33,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 fail 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  },
+  {
+   "id": "megatex.library.pad0.occupancy",
+   "metric": "occupancy",
+   "kind": "design",
+   "original": 0.919128,
+   "refactored": 0.909653,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 occupancy 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  },
+  {
+   "id": "megatex.library.pad0.bleedRate",
+   "metric": "bleedRate",
+   "kind": "design",
+   "original": 0.940265,
+   "refactored": 0.944444,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 bleedRate 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  },
+  {
+   "id": "megatex.library.pad2.fail",
+   "metric": "fail",
+   "kind": "design",
+   "original": 61,
+   "refactored": 59,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 fail 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  },
+  {
+   "id": "megatex.library.pad2.occupancy",
+   "metric": "occupancy",
+   "kind": "design",
+   "original": 0.782459,
+   "refactored": 0.774792,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 occupancy 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  }
+ ],
+ "gaps": 0,
+ "basis": "同一份固定输入喂给原版与嫁接模块（同判据，应逐值相同），再与重构库原有的同职责模块比（设计差异，逐条写原因）。一致只说明这几个统计量在这份输入上一致。"
+}

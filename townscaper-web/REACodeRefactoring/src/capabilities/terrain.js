@@ -6,6 +6,7 @@
  * 逻辑来自 src/terrain/features.js、src/badnorth/island.js，这里拆成"先匹配、再执行"。
  */
 import { top, ground, isSolid, isRock, topIsBuilt, isCave, setVoxel, straightNext, editable, pickSpread } from './ops.js';
+import { ledgeSites, placeThinLedge } from '../terrain/thin-platform.js';
 
 /* ------------------------------------------------------------------ 石拱 / 天桥 */
 export const arch = {
@@ -13,6 +14,7 @@ export const arch = {
     id: 'terrain.arch', layer: 'terrain', kind: '地形', name: '石拱 / 天桥', kind2: 'geometry',
     summary: '两根够高的柱体（岩柱或楼）之间隔 1–3 格低处时，在两者较矮那一层架一道拱，下面留空能穿行。岩柱间架岩拱，楼之间架建筑天桥。',
     sources: ['1670794261669769217', '1584623053061099520', '1189908238566903808'],
+    ideas: ['townscaper-web/REACode/src/archvoid.js'],   // 同族：拱券楔石开口的原版实现
     targets: '相隔 1–3 格、中间更低的两根柱体',
     keywords: ['拱', '石拱', '天桥', '桥', '连接', '跨', 'arch', 'bridge', '岩', '洞'],
     params: { count: { label: '最多架几道', type: 'int', min: 1, max: 6, default: 2 }, minHeight: { label: '柱体至少几层', type: 'int', min: 3, max: 10, default: 4 } },
@@ -72,6 +74,7 @@ export const overhang = {
     id: 'terrain.overhang', layer: 'terrain', kind: '地形', name: '崖顶悬垂', kind2: 'geometry',
     summary: '高崖顶（≥4 层岩石）往外伸出一格，只写最上面一层，底下留空。',
     sources: ['1671808851895627776'],
+    ideas: ['townscaper-web/REACode/src/overhangterrain.js'],   // 同名机制的原版实现
     targets: '比邻格高 ≥3 层的岩石崖顶',
     keywords: ['悬垂', '悬崖', '崖', '伸出', 'overhang', 'cliff', '岩'],
     params: { count: { label: '最多几处', type: 'int', min: 1, max: 8, default: 3 } },
@@ -108,6 +111,7 @@ export const seastack = {
     id: 'terrain.seastack', layer: 'terrain', kind: '地形', name: '海中石柱', kind2: 'geometry',
     summary: '离岸 1–2 格的水里竖一根岩柱，顶上压一块更宽的帽（浪蚀台脚 + 蘑菇帽）。',
     sources: ['1708815475801505819'],
+    ideas: ['townscaper-web/REACode/src/overhangterrain.js'],   // 同族：蘑菇帽海柱（stemR<capR）的原版实现，parity/overhang 裁判已对账
     targets: '靠岸、四周都是水的水格',
     keywords: ['石柱', '海柱', '礁', '海中', '岩柱', 'stack'],
     params: { count: { label: '几根', type: 'int', min: 1, max: 6, default: 2 }, height: { label: '高度（层）', type: 'int', min: 3, max: 9, default: 5 } },
@@ -145,6 +149,7 @@ export const tunnel = {
     id: 'terrain.tunnel', layer: 'terrain', kind: '地形', name: '穿山隧道', kind2: 'geometry',
     summary: '两头是同一高度的地面，中间 1–6 格的岩体比它高 ≥2 层：把地面上一层挖空，底下能走、上面留岩顶（"瑞士奶酪"岛）。导航图会把洞里的格子当可走。',
     sources: ['906425294533394432', '906416813810049025'],
+    ideas: ['townscaper-web/REACode/src/cavepath.js', 'townscaper-web/REACode/src/holenav.js'],   // 同帖：洞窟 tileset / 门洞图的原版实现
     targets: '两侧同高地面之间、更高的岩体',
     keywords: ['隧道', '洞', '穿', '奶酪', '洞窟', 'tunnel', 'cave', '通行'],
     params: { count: { label: '几条', type: 'int', min: 1, max: 4, default: 1 } },
@@ -184,6 +189,32 @@ export const tunnel = {
       if (!t.cells.every((id) => editable(ctx, id) && isRock(w, id, t.floor + 1) && top(w, id) >= t.floor + 2)) continue;
       for (const id of t.cells) setVoxel(w, id, t.floor + 1, false);
       applied.push(t.id);
+    }
+    return { applied };
+  },
+};
+
+/* ------------------------------------------------------------------ 沿墙薄檐 / 薄平台 */
+export const ledge = {
+  meta: {
+    id: 'terrain.ledge', layer: 'terrain', kind: '地形', name: '沿墙薄檐 / 薄平台', kind2: 'geometry',
+    summary: '高岩壁（比本格顶高 ≥3 层）腰上贴一片只一层厚、底下悬空的岩石窄檐：檐能站人，导航图在落差 ≤2 的边上放楼梯，ladderContact 会把它判成 thinPlatform（梯子搭在薄台上）。109 帧黄色薄平台的几何机制；黄色美术未迁。',
+    sources: ['781957658597269506'],
+    ideas: ['townscaper-web/REACode/src/terracecliff.js', 'townscaper-web/REACode/src/terraceladder.js'],   // 同帖：台地薄檐与梯子的原版实现
+    modules: ['src/terrain/thin-platform.js', 'src/core/ladder-profile.js', 'src/world/navlayer.js'],
+    targets: '高 ≥3 层的岩壁旁更低的地格',
+    keywords: ['薄台', '薄平台', '檐', '平台', '悬挑', '悬空', 'ledge', 'platform', '薄', '悬'],
+    params: { count: { label: '最多几片', type: 'int', min: 1, max: 8, default: 2 } },
+  },
+  match(w, ctx = {}, params = {}) {
+    return ledgeSites(w, { editable: (id) => editable(ctx, id) });
+  },
+  run(w, { targets, ctx = {} }) {
+    const applied = [];
+    for (const t of targets) {
+      if (!t.cells.every((id) => editable(ctx, id))) continue;
+      const r = placeThinLedge(w, t.cells, t.level);
+      if (r.placed.length) applied.push(t.id);
     }
     return { applied };
   },

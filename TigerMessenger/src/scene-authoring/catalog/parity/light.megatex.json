@@ -1,0 +1,70 @@
+{
+ "capability": "light.megatex",
+ "verdict": "diff-registered",
+ "line": "atlas",
+ "generatedAt": "2026-11-23T18:26:01.288Z",
+ "generator": "TigerMessenger/tools/refactor/lightlife-parity.mjs",
+ "basis": "本能力在光影与生命管线里真实调用 townscaper-web/REACodeRefactoring/src/light/mega-atlas.js（meta.modules）；这份是它对原版 townscaper-web/REACode/src/megatex.js 的对照登记，完整内容见 megatex.json。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/parity/megatex.json",
+ "sameCriteriaEqual": true,
+ "original": [
+  "townscaper-web/REACode/src/megatex.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/light/mega-atlas.js",
+  "townscaper-web/REACodeRefactoring/src/light/texel-owner.js",
+  "townscaper-web/REACodeRefactoring/src/core/atlas.js"
+ ],
+ "inputs": {
+  "faces": 150,
+  "seed": 7,
+  "size": 512,
+  "pads": [
+   0,
+   2
+  ]
+ },
+ "gaps": 0,
+ "diffs": [
+  {
+   "id": "megatex.library.pad0.fail",
+   "metric": "fail",
+   "kind": "design",
+   "original": 37,
+   "refactored": 33,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 fail 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  },
+  {
+   "id": "megatex.library.pad0.occupancy",
+   "metric": "occupancy",
+   "kind": "design",
+   "original": 0.919128,
+   "refactored": 0.909653,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 occupancy 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  },
+  {
+   "id": "megatex.library.pad0.bleedRate",
+   "metric": "bleedRate",
+   "kind": "design",
+   "original": 0.940265,
+   "refactored": 0.944444,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 bleedRate 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  },
+  {
+   "id": "megatex.library.pad2.fail",
+   "metric": "fail",
+   "kind": "design",
+   "original": 61,
+   "refactored": 59,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 fail 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  },
+  {
+   "id": "megatex.library.pad2.occupancy",
+   "metric": "occupancy",
+   "kind": "design",
+   "original": 0.782459,
+   "refactored": 0.774792,
+   "note": "共享增量图集（TexelOwnerAtlas / core/atlas.js 的 guillotine 分配）与原版货架排布的 occupancy 不同：同一批面摆的位置不一样，邻面关系跟着变；游戏里的 impostor / 精灵图集用的是增量图集。"
+  }
+ ]
+}

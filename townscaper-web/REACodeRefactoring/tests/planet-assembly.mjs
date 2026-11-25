@@ -36,6 +36,13 @@ for (const n of [180, 300]) {
   assert.deepEqual(assemblyOrder(planet, { mode: 'frontier', seed: 7 }), order);
   assert.notDeepEqual(assemblyOrder(planet, { mode: 'frontier', seed: 99 }), order);
   assert.notDeepEqual(assemblyOrder(planet, { mode: 'shuffle', seed: 7 }), order);
+
+  // r216 起点可指定：任意陆地格作 root → 它必须是序列第一格，且仍覆盖全部陆地（784847933686575104 残差核销）
+  for (const root of [land[0], land[land.length >> 1], land[land.length - 1]]) {
+    const routed = assemblyOrder(planet, { mode: 'frontier', seed: 7, root });
+    assert.equal(routed[0], root, '指定起点必须是装配序列第一格');
+    assert.equal(new Set(routed).size, land.length, '指定起点仍铺满全部陆地');
+  }
   const byHeight = assemblyOrder(planet, { mode: 'height', seed: 7 });
   for (let i = 1; i < byHeight.length; i++) assert.ok(planet.H[byHeight[i]] >= planet.H[byHeight[i - 1]], 'height 模式按层升序');
 

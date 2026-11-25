@@ -11,6 +11,7 @@ import{buildHalfEdge,checkHalfEdge}from'./src/core/halfedge.js';
 import{trisAsCells}from'./src/build/splice-polygon-c09.js';
 const q=new URLSearchParams(location.search),grid=q.get('grid')==='mixed'?'mixed':'quad',$=s=>document.querySelector(s);
 if(q.get('mode')==='solid')document.querySelector('input[value=solid]').checked=true;
+if(q.get('on')==='0')$('#on').checked=false;   // A/B：关掉插入 = 原地形（同机位、同种子）
 const f=$('#scene');f.src='index.html?scene=terrain&grid='+grid;
 let THREE,r,grp=null,walker=null,pick=+(q.get('pick')||0),rot=+(q.get('rot')||.35),saved=null,step=0,acc=0,last=performance.now();
 const SHAPE=[[-0.8,-0.55],[0.8,-0.55],[0.8,0.1],[0.25,0.1],[0.25,0.55],[-0.8,0.55]];   // 带凹口的 L 形占地（片子里白框也有缺口）
@@ -22,6 +23,7 @@ function apply(){
  const cand=plateaus(w);if(!cand.length){$('#stats').textContent='没有足够大的平台';return;}const c=cand[pick%cand.length],g=w.ground(c);
  const ctr=[c.pts.reduce((s,p)=>s+at(p,g)[0],0)/c.n,c.pts.reduce((s,p)=>s+at(p,g)[1],0)/c.n];
  const poly=SHAPE.map(([x,z])=>[ctr[0]+x*Math.cos(rot)-z*Math.sin(rot),ctr[1]+x*Math.sin(rot)+z*Math.cos(rot)]);
+ window.__c09ctr={ctr,g,L};   // 测试用：同机位 A/B 的锚点（开/关两档都写）
  w.spliceFootprintsC09=$('#on').checked?[{poly,stories:1}]:null;w.touch();v.changed();v.worldMesh.invalidate();
  setTimeout(()=>overlay(ctr,g,poly),900);
 }
@@ -40,8 +42,20 @@ function overlay(ctr,g,poly){
  walker=null;if(it){const H=buildHalfEdge(trisAsCells(V,tris)),errs=checkHalfEdge(H),order=[...it.res.hole,...it.res.outer],seq=[];
   for(const vtx of order)for(const h of H.vertexFan(vtx))seq.push(h);
   const yl=line(new Array(18).fill(0),'#ffe14d');yl.material.linewidth=2;walker={H,seq,yl,V,y:y+.005};
+  // 量具（只读）：扇角 / 拼接前就有的半边问题 / 占地形制 / 房子尺寸
+  const angAt=(o,a,b)=>{const u=[a[0]-o[0],a[1]-o[1]],v2=[b[0]-o[0],b[1]-o[1]];return Math.acos(Math.max(-1,Math.min(1,(u[0]*v2[0]+u[1]*v2[1])/((Math.hypot(...u)*Math.hypot(...v2))||1))))*180/Math.PI;};
+  let fanMin=Infinity,fanMax=0,fanFull=0;
+  for(const vtx of new Set(order)){let s=0;for(const h of H.vertexFan(vtx)){const hh=H.he[h],tri=[hh.origin,H.he[hh.next].origin,H.he[hh.prev].origin];s+=angAt(V[vtx],V[tri[1]],V[tri[2]]);}
+   fanMin=Math.min(fanMin,s);fanMax=Math.max(fanMax,s);if(Math.abs(s-360)<1)fanFull++;}
+  const src=it.res.source,H0=buildHalfEdge(trisAsCells(src.verts,src.tris)),baseErrs=checkHalfEdge(H0);
+  const P2=it.res.poly;let concave=0;for(let i=0;i<P2.length;i++){const a=P2[(i+P2.length-1)%P2.length],b=P2[i],c=P2[(i+1)%P2.length];if((b[0]-a[0])*(c[1]-b[1])-(b[1]-a[1])*(c[0]-b[0])<-1e-9)concave++;}
+  const xs=P2.map(p=>p[0]),zs=P2.map(p=>p[1]),bw=Math.max(...xs)-Math.min(...xs),bd=Math.max(...zs)-Math.min(...zs);
+  const y1h=g*L+(it.stories||1)*L*.8;
   window.__c09splice={grid,cell:pick,ok:!info.errors.length,errors:info.errors,emitted:info.emitted,fresh:it.res.fresh.length,removed:it.res.removed.length,kept:it.res.kept.length,
-   minAngleDeg:+it.res.minAngleDeg.toFixed(2),areaCheck:+(it.res.areaR-it.res.areaNew-it.res.areaPoly).toExponential(2),halfedgeErrors:errs.length,euler:H.euler,boundaryLoops:H.boundaryLoops.length,walkSteps:seq.length};}
+   minAngleDeg:+it.res.minAngleDeg.toFixed(2),areaCheck:+(it.res.areaR-it.res.areaNew-it.res.areaPoly).toExponential(2),halfedgeErrors:errs.length,euler:H.euler,boundaryLoops:H.boundaryLoops.length,walkSteps:seq.length,
+   polyVerts:P2.length,concave,areaPoly:+it.res.areaPoly.toFixed(4),bboxW:+bw.toFixed(3),bboxD:+bd.toFixed(3),fillRatio:+(it.res.areaPoly/(bw*bd)).toFixed(3),
+   cellsHit:info.cells.size,fanMinDeg:+fanMin.toFixed(2),fanMaxDeg:+fanMax.toFixed(2),fanFull,baseErrors:baseErrs.length,baseLoops:H0.boundaryLoops.length,srcTris:src.tris.length,
+   flips:it.res.flips,grown:it.res.grown,roofTris:info.emitted[0]?.roofTris??0,walls:P2.length,stories:it.stories||1,houseTop:+(y1h-g*L).toFixed(3),levelHeight:+L.toFixed(3),g};}
  else window.__c09splice={grid,off:true};
  $('#stats').textContent=JSON.stringify(window.__c09splice);
  setMode();if(q.get('step')!=null)drawStep(+q.get('step'));

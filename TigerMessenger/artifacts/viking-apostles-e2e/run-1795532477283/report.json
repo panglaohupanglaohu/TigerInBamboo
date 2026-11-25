@@ -1,0 +1,74 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/viking-apostles-e2e/run-1795532477283",
+  "steps": {
+    "worldReady": "ok",
+    "muster": {
+      "site": "apostles"
+    },
+    "board0": {
+      "count": 0,
+      "walking": 72,
+      "refillLeft": 228
+    },
+    "board20": {
+      "count": 0,
+      "walking": 87,
+      "refillLeft": 213
+    },
+    "board40": {
+      "count": 0,
+      "walking": 100,
+      "refillLeft": 200
+    },
+    "board60": {
+      "count": 0,
+      "walking": 110,
+      "refillLeft": 190
+    },
+    "board80": {
+      "count": 2,
+      "walking": 108,
+      "refillLeft": 190
+    },
+    "board100": {
+      "count": 6,
+      "walking": 104,
+      "refillLeft": 190
+    },
+    "boardStat": {
+      "i": 109,
+      "whistled": false,
+      "active": true,
+      "departed": false,
+      "departedFrame": -1,
+      "refillLeft": 190,
+      "walking": 102,
+      "ships": [
+        {
+          "id": "leebai",
+          "count": 0,
+          "walkers": 55
+        },
+        {
+          "id": "duke",
+          "count": 8,
+          "walkers": 47
+        }
+      ]
+    },
+    "boarded": [
+      {
+        "id": "leebai",
+        "count": 0
+      },
+      {
+        "id": "duke",
+        "count": 8
+      }
+    ],
+    "sailPhase": "sail-apostles"
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "page.evaluate: TypeError: globalThis.__tmVikingCampaign.report is not a function\n    at eval (eval at evaluate (:311:30), <anonymous>:1:44)\n    at UtilityScript.evaluate (<anonymous>:313:16)\n    at UtilityScript.<anonymous> (<anonymous>:1:44)\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/viking-apostles-browser.mjs:36:24"
+}

@@ -1,0 +1,75 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/relief-old-port-e2e/run-1795569439198",
+  "scene": "old-port",
+  "steps": {
+    "keysBefore": [
+      "tm.citadelEditor.collapsed",
+      "tm.citadelEditor.dropToGround",
+      "tm.defaults.v1",
+      "tm.equatorialClouds.enabled",
+      "tm.morris.panel.collapsed",
+      "tm.questPanel.collapsed"
+    ],
+    "scanned": {
+      "direct": "old-port",
+      "scene": "old-port",
+      "note": "扫描完成：6 / 6 个能力能作用。 可改陆地 1049 格。 已按「旧港湾」自动预装 6 个能力（软坡（缓坡省连续）、硬崖（陡崖省台阶）、河谷（开河 + 填洼）、悬垂（崖顶岩檐） 等），点 ▶ 执行管线一键跑完整条。",
+      "nodes": 6,
+      "scanned": "old-port",
+      "status": "旧港湾：采样 61×61 格（3 m）· 陆地 1638 格 · 保护格 1064 · 地形网格 679 个"
+    },
+    "candidate": {
+      "h4": "候选 · 通过（需留意）",
+      "mode": "replace",
+      "fails": [],
+      "warns": [
+        "! 竖崖占比 ≤ 12%竖崖（> 62°）56.0% · 中等坡 27.4%",
+        "! 最大可走连通片 ≥ 60%最大连通片 7.0%（173 片）"
+      ],
+      "status": "relief 候选：作用在本场景✓ 不写存档 / 不改默认✓ 步骤与计划一致✓ 高度场大小✓ 建筑 / 轨道及外扩 1 圈不动✓ 海陆不变（海岸线）✓ 可改陆地填洼后没有排不出去的坑✓ 河格都有不上坡的去处✓ 岩檐：檐下是空的、不在保护格上✓ 梯子：梯脚在下层台面、梯顶搭上层台沿、梯长 = √(H²+run²)✓ 等高线在格边上且与复算一致✓ 竖崖占比 ≤ 12%! 最大可走连通片 ≥ 60%!",
+      "live": {
+        "group": true,
+        "visible": true,
+        "tris": 4076,
+        "parts": [
+          "relief-surface",
+          "relief-lips",
+          "relief-ladders",
+          "relief-contours"
+        ]
+      }
+    },
+    "compare": {
+      "state": {
+        "active": "original",
+        "text": "实景候选：旧港湾 · 正在看原样（replace，隐藏原地形网格 680 个，岩檐 48，梯子 16）"
+      },
+      "live": {
+        "group": true,
+        "visible": false,
+        "tris": 4076,
+        "parts": [
+          "relief-surface",
+          "relief-lips",
+          "relief-ladders",
+          "relief-contours"
+        ]
+      }
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "capabilities": [
+    "relief.soft",
+    "relief.cliff",
+    "relief.valley",
+    "relief.overhang",
+    "relief.ledge",
+    "relief.passes"
+  ],
+  "failure": "「看候选」没切回候选"
+}

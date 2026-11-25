@@ -1,0 +1,39 @@
+{
+ "capability": "apostles.palette",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "apostles",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/palette.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/palette.js"
+ ],
+ "inputs": {
+  "keys": [
+   "PALETTES"
+  ]
+ },
+ "metrics": [
+  {
+   "id": "pal",
+   "name": "PALETTES 深等",
+   "original": 4,
+   "refactored": 3,
+   "equal": false
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "PALETTES",
+   "original": "{\"vivid\":{\"label\":\"高饱和\",\"walls\":[\"#e05a4f\",\"#5cc06a\",\"#4f7fd0\",\"#e8a13c\",\"#a95fb0\",\"#3fb8b0\"],\"roof\":\"#e2703a\",\"trim\":\"#",
+   "refactored": "{\"town\":{\"name\":\"小镇\",\"colors\":[\"#dd6a5f\",\"#eec463\",\"#85b780\",\"#6f9dc6\",\"#ac91c9\",\"#e8a377\",\"#c2ab8b\",\"#ecdfc4\",\"#8b9fa6\""
+  }
+ ],
+ "basis": "调色板是纯常量表，JSON 深比较即等价判定。"
+}

@@ -1,0 +1,64 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-25T00:29:38.851Z",
+ "arena": {
+  "fixture": "高度场 18×18（中央台地 + 海缘，与 building.probe 同构）",
+  "runner": "TigerMessenger/tools/refactor/record-building-arena.mjs（实算）"
+ },
+ "judge": "规则写死：match targets≥1 且 run applied≥1（或 plan 新增键，如 prefabs 目录登记）为「擂过」。",
+ "results": [
+  {
+   "id": "building.sites",
+   "name": "建筑选址",
+   "domain": "building",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "sites"
+   ],
+   "layout": 0,
+   "changed": 1,
+   "ms": 0,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "building.prefabs",
+   "name": "多格 prefab 目录",
+   "domain": "building",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "prefabs"
+   ],
+   "layout": 0,
+   "changed": 1,
+   "ms": 0,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "building.joint-wfc",
+   "name": "联合 WFC 摆建筑群",
+   "domain": "building",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "solve",
+    "layout"
+   ],
+   "layout": 57,
+   "changed": 1,
+   "ms": 27,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  }
+ ],
+ "counts": {
+  "caps": 3,
+  "passed": 3
+ }
+}

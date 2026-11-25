@@ -1,0 +1,270 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "① 纯三角底图：每格 3 边、无四边格",
+      "pass": true,
+      "detail": "486 格 / sides={\"3\":486}"
+    },
+    {
+      "name": "① 纯三角底图：顶点最多被 6 格共用",
+      "pass": true,
+      "detail": "{\"2\":6,\"3\":48,\"6\":217}"
+    },
+    {
+      "name": "① 纯三角底图：V−E+F=1（圆盘拓扑）",
+      "pass": true,
+      "detail": "V 271 − E 756 + F 486 = 1"
+    },
+    {
+      "name": "① 纯三角底图：所有格面积相同（规则格子，作不规则性的对照）",
+      "pass": true,
+      "detail": "CV 0 · 0.433–0.433"
+    },
+    {
+      "name": "② 不规则底图：三角格与四边格混在一张网里",
+      "pass": true,
+      "detail": "三角 176 / 四边 155 / 共 331"
+    },
+    {
+      "name": "② 每个四边格只切一条对角线",
+      "pass": true,
+      "detail": "diagonals 155 == quads 155"
+    },
+    {
+      "name": "② 切完的三角数 = 三角格 + 2×四边格",
+      "pass": true,
+      "detail": "486 = 176 + 2×155"
+    },
+    {
+      "name": "② 底图不规则：格面积 CV > 0.3",
+      "pass": true,
+      "detail": "CV 0.4165 · 0.2416–1.3988（max/min 5.79×）"
+    },
+    {
+      "name": "② 不规则底图：V−E+F=1",
+      "pass": true,
+      "detail": "V 271 − E 601 + F 331 = 1"
+    },
+    {
+      "name": "③ 主场景三角底图：每格 3 边",
+      "pass": true,
+      "detail": "1944 格 / {\"3\":1944}"
+    },
+    {
+      "name": "③ 三角底图上生成出岛：陆地 ≥ 400 格、≥ 8 个层高",
+      "pass": true,
+      "detail": "陆地 576 · 10 层"
+    },
+    {
+      "name": "③ 三角底图上有河道：river 格 > 0 且有入海口",
+      "pass": true,
+      "detail": "river 27 格 · 2 条 · 2 个口"
+    },
+    {
+      "name": "③ 格线层跟着三角格画：唯一段数 ÷ 陆地格 ≈ 2.8（每陆地格 3 边，与 r121 口径一致）",
+      "pass": true,
+      "detail": "1625 段 / 576 陆地格 = 2.821"
+    },
+    {
+      "name": "④ r55 页接受三角底图（原来只透传 quad|mixed）",
+      "pass": true,
+      "detail": "grid tri · 1944 格 / {\"3\":1944}"
+    },
+    {
+      "name": "④ 三角底图上有软坡面：soft 面积 > 0 且墙面随软坡变小",
+      "pass": true,
+      "detail": "软坡面 36.4 vs 墙面 211.8（关软坡：软坡面 0 / 墙面 215.4）"
+    },
+    {
+      "name": "④ 三角底图上有河道 + 湖：riverCells > 0、reaches ≥ 1、湖 > 0",
+      "pass": true,
+      "detail": "river 52 格 / 2 条 / 7 口 / 湖 6（51 格）"
+    },
+    {
+      "name": "④ 缓坡坍缩：河道缓坡把陡边从 118 降到 91",
+      "pass": true,
+      "detail": "{\"lowered\":19,\"volume\":26,\"cliffsKept\":0,\"reached\":564,\"steepEdgesBefore\":118,\"steepEdgesAfter\":91,\"maxDepth\":24}"
+    },
+    {
+      "name": "④ 关软坡时 softTops 关闭（反向对照口径一致）",
+      "pass": true,
+      "detail": "softTops false"
+    },
+    {
+      "name": "⑤ 0 页面错误",
+      "pass": true,
+      "detail": "0"
+    }
+  ],
+  "grids": {
+    "tri": {
+      "kind": "tri",
+      "cells": 486,
+      "sides": {
+        "3": 486
+      },
+      "verts": 271,
+      "edges": 756,
+      "euler": 1,
+      "vertexSharing": {
+        "2": 6,
+        "3": 48,
+        "6": 217
+      },
+      "areaMean": 0.433,
+      "areaCv": 0,
+      "areaMin": 0.433,
+      "areaMax": 0.433,
+      "quads": 0,
+      "triangles": 486,
+      "diagonals": 0,
+      "tris": 486,
+      "wire": true,
+      "tri2": true
+    },
+    "mixed": {
+      "kind": "mixed",
+      "cells": 331,
+      "sides": {
+        "3": 176,
+        "4": 155
+      },
+      "verts": 271,
+      "edges": 601,
+      "euler": 1,
+      "vertexSharing": {
+        "1": 3,
+        "2": 29,
+        "3": 35,
+        "4": 71,
+        "5": 100,
+        "6": 33
+      },
+      "areaMean": 0.6358,
+      "areaCv": 0.4165,
+      "areaMin": 0.2416,
+      "areaMax": 1.3988,
+      "quads": 155,
+      "triangles": 176,
+      "diagonals": 155,
+      "tris": 486,
+      "wire": true,
+      "tri2": true
+    }
+  },
+  "scene": {
+    "cells": 1944,
+    "sides": {
+      "3": 1944
+    },
+    "land": 576,
+    "levels": 10,
+    "river": 27,
+    "gridSegments": 1625,
+    "reaches": 2,
+    "mouths": 2
+  },
+  "r55": {
+    "grid": "tri",
+    "seed": 7,
+    "opts": {
+      "seed": 7,
+      "riverRelax": true,
+      "lakes": true,
+      "basins": 1,
+      "erosion": null,
+      "softSlopes": true,
+      "softRelax": true
+    },
+    "lakes": 6,
+    "lakeCells": 51,
+    "relax": {
+      "lowered": 19,
+      "volume": 26,
+      "cliffsKept": 0,
+      "reached": 564,
+      "steepEdgesBefore": 118,
+      "steepEdgesAfter": 91,
+      "maxDepth": 24
+    },
+    "joint": {
+      "submerged": 0,
+      "extended": 25,
+      "spills": 6,
+      "riverCells": 52,
+      "toSea": 52,
+      "broken": 0,
+      "lakes": 6
+    },
+    "erosion": null,
+    "minimaAfter": 0,
+    "gridSides": {
+      "3": 1944
+    },
+    "cells": 1944,
+    "riverCells": 52,
+    "riverReaches": 2,
+    "riverMouths": 7,
+    "land": 576,
+    "levelCount": 10,
+    "softTops": true,
+    "slope": {
+      "flat": 99.7,
+      "soft": 36.4,
+      "steep": 18.7,
+      "wallArea": 211.8
+    }
+  },
+  "r55off": {
+    "grid": "tri",
+    "seed": 7,
+    "opts": {
+      "seed": 7,
+      "riverRelax": true,
+      "lakes": true,
+      "basins": 1,
+      "erosion": null,
+      "softSlopes": false,
+      "softRelax": false
+    },
+    "lakes": 4,
+    "lakeCells": 8,
+    "relax": {
+      "lowered": 22,
+      "volume": 29,
+      "cliffsKept": 1,
+      "reached": 564,
+      "steepEdgesBefore": 179,
+      "steepEdgesAfter": 148,
+      "maxDepth": 24
+    },
+    "joint": {
+      "submerged": 0,
+      "extended": 58,
+      "spills": 4,
+      "riverCells": 85,
+      "toSea": 85,
+      "broken": 0,
+      "lakes": 4
+    },
+    "erosion": null,
+    "minimaAfter": 0,
+    "gridSides": {
+      "3": 1944
+    },
+    "cells": 1944,
+    "riverCells": 85,
+    "riverReaches": 2,
+    "riverMouths": 7,
+    "land": 576,
+    "levelCount": 10,
+    "softTops": false,
+    "slope": {
+      "flat": 144.1,
+      "soft": 0,
+      "steep": 0,
+      "wallArea": 215.4
+    }
+  }
+}

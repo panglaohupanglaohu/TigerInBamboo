@@ -1,0 +1,66 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/capability-contracts-e2e/run-1795450320904",
+  "capabilities": [],
+  "steps": {
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「高山圣城（通用插件 + 构建面板）」自动预装 3 个能力（建筑选址、多格 prefab 目录、联合 WFC 摆建筑群），点 ▶ 执行管线一键跑完整条。",
+    "contracts": {
+      "total": 63,
+      "declared": 48,
+      "fromMeta": 34,
+      "fromOverlay": 14,
+      "missing": 15,
+      "missingIds": [
+        "relief.soft",
+        "relief.cliff",
+        "relief.valley",
+        "relief.overhang",
+        "relief.ledge",
+        "relief.passes",
+        "battle.navFinePortals",
+        "battle.navTraffic",
+        "battle.navFooting",
+        "fx.fire",
+        "fx.hallway",
+        "fx.sediment",
+        "fx.projectiles",
+        "scene.oklab-contrast",
+        "scene.oklab-palette"
+      ],
+      "errors": 17,
+      "errorIds": [
+        "relief.soft",
+        "relief.cliff",
+        "relief.valley",
+        "relief.overhang",
+        "relief.ledge",
+        "relief.passes",
+        "battle.navFinePortals",
+        "battle.navTraffic",
+        "battle.navFooting",
+        "fx.fire",
+        "fx.hallway",
+        "fx.sediment",
+        "fx.projectiles",
+        "scene.oklab-contrast",
+        "scene.oklab-palette"
+      ],
+      "warnings": 44
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "zz-failure.png"
+  ],
+  "pass": false,
+  "failure": "Error: 有能力没有契约：relief.soft、relief.cliff、relief.valley、relief.overhang、relief.ledge、relief.passes、battle.navFinePortals、battle.navTraffic、battle.navFooting、fx.fire、fx.hallway、fx.sediment、fx.projectiles、scene.oklab-contrast、scene.oklab-palette\n    at expect (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:15:38)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/capability-contracts-browser.mjs:11:2\n    at async Object.finish (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:52:8)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/capability-contracts-browser.mjs:6:1"
+}

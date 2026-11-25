@@ -1,0 +1,52 @@
+{
+ "capability": "planet.surface-detail",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/engine/sphere.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/sphere/planet.js"
+ ],
+ "inputs": {
+  "count": 160,
+  "spacing": 4,
+  "relax": 6,
+  "seed": 1
+ },
+ "metrics": [
+  {
+   "id": "shape",
+   "name": "返回键",
+   "original": "points,projected,stages",
+   "refactored": "pts,tris,nb,steps"
+  },
+  {
+   "id": "n",
+   "name": "点数",
+   "original": 160,
+   "refactored": 0
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "api",
+   "id": "buildSphere 形参",
+   "original": "{count,spacingPasses,relaxPasses,seed}",
+   "refactored": "{n,spacing,relax,seed,history}+RangeError 校验",
+   "note": "参数改名+校验；点集生成器是否同源看统计"
+  },
+  {
+   "kind": "value",
+   "id": "buildSphere 点数",
+   "original": 160,
+   "refactored": 0
+  }
+ ],
+ "basis": "形参名不同但语义对应（count↔n 等）；点集分布同源与否由结构统计登记，不伪造逐点相等。"
+}

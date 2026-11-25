@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<link rel="icon" href="data:," />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>球面平滑海岸线：worldShorelines · 浏览器验收</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #22303c; font: 13px/1.5 system-ui, "PingFang SC", sans-serif; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+  #ui { position: fixed; left: 14px; top: 14px; width: 420px; background: rgba(255,255,255,.92); color: #1d2f36; border-radius: 12px; padding: 10px 12px; box-shadow: 0 6px 20px rgba(0,0,0,.3); }
+  #ui h1 { font-size: 15px; margin: 0 0 4px; }
+  #stat { font-size: 11.5px; color: #2f7f8a; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ui">
+  <h1>球面平滑海岸线（world-sphere.js worldShorelines）浏览器验收</h1>
+  <div id="stat">加载中…</div>
+</div>
+<script type="module">
+// 1768627849529893109 残差「球面平滑海岸线浏览器验收」。
+//   与 sphere-world.html 同贴片/同网格规格；世界改由确定性 fbm 噪声生成——一座噪声边缘主岛
+//   + 内湖（挖空）+ 小屿 ⇒ 三条独立岸环（外岸/内岸/屿岸），水体素=空格留在球壳海面上。
+//   岸线 = worldShorelines：traceShoreLoops 平面黄线 → sampleShoreline → shoreLoopOnSphere
+//   按角距细分贴球 → smoothSphereLoop Taubin → pushOutSphere 测地外推蓝线。
+//   ?src=vendor 时所有 src/* 换成 TigerMessenger vendor 逐字拷贝（three 用 TigerMessenger/vendor），
+//   用来验收「vendor 拷贝在浏览器里跑出同一套数」；缺省走本仓 src/。
+const q = new URLSearchParams(location.search);
+const VENDOR = q.get('src') === 'vendor';
+const BASE = VENDOR ? '/TigerMessenger/src/vendor/townscaper-rea-refactoring'
+  : (location.port === '8931' ? '/townscaper-web/REACodeRefactoring' : '.');
+const THREE = await import(VENDOR ? '/TigerMessenger/vendor/three.module.js' : BASE + '/vendor/three.module.js');
+const { makeSpherePatch, mapPoint, worldShorelines } = await import(BASE + '/src/sphere/world-sphere.js');
+const { makeSphereWorld } = await import(BASE + '/src/sphere/sphere-world.js');
+const { traceShoreLoops } = await import(BASE + '/src/core/shore-loops.js');
+const { fbm, hash01, clamp01 } = await import(BASE + '/src/core/noise.js');
+
+const norm = (a) => { const l = Math.hypot(...a) || 1; return a.map((v) => v / l); };
+const len3 = (a) => Math.hypot(a[0], a[1], a[2]);
+const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const clampA = (x) => Math.max(-1, Math.min(1, x));
+
+/* ---- 球面 World + 确定性水陆体素 -------------------------------------------- */
+const R = 60;
+const patch = makeSpherePatch({ R, up: norm([0.15, 1, -0.25]) });
+const spec = { kind: 'quad', radius: 7, cellSize: 1.1, seed: 11, mode: 'sphere', y: 0, levelHeight: 1 };
+const ctx = makeSphereWorld(patch, spec);
+
+/** 水陆生成（纯 fbm/hash，无 Math.random）：主岛噪声海岸 + 内湖 + 小屿 → 3 条岸环。 */
+function makeIslands(c) {
+  const { grid, world } = c;
+  const IC = [0.3, -0.4], LC = [0.8, 0.2], SC = [4.0, 3.0];
+  let land = 0, rock = 0;
+  for (const cell of grid.cells) {
+    const { cx, cz } = cell;
+    const dI = Math.hypot(cx - IC[0], cz - IC[1]);
+    const coast = 3.4 + 2.0 * (fbm(cx, cz, { seed: 91, freq: 0.5, octaves: 4 }) - 0.5);
+    let on = dI < coast;
+    const dS = Math.hypot(cx - SC[0], cz - SC[1]);
+    if (dS < 1.0 + 0.4 * (fbm(cx, cz, { seed: 47, freq: 1.2, octaves: 3 }) - 0.5)) on = true;
+    const dL = Math.hypot(cx - LC[0], cz - LC[1]);
+    if (dL < 0.8) on = false;                         // 内湖（全包围水体素 → 第二条环）
+    if (!on) { world.fill(cell, 0); continue; }
+    const h = Math.max(1, Math.min(4, 1 + Math.floor(3 * clamp01(1 - dI / 3.4) + fbm(cx, cz, { seed: 5, freq: 0.8 }) * 1.2)));
+    const rk = fbm(cx, cz, { seed: 7, freq: 0.7, octaves: 3 }) > 0.55;
+    world.fill(cell, h, { rock: rk });
+    if (!rk) world.color[cell.id] = Math.floor(hash01(cell.id * 7919) * 15);
+    land++; if (rk) rock++;
+  }
+  world.touch();
+  return { landCells: land, rockCells: rock, waterCells: grid.cells.length - land };
+}
+const terra = makeIslands(ctx);
+
+/* ---- 渲染 ------------------------------------------------------------------ */
+const cv = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1);
+renderer.setSize(innerWidth, innerHeight, false);
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x22303c);
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.05, 1000);
+const V = (a) => new THREE.Vector3(a[0], a[1], a[2]);
+const HOME = {
+  pos: V(patch.anchor).addScaledVector(V(patch.up), 13).addScaledVector(V(patch.e1), 9).addScaledVector(V(patch.e2), -5),
+  look: V(patch.anchor).addScaledVector(V(patch.up), 0.5),
+};
+camera.position.copy(HOME.pos); camera.lookAt(HOME.look);
+scene.add(new THREE.HemisphereLight(0xbfd6e4, 0x27333f, 1.15));
+const sun = new THREE.DirectionalLight(0xfff2dd, 1.7);
+sun.position.copy(V(patch.anchor).addScaledVector(V(patch.up), 40).addScaledVector(V(patch.e1), 25));
+scene.add(sun);
+const ocean = new THREE.Mesh(new THREE.SphereGeometry(R * 0.996, 72, 48), new THREE.MeshLambertMaterial({ color: 0x2e5066 }));
+scene.add(ocean);
+
+const PALETTE = ['#d9b380', '#c96f4a', '#e0e4e8', '#8fb573', '#b5533c', '#e5c07b', '#7fa6b8', '#a08bc0', '#d989a6', '#6b8f71', '#c4a484', '#94795d', '#5d7a94', '#b8b09a', '#8a5a44'];
+const SEA = [0.38, 0.46, 0.52], ROCK = [0.52, 0.55, 0.47];
+const hex = (h) => [parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255];
+const shade = (rgb, k) => rgb.map((v) => v * k);
+const cellMat = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
+
+function buildMesh(c) {
+  const { grid, world } = c, lh = c.levelHeight;
+  const pos = [], col = [];
+  const push = (p, rgb) => { pos.push(p[0], p[1], p[2]); col.push(rgb[0], rgb[1], rgb[2]); };
+  const lift = (x, z, y) => mapPoint(patch, x, z, { mode: c.mode, y });
+  for (const cell of grid.cells) {
+    if (!cell.inRange) continue;
+    const t = world.top(cell);
+    if (!t) { for (let i = 1; i < cell.n - 1; i++) { push(cell.pos, SEA); push(cell.pts3[i], SEA); push(cell.pts3[i + 1], SEA); } continue; }
+    const rockTop = world.isRock(cell, t);
+    const wallCol = world.color[cell.id] >= 0 ? hex(PALETTE[world.color[cell.id] % PALETTE.length]) : (rockTop ? ROCK : hex(PALETTE[0]));
+    const capCol = rockTop ? ROCK : wallCol;
+    const topY = t * lh, ctr = lift(cell.cx, cell.cz, topY);
+    const ring = cell.pts.map((p) => lift(p.x, p.z, topY));
+    for (let i = 1; i < cell.n - 1; i++) { push(ctr, capCol); push(ring[i], capCol); push(ring[i + 1], capCol); }
+    for (let i = 0; i < cell.n; i++) {
+      const nb = cell.edgeNeighbors[i], nbTop = nb >= 0 ? world.top(grid.cells[nb]) : 0;
+      if (nbTop >= t) continue;
+      const y0 = nbTop * lh, a = cell.pts[i], b = cell.pts[(i + 1) % cell.n];
+      const a0 = lift(a.x, a.z, y0), b0 = lift(b.x, b.z, y0), b1 = ring[(i + 1) % cell.n], a1 = ring[i], wc = shade(wallCol, 0.8);
+      push(a0, wc); push(b0, wc); push(b1, wc);
+      push(a0, wc); push(b1, wc); push(a1, wc);
+    }
+  }
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+  geo.computeVertexNormals();
+  return new THREE.Mesh(geo, cellMat);
+}
+const mesh = buildMesh(ctx); scene.add(mesh);
+function render() { renderer.render(scene, camera); }
+render();
+
+/* ---- 岸线提取 + 渲染 --------------------------------------------------------- */
+const SHORE_OPTS = { mode: 'sphere', spacing: 0.18, maxStep: 0.05, smoothIters: 6, reach: 0.4 };
+const loops = worldShorelines(patch, ctx.world, SHORE_OPTS);
+
+const shoreGroup = new THREE.Group();
+function ringMesh(pts, color, size) {
+  const g = new THREE.BufferGeometry().setFromPoints(pts.map((p) => V(p)));
+  const line = new THREE.LineLoop(g, new THREE.LineBasicMaterial({ color }));
+  const pg = new THREE.BufferGeometry().setFromPoints(pts.map((p) => V(p)));
+  const dots = new THREE.Points(pg, new THREE.PointsMaterial({ color, size, sizeAttenuation: true }));
+  const grp = new THREE.Group(); grp.add(line, dots); return grp;
+}
+for (const loop of loops) {
+  shoreGroup.add(ringMesh(loop.pts, 0xffd94d, 0.12));         // 黄线：贴球岸线
+  if (loop.sea) shoreGroup.add(ringMesh(loop.sea, 0x4dc3ff, 0.1)); // 蓝线：测地外推浪带起点
+}
+function showShore(on) { if (on && shoreGroup.parent !== scene) scene.add(shoreGroup); if (!on && shoreGroup.parent === scene) scene.remove(shoreGroup); render(); }
+showShore(true);
+
+/* ---- 验收 API --------------------------------------------------------------- */
+const snaps = {};
+function snap(name) {
+  render();
+  const gl = renderer.getContext(), w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
+  const buf = new Uint8Array(w * h * 4);
+  gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+  snaps[name] = buf;
+  return { w, h, bytes: buf.length };
+}
+function diff(a, b) {
+  const A = snaps[a], B = snaps[b];
+  if (!A || !B || A.length !== B.length) throw new Error('snap missing');
+  let px = 0, maxd = 0;
+  for (let i = 0; i < A.length; i += 4) {
+    const d = Math.max(Math.abs(A[i] - B[i]), Math.abs(A[i + 1] - B[i + 1]), Math.abs(A[i + 2] - B[i + 2]), Math.abs(A[i + 3] - B[i + 3]));
+    if (d) { px++; if (d > maxd) maxd = d; }
+  }
+  return { pixels: px, maxDelta: maxd, totalPx: A.length / 4 };
+}
+
+/** 岸线统计 + 断点/空洞：相邻点角距超 maxStep 即断点；NaN/离径即空洞。 */
+function stats() {
+  const per = loops.map((l, i) => {
+    let breaks = 0, nonFinite = 0, maxDev = 0, maxNormDot = 0, minNormLen = Infinity;
+    const n = l.pts.length;
+    for (let j = 0; j < n; j++) {
+      const p = l.pts[j];
+      if (!p.every(Number.isFinite)) nonFinite++;
+      maxDev = Math.max(maxDev, Math.abs(len3(p) - R));
+      const u = norm(p);
+      if (l.normals) { maxNormDot = Math.max(maxNormDot, Math.abs(dot(u, l.normals[j]))); minNormLen = Math.min(minNormLen, len3(l.normals[j])); }
+      const q2 = l.pts[(j + 1) % n];
+      const step = Math.acos(clampA(dot(norm(p), norm(q2))));
+      if (step > SHORE_OPTS.maxStep + 1e-9) breaks++;
+    }
+    let seaDev = 0, seaRadial = 0;
+    if (l.sea) for (let j = 0; j < n; j++) {
+      seaDev = Math.max(seaDev, Math.abs(Math.acos(clampA(dot(norm(l.sea[j]), norm(l.pts[j])))) * R - SHORE_OPTS.reach));
+      seaRadial = Math.max(seaRadial, Math.abs(len3(l.sea[j]) - len3(l.pts[j])));
+    }
+    return {
+      loop: i, count: n, subdivided: l.subdivided,
+      maxStepAngle: l.report.maxStepAngle, meanStepAngle: l.report.meanStepAngle, minChord: l.report.minChord,
+      breaks, nonFinite, maxRadialDev: maxDev, maxNormalDot: maxNormDot, minNormalLen: minNormLen,
+      seaPoints: l.sea ? l.sea.length : 0, maxSeaDev: seaDev, maxSeaRadialDev: seaRadial,
+    };
+  });
+  let nonFiniteMesh = 0;
+  const pa = mesh.geometry.attributes.position.array;
+  for (let i = 0; i < pa.length; i++) if (!Number.isFinite(pa[i])) nonFiniteMesh++;
+  return {
+    R, vendor: VENDOR, opts: SHORE_OPTS, terra,
+    cells: ctx.grid.cells.length, loops: loops.length, per,
+    totalPts: per.reduce((a, p) => a + p.count, 0), totalBreaks: per.reduce((a, p) => a + p.breaks, 0),
+    totalNonFinite: per.reduce((a, p) => a + p.nonFinite, 0), nonFiniteMesh,
+  };
+}
+
+/** 跨接缝连续性：岸线走过的每个格角，所有共享它的格贴球角点逐位一致（缝 = 0）。 */
+function seamAudit() {
+  const { grid, world } = ctx;
+  const cornerCells = new Map();          // vertex id → [pts3 拷贝]
+  for (const cell of grid.cells) for (let i = 0; i < cell.n; i++) {
+    const id = cell.pts[i].id;
+    if (!cornerCells.has(id)) cornerCells.set(id, []);
+    cornerCells.get(id).push(cell.pts3[i]);
+  }
+  const raw = traceShoreLoops(grid.cells, (c) => world.isSolid(c, 1));
+  let corners = 0, refs = 0, mismatched = 0, maxGap = 0, sharedCorners = 0;
+  const seenV = new Set();
+  for (const loop of raw) for (const seg of loop) for (const v of [seg.a, seg.b]) {
+    if (seenV.has(v.id)) continue; seenV.add(v.id);
+    const copies = cornerCells.get(v.id) || [];
+    corners++; refs += copies.length;
+    if (copies.length > 1) sharedCorners++;
+    for (let i = 0; i < copies.length; i++) for (let j = i + 1; j < copies.length; j++) {
+      const d = dist(copies[i], copies[j]);
+      if (d > maxGap) maxGap = d;
+      if (d !== 0) mismatched++;
+    }
+  }
+  return { shoreLoops: raw.length, shoreCorners: corners, cornerRefs: refs, sharedCorners, pairsMismatched: mismatched, maxGap };
+}
+
+/** 确定性：同 World 重抽一次 + 从 spec 重建世界再抽一次，点数串逐字相等。 */
+function determinism() {
+  const a = worldShorelines(patch, ctx.world, SHORE_OPTS);
+  const b = worldShorelines(patch, ctx.world, SHORE_OPTS);
+  const flat = (ls) => JSON.stringify(ls.map((l) => [l.pts, l.sea, l.normals, l.subdivided]));
+  const sameWorld = flat(a) === flat(b);
+  const ctx2 = makeSphereWorld(patch, spec);
+  const terra2 = makeIslands(ctx2);
+  const c2 = worldShorelines(patch, ctx2.world, SHORE_OPTS);
+  const rebuilt = flat(a) === flat(c2) && JSON.stringify(terra) === JSON.stringify(terra2);
+  return { sameWorld, rebuilt };
+}
+
+/** 岸线特写：把相机怼到最长岸环中点看黄/蓝线是否贴着海-陆界。 */
+let shoreView = null;
+function focusShore() {
+  const big = loops.reduce((a, l) => (l.pts.length > a.pts.length ? l : a), loops[0]);
+  const mid = big.pts[(big.pts.length / 2) | 0], m = V(mid);
+  const up = m.clone().sub(V(patch.center)).normalize();
+  const nrm = V(big.normals ? big.normals[(big.pts.length / 2) | 0] : [0, 0, 0]);
+  shoreView = { pos: m.clone().addScaledVector(up, 2.2).addScaledVector(nrm, 1.2), look: m.clone() };
+  camera.position.copy(shoreView.pos); camera.lookAt(shoreView.look); render();
+  return { mid, loopPts: big.pts.length };
+}
+function restoreView() { camera.position.copy(HOME.pos); camera.lookAt(HOME.look); render(); }
+
+const api = { ready: true, ctx, patch, spec, R, loops, terra, vendor: VENDOR,
+  stats, seamAudit, determinism, snap, diff, showShore, focusShore, restoreView };
+window.sphereShoreDemo = api;
+
+const st = stats(), sm = seamAudit(), dt = determinism();
+document.getElementById('stat').textContent =
+  `${VENDOR ? '【vendor 拷贝】' : ''}patch R=${R} · 网格 ${st.cells} 格（陆 ${st.terra.landCells}/岩 ${st.terra.rockCells}/水 ${st.terra.waterCells}）\n` +
+  `岸环 ${st.loops} 条（${st.per.map((p) => p.count).join(' + ')} = ${st.totalPts} 点，细分补 ${st.per.reduce((a, p) => a + p.subdivided, 0)} 点）\n` +
+  `断点 ${st.totalBreaks} · 非有限点 ${st.totalNonFinite} · 径向偏差 ≤${Math.max(...st.per.map((p) => p.maxRadialDev)).toExponential(2)} · 最大步角 ${Math.max(...st.per.map((p) => p.maxStepAngle)).toFixed(4)} ≤ ${st.opts.maxStep}\n` +
+  `跨接缝：${sm.shoreCorners} 个岸角 ${sm.cornerRefs} 引用全逐位一致（缝 ${sm.maxGap}，错 ${sm.pairsMismatched}）\n` +
+  `确定性：同世界重抽 ${dt.sameWorld} · 重建世界 ${dt.rebuilt}\n` +
+  `window.sphereShoreDemo：stats / seamAudit / determinism / showShore / focusShore / snap / diff`;
+</script>
+</body>
+</html>

@@ -422,6 +422,37 @@ export class Smoke {
     return { on: this.fireOn, t: +s.fireT.toFixed(3), light: +(c.light * (s.fireStrength ?? 1)).toFixed(4),
       sizeMul: +c.sizeMul.toFixed(4), area: +c.area.toFixed(4) };
   }
+  /** 爆燃分层读数（第 162 轮，837027901853810688）：把「三组高度」变成曲线上的可读量。
+   *  片里 0083–0086 的爆燃是**一簇分高度的团**（下层最大最粗、中层沿高度接上、顶层最瘦且先升），
+   *  不是一根柱子整体变粗 —— 而 r100–r161 的联合曲线只数整屏像素，分层只能靠 `burstLayers`/`burstY`
+   *  在点火那一瞬读一次，时间轴上测不到。
+   *  本方法只读已有卡片（`burst:1` 按 `burstLayer` 分组）算各自的世界高度区间、卡片数、组间净空，
+   *  **不改任何渲染状态**；曲线测试每帧调它即可把「三层高度」画到时间轴上。 */
+  tierStats() {
+    const by = new Map();
+    for (const p of this.p) {
+      if (!p.burst) continue;
+      const k = p.burstLayer ?? 'layer';
+      let g = by.get(k);
+      if (!g) { g = { name: k, cards: 0, yMin: Infinity, yMax: -Infinity, ySum: 0, sizeMul: p.fm ?? 1 }; by.set(k, g); }
+      g.cards++; g.yMin = Math.min(g.yMin, p.y); g.yMax = Math.max(g.yMax, p.y); g.ySum += p.y; g.sizeMul = p.fm ?? 1;
+    }
+    const plan = (this.burstStats?.layers ?? []).map((l) => l.name);
+    const tiers = [...by.values()]
+      .map((g) => ({ name: g.name, cards: g.cards, sizeMul: g.sizeMul,
+        yMin: +g.yMin.toFixed(4), yMax: +g.yMax.toFixed(4), yMean: +(g.ySum / g.cards).toFixed(4) }))
+      .sort((a, b) => a.yMean - b.yMean);
+    // 组间净空 >0 = 两组在高度上脱开；<0 = 相邻两组在高度上叠住（原片是叠住但仍有三个亮心）
+    const gaps = [];
+    for (let i = 1; i < tiers.length; i++) gaps.push(+(tiers[i].yMin - tiers[i - 1].yMax).toFixed(4));
+    const ys = tiers.flatMap((t) => [t.yMin, t.yMax]);
+    return {
+      tiers, gaps, plan,
+      floor: ys.length ? +Math.min(...ys).toFixed(4) : 0,
+      top: ys.length ? +Math.max(...ys).toFixed(4) : 0,
+      span: ys.length ? +(Math.max(...ys) - Math.min(...ys)).toFixed(4) : 0,
+    };
+  }
   dispose() { this.group.parent?.remove(this.group); this.back.geometry.dispose(); this.back.material.uniforms.uNoise.value.dispose(); this.checkerTexture.dispose(); this.back.material.dispose(); this.front.material.dispose(); this.hazeGroup?.parent?.remove(this.hazeGroup); this.haze?.geometry.dispose(); this.haze?.material.dispose(); this.clear(); }
 
   update(dt = 0, wind, camera = null) {

@@ -1,4 +1,5 @@
-import {ladderProfile,ladderAnchors,ladderContact} from '../core/ladder-profile.js';
+import {ladderAnchors} from '../core/ladder-profile.js';
+import {ladderChannel} from './climb-route.js';
 /**
  * navlayer.js — 把 navgraph 画出来：
  *   楼梯（默认开）：落差 1 层的区域之间一架三级台阶，贴着高的那一侧崖壁（1181464374839521280）
@@ -56,8 +57,10 @@ export class NavLayer {
       const { mx, mz, ux, uz, len, vx, vz } = an;
       const rise = s.rise || 1, width = Math.min(0.36, len * 0.6), steps = rise * 3, depth = 0.11;
       if(this.woodLadders){
-        const profile=ladderProfile(an.foot,an.lip,{side:an.side,width:an.width});
-        this.ladderDiagnostics.push({cell:c.id,edge:i,...profile,contact:ladderContact(this._world,s,an,profile,{at,L})});for(const rail of profile.rails)rod(rail.a,rail.b,.018);for(const rung of profile.rungs)rod(rung.a,rung.b,.014);continue;
+        // 与 climb-route（单位攀爬轨迹）同一份通道数据：锚点/剖面/接触不各算一套。
+        const ch=ladderChannel(this._world,nav,s,{at,L});
+        if(!ch.profile){this.ladderDiagnostics.push({cell:c.id,edge:i,contact:ch.contact});continue;}
+        this.ladderDiagnostics.push({cell:c.id,edge:i,...ch.profile,contact:ch.contact});for(const rail of ch.profile.rails)rod(rail.a,rail.b,.018);for(const rung of ch.profile.rungs)rod(rung.a,rung.b,.014);continue;
       }
       for (let k = 0; k < steps; k++) {
         const top = h * L + (rise * L * (steps - k)) / steps;          // 最靠墙的一级最高

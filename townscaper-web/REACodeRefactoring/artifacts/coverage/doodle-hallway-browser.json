@@ -1,0 +1,193 @@
+{
+  "reports": {
+    "textureColor": {
+      "W": 1480,
+      "H": 1157,
+      "ppu": 200,
+      "V": 5.785398163397447,
+      "sampled": 278980,
+      "inkPct": 12.38,
+      "tints": [
+        {
+          "k": "25,28,24",
+          "pct": 18.9
+        },
+        {
+          "k": "29,26,26",
+          "pct": 11.92
+        },
+        {
+          "k": "27,27,29",
+          "pct": 11.79
+        },
+        {
+          "k": "27,28,27",
+          "pct": 11.61
+        },
+        {
+          "k": "30,27,24",
+          "pct": 9.74
+        },
+        {
+          "k": "25,26,29",
+          "pct": 8.61
+        },
+        {
+          "k": "30,30,28",
+          "pct": 4.02
+        }
+      ],
+      "tintsN": 7,
+      "cols": 380,
+      "wainscot": {
+        "slope": 0.3914,
+        "resid": 0.0025,
+        "flatV": 0.96,
+        "n": 195
+      },
+      "sym": [
+        {
+          "panel": "0.00",
+          "asym": null,
+          "skip": "stair"
+        },
+        {
+          "panel": "1.05",
+          "asym": null,
+          "skip": "stair"
+        },
+        {
+          "panel": "2.10",
+          "asym": null,
+          "skip": "stair"
+        },
+        {
+          "panel": "3.15",
+          "asym": 0.0026,
+          "shift": -1
+        },
+        {
+          "panel": "4.20",
+          "asym": 0.0025,
+          "shift": -1
+        },
+        {
+          "panel": "6.59",
+          "asym": 0.0024,
+          "shift": -1
+        }
+      ],
+      "symMax": 0.0026,
+      "symStairSkipped": 3
+    },
+    "textureGray": {
+      "W": 1480,
+      "H": 1157,
+      "ppu": 200,
+      "V": 5.785398163397447,
+      "sampled": 278980,
+      "inkPct": 13.48,
+      "tints": [],
+      "tintsN": 0,
+      "cols": 0,
+      "wainscot": {
+        "slope": null,
+        "resid": null,
+        "flatV": null,
+        "n": 0
+      },
+      "sym": [
+        {
+          "panel": "0.00",
+          "asym": null,
+          "skip": "stair"
+        },
+        {
+          "panel": "1.05",
+          "asym": null,
+          "skip": "stair"
+        },
+        {
+          "panel": "2.10",
+          "asym": null,
+          "skip": "stair"
+        },
+        {
+          "panel": "3.15",
+          "asym": 0.0026,
+          "shift": -1
+        },
+        {
+          "panel": "4.20",
+          "asym": 0.0026,
+          "shift": -1
+        },
+        {
+          "panel": "6.59",
+          "asym": 0.0025,
+          "shift": -1
+        }
+      ],
+      "symMax": 0.0026,
+      "symStairSkipped": 3
+    },
+    "noMirror": {
+      "symMax": 0.6576,
+      "inkPct": 11.6
+    },
+    "render": {
+      "noise": {
+        "n": 0,
+        "mean": 0
+      },
+      "ab": {
+        "n": 479986,
+        "mean": 76.7
+      },
+      "ctrl": {
+        "n": 0,
+        "mean": 0
+      },
+      "size": [
+        1000,
+        720
+      ]
+    },
+    "world": {
+      "faces": 248,
+      "offset": 0.004,
+      "verts": 1488,
+      "wallStats": {
+        "panels": 6,
+        "inkPct": 3.8707835237082184,
+        "wainscotPct": 38
+      },
+      "ctrlFaces": 248,
+      "rect": {
+        "x": 0,
+        "y": 35,
+        "width": 999,
+        "height": 719
+      },
+      "diff": {
+        "noise": {
+          "n": 0,
+          "mean": 0
+        },
+        "ab": {
+          "n": 62318,
+          "mean": 24.55
+        },
+        "ctrl": {
+          "n": 66189,
+          "mean": 25.81
+        },
+        "size": [
+          999,
+          685
+        ]
+      }
+    }
+  },
+  "errors": []
+}

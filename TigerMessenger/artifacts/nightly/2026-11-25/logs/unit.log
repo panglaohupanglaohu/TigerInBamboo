@@ -1,0 +1,2726 @@
+TAP version 13
+# Subtest: 三套方案：approved / soft / soft+palette，网址参数写法对得上
+ok 1 - 三套方案：approved / soft / soft+palette，网址参数写法对得上
+  ---
+  duration_ms: 0.793333
+  type: 'test'
+  ...
+# Subtest: 清单 → 每套四个机位；缺的标未拍，无效机位标出来；当前方案只标一个
+ok 2 - 清单 → 每套四个机位；缺的标未拍，无效机位标出来；当前方案只标一个
+  ---
+  duration_ms: 15.7165
+  type: 'test'
+  ...
+# Subtest: 检查一句话：变差项只对候选写，approved 不写
+ok 3 - 检查一句话：变差项只对候选写，approved 不写
+  ---
+  duration_ms: 0.337791
+  type: 'test'
+  ...
+# Subtest: 没有清单 / 清单坏了 / 路径想跳出 artifacts：不显示图，给出原因
+ok 4 - 没有清单 / 清单坏了 / 路径想跳出 artifacts：不显示图，给出原因
+  ---
+  duration_ms: 0.236708
+  type: 'test'
+  ...
+# Subtest: 页面接线：对照区在十二门徒工坊里，清单路径与端到端脚本写的一致；待决定事项已登记
+ok 5 - 页面接线：对照区在十二门徒工坊里，清单路径与端到端脚本写的一致；待决定事项已登记
+  ---
+  duration_ms: 0.438459
+  type: 'test'
+  ...
+# Subtest: scoreLook：缺陷越少分越低；transparentRock 权重最高；比例项按 0–1 计
+ok 6 - scoreLook：缺陷越少分越低；transparentRock 权重最高；比例项按 0–1 计
+  ---
+  duration_ms: 0.489542
+  type: 'test'
+  ...
+# Subtest: rankMeasurements / pickBest：分数低者胜；并列取改动小的（approved < soft < soft,palette）；失败行垫底
+ok 7 - rankMeasurements / pickBest：分数低者胜；并列取改动小的（approved < soft < soft,palette）；失败行垫底
+  ---
+  duration_ms: 0.501042
+  type: 'test'
+  ...
+# Subtest: measuredView：无记录 none；pending 无 winner → 待实测选出；带 planId → winner 带时间与摘要
+ok 8 - measuredView：无记录 none；pending 无 winner → 待实测选出；带 planId → winner 带时间与摘要
+  ---
+  duration_ms: 14.685583
+  type: 'test'
+  ...
+# Subtest: PENDING_DEFAULTS：四条待决定种子（P-R32-01 已决移入 RESOLVED）
+ok 9 - PENDING_DEFAULTS：四条待决定种子（P-R32-01 已决移入 RESOLVED）
+  ---
+  duration_ms: 0.128167
+  type: 'test'
+  ...
+# Subtest: seedPendingDefaults：幂等只补缺失；RESOLVED 落实已决；不覆盖 active 用户默认；可注入 at
+ok 10 - seedPendingDefaults：幂等只补缺失；RESOLVED 落实已决；不覆盖 active 用户默认；可注入 at
+  ---
+  duration_ms: 1.073584
+  type: 'test'
+  ...
+# Subtest: rowLine：有 eval 显示得分与关键指标；error 行如实写失败
+ok 11 - rowLine：有 eval 显示得分与关键指标；error 行如实写失败
+  ---
+  duration_ms: 0.111333
+  type: 'test'
+  ...
+# Subtest: 连续 need 次「同一场景 + 同样网格数」才算稳定
+ok 12 - 连续 need 次「同一场景 + 同样网格数」才算稳定
+  ---
+  duration_ms: 0.495708
+  type: 'test'
+  ...
+# Subtest: 重建间隙：读到 0 / null / 场景换了 / 网格数在涨，都清零重数，不下「没有岩体」的结论
+ok 13 - 重建间隙：读到 0 / null / 场景换了 / 网格数在涨，都清零重数，不下「没有岩体」的结论
+  ---
+  duration_ms: 0.139792
+  type: 'test'
+  ...
+# Subtest: 换候选（look 变了）也要重新数
+ok 14 - 换候选（look 变了）也要重新数
+  ---
+  duration_ms: 0.0805
+  type: 'test'
+  ...
+# Subtest: waitForStable：场景重建（0 → 一半 → 全部）后返回稳定的那次采样；抛错只算一次失败
+ok 15 - waitForStable：场景重建（0 → 一半 → 全部）后返回稳定的那次采样；抛错只算一次失败
+  ---
+  duration_ms: 0.546667
+  type: 'test'
+  ...
+# Subtest: waitForStable：一直不稳定 → 超时返回 ok:false 与最后一次采样，不编数
+ok 16 - waitForStable：一直不稳定 → 超时返回 ok:false 与最后一次采样，不编数
+  ---
+  duration_ms: 0.185584
+  type: 'test'
+  ...
+# Subtest: min：网格数低于下限不算稳定（例如只等到 1 块岩体）
+ok 17 - min：网格数低于下限不算稳定（例如只等到 1 块岩体）
+  ---
+  duration_ms: 0.114625
+  type: 'test'
+  ...
+# Subtest: sampleApostleScene：只数 userData.apostleMass 的网格，返回场景 uuid
+ok 18 - sampleApostleScene：只数 userData.apostleMass 的网格，返回场景 uuid
+  ---
+  duration_ms: 0.102875
+  type: 'test'
+  ...
+# Subtest: 完整方台：水线以上没有反面三角、没有开口边（崖脚在水下的开口不算）
+ok 19 - 完整方台：水线以上没有反面三角、没有开口边（崖脚在水下的开口不算）
+  ---
+  duration_ms: 1.59275
+  type: 'test'
+  ...
+# Subtest: 翻一个顶面三角对：判出反面三角并给出位置
+ok 20 - 翻一个顶面三角对：判出反面三角并给出位置
+  ---
+  duration_ms: 0.83025
+  type: 'test'
+  ...
+# Subtest: 顶面挖一个洞：判出 4 条开口边
+ok 21 - 顶面挖一个洞：判出 4 条开口边
+  ---
+  duration_ms: 0.262334
+  type: 'test'
+  ...
+# Subtest: 非有限坐标判出来
+ok 22 - 非有限坐标判出来
+  ---
+  duration_ms: 0.246208
+  type: 'test'
+  ...
+# Subtest: 球面下弯：bend 把顶点加回去再比水线（下弯后 y<0 的顶面仍算水线以上）
+ok 23 - 球面下弯：bend 把顶点加回去再比水线（下弯后 y<0 的顶面仍算水线以上）
+  ---
+  duration_ms: 0.460958
+  type: 'test'
+  ...
+# Subtest: 材质：岩体半透明判失败；白沫 / 浪 / 悬停框半透明是设计
+ok 24 - 材质：岩体半透明判失败；白沫 / 浪 / 悬停框半透明是设计
+  ---
+  duration_ms: 0.446875
+  type: 'test'
+  ...
+# Subtest: R30 植被：贴地 / 悬空 / 埋入 / 脚下没有岩面 四种都分得出
+ok 25 - R30 植被：贴地 / 悬空 / 埋入 / 脚下没有岩面 四种都分得出
+  ---
+  duration_ms: 0.606167
+  type: 'test'
+  ...
+# Subtest: R30 植被：地形变了而植物没跟 → 判出来（软坡把顶面降了 0.5，植物还在旧高度）
+ok 26 - R30 植被：地形变了而植物没跟 → 判出来（软坡把顶面降了 0.5，植物还在旧高度）
+  ---
+  duration_ms: 0.221625
+  type: 'test'
+  ...
+# Subtest: R30 白沫：最近距离与分级；白沫整体离岸 / 水线一半没白沫 都判出来
+ok 27 - R30 白沫：最近距离与分级；白沫整体离岸 / 水线一半没白沫 都判出来
+  ---
+  duration_ms: 2.87225
+  type: 'test'
+  ...
+# Subtest: 汇总 checks 与「和 approved 比有没有变差」
+ok 28 - 汇总 checks 与「和 approved 比有没有变差」
+  ---
+  duration_ms: 0.415959
+  type: 'test'
+  ...
+# Subtest: §5.3 meta：id / name / domain / line=terrain / requires / modules，modules 是 run 真正 import 的库模块
+ok 29 - §5.3 meta：id / name / domain / line=terrain / requires / modules，modules 是 run 真正 import 的库模块
+  ---
+  duration_ms: 0.732667
+  type: 'test'
+  ...
+# Subtest: match：两块有陆地、有颜色的岩体都能作用；没有数据的岩体跳过
+ok 30 - match：两块有陆地、有颜色的岩体都能作用；没有数据的岩体跳过
+  ---
+  duration_ms: 2.619708
+  type: 'test'
+  ...
+# Subtest: 执行 + 独立验证：soft,palette 候选，不写存档，复算一致
+ok 31 - 执行 + 独立验证：soft,palette 候选，不写存档，复算一致
+  ---
+  duration_ms: 11.516917
+  type: 'test'
+  ...
+# Subtest: 只开软坡：look=soft；网址参数写法与 APOSTLES_LOOK.id 写法
+ok 32 - 只开软坡：look=soft；网址参数写法与 APOSTLES_LOOK.id 写法
+  ---
+  duration_ms: 2.39025
+  type: 'test'
+  ...
+# Subtest: 确定性：同输入同结果；步骤乱序也按固定顺序算，报告按声明顺序
+ok 33 - 确定性：同输入同结果；步骤乱序也按固定顺序算，报告按声明顺序
+  ---
+  duration_ms: 2.714208
+  type: 'test'
+  ...
+# Subtest: 软坡量得出诊断结论 3：2 层起跳的平顶台地没有可融台阶，1 层台阶的才有
+ok 34 - 软坡量得出诊断结论 3：2 层起跳的平顶台地没有可融台阶，1 层台阶的才有
+  ---
+  duration_ms: 1.980209
+  type: 'test'
+  ...
+# Subtest: 破坏判失败：改开关 / 改指标 / 打开持久化 / 夹带岩体数据 / 换场景 / 步骤对不上
+ok 35 - 破坏判失败：改开关 / 改指标 / 打开持久化 / 夹带岩体数据 / 换场景 / 步骤对不上
+  ---
+  duration_ms: 3.299208
+  type: 'test'
+  ...
+# Subtest: PipeLineEngine 适配器：apostles-terrain 走真实能力库，输入不被改，回执齐全
+ok 36 - PipeLineEngine 适配器：apostles-terrain 走真实能力库，输入不被改，回执齐全
+  ---
+  duration_ms: 14.674125
+  type: 'test'
+  ...
+# Subtest: R22 自动预装：扫描十二门徒后两个能力都进管线；清空过的不再自动填
+ok 37 - R22 自动预装：扫描十二门徒后两个能力都进管线；清空过的不再自动填
+  ---
+  duration_ms: 0.296625
+  type: 'test'
+  ...
+# Subtest: 岩体顺序与种子和游戏一致（seed = 7300 + 序号 × 101）
+ok 38 - 岩体顺序与种子和游戏一致（seed = 7300 + 序号 × 101）
+  ---
+  duration_ms: 0.903167
+  type: 'test'
+  ...
+# Subtest: 接线：能力树 / 左栏 / 管线页 / 桥接命令都登记了
+ok 39 - 接线：能力树 / 左栏 / 管线页 / 桥接命令都登记了
+  ---
+  duration_ms: 70.939458
+  type: 'test'
+  ...
+# Subtest: assemble: goal parsing maps words to contract resources
+ok 40 - assemble: goal parsing maps words to contract resources
+  ---
+  duration_ms: 1.004958
+  type: 'test'
+  ...
+# Subtest: assemble: citadel goal → two stages, terrain first, building second
+ok 41 - assemble: citadel goal → two stages, terrain first, building second
+  ---
+  duration_ms: 1.257292
+  type: 'test'
+  ...
+# Subtest: assemble: buildings only → no terrain stage (scene height field is enough)
+ok 42 - assemble: buildings only → no terrain stage (scene height field is enough)
+  ---
+  duration_ms: 0.21425
+  type: 'test'
+  ...
+# Subtest: assemble: crystal city has no terrain layer → honest unmet for the mountain part, building stage still assembled
+ok 43 - assemble: crystal city has no terrain layer → honest unmet for the mountain part, building stage still assembled
+  ---
+  duration_ms: 0.121708
+  type: 'test'
+  ...
+# Subtest: assemble: no goal falls back to R22 preload (scan matches + requires)
+ok 44 - assemble: no goal falls back to R22 preload (scan matches + requires)
+  ---
+  duration_ms: 0.293417
+  type: 'test'
+  ...
+# Subtest: assemble: contract cycles are reported, not looped
+ok 45 - assemble: contract cycles are reported, not looped
+  ---
+  duration_ms: 0.105667
+  type: 'test'
+  ...
+# Subtest: assemble: deterministic
+ok 46 - assemble: deterministic
+  ---
+  duration_ms: 0.373209
+  type: 'test'
+  ...
+# Subtest: preload: empty pipeline gets every matched capability, in registry order
+ok 47 - preload: empty pipeline gets every matched capability, in registry order
+  ---
+  duration_ms: 0.823167
+  type: 'test'
+  ...
+# Subtest: preload: prerequisites come along even if they had no direct match
+ok 48 - preload: prerequisites come along even if they had no direct match
+  ---
+  duration_ms: 0.095709
+  type: 'test'
+  ...
+# Subtest: preload: never touches a pipeline that already has runnable nodes
+ok 49 - preload: never touches a pipeline that already has runnable nodes
+  ---
+  duration_ms: 0.09275
+  type: 'test'
+  ...
+# Subtest: preload: user clearing the pipeline is respected unless forced
+ok 50 - preload: user clearing the pipeline is respected unless forced
+  ---
+  duration_ms: 0.062125
+  type: 'test'
+  ...
+# Subtest: preload: no scan / nothing matches → nothing added
+ok 51 - preload: no scan / nothing matches → nothing added
+  ---
+  duration_ms: 0.098042
+  type: 'test'
+  ...
+# Subtest: preload: note names the scene and the action
+ok 52 - preload: note names the scene and the action
+  ---
+  duration_ms: 0.13775
+  type: 'test'
+  ...
+# Subtest: preload: real battle / mountain registries — every cap matched ⇒ all preloaded, requires satisfied
+ok 53 - preload: real battle / mountain registries — every cap matched ⇒ all preloaded, requires satisfied
+  ---
+  duration_ms: 0.180917
+  type: 'test'
+  ...
+# Subtest: preload: scene-layer workshops opt in; planet / object do not
+ok 54 - preload: scene-layer workshops opt in; planet / object do not
+  ---
+  duration_ms: 0.789208
+  type: 'test'
+  ...
+# Subtest: 能力库只含可执行条目且元数据完整
+ok 55 - 能力库只含可执行条目且元数据完整
+  ---
+  duration_ms: 0.575708
+  type: 'test'
+  ...
+# Subtest: 扫描：三个能力都匹配到有陆地和小屋的采样
+ok 56 - 扫描：三个能力都匹配到有陆地和小屋的采样
+  ---
+  duration_ms: 0.186416
+  type: 'test'
+  ...
+# Subtest: 扫描：没有小屋时守军布防不匹配，没有陆地时全不匹配
+ok 57 - 扫描：没有小屋时守军布防不匹配，没有陆地时全不匹配
+  ---
+  duration_ms: 0.077792
+  type: 'test'
+  ...
+# Subtest: 执行：三步管线产出完整作战计划（私有副本）
+ok 58 - 执行：三步管线产出完整作战计划（私有副本）
+  ---
+  duration_ms: 0.154333
+  type: 'test'
+  ...
+# Subtest: 参数规范化：越界收进范围、布尔按类型取
+ok 59 - 参数规范化：越界收进范围、布尔按类型取
+  ---
+  duration_ms: 0.058791
+  type: 'test'
+  ...
+# Subtest: 验证：健全计划通过；无陆地 / 无小屋 / 参数缺失判失败
+ok 60 - 验证：健全计划通过；无陆地 / 无小屋 / 参数缺失判失败
+  ---
+  duration_ms: 0.28
+  type: 'test'
+  ...
+# Subtest: 验证：超编守军给 warn/fail 且归责 battle.garrison
+ok 61 - 验证：超编守军给 warn/fail 且归责 battle.garrison
+  ---
+  duration_ms: 0.0615
+  type: 'test'
+  ...
+# Subtest: pixelDiff：全同 → 0；全不同 → changed 1；部分像素按 threshold 计
+ok 62 - pixelDiff：全同 → 0；全不同 → changed 1；部分像素按 threshold 计
+  ---
+  duration_ms: 0.821166
+  type: 'test'
+  ...
+# Subtest: pixelDiff：尺寸不同 / 不是 RGBA 倍数 → RangeError
+ok 63 - pixelDiff：尺寸不同 / 不是 RGBA 倍数 → RangeError
+  ---
+  duration_ms: 2.142167
+  type: 'test'
+  ...
+# Subtest: pushEntry：新的在前、最多 MAX_KEEP 组、字段齐全
+ok 64 - pushEntry：新的在前、最多 MAX_KEEP 组、字段齐全
+  ---
+  duration_ms: 0.175958
+  type: 'test'
+  ...
+# Subtest: diffSentence：没比 / 完全一样 / 有差异三种说法
+ok 65 - diffSentence：没比 / 完全一样 / 有差异三种说法
+  ---
+  duration_ms: 0.145833
+  type: 'test'
+  ...
+# Subtest: 面板接线：走 agent.compare(true/false) 同机位两拍、grabGame 读 \#game 画布、只存内存不设默认
+ok 66 - 面板接线：走 agent.compare(true/false) 同机位两拍、grabGame 读 \#game 画布、只存内存不设默认
+  ---
+  duration_ms: 0.463417
+  type: 'test'
+  ...
+# Subtest: candidate: one body + one roof per footprint cell, one door per building, roads drawn
+ok 67 - candidate: one body + one roof per footprint cell, one door per building, roads drawn
+  ---
+  duration_ms: 2.337708
+  type: 'test'
+  ...
+# Subtest: candidate: bodies stand on the plan base, stories set the height, doors sit on the door edge
+ok 68 - candidate: bodies stand on the plan base, stories set the height, doors sit on the door edge
+  ---
+  duration_ms: 2.615625
+  type: 'test'
+  ...
+# Subtest: candidate: adopt record never auto-deploys and refuses an empty layout
+ok 69 - candidate: adopt record never auto-deploys and refuses an empty layout
+  ---
+  duration_ms: 0.785334
+  type: 'test'
+  ...
+# Subtest: candidate: game side only writes its own adopt key, marks its meshes reaIgnore, never touches user saves / lake
+ok 70 - candidate: game side only writes its own adopt key, marks its meshes reaIgnore, never touches user saves / lake
+  ---
+  duration_ms: 1.298041
+  type: 'test'
+  ...
+# Subtest: candidate: building workshop exposes preview / compare / revert / commit hooks to the bridge
+ok 71 - candidate: building workshop exposes preview / compare / revert / commit hooks to the bridge
+  ---
+  duration_ms: 0.183709
+  type: 'test'
+  ...
+# Subtest: crystal: terraces sampled, towers marked as existing buildings, lowest terrace treated as sea
+ok 72 - crystal: terraces sampled, towers marked as existing buildings, lowest terrace treated as sea
+  ---
+  duration_ms: 0.4715
+  type: 'test'
+  ...
+# Subtest: crystal: the building pipeline places a group on flat terraces without touching towers
+ok 73 - crystal: the building pipeline places a group on flat terraces without touching towers
+  ---
+  duration_ms: 33.100583
+  type: 'test'
+  ...
+# Subtest: crystal: game-side probe uses canyon.js and never reads the crystal-city save
+ok 74 - crystal: game-side probe uses canyon.js and never reads the crystal-city save
+  ---
+  duration_ms: 7.119291
+  type: 'test'
+  ...
+# Subtest: joint-wfc: solves a group with several prefab kinds, roads, and passes independent validation
+ok 75 - joint-wfc: solves a group with several prefab kinds, roads, and passes independent validation
+  ---
+  duration_ms: 68.625166
+  type: 'test'
+  ...
+# Subtest: joint-wfc: terrain rules — no footprint on protected / sea / steep cells, footprint height range within maxStep
+ok 76 - joint-wfc: terrain rules — no footprint on protected / sea / steep cells, footprint height range within maxStep
+  ---
+  duration_ms: 68.706334
+  type: 'test'
+  ...
+# Subtest: joint-wfc: doors face roads (socket rule), roads never dangle
+ok 77 - joint-wfc: doors face roads (socket rule), roads never dangle
+  ---
+  duration_ms: 169.426209
+  type: 'test'
+  ...
+# Subtest: joint-wfc: placements carry stable multi-cell instance ids; same seed → same identity set
+ok 78 - joint-wfc: placements carry stable multi-cell instance ids; same seed → same identity set
+  ---
+  duration_ms: 188.518292
+  type: 'test'
+  ...
+# Subtest: joint-wfc: building layer runs it as an executable capability; deterministic; verify passes
+ok 79 - joint-wfc: building layer runs it as an executable capability; deterministic; verify passes
+  ---
+  duration_ms: 218.766917
+  type: 'test'
+  ...
+# Subtest: joint-wfc: nothing buildable → no-target and verification fails (does not invent a layout)
+ok 80 - joint-wfc: nothing buildable → no-target and verification fails (does not invent a layout)
+  ---
+  duration_ms: 5.113875
+  type: 'test'
+  ...
+# Subtest: building layer: engine catalog / scan / run with a valid receipt
+ok 81 - building layer: engine catalog / scan / run with a valid receipt
+  ---
+  duration_ms: 191.832584
+  type: 'test'
+  ...
+# Subtest: building verify: pass, deterministic, and broken plans fail
+ok 82 - building verify: pass, deterministic, and broken plans fail
+  ---
+  duration_ms: 196.353334
+  type: 'test'
+  ...
+# Subtest: building layer: registered in worker-host, adapters, studio, lineage, bridge (§7.2 \#4 \#5)
+ok 83 - building layer: registered in worker-host, adapters, studio, lineage, bridge (§7.2 \#4 \#5)
+  ---
+  duration_ms: 1.052166
+  type: 'test'
+  ...
+# Subtest: prefab: library is valid, multi-cell, one door each, door turns with the prefab
+ok 84 - prefab: library is valid, multi-cell, one door each, door turns with the prefab
+  ---
+  duration_ms: 0.546625
+  type: 'test'
+  ...
+# Subtest: prefab: every part tile pairs only with its partner (private socket labels)
+ok 85 - prefab: every part tile pairs only with its partner (private socket labels)
+  ---
+  duration_ms: 0.784292
+  type: 'test'
+  ...
+# Subtest: prefab: building.prefabs capability selects a subset and records the catalog in the plan
+ok 86 - prefab: building.prefabs capability selects a subset and records the catalog in the plan
+  ---
+  duration_ms: 0.442
+  type: 'test'
+  ...
+# Subtest: prefab: meta follows §5.3 + contract, and imports the real library module
+ok 87 - prefab: meta follows §5.3 + contract, and imports the real library module
+  ---
+  duration_ms: 0.354375
+  type: 'test'
+  ...
+# Subtest: prefab: the building side panel draws the catalog (足迹 + 门 socket)
+ok 88 - prefab: the building side panel draws the catalog (足迹 + 门 socket)
+  ---
+  duration_ms: 0.111167
+  type: 'test'
+  ...
+# Subtest: replace: a new seed replaces the whole group in the same window and still verifies
+ok 89 - replace: a new seed replaces the whole group in the same window and still verifies
+  ---
+  duration_ms: 296.763541
+  type: 'test'
+  ...
+# Subtest: replace: relayout keeps window and prefab subset
+ok 90 - replace: relayout keeps window and prefab subset
+  ---
+  duration_ms: 53.730292
+  type: 'test'
+  ...
+# Subtest: replace / revert: page buttons and game-side functions exist and stay on candidates only
+ok 91 - replace / revert: page buttons and game-side functions exist and stay on candidates only
+  ---
+  duration_ms: 0.410458
+  type: 'test'
+  ...
+# Subtest: contracts: every executable capability in every layer has a valid contract, zero errors
+ok 92 - contracts: every executable capability in every layer has a valid contract, zero errors
+  ---
+  duration_ms: 1.33475
+  type: 'test'
+  ...
+# Subtest: contracts: migrated layers declare in meta (not the overlay); overlay only covers mountain / battle / fx
+ok 93 - contracts: migrated layers declare in meta (not the overlay); overlay only covers mountain / battle / fx
+  ---
+  duration_ms: 0.2075
+  type: 'test'
+  ...
+# Subtest: contracts: meta fields win over the overlay
+ok 94 - contracts: meta fields win over the overlay
+  ---
+  duration_ms: 0.077625
+  type: 'test'
+  ...
+# Subtest: contracts: the validator catches broken contracts
+ok 95 - contracts: the validator catches broken contracts
+  ---
+  duration_ms: 0.188583
+  type: 'test'
+  ...
+# Subtest: contracts: vocabulary is Chinese-labelled and every layer input is a known resource
+ok 96 - contracts: vocabulary is Chinese-labelled and every layer input is a known resource
+  ---
+  duration_ms: 0.241334
+  type: 'test'
+  ...
+# Subtest: contracts: the pipeline page mounts the contract panel (studio → auto-assemble-panel)
+ok 97 - contracts: the pipeline page mounts the contract panel (studio → auto-assemble-panel)
+  ---
+  duration_ms: 0.427042
+  type: 'test'
+  ...
+# Subtest: all posts preserve evidence and are sorted by exact author time, never study round or scan time
+ok 98 - all posts preserve evidence and are sorted by exact author time, never study round or scan time
+  ---
+  duration_ms: 50.201042
+  type: 'test'
+  ...
+# Subtest: same-post explanations and cross-project combinations remain distinct from scoped replacements
+ok 99 - same-post explanations and cross-project combinations remain distinct from scoped replacements
+  ---
+  duration_ms: 22.479125
+  type: 'test'
+  ...
+# Subtest: changed source invalidates only dependent interpretation and changes shared fingerprint
+ok 100 - changed source invalidates only dependent interpretation and changes shared fingerprint
+  ---
+  duration_ms: 98.2365
+  type: 'test'
+  ...
+# Subtest: physical scan and catalog carry the same evolution fingerprint without promoting executable status
+ok 101 - physical scan and catalog carry the same evolution fingerprint without promoting executable status
+  ---
+  duration_ms: 663.238875
+  type: 'test'
+  ...
+# Subtest: every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations
+ok 102 - every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations
+  ---
+  duration_ms: 4.978917
+  type: 'test'
+  ...
+# Subtest: scene taxonomy groups life effects vehicles without changing execution readiness
+ok 103 - scene taxonomy groups life effects vehicles without changing execution readiness
+  ---
+  duration_ms: 0.719834
+  type: 'test'
+  ...
+# Subtest: every real scanned record has one scene category; shared algorithms stay foundational
+ok 104 - every real scanned record has one scene category; shared algorithms stay foundational
+  ---
+  duration_ms: 68.016084
+  type: 'test'
+  ...
+# Subtest: new capability inserts after its last scene-layer node without reordering existing recipe
+ok 105 - new capability inserts after its last scene-layer node without reordering existing recipe
+  ---
+  duration_ms: 0.143041
+  type: 'test'
+  ...
+# Subtest: 代际按关系与阶段切分，方向先向前
+ok 106 - 代际按关系与阶段切分，方向先向前
+  ---
+  duration_ms: 8.138417
+  type: 'test'
+  ...
+# Subtest: 模块归线、import 推断与组合前置
+ok 107 - 模块归线、import 推断与组合前置
+  ---
+  duration_ms: 0.348291
+  type: 'test'
+  ...
+# Subtest: 补学队列：得分、理由，以及经验 / 管线需求回流
+ok 108 - 补学队列：得分、理由，以及经验 / 管线需求回流
+  ---
+  duration_ms: 0.543208
+  type: 'test'
+  ...
+# Subtest: 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置
+ok 109 - 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置
+  ---
+  duration_ms: 0.279
+  type: 'test'
+  ...
+# Subtest: 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定
+ok 110 - 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定
+  ---
+  duration_ms: 136.285792
+  type: 'test'
+  ...
+# Subtest: 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学
+ok 111 - 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学
+  ---
+  duration_ms: 402.438167
+  type: 'test'
+  ...
+# Subtest: maturity: 九级都有证据 → L9，没有缺口
+ok 112 - maturity: 九级都有证据 → L9，没有缺口
+  ---
+  duration_ms: 1.06575
+  type: 'test'
+  ...
+# Subtest: maturity: 缺 ④ 照写 —— ①②③⑤⑥ → L6（缺 ④），连续级只到 3
+ok 113 - maturity: 缺 ④ 照写 —— ①②③⑤⑥ → L6（缺 ④），连续级只到 3
+  ---
+  duration_ms: 0.139042
+  type: 'test'
+  ...
+# Subtest: maturity: 没有证据 → L0；只认路径，true / 空串 / 对象 / 越界级都不算
+ok 114 - maturity: 没有证据 → L0；只认路径，true / 空串 / 对象 / 越界级都不算
+  ---
+  duration_ms: 0.081083
+  type: 'test'
+  ...
+# Subtest: maturity: 每个达到的级都带一条证据路径
+ok 115 - maturity: 每个达到的级都带一条证据路径
+  ---
+  duration_ms: 0.0955
+  type: 'test'
+  ...
+# Subtest: maturity: 证据校验不过（文件删了 / 被改了）→ 那一级掉下去
+ok 116 - maturity: 证据校验不过（文件删了 / 被改了）→ 那一级掉下去
+  ---
+  duration_ms: 0.124125
+  type: 'test'
+  ...
+# Subtest: maturity: 分布合计等于能力数，谁都没到的级单独列出
+ok 117 - maturity: 分布合计等于能力数，谁都没到的级单独列出
+  ---
+  duration_ms: 0.25775
+  type: 'test'
+  ...
+# Subtest: maturity: 统一计数表 —— 五个口径都写明来源代码，唯一对外数字是去重数
+ok 118 - maturity: 统一计数表 —— 五个口径都写明来源代码，唯一对外数字是去重数
+  ---
+  duration_ms: 0.222
+  type: 'test'
+  ...
+# Subtest: maturity 证据校验器：文件、锚点、json 内容都要对，改一处就不成立
+ok 119 - maturity 证据校验器：文件、锚点、json 内容都要对，改一处就不成立
+  ---
+  duration_ms: 5.084708
+  type: 'test'
+  ...
+# Subtest: maturity 加入日期：日志按带点 ID 找最早一段，普通词不匹配
+ok 120 - maturity 加入日期：日志按带点 ID 找最早一段，普通词不匹配
+  ---
+  duration_ms: 4.693541
+  type: 'test'
+  ...
+# Subtest: maturity: ⑤ 的测试清单来自 test_workshops.py，并排除本轮自己的测试
+ok 121 - maturity: ⑤ 的测试清单来自 test_workshops.py，并排除本轮自己的测试
+  ---
+  duration_ms: 0.437625
+  type: 'test'
+  ...
+# Subtest: maturity: 生成的 json（若已生成）每个达到的级都有证据且证据现在仍成立
+ok 122 - maturity: 生成的 json（若已生成）每个达到的级都有证据且证据现在仍成立
+  ---
+  duration_ms: 37.036208
+  type: 'test'
+  ...
+# Subtest: maturity 界面接线：能力树按级显示、左栏带徽章并写口径、缺数据时降级
+ok 123 - maturity 界面接线：能力树按级显示、左栏带徽章并写口径、缺数据时降级
+  ---
+  duration_ms: 2.880625
+  type: 'test'
+  ...
+# Subtest: scanner reads real library, preserves distinct entries, never enables live execution
+ok 124 - scanner reads real library, preserves distinct entries, never enables live execution
+  ---
+  duration_ms: 59.1105
+  type: 'test'
+  ...
+# Subtest: invalid format rejected without executing JS; malicious controls stripped
+ok 125 - invalid format rejected without executing JS; malicious controls stripped
+  ---
+  duration_ms: 0.232584
+  type: 'test'
+  ...
+# Subtest: 每条能力线恰好挂在一个枝上，枝的合计等于各线之和
+ok 126 - 每条能力线恰好挂在一个枝上，枝的合计等于各线之和
+  ---
+  duration_ms: 0.556833
+  type: 'test'
+  ...
+# Subtest: 双源对账：每个原版叶子状态与对齐数据一致
+ok 127 - 双源对账：每个原版叶子状态与对齐数据一致
+  ---
+  duration_ms: 0.263333
+  type: 'test'
+  ...
+# Subtest: JEV 归线只采纳置信度 ≥ 0.85 的结果
+ok 128 - JEV 归线只采纳置信度 ≥ 0.85 的结果
+  ---
+  duration_ms: 0.242875
+  type: 'test'
+  ...
+# Subtest: 嫁接队列按分排序，条目都是只在原版或接口没带全
+ok 129 - 嫁接队列按分排序，条目都是只在原版或接口没带全
+  ---
+  duration_ms: 0.117209
+  type: 'test'
+  ...
+# Subtest: 解锁前沿：自己不能执行、前置都能执行
+ok 130 - 解锁前沿：自己不能执行、前置都能执行
+  ---
+  duration_ms: 0.066125
+  type: 'test'
+  ...
+# Subtest: 目标路径「圣城山形」：6 个能力都挂在存在的能力线上，声明调用的库模块真实存在
+ok 131 - 目标路径「圣城山形」：6 个能力都挂在存在的能力线上，声明调用的库模块真实存在
+  ---
+  duration_ms: 0.303333
+  type: 'test'
+  ...
+# Subtest: 山形：六步管线把方台变成山，保护区 / 轨道 / 海岸一格不动
+ok 132 - 山形：六步管线把方台变成山，保护区 / 轨道 / 海岸一格不动
+  ---
+  duration_ms: 194.046917
+  type: 'test'
+  ...
+# Subtest: 山形：同样输入结果确定；步骤乱序也按固定顺序执行
+ok 133 - 山形：同样输入结果确定；步骤乱序也按固定顺序执行
+  ---
+  duration_ms: 83.490041
+  type: 'test'
+  ...
+# Subtest: 验证：改动保护区 / 淹掉海岸 / 山体压到轨旁都判失败
+ok 134 - 验证：改动保护区 / 淹掉海岸 / 山体压到轨旁都判失败
+  ---
+  duration_ms: 66.234292
+  type: 'test'
+  ...
+# Subtest: parser reads real exports and imports without executing source or comment examples
+ok 135 - parser reads real exports and imports without executing source or comment examples
+  ---
+  duration_ms: 53.054542
+  type: 'test'
+  ...
+# Subtest: physical inventory preserves every module once, videos separately and no automatic executable promotion
+ok 136 - physical inventory preserves every module once, videos separately and no automatic executable promotion
+  ---
+  duration_ms: 621.789458
+  type: 'test'
+  ...
+# Subtest: library dependencies link only explicit implemented adapters, with palette before contrast
+ok 137 - library dependencies link only explicit implemented adapters, with palette before contrast
+  ---
+  duration_ms: 463.801333
+  type: 'test'
+  ...
+# Subtest: verify: every preserve key in the vocabulary has a generic checker
+ok 138 - verify: every preserve key in the vocabulary has a generic checker
+  ---
+  duration_ms: 0.439625
+  type: 'test'
+  ...
+# Subtest: verify: clean footprint on free land passes all footprint checks
+ok 139 - verify: clean footprint on free land passes all footprint checks
+  ---
+  duration_ms: 2.954167
+  type: 'test'
+  ...
+# Subtest: verify: breaking each preserve is caught
+ok 140 - verify: breaking each preserve is caught
+  ---
+  duration_ms: 2.119667
+  type: 'test'
+  ...
+# Subtest: verify: no comparable data is a warning, never a pass
+ok 141 - verify: no comparable data is a warning, never a pass
+  ---
+  duration_ms: 0.406792
+  type: 'test'
+  ...
+# Subtest: verify: blame points at the capabilities that declared the preserve
+ok 142 - verify: blame points at the capabilities that declared the preserve
+  ---
+  duration_ms: 0.693625
+  type: 'test'
+  ...
+# Subtest: verify: the building layer verify includes the generated checks
+ok 143 - verify: the building layer verify includes the generated checks
+  ---
+  duration_ms: 197.407625
+  type: 'test'
+  ...
+# Subtest: planHook：每层结果带 capabilityId / adoptedBy / state / note
+ok 144 - planHook：每层结果带 capabilityId / adoptedBy / state / note
+  ---
+  duration_ms: 0.979834
+  type: 'test'
+  ...
+# Subtest: applyDefaultsForScene：无场景 / 无记录 / 全 ok / 有缺失 四种 status
+ok 145 - applyDefaultsForScene：无场景 / 无记录 / 全 ok / 有缺失 四种 status
+  ---
+  duration_ms: 1.256833
+  type: 'test'
+  ...
+# Subtest: layerCheck：mountain 看 tm.mountain.adopted.v1，building 看 tm.building.adopted.v1，其他层 no-apply-semantics
+ok 146 - layerCheck：mountain 看 tm.mountain.adopted.v1，building 看 tm.building.adopted.v1，其他层 no-apply-semantics
+  ---
+  duration_ms: 0.112792
+  type: 'test'
+  ...
+# Subtest: planHook：status!==active → skipped-pending，不进 check；全 pending → apply status pending-only
+ok 147 - planHook：status!==active → skipped-pending，不进 check；全 pending → apply status pending-only
+  ---
+  duration_ms: 0.093625
+  type: 'test'
+  ...
+# Subtest: set / get / list：scene:layer 记录往返，带 adoptedBy / at / plan
+ok 148 - set / get / list：scene:layer 记录往返，带 adoptedBy / at / plan
+  ---
+  duration_ms: 1.460167
+  type: 'test'
+  ...
+# Subtest: 同一 scene:layer 再设覆盖旧记录；不同层互不影响
+ok 149 - 同一 scene:layer 再设覆盖旧记录；不同层互不影响
+  ---
+  duration_ms: 0.196167
+  type: 'test'
+  ...
+# Subtest: clearDefault / clearScene：撤销与场景级清空
+ok 150 - clearDefault / clearScene：撤销与场景级清空
+  ---
+  duration_ms: 1.631084
+  type: 'test'
+  ...
+# Subtest: 坏数据兜底：坏 JSON / 缺 records / 记录缺 capabilityId 都不抛、当空表
+ok 151 - 坏数据兜底：坏 JSON / 缺 records / 记录缺 capabilityId 都不抛、当空表
+  ---
+  duration_ms: 0.234958
+  type: 'test'
+  ...
+# Subtest: auto-test 来源保留；adoptedBy 非法值归一为 user；at 缺省补当前时间
+ok 152 - auto-test 来源保留；adoptedBy 非法值归一为 user；at 缺省补当前时间
+  ---
+  duration_ms: 0.330708
+  type: 'test'
+  ...
+# Subtest: 确定性：同样操作序列两次产生逐字节相同的存储内容
+ok 153 - 确定性：同样操作序列两次产生逐字节相同的存储内容
+  ---
+  duration_ms: 0.113334
+  type: 'test'
+  ...
+# Subtest: recordKey / parseDefaults 往返；defaultStorage 在 Node 里是内存表不抛
+ok 154 - recordKey / parseDefaults 往返；defaultStorage 在 Node 里是内存表不抛
+  ---
+  duration_ms: 0.087125
+  type: 'test'
+  ...
+# Subtest: R-A5 status / pendingRef：setDefault 透传合法值，非法 status 回退 active，pendingRef 非字符串归 null
+ok 155 - R-A5 status / pendingRef：setDefault 透传合法值，非法 status 回退 active，pendingRef 非字符串归 null
+  ---
+  duration_ms: 0.109792
+  type: 'test'
+  ...
+# Subtest: R-A5 parseDefaults：旧记录无 status 视为 active；pending-* 与 pendingRef 从存储里保留
+ok 156 - R-A5 parseDefaults：旧记录无 status 视为 active；pending-* 与 pendingRef 从存储里保留
+  ---
+  duration_ms: 4.18525
+  type: 'test'
+  ...
+# Subtest: currentDefaultView：没有记录 → null；有记录 → 名称 / 谁定的 / 时间都在
+ok 157 - currentDefaultView：没有记录 → null；有记录 → 名称 / 谁定的 / 时间都在
+  ---
+  duration_ms: 9.700791
+  type: 'test'
+  ...
+# Subtest: defaults-ui.js 接线：两个挂载函数、走 defaults.js 登记、按钮带 data 钩子、不写场景存档
+ok 158 - defaults-ui.js 接线：两个挂载函数、走 defaults.js 登记、按钮带 data 钩子、不写场景存档
+  ---
+  duration_ms: 0.579917
+  type: 'test'
+  ...
+# Subtest: defaults-panel.js + pipeline.html：总栏挂载点、du- 前缀 request、撤销命令映射、页面有 section 与 script
+ok 159 - defaults-panel.js + pipeline.html：总栏挂载点、du- 前缀 request、撤销命令映射、页面有 section 与 script
+  ---
+  duration_ms: 0.441583
+  type: 'test'
+  ...
+# Subtest: 写只进 v2 键，旧分层键不动
+ok 160 - 写只进 v2 键，旧分层键不动
+  ---
+  duration_ms: 0.508833
+  type: 'test'
+  ...
+# Subtest: 旧键记录合并进读侧，去重并按时间排序
+ok 161 - 旧键记录合并进读侧，去重并按时间排序
+  ---
+  duration_ms: 1.629334
+  type: 'test'
+  ...
+# Subtest: 汇总语义：失败按 blame 归属，committed 只算采用
+ok 162 - 汇总语义：失败按 blame 归属，committed 只算采用
+  ---
+  duration_ms: 0.1335
+  type: 'test'
+  ...
+# Subtest: 导出文件导入另一台机器（全新存储）：记录与汇总一致，重复导入不产生重复
+ok 163 - 导出文件导入另一台机器（全新存储）：记录与汇总一致，重复导入不产生重复
+  ---
+  duration_ms: 0.555875
+  type: 'test'
+  ...
+# Subtest: 验证失败写入后，同一存储读出的 failed 立即 +1（队列重算的输入）
+ok 164 - 验证失败写入后，同一存储读出的 failed 立即 +1（队列重算的输入）
+  ---
+  duration_ms: 0.147875
+  type: 'test'
+  ...
+# Subtest: experiment restores data actual parameters and recipe; stale state cannot finalize
+ok 165 - experiment restores data actual parameters and recipe; stale state cannot finalize
+  ---
+  duration_ms: 3.504292
+  type: 'test'
+  ...
+# Subtest: restore failure rolls all state back; backup quota stops before mutation
+ok 166 - restore failure rolls all state back; backup quota stops before mutation
+  ---
+  duration_ms: 0.287292
+  type: 'test'
+  ...
+# Subtest: invalid snapshot parameters and codec reject before backup or scene changes
+ok 167 - invalid snapshot parameters and codec reject before backup or scene changes
+  ---
+  duration_ms: 0.176958
+  type: 'test'
+  ...
+# Subtest: 四个新能力都在脚本口径的可执行清单里，且带 modules（归线靠它与 meta.line）
+ok 168 - 四个新能力都在脚本口径的可执行清单里，且带 modules（归线靠它与 meta.line）
+  ---
+  duration_ms: 0.464959
+  type: 'test'
+  ...
+# Subtest: fire / hallway / sediment / projectiles 四条线各自挂上了对应能力
+ok 169 - fire / hallway / sediment / projectiles 四条线各自挂上了对应能力
+  ---
+  duration_ms: 0.104708
+  type: 'test'
+  ...
+# Subtest: 解锁前沿为空
+ok 170 - 解锁前沿为空
+  ---
+  duration_ms: 0.35
+  type: 'test'
+  ...
+# Subtest: 27 / 27 条能力线带 ⚙
+ok 171 - 27 / 27 条能力线带 ⚙
+  ---
+  duration_ms: 0.088792
+  type: 'test'
+  ...
+# Subtest: poseAt：两端等于路径首尾，中点在两采样点之间，越界夹紧
+ok 172 - poseAt：两端等于路径首尾，中点在两采样点之间，越界夹紧
+  ---
+  duration_ms: 1.53225
+  type: 'test'
+  ...
+# Subtest: sweepDeg：fx.camera 一圈的路径扫过 ≈ 360°，半圈 ≈ 180°；沿路径匀速采样得到同一角度
+ok 173 - sweepDeg：fx.camera 一圈的路径扫过 ≈ 360°，半圈 ≈ 180°；沿路径匀速采样得到同一角度
+  ---
+  duration_ms: 3.259541
+  type: 'test'
+  ...
+# Subtest: flightPlan：时长默认取计划、可覆盖；圈数与中心来自路径；没有路径报错
+ok 174 - flightPlan：时长默认取计划、可覆盖；圈数与中心来自路径；没有路径报错
+  ---
+  duration_ms: 2.591417
+  type: 'test'
+  ...
+# Subtest: 实景接线：fxLive.js 每帧经 applyTownCamera 驱动镜头并能还原；桥与工坊按钮已登记；单元清单已登记
+ok 175 - 实景接线：fxLive.js 每帧经 applyTownCamera 驱动镜头并能还原；桥与工坊按钮已登记；单元清单已登记
+  ---
+  duration_ms: 3.149041
+  type: 'test'
+  ...
+# Subtest: fx.fire：meta 有 §5.3 全字段，line = fire，modules 真实存在于重构库
+ok 176 - fx.fire：meta 有 §5.3 全字段，line = fire，modules 真实存在于重构库
+  ---
+  duration_ms: 4.848
+  type: 'test'
+  ...
+# Subtest: fx.fire：在小屋上按间隔点火，曲线等于 fire-coupling 实测点
+ok 177 - fx.fire：在小屋上按间隔点火，曲线等于 fire-coupling 实测点
+  ---
+  duration_ms: 7.233542
+  type: 'test'
+  ...
+# Subtest: fx.fire：确定性 + 没有小屋时退到最高台地
+ok 178 - fx.fire：确定性 + 没有小屋时退到最高台地
+  ---
+  duration_ms: 2.350625
+  type: 'test'
+  ...
+# Subtest: fx.fire：独立验证通过；点火处挪出格网 / 篡改火光 / 曲线反向 → 失败
+ok 179 - fx.fire：独立验证通过；点火处挪出格网 / 篡改火光 / 曲线反向 → 失败
+  ---
+  duration_ms: 0.590583
+  type: 'test'
+  ...
+# Subtest: fx.fire：实景接线 —— fxLive.js 用 life/effects.js 的 Effects 点火，桥登记 fx.live.*，工坊调用，单元清单已登记
+ok 180 - fx.fire：实景接线 —— fxLive.js 用 life/effects.js 的 Effects 点火，桥登记 fx.live.*，工坊调用，单元清单已登记
+  ---
+  duration_ms: 0.648875
+  type: 'test'
+  ...
+# Subtest: fx.hallway：meta 全字段，line = hallway，modules 含版式与贴图两个库模块
+ok 181 - fx.hallway：meta 全字段，line = hallway，modules 含版式与贴图两个库模块
+  ---
+  duration_ms: 0.755334
+  type: 'test'
+  ...
+# Subtest: fx.hallway：板与纹样数等于 planHallway 直接算的结果，覆盖整面墙，落在小屋上
+ok 182 - fx.hallway：板与纹样数等于 planHallway 直接算的结果，覆盖整面墙，落在小屋上
+  ---
+  duration_ms: 19.76725
+  type: 'test'
+  ...
+# Subtest: fx.hallway：确定性；换种子版式变；关镜像纹样数变
+ok 183 - fx.hallway：确定性；换种子版式变；关镜像纹样数变
+  ---
+  duration_ms: 123.7475
+  type: 'test'
+  ...
+# Subtest: fx.hallway：独立验证通过；挪板 / 板重叠 / 落点出格网 → 失败
+ok 184 - fx.hallway：独立验证通过；挪板 / 板重叠 / 落点出格网 → 失败
+  ---
+  duration_ms: 5.507833
+  type: 'test'
+  ...
+# Subtest: fx.hallway：实景样板接线 —— fxLive.js 调 makeHallway，工坊画展开面条，单元清单已登记
+ok 185 - fx.hallway：实景样板接线 —— fxLive.js 调 makeHallway，工坊画展开面条，单元清单已登记
+  ---
+  duration_ms: 0.404791
+  type: 'test'
+  ...
+# Subtest: fx catalog has 9 executable capabilities mapped to adapt lines (R37–R39 add fire / hallway / sediment / projectiles)
+ok 186 - fx catalog has 9 executable capabilities mapped to adapt lines (R37–R39 add fire / hallway / sediment / projectiles)
+  ---
+  duration_ms: 0.622458
+  type: 'test'
+  ...
+# Subtest: fx runPlan executes all five capabilities on a synthetic stage
+ok 187 - fx runPlan executes all five capabilities on a synthetic stage
+  ---
+  duration_ms: 154.001916
+  type: 'test'
+  ...
+# Subtest: fx verify independently re-checks the produced plan
+ok 188 - fx verify independently re-checks the produced plan
+  ---
+  duration_ms: 138.782625
+  type: 'test'
+  ...
+# Subtest: fx verify fails on missing or corrupted plan
+ok 189 - fx verify fails on missing or corrupted plan
+  ---
+  duration_ms: 8.354375
+  type: 'test'
+  ...
+# Subtest: fx.sediment / fx.projectiles：meta 全字段，line 分别是 sediment / projectiles
+ok 190 - fx.sediment / fx.projectiles：meta 全字段，line 分别是 sediment / projectiles
+  ---
+  duration_ms: 0.473417
+  type: 'test'
+  ...
+# Subtest: fx.sediment：高崖面每条层带的岩性等于 bandType 查表，首尾相接盖满崖高
+ok 191 - fx.sediment：高崖面每条层带的岩性等于 bandType 查表，首尾相接盖满崖高
+  ---
+  duration_ms: 68.850792
+  type: 'test'
+  ...
+# Subtest: fx.sediment：确定性；弯层改变层带；平地没有崖面不匹配
+ok 192 - fx.sediment：确定性；弯层改变层带；平地没有崖面不匹配
+  ---
+  duration_ms: 38.156458
+  type: 'test'
+  ...
+# Subtest: fx.sediment：独立验证通过；改岩性 / 改崖面总数 → 失败
+ok 193 - fx.sediment：独立验证通过；改岩性 / 改崖面总数 → 失败
+  ---
+  duration_ms: 9.705292
+  type: 'test'
+  ...
+# Subtest: fx.projectiles：解析表弹道从射手出发、按抛体公式正好落到岸边格，顶点不低于两端
+ok 194 - fx.projectiles：解析表弹道从射手出发、按抛体公式正好落到岸边格，顶点不低于两端
+  ---
+  duration_ms: 62.2205
+  type: 'test'
+  ...
+# Subtest: fx.projectiles：确定性；带阻力走烘好的轨迹表且偏差 ≤ 0.06 格
+ok 195 - fx.projectiles：确定性；带阻力走烘好的轨迹表且偏差 ≤ 0.06 格
+  ---
+  duration_ms: 124.43675
+  type: 'test'
+  ...
+# Subtest: fx.projectiles：独立验证通过；篡改速度 / 落点 → 失败
+ok 196 - fx.projectiles：独立验证通过；篡改速度 / 落点 → 失败
+  ---
+  duration_ms: 69.636042
+  type: 'test'
+  ...
+# Subtest: 沉积 / 弹道实景接线：fxLive.js 画层带面片与弹道，单元清单已登记
+ok 197 - 沉积 / 弹道实景接线：fxLive.js 画层带面片与弹道，单元清单已登记
+  ---
+  duration_ms: 0.275375
+  type: 'test'
+  ...
+# Subtest: editor dock ships on local and published pages; ?dev=0 / ?release=1 opt out
+ok 198 - editor dock ships on local and published pages; ?dev=0 / ?release=1 opt out
+  ---
+  duration_ms: 4.561041
+  type: 'test'
+  ...
+# Subtest: two real source-backed adapters change materials on a copy, keep actual output within color budget
+ok 199 - two real source-backed adapters change materials on a copy, keep actual output within color budget
+  ---
+  duration_ms: 2.886958
+  type: 'test'
+  ...
+# Subtest: all material adapters preserve manual colors by default; explicit opt-in works
+ok 200 - all material adapters preserve manual colors by default; explicit opt-in works
+  ---
+  duration_ms: 0.355917
+  type: 'test'
+  ...
+# Subtest: verifier rejects forged locked edits and perceptual budget excess independently
+ok 201 - verifier rejects forged locked edits and perceptual budget excess independently
+  ---
+  duration_ms: 0.118875
+  type: 'test'
+  ...
+# Subtest: reordered inputs produce identical deterministic palette results
+ok 202 - reordered inputs produce identical deterministic palette results
+  ---
+  duration_ms: 0.538458
+  type: 'test'
+  ...
+# Subtest: neutral gain is a no-op, malformed params and invalid output are rejected
+ok 203 - neutral gain is a no-op, malformed params and invalid output are rejected
+  ---
+  duration_ms: 0.25775
+  type: 'test'
+  ...
+# Subtest: gamut extremes are finite and quantized output obeys the tightest budget
+ok 204 - gamut extremes are finite and quantized output obeys the tightest budget
+  ---
+  duration_ms: 5.220417
+  type: 'test'
+  ...
+# Subtest: layer-focus: three focus layers, each bound to a real pane and supported scenes
+ok 205 - layer-focus: three focus layers, each bound to a real pane and supported scenes
+  ---
+  duration_ms: 0.583833
+  type: 'test'
+  ...
+# Subtest: layer-focus: resolveTab maps focus names onto the scene tier
+ok 206 - layer-focus: resolveTab maps focus names onto the scene tier
+  ---
+  duration_ms: 0.185167
+  type: 'test'
+  ...
+# Subtest: layer-focus: sceneForFocus only switches when the current scene cannot run the layer
+ok 207 - layer-focus: sceneForFocus only switches when the current scene cannot run the layer
+  ---
+  duration_ms: 0.114667
+  type: 'test'
+  ...
+# Subtest: layer-focus: pipeline.html has the three direct tabs in the sub-workshop tablist
+ok 208 - layer-focus: pipeline.html has the three direct tabs in the sub-workshop tablist
+  ---
+  duration_ms: 0.41525
+  type: 'test'
+  ...
+# Subtest: layer-focus: focus mode hides the voxel pane and gives the focused pane a readable height
+ok 209 - layer-focus: focus mode hides the voxel pane and gives the focused pane a readable height
+  ---
+  duration_ms: 0.601583
+  type: 'test'
+  ...
+# Subtest: layer-focus: system-tabs wires focus tabs and exposes the focus to callers
+ok 210 - layer-focus: system-tabs wires focus tabs and exposes the focus to callers
+  ---
+  duration_ms: 0.334667
+  type: 'test'
+  ...
+# Subtest: 公式：越过阈值 2 + 10·g（封顶 6）；临界一成内 0–1；离得远 0；方向区分上限 / 下限
+ok 211 - 公式：越过阈值 2 + 10·g（封顶 6）；临界一成内 0–1；离得远 0；方向区分上限 / 下限
+  ---
+  duration_ms: 0.823833
+  type: 'test'
+  ...
+# Subtest: 按线取最高分（不累加），只收大于 0 的
+ok 212 - 按线取最高分（不累加），只收大于 0 的
+  ---
+  duration_ms: 0.664125
+  type: 'test'
+  ...
+# Subtest: 加分后重排：越线的线升到前面，alsoIn 交叉线也加分，原名次保留在 rankBefore
+ok 213 - 加分后重排：越线的线升到前面，alsoIn 交叉线也加分，原名次保留在 rankBefore
+  ---
+  duration_ms: 0.225875
+  type: 'test'
+  ...
+# Subtest: 没有指标 / 指标都没越线：队列原样（顺序、得分、名次）
+ok 214 - 没有指标 / 指标都没越线：队列原样（顺序、得分、名次）
+  ---
+  duration_ms: 0.110167
+  type: 'test'
+  ...
+# Subtest: export-learn-queue.mjs 接上了：读 verification-metrics.json / --metrics，写 metricFormula 与 inputs.metrics
+ok 215 - export-learn-queue.mjs 接上了：读 verification-metrics.json / --metrics，写 metricFormula 与 inputs.metrics
+  ---
+  duration_ms: 0.331875
+  type: 'test'
+  ...
+# Subtest: immutable verified proof fixture separates existing frame review, delivered code, source limits and residual work
+ok 216 - immutable verified proof fixture separates existing frame review, delivered code, source limits and residual work
+  ---
+  duration_ms: 103.562333
+  type: 'test'
+  ...
+# Subtest: changed proof is rejected and original learning backlog remains visible
+ok 217 - changed proof is rejected and original learning backlog remains visible
+  ---
+  duration_ms: 25.039959
+  type: 'test'
+  ...
+# Subtest: changed learning evidence or record text cannot inherit the reviewed closure
+ok 218 - changed learning evidence or record text cannot inherit the reviewed closure
+  ---
+  duration_ms: 30.433958
+  type: 'test'
+  ...
+# Subtest: live source drift safely invalidates old proof instead of counting it as complete
+ok 219 - live source drift safely invalidates old proof instead of counting it as complete
+  ---
+  duration_ms: 12.664667
+  type: 'test'
+  ...
+# Subtest: all 113 records accounted, duplicate histories consolidated, closure evidence retained
+ok 220 - all 113 records accounted, duplicate histories consolidated, closure evidence retained
+  ---
+  duration_ms: 32.319167
+  type: 'test'
+  ...
+# Subtest: reordering preserves reviewed identities and states
+ok 221 - reordering preserves reviewed identities and states
+  ---
+  duration_ms: 81.430292
+  type: 'test'
+  ...
+# Subtest: new or changed titles never inherit a closure from clip IDs
+ok 222 - new or changed titles never inherit a closure from clip IDs
+  ---
+  duration_ms: 0.967083
+  type: 'test'
+  ...
+# Subtest: changed evidence reopens a historical closure
+ok 223 - changed evidence reopens a historical closure
+  ---
+  duration_ms: 0.908292
+  type: 'test'
+  ...
+# Subtest: missing ledger keeps every entry visible and requires review
+ok 224 - missing ledger keeps every entry visible and requires review
+  ---
+  duration_ms: 11.758875
+  type: 'test'
+  ...
+# Subtest: same clip with distinct deliverables is not collapsed
+ok 225 - same clip with distinct deliverables is not collapsed
+  ---
+  duration_ms: 0.350791
+  type: 'test'
+  ...
+# Subtest: superseded DDA implementation is not scheduled twice
+ok 226 - superseded DDA implementation is not scheduled twice
+  ---
+  duration_ms: 0.358583
+  type: 'test'
+  ...
+# Subtest: live source may evolve without dropping records or reusing historical positions
+ok 227 - live source may evolve without dropping records or reusing historical positions
+  ---
+  duration_ms: 29.965375
+  type: 'test'
+  ...
+# Subtest: last successful learning cache survives new reader and revalidates hashes
+ok 228 - last successful learning cache survives new reader and revalidates hashes
+  ---
+  duration_ms: 152.396291
+  type: 'test'
+  ...
+# Subtest: quota and oversized learning payload preserve previous slot
+ok 229 - quota and oversized learning payload preserve previous slot
+  ---
+  duration_ms: 224.866584
+  type: 'test'
+  ...
+# Subtest: corrupt cached data rejects instead of activating an unverified offline view
+ok 230 - corrupt cached data rejects instead of activating an unverified offline view
+  ---
+  duration_ms: 56.156708
+  type: 'test'
+  ...
+# Subtest: synchronous storage-open denial releases the deadline timer immediately
+ok 231 - synchronous storage-open denial releases the deadline timer immediately
+  ---
+  duration_ms: 0.325208
+  type: 'test'
+  ...
+# Subtest: late storage-open result closes after timeout without starting a transaction
+ok 232 - late storage-open result closes after timeout without starting a transaction
+  ---
+  duration_ms: 0.206041
+  type: 'test'
+  ...
+# Subtest: active storage transaction aborts and closes at deadline without publishing result
+ok 233 - active storage transaction aborts and closes at deadline without publishing result
+  ---
+  duration_ms: 0.149125
+  type: 'test'
+  ...
+# Subtest: parses real ARCH single quotes comments trailing commas and real JSON declarations without execution
+ok 234 - parses real ARCH single quotes comments trailing commas and real JSON declarations without execution
+  ---
+  duration_ms: 51.317209
+  type: 'test'
+  ...
+# Subtest: data escapes work; execution expressions prototypes duplicates and trailing programs are rejected
+ok 235 - data escapes work; execution expressions prototypes duplicates and trailing programs are rejected
+  ---
+  duration_ms: 0.430375
+  type: 'test'
+  ...
+# Subtest: bounds malformed strings comments and nesting without accepting a partial result
+ok 236 - bounds malformed strings comments and nesting without accepting a partial result
+  ---
+  duration_ms: 0.143916
+  type: 'test'
+  ...
+# Subtest: reorder and rename preserve comparison identity; status or lane changes are explicit revisions
+ok 237 - reorder and rename preserve comparison identity; status or lane changes are explicit revisions
+  ---
+  duration_ms: 6.558708
+  type: 'test'
+  ...
+# Subtest: new duplicates never renumber old anchors; exact ambiguous anchors are quarantined
+ok 238 - new duplicates never renumber old anchors; exact ambiguous anchors are quarantined
+  ---
+  duration_ms: 0.933042
+  type: 'test'
+  ...
+# Subtest: location edits become review conflicts; genuine additions and removals are explicit without mutating source
+ok 239 - location edits become review conflicts; genuine additions and removals are explicit without mutating source
+  ---
+  duration_ms: 0.726542
+  type: 'test'
+  ...
+# Subtest: real library comparison is idempotent; every record is indexed or explicitly conflicted
+ok 240 - real library comparison is idempotent; every record is indexed or explicitly conflicted
+  ---
+  duration_ms: 91.080667
+  type: 'test'
+  ...
+# Subtest: decode real seven source files as one hash-checked data value without script execution
+ok 241 - decode real seven source files as one hash-checked data value without script execution
+  ---
+  duration_ms: 42.6255
+  type: 'test'
+  ...
+# Subtest: tamper version duplicate and missing core reject; incomplete value never commits globals
+ok 242 - tamper version duplicate and missing core reject; incomplete value never commits globals
+  ---
+  duration_ms: 225.135875
+  type: 'test'
+  ...
+# Subtest: optional absence explicit and accepted; supported data grammar still checks structure
+ok 243 - optional absence explicit and accepted; supported data grammar still checks structure
+  ---
+  duration_ms: 172.512
+  type: 'test'
+  ...
+# Subtest: video card promotes readable content title and labels rather than a source ID
+ok 244 - video card promotes readable content title and labels rather than a source ID
+  ---
+  duration_ms: 0.451334
+  type: 'test'
+  ...
+# Subtest: review frame prefixes are removed and long descriptions stay bounded
+ok 245 - review frame prefixes are removed and long descriptions stay bounded
+  ---
+  duration_ms: 0.204167
+  type: 'test'
+  ...
+# Subtest: 判定规则：守护指标退步超过容差 → 输；要变好的都没好过容差 → 输；否则赢
+ok 246 - 判定规则：守护指标退步超过容差 → 输；要变好的都没好过容差 → 输；否则赢
+  ---
+  duration_ms: 0.706125
+  type: 'test'
+  ...
+# Subtest: 指标口径：空 plan 全 0；跑完全管线各项产出都在
+ok 247 - 指标口径：空 plan 全 0；跑完全管线各项产出都在
+  ---
+  duration_ms: 209.797417
+  type: 'test'
+  ...
+# Subtest: 擂台登记：9 个能力都有规则，登记表齐全、rule = ARENA_RULES、beat = 前面的能力（第一代 baseline）、种子一致
+ok 248 - 擂台登记：9 个能力都有规则，登记表齐全、rule = ARENA_RULES、beat = 前面的能力（第一代 baseline）、种子一致
+  ---
+  duration_ms: 1.312625
+  type: 'test'
+  ...
+# Subtest: 擂台 scene.town-graph：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 249 - 擂台 scene.town-graph：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 30.213667
+  type: 'test'
+  ...
+# Subtest: 擂台 light.voxel-ao：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 250 - 擂台 light.voxel-ao：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 91.162875
+  type: 'test'
+  ...
+# Subtest: 擂台 light.bounce：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 251 - 擂台 light.bounce：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 172.0085
+  type: 'test'
+  ...
+# Subtest: 擂台 light.megatex：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 252 - 擂台 light.megatex：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 346.803541
+  type: 'test'
+  ...
+# Subtest: 擂台 life.plant-atlas：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 253 - 擂台 life.plant-atlas：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 171.606584
+  type: 'test'
+  ...
+# Subtest: 擂台 life.wind：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 254 - 擂台 life.wind：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 108.615833
+  type: 'test'
+  ...
+# Subtest: 擂台 life.smoke：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 255 - 擂台 life.smoke：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 113.815833
+  type: 'test'
+  ...
+# Subtest: 擂台 life.animals：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 256 - 擂台 life.animals：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 111.925792
+  type: 'test'
+  ...
+# Subtest: 擂台 scene.plateau-diag：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+ok 257 - 擂台 scene.plateau-diag：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 115.856417
+  type: 'test'
+  ...
+# Subtest: 回归检查自己会红：把登记成绩改好一点，现在的成绩就算退步
+ok 258 - 回归检查自己会红：把登记成绩改好一点，现在的成绩就算退步
+  ---
+  duration_ms: 44.715125
+  type: 'test'
+  ...
+# Subtest: voxel-light：World 也能当体素集合；高塔旁边的地面被压暗，开阔处不压；空场不碰 document
+ok 259 - voxel-light：World 也能当体素集合；高塔旁边的地面被压暗，开阔处不压；空场不碰 document
+  ---
+  duration_ms: 23.877
+  type: 'test'
+  ...
+# Subtest: voxel-light：烘顶点色确定性；多跳扩散后红塔旁的空气泛红（彩色反弹）
+ok 260 - voxel-light：烘顶点色确定性；多跳扩散后红塔旁的空气泛红（彩色反弹）
+  ---
+  duration_ms: 32.08025
+  type: 'test'
+  ...
+# Subtest: mega-atlas：同 n / seed 同一批面；货架与增量图集两种排布都能反查回自己的面（垫边 2 时内框反查 100%）
+ok 261 - mega-atlas：同 n / seed 同一批面；货架与增量图集两种排布都能反查回自己的面（垫边 2 时内框反查 100%）
+  ---
+  duration_ms: 266.177917
+  type: 'test'
+  ...
+# Subtest: town-graph：Town 的体素就是传入的 World；9 层上限；区域图含走道；颜色改动让区域缓存失效
+ok 262 - town-graph：Town 的体素就是传入的 World；9 层上限；区域图含走道；颜色改动让区域缓存失效
+  ---
+  duration_ms: 0.498375
+  type: 'test'
+  ...
+# Subtest: 嫁接模块：头注释写明原版文件、帖子、与原版的不同；不 import three、不 import 原版 REACode；头注释在 import 之前结束
+ok 263 - 嫁接模块：头注释写明原版文件、帖子、与原版的不同；不 import three、不 import 原版 REACode；头注释在 import 之前结束
+  ---
+  duration_ms: 0.58625
+  type: 'test'
+  ...
+# Subtest: 光照：同判据（同参数、同小镇）嫁接 voxel-light.js 与原版 lighting.js 单跳、多跳顶点色逐值相同
+ok 264 - 光照：同判据（同参数、同小镇）嫁接 voxel-light.js 与原版 lighting.js 单跳、多跳顶点色逐值相同
+  ---
+  duration_ms: 281.4545
+  type: 'test'
+  ...
+# Subtest: 大纹理：货架排布下 mega-atlas.js 的整套量法与原版 megatex.js 逐值相同；增量图集的差异登记为 design
+ok 265 - 大纹理：货架排布下 mega-atlas.js 的整套量法与原版 megatex.js 逐值相同；增量图集的差异登记为 design
+  ---
+  duration_ms: 470.362875
+  type: 'test'
+  ...
+# Subtest: 体素图：同一串编辑之后 town-graph.js 的 Town 与原版 Town 柱子 / 区域图相同；对账别名（pointInQuad / buildCellIndex / PALETTES）成立
+ok 266 - 体素图：同一串编辑之后 town-graph.js 的 Town 与原版 Town 柱子 / 区域图相同；对账别名（pointInQuad / buildCellIndex / PALETTES）成立
+  ---
+  duration_ms: 3.025833
+  type: 'test'
+  ...
+# Subtest: 登记文件：三份完整对照 + 四个能力各一份（capability = 能力 ID，verdict 合法）+ 需求行；同输入两次结论相同
+ok 267 - 登记文件：三份完整对照 + 四个能力各一份（capability = 能力 ID，verdict 合法）+ 需求行；同输入两次结论相同
+  ---
+  duration_ms: 468.951583
+  type: 'test'
+  ...
+# Subtest: 采用记录：v2、autoDeploy、带采用时的场景指纹；计划和网格对不上就拒绝
+ok 268 - 采用记录：v2、autoDeploy、带采用时的场景指纹；计划和网格对不上就拒绝
+  ---
+  duration_ms: 1.047709
+  type: 'test'
+  ...
+# Subtest: 自动部署的闸门：只有 v2 采用记录 + 场景对得上才换
+ok 269 - 自动部署的闸门：只有 v2 采用记录 + 场景对得上才换
+  ---
+  duration_ms: 0.470167
+  type: 'test'
+  ...
+# Subtest: 同一场景的判定：网格一致、陆地 / 建筑 / 轨道格数各差 ≤ max(2, 1%)
+ok 270 - 同一场景的判定：网格一致、陆地 / 建筑 / 轨道格数各差 ≤ max(2, 1%)
+  ---
+  duration_ms: 0.071333
+  type: 'test'
+  ...
+# Subtest: 游戏接线：main.js 启动时调自动部署；采用写 v2；有「回到原山形」；不碰存档与湖区
+ok 271 - 游戏接线：main.js 启动时调自动部署；采用写 v2；有「回到原山形」；不碰存档与湖区
+  ---
+  duration_ms: 0.764083
+  type: 'test'
+  ...
+# [R26 擂台] 中等坡占比 0.9207→0.9238（same） · 竖崖占比 0.0002→0（same） · 排水率 0.3665→0.7467（better） · 硬边位移（米） 2.7101→1.5961（better）
+# Subtest: 测试岛固定：同种子逐格相同，换种子不同；有城、有轨道、有海
+ok 272 - 测试岛固定：同种子逐格相同，换种子不同；有城、有轨道、有海
+  ---
+  duration_ms: 62.238333
+  type: 'test'
+  ...
+# Subtest: 指标定义只看产出地形：同一张高度场，不管能力参数 / 配色 / 用了哪些步骤，指标完全相同
+ok 273 - 指标定义只看产出地形：同一张高度场，不管能力参数 / 配色 / 用了哪些步骤，指标完全相同
+  ---
+  duration_ms: 68.322666
+  type: 'test'
+  ...
+# Subtest: 指标的已知答案：圆锥全排进海；碗底排不出；紧贴保护区抬 4 m = 硬边位移 4 m
+ok 274 - 指标的已知答案：圆锥全排进海；碗底排不出；紧贴保护区抬 4 m = 硬边位移 4 m
+  ---
+  duration_ms: 31.332708
+  type: 'test'
+  ...
+# Subtest: 比较规则写死：容差不放宽；任何一项退步超过容差 = 没赢；全持平 = 没赢
+ok 275 - 比较规则写死：容差不放宽；任何一项退步超过容差 = 没赢；全持平 = 没赢
+  ---
+  duration_ms: 0.331375
+  type: 'test'
+  ...
+# Subtest: 确定性：同一代跑两次指标完全相同
+ok 276 - 确定性：同一代跑两次指标完全相同
+  ---
+  duration_ms: 69.398666
+  type: 'test'
+  ...
+# Subtest: 登记表 catalog/arena/terrain.json 记的每代成绩 = 实算（不是手填）
+ok 277 - 登记表 catalog/arena/terrain.json 记的每代成绩 = 实算（不是手填）
+  ---
+  duration_ms: 0.189917
+  type: 'test'
+  ...
+# Subtest: 擂台：mountain.rolling 这一代在约定指标上必须赢上一代（规则见 arena.js 文件头，不放宽）
+ok 278 - 擂台：mountain.rolling 这一代在约定指标上必须赢上一代（规则见 arena.js 文件头，不放宽）
+  ---
+  duration_ms: 0.366417
+  type: 'test'
+  ...
+# Subtest: 变异与交叉：每个基因都落在能力声明的范围和步长上
+ok 279 - 变异与交叉：每个基因都落在能力声明的范围和步长上
+  ---
+  duration_ms: 5.547542
+  type: 'test'
+  ...
+# Subtest: 第一代：基线排第一、没有重复、同种子可复现、换种子不同
+ok 280 - 第一代：基线排第一、没有重复、同种子可复现、换种子不同
+  ---
+  duration_ms: 1233.247708
+  type: 'test'
+  ...
+# Subtest: 精英保留：留种的亲本原样进下一代，所以每代最好成绩不会倒退
+ok 281 - 精英保留：留种的亲本原样进下一代，所以每代最好成绩不会倒退
+  ---
+  duration_ms: 613.736625
+  type: 'test'
+  ...
+# Subtest: 默认参数在合成场地上通过硬检查；describeGenome 只列出变了的基因
+ok 282 - 默认参数在合成场地上通过硬检查；describeGenome 只列出变了的基因
+  ---
+  duration_ms: 25.855583
+  type: 'test'
+  ...
+# [R25] 7816 个三角重心复查：地面与画面最大差 0.000 m · 洞 0 个 · 轨道 59 格地面高差 0.00 m · 保护区 501 格 0.00 m | 自由陆地 ≤45° 可走坡 92% · 最大连通片 65%
+# Subtest: 三角剖分与实景网格 / lowpoly 同一规则：(i+j) 奇偶决定对角线
+ok 283 - 三角剖分与实景网格 / lowpoly 同一规则：(i+j) 奇偶决定对角线
+  ---
+  duration_ms: 1.4235
+  type: 'test'
+  ...
+# Subtest: 通过：新山形的地面与画面一致、没有洞，轨道 / 保护区地面 = 原高
+ok 284 - 通过：新山形的地面与画面一致、没有洞，轨道 / 保护区地面 = 原高
+  ---
+  duration_ms: 156.150792
+  type: 'test'
+  ...
+# Subtest: 网格节点处地面 = 节点高度；网格外 / 没有地形处返回 null（交回原地面链）
+ok 285 - 网格节点处地面 = 节点高度；网格外 / 没有地形处返回 null（交回原地面链）
+  ---
+  duration_ms: 106.286875
+  type: 'test'
+  ...
+# Subtest: 确定性：同一计划两次重建，任意点地面高度完全相同；两次跑管线结果相同
+ok 286 - 确定性：同一计划两次重建，任意点地面高度完全相同；两次跑管线结果相同
+  ---
+  duration_ms: 208.448667
+  type: 'test'
+  ...
+# Subtest: 坏地面判失败：对角线反了 / 挖了洞 / 轨道处被抬高
+ok 287 - 坏地面判失败：对角线反了 / 挖了洞 / 轨道处被抬高
+  ---
+  duration_ms: 156.594459
+  type: 'test'
+  ...
+# Subtest: 游戏接线：玩家地面链最后一道接新山形；工坊桥与 main.js 引用同一份山形模块
+ok 288 - 游戏接线：玩家地面链最后一道接新山形；工坊桥与 main.js 引用同一份山形模块
+  ---
+  duration_ms: 0.865209
+  type: 'test'
+  ...
+# [R27 擂台岛] Bad North 夏季：pass · 草坡 62%（线 ≥ 45%） · 灰面 29%（线 ≤ 35%）· 草坡饱和度 0.27（线 ≥ 0.18） | Townscaper：fail · 草坡 62%（线 ≥ 45%） · 灰面 37%（线 ≤ 35%）· 草坡饱和度 0.40（线 ≥ 0.18）
+# Subtest: 两套候选就是 Bad North 夏季（1）与 Townscaper（2），来源写在候选上
+ok 289 - 两套候选就是 Bad North 夏季（1）与 Townscaper（2），来源写在候选上
+  ---
+  duration_ms: 1.390791
+  type: 'test'
+  ...
+# Subtest: 饱和度：灰色 = 0，纯色 = 1；两套候选的草坡 / 草丛颜色本身都不灰（≥ 判定线）
+ok 290 - 饱和度：灰色 = 0，纯色 = 1；两套候选的草坡 / 草丛颜色本身都不灰（≥ 判定线）
+  ---
+  duration_ms: 0.145042
+  type: 'test'
+  ...
+# Subtest: 已知答案：全草坡的山 → 草坡 100%、通过；全岩壁的山 → 草坡 0%、判失败（坏配色 / 坏着色必须红）
+ok 291 - 已知答案：全草坡的山 → 草坡 100%、通过；全岩壁的山 → 草坡 0%、判失败（坏配色 / 坏着色必须红）
+  ---
+  duration_ms: 12.692167
+  type: 'test'
+  ...
+# Subtest: 配色只换颜色：两套候选的草坡面积相同（同一座山、同一张材质图），灰面与饱和度各自算
+ok 292 - 配色只换颜色：两套候选的草坡面积相同（同一座山、同一张材质图），灰面与饱和度各自算
+  ---
+  duration_ms: 4.883959
+  type: 'test'
+  ...
+# Subtest: 确定性：同一计划两次检查结果完全相同
+ok 293 - 确定性：同一计划两次检查结果完全相同
+  ---
+  duration_ms: 6.084583
+  type: 'test'
+  ...
+# Subtest: 实景接线：实景换配色 / 对照命令在桥上；采用时记下当前配色；不改默认配色
+ok 294 - 实景接线：实景换配色 / 对照命令在桥上；采用时记下当前配色；不改默认配色
+  ---
+  duration_ms: 0.436833
+  type: 'test'
+  ...
+# [R28 分布 · 擂台岛] 30/30 过硬检查 · 最好 1 · 最差 16 · 最典型 21 · 中等坡中位 0.9333 · 排水中位 0.7019
+# Subtest: 种子基因：只改 massif.seed 与 rolling.seed，其余全是默认；30 个种子两两不同
+ok 295 - 种子基因：只改 massif.seed 与 rolling.seed，其余全是默认；30 个种子两两不同
+  ---
+  duration_ms: 0.941208
+  type: 'test'
+  ...
+# Subtest: 分布与挑选（已知答案）：分位数、直方图、最好 / 最差 / 最典型
+ok 296 - 分布与挑选（已知答案）：分位数、直方图、最好 / 最差 / 最典型
+  ---
+  duration_ms: 0.567875
+  type: 'test'
+  ...
+# Subtest: 30 种子报告：30 座都跑完、每座都有六项指标；三张代表都在里面；同输入两次完全相同
+ok 297 - 30 种子报告：30 座都跑完、每座都有六项指标；三张代表都在里面；同输入两次完全相同
+  ---
+  duration_ms: 1910.303709
+  type: 'test'
+  ...
+# Subtest: keepPlans：只在要时带 plan（Worker 给三张缩略图用；报告默认不带）
+ok 298 - keepPlans：只在要时带 plan（Worker 给三张缩略图用；报告默认不带）
+  ---
+  duration_ms: 79.3965
+  type: 'test'
+  ...
+# Subtest: 拱下几何：两个拱、门户收窄、有侧壁；穿墙探针关时放得下、开后全部拦下
+ok 299 - 拱下几何：两个拱、门户收窄、有侧壁；穿墙探针关时放得下、开后全部拦下
+  ---
+  duration_ms: 5.97175
+  type: 'test'
+  ...
+# Subtest: 穿拱模拟：开精细门户时斜着进拱也不擦墙、都穿过去
+ok 300 - 穿拱模拟：开精细门户时斜着进拱也不擦墙、都穿过去
+  ---
+  duration_ms: 1.91425
+  type: 'test'
+  ...
+# Subtest: 身高敏感：矮个子几乎不收窄；高到拱顶放不下时拱被封死、南北不通
+ok 301 - 身高敏感：矮个子几乎不收窄；高到拱顶放不下时拱被封死、南北不通
+  ---
+  duration_ms: 3.640292
+  type: 'test'
+  ...
+# Subtest: 能力元数据：§5.3 字段齐全、真实模块、在战役能力表里
+ok 302 - 能力元数据：§5.3 字段齐全、真实模块、在战役能力表里
+  ---
+  duration_ms: 0.627875
+  type: 'test'
+  ...
+# Subtest: 扫描与执行：演示岛（实景同一种网格）上匹配、执行写进作战计划
+ok 303 - 扫描与执行：演示岛（实景同一种网格）上匹配、执行写进作战计划
+  ---
+  duration_ms: 78.937917
+  type: 'test'
+  ...
+# Subtest: 验证：健全计划通过；关掉开关 / 改报告 判失败
+ok 304 - 验证：健全计划通过；关掉开关 / 改报告 判失败
+  ---
+  duration_ms: 31.443583
+  type: 'test'
+  ...
+# Subtest: 确定性：同一采样两次执行，报告逐字相同
+ok 305 - 确定性：同一采样两次执行，报告逐字相同
+  ---
+  duration_ms: 230.524125
+  type: 'test'
+  ...
+# Subtest: 自动预装：扫描匹配到拱洞时，导航能力连同前置舞台一起预装
+ok 306 - 自动预装：扫描匹配到拱洞时，导航能力连同前置舞台一起预装
+  ---
+  duration_ms: 28.264917
+  type: 'test'
+  ...
+# Subtest: 实景接线：采样带导航、开战前挖拱、开战后开精细门户；默认全关
+ok 307 - 实景接线：采样带导航、开战前挖拱、开战后开精细门户；默认全关
+  ---
+  duration_ms: 3.299959
+  type: 'test'
+  ...
+# Subtest: 洞道：三个洞底节点，脚高都在洞底；洞顶比洞底高 2.5
+ok 308 - 洞道：三个洞底节点，脚高都在洞底；洞顶比洞底高 2.5
+  ---
+  duration_ms: 3.543459
+  type: 'test'
+  ...
+# Subtest: 楼梯：一架，踏面一级 L/3，比不插值的一整层小
+ok 309 - 楼梯：一架，踏面一级 L/3，比不插值的一整层小
+  ---
+  duration_ms: 1.029875
+  type: 'test'
+  ...
+# Subtest: 逐帧：穿洞那段脚贴洞底，上楼梯那段脚高的最大跳变小于不插值
+ok 310 - 逐帧：穿洞那段脚贴洞底，上楼梯那段脚高的最大跳变小于不插值
+  ---
+  duration_ms: 5.972667
+  type: 'test'
+  ...
+# Subtest: 能力：元数据；演示岛上执行写进计划；验证复算一致；改报告判失败
+ok 311 - 能力：元数据；演示岛上执行写进计划；验证复算一致；改报告判失败
+  ---
+  duration_ms: 168.85975
+  type: 'test'
+  ...
+# Subtest: 战役层导航线：三个可执行能力都挂在 navigation 线上（树上导航线 ⚙ +3）
+ok 312 - 战役层导航线：三个可执行能力都挂在 navigation 线上（树上导航线 ⚙ +3）
+  ---
+  duration_ms: 0.513625
+  type: 'test'
+  ...
+# Subtest: 实景接线：画面脚高只在开了 footing 且拱洞已挖空时按洞底修正；实况报洞底画面偏差
+ok 313 - 实景接线：画面脚高只在开了 footing 且拱洞已挖空时按洞底修正；实况报洞底画面偏差
+  ---
+  duration_ms: 0.430167
+  type: 'test'
+  ...
+# Subtest: 原版只读：两份原版文件在，对照里写明的就是它们
+ok 314 - 原版只读：两份原版文件在，对照里写明的就是它们
+  ---
+  duration_ms: 21.885917
+  type: 'test'
+  ...
+# Subtest: 奶酪：原版统计与原版自己的 selfCheck 对得上（换算没丢点）
+ok 315 - 奶酪：原版统计与原版自己的 selfCheck 对得上（换算没丢点）
+  ---
+  duration_ms: 14.039667
+  type: 'test'
+  ...
+# Subtest: 同判据：两座岛上连通块数 / 最大块占比 / 被覆盖节点数完全一致
+ok 316 - 同判据：两座岛上连通块数 / 最大块占比 / 被覆盖节点数完全一致
+  ---
+  duration_ms: 74.903333
+  type: 'test'
+  ...
+# Subtest: 战役判据：差异逐条登记，门洞加价口径不同是一条缺口
+ok 317 - 战役判据：差异逐条登记，门洞加价口径不同是一条缺口
+  ---
+  duration_ms: 10.186042
+  type: 'test'
+  ...
+# Subtest: 确定性：同样输入两次结果逐字相同
+ok 318 - 确定性：同样输入两次结果逐字相同
+  ---
+  duration_ms: 49.776334
+  type: 'test'
+  ...
+# Subtest: 登记文件：每个导航能力一份，④ 的校验规则（capability = 能力 ID、verdict 合法）都成立
+ok 319 - 登记文件：每个导航能力一份，④ 的校验规则（capability = 能力 ID、verdict 合法）都成立
+  ---
+  duration_ms: 38.839667
+  type: 'test'
+  ...
+# Subtest: 缺口进补学队列：demand 行格式对、export-learn-queue 会读到
+ok 320 - 缺口进补学队列：demand 行格式对、export-learn-queue 会读到
+  ---
+  duration_ms: 18.090958
+  type: 'test'
+  ...
+# Subtest: 页面接线：战役侧栏挂导航块并现算对照
+ok 321 - 页面接线：战役侧栏挂导航块并现算对照
+  ---
+  duration_ms: 0.4075
+  type: 'test'
+  ...
+# Subtest: 窄道 / 弯道 / 岔口：考场上逐格数对
+ok 322 - 窄道 / 弯道 / 岔口：考场上逐格数对
+  ---
+  duration_ms: 1.333791
+  type: 'test'
+  ...
+# Subtest: 对向会车：两队（各 3 个普通兵 + 1 个大个子）全部到达、没有人卡死
+ok 323 - 对向会车：两队（各 3 个普通兵 + 1 个大个子）全部到达、没有人卡死
+  ---
+  duration_ms: 21.1085
+  type: 'test'
+  ...
+# Subtest: 不同体型重新选路：普通兵钻矮拱走短路，大个子放不进、改走长路
+ok 324 - 不同体型重新选路：普通兵钻矮拱走短路，大个子放不进、改走长路
+  ---
+  duration_ms: 13.400291
+  type: 'test'
+  ...
+# Subtest: 能力：元数据、在演示岛上执行写进计划、验证复算一致；改报告判失败
+ok 325 - 能力：元数据、在演示岛上执行写进计划、验证复算一致；改报告判失败
+  ---
+  duration_ms: 299.730792
+  type: 'test'
+  ...
+# Subtest: 实景接线：大个子体型按比例换、后面波次也换；实况快照报体型与卡墙
+ok 326 - 实景接线：大个子体型按比例换、后面波次也换；实况快照报体型与卡墙
+  ---
+  duration_ms: 0.476584
+  type: 'test'
+  ...
+# Subtest: 换件：vendor 导航小组是新版（旧件快照还在）
+ok 327 - 换件：vendor 导航小组是新版（旧件快照还在）
+  ---
+  duration_ms: 1.571625
+  type: 'test'
+  ...
+# Subtest: 实心柱世界：新旧导航路线逐对相同（代价 + 下一步）
+ok 328 - 实心柱世界：新旧导航路线逐对相同（代价 + 下一步）
+  ---
+  duration_ms: 74.567666
+  type: 'test'
+  ...
+# Subtest: 实心柱世界：旧版能走的一步新版也能走、落点相同
+ok 329 - 实心柱世界：旧版能走的一步新版也能走、落点相同
+  ---
+  duration_ms: 243.25275
+  type: 'test'
+  ...
+# Subtest: 有拱的世界：doorCost=1 与旧版代价相同；默认 1.35 只会更贵
+ok 330 - 有拱的世界：doorCost=1 与旧版代价相同；默认 1.35 只会更贵
+  ---
+  duration_ms: 2.49125
+  type: 'test'
+  ...
+# Subtest: 真实 vendor Battle：新旧导航各跑 30 秒都不出 NaN、地上的人都在图上、维京人朝小屋走
+ok 331 - 真实 vendor Battle：新旧导航各跑 30 秒都不出 NaN、地上的人都在图上、维京人朝小屋走
+  ---
+  duration_ms: 995.195791
+  type: 'test'
+  ...
+# Subtest: 步骤编排：顺序与工作目录按 Guide §5.1 / §5.2；JEV 在 ⑤ 之前；目标路径在 ⑤ 与 ⑥ 之间
+ok 332 - 步骤编排：顺序与工作目录按 Guide §5.1 / §5.2；JEV 在 ⑤ 之前；目标路径在 ⑤ 与 ⑥ 之间
+  ---
+  duration_ms: 1.364667
+  type: 'test'
+  ...
+# Subtest: 开关：--no-jev 记为跳过；--skip-recompute 只留漂移 / 目标路径 / 测试
+ok 333 - 开关：--no-jev 记为跳过；--skip-recompute 只留漂移 / 目标路径 / 测试
+  ---
+  duration_ms: 0.109125
+  type: 'test'
+  ...
+# Subtest: 单元清单从 test_workshops.py 读，含本轮新增的测试
+ok 334 - 单元清单从 test_workshops.py 读，含本轮新增的测试
+  ---
+  duration_ms: 0.251083
+  type: 'test'
+  ...
+# Subtest: TAP 解析：汇总行与 not ok 行
+ok 335 - TAP 解析：汇总行与 not ok 行
+  ---
+  duration_ms: 0.25125
+  type: 'test'
+  ...
+# Subtest: 快照对比：新增能力、线升级、指标变好 / 变差按方向判断、测试红绿翻转
+ok 336 - 快照对比：新增能力、线升级、指标变好 / 变差按方向判断、测试红绿翻转
+  ---
+  duration_ms: 0.295042
+  type: 'test'
+  ...
+# Subtest: 晨报一页：四块（新增能力 / 哪条线升级 / 场景候选变好变差 / 测试红绿）都在；latest.json 摘要字段齐
+ok 337 - 晨报一页：四块（新增能力 / 哪条线升级 / 场景候选变好变差 / 测试红绿）都在；latest.json 摘要字段齐
+  ---
+  duration_ms: 0.301042
+  type: 'test'
+  ...
+# Subtest: 指标收集：检查项上的 metric 带线与阈值，verify.metrics 的数只做对比
+ok 338 - 指标收集：检查项上的 metric 带线与阈值，verify.metrics 的数只做对比
+  ---
+  duration_ms: 0.259541
+  type: 'test'
+  ...
+# Subtest: run-nightly.mjs 与 Guide §5 接线
+ok 339 - run-nightly.mjs 与 Guide §5 接线
+  ---
+  duration_ms: 0.740083
+  type: 'test'
+  ...
+# Subtest: actual REA arc sampling redistributes interiors and passes existing verifier
+ok 340 - actual REA arc sampling redistributes interiors and passes existing verifier
+  ---
+  duration_ms: 1.63975
+  type: 'test'
+  ...
+# Subtest: manual anchors, hidden and out-of-scope objects remain untouched
+ok 341 - manual anchors, hidden and out-of-scope objects remain untouched
+  ---
+  duration_ms: 0.1905
+  type: 'test'
+  ...
+# Subtest: over-budget or blocked segment produces no unsafe edits
+ok 342 - over-budget or blocked segment produces no unsafe edits
+  ---
+  duration_ms: 0.391666
+  type: 'test'
+  ...
+# Subtest: source ordering does not affect stable layout results
+ok 343 - source ordering does not affect stable layout results
+  ---
+  duration_ms: 0.137875
+  type: 'test'
+  ...
+# Subtest: actual material composition calls library code, preserves inputs, traces ordered steps and output
+ok 344 - actual material composition calls library code, preserves inputs, traces ordered steps and output
+  ---
+  duration_ms: 8.948666
+  type: 'test'
+  ...
+# Subtest: preflight rejects missing code, wrong parameter types and invalid plans before touching adapter
+ok 345 - preflight rejects missing code, wrong parameter types and invalid plans before touching adapter
+  ---
+  duration_ms: 0.913167
+  type: 'test'
+  ...
+# Subtest: library schema changes invalidate catalog and plan identities; dependencies and conflicts are real
+ok 346 - library schema changes invalidate catalog and plan identities; dependencies and conflicts are real
+  ---
+  duration_ms: 1.0035
+  type: 'test'
+  ...
+# Subtest: object combination executes on sequential copied layouts and returns actual edits
+ok 347 - object combination executes on sequential copied layouts and returns actual edits
+  ---
+  duration_ms: 2.540917
+  type: 'test'
+  ...
+# Subtest: commit gate rejects failed checks, changed target and incomplete execution
+ok 348 - commit gate rejects failed checks, changed target and incomplete execution
+  ---
+  duration_ms: 0.216583
+  type: 'test'
+  ...
+# Subtest: altered Worker output cannot retain a valid execution receipt
+ok 349 - altered Worker output cannot retain a valid execution receipt
+  ---
+  duration_ms: 0.9035
+  type: 'test'
+  ...
+# Subtest: execution failure stays on the private copy and incomplete reports cannot become candidates
+ok 350 - execution failure stays on the private copy and incomplete reports cannot become candidates
+  ---
+  duration_ms: 0.697917
+  type: 'test'
+  ...
+# Subtest: missing/manual adapters cannot masquerade as complete execution
+ok 351 - missing/manual adapters cannot masquerade as complete execution
+  ---
+  duration_ms: 6.124667
+  type: 'test'
+  ...
+# Subtest: candidate preserves geometry and setting locks; manual drift and tampering reject
+ok 352 - candidate preserves geometry and setting locks; manual drift and tampering reject
+  ---
+  duration_ms: 1.051625
+  type: 'test'
+  ...
+# Subtest: candidate reloads from isolated disk and preserves current snapshot
+ok 353 - candidate reloads from isolated disk and preserves current snapshot
+  ---
+  duration_ms: 9.268334
+  type: 'test'
+  ...
+# Subtest: disabled and removed capabilities restore baseline; unrelated geometry never enters settings
+ok 354 - disabled and removed capabilities restore baseline; unrelated geometry never enters settings
+  ---
+  duration_ms: 0.476917
+  type: 'test'
+  ...
+# Subtest: duplicate capabilities and invalid parameters reject
+ok 355 - duplicate capabilities and invalid parameters reject
+  ---
+  duration_ms: 0.142459
+  type: 'test'
+  ...
+# Subtest: saved experiment retains independent recipe and baseline
+ok 356 - saved experiment retains independent recipe and baseline
+  ---
+  duration_ms: 2.113875
+  type: 'test'
+  ...
+# Subtest: legacy life recipe stays valid; new defaults separate weather vegetation animals smoke and fire
+ok 357 - legacy life recipe stays valid; new defaults separate weather vegetation animals smoke and fire
+  ---
+  duration_ms: 0.1375
+  type: 'test'
+  ...
+# Subtest: whole directory has exactly one reviewed row per actual code file, including HTML and tools
+ok 358 - whole directory has exactly one reviewed row per actual code file, including HTML and tools
+  ---
+  duration_ms: 0.691833
+  type: 'test'
+  ...
+# Subtest: source identities and all claimed target paths exist; pages cannot inherit core completion
+ok 359 - source identities and all claimed target paths exist; pages cannot inherit core completion
+  ---
+  duration_ms: 15.635875
+  type: 'test'
+  ...
+# Subtest: verified deliveries are explicitly scoped with execution evidence and residual gaps
+ok 360 - verified deliveries are explicitly scoped with execution evidence and residual gaps
+  ---
+  duration_ms: 0.140083
+  type: 'test'
+  ...
+# Subtest: recent: 按加入日期倒序，限制条数，带能力线 / 场景 / 级别 / 日期依据
+ok 361 - recent: 按加入日期倒序，限制条数，带能力线 / 场景 / 级别 / 日期依据
+  ---
+  duration_ms: 6.277667
+  type: 'test'
+  ...
+# Subtest: recent: 本机首次执行只能把「上限」类日期往前提，不覆盖日志 / meta 给的日期
+ok 362 - recent: 本机首次执行只能把「上限」类日期往前提，不覆盖日志 / meta 给的日期
+  ---
+  duration_ms: 1.841125
+  type: 'test'
+  ...
+# Subtest: recent: 没有成熟度数据时降级 —— 只列页面已登记的能力，日期未知、未评级，不编日期
+ok 363 - recent: 没有成熟度数据时降级 —— 只列页面已登记的能力，日期未知、未评级，不编日期
+  ---
+  duration_ms: 0.249917
+  type: 'test'
+  ...
+# Subtest: recent: 点一行去哪 —— 直达层用 R21 页签，其余去对应工坊并切到能跑的场景
+ok 364 - recent: 点一行去哪 —— 直达层用 R21 页签，其余去对应工坊并切到能跑的场景
+  ---
+  duration_ms: 0.124084
+  type: 'test'
+  ...
+# Subtest: recent 页面接线：pipeline.html 有栏位，studio.js 读成熟度与经验并按目标跳转，版本号已加
+ok 365 - recent 页面接线：pipeline.html 有栏位，studio.js 读成熟度与经验并按目标跳转，版本号已加
+  ---
+  duration_ms: 0.773334
+  type: 'test'
+  ...
+# Subtest: 判定规则：守护指标退步超过容差 → 输；要变好的都没好过容差 → 输；否则赢
+ok 366 - 判定规则：守护指标退步超过容差 → 输；要变好的都没好过容差 → 输；否则赢
+  ---
+  duration_ms: 0.45275
+  type: 'test'
+  ...
+# Subtest: 指标与参数无关、已知答案：平地坡 0°、一格 3 m 高差 = 45°、保护格两侧整体抬高不算硬边位移
+ok 367 - 指标与参数无关、已知答案：平地坡 0°、一格 3 m 高差 = 45°、保护格两侧整体抬高不算硬边位移
+  ---
+  duration_ms: 1.355958
+  type: 'test'
+  ...
+# Subtest: 擂台岛与规则登记：每个能力都有规则，登记表的 rule = ARENA_RULES，上一代是排在它前面的能力
+ok 368 - 擂台岛与规则登记：每个能力都有规则，登记表的 rule = ARENA_RULES，上一代是排在它前面的能力
+  ---
+  duration_ms: 1.068791
+  type: 'test'
+  ...
+# Subtest: 擂台 relief.soft：这一代必须赢上一代；登记过成绩的，不许比登记的差
+ok 369 - 擂台 relief.soft：这一代必须赢上一代；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 55.237375
+  type: 'test'
+  ...
+# Subtest: 擂台 relief.cliff：这一代必须赢上一代；登记过成绩的，不许比登记的差
+ok 370 - 擂台 relief.cliff：这一代必须赢上一代；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 43.297625
+  type: 'test'
+  ...
+# Subtest: 擂台 relief.valley：这一代必须赢上一代；登记过成绩的，不许比登记的差
+ok 371 - 擂台 relief.valley：这一代必须赢上一代；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 134.152917
+  type: 'test'
+  ...
+# Subtest: 擂台 relief.overhang：这一代必须赢上一代；登记过成绩的，不许比登记的差
+ok 372 - 擂台 relief.overhang：这一代必须赢上一代；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 65.477292
+  type: 'test'
+  ...
+# Subtest: 擂台 relief.ledge：这一代必须赢上一代；登记过成绩的，不许比登记的差
+ok 373 - 擂台 relief.ledge：这一代必须赢上一代；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 56.050334
+  type: 'test'
+  ...
+# Subtest: 擂台 relief.passes：这一代必须赢上一代；登记过成绩的，不许比登记的差
+ok 374 - 擂台 relief.passes：这一代必须赢上一代；登记过成绩的，不许比登记的差
+  ---
+  duration_ms: 70.914583
+  type: 'test'
+  ...
+# Subtest: 回归检查自己会红：把登记成绩改好一点，现在的成绩就算退步
+ok 375 - 回归检查自己会红：把登记成绩改好一点，现在的成绩就算退步
+  ---
+  duration_ms: 16.424708
+  type: 'test'
+  ...
+# Subtest: 完整山体：一条管线跑完，四类特征都在（软坡粗糙度降、有台面、河谷后没坑、有岩檐、有梯子）
+ok 376 - 完整山体：一条管线跑完，四类特征都在（软坡粗糙度降、有台面、河谷后没坑、有岩檐、有梯子）
+  ---
+  duration_ms: 33.328959
+  type: 'test'
+  ...
+# Subtest: plan-mesh：高度面、岩檐盒子、梯子、等高线的数量对得上计划
+ok 377 - plan-mesh：高度面、岩檐盒子、梯子、等高线的数量对得上计划
+  ---
+  duration_ms: 35.759917
+  type: 'test'
+  ...
+# Subtest: plan-mesh：坐标 = 贴球图表米制坐标（x 东、y 高、z 北，原点在采样中心），和 mountainCandidate 的 i·step − half 一致
+ok 378 - plan-mesh：坐标 = 贴球图表米制坐标（x 东、y 高、z 北，原点在采样中心），和 mountainCandidate 的 i·step − half 一致
+  ---
+  duration_ms: 0.314417
+  type: 'test'
+  ...
+# Subtest: plan-mesh：岩檐盒子顶 = 高格顶，底 = 檐底，底面压暗（悬垂看得见）
+ok 379 - plan-mesh：岩檐盒子顶 = 高格顶，底 = 檐底，底面压暗（悬垂看得见）
+  ---
+  duration_ms: 18.640208
+  type: 'test'
+  ...
+# Subtest: 游戏侧只是候选：不写 localStorage / 存档，persist ≠ false 拒绝预览，能拆回，原地形只隐藏不删
+ok 380 - 游戏侧只是候选：不写 localStorage / 存档，persist ≠ false 拒绝预览，能拆回，原地形只隐藏不删
+  ---
+  duration_ms: 0.660875
+  type: 'test'
+  ...
+# Subtest: 场景 id 与游戏一致（old-port = 旧港湾、moss = 苔庭），桥接命令与游戏侧模块同一版本号（只加载一份模块）
+ok 381 - 场景 id 与游戏一致（old-port = 旧港湾、moss = 苔庭），桥接命令与游戏侧模块同一版本号（只加载一份模块）
+  ---
+  duration_ms: 0.734791
+  type: 'test'
+  ...
+# Subtest: 每个用到原版文件的地貌能力（meta.ideas 里有 REACode/）都配齐：对照 case + ④ 登记 + 擂台规则 + ⑦ 登记
+ok 382 - 每个用到原版文件的地貌能力（meta.ideas 里有 REACode/）都配齐：对照 case + ④ 登记 + 擂台规则 + ⑦ 登记
+  ---
+  duration_ms: 0.990583
+  type: 'test'
+  ...
+# Subtest: 诚实口径：verdict / pass 没实算（null）就不算 ④ / ⑦；实算过的必须是 capability-maturity.js 认的值
+ok 383 - 诚实口径：verdict / pass 没实算（null）就不算 ④ / ⑦；实算过的必须是 capability-maturity.js 认的值
+  ---
+  duration_ms: 0.322709
+  type: 'test'
+  ...
+# Subtest: 对齐别名：对照登记里的每个原版文件都在 reacode-target-aliases.json 里有落点
+ok 384 - 对齐别名：对照登记里的每个原版文件都在 reacode-target-aliases.json 里有落点
+  ---
+  duration_ms: 0.107834
+  type: 'test'
+  ...
+# Subtest: 六个地貌测试都进了 test_workshops.py 单元清单（成熟度 ⑤ 只认清单里的测试）
+ok 385 - 六个地貌测试都进了 test_workshops.py 单元清单（成熟度 ⑤ 只认清单里的测试）
+  ---
+  duration_ms: 0.077542
+  type: 'test'
+  ...
+# Subtest: 记录脚本是登记表唯一写入方：测试和面板都不写 catalog/parity、catalog/arena
+ok 386 - 记录脚本是登记表唯一写入方：测试和面板都不写 catalog/parity、catalog/arena
+  ---
+  duration_ms: 0.274208
+  type: 'test'
+  ...
+# Subtest: 直达网址：?relief=old-port / moss / arena / 1；别的值一律不认（不切到未知场景）
+ok 387 - 直达网址：?relief=old-port / moss / arena / 1；别的值一律不认（不切到未知场景）
+  ---
+  duration_ms: 0.646375
+  type: 'test'
+  ...
+# Subtest: 缩略图：尺寸 = n × scale，候选图画出河 / 岩檐 / 梯子 / 等高线（和原样图不同），只读不改采样
+ok 388 - 缩略图：尺寸 = n × scale，候选图画出河 / 岩檐 / 梯子 / 等高线（和原样图不同），只读不改采样
+  ---
+  duration_ms: 45.507792
+  type: 'test'
+  ...
+# Subtest: 证据表：没有登记 / 已登记待实算 / 已实算 三种状态分得清，④ ⑦ 只在实算后算达到
+ok 389 - 证据表：没有登记 / 已登记待实算 / 已实算 三种状态分得清，④ ⑦ 只在实算后算达到
+  ---
+  duration_ms: 0.219125
+  type: 'test'
+  ...
+# Subtest: 页面接线：pipeline.html 有面板、studio.js 挂载、自带样式在场景管线页显示、直达页签时让位、面板里有对照 / 擂台 / 实景三块
+ok 390 - 页面接线：pipeline.html 有面板、studio.js 挂载、自带样式在场景管线页显示、直达页签时让位、面板里有对照 / 擂台 / 实景三块
+  ---
+  duration_ms: 0.631583
+  type: 'test'
+  ...
+# Subtest: 待你决定：PENDING 里登记了 P-R49-01（选项、怎么看对照、不动时的现状）
+ok 391 - 待你决定：PENDING 里登记了 P-R49-01（选项、怎么看对照、不动时的现状）
+  ---
+  duration_ms: 0.199542
+  type: 'test'
+  ...
+# Subtest: 对照器：容差、NaN、缺字段 / 多字段 / 长度 / 类型都算差异
+ok 392 - 对照器：容差、NaN、缺字段 / 多字段 / 长度 / 类型都算差异
+  ---
+  duration_ms: 1.185458
+  type: 'test'
+  ...
+# Subtest: 归类：登记外差异 → unregistered；全部登记 → diff-registered；无差异 → equivalent；kind 不符不算登记
+ok 393 - 归类：登记外差异 → unregistered；全部登记 → diff-registered；无差异 → equivalent；kind 不符不算登记
+  ---
+  duration_ms: 0.184833
+  type: 'test'
+  ...
+# Subtest: 截断不让结果变好：一万处差异里最后一处没登记，也判 unregistered
+ok 394 - 截断不让结果变好：一万处差异里最后一处没登记，也判 unregistered
+  ---
+  duration_ms: 12.824
+  type: 'test'
+  ...
+# Subtest: 六条线都有对照 case 与登记表，登记表格式对、指向的原版 / 重构文件都存在
+ok 395 - 六条线都有对照 case 与登记表，登记表格式对、指向的原版 / 重构文件都存在
+  ---
+  duration_ms: 0.635792
+  type: 'test'
+  ...
+# Subtest: 对照 relief.soft：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+ok 396 - 对照 relief.soft：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+  ---
+  duration_ms: 18.265375
+  type: 'test'
+  ...
+# Subtest: 对照 relief.cliff：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+ok 397 - 对照 relief.cliff：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+  ---
+  duration_ms: 8.904125
+  type: 'test'
+  ...
+# Subtest: 对照 relief.valley：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+ok 398 - 对照 relief.valley：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+  ---
+  duration_ms: 75.668875
+  type: 'test'
+  ...
+# Subtest: 对照 relief.overhang：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+ok 399 - 对照 relief.overhang：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+  ---
+  duration_ms: 147.626083
+  type: 'test'
+  ...
+# Subtest: 对照 relief.ledge：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+ok 400 - 对照 relief.ledge：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+  ---
+  duration_ms: 1.88625
+  type: 'test'
+  ...
+# Subtest: 对照 relief.passes：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+ok 401 - 对照 relief.passes：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0
+  ---
+  duration_ms: 30.058625
+  type: 'test'
+  ...
+# Subtest: 悬垂：确实有悬垂（朝下面 > 0、悬出来的地板 > 0、海蚀洞走得进去），新增字段只多不少
+ok 402 - 悬垂：确实有悬垂（朝下面 > 0、悬出来的地板 > 0、海蚀洞走得进去），新增字段只多不少
+  ---
+  duration_ms: 6.925875
+  type: 'test'
+  ...
+# Subtest: 河谷对照岛：最高格是孤峰（原版 DFS 走不回源头），峰高 > 3 层
+ok 403 - 河谷对照岛：最高格是孤峰（原版 DFS 走不回源头），峰高 > 3 层
+  ---
+  duration_ms: 2.867917
+  type: 'test'
+  ...
+# Subtest: 对齐别名：六个原版文件都登记了新落点（嫁接队列按导出名对账，不再算「只在原版」）
+ok 404 - 对齐别名：六个原版文件都登记了新落点（嫁接队列按导出名对账，不再算「只在原版」）
+  ---
+  duration_ms: 0.293458
+  type: 'test'
+  ...
+# Subtest: §5.3 meta：id / name / domain / line=terrain / requires / modules，modules 是 run 真正 import 的库模块
+ok 405 - §5.3 meta：id / name / domain / line=terrain / requires / modules，modules 是 run 真正 import 的库模块
+  ---
+  duration_ms: 1.540208
+  type: 'test'
+  ...
+# Subtest: 擂台岛：固定种子同一座岛，有城（cls 1）和轨道（cls 2）
+ok 406 - 擂台岛：固定种子同一座岛，有城（cls 1）和轨道（cls 2）
+  ---
+  duration_ms: 7.488167
+  type: 'test'
+  ...
+# Subtest: match：六个能力都能作用于擂台岛；坏采样不抛错
+ok 407 - match：六个能力都能作用于擂台岛；坏采样不抛错
+  ---
+  duration_ms: 2.257375
+  type: 'test'
+  ...
+# Subtest: 执行 + 独立验证：完整山体（软坡 + 硬崖 + 河谷 + 悬垂 + 梯子 + 等高线），不写存档，复算通过
+ok 408 - 执行 + 独立验证：完整山体（软坡 + 硬崖 + 河谷 + 悬垂 + 梯子 + 等高线），不写存档，复算通过
+  ---
+  duration_ms: 72.570083
+  type: 'test'
+  ...
+# Subtest: 确定性：同输入同结果；步骤乱序按固定顺序算，报告按声明顺序；requires 不满足就跳过
+ok 409 - 确定性：同输入同结果；步骤乱序按固定顺序算，报告按声明顺序；requires 不满足就跳过
+  ---
+  duration_ms: 85.717291
+  type: 'test'
+  ...
+# Subtest: 保护：建筑 / 轨道及外扩 1 圈一格不动；海陆不变
+ok 410 - 保护：建筑 / 轨道及外扩 1 圈一格不动；海陆不变
+  ---
+  duration_ms: 14.391875
+  type: 'test'
+  ...
+# Subtest: 破坏判失败：改保护格 / 把陆地变海 / 挖坑 / 岩檐悬空错位 / 梯子够不着 / 等高线不在格边 / 打开持久化 / 换场景 / 步骤对不上
+ok 411 - 破坏判失败：改保护格 / 把陆地变海 / 挖坑 / 岩檐悬空错位 / 梯子够不着 / 等高线不在格边 / 打开持久化 / 换场景 / 步骤对不上
+  ---
+  duration_ms: 119.892459
+  type: 'test'
+  ...
+# Subtest: PipeLineEngine 适配器：relief 走真实能力库，输入不被改，回执齐全
+ok 412 - PipeLineEngine 适配器：relief 走真实能力库，输入不被改，回执齐全
+  ---
+  duration_ms: 19.826625
+  type: 'test'
+  ...
+# Subtest: R22 自动预装：扫描后六个能力都进管线；清空过的不再自动填
+ok 413 - R22 自动预装：扫描后六个能力都进管线；清空过的不再自动填
+  ---
+  duration_ms: 1.941625
+  type: 'test'
+  ...
+# Subtest: 接线：能力树（collectExecutables）/ Worker / 左栏 / 管线页 / 桥接命令都登记了，版本号已加
+ok 414 - 接线：能力树（collectExecutables）/ Worker / 左栏 / 管线页 / 桥接命令都登记了，版本号已加
+  ---
+  duration_ms: 36.075042
+  type: 'test'
+  ...
+# Subtest: immutable experiments and explicit validated final survive reload
+ok 415 - immutable experiments and explicit validated final survive reload
+  ---
+  duration_ms: 3.812083
+  type: 'test'
+  ...
+# Subtest: storage failure is surfaced and duplicate plugins rejected
+ok 416 - storage failure is surfaced and duplicate plugins rejected
+  ---
+  duration_ms: 0.272959
+  type: 'test'
+  ...
+# Subtest: exact runtime version is stable after a new final; missing versions reject
+ok 417 - exact runtime version is stable after a new final; missing versions reject
+  ---
+  duration_ms: 0.15325
+  type: 'test'
+  ...
+# Subtest: 要不要挂：登记了才挂；山形 auto 不挂（R28 自带）；体素场景层挂但写 NOT_RUN；显式给就挂
+ok 418 - 要不要挂：登记了才挂；山形 auto 不挂（R28 自带）；体素场景层挂但写 NOT_RUN；显式给就挂
+  ---
+  duration_ms: 0.55275
+  type: 'test'
+  ...
+# Subtest: tier-workshop：seedReport 默认 auto，按 storageKey || tier 找登记；面板放在侧栏「来源详情」之前
+ok 419 - tier-workshop：seedReport 默认 auto，按 storageKey || tier 找登记；面板放在侧栏「来源详情」之前
+  ---
+  duration_ms: 0.332458
+  type: 'test'
+  ...
+# Subtest: 同一模块同一版本号：面板 / Worker / 登记表都引 seed-report.js?v=seeds-r61、seed-layers.js?v=seeds-r61；Worker 用 seeds-r62
+ok 420 - 同一模块同一版本号：面板 / Worker / 登记表都引 seed-report.js?v=seeds-r61、seed-layers.js?v=seeds-r61；Worker 用 seeds-r62
+  ---
+  duration_ms: 0.250958
+  type: 'test'
+  ...
+# Subtest: 登记表里各层模块的版本号与主线程其他引用方（worker-adapters.js / 各 verify-worker）现在用的一致（避免两份模块实例；现读不写死）
+ok 421 - 登记表里各层模块的版本号与主线程其他引用方（worker-adapters.js / 各 verify-worker）现在用的一致（避免两份模块实例；现读不写死）
+  ---
+  duration_ms: 1.122292
+  type: 'test'
+  ...
+# Subtest: 通用分布 / 挑选 = R28 山形同一算法（同一批行，两边答案逐值相同）
+ok 422 - 通用分布 / 挑选 = R28 山形同一算法（同一批行，两边答案逐值相同）
+  ---
+  duration_ms: 1.349417
+  type: 'test'
+  ...
+# Subtest: 逐个种子：某个种子抛错 = 这一座判失败，整批不中断；指标缺的写 null 不编数
+ok 423 - 逐个种子：某个种子抛错 = 这一座判失败，整批不中断；指标缺的写 null 不编数
+  ---
+  duration_ms: 0.365792
+  type: 'test'
+  ...
+# Subtest: 验证 → 通用分数：失败 = −1；通过 + 0.5 × 提醒；三个通用指标
+ok 424 - 验证 → 通用分数：失败 = −1；通过 + 0.5 × 提醒；三个通用指标
+  ---
+  duration_ms: 0.108708
+  type: 'test'
+  ...
+# Subtest: 登记表：11 层；体素场景层登记为 NOT_RUN 并写明原因；没登记的层 = NOT_RUN（blocked）
+ok 425 - 登记表：11 层；体素场景层登记为 NOT_RUN 并写明原因；没登记的层 = NOT_RUN（blocked）
+  ---
+  duration_ms: 114.907291
+  type: 'test'
+  ...
+# Subtest: battle：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+ok 426 - battle：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+  ---
+  duration_ms: 6.04775
+  type: 'test'
+  ...
+# Subtest: fx：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+ok 427 - fx：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+  ---
+  duration_ms: 436.42825
+  type: 'test'
+  ...
+# Subtest: apostles-terrain：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+ok 428 - apostles-terrain：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+  ---
+  duration_ms: 12.824333
+  type: 'test'
+  ...
+# Subtest: gscene：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+ok 429 - gscene：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+  ---
+  duration_ms: 11.679416
+  type: 'test'
+  ...
+# Subtest: object：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+ok 430 - object：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+  ---
+  duration_ms: 8.52525
+  type: 'test'
+  ...
+# Subtest: relief：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+ok 431 - relief：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+  ---
+  duration_ms: 154.499458
+  type: 'test'
+  ...
+# Subtest: building：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+ok 432 - building：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同
+  ---
+  duration_ms: 424.41825
+  type: 'test'
+  ...
+# Subtest: 山形适配器复用 R28 的 mountain/seeds.js：同种子同一行
+ok 433 - 山形适配器复用 R28 的 mountain/seeds.js：同种子同一行
+  ---
+  duration_ms: 263.177333
+  type: 'test'
+  ...
+# Subtest: 光影与生命：3 个合成岛各跑全部 9 个能力 + 独立验证
+ok 434 - 光影与生命：3 个合成岛各跑全部 9 个能力 + 独立验证
+  ---
+  duration_ms: 156.34725
+  type: 'test'
+  ...
+# Subtest: 球系统：配方 seed = s，2 个种子能编译出两颗不同的星球
+ok 435 - 球系统：配方 seed = s，2 个种子能编译出两颗不同的星球
+  ---
+  duration_ms: 1388.962042
+  type: 'test'
+  ...
+# Subtest: 命令行脚本：层清单来自登记表；写 artifacts/seed-report/<层>/latest.json；不 import 原版 REACode
+ok 436 - 命令行脚本：层清单来自登记表；写 artifacts/seed-report/<层>/latest.json；不 import 原版 REACode
+  ---
+  duration_ms: 0.417625
+  type: 'test'
+  ...
+# Subtest: planet: small sea-level rise passes all checks
+ok 437 - planet: small sea-level rise passes all checks
+  ---
+  duration_ms: 792.842125
+  type: 'test'
+  ...
+# Subtest: planet: drowning a scene landmark fails verification
+ok 438 - planet: drowning a scene landmark fails verification
+  ---
+  duration_ms: 677.017917
+  type: 'test'
+  ...
+# Subtest: planet: compiler failure is a failed candidate, not a crash
+ok 439 - planet: compiler failure is a failed candidate, not a crash
+  ---
+  duration_ms: 66.997708
+  type: 'test'
+  ...
+# Subtest: object: scan finds identical trees and overlaps; router follows goal keywords
+ok 440 - object: scan finds identical trees and overlaps; router follows goal keywords
+  ---
+  duration_ms: 0.709
+  type: 'test'
+  ...
+# Subtest: object: plan reduces overlaps, keeps manual edits, passes verification
+ok 441 - object: plan reduces overlaps, keeps manual edits, passes verification
+  ---
+  duration_ms: 0.836084
+  type: 'test'
+  ...
+# Subtest: object: touching a manual edit or exceeding the move budget fails
+ok 442 - object: touching a manual edit or exceeding the move budget fails
+  ---
+  duration_ms: 0.219708
+  type: 'test'
+  ...
+# Subtest: catalog: three workshops, every node has an execution state
+ok 443 - catalog: three workshops, every node has an execution state
+  ---
+  duration_ms: 11.383917
+  type: 'test'
+  ...
+# Subtest: actual fixed REA source executes a detached reproducible candidate with exact source revision
+ok 444 - actual fixed REA source executes a detached reproducible candidate with exact source revision
+  ---
+  duration_ms: 30.247125
+  type: 'test'
+  ...
+# Subtest: node target binding remains fixed and refuses another selected object or stale revision
+ok 445 - node target binding remains fixed and refuses another selected object or stale revision
+  ---
+  duration_ms: 2.205459
+  type: 'test'
+  ...
+# Subtest: raw leaf cards, region input and session UUID cannot masquerade as compatible canopy targets
+ok 446 - raw leaf cards, region input and session UUID cannot masquerade as compatible canopy targets
+  ---
+  duration_ms: 0.189292
+  type: 'test'
+  ...
+# Subtest: tampered payload, algorithm identity, writeSet or params reject before execution
+ok 447 - tampered payload, algorithm identity, writeSet or params reject before execution
+  ---
+  duration_ms: 4.555458
+  type: 'test'
+  ...
+# Subtest: invalid or overbudget algorithm inputs reject, and JSON roundtrip preserves execution
+ok 448 - invalid or overbudget algorithm inputs reject, and JSON roundtrip preserves execution
+  ---
+  duration_ms: 16.955334
+  type: 'test'
+  ...
+# Subtest: chain: assembled from contracts, then run stage by stage with the mountain plan feeding the building stage
+ok 449 - chain: assembled from contracts, then run stage by stage with the mountain plan feeding the building stage
+  ---
+  duration_ms: 204.057125
+  type: 'test'
+  ...
+# Subtest: chain: the page has the one-click two-stage run and the game rejects a stale terrain
+ok 450 - chain: the page has the one-click two-stage run and the game rejects a stale terrain
+  ---
+  duration_ms: 1.044083
+  type: 'test'
+  ...
+# Subtest: scene/object viewport orbit, pan and dolly preserve world and initial pose
+ok 451 - scene/object viewport orbit, pan and dolly preserve world and initial pose
+  ---
+  duration_ms: 2.686291
+  type: 'test'
+  ...
+# Subtest: ownership handoff applies stored pose and projection after a prior camera resets them
+ok 452 - ownership handoff applies stored pose and projection after a prior camera resets them
+  ---
+  duration_ms: 0.169375
+  type: 'test'
+  ...
+1..452
+# tests 452
+# suites 0
+# pass 452
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4198.939917

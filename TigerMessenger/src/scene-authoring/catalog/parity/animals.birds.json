@@ -1,0 +1,32 @@
+{
+ "capability": "animals.birds",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "animals",
+ "sameCriteriaEqual": true,
+ "verdict": "equivalent",
+ "original": [
+  "townscaper-web/REACode/src/birds.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/life/birds.js"
+ ],
+ "inputs": {
+  "verts": 240,
+  "minY": 0.6,
+  "spacing": 0.13
+ },
+ "metrics": [
+  {
+   "id": "perches",
+   "name": "栖点列表深等",
+   "original": 31,
+   "refactored": 31,
+   "equal": true
+  }
+ ],
+ "diffs": [],
+ "basis": "两文件 findRoofPerches 行号对齐（同一段落逐式移植）；同一假 geometry+callbacks 喂两边逐点比。"
+}

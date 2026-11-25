@@ -1,0 +1,135 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>平流场假彩色铺面 · REACode重构版</title><link rel="icon" href="data:,"><script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script><style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:12px 22px}iframe{width:100%;height:70vh;border:0}a{color:#26758a}label{margin-right:16px}span#status{display:block;margin-top:6px;font-variant-numeric:tabular-nums}</style><header><b>平流场 · 假彩色色带铺在真实 World 表面</b> · <a href="pipeline.html" target="_top">管线</a> · <a href="float.html">浮点读写实测</a><p>1664565063552847873：片内 117 帧只有一件事 —— 一个被平流输运的连续标量场按 plasma 色带铺在岩台上。本页把 <code>core/float-advect.js</code> 的场以 RGBA 浮点纹理贴到 <b>真实 <code>view.worldMesh.geometry</code></b>（同一批三角、同一套世界坐标）上，色带因此随台地/崖壁弯折，不是全屏平板。不是流体求解器；16F/32F 读写能力见 <a href="float.html">float.html</a>。</p><label>量化档<select id="quant"><option value="0">连续（float 场）</option><option value="8">8 级（模拟 8 位台阶）</option><option value="32">32 级</option></select></label><label><input id="freeze" type="checkbox">冻结时间</label><label><input id="shade" type="checkbox" checked>叠法线明暗</label><button id="reset">回到第 0 步</button><button id="step40">推进 40 步</button><span id="status">加载…</span></header><iframe id="scene" title="真实共享 World 平流色带"></iframe><script type="module">
+import * as THREE from 'three';
+import { createFieldBands, paletteCPU } from './src/world/float-bands.js';
+const $ = (s) => document.querySelector(s);
+let api, bands, raf = null;
+
+function text() {
+  if (!bands) return;
+  const s = bands.stats();
+  $('#status').textContent = `场 ${s.fieldSize}² · ${s.texture.type}+${s.texture.filter} · 存储 ${s.storage} · 三角 ${s.geometry.triangles}（来源 ${s.geometry.source}） · 步 ${s.steps} · 量化 ${s.quant || '连续'} · 场值 ${s.fieldRange[0]}–${s.fieldRange[1]}`;
+}
+
+function boot() {
+  const r = $('#scene').contentWindow.rea;
+  if (!r?.view?.worldMesh?.geometry) return false;
+  api = r;
+  bands = createFieldBands({ view: r.view, world: r.world, size: 128, storage: 'f32' });
+  // 只留色带层：原网格/描边/倒影关掉，避免与真实材质混色（测量口径要干净）
+  r.view.mesh.visible = false;
+  if (r.view.outline?.group) r.view.outline.group.visible = false;
+  if (r.view.reflection) r.view.reflection.visible = false;
+  bands.setCamera({ distance: 15, pitch: 0.62, yaw: 0.7 });
+  r.view.render(0);
+  // 每帧推进 1 步平流（由 view 的渲染循环驱动，不另起 rAF）
+  r.view.onFrame = () => { if (!$('#freeze').checked) bands.advance(1); };
+  text();
+  window.floatBands = {
+    bands, rea: r,
+    stats: () => bands.stats(),
+    reset() { bands.reset(); r.view.render(0); text(); return bands.steps; },
+    stepTo(n) { bands.stepTo(n); r.view.render(0); text(); return bands.steps; },
+    advance(n = 1) { bands.advance(n); r.view.render(0); text(); return bands.steps; },
+    setQuant(n) { bands.setQuant(n); r.view.render(0); text(); return bands.material.uniforms.uQuant.value; },
+    setShade(on) { bands.setShade(on); r.view.render(0); return bands.material.uniforms.uShade.value; },
+    /** 只留色带层（其余 scene 子对象全隐）—— 量色带口径要干净，否则建筑/植被/水面会挡在采样点上。 */
+    isolate(on = true) {
+      const keep = new Set([bands.mesh]);
+      const hidden = [];
+      for (const c of r.view.scene.children) { if (on && !keep.has(c) && c.visible) { c.visible = false; hidden.push(c); } }
+      if (!on) for (const c of r.view.scene.__fbHidden || []) c.visible = true;
+      r.view.scene.__fbHidden = on ? hidden : [];
+      r.view.render(0);
+      return hidden.length;
+    },
+    freeze(on) { $('#freeze').checked = !!on; },
+    camera(o) { bands.setCamera(o); r.view.render(0); return { distance: r.view.distance, pitch: r.view.pitch, yaw: r.view.yaw }; },
+    /** 读回画布（步长抽稀），y 自顶向下。 */
+    readPixels(step = 3) {
+      const { view } = r;
+      view.render(0);
+      const gl = view.renderer.getContext(), c = view.renderer.domElement;
+      const w = c.width, h = c.height;
+      const buf = new Uint8Array(w * h * 4);
+      gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+      const sw = Math.floor(w / step), sh = Math.floor(h / step);
+      const out = new Uint8Array(sw * sh * 4);
+      for (let y = 0; y < sh; y++) for (let x = 0; x < sw; x++) {
+        const src = ((h - 1 - y * step) * w + x * step) * 4;   // 第 0 行在下 → 翻正
+        const dst = (y * sw + x) * 4;
+        out[dst] = buf[src]; out[dst + 1] = buf[src + 1]; out[dst + 2] = buf[src + 2]; out[dst + 3] = buf[src + 3];
+      }
+      let bin = '';
+      for (let i = 0; i < out.length; i += 8192) bin += String.fromCharCode.apply(null, out.subarray(i, i + 8192));
+      return { w, h, step, sw, sh, b64: btoa(bin) };
+    },
+    /**
+     * 逐像素对表用的采样：从画布上撒 k×k 条射线打到色带层上，取**射线真正命中的世界点**
+     * （不是格心、不猜遮挡），并按片元同一套明暗公式给 CPU 孪生色。
+     */
+    probeGrid(k = 8) {
+      const { view } = r, cam = view.camera, c = view.renderer.domElement;
+      cam.updateMatrixWorld(true); cam.updateProjectionMatrix();
+      const rc = new THREE.Raycaster(), ndc = new THREE.Vector2();
+      const light = new THREE.Vector3(0.45, 0.82, 0.35).normalize();
+      const shadeOn = !!bands.material.uniforms.uShade.value;
+      const out = [];
+      for (let iy = 0; iy < k; iy++) for (let ix = 0; ix < k; ix++) {
+        const px = Math.round((ix + 0.5) / k * c.width), py = Math.round((iy + 0.5) / k * c.height);
+        ndc.set((px / c.width) * 2 - 1, -((py / c.height) * 2 - 1));
+        rc.setFromCamera(ndc, cam);
+        const hit = rc.intersectObject(bands.mesh, false)[0];
+        if (!hit) continue;
+        const p = hit.point;
+        const n = hit.face ? hit.face.normal.clone().transformDirection(bands.mesh.matrixWorld) : new THREE.Vector3(0, 1, 0);
+        const d = Math.min(1, Math.max(0, n.dot(light) * 0.5 + 0.5));
+        const fk = shadeOn ? 0.7 + 0.3 * d : 1;
+        const base = paletteCPU(bands.sampleCPU(p.x, p.z));
+        out.push({ px, py, world: [+p.x.toFixed(3), +p.y.toFixed(3), +p.z.toFixed(3)],
+          field: +bands.sampleCPU(p.x, p.z).toFixed(5),
+          cpu: base.map((v) => Math.round(Math.min(1, v * fk) * 255)), shade: +fk.toFixed(4) });
+      }
+      return out;
+    },
+    /** 顶面采样点：每个世界格取顶面中心（世界坐标 + CPU 侧应有颜色）。 */
+    surfacePoints(limit = 40) {
+      const { world, view } = r, L = view.levelHeight;
+      const pts = [];
+      for (const cell of world.cells) {
+        const top = world.top(cell);
+        if (!top) continue;
+        const x = cell.cx, z = cell.cz, y = (top - 1) * L;
+        const cam = view.camera;
+        const v3 = { x, y, z };
+        pts.push({ x: +x.toFixed(3), y: +y.toFixed(3), z: +z.toFixed(3), top,
+          field: bands.sampleCPU(x, z), cpu: bands.cpuColorShaded(x, z) });
+      }
+      pts.sort((a, b) => b.top - a.top);
+      const step = Math.max(1, Math.floor(pts.length / limit));
+      return pts.filter((_, i) => i % step === 0).slice(0, limit);
+    },
+    /** 世界点投影到画布像素（供 CPU/GPU 对表）。 */
+    projectTo(x, y, z) {
+      const { view } = r, cam = view.camera, c = view.renderer.domElement;
+      cam.updateMatrixWorld(true); cam.updateProjectionMatrix();
+      const THREE_v = bands.mesh.position.clone();   // 借用已有 Vector3
+      THREE_v.set(x, y, z).project(cam);
+      return { px: Math.round((0.5 + THREE_v.x * 0.5) * c.width), py: Math.round((0.5 - THREE_v.y * 0.5) * c.height), ndc: [THREE_v.x, THREE_v.y, THREE_v.z] };
+    },
+    palette: paletteCPU,
+  };
+  return true;
+}
+
+$('#quant').onchange = () => { window.floatBands.setQuant(Number($('#quant').value)); };
+$('#shade').onchange = () => { window.floatBands.setShade($('#shade').checked); };
+$('#freeze').onchange = () => { if (bands) bands.advance(0); };
+$('#reset').onclick = () => { window.floatBands.reset(); };
+$('#step40').onclick = () => { window.floatBands.reset(); window.floatBands.advance(40); };
+
+$('#scene').src = 'index.html?scene=terrain&grid=mixed';
+$('#scene').onload = () => {
+  const wait = () => { if (!boot()) setTimeout(wait, 120); };
+  wait();
+};
+</script></html>

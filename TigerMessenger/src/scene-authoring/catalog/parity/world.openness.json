@@ -1,0 +1,37 @@
+{
+ "capability": "world.openness",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "world",
+ "sameCriteriaEqual": true,
+ "verdict": "equivalent",
+ "original": [
+  "townscaper-web/REACode/src/rayvis.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/space-visibility.js"
+ ],
+ "inputs": {
+  "dirs": 32,
+  "scene": "16×8×16 房间+柱",
+  "probes": 3
+ },
+ "metrics": [
+  {
+   "id": "dirs",
+   "name": "fibonacciDirs(32) 逐位一致",
+   "equal": true
+  },
+  {
+   "id": "visibility",
+   "name": "同场景同方向集可见度最大差",
+   "original": 0,
+   "refactored": 0,
+   "equal": true
+  }
+ ],
+ "diffs": [],
+ "basis": "space-visibility 自述「rayvis.js 其余部分迁到共享 World」：方向集逐位比，可见度在同一占据场景上比（采样策略不同如实登记）。"
+}

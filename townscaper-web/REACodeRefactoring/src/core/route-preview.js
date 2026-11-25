@@ -41,6 +41,12 @@ function dedupe(points) {
  *
  * `at` 是崖沿在这一段上的归一化位置：给数（默认 0.5）或 (a, b, i) => t。
  * 导航图有真实楼梯格对时要传真实位置，否则弧会落在台地中间。
+ *
+ * 第 175 轮：外抛距离 `land` 是**上限**，不是死值 —— 真实导航图相邻节点只有 0.42–0.47 世界单位
+ * （一格宽），固定 0.55 会越过终点 → 原实现整段放弃弧（退化成斜插），主战场上 2 处跨崖
+ * 6 个点埋进崖体（995043346778415104 的片子正是「外抛一小段再几乎竖直落下」）。
+ * 现在按「这一段还剩多少水平余量」收边：reach = min(land, 剩余段 × 0.85)。
+ * 只有剩余余量小到塞不下任何弧（< 5% 段长）才退化成斜落。
  */
 export function landArcs(points, { minStep = 0.5, at = 0.5, land = 0.55, arcSegs = 8, maxArcs = 256 } = {}) {
   if (!Array.isArray(points)) throw new TypeError('points must be an array');
@@ -64,16 +70,21 @@ export function landArcs(points, { minStep = 0.5, at = 0.5, land = 0.55, arcSegs
     const t = atFn(a, b, i);
     if (!Number.isFinite(t) || t <= 0 || t >= 1) throw new RangeError('at callback must return t in (0,1)');
     const ux = hx / flat, uz = hz / flat;
-    // 沿口：崖沿处、上层高度；落点：沿走向再外抛 land，下层高度
-    const lip = [a[0] + hx * t, a[1], a[2] + hz * t];
-    const landing = [lip[0] + ux * land, b[1], lip[2] + uz * land];
-    if (Math.hypot(landing[0] - b[0], landing[2] - b[2]) > flat * (1 - t)) {
-      // 段太短，外抛会越过终点：退化成段内的斜落，不加弧
+    // 外抛距离按「这一段在崖沿之后还剩多少水平余量」收边（land 是上限）
+    const room = flat * (1 - t);
+    const reach = Math.min(land, room * 0.85);
+    if (!(reach > flat * 0.05)) {
+      // 剩余段太短，弧塞不下：退化成段内的斜落，不加弧
       out.push(b); continue;
     }
+    // 沿口：崖沿处、上层高度；落点：沿走向再外抛 reach，下层高度
+    const lip = [a[0] + hx * t, a[1], a[2] + hz * t];
+    const landing = [lip[0] + ux * reach, b[1], lip[2] + uz * reach];
     out.push(lip);
     // 二次贝塞尔：从沿口水平出去，控制点外抛 1.6 倍，再落到下层 —— 起点切线水平、终点切线陡
-    const cx = lip[0] + ux * land * 1.6, cz = lip[2] + uz * land * 1.6;
+    // 控制点同样收边：外抛不得超过剩余段（否则弧会甩到下一格外面，落点附近的点反而浮空）
+    const bulge = Math.min(reach * 1.6, room * 1.05);
+    const cx = lip[0] + ux * bulge, cz = lip[2] + uz * bulge;
     for (let k = 1; k < arcSegs; k++) {
       const s = k / arcSegs, w0 = (1 - s) * (1 - s), w1 = 2 * (1 - s) * s, w2 = s * s;
       out.push([w0 * lip[0] + w1 * cx + w2 * landing[0], w0 * lip[1] + w1 * lip[1] + w2 * landing[1], w0 * lip[2] + w1 * cz + w2 * landing[2]]);
@@ -156,6 +167,97 @@ export function buildRoutePreview(nodes, { spacing = 0.12, radius = 0.3, minStep
   const rounded = roundCorners(landed.points, { radius, segs });
   const sampled = samplePath(rounded.points, { spacing, maxSamples });
   return { ...sampled, hops, corners: rounded.corners, arcs: landed.arcs };
+}
+
+/**
+ * 检查点拖拽（810157485638189056 片中的三轴 gizmo）：返回**新**节点串，不改入参。
+ *
+ * 片子 0020–0450 逐帧看：棕色块顶面一直画着三角剖分对角线，一个带红/绿/蓝三轴的方柄
+ * 沿路线滑动，红曲线先画出、黑点再沿它铺开 —— 也就是「拖检查点 → 重采样」的实时回路。
+ * 这里只做几何侧的搬运；手柄→世界坐标的反投影在页面里（2D 线性映射有精确逆）。
+ */
+export function moveCheckpoint(nodes, index, delta) {
+  if (!Array.isArray(nodes)) throw new TypeError('nodes must be an array');
+  if (!nodes.every(isTriple)) throw new TypeError('finite XYZ triples required');
+  if (!Number.isInteger(index) || index < 0 || index >= nodes.length) throw new RangeError('index out of range');
+  if (!isTriple(delta)) throw new TypeError('delta must be a finite XYZ triple');
+  const out = nodes.map((p) => p.slice());
+  const from = out[index].slice();
+  out[index] = [from[0] + delta[0], from[1] + delta[1], from[2] + delta[2]];
+  return { nodes: out, moved: len3(from, out[index]), index };
+}
+
+/**
+ * 累积轨迹模式：把新采样点并进历史点阵，按 xz 栅格去重（同格只留第一次的点），
+ * 超过 max 从最早的开始丢。片子里点阵是「只增不减、铺满走过的地方」，不是每帧清空重画。
+ *
+ * trail 传空数组即可；返回新的 points（不原地改）。
+ */
+export function accumulateTrail(trail, added, { cell = 0.12, max = 8192 } = {}) {
+  if (!Array.isArray(trail)) throw new TypeError('trail must be an array');
+  if (!Array.isArray(added)) throw new TypeError('added must be an array');
+  if (!trail.every(isTriple) || !added.every(isTriple)) throw new TypeError('finite XYZ triples required');
+  if (!Number.isFinite(cell) || cell <= 0) throw new RangeError('cell must be > 0');
+  if (!Number.isInteger(max) || max < 1) throw new RangeError('max must be an integer >= 1');
+
+  const key = (p) => `${Math.round(p[0] / cell)},${Math.round(p[2] / cell)}`;
+  const seen = new Set(trail.map(key));
+  const points = trail.map((p) => p.slice());
+  let addedCount = 0;
+  for (const p of added) {
+    const k = key(p);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    points.push(p.slice());
+    addedCount++;
+  }
+  let dropped = 0;
+  while (points.length > max) { points.shift(); dropped++; }
+  return { points, added: addedCount, dropped, cells: seen.size };
+}
+
+/**
+ * 块面三角剖分线（调试层）：每个矩形顶面按一条对角线切成两片三角形。
+ * 片子里棕色块的顶面全都有这条线，且相邻块的斜向不一致（不是全局统一方向）。
+ *
+ * 注意：矩形的两条对角线**等长**，所以没有「取短/取长」这回事，只有斜向：
+ *   mode='a'   (x0,z0)-(x1,z1)
+ *   mode='b'   (x0,z1)-(x1,z0)
+ *   mode='alt' 按序号奇偶交替（片子里相邻块斜向不一致的样子）
+ * 返回 3D 线段端点，直接给页面画。
+ */
+export function quadTriDiagonals(rects, { mode = 'a' } = {}) {
+  if (!Array.isArray(rects)) throw new TypeError('rects must be an array');
+  if (!['a', 'b', 'alt'].includes(mode)) throw new RangeError("mode must be 'a' | 'b' | 'alt'");
+  const segments = [];
+  let aCount = 0, bCount = 0;
+  rects.forEach((r, i) => {
+    for (const k of ['x0', 'x1', 'z0', 'z1', 'y']) if (!Number.isFinite(r?.[k])) throw new TypeError(`rect[${i}].${k} must be finite`);
+    if (!(r.x1 > r.x0) || !(r.z1 > r.z0)) throw new RangeError(`rect[${i}] must have x1>x0, z1>z0`);
+    const a = [r.x0, r.y, r.z0], b = [r.x1, r.y, r.z1];   // 对角线 A：(x0,z0)-(x1,z1)
+    const c = [r.x0, r.y, r.z1], d = [r.x1, r.y, r.z0];   // 对角线 B：(x0,z1)-(x1,z0)
+    const useA = mode === 'a' ? true : mode === 'b' ? false : (i % 2) === 0;
+    if (useA) aCount++; else bCount++;
+    segments.push(useA ? [a, b] : [c, d]);
+  });
+  return { segments, quads: rects.length, a: aCount, b: bCount };
+}
+
+/**
+ * 拖拽回路要用的一组读数：点数 / 总长 / 跨层段 / 圆角 / 落崖弧 / 埋点数。
+ * surface 给了才数埋点（没给就是 null）。
+ */
+export function editRouteStats(nodes, { spacing = 0.16, radius = 0.35, surface = null, tol = 0.02, ...rest } = {}) {
+  const built = buildRoutePreview(nodes, { spacing, radius, ...rest });
+  return {
+    count: built.points.length,
+    length: built.length,
+    hops: built.hops,
+    corners: built.corners,
+    arcs: built.arcs,
+    buried: typeof surface === 'function' ? buriedSamples(built.points, surface, tol).length : null,
+    points: built.points,
+  };
 }
 
 /**

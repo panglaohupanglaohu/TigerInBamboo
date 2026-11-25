@@ -1,0 +1,129 @@
+{
+ "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/visible-audit/run-1795435941396",
+ "errors": [],
+ "topTabs": [
+  "◈ TIGER",
+  "系统工坊 · 编辑管线",
+  "学习工坊 · 学习管线",
+  "保存管线配方",
+  "导出配方 ↗",
+  "球系统管线",
+  "场景管线",
+  "物件管线",
+  "打开构建面板",
+  "01 △ 地形",
+  "02 ▥ 建筑",
+  "03 ≈ 水",
+  "04 ☼ 光",
+  "05 ◎ 世界",
+  "06 ❧ 生命",
+  "07 ♨ 烟火",
+  "08 ≋ 载具",
+  "09 ⚑ 战斗",
+  "△ 地形6",
+  "▥ 建筑3"
+ ],
+ "sceneOptions": [
+  "morris-lake|莫西斯湖 · 湖上建筑群（完整插件）",
+  "bookshop|书店镇（通用插件）",
+  "apostles|十二门徒（通用插件 + 构建面板）",
+  "moss|苔庭（通用插件）",
+  "citadel|高山圣城（通用插件 + 构建面板）",
+  "old-port|旧港湾（通用插件）",
+  "swamp|湖沼（通用插件）",
+  "moon-lake|月湖（通用插件）",
+  "gate|叹息之门（通用插件）",
+  "crystal|水晶城（通用插件 + 构建面板）"
+ ],
+ "highland-citadel": "无此场景选项",
+ "apostles": {
+  "workshops": [
+   {
+    "id": "system-workshop",
+    "shown": true,
+    "h": 1308,
+    "nodes": 0
+   },
+   {
+    "id": "planet-workshop",
+    "shown": false,
+    "h": 0,
+    "nodes": 0
+   },
+   {
+    "id": "gscene-workshop",
+    "shown": true,
+    "h": 644,
+    "nodes": 0
+   },
+   {
+    "id": "mountain-workshop",
+    "shown": false,
+    "h": 0,
+    "nodes": 0
+   },
+   {
+    "id": "battle-workshop",
+    "shown": true,
+    "h": 176,
+    "nodes": 0
+   },
+   {
+    "id": "fx-workshop",
+    "shown": true,
+    "h": 176,
+    "nodes": 0
+   },
+   {
+    "id": "object-workshop",
+    "shown": false,
+    "h": 0,
+    "nodes": 0
+   },
+   {
+    "id": "learning-workshop",
+    "shown": false,
+    "h": 0,
+    "nodes": 0
+   }
+  ],
+  "subTabs": [
+   "球系统管线",
+   "场景管线",
+   "物件管线"
+  ],
+  "sidebarCaps": 59,
+  "execCaps": [
+   "battle.stage",
+   "scene.oklab-palette",
+   "battle.stage",
+   "grid.contours",
+   "battle.stage",
+   "battle.stage",
+   "battle.garrison",
+   "battle.waves",
+   "scene.oklab-contrast",
+   "scene.oklab-palette",
+   "scene.palette-unify",
+   "scene.tone",
+   "scene.style-pack",
+   "mountain.protect",
+   "mountain.massif",
+   "mountain.erode",
+   "mountain.rolling",
+   "mountain.talus",
+   "mountain.lowpoly",
+   "fx.campaign",
+   "fx.camera",
+   "fx.wake",
+   "fx.ornament",
+   "fx.replay"
+  ]
+ },
+ "learnTabs": [
+  "能力树",
+  "能力地图",
+  "队列与闭环",
+  "时间线与能力演进"
+ ]
+}

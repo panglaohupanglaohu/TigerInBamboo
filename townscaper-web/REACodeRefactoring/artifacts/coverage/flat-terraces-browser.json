@@ -1,0 +1,174 @@
+{
+  "out": {
+    "off": {
+      "flatRoofs": false,
+      "flatRegions": 0,
+      "flatCells": 0,
+      "flatRimSegments": 0,
+      "flatRimLength": 0,
+      "flatDeckArea": 0,
+      "flatChimneys": 0,
+      "terraces": [],
+      "hMax": 0,
+      "verts": 8427,
+      "roofEls": 11,
+      "multTower": 63
+    },
+    "on": {
+      "flatRoofs": true,
+      "flatRegions": 11,
+      "flatCells": 16,
+      "flatRimSegments": 39,
+      "flatRimLength": 22.91,
+      "flatDeckArea": 4.7869,
+      "flatChimneys": 6,
+      "terraces": [
+        {
+          "h": 5,
+          "cells": 1,
+          "base": 2.5,
+          "minId": 9,
+          "rimSegments": 3,
+          "rimLength": 1.4751573979472425,
+          "deckArea": 0.10029417779210287,
+          "chimneys": 0,
+          "gables": 0,
+          "minY": 2.5,
+          "maxY": 2.562
+        },
+        {
+          "h": 6,
+          "cells": 1,
+          "base": 3,
+          "minId": 25,
+          "rimSegments": 4,
+          "rimLength": 2.6934951068311217,
+          "deckArea": 0.4484601968745555,
+          "chimneys": 0,
+          "gables": 0,
+          "minY": 3,
+          "maxY": 3.062
+        },
+        {
+          "h": 4,
+          "cells": 1,
+          "base": 2,
+          "minId": 70,
+          "rimSegments": 3,
+          "rimLength": 1.808453636064655,
+          "deckArea": 0.35304870022912527,
+          "chimneys": 0,
+          "gables": 0,
+          "minY": 2,
+          "maxY": 2.062
+        },
+        {
+          "h": 5,
+          "cells": 1,
+          "base": 2.5,
+          "minId": 88,
+          "rimSegments": 3,
+          "rimLength": 1.7116592326162086,
+          "deckArea": 0.34360333274125227,
+          "chimneys": 1,
+          "gables": 0,
+          "minY": 2.5,
+          "maxY": 2.8100409028846767
+        }
+      ],
+      "hMax": 0.3100409028846767,
+      "verts": 10173,
+      "roofEls": 0,
+      "multTower": 63
+    },
+    "ab": {
+      "W": 1100,
+      "H": 820,
+      "noise": 0,
+      "onVsOff": 70216,
+      "onHash": 463932703,
+      "offHash": 1488906183,
+      "backHash": 463932703,
+      "onVerts": 10173,
+      "offVerts": 8427,
+      "backVerts": 10173
+    },
+    "png": {
+      "n": 118925,
+      "bbox": [
+        114,
+        0,
+        1088,
+        819
+      ]
+    },
+    "url": {
+      "flatRoofs": true,
+      "flatRegions": 11,
+      "flatCells": 16,
+      "flatRimSegments": 39,
+      "flatRimLength": 22.91,
+      "flatDeckArea": 4.7869,
+      "flatChimneys": 6,
+      "terraces": [
+        {
+          "h": 5,
+          "cells": 1,
+          "base": 2.5,
+          "minId": 9,
+          "rimSegments": 3,
+          "rimLength": 1.4751573979472425,
+          "deckArea": 0.10029417779210287,
+          "chimneys": 0,
+          "gables": 0,
+          "minY": 2.5,
+          "maxY": 2.562
+        },
+        {
+          "h": 6,
+          "cells": 1,
+          "base": 3,
+          "minId": 25,
+          "rimSegments": 4,
+          "rimLength": 2.6934951068311217,
+          "deckArea": 0.4484601968745555,
+          "chimneys": 0,
+          "gables": 0,
+          "minY": 3,
+          "maxY": 3.062
+        },
+        {
+          "h": 4,
+          "cells": 1,
+          "base": 2,
+          "minId": 70,
+          "rimSegments": 3,
+          "rimLength": 1.808453636064655,
+          "deckArea": 0.35304870022912527,
+          "chimneys": 0,
+          "gables": 0,
+          "minY": 2,
+          "maxY": 2.062
+        },
+        {
+          "h": 5,
+          "cells": 1,
+          "base": 2.5,
+          "minId": 88,
+          "rimSegments": 3,
+          "rimLength": 1.7116592326162086,
+          "deckArea": 0.34360333274125227,
+          "chimneys": 1,
+          "gables": 0,
+          "minY": 2.5,
+          "maxY": 2.8100409028846767
+        }
+      ],
+      "hMax": 0.3100409028846767,
+      "verts": 10173,
+      "roofEls": 0,
+      "multTower": 63
+    }
+  },
+  "errors": []
+}

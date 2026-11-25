@@ -1,0 +1,187 @@
+{
+  "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+  "task": "Judge which game pipeline tier benefits most from fast-track refactoring this unrefactored REACode prototype module into REACodeRefactoring.",
+  "type": "choice",
+  "threshold": 0.8,
+  "usage": {
+    "items": 24,
+    "requests": 4,
+    "cache_hits": 0,
+    "input": 9981,
+    "output": 1212,
+    "cost_usd": 0.004194,
+    "errors": [],
+    "answered": 24
+  },
+  "decisions": {
+    "src/buildanim.js": {
+      "choice": "skip",
+      "confidence": 0.14,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/stilts.js": {
+      "choice": "object",
+      "confidence": 0.45,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/rimline.js": {
+      "choice": "scene",
+      "confidence": 0.39,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/paintblotch.js": {
+      "choice": "scene",
+      "confidence": 0.37,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/orderbadge.js": {
+      "choice": "skip",
+      "confidence": 0.69,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/cascades.js": {
+      "choice": "scene",
+      "confidence": 0.61,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/courtyard.js": {
+      "choice": "scene",
+      "confidence": 0.54,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/quadsphere.js": {
+      "choice": "planet",
+      "confidence": 0.95,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": true
+    },
+    "src/skyfilm.js": {
+      "choice": "planet",
+      "confidence": 0.55,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/planetatmo.js": {
+      "choice": "planet",
+      "confidence": 0.86,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": true
+    },
+    "src/tideflat.js": {
+      "choice": "scene",
+      "confidence": 0.59,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/voxdebug.js": {
+      "choice": "skip",
+      "confidence": 0.52,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/candleprops.js": {
+      "choice": "skip",
+      "confidence": 0.26,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/decalfield.js": {
+      "choice": "scene",
+      "confidence": 0.26,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/icefringe.js": {
+      "choice": "scene",
+      "confidence": 0.62,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/bloodfield.js": {
+      "choice": "scene",
+      "confidence": 0.68,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/grassedge.js": {
+      "choice": "scene",
+      "confidence": 0.84,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": true
+    },
+    "src/meshmerge.js": {
+      "choice": "object",
+      "confidence": 0.45,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "src/timberframe.js": {
+      "choice": "object",
+      "confidence": 0.84,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": true
+    },
+    "src/occmask.js": {
+      "choice": "object",
+      "confidence": 0.26,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": false
+    },
+    "tools/add.mjs": {
+      "choice": "skip",
+      "confidence": 0.98,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": true
+    },
+    "tools/batch-ids.mjs": {
+      "choice": "skip",
+      "confidence": 0.98,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": true
+    },
+    "tools/batch.mjs": {
+      "choice": "skip",
+      "confidence": 0.94,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": true
+    },
+    "tools/pixprobe.mjs": {
+      "choice": "skip",
+      "confidence": 0.87,
+      "model": "jev-1.14.0",
+      "cached": false,
+      "accepted": true
+    }
+  },
+  "scope": "文字证据的批量小判断。不看图、不审源码、不替代硬性检查；未达阈值的交给开发模型复核。"
+}

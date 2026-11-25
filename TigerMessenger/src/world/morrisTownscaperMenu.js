@@ -1,4 +1,4 @@
-import {UI_DEV} from '../ui/uiLayers.js?v=ui-layers-r4-release-edit';
+import {UI_DEV} from '../ui/uiLayers.js?v=ui-layers-r5-scenejump';
 import * as T from 'three';
 // In-game menu for the Morris lake, driven by REACodeRefactoring: its learnpanel (pipelines, toggles,
 // clips, camera tours), palettes, scene generators (town / terrain / fusion) and v5 share strings.

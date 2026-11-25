@@ -1,0 +1,120 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/recent-additions-e2e/run-1795569413648",
+  "steps": {
+    "panel": {
+      "source": "maturity",
+      "total": 95,
+      "visible": true,
+      "top": -256,
+      "height": 127,
+      "note": "8 / 95 个可执行能力 · 日期依据逐项写在括号里。",
+      "items": [
+        {
+          "id": "animals.birds",
+          "target": "#scene",
+          "level": "7",
+          "basis": "workshop-log",
+          "name": "动物层 · 飞鸟",
+          "line": "生物与装饰线",
+          "date": "2026-11-25 · 工坊日志首次提到",
+          "scenes": "能跑：莫西斯湖",
+          "badge": "L7"
+        },
+        {
+          "id": "building.edit",
+          "target": "#scene",
+          "level": "7",
+          "basis": "workshop-log",
+          "name": "建筑与空间",
+          "line": "光照线",
+          "date": "2026-11-25 · 工坊日志首次提到",
+          "scenes": "能跑：莫西斯湖",
+          "badge": "L7"
+        },
+        {
+          "id": "effects.fire",
+          "target": "#scene",
+          "level": "7",
+          "basis": "workshop-log",
+          "name": "特效层 · 火",
+          "line": "火焰线",
+          "date": "2026-11-25 · 工坊日志首次提到",
+          "scenes": "能跑：莫西斯湖",
+          "badge": "L7"
+        },
+        {
+          "id": "fx.replay",
+          "target": "#fx",
+          "level": "7",
+          "basis": "workshop-log",
+          "name": "管线回放图",
+          "line": "工具线",
+          "date": "2026-11-25 · 工坊日志首次提到",
+          "scenes": "能跑：十二门徒、苔庭、高山圣城、书店镇",
+          "badge": "L7"
+        },
+        {
+          "id": "life.animals",
+          "target": "#scene",
+          "level": "7",
+          "basis": "workshop-log",
+          "name": "小动物（导航面流动）",
+          "line": "生物与装饰线",
+          "date": "2026-11-25 · 工坊日志首次提到",
+          "scenes": "能跑：—",
+          "badge": "L7"
+        },
+        {
+          "id": "life.layers",
+          "target": "#scene",
+          "level": "7",
+          "basis": "workshop-log",
+          "name": "植物与飞鸟",
+          "line": "生物与装饰线",
+          "date": "2026-11-25 · 工坊日志首次提到",
+          "scenes": "能跑：莫西斯湖",
+          "badge": "L7"
+        },
+        {
+          "id": "life.plant-atlas",
+          "target": "#scene",
+          "level": "7",
+          "basis": "workshop-log",
+          "name": "植物图集（全场景共用）",
+          "line": "植被线",
+          "date": "2026-11-25 · 工坊日志首次提到",
+          "scenes": "能跑：—",
+          "badge": "L7"
+        },
+        {
+          "id": "life.smoke",
+          "target": "#scene",
+          "level": "7",
+          "basis": "workshop-log",
+          "name": "烟（烟囱）",
+          "line": "烟火线",
+          "date": "2026-11-25 · 工坊日志首次提到",
+          "scenes": "能跑：—",
+          "badge": "L7"
+        }
+      ]
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#recent-additions .recent-item[data-capability-id=\"fx.replay\"]')\n    - locator resolved to <button type=\"button\" data-level=\"7\" data-target=\"#fx\" class=\"recent-item m7\" data-basis=\"workshop-log\" data-capability-id=\"fx.replay\" title=\"管线回放图（fx.replay）↵能力线：工具↵加入：2026-11-25（工坊日志首次提到）↵能跑的场景：十二门徒、苔庭、高山圣城、书店镇↵九级成熟度：L7（缺 ①②④）↵本机执行 0 次 · 通过 0 · 采用 0↵点击 → 表现层管线\">…</button>\n",
+  "state": {
+    "focus": null,
+    "tier": "scene",
+    "scene": "morris-lake",
+    "hash": "#scene",
+    "selected": [
+      "场景管线"
+    ],
+    "status": "真实场景已连接。扫描场景能力后，按改造方向生成候选。",
+    "flash": false
+  }
+}

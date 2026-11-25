@@ -27,6 +27,11 @@ const quad = (a, b, c, d) => { for (const p of [a, b, c, a, c, d]) { pos.push(..
 quad([-.5, 0, -.5], [-.5, 0, .5], [.5, 0, .5], [.5, 0, -.5]);    // 海平面那格
 for (let i = 1; i < N; i++) quad([i - .5, .5, -.5], [i - .5, .5, .5], [i + .5, .5, .5], [i + .5, .5, -.5]);
 quad([.5, 0, -.5], [.5, 0, .5], [.5, .5, .5], [.5, .5, -.5]);     // 崖壁（x=.5，从海平面到台面）
+// 多层台阶：低台 z=.5 外挑一块 y=1.0 的高台（x∈[2.5,4.5]，z∈[.5,1.5]），立面 + 顶面两级都供等值线爬
+for (const x0 of [2.5, 3.5]) {
+  quad([x0, .5, .5], [x0 + 1, .5, .5], [x0 + 1, 1, .5], [x0, 1, .5]);        // 台阶立面 .5→1.0
+  quad([x0, 1, .5], [x0, 1, 1.5], [x0 + 1, 1, 1.5], [x0 + 1, 1, .5]);        // 高台顶面（y+ 朝上的绕序）
+}
 const hx = 8; quad([hx - .3, .5, -.3], [hx - .3, .9, -.3], [hx + .3, .9, -.3], [hx + .3, .5, -.3]); quad([hx - .3, .9, -.3], [hx - .3, .9, .3], [hx + .3, .9, .3], [hx + .3, .9, -.3]);
 const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); geo.computeVertexNormals();
 const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ side: THREE.DoubleSide }));
@@ -85,11 +90,36 @@ const hitAt = (x) => ({ cell: index.cellAt(x, 0), point: new THREE.Vector3(x, .5
 b.selected = sq1;
 assert.equal(b.onPointer(hitAt(4)), true); assert.deepEqual(c03.pending.options, ['move']); assert.equal(sq1.goal, cells[2], '确认前不动');
 assert.ok(c03.marker.visible, '地面标记');
+assert.ok(Math.abs(c03.marker.position.x - 4) < .01 && Math.abs(c03.marker.position.z - 0) < .01, '标记钉在目标格中心');
 c03.confirmAction('move'); assert.equal(sq1.goal, cells[4], 'Move 确认后才下令'); assert.equal(b.selected, null);
+assert.equal(c03.marker.visible, false, '确认后标记收回'); assert.equal(c03.pending, null, 'pending 清理');
 b.selected = sq1; b.onPointer(hitAt(6.3)); assert.deepEqual(c03.pending.options, ['select', 'move', 'swap'], '目标处有别队 → 三项');
 c03.confirmAction('swap'); assert.equal(sq1.goal, cells[6]); assert.equal(sq2.goal, cells[4], 'Swap 互换');
+assert.equal(sq2.goalFloor, sq1.goalFloor, 'Swap 楼层也互换');
+assert.equal(c03.marker.visible, false, 'Swap 后标记收回');
 b.selected = sq1; b.onPointer(hitAt(4.1)); c03.confirmAction('select'); assert.equal(b.selected, sq2, 'Select 改选那一队');
-c03.set('confirm', false); reset();
+// Esc 取消：弹窗开着 → 收掉且不下令；没开 → cancelPopup 返回 false
+b.selected = sq1; b.onPointer(hitAt(3)); assert.ok(c03.pending && c03.marker.visible, '再开弹窗');
+assert.equal(c03.cancelPopup(), true, 'Esc 取消返回 true'); assert.equal(c03.pending, null); assert.equal(c03.marker.visible, false, 'Esc 收回标记');
+assert.equal(sq1.goal, cells[6], '取消不下令'); assert.equal(c03.cancelPopup(), false, '没弹窗返回 false');
+// 确认走 battle 原下令路径：navigation.plan 必须被调（不绕过校验）；plan 打回 → 不改 goal
+const origPlan = b.navigation.plan.bind(b.navigation); const planCells = [];
+b.navigation.plan = (u, cell, floor) => { planCells.push(cell?.id); return origPlan(u, cell, floor); };
+b.selected = sq1; b.onPointer(hitAt(5)); c03.confirmAction('move');
+assert.equal(sq1.goal, cells[5], '确认 Move 落到真实 goal'); assert.ok(planCells.includes(5), 'navigation.plan 校验过目标');
+b.navigation.plan = () => null;
+sq1.goal = cells[6]; b.selected = sq1; b.onPointer(hitAt(5)); assert.ok(c03.pending, '弹窗照开');
+c03.confirmAction('move'); assert.equal(sq1.goal, cells[6], 'plan 打回 → 目标不变');
+b.navigation.plan = origPlan;
+// 弹窗期间队伍阵亡 / 选中被顶替 → 自动收
+b.selected = sq1; b.onPointer(hitAt(3)); sq1.alive = false; tick(.05);
+assert.equal(c03.pending, null, '队伍阵亡自动收'); assert.equal(c03.marker.visible, false);
+sq1.alive = true;
+// 关档时开着弹窗 → 收回
+b.selected = sq1; b.onPointer(hitAt(3)); assert.ok(c03.pending);
+c03.set('confirm', false); assert.equal(c03.pending, null); assert.equal(c03.marker.visible, false, '关档收回标记');
+assert.ok(!c03._escKey, '关档摘掉 Esc 监听（Node 无 addEventListener，本来就不挂）');
+reset();
 
 // ⑤ houseFx：失守 → 屋下焦痕 → 2.2 s 后火球（粉辉光）→ 屋体顶点压成焦黑；stop 还原
 c03.set('houseFx', true);
@@ -112,6 +142,16 @@ c03.set('torches', false); reset();
 // ⑦ distIso：表面测地距离 —— 从海平面那格出发，线爬上崖壁（竖直面上有段），台面上等间距
 const iso = isoLinesOnMesh(mesh, { spacing: .2 });
 assert.ok(iso.sources > 0 && iso.levels >= 10 && iso.segments > 30 && iso.wallSegments >= 2, JSON.stringify({ ...iso, positions: iso.positions.length }));
+// 多层台阶补强：侧挑高台（y=1.0，z>.5）顶面有线、第二级立面（z≈.5，y∈[.55,.95]）也有线
+let tierSegs = 0, riserSegs = 0;
+for (let s = 0; s < iso.positions.length; s += 6) {
+  const xs = [iso.positions[s], iso.positions[s + 3]], ys = [iso.positions[s + 1], iso.positions[s + 4]], zs = [iso.positions[s + 2], iso.positions[s + 5]];
+  if (ys.every((y) => y > .93) && zs.every((z) => z > .55)) tierSegs++;
+  // 立面段：两端 z≈.5（贴墙），中点落在墙内部 y∈(.5,1)、x∈(2.5,4.5)
+  if (zs.every((z) => Math.abs(z - .5) < .025) && (ys[0] + ys[1]) / 2 > .52 && (ys[0] + ys[1]) / 2 < .98 && xs.every((x) => x > 2.4 && x < 4.6)) riserSegs++;
+}
+assert.ok(tierSegs >= 4, '高台顶面有等值线段 ' + tierSegs);
+assert.ok(riserSegs >= 3, '第二级台阶立面爬线 ' + riserSegs);
 c03.isoSpacing = .2; c03.set('distIso', true); tick(.05); assert.ok(c03.isoLines?.visible && c03.stats.isoSegments === iso.segments);
 c03.set('distIso', false); assert.equal(c03.isoLines.visible, false);
 

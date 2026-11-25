@@ -13,4 +13,8 @@ top = [H(c) for c in town]
 if mode == 'base': bot = [H(c) for c in town]
 elif mode == 'pale': bot = [pale(c) for c in town]          # 片中 frame 340：下行全部涂浅
 elif mode == 'half': bot = [pale(c) if i % 2 else H(c) for i, c in enumerate(town)]
+elif mode == 'rows':                                        # 多行验收：上行换成错位一族的颜色，下行全浅 → 两行一眼可分
+    top = [H(c) for c in town[7:] + town[:7]]
+    bot = [pale(c) for c in town]
+else: raise SystemExit('mode: base|pale|half|rows')
 write_png(out, 16, 2, top + bot)

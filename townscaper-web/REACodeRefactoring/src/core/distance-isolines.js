@@ -4,11 +4,13 @@
  * 同一块平地上是一圈圈互相嵌套的闭环 —— 这是距离场的等值线（iso-distance），
  * 不是流向继承线（902069261304287232 那条画的是每格到父格的一段，会分叉、不闭合）。
  *
- * 本模块只做这条链：可走格 mask → 精确欧氏距离变换（到最近不可走格 / 岛缘的格心距离）
- *   → marching squares 取任意多级等值线 → 端点缝合成长折线（闭环 / 开放都能标出来）。
+ * 本模块只做这条链：可走格 mask + 任意多边形占地 obstacles → 精确欧氏距离变换
+ *   （到最近不可走格 / 岛缘 / 多边形边界的格心距离）→ marching squares 取任意多级等值线
+ *   → 端点缝合成长折线（闭环 / 开放都能标出来）。
  *
- * 没做：多层 nav 的各层独立距离、等值线的世界坐标投影（贴到台阶立面）、
- *   battle.js 的调试层开关（这一轮的片子是纯地形静态图，没有单位参与）。
+ * 3D 多层台阶与 battle.js 调试接入落在 src/badnorth/battle-c03.js 的 distIso 档
+ *   （isoLinesOnMesh：渲染网格表面测地距离，线爬崖壁/台阶立面，默认关，?distIso=1 或
+ *   c03.set('distIso', true) 打开）。本文件管 2D 网格口径 + 亚格精度的多边形占地。
  */
 
 /** 一维平方距离变换（Felzenszwalb & Huttenlocher）。f 里允许 Infinity（没有源）。 */
@@ -33,14 +35,54 @@ function edt1d(f, n, d, v, z) {
   }
 }
 
+/** 点到线段距离。 */
+function segDist(px, py, ax, ay, bx, by) {
+  const dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy;
+  const t = l2 ? Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / l2)) : 0;
+  return Math.hypot(px - ax - dx * t, py - ay - dy * t);
+}
+
+/** 校验并归一化一个任意多边形占地（≥3 顶点、有限坐标、首尾不重复）。 */
+function normalizePolygon(poly) {
+  if (!Array.isArray(poly) || poly.length < 3) throw new RangeError('多边形占地至少需要 3 个顶点');
+  const out = poly.map((p) => {
+    if (!Array.isArray(p) || p.length < 2 || !Number.isFinite(p[0]) || !Number.isFinite(p[1])) throw new TypeError('多边形顶点必须是 [x,y] 有限坐标');
+    return [p[0], p[1]];
+  });
+  if (out.length > 1 && out[0][0] === out.at(-1)[0] && out[0][1] === out.at(-1)[1]) out.pop();
+  if (out.length < 3) throw new RangeError('多边形占地去重后不足 3 个顶点');
+  return out;
+}
+
 /**
- * 距离场：dist[i] = 该格中心到最近「不可走格或岛外」格心的欧氏距离（格为单位）。
- * 岛缘算距离 0.5 之外的第一格 → 边界格距离 1。
+ * 点到简单多边形的**有向**欧氏距离：负 = 内部，0 = 边界上。
+ * 任意凸/凹多边形都行（偶奇规则判内外），距离取到各边线段的最小值 —— 所以斜墙、
+ * 退台、尖角 footprint 的等值线都贴着真实边线走，不再被格子边界切成台阶。
  */
-export function distanceField(mask, { w, h } = {}) {
+export function polygonDistance(x, y, poly) {
+  const p = normalizePolygon(poly);
+  let best = Infinity, inside = false;
+  for (let i = 0; i < p.length; i++) {
+    const [ax, ay] = p[i], [bx, by] = p[(i + 1) % p.length];
+    const d = segDist(x, y, ax, ay, bx, by); if (d < best) best = d;
+    if ((ay > y) !== (by > y) && x < ax + (bx - ax) * (y - ay) / (by - ay)) inside = !inside;
+  }
+  return inside ? -best : best;
+}
+
+/**
+ * 距离场：dist[i] = 该格中心到最近「不可走格、岛外或多边形占地边界」的欧氏距离（格为单位）。
+ * 岛缘算距离 0.5 之外的第一格 → 边界格距离 1。
+ *
+ * obstacles：任意多边形 footprint（顶点按 mask 同款「格心=整数坐标」口径）。
+ *   格心落在多边形内 → 距离 0（等于多了一个源）；多边形外取到边界的精确距离，
+ *   与 EDT 的格心距离取 min —— 斜边占地不再退化成一格一格的方块。
+ */
+export function distanceField(mask, { w, h, obstacles = [] } = {}) {
   if (!Array.isArray(mask) && !mask?.length) throw new TypeError('mask 需要可索引的格子数组');
   if (!Number.isInteger(w) || !Number.isInteger(h) || w < 2 || h < 2) throw new RangeError('w/h 必须是 ≥2 的整数');
   if (mask.length !== w * h) throw new RangeError(`mask 长度 ${mask.length} ≠ ${w}×${h}`);
+  const polys = obstacles.map(normalizePolygon);
   // 四周补一圈「外面」= 距离 0 的源，边界格的距离才是 1 而不是无穷。
   const W = w + 2, H = h + 2, f = new Float64Array(W * H).fill(0);
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
@@ -59,16 +101,25 @@ export function distanceField(mask, { w, h } = {}) {
     edt1d(tmp, H, out, v, z);
     for (let y = 0; y < H; y++) grid[y * W + x] = out[y];
   }
+  /** 占地多边形对单点的贡献：内部/边界 0，外部取精确边界距离。 */
+  const polyAt = (x, y) => {
+    let d = Infinity;
+    for (const p of polys) { const sd = polygonDistance(x, y, p); if (sd < d) d = sd; }
+    return Math.max(0, d);
+  };
   const dist = new Float32Array(w * h);
   let max = 0;
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-    const i = y * w + x, d = Math.sqrt(grid[(y + 1) * W + (x + 1)]);
+    const i = y * w + x;
+    let d = Math.sqrt(grid[(y + 1) * W + (x + 1)]);
+    if (mask[i] && polys.length) { const pd = polyAt(x, y); if (pd < d) d = pd; }
     dist[i] = mask[i] ? d : 0;
     if (mask[i] && d > max) max = d;
   }
   return {
-    w, h, dist, max,
-    /** 双线性采样（格子中心为整数坐标），给等值线插值和验收用 */
+    w, h, dist, max, obstacles: polys,
+    /** 双线性采样（格子中心为整数坐标），给等值线插值和验收用；
+     *  有占地多边形时与多边形边界的精确距离取 min —— 等值线在格内也贴斜边。 */
     at(x, y) {
       const x0 = Math.floor(x), y0 = Math.floor(y), tx = x - x0, ty = y - y0;
       const g = (px, py) => {
@@ -77,7 +128,9 @@ export function distanceField(mask, { w, h } = {}) {
       };
       const a = g(x0, y0) * (1 - tx) + g(x0 + 1, y0) * tx;
       const b = g(x0, y0 + 1) * (1 - tx) + g(x0 + 1, y0 + 1) * tx;
-      return a * (1 - ty) + b * ty;
+      let v = a * (1 - ty) + b * ty;
+      if (polys.length) { const pd = polyAt(x, y); if (pd < v) v = pd; }
+      return v;
     },
   };
 }

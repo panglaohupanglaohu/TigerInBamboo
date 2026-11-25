@@ -1,0 +1,9 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/battle-apostles-e2e/run-1795256083579",
+  "steps": {
+    "mount": "ok"
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "page.waitForFunction: Timeout 90000ms exceeded.\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/battle-apostles-browser.mjs:25:13"
+}

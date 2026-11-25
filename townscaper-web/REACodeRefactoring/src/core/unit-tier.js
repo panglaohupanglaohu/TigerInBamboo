@@ -15,3 +15,31 @@ export function setUnitAppearanceTier(unit, tier = null) {
   else { unitTierAppearance(tier); unit.appearanceTier = tier; }
   return unit;
 }
+
+/* 827215002448846848 残差·升级机制：本地最小真实机制「击杀数 → 等级 → 装备档位」。
+ * 非原作复现 —— 片里只见三档装束并列展示，升级经济 / XP / 触发时机均未公开；
+ * 上游 REACode 裁判也没有等级/XP 字段可对齐（squadbanner/combatfx 通读无对应概念），
+ * 故字段取直白语义 u.kills（击杀计数）/ u.level（当前档位）。
+ * 阈值 [2,5] 是本地解释：片内没有升级过程可量化，取「一场小战能看到升档」的最小刻度。
+ * 等级只升不降；spawnSquad tier=N 预置档位的单位以 appearanceTier 为起始档，不会被打回低档。 */
+export const PROMOTION_THRESHOLDS = Object.freeze([2, 5]);
+export function unitLevelForKills(kills, thresholds = PROMOTION_THRESHOLDS) {
+  if (!Number.isInteger(kills) || kills < 0) throw new RangeError('kills must be a non-negative integer');
+  if (!Array.isArray(thresholds) || !thresholds.length || thresholds.some((t) => !Number.isInteger(t) || t < 1)) throw new RangeError('invalid promotion thresholds');
+  let level = 1;
+  for (const t of thresholds) if (kills >= t) level++;
+  return Math.min(level, TIERS.length);
+}
+/** 记一次击杀并刷新 u.level；返回 {kills, level, earned, promoted}。
+ * earned = 仅按击杀数该得的档位；level = max(原档, earned)（升级不降档）；
+ * promoted = 本次真的升档（调用方应同步外观档位）。 */
+export function creditUnitKill(u, { thresholds = PROMOTION_THRESHOLDS } = {}) {
+  if (!u || typeof u !== 'object') throw new TypeError('unit required');
+  const kills = u.kills ?? 0;
+  if (!Number.isInteger(kills) || kills < 0) throw new RangeError('u.kills must be a non-negative integer');
+  const before = u.level ?? u.appearanceTier ?? 1;
+  const earned = unitLevelForKills(kills + 1, thresholds);
+  const level = Math.max(before, earned);
+  u.kills = kills + 1; u.level = level;
+  return { kills: u.kills, level, earned, promoted: level > before };
+}

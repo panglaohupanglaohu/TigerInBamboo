@@ -1,0 +1,88 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/building-citadel-e2e/run-1795460879578",
+  "capabilities": [
+    {
+      "id": "building.joint-wfc",
+      "scene": "citadel",
+      "buildings": 11,
+      "meshes": 65
+    }
+  ],
+  "steps": {
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「高山圣城（通用插件 + 构建面板）」自动预装 3 个能力（建筑选址、多格 prefab 目录、联合 WFC 摆建筑群），点 ▶ 执行管线一键跑完整条。",
+    "rootBefore": {
+      "meshes": 3649,
+      "sig": 1141278.172
+    },
+    "run": {
+      "h4": "候选 · 通过（需留意）",
+      "checks": [
+        "✓ 计划与采样网格一致101×101 建筑格，每格 3 m",
+        "✓ 足迹不压保护格11 栋都在可建格上",
+        "✓ 建筑 / 路不重叠共占 21 格",
+        "✓ 足迹 = prefab 形状每栋与库里的 prefab × 朝向一致",
+        "✓ 足迹高差每栋 ≤ 3 m",
+        "✓ 门 socket 对着路11 扇门都对着路",
+        "✓ 路 socket 不悬空10 格路都接上了",
+        "! 路网接到老城或别的门7 段路网，4 段接到老城或 ≥ 2 扇门；3 扇门的路是孤立的",
+        "✓ 建筑数量11 栋（要求 ≥ 3）",
+        "✓ 建筑底面不埋进地里11 栋底面都在足迹最高处之上",
+        "✓ 契约 · 已有建筑（含用户搭建）不动已有建筑格 481 格：无落点",
+        "✓ 契约 · 建筑保护带不动建筑保护带（4 m） 616 格：无落点",
+        "✓ 契约 · 轨道净空轨道净空（6 m） 939 格：无落点",
+        "✓ 契约 · 海岸线不变海平面 0.3 m：陆 / 海不变，落点都在陆上",
+        "✓ 契约 · 不写用户存档改造 / 验证都在 Worker 里（没有 localStorage），不写存档；采用只写候选记录",
+        "✓ 契约 · 不碰湖上建筑场景 citadel 不是莫西斯湖",
+        "✓ 契约 · 原地形只隐藏不改候选不改地形高度"
+      ],
+      "state": {
+        "active": true,
+        "id": "citadel",
+        "previewing": true,
+        "comparing": false,
+        "inScene": true,
+        "meshes": 65,
+        "buildings": 11,
+        "roads": 10,
+        "terrain": "original",
+        "mountainPreviewing": false,
+        "terrainStale": false,
+        "adopted": false,
+        "seed": 7,
+        "groups": [
+          {
+            "name": "building-candidate-citadel",
+            "children": 65,
+            "visible": true
+          }
+        ]
+      }
+    },
+    "rootDuring": {
+      "meshes": 3649,
+      "sig": 1141278.172
+    },
+    "record": {
+      "buildings": 11,
+      "autoDeploy": false,
+      "terrain": "original"
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R57-1-candidate-oblique.png",
+    "R57-2-original-same-camera.png",
+    "R57-3-side-after-unadopt.png"
+  ],
+  "pass": true
+}

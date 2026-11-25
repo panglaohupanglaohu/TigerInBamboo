@@ -1,0 +1,67 @@
+{
+ "capability": "effects.fire",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "fx",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/smokefx.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/smoke-order.js"
+ ],
+ "inputs": {
+  "samples": 216,
+  "edge": 0.5,
+  "cut": 0.055,
+  "pull": 0.07
+ },
+ "metrics": [
+  {
+   "id": "mask",
+   "name": "圆角遮罩公式（原版 mask vs 本侧 outer）",
+   "original": "逐字",
+   "refactored": 0,
+   "equal": true
+  },
+  {
+   "id": "bright",
+   "name": "亮部 cutoff（原版喂 mask vs 本侧喂 pull 内缩圈）",
+   "original": "逐字公式不同输入",
+   "refactored": 0.8788,
+   "equal": false
+  },
+  {
+   "id": "glslTwin",
+   "name": "fireCardGLSL 与 JS 同源孪生",
+   "original": "原版 GLSL only",
+   "refactored": true
+  },
+  {
+   "id": "rim",
+   "name": "描边",
+   "original": "两遍叠加自然出描边",
+   "refactored": "rim = outer − innerMask 解析描边"
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "亮部输入圈",
+   "original": "cutoff 喂外圈 mask",
+   "refactored": "cutoff 喂 pull 内缩圈（PULL=0.07「cutoff pulled in 1 pixel」显式参数化）",
+   "note": "smoothstep(.02+cut*1.6,.10+cut*1.6, M*mix(.35,n,.8)) 公式逐字一致，M 取内缩圈 → 亮部差 max 0.879"
+  },
+  {
+   "kind": "mechanism",
+   "id": "两遍绘制",
+   "original": "GPU 两遍（dark pass+bright pass，renderOrder 10/11）",
+   "refactored": "JS/GLSL 解析 alpha+rim 单通",
+   "note": "同「z-depth and draw order … 2 passes」意图的不同实现"
+  }
+ ],
+ "basis": "fireCard 注释自标 REACode/smokefx.js makeFlame：把原版第二遍 GLSL 公式忠实转 JS 对拍——遮罩公式逐字等（max 0）、亮部因 pull 内缩圈差异如实量（max 0.879）、JS/GLSL 孪生同源。"
+}

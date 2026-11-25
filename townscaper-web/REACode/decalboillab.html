@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>贴花持续叠加：boil 与接缝出血</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:112ch; }
+  header b { color:#9c4720; font-weight:650; }
+  #stage { position:fixed; inset:96px 16px 66px 16px; display:flex; gap:14px; align-items:center; justify-content:center;
+    background:#20282b; border-radius:12px; border:1px solid var(--line); padding:14px; }
+  .col { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .col span { color:#9fb3b8; font-size:11.5px; }
+  canvas { image-rendering:auto; border-radius:8px; display:block; }
+  #panel { position:fixed; right:26px; top:110px; width:238px; background:#fff; border:1px solid var(--line);
+    border-radius:10px; padding:11px 13px; display:flex; flex-direction:column; gap:8px; z-index:5;
+    box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #panel label.chk { display:flex; gap:7px; align-items:center; font-size:12.5px; cursor:pointer; }
+  #stats { position:fixed; left:18px; bottom:14px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; z-index:5; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .warn { color:#9c4720; font-weight:650; }
+</style>
+</head>
+<body>
+<header>
+  <h1>贴花不是贴一层，是<b>每帧继续往上叠</b><span style="font-size:12px;color:#5c727a;font-weight:400"> · 1427721874490933250</span></h1>
+  <p>镜头不动、几何不动，但每帧都有新贴花压上去，各自带自己的随机相位 → 画面像黏土动画那样"呼吸"（line boil）。
+     按格贴就必然踩到接缝，所以要给每格<b>出血 pad</b>：贴花允许画到邻居地盘的边缘外几个像素。</p>
+</header>
+<div id="stage">
+  <div class="col"><span id="lblA">pad=2（出血）</span><canvas id="cvA"></canvas></div>
+  <div class="col"><span id="lblB">pad=0（裁在格内）</span><canvas id="cvB"></canvas></div>
+</div>
+<div id="panel">
+  <h2>参数</h2>
+  <label class="chk"><input type="checkbox" id="play" checked> 播放（每帧叠 rate 张）</label>
+  <label class="chk"><input type="checkbox" id="seams"> 画出格子边界</label>
+  <div class="row"><span>每帧新增</span><b id="vrate">3</b></div>
+  <input type="range" id="rate" min="0" max="10" value="3" step="1">
+  <div class="row"><span>抖动 jitter</span><b id="vjit">0.09</b></div>
+  <input type="range" id="jit" min="0" max="0.4" value="0.09" step="0.01">
+  <div class="row"><span>已叠贴花</span><b id="vn">0</b></div>
+  <div class="row"><span>帧间变动</span><b id="vboil">–</b></div>
+  <div class="row"><span>覆盖</span><b id="vcov">–</b></div>
+  <div class="row"><span>接缝/内部梯度 pad=0</span><b id="vraw">–</b></div>
+  <div class="row"><span>接缝/内部梯度 pad=2</span><b id="vpad">–</b></div>
+</div>
+<div id="stats"></div>
+
+<script type="module">
+import { DecalField, boil, seamStep, audit } from './src/decalfield.js';
+
+const $ = (id) => document.getElementById(id);
+const COLS = 8, ROWS = 6, TILE = 64, W = COLS * TILE, H = ROWS * TILE;
+const cvA = $('cvA'), cvB = $('cvB');
+for (const c of [cvA, cvB]) { c.width = W; c.height = H; c.style.width = W + 'px'; c.style.height = H + 'px'; }
+const gA = cvA.getContext('2d'), gB = cvB.getContext('2d');
+
+let rate = 3, jitter = 0.09, play = true, showSeams = false;
+
+const fieldA = new DecalField({ cols: COLS, rows: ROWS, tilePx: TILE, jitter, rate });   // 出血版
+const fieldB = new DecalField({ cols: COLS, rows: ROWS, tilePx: TILE, jitter, rate });   // 同种子、同序列 → 只差 pad
+fieldA.add(24); fieldB.decals = fieldA.decals.map((d) => ({ ...d }));
+
+const prev = document.createElement('canvas');
+prev.width = W; prev.height = H;
+const gPrev = prev.getContext('2d');
+
+let lastBoil = { mean: 0, movedPct: 0 };
+let steps = 0;
+
+function frame() {
+  if (play) {
+    gPrev.clearRect(0, 0, W, H);
+    gPrev.drawImage(cvA, 0, 0);
+    fieldA.step();
+    // B 跟着 A 的贴花走，但渲染时 pad=0 —— 这样才能把"同一批贴花的两种贴法"并排比
+    fieldB.decals = fieldA.decals.map((d) => ({ ...d }));
+    fieldA.render(gA, { pad: 2, showSeams });
+    fieldB.render(gB, { pad: 0, showSeams });
+    lastBoil = boil(prev, cvA);
+    steps++;
+  }
+  $('vn').textContent = fieldA.decals.length;
+  $('vboil').textContent = lastBoil.movedPct.toFixed(2) + '%';
+  requestAnimationFrame(frame);
+}
+
+// 静态量一遍（接缝梯度 / 覆盖），参数变了才重算
+function remeasure() {
+  const sRaw = seamStep(cvB, { tilePx: TILE, cols: COLS, rows: ROWS });
+  const sPad = seamStep(cvA, { tilePx: TILE, cols: COLS, rows: ROWS });
+  $('vraw').textContent = sRaw.ratio.toFixed(2) + '×';
+  $('vpad').textContent = sPad.ratio.toFixed(2) + '×';
+  const d = gA.getImageData(0, 0, W, H).data;
+  let cov = 0;
+  for (let i = 0; i < d.length; i += 4) {
+    const dr = d[i] - 216, dg = d[i + 1] - 210, db = d[i + 2] - 122;
+    if (dr * dr + dg * dg + db * db > 900) cov++;
+  }
+  const coverPct = (cov / (W * H)) * 100;
+  $('vcov').textContent = coverPct.toFixed(0) + '%';
+  $('stats').innerHTML =
+    `同一批 <b>${fieldA.decals.length}</b> 张贴花，只差一个 pad：接缝处水平梯度 / 内部梯度 ` +
+    `<span class="warn">pad=0 → ${sRaw.ratio.toFixed(2)}×</span> vs <span class="ok">pad=2 → ${sPad.ratio.toFixed(2)}×</span>` +
+    `（比值越接近 1 越看不见接缝；内部基准 ${sRaw.innerGrad.toFixed(2)} 灰阶/px）。` +
+    ` 帧间变动 <b>${lastBoil.movedPct.toFixed(2)}%</b> 像素（mean ${lastBoil.mean.toFixed(2)}），覆盖 <b>${coverPct.toFixed(0)}%</b> 地面。` +
+    ` 这就是原文那句 continuously adding decals → claymation / line boil。`;
+  return { sRaw, sPad, coverPct };
+}
+
+$('play').addEventListener('change', (e) => { play = e.target.checked; });
+$('seams').addEventListener('change', (e) => { showSeams = e.target.checked; });
+$('rate').addEventListener('input', (e) => { rate = +e.target.value; fieldA.rate = rate; $('vrate').textContent = rate; });
+$('jit').addEventListener('input', (e) => { jitter = +e.target.value; fieldA.jitter = jitter; $('vjit').textContent = jitter.toFixed(2); });
+
+window.__lab = {
+  ready: true,
+  field: fieldA,
+  measure: remeasure,
+  freeze: () => { play = false; $('play').checked = false; },
+  step: (n = 1) => { for (let i = 0; i < n; i++) fieldA.step(); fieldA.render(gA, { pad: 2, showSeams }); },
+  audit: (opts) => audit(opts),
+  boilNow: () => lastBoil,
+  size: [W, H],
+};
+
+fieldA.render(gA, { pad: 2 });
+fieldB.render(gB, { pad: 0 });
+remeasure();
+requestAnimationFrame(frame);
+setTimeout(remeasure, 900);
+</script>
+</body>
+</html>

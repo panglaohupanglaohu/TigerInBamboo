@@ -1,0 +1,57 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-25T00:29:15.744Z",
+ "arena": {
+  "fixture": "双岩体考场（24×24 双层台地，带顶/壁色）——与 apostles-terrain-pipeline.test.mjs 同形",
+  "runner": "TigerMessenger/tools/refactor/record-apostles-arena.mjs（实算）"
+ },
+ "judge": "规则写死：match targets≥1 且 run applied≥1 且 flag 入列 + metrics 有逐岩体实算行为「擂过」。",
+ "results": [
+  {
+   "id": "apostles.soft",
+   "name": "十二门徒软坡",
+   "domain": "apostles-terrain",
+   "targets": 2,
+   "applied": 1,
+   "flagSet": true,
+   "metricsRows": 2,
+   "planKeys": [
+    "flags",
+    "look",
+    "lookId",
+    "persist",
+    "metrics"
+   ],
+   "changed": "可融台阶（缓坡省差 1 层）91 条 · 陡崖省 1 层台阶 149 · ≥2 层竖崖 108；可融占台阶 26.2%（当前画面：approved）",
+   "ms": 2,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "apostles.palette",
+   "name": "十二门徒库地形色",
+   "domain": "apostles-terrain",
+   "targets": 2,
+   "applied": 1,
+   "flagSet": true,
+   "metricsRows": 2,
+   "planKeys": [
+    "flags",
+    "look",
+    "lookId",
+    "persist",
+    "metrics"
+   ],
+   "changed": "顶面 / 崖壁平均色离库地形色（草 #86a160 · 岩 #a7a49d）平均 ΔE 12.121",
+   "ms": 0,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  }
+ ],
+ "counts": {
+  "caps": 2,
+  "passed": 2
+ }
+}

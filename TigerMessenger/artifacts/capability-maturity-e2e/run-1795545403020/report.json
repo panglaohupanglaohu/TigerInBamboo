@@ -1,0 +1,283 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/capability-maturity-e2e/run-1795545403020",
+  "steps": {
+    "json": {
+      "rows": 84,
+      "byLevel": {
+        "0": 5,
+        "1": 17,
+        "2": 0,
+        "3": 14,
+        "4": 0,
+        "5": 18,
+        "6": 21,
+        "7": 9,
+        "8": 0,
+        "9": 0
+      },
+      "missingEverywhere": [
+        8,
+        9
+      ],
+      "counts": [
+        {
+          "id": "sidebar",
+          "value": 49,
+          "seen": 39
+        },
+        {
+          "id": "lineage",
+          "value": 85,
+          "seen": 55
+        },
+        {
+          "id": "tree-script",
+          "value": 138,
+          "seen": 64
+        },
+        {
+          "id": "tree-page",
+          "value": 119,
+          "seen": 105
+        },
+        {
+          "id": "unique",
+          "value": 84,
+          "seen": null
+        }
+      ]
+    },
+    "tree": {
+      "maturity": "loaded",
+      "execUnique": "95",
+      "execPerLine": "158",
+      "lines": 27,
+      "withExec": 27,
+      "badged": [
+        {
+          "line": "grid",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "wfc",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "sphere",
+          "level": "3",
+          "text": "L3"
+        },
+        {
+          "line": "tools",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "terrain",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "shore",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "sediment",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "water-effects",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "building",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "hallway",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "light",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "shadows",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "reflection",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "lines",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "palette",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "atlas",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "camera",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "plants",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "animals",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "wind",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "smoke",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "fire",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "navigation",
+          "level": "7",
+          "text": "L7"
+        },
+        {
+          "line": "combat",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "projectiles",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "campaign",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "ui-decoration",
+          "level": "6",
+          "text": "L6"
+        }
+      ],
+      "pill": "95可执行（去重）",
+      "dist": "九级成熟度① 来源 17② 原版 0③ 重构 14④ 等价 0⑤ 单测 18⑥ 实景 21⑦ 擂台 9⑧ 采用 0⑨ 默认 0无证据 584 个能力（去重）· 没有任何能力达到：⑧ 用户采用、⑨ 默认进游戏 · 生成于 2026-11-24T18:24"
+    },
+    "drawer": {
+      "line": "terrain",
+      "buttons": [
+        {
+          "text": "⚙ 地形与承托L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 崖顶悬垂L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 海中石柱L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 穿山隧道L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 沿墙薄檐 / 薄平台L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 山体隆起L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 沟谷侵蚀L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 连绵圆润L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 十二门徒软坡",
+          "level": null
+        },
+        {
+          "text": "⚙ 软坡（缓坡省连续）",
+          "level": null
+        },
+        {
+          "text": "⚙ 硬崖（陡崖省台阶）",
+          "level": null
+        },
+        {
+          "text": "⚙ 河谷（开河 + 填洼）",
+          "level": null
+        },
+        {
+          "text": "⚙ 悬垂（崖顶岩檐）",
+          "level": null
+        },
+        {
+          "text": "⚙ 薄台与攀爬（崖边梯子）",
+          "level": null
+        },
+        {
+          "text": "⚙ 三遍（等高线 = 层界格边）",
+          "level": null
+        },
+        {
+          "text": "⚙ 保护带L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 岩屑坡L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 十二门徒库地形色",
+          "level": null
+        },
+        {
+          "text": "⚙ 重解地形L0",
+          "level": "0"
+        }
+      ]
+    }
+  },
+  "errors": [
+    "p1 console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "failure": "抽屉里有能力没有级别：[{\"text\":\"⚙ 十二门徒软坡\",\"level\":null},{\"text\":\"⚙ 软坡（缓坡省连续）\",\"level\":null},{\"text\":\"⚙ 硬崖（陡崖省台阶）\",\"level\":null},{\"text\":\"⚙ 河谷（开河 + 填洼）\",\"level\":null},{\"text\":\"⚙ 悬垂（崖顶岩檐）\",\"level\":null},{\"text\":\"⚙ 薄台与攀爬（崖边梯子）\",\"level\":null},{\"text\":\"⚙ 三遍（等高线 = 层界格边）\",\"level\":null},{\"text\":\"⚙ 十二门徒库地形色\",\"level\":null}]"
+}

@@ -1,0 +1,156 @@
+{
+  "canal": {
+    "bridges": 4,
+    "faces": [
+      {
+        "cell": 836,
+        "face": 0,
+        "span": 0.274,
+        "rise": 0.192,
+        "crown": 0.192,
+        "ya": 0.445,
+        "ringTris": 16,
+        "keyTris": 2,
+        "ringWedges": 9,
+        "keyS": 0.478,
+        "keyY": 0.218,
+        "ringMinS": 0.089,
+        "ringMaxS": 0.889,
+        "ringMaxY": 0.2075,
+        "vaultTris": 24,
+        "firstHitOpen": 1.1378,
+        "firstHitAboveDeck": 0.348
+      },
+      {
+        "cell": 836,
+        "face": 2,
+        "span": 0.351,
+        "rise": 0.245,
+        "crown": 0.245,
+        "ya": 0.445,
+        "ringTris": 16,
+        "keyTris": 2,
+        "ringWedges": 9,
+        "keyS": 0.478,
+        "keyY": 0.2708,
+        "ringMinS": 0.064,
+        "ringMaxS": 0.929,
+        "ringMaxY": 0.2582,
+        "vaultTris": 38,
+        "firstHitOpen": 0.7491,
+        "firstHitAboveDeck": 0.3483
+      },
+      {
+        "cell": 1055,
+        "face": 1,
+        "span": 0.437,
+        "rise": 0.306,
+        "crown": 0.306,
+        "ya": 0.445,
+        "ringTris": 16,
+        "keyTris": 2,
+        "ringWedges": 9,
+        "keyS": 0.478,
+        "keyY": 0.3304,
+        "ringMinS": 0.076,
+        "ringMaxS": 0.916,
+        "ringMaxY": 0.3154,
+        "vaultTris": 39,
+        "firstHitOpen": 1.6773,
+        "firstHitAboveDeck": 0.349
+      },
+      {
+        "cell": 1055,
+        "face": 3,
+        "span": 0.516,
+        "rise": 0.361,
+        "crown": 0.361,
+        "ya": 0.445,
+        "ringTris": 16,
+        "keyTris": 2,
+        "ringWedges": 9,
+        "keyS": 0.478,
+        "keyY": 0.385,
+        "ringMinS": 0.084,
+        "ringMaxS": 0.908,
+        "ringMaxY": 0.3678,
+        "vaultTris": 58,
+        "firstHitOpen": 1.8084,
+        "firstHitAboveDeck": 0.3491
+      }
+    ]
+  },
+  "budget": {
+    "canalArch": {
+      "cell": 560,
+      "level": 4,
+      "base": 1.5,
+      "floor": 0,
+      "crown": 1.45,
+      "spring": 1.05,
+      "rise": 0.4,
+      "wedges": 18,
+      "keys": 2,
+      "groups": 2
+    },
+    "arches": [
+      {
+        "cell": 215,
+        "level": 4,
+        "base": 1.5,
+        "floor": 1,
+        "crown": 1.45,
+        "spring": 1.075,
+        "rise": 0.375,
+        "slab": 0.05,
+        "span": 0.467,
+        "slabsCut": 0,
+        "corniceContinuous": true
+      },
+      {
+        "cell": 377,
+        "level": 6,
+        "base": 2.5,
+        "floor": 2,
+        "crown": 2.45,
+        "spring": 2.075,
+        "rise": 0.375,
+        "slab": 0.05,
+        "span": 0.416,
+        "slabsCut": 0,
+        "corniceContinuous": true
+      },
+      {
+        "cell": 378,
+        "level": 6,
+        "base": 2.5,
+        "floor": 2,
+        "crown": 2.45,
+        "spring": 2.075,
+        "rise": 0.375,
+        "slab": 0.05,
+        "span": 0.626,
+        "slabsCut": 0,
+        "corniceContinuous": true
+      }
+    ],
+    "groups": 6,
+    "wedges": 54,
+    "levels": [
+      4,
+      6
+    ]
+  },
+  "ab": {
+    "W": 900,
+    "H": 640,
+    "changed": 61480,
+    "noise": 0,
+    "centroid": [
+      444.9,
+      215.2
+    ],
+    "nearShare": 1
+  },
+  "errors": []
+}

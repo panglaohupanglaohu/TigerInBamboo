@@ -10,7 +10,7 @@ a{color:#276e86}
 </style>
 <h1>距离场 → 等值线</h1>
 <p class="lead">对照片子 902103473365417984「Ok, one more visualization. Distances this time」：岛上每隔固定距离铺一道亮线，平地上是嵌套闭环，遇到建筑和岸线就绕开。
-左边是同一份距离场的原始值（每格到最近障碍/岸边的格心距离），右边是按等间距取出来的等值线。等间距是人工选的，不是数据的分布。</p>
+左边是同一份距离场的原始值（每格到最近障碍/岸边/多边形占地边界的格心距离），右边是按等间距取出来的等值线。等间距是人工选的，不是数据的分布。菱形塔楼走任意多边形 footprint（斜边亚格精度），其余房子是格子占地。</p>
 <div>
 <label>等值间距 <input id="spacing" type="range" min="0.5" max="3" step="0.25" value="1.25"></label>
 <label><input id="ref" type="checkbox"> 参考片配色（浅地白线）</label>
@@ -23,9 +23,9 @@ a{color:#276e86}
 </div>
 <p><a href="index.html?scene=terrain" target="_top">真实场景</a> · <a href="contour.html" target="_top">不规则网格等值线</a> · <a href="artifacts/coverage/902103473365417984-review.md">逐帧记录</a></p>
 <script type="module">
-import { distanceField, isoContours, evenLevels } from './src/core/distance-isolines.js';
+import { distanceField, isoContours, evenLevels, polygonDistance } from './src/core/distance-isolines.js';
 
-// 手搭一座跟片子里同构的岛：外圈岸线 + 两级台地 + 几栋占地的房子
+// 手搭一座跟片子里同构的岛：外圈岸线 + 两级台地 + 几栋占地的房子 + 一座斜放的菱形塔楼
 const W = 38, H = 30;
 const mask = new Array(W * H).fill(0);
 const inEllipse = (x, y, cx, cy, rx, ry) => ((x - cx) / rx) ** 2 + ((y - cy) / ry) ** 2 <= 1;
@@ -35,13 +35,16 @@ const blocks = [
   { x0: 24, y0: 16, x1: 28, y1: 20 },  // 东侧房
   { x0: 13, y0: 21, x1: 16, y1: 23 },  // 南侧小屋
 ];
+// 任意多边形占地（格心坐标）：斜置菱形塔楼 —— 距离场量到真实斜边，等值线贴边不再走格子台阶
+const tower = [[31.2, 9.5], [29, 11.7], [26.8, 9.5], [29, 7.3]];
 for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
   const land = inEllipse(x, y, 19, 15, 15, 11) || inEllipse(x, y, 9, 8, 6, 5) || inEllipse(x, y, 29, 22, 6, 5);
   if (!land) continue;
   if (blocks.some((b) => x >= b.x0 && x <= b.x1 && y >= b.y0 && y <= b.y1)) continue;
+  if (polygonDistance(x, y, tower) < 0) continue;   // 塔楼压住的格心也标记出来（视觉）；距离仍按斜边算
   mask[y * W + x] = 1;
 }
-const field = distanceField(mask, { w: W, h: H });
+const field = distanceField(mask, { w: W, h: H, obstacles: [tower] });
 const left = document.querySelector('#left'), right = document.querySelector('#right');
 const PAD = 14, cell = Math.min((left.width - PAD * 2) / W, (left.height - PAD * 2) / H);
 const ramp = (t) => {
@@ -86,12 +89,16 @@ function draw() {
       ctx.lineWidth = 1;
       for (const b of blocks) ctx.strokeRect(PAD + b.x0 * cell, PAD + b.y0 * cell, (b.x1 - b.x0 + 1) * cell, (b.y1 - b.y0 + 1) * cell);
     }
+    // 两图都描塔楼真实斜边（等值线贴的是这条线，不是格子台阶）
+    ctx.beginPath();
+    tower.forEach(([x, y], i) => i ? ctx.lineTo(PAD + x * cell + cell / 2, PAD + y * cell + cell / 2) : ctx.moveTo(PAD + x * cell + cell / 2, PAD + y * cell + cell / 2));
+    ctx.closePath(); ctx.strokeStyle = 'rgba(40,60,66,.55)'; ctx.lineWidth = 1.4; ctx.stroke();
   }
   const segs = out.reduce((s, L) => s + L.segments.length, 0);
   const closed = out.reduce((s, L) => s + L.closed, 0);
   document.querySelector('#stats').textContent =
-    `${W}×${H} 格 · 可走 ${mask.filter(Boolean).length} 格 · 最远距离 ${field.max.toFixed(2)} 格 · 间距 ${spacing.toFixed(2)} → ${levels.length} 层等值 · ${segs} 段 · 闭环 ${closed}`;
-  window.distanceReview = { field, levels, out, spacing, segs, closed, mask, w: W, h: H };
+    `${W}×${H} 格 · 可走 ${mask.filter(Boolean).length} 格 · 多边形占地 ${field.obstacles.length} 块 · 最远距离 ${field.max.toFixed(2)} 格 · 间距 ${spacing.toFixed(2)} → ${levels.length} 层等值 · ${segs} 段 · 闭环 ${closed}`;
+  window.distanceReview = { field, levels, out, spacing, segs, closed, mask, w: W, h: H, tower };
 }
 for (const id of ['spacing', 'ref', 'fill']) document.querySelector('#' + id).oninput = draw;
 draw();

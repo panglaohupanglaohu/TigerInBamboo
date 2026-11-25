@@ -1,0 +1,58 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/relief-moss-e2e/run-1795547841009",
+  "scene": "moss",
+  "steps": {
+    "keysBefore": [
+      "tm.citadelEditor.collapsed",
+      "tm.citadelEditor.dropToGround",
+      "tm.defaults.v1",
+      "tm.equatorialClouds.enabled",
+      "tm.morris.panel.collapsed",
+      "tm.questPanel.collapsed"
+    ],
+    "scanned": {
+      "direct": "moss",
+      "scene": "moss",
+      "note": "扫描完成：6 / 6 个能力能作用。 可改陆地 81 格。 已按「苔庭」自动预装 6 个能力（软坡（缓坡省连续）、硬崖（陡崖省台阶）、河谷（开河 + 填洼）、悬垂（崖顶岩檐） 等），点 ▶ 执行管线一键跑完整条。",
+      "nodes": 6,
+      "scanned": "moss",
+      "status": "苔庭：采样 51×51 格（3 m）· 陆地 190 格 · 保护格 272 · 地形网格 254 个"
+    },
+    "candidate": {
+      "h4": "候选 · 通过（需留意）",
+      "mode": "partial",
+      "fails": [],
+      "warns": [
+        "! 竖崖占比 ≤ 12%竖崖（> 62°）27.1% · 中等坡 60.0%"
+      ],
+      "status": "relief 候选：undefined",
+      "live": {
+        "group": true,
+        "visible": true,
+        "tris": 466,
+        "parts": [
+          "relief-surface",
+          "relief-ladders",
+          "relief-contours"
+        ]
+      }
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "capabilities": [
+    "relief.soft",
+    "relief.cliff",
+    "relief.valley",
+    "relief.overhang",
+    "relief.ledge",
+    "relief.passes"
+  ],
+  "failure": "游戏里没有候选网格：{\"group\":true,\"visible\":true,\"tris\":466,\"parts\":[\"relief-surface\",\"relief-ladders\",\"relief-contours\"]}"
+}

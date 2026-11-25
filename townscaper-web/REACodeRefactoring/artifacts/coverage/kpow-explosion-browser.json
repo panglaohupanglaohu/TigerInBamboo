@@ -1,0 +1,153 @@
+{
+ "banner": {
+  "w": 256,
+  "h": 80,
+  "red": 11539,
+  "white": 1224,
+  "visible": true,
+  "scale": 1.5,
+  "atTop": true,
+  "onTopCell": true,
+  "y": 4.25,
+  "top": 7
+ },
+ "blast": {
+  "cell": {
+   "top": 6,
+   "cx": 0.07,
+   "cz": -0.15
+  },
+  "ground": 3,
+  "grewTo": 0.42,
+  "peakT": 0.16,
+  "tailS": 0.0691,
+  "tailOp": 0.034,
+  "peakRGB": [
+   1,
+   1,
+   0.9
+  ],
+  "tailRGB": [
+   1,
+   0.558,
+   0
+  ],
+  "monotoneGrow": true,
+  "firstHalf": [
+   0.0984,
+   0.1837,
+   0.2559,
+   0.315,
+   0.3609,
+   0.3937,
+   0.4134,
+   0.42
+  ],
+  "n": 37,
+  "aliveAt070": 1,
+  "aliveAt076": 0,
+  "scorch": {
+   "count": 1,
+   "meshY": 3.012,
+   "groundY": 3,
+   "nominalY": 3,
+   "c0": [
+    0.88,
+    0.29,
+    0.24
+   ],
+   "c1": [
+    0.516,
+    0.204,
+    0.179
+   ],
+   "c2": [
+    0.16,
+    0.12,
+    0.12
+   ],
+   "op": 0.65,
+   "r": 0.525
+  },
+  "sparks": {
+   "n": 28,
+   "stats": 28,
+   "start": {
+    "n": 28,
+    "y": 3.276,
+    "vy": 2.152
+   },
+   "late": {
+    "y": 3.963,
+    "vy": -0.28,
+    "drawRange": 28,
+    "t": 0.76
+   }
+  },
+  "counts": {
+   "explosions": 1,
+   "scorches": 1
+  },
+  "smokeSources": 0,
+  "smokeTracked": 0
+ },
+ "auto": {
+  "n0": 1,
+  "n1": 2,
+  "reset": 3.5,
+  "scorches": 1
+ },
+ "diff": {
+  "noiseGlobal": 92,
+  "fireball": {
+   "changed": 34816,
+   "box": [
+    399,
+    119,
+    374,
+    484
+   ],
+   "mean": [
+    228.2,
+    226.1,
+    203.3
+   ],
+   "boxPx": 181016,
+   "noiseInBox": 91
+  },
+  "scorch": {
+   "changed": 9288,
+   "box": [
+    378,
+    98,
+    395,
+    499
+   ],
+   "mean": [
+    199.5,
+    174,
+    144.3
+   ],
+   "boxPx": 197105,
+   "noiseInBox": 92
+  },
+  "banner": {
+   "changed": 2764,
+   "box": [
+    400,
+    205,
+    103,
+    28
+   ],
+   "mean": [
+    216.8,
+    82.9,
+    81.4
+   ],
+   "boxPx": 2884,
+   "noiseInBox": 0
+  },
+  "redOn": 41120,
+  "redOffScorch": 40334
+ }
+}

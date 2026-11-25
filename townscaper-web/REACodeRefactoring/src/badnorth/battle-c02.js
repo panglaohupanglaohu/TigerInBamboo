@@ -1,6 +1,11 @@
 /**
- * 第 56 批 C02：Bad North 特效 B + 生命 / 导航 / 水 —— Battle 扩展（全部默认关）。
+ * 第 56 批 C02：Bad North 特效 B + 生命 / 导航 / 水 —— Battle 扩展（除 scorch 外全部默认关）。
  * 打开：URL `?c02=bloodShape,scorch,...`（或 `?c02=all`），或运行时 `battle.c02.set(name, on)`。
+ *
+ * 默认开：`scorch`（照 C01 的 `C01_DEFAULT_ON` 先例）。理由：1007587828992266240（300 帧·白垩崖两队混战）
+ * 与 912691357440978945 里「小屋失守 → 屋周留一圈焦黑斑 + 余烬上飘」是**原片默认观感**，
+ * 而 C01 的 `houseChar` 只把屋体顶点压黑、不铺地 —— 主场景原来只有黑屋没有焦痕。
+ * 只给这一条默认开，其余 C02 开关维持默认关；关法 `?c02=-scorch` 或 `c02.set('scorch', false)`。
  *
  *   bloodShape  912691357440978945 血泊不规则：分叉 / 带卫星滴的程序化血斑贴图 + 新血泊旁 2–3 片卫星斑往外渗开（错开起始、边长边外移）
  *   scorch      912691357440978945 失守小屋留焦痕：屋周一圈焦黑斑（不规则贴图）+ 余烬火星上飘
@@ -22,7 +27,8 @@ import { makeWakeParticles } from '../core/wake-sampling.js';
 import { navMeshFromLayeredGraph } from '../world/navmesh-flow.js';
 import { footprint } from './squad-footprint.js';
 
-export const C02_FLAGS = ['bloodShape', 'scorch', 'dmgKick', 'flowGrid', 'flowFaces', 'tumble', 'wakes', 'navmesh', 'rain', 'swingArc', 'footprint', 'passageWorld'];
+export const C02_FLAGS = ['bloodShape', 'scorch', 'dmgKick', 'flowGrid', 'flowFaces', 'tumble', 'wakes', 'navmesh', 'rain', 'swingArc', 'footprint', 'passageScreen'];
+export const C02_DEFAULT_ON = ['scorch'];
 // 与 battle.js #drawFlow 同一套色（图例 / 格面要和线一致）
 const C_UNIT = [[0.15, 0.55, 1.0], [1.0, 0.45, 0.1], [0.15, 0.85, 0.35], [0.95, 0.3, 0.85], [0.95, 0.9, 0.2], [0.3, 0.9, 0.9]];
 const C_TYPE = [[0.95, 0.35, 0.75], [0.72, 0.95, 0.2], [0.2, 0.85, 1.0]];
@@ -64,7 +70,9 @@ export class BattleC02 {
     this.b = battle; this.on = Object.fromEntries(C02_FLAGS.map((k) => [k, false]));
     const q = new URLSearchParams(globalThis.location?.search ?? '');
     const list = (q.get('c02') || '').split(',').filter(Boolean);
+    for (const k of C02_DEFAULT_ON) this.on[k] = true;                 // 1007587828992266240：焦痕是原片默认观感
     for (const k of C02_FLAGS) if (list.includes('all') || list.includes(k)) this.on[k] = true;
+    for (const k of C02_FLAGS) if (list.includes('-' + k)) this.on[k] = false;   // 显式关：?c02=-scorch
     this.group = new THREE.Group(); battle.group.add(this.group);
     this.stats = { satellites: 0, scorched: 0, embers: 0, kicks: 0, killFast: 0, gridSegs: 0, faces: 0, tumbling: 0, maxTumbleDeg: 0, dust: 0, splashes: 0, gettingUp: 0, foam: 0, spray: 0, navEdges: 0, navVerts: 0, rainDrops: 0, splats: 0, clouds: 0, arcs: 0, footprints: 0, passagePx: 0 };
     // 血 / 焦痕贴图
@@ -156,7 +164,7 @@ export class BattleC02 {
     this.rainLines.visible = this.clouds.visible = this.on.rain && b.running;
     if (!this.on.rain) this.rainSplash.geometry.setDrawRange(0, 0);
     if (!this.on.footprint) this.fpLines.visible = false;
-    if (this.on.passageWorld) this.#worldPassage(); else this.#restorePassage();
+    if (this.on.passageScreen) this.#screenPassage(); else this.#worldPassage();
     if (!this.on.wakes) { this.foamPts.geometry.setDrawRange(0, 0); this.sprayPts.geometry.setDrawRange(0, 0); }
   }
   #restoreBlood() { const m = this.b.blood.material; if (m.map === this.splatTex) { m.map = null; m.alphaTest = 0; m.needsUpdate = true; } }
@@ -194,7 +202,7 @@ export class BattleC02 {
     if (this.on.rain) this.#rain(dt);
     this.#arcs(dt);
     if (this.on.footprint) this.#footprints();
-    if (this.on.passageWorld) this.#passagePx();
+    this.#passagePx();
   }
 
   /* -------------------------------------------- 912691：血泊不规则渗开 */
@@ -524,22 +532,21 @@ export class BattleC02 {
   }
 
   /* -------------------------------------------- 886199：窄道点线世界尺寸 */
-  #worldPassage() {
+  /* 第 164 轮：世界尺寸点 + 物理像素下限已是**默认**（battle.js 的 dotMat），
+     本开关反过来当对照：`?c02=passageScreen` 切回旧口径的固定 7px 屏幕点。 */
+  #worldPassage() { this.b.setPassageDots('world'); this._passageSaved = null; this.#passagePx(); }
+  #screenPassage() {
     const m = this.b.passageDots.material; if (this._passageSaved) return;
     this._passageSaved = { size: m.size, att: m.sizeAttenuation };
-    m.sizeAttenuation = true; m.size = 0.14; m.needsUpdate = true;   // 点距 0.28 的一半：点径:点距 = 1:2，任何距离都成立
+    this.b.setPassageDots('screen');
   }
-  #restorePassage() {
-    const s = this._passageSaved; if (!s) return; const m = this.b.passageDots.material;
-    m.size = s.size; m.sizeAttenuation = s.att; m.needsUpdate = true; this._passageSaved = null;
-  }
+  #restorePassage() { if (!this._passageSaved) return; this._passageSaved = null; this.b.setPassageDots('world'); }
   #passagePx() {
-    // 远景下世界尺寸点会小到看不见：按相机距离把 size 下限钳到 4px（three 的 sizeAttenuation 公式：px = size · (H/2) / depth）
-    const b = this.b, cam = b.view.camera, H = b.view.renderer?.domElement?.height ?? 900, m = b.passageDots.material;
-    const target = b.world?.cells?.length ? b.passageDots.geometry.boundingSphere?.center : null;
-    const depth = target ? cam.position.distanceTo(target) : 10, fovK = cam.isPerspectiveCamera ? 1 / Math.tan((cam.fov * Math.PI / 180) / 2) : 1;
-    const px = 0.14 * (H / 2) * fovK / Math.max(0.1, depth);
-    m.size = px < 4 ? 0.14 * 4 / px : 0.14;
-    this.stats.passagePx = +Math.max(4, px).toFixed(2);
+    // 直接读模块的逐点口径（size·(H_css/2)/depth，含物理像素下限），不再自己反算 size。
+    const r = this.b.passageDotPx();
+    this.stats.passagePx = r.farPx;
+    this.stats.passagePxNear = r.nearPx;
+    this.stats.passageClamped = r.clamped;
+    Object.assign((this.b.passageStats ||= {}), r);
   }
 }

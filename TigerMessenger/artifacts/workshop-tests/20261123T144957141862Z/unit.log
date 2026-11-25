@@ -1,0 +1,307 @@
+✔ 三套方案：approved / soft / soft+palette，网址参数写法对得上 (0.8405ms)
+✔ 清单 → 每套四个机位；缺的标未拍，无效机位标出来；当前方案只标一个 (31.673792ms)
+✔ 检查一句话：变差项只对候选写，approved 不写 (0.29675ms)
+✔ 没有清单 / 清单坏了 / 路径想跳出 artifacts：不显示图，给出原因 (0.197875ms)
+✔ 页面接线：对照区在十二门徒工坊里，清单路径与端到端脚本写的一致；待决定事项已登记 (0.354625ms)
+✔ 连续 need 次「同一场景 + 同样网格数」才算稳定 (0.42ms)
+✔ 重建间隙：读到 0 / null / 场景换了 / 网格数在涨，都清零重数，不下「没有岩体」的结论 (0.175291ms)
+✔ 换候选（look 变了）也要重新数 (0.098875ms)
+✔ waitForStable：场景重建（0 → 一半 → 全部）后返回稳定的那次采样；抛错只算一次失败 (0.585875ms)
+✔ waitForStable：一直不稳定 → 超时返回 ok:false 与最后一次采样，不编数 (0.261417ms)
+✔ min：网格数低于下限不算稳定（例如只等到 1 块岩体） (0.151958ms)
+✔ sampleApostleScene：只数 userData.apostleMass 的网格，返回场景 uuid (0.140209ms)
+✔ 完整方台：水线以上没有反面三角、没有开口边（崖脚在水下的开口不算） (1.975792ms)
+✔ 翻一个顶面三角对：判出反面三角并给出位置 (2.083833ms)
+✔ 顶面挖一个洞：判出 4 条开口边 (0.2805ms)
+✔ 非有限坐标判出来 (0.211666ms)
+✔ 球面下弯：bend 把顶点加回去再比水线（下弯后 y<0 的顶面仍算水线以上） (0.367958ms)
+✔ 材质：岩体半透明判失败；白沫 / 浪 / 悬停框半透明是设计 (0.799041ms)
+✔ R30 植被：贴地 / 悬空 / 埋入 / 脚下没有岩面 四种都分得出 (0.434584ms)
+✔ R30 植被：地形变了而植物没跟 → 判出来（软坡把顶面降了 0.5，植物还在旧高度） (0.166083ms)
+✔ R30 白沫：最近距离与分级；白沫整体离岸 / 水线一半没白沫 都判出来 (3.237875ms)
+✔ 汇总 checks 与「和 approved 比有没有变差」 (0.379208ms)
+✔ §5.3 meta：id / name / domain / line=terrain / requires / modules，modules 是 run 真正 import 的库模块 (1.513666ms)
+✔ match：两块有陆地、有颜色的岩体都能作用；没有数据的岩体跳过 (0.421167ms)
+✔ 执行 + 独立验证：soft,palette 候选，不写存档，复算一致 (4.682208ms)
+✔ 只开软坡：look=soft；网址参数写法与 APOSTLES_LOOK.id 写法 (0.803542ms)
+✔ 确定性：同输入同结果；步骤乱序也按固定顺序算，报告按声明顺序 (2.357666ms)
+✔ 软坡量得出诊断结论 3：2 层起跳的平顶台地没有可融台阶，1 层台阶的才有 (1.012292ms)
+✔ 破坏判失败：改开关 / 改指标 / 打开持久化 / 夹带岩体数据 / 换场景 / 步骤对不上 (2.895583ms)
+✔ PipeLineEngine 适配器：apostles-terrain 走真实能力库，输入不被改，回执齐全 (11.2635ms)
+✔ R22 自动预装：扫描十二门徒后两个能力都进管线；清空过的不再自动填 (0.33675ms)
+✔ 岩体顺序与种子和游戏一致（seed = 7300 + 序号 × 101） (0.585041ms)
+✔ 接线：能力树 / 左栏 / 管线页 / 桥接命令都登记了 (25.137375ms)
+✔ preload: empty pipeline gets every matched capability, in registry order (0.757ms)
+✔ preload: prerequisites come along even if they had no direct match (0.08175ms)
+✔ preload: never touches a pipeline that already has runnable nodes (0.081292ms)
+✔ preload: user clearing the pipeline is respected unless forced (0.056208ms)
+✔ preload: no scan / nothing matches → nothing added (0.084042ms)
+✔ preload: note names the scene and the action (0.114709ms)
+✔ preload: real battle / mountain registries — every cap matched ⇒ all preloaded, requires satisfied (0.59925ms)
+✔ preload: scene-layer workshops opt in; planet / object do not (0.618291ms)
+✔ 能力库只含可执行条目且元数据完整 (1.222958ms)
+✔ 扫描：三个能力都匹配到有陆地和小屋的采样 (0.191542ms)
+✔ 扫描：没有小屋时守军布防不匹配，没有陆地时全不匹配 (0.098459ms)
+✔ 执行：三步管线产出完整作战计划（私有副本） (0.203042ms)
+✔ 参数规范化：越界收进范围、布尔按类型取 (0.086416ms)
+✔ 验证：健全计划通过；无陆地 / 无小屋 / 参数缺失判失败 (0.198167ms)
+✔ 验证：超编守军给 warn/fail 且归责 battle.garrison (0.08ms)
+✔ all posts preserve evidence and are sorted by exact author time, never study round or scan time (16.852417ms)
+✔ same-post explanations and cross-project combinations remain distinct from scoped replacements (3.829958ms)
+✔ changed source invalidates only dependent interpretation and changes shared fingerprint (63.087916ms)
+✔ physical scan and catalog carry the same evolution fingerprint without promoting executable status (351.253166ms)
+✔ every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations (6.801541ms)
+✔ scene taxonomy groups life effects vehicles without changing execution readiness (0.944375ms)
+✔ every real scanned record has one scene category; shared algorithms stay foundational (28.356625ms)
+✔ new capability inserts after its last scene-layer node without reordering existing recipe (0.1465ms)
+✔ 代际按关系与阶段切分，方向先向前 (13.144833ms)
+✔ 模块归线、import 推断与组合前置 (0.471458ms)
+✔ 补学队列：得分、理由，以及经验 / 管线需求回流 (0.825125ms)
+✔ 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置 (0.510792ms)
+✔ 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定 (64.471375ms)
+✔ 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学 (220.905417ms)
+✔ maturity: 九级都有证据 → L9，没有缺口 (0.928875ms)
+✔ maturity: 缺 ④ 照写 —— ①②③⑤⑥ → L6（缺 ④），连续级只到 3 (0.123084ms)
+✔ maturity: 没有证据 → L0；只认路径，true / 空串 / 对象 / 越界级都不算 (0.083208ms)
+✔ maturity: 每个达到的级都带一条证据路径 (0.084584ms)
+✔ maturity: 证据校验不过（文件删了 / 被改了）→ 那一级掉下去 (0.127208ms)
+✔ maturity: 分布合计等于能力数，谁都没到的级单独列出 (0.227958ms)
+✔ maturity: 统一计数表 —— 五个口径都写明来源代码，唯一对外数字是去重数 (0.20425ms)
+✔ maturity 证据校验器：文件、锚点、json 内容都要对，改一处就不成立 (5.482583ms)
+✔ maturity 加入日期：日志按带点 ID 找最早一段，普通词不匹配 (4.200625ms)
+✔ maturity: ⑤ 的测试清单来自 test_workshops.py，并排除本轮自己的测试 (0.369166ms)
+✔ maturity: 生成的 json（若已生成）每个达到的级都有证据且证据现在仍成立 (5.738625ms)
+✔ maturity 界面接线：能力树按级显示、左栏带徽章并写口径、缺数据时降级 (0.829583ms)
+✔ scanner reads real library, preserves distinct entries, never enables live execution (28.395959ms)
+✔ invalid format rejected without executing JS; malicious controls stripped (0.233625ms)
+✔ 每条能力线恰好挂在一个枝上，枝的合计等于各线之和 (0.395583ms)
+✔ 双源对账：每个原版叶子状态与对齐数据一致 (1.408042ms)
+✔ JEV 归线只采纳置信度 ≥ 0.85 的结果 (0.266083ms)
+✔ 嫁接队列按分排序，条目都是只在原版或接口没带全 (0.108333ms)
+✔ 解锁前沿：自己不能执行、前置都能执行 (0.055625ms)
+✔ 目标路径「圣城山形」：6 个能力都挂在存在的能力线上，声明调用的库模块真实存在 (0.423334ms)
+✔ 山形：六步管线把方台变成山，保护区 / 轨道 / 海岸一格不动 (69.740042ms)
+✔ 山形：同样输入结果确定；步骤乱序也按固定顺序执行 (44.930209ms)
+✔ 验证：改动保护区 / 淹掉海岸 / 山体压到轨旁都判失败 (45.582709ms)
+✔ parser reads real exports and imports without executing source or comment examples (33.647ms)
+✔ physical inventory preserves every module once, videos separately and no automatic executable promotion (411.57775ms)
+✔ library dependencies link only explicit implemented adapters, with palette before contrast (219.456583ms)
+✔ 写只进 v2 键，旧分层键不动 (0.629166ms)
+✔ 旧键记录合并进读侧，去重并按时间排序 (0.956333ms)
+✔ 汇总语义：失败按 blame 归属，committed 只算采用 (0.116458ms)
+✔ 导出文件导入另一台机器（全新存储）：记录与汇总一致，重复导入不产生重复 (0.285625ms)
+✔ 验证失败写入后，同一存储读出的 failed 立即 +1（队列重算的输入） (0.121167ms)
+✔ experiment restores data actual parameters and recipe; stale state cannot finalize (3.621709ms)
+✔ restore failure rolls all state back; backup quota stops before mutation (0.266041ms)
+✔ invalid snapshot parameters and codec reject before backup or scene changes (0.144625ms)
+✖ fx catalog has 5 executable capabilities mapped to adapt lines (0.677708ms)
+✖ fx runPlan executes all five capabilities on a synthetic stage (3.682209ms)
+✔ fx verify independently re-checks the produced plan (109.846375ms)
+✔ fx verify fails on missing or corrupted plan (0.225875ms)
+✔ editor dock ships on local and published pages; ?dev=0 / ?release=1 opt out (4.049125ms)
+✔ two real source-backed adapters change materials on a copy, keep actual output within color budget (2.132958ms)
+✔ all material adapters preserve manual colors by default; explicit opt-in works (0.251667ms)
+✔ verifier rejects forged locked edits and perceptual budget excess independently (0.103542ms)
+✔ reordered inputs produce identical deterministic palette results (0.494208ms)
+✔ neutral gain is a no-op, malformed params and invalid output are rejected (1.226458ms)
+✔ gamut extremes are finite and quantized output obeys the tightest budget (4.794916ms)
+✔ layer-focus: three focus layers, each bound to a real pane and supported scenes (0.548875ms)
+✔ layer-focus: resolveTab maps focus names onto the scene tier (0.107542ms)
+✔ layer-focus: sceneForFocus only switches when the current scene cannot run the layer (0.075125ms)
+✔ layer-focus: pipeline.html has the three direct tabs in the sub-workshop tablist (0.235875ms)
+✔ layer-focus: focus mode hides the voxel pane and gives the focused pane a readable height (0.350083ms)
+✔ layer-focus: system-tabs wires focus tabs and exposes the focus to callers (0.741583ms)
+✔ immutable verified proof fixture separates existing frame review, delivered code, source limits and residual work (161.008667ms)
+✔ changed proof is rejected and original learning backlog remains visible (15.461041ms)
+✔ changed learning evidence or record text cannot inherit the reviewed closure (10.9535ms)
+✔ live source drift safely invalidates old proof instead of counting it as complete (7.722583ms)
+✔ all 113 records accounted, duplicate histories consolidated, closure evidence retained (49.147791ms)
+✔ reordering preserves reviewed identities and states (72.219875ms)
+✔ new or changed titles never inherit a closure from clip IDs (0.361417ms)
+✔ changed evidence reopens a historical closure (0.558209ms)
+✔ missing ledger keeps every entry visible and requires review (35.274916ms)
+✔ same clip with distinct deliverables is not collapsed (0.314084ms)
+✔ superseded DDA implementation is not scheduled twice (0.701834ms)
+✔ live source may evolve without dropping records or reusing historical positions (33.126084ms)
+✔ last successful learning cache survives new reader and revalidates hashes (110.820541ms)
+✔ quota and oversized learning payload preserve previous slot (193.378667ms)
+✔ corrupt cached data rejects instead of activating an unverified offline view (19.255833ms)
+✔ synchronous storage-open denial releases the deadline timer immediately (0.274667ms)
+✔ late storage-open result closes after timeout without starting a transaction (0.168375ms)
+✔ active storage transaction aborts and closes at deadline without publishing result (0.121ms)
+✔ parses real ARCH single quotes comments trailing commas and real JSON declarations without execution (74.237292ms)
+✔ data escapes work; execution expressions prototypes duplicates and trailing programs are rejected (0.39475ms)
+✔ bounds malformed strings comments and nesting without accepting a partial result (0.136084ms)
+✔ reorder and rename preserve comparison identity; status or lane changes are explicit revisions (8.451375ms)
+✔ new duplicates never renumber old anchors; exact ambiguous anchors are quarantined (3.413333ms)
+✔ location edits become review conflicts; genuine additions and removals are explicit without mutating source (2.556458ms)
+✔ real library comparison is idempotent; every record is indexed or explicitly conflicted (51.208958ms)
+✔ decode real seven source files as one hash-checked data value without script execution (98.352125ms)
+✔ tamper version duplicate and missing core reject; incomplete value never commits globals (128.786042ms)
+✔ optional absence explicit and accepted; supported data grammar still checks structure (71.001583ms)
+✔ video card promotes readable content title and labels rather than a source ID (0.423292ms)
+✔ review frame prefixes are removed and long descriptions stay bounded (0.188666ms)
+✔ 采用记录：v2、autoDeploy、带采用时的场景指纹；计划和网格对不上就拒绝 (0.804125ms)
+✔ 自动部署的闸门：只有 v2 采用记录 + 场景对得上才换 (0.223542ms)
+✔ 同一场景的判定：网格一致、陆地 / 建筑 / 轨道格数各差 ≤ max(2, 1%) (0.066ms)
+✔ 游戏接线：main.js 启动时调自动部署；采用写 v2；有「回到原山形」；不碰存档与湖区 (0.596875ms)
+[R26 擂台] 中等坡占比 0.9207→0.9129（worse） · 竖崖占比 0.0002→0（same） · 排水率 0.3665→0.7322（better） · 硬边位移（米） 2.7101→1.5767（better）
+✔ 测试岛固定：同种子逐格相同，换种子不同；有城、有轨道、有海 (7.30575ms)
+✔ 指标定义只看产出地形：同一张高度场，不管能力参数 / 配色 / 用了哪些步骤，指标完全相同 (17.31525ms)
+✔ 指标的已知答案：圆锥全排进海；碗底排不出；紧贴保护区抬 4 m = 硬边位移 4 m (10.142208ms)
+✔ 比较规则写死：容差不放宽；任何一项退步超过容差 = 没赢；全持平 = 没赢 (0.356791ms)
+✔ 确定性：同一代跑两次指标完全相同 (51.4415ms)
+✔ 登记表 catalog/arena/terrain.json 记的每代成绩 = 实算（不是手填） (0.209708ms)
+✖ 擂台：mountain.rolling 这一代在约定指标上必须赢上一代（规则见 arena.js 文件头，不放宽） (1.842ms)
+✔ 变异与交叉：每个基因都落在能力声明的范围和步长上 (4.9775ms)
+✔ 第一代：基线排第一、没有重复、同种子可复现、换种子不同 (782.519542ms)
+✔ 精英保留：留种的亲本原样进下一代，所以每代最好成绩不会倒退 (496.51125ms)
+✔ 默认参数在合成场地上通过硬检查；describeGenome 只列出变了的基因 (20.025084ms)
+✔ 三角剖分与实景网格 / lowpoly 同一规则：(i+j) 奇偶决定对角线 (1.405708ms)
+✖ 通过：新山形的地面与画面一致、没有洞，轨道 / 保护区地面 = 原高 (207.6325ms)
+✔ 网格节点处地面 = 节点高度；网格外 / 没有地形处返回 null（交回原地面链） (43.747667ms)
+✔ 确定性：同一计划两次重建，任意点地面高度完全相同；两次跑管线结果相同 (84.9845ms)
+✔ 坏地面判失败：对角线反了 / 挖了洞 / 轨道处被抬高 (44.920042ms)
+✔ 游戏接线：玩家地面链最后一道接新山形；工坊桥与 main.js 引用同一份山形模块 (0.670292ms)
+[R27 擂台岛] Bad North 夏季：pass · 草坡 60%（线 ≥ 45%） · 灰面 30%（线 ≤ 35%）· 草坡饱和度 0.27（线 ≥ 0.18） | Townscaper：fail · 草坡 60%（线 ≥ 45%） · 灰面 39%（线 ≤ 35%）· 草坡饱和度 0.40（线 ≥ 0.18）
+✔ 两套候选就是 Bad North 夏季（1）与 Townscaper（2），来源写在候选上 (0.61525ms)
+✔ 饱和度：灰色 = 0，纯色 = 1；两套候选的草坡 / 草丛颜色本身都不灰（≥ 判定线） (0.186917ms)
+✔ 已知答案：全草坡的山 → 草坡 100%、通过；全岩壁的山 → 草坡 0%、判失败（坏配色 / 坏着色必须红） (9.591125ms)
+✔ 配色只换颜色：两套候选的草坡面积相同（同一座山、同一张材质图），灰面与饱和度各自算 (4.625542ms)
+✔ 确定性：同一计划两次检查结果完全相同 (6.52525ms)
+✔ 实景接线：实景换配色 / 对照命令在桥上；采用时记下当前配色；不改默认配色 (0.521667ms)
+[R28 分布 · 擂台岛] 30/30 过硬检查 · 最好 1 · 最差 26 · 最典型 17 · 中等坡中位 0.9234 · 排水中位 0.6846
+✔ 种子基因：只改 massif.seed 与 rolling.seed，其余全是默认；30 个种子两两不同 (1.192417ms)
+✔ 分布与挑选（已知答案）：分位数、直方图、最好 / 最差 / 最典型 (0.732584ms)
+✔ 30 种子报告：30 座都跑完、每座都有六项指标；三张代表都在里面；同输入两次完全相同 (1418.373791ms)
+✔ keepPlans：只在要时带 plan（Worker 给三张缩略图用；报告默认不带） (60.553834ms)
+✔ actual REA arc sampling redistributes interiors and passes existing verifier (1.561834ms)
+✔ manual anchors, hidden and out-of-scope objects remain untouched (2.309792ms)
+✔ over-budget or blocked segment produces no unsafe edits (0.420875ms)
+✔ source ordering does not affect stable layout results (0.149041ms)
+✔ actual material composition calls library code, preserves inputs, traces ordered steps and output (14.374833ms)
+✔ preflight rejects missing code, wrong parameter types and invalid plans before touching adapter (2.17525ms)
+✔ library schema changes invalidate catalog and plan identities; dependencies and conflicts are real (0.999291ms)
+✔ object combination executes on sequential copied layouts and returns actual edits (2.568542ms)
+✔ commit gate rejects failed checks, changed target and incomplete execution (0.255ms)
+✔ altered Worker output cannot retain a valid execution receipt (3.726875ms)
+✔ execution failure stays on the private copy and incomplete reports cannot become candidates (1.4325ms)
+✔ missing/manual adapters cannot masquerade as complete execution (1.734709ms)
+✔ candidate preserves geometry and setting locks; manual drift and tampering reject (0.551833ms)
+✔ candidate reloads from isolated disk and preserves current snapshot (6.687375ms)
+✔ disabled and removed capabilities restore baseline; unrelated geometry never enters settings (0.474166ms)
+✔ duplicate capabilities and invalid parameters reject (0.132292ms)
+✔ saved experiment retains independent recipe and baseline (2.072458ms)
+✔ legacy life recipe stays valid; new defaults separate weather vegetation animals smoke and fire (0.1235ms)
+✔ whole directory has exactly one reviewed row per actual code file, including HTML and tools (0.7055ms)
+✔ source identities and all claimed target paths exist; pages cannot inherit core completion (15.137ms)
+✔ verified deliveries are explicitly scoped with execution evidence and residual gaps (0.128708ms)
+✔ recent: 按加入日期倒序，限制条数，带能力线 / 场景 / 级别 / 日期依据 (6.234541ms)
+✔ recent: 本机首次执行只能把「上限」类日期往前提，不覆盖日志 / meta 给的日期 (1.093916ms)
+✔ recent: 没有成熟度数据时降级 —— 只列页面已登记的能力，日期未知、未评级，不编日期 (0.20425ms)
+✔ recent: 点一行去哪 —— 直达层用 R21 页签，其余去对应工坊并切到能跑的场景 (0.11975ms)
+✔ recent 页面接线：pipeline.html 有栏位，studio.js 读成熟度与经验并按目标跳转，版本号已加 (0.839708ms)
+✔ immutable experiments and explicit validated final survive reload (2.871667ms)
+✔ storage failure is surfaced and duplicate plugins rejected (0.211ms)
+✔ exact runtime version is stable after a new final; missing versions reject (0.13325ms)
+✔ planet: small sea-level rise passes all checks (620.681916ms)
+✔ planet: drowning a scene landmark fails verification (558.122833ms)
+✔ planet: compiler failure is a failed candidate, not a crash (57.411833ms)
+✔ object: scan finds identical trees and overlaps; router follows goal keywords (0.607375ms)
+✔ object: plan reduces overlaps, keeps manual edits, passes verification (0.71325ms)
+✔ object: touching a manual edit or exceeding the move budget fails (0.088958ms)
+✔ catalog: three workshops, every node has an execution state (5.54175ms)
+✔ actual fixed REA source executes a detached reproducible candidate with exact source revision (23.378084ms)
+✔ node target binding remains fixed and refuses another selected object or stale revision (1.250042ms)
+✔ raw leaf cards, region input and session UUID cannot masquerade as compatible canopy targets (0.232958ms)
+✔ tampered payload, algorithm identity, writeSet or params reject before execution (3.943959ms)
+✔ invalid or overbudget algorithm inputs reject, and JSON roundtrip preserves execution (7.055917ms)
+✔ scene/object viewport orbit, pan and dolly preserve world and initial pose (4.5635ms)
+✔ ownership handoff applies stored pose and projection after a prior camera resets them (0.141625ms)
+ℹ tests 217
+ℹ suites 0
+ℹ pass 213
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2100.371042
+
+✖ failing tests:
+
+test at TigerMessenger/tests/fx-pipeline.test.mjs:13:1
+✖ fx catalog has 5 executable capabilities mapped to adapt lines (0.677708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  9 !== 5
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-pipeline.test.mjs:15:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 5,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/fx-pipeline.test.mjs:20:1
+✖ fx runPlan executes all five capabilities on a synthetic stage (3.682209ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  9 !== 5
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-pipeline.test.mjs:22:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 5,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/mountain-arena.test.mjs:56:1
+✖ 擂台：mountain.rolling 这一代在约定指标上必须赢上一代（规则见 arena.js 文件头，不放宽） (1.842ms)
+  AssertionError [ERR_ASSERTION]: 没赢：中等坡占比 0.9207 → 0.9129退步
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-arena.test.mjs:59:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/mountain-ground.test.mjs:22:1
+✖ 通过：新山形的地面与画面一致、没有洞，轨道 / 保护区地面 = 原高 (207.6325ms)
+  AssertionError [ERR_ASSERTION]: 三角数 7816
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-ground.test.mjs:24:10)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+

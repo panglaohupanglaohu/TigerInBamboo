@@ -301,7 +301,7 @@
       59
     ]
   ],
-  "minF": 0.136,
+  "minF": 0.024,
   "maxF": 1,
   "hidden": 52,
   "occluded": 52,
@@ -312,16 +312,28 @@
     "candidateDots": 173,
     "version": 406,
     "occluded": 52,
-    "roofs": 4
+    "roofs": 4,
+    "mode": "world",
+    "size": 0.13,
+    "sizeAttenuation": true,
+    "nearPx": 7,
+    "farPx": 7,
+    "floorCss": 7,
+    "floorPx": 7,
+    "clamped": 173,
+    "clampedShare": 1,
+    "depthMin": 19.7,
+    "depthMax": 27.14,
+    "pixelRatio": 1
   },
   "dimmed": 20,
   "occludedReported": 52,
   "fadeRange": [
-    0.136,
+    0.024,
     1
   ],
-  "dimPeakBefore": 212.8,
-  "dimPeakAfter": 187.6,
+  "dimPeakBefore": 214.3,
+  "dimPeakAfter": 189.1,
   "dimensioned": [
     20,
     40
@@ -334,7 +346,7 @@
     0.775,
     0.775
   ],
-  "keepPeakBefore": 228.3,
-  "keepPeakAfter": 228.3,
+  "keepPeakBefore": 227.4,
+  "keepPeakAfter": 227.3,
   "errors": []
 }

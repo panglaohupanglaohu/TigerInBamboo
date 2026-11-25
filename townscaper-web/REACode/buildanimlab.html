@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>岛是怎么一块一块长出来的：分趟构建 + 加盖前的敞口黑洞</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:104ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; inset:104px 330px 56px 16px; background:#8fa3b8; border-radius:12px;
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center; }
+  canvas#cv { display:block; border-radius:10px; }
+  #panel { position:fixed; right:16px; top:104px; width:300px; bottom:56px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:11px 13px; display:flex;
+    flex-direction:column; gap:9px; overflow:auto; box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.03em; }
+  .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.bad b { color:#b23a2a; }
+  .row.good b { color:var(--ok); }
+  table { border-collapse:collapse; font-size:11.5px; width:100%; }
+  td,th { border-bottom:1px solid var(--line); padding:3px 4px; text-align:right;
+    font-variant-numeric:tabular-nums; }
+  th:first-child, td:first-child { text-align:left; color:var(--muted); }
+  button { font:inherit; font-size:12px; padding:4px 9px; border-radius:6px; border:1px solid var(--line);
+    background:#fff; color:var(--ink); cursor:pointer; }
+  button:hover { border-color:#9fb6bd; }
+  button.on { background:#1d2f36; color:#fff; border-color:#1d2f36; }
+  input[type=range] { width:100%; margin:0; }
+  .chips { display:flex; gap:6px; flex-wrap:wrap; }
+  #chart { display:block; width:100%; height:104px; background:#f7faf9; border:1px solid var(--line); border-radius:6px; }
+  #foot { position:fixed; left:18px; bottom:12px; right:330px; font-size:11.5px; color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>岛是怎么一块一块长出来的 — 分趟构建 + 加盖前的敞口黑洞</h1>
+  <p>原文只有一句闲话（<b>“Excerpts from this weeks episode of Lets Redo All Environment Art”</b>，2017-01-10），机制是从帧里量的：
+  进度曲线在最后 10% 的时间里跳掉 70% 的面积 → 只能是<b>整趟 flush</b>；802 的两帧纯黑
+  #232222（占画面 4.36%）是<b>盖板还没生成</b>时看到的敞口盒子。左边是模型，右边是三条基线的 RMS。</p>
+</header>
+
+<div id="stage"><canvas id="cv" width="760" height="560"></canvas></div>
+
+<div id="panel">
+  <h2>当前状态</h2>
+  <div class="row"><span>进度（体量 %）</span><b id="vArea">0.0</b></div>
+  <div class="row"><span>当前趟</span><b id="vPass">—</b></div>
+  <div class="row" id="rOpen"><span>敞口（无盖板）</span><b id="vOpen">0 栋</b></div>
+  <div class="row"><span>岸线泡沫</span><b id="vFoam">未出现</b></div>
+  <div class="row"><span>时间</span><b id="vT">0.00 s</b></div>
+
+  <h2>和实测比（RMS，百分点）</h2>
+  <table id="tbl">
+    <thead><tr><th>模型</th><th>818 rebuild</th><th>806 drag</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <div class="row"><span>散点 vs 模型</span><b id="vFit">—</b></div>
+  <canvas id="chart" width="276" height="104"></canvas>
+
+  <h2>控制</h2>
+  <div class="chips">
+    <button id="bPlay" class="on">重放</button>
+    <button id="bMode">切换：分趟 / 拖拽</button>
+    <button id="bPal">换色板</button>
+  </div>
+  <div class="row"><span>时间轴</span><b id="vScrub">0.00 s</b></div>
+  <input id="scrub" type="range" min="0" max="1000" step="1" value="0" />
+  <div class="row"><span>每帧配额</span><b id="vPf">—</b></div>
+</div>
+
+<div id="foot">测：<code>node tools/pixprobe.mjs area &lt;帧&gt;</code>；模型：<code>src/buildanim.js</code>。
+818 的权重/时间点是反解的（自洽检查），独立验证看 802 的两帧敞口 —— 相隔 1.5s 各出现一次。</div>
+
+<script type="module">
+import {
+  makeTown, planBuild, createBuild, stepBuild, areaPct, isOpenTop, foamVisible,
+  passIndexOf, compareCurve, calibrate, MEASURED, PASSES, WEIGHT, INTERIOR,
+  FOAM, PALETTES, mixPalette,
+} from './src/buildanim.js';
+
+const town = makeTown();
+const plan = planBuild(town.modules);
+const DUR = 3.0;                       // 818 实测 1.287 → 4.285 ≈ 3.0s
+
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const chart = document.getElementById('chart');
+const cctx = chart.getContext('2d');
+
+const W = 26, H = 30;                  // 一格 = 26px 宽、30px 高（等轴测）
+const OX = cv.width / 2 - 20, OY = cv.height / 2 - 40;
+
+function proj(x, y, z) {
+  return [OX + (x - y) * W, OY + (x + y) * (W / 2) - z * H];
+}
+
+let st, mode = 'rebuild', raf = 0, t0 = 0, palIdx = 0, palFrom = 0, palT = 1;
+
+function reset() {
+  st = createBuild(plan, { mode, duration: DUR, perFrame: calibrate(plan, DUR, mode) });
+  document.getElementById('vPf').textContent = st.perFrame.toFixed(3) + ' 块/帧';
+}
+
+/* ───────── 画 ───────── */
+const COL = {
+  plate: '#8a8f93', plateTop: '#a3a8ac', plateSide: '#75797d',
+  foam: FOAM.color,
+};
+
+function pal() {
+  const a = [PALETTES.terracotta, PALETTES.lilac, PALETTES.mint];
+  const from = a[palFrom % 3], to = a[palIdx % 3];
+  return mixPalette(from, to, palT);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  // 背景与水
+  const g = ctx.createLinearGradient(0, 0, 0, cv.height);
+  g.addColorStop(0, '#9db0c2'); g.addColorStop(1, '#8397ad');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, cv.width, cv.height);
+
+  const shown = plan.order.slice(0, st.popped);
+  const p = pal();
+  const wallCol = p.css;
+  const wallDark = `hsl(${p.h.toFixed(1)} ${(p.s * 62).toFixed(1)}% ${((p.v * (1 - p.s / 2)) * 62).toFixed(1)}%)`;
+  const wallLight = `hsl(${p.h.toFixed(1)} ${(p.s * 80).toFixed(1)}% ${Math.min(96, (p.v * (1 - p.s / 2)) * 118).toFixed(1)}%)`;
+  const deckCol = `hsl(${(p.h + 23).toFixed(1)} ${Math.min(0.9, p.s * 1.15).toFixed(2) * 100}% ${Math.min(94, (p.v * 1.12) * 100).toFixed(1)}%)`;
+
+  // 先画底板（它永远在下层），再按 x+y+z 排序画体块
+  const faces = [];
+  const decks = new Set();
+  const openTops = new Set();
+  for (const m of shown) {
+    if (m.kind === 'deck') decks.add(m.x + ',' + m.y);
+  }
+  for (const m of shown) {
+    if (m.kind === 'wall' && !decks.has(m.x + ',' + m.y)) openTops.add(m.x + ',' + m.y);
+  }
+
+  for (const m of shown) {
+    if (m.kind === 'plate') {
+      const [ax, ay] = proj(m.x, m.y, 0);
+      const [bx, by] = proj(m.x + 1, m.y, 0);
+      const [cx2, cy2] = proj(m.x + 1, m.y + 1, 0);
+      const [dx, dy] = proj(m.x, m.y + 1, 0);
+      faces.push({ z: -1, d: m.x + m.y, draw: () => {
+        // 厚度：底板侧面
+        ctx.beginPath();
+        ctx.moveTo(dx, dy); ctx.lineTo(cx2, cy2); ctx.lineTo(cx2, cy2 + 5); ctx.lineTo(dx, dy + 5); ctx.closePath();
+        ctx.fillStyle = COL.plateSide; ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.lineTo(bx, by + 5); ctx.lineTo(ax, ay + 5); ctx.closePath();
+        ctx.fillStyle = '#6a6e72'; ctx.fill();
+        ctx.beginPath();
+        ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.lineTo(cx2, cy2); ctx.lineTo(dx, dy); ctx.closePath();
+        ctx.fillStyle = COL.plateTop; ctx.fill();
+      } });
+      continue;
+    }
+    if (m.kind === 'foam') {
+      faces.push({ z: -0.5, d: m.x + m.y, draw: () => {
+        // 沿 footprint 外扩 2.3%：这里岛宽 ≈ 10 格 → 外扩 0.23 格
+        const off = 0.23;
+        const [ax, ay] = proj(m.x, m.y, 0);
+        const [bx, by] = proj(m.x + 1, m.y, 0);
+        const [cx2, cy2] = proj(m.x + 1, m.y + 1, 0);
+        const [dx, dy] = proj(m.x, m.y + 1, 0);
+        let a2, b2;
+        if (m.dx === 1) { a2 = [bx, by]; b2 = [cx2, cy2]; }
+        else if (m.dx === -1) { a2 = [ax, ay]; b2 = [dx, dy]; }
+        else if (m.dy === 1) { a2 = [dx, dy]; b2 = [cx2, cy2]; }
+        else { a2 = [ax, ay]; b2 = [bx, by]; }
+        const nx = (a2[1] - b2[1]), ny = (b2[0] - a2[0]);
+        const len = Math.hypot(nx, ny) || 1;
+        const ox = (nx / len) * off * W * 0.5, oy = (ny / len) * off * W * 0.5;
+        // 每段两端各外延 0.22 格：不延的话拐角处会断开成一段段白棍，
+        // 片子里那条岸线是**闭合**的，靠重叠补角最省事（也让圆头端点自然接上）。
+        const ux = (b2[0] - a2[0]) / len, uy = (b2[1] - a2[1]) / len;
+        const ext = W * 0.22;
+        ctx.beginPath();
+        ctx.moveTo(a2[0] + ox - ux * ext, a2[1] + oy - uy * ext);
+        ctx.lineTo(b2[0] + ox + ux * ext, b2[1] + oy + uy * ext);
+        ctx.lineWidth = 2.4;
+        ctx.strokeStyle = COL.foam;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+      } });
+      continue;
+    }
+    if (m.kind === 'wall') {
+      const z = m.z + 1;
+      faces.push({ z, d: m.x + m.y, draw: () => {
+        const [ax, ay] = proj(m.x, m.y, z);
+        const [bx, by] = proj(m.x + 1, m.y, z);
+        const [cx2, cy2] = proj(m.x + 1, m.y + 1, z);
+        const [dx, dy] = proj(m.x, m.y + 1, z);
+        // 左面（x 面）
+        ctx.beginPath();
+        ctx.moveTo(ax, ay); ctx.lineTo(dx, dy); ctx.lineTo(dx, dy + H); ctx.lineTo(ax, ay + H); ctx.closePath();
+        ctx.fillStyle = wallDark; ctx.fill();
+        // 右面（y 面）
+        ctx.beginPath();
+        ctx.moveTo(dx, dy); ctx.lineTo(cx2, cy2); ctx.lineTo(cx2, cy2 + H); ctx.lineTo(dx, dy + H); ctx.closePath();
+        ctx.fillStyle = wallCol; ctx.fill();
+      } });
+    }
+    if (m.kind === 'deck') {
+      // 盖板就落在最高那层墙的顶面（z = floors），不是再往上抬一层 ——
+      // 一开始写成 z+1，所有屋顶都悬空一格，远看像一排漂浮的碟子。
+      const z = m.z;
+      faces.push({ z: z + 0.5, d: m.x + m.y, draw: () => {
+        const [ax, ay] = proj(m.x, m.y, z);
+        const [bx, by] = proj(m.x + 1, m.y, z);
+        const [cx2, cy2] = proj(m.x + 1, m.y + 1, z);
+        const [dx, dy] = proj(m.x, m.y + 1, z);
+        ctx.beginPath();
+        ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.lineTo(cx2, cy2); ctx.lineTo(dx, dy); ctx.closePath();
+        ctx.fillStyle = deckCol; ctx.fill();
+        ctx.strokeStyle = 'rgba(40,30,20,.38)'; ctx.lineWidth = 1; ctx.stroke();
+      } });
+    }
+    if (m.kind === 'trim') {
+      const z = m.z;
+      faces.push({ z: z + 0.6, d: m.x + m.y, draw: () => {
+        const y0 = proj(m.x, m.y + 1, z);
+        const y1 = proj(m.x + 1, m.y + 1, z);
+        ctx.beginPath();
+        ctx.moveTo(y0[0], y0[1]); ctx.lineTo(y1[0], y1[1]);
+        ctx.strokeStyle = wallLight; ctx.lineWidth = 2; ctx.stroke();
+        const x0 = proj(m.x + 1, m.y, z);
+        const x1 = proj(m.x + 1, m.y + 1, z);
+        ctx.beginPath();
+        ctx.moveTo(x0[0], x0[1]); ctx.lineTo(x1[0], x1[1]); ctx.stroke();
+      } });
+    }
+  }
+
+  faces.sort((a, b) => a.d - b.d || a.z - b.z);
+  for (const f of faces) f.draw();
+
+  // 敞口：盖板没到之前，楼顶是纯黑（802 实测 #232222）
+  for (const key of openTops) {
+    const [sx, sy] = key.split(',').map(Number);
+    let top = 0;
+    for (const m of shown) if (m.kind === 'wall' && m.x === sx && m.y === sy) top = Math.max(top, m.z + 1);
+    const [ax, ay] = proj(sx, sy, top);
+    const [bx, by] = proj(sx + 1, sy, top);
+    const [cx2, cy2] = proj(sx + 1, sy + 1, top);
+    const [dx, dy] = proj(sx, sy + 1, top);
+    ctx.beginPath();
+    ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.lineTo(cx2, cy2); ctx.lineTo(dx, dy); ctx.closePath();
+    ctx.fillStyle = INTERIOR; ctx.fill();
+  }
+
+  paintStats(openTops.size);
+  drawChart();
+}
+
+/* ───────── 数字面板 ───────── */
+const RMS = {
+  p818: compareCurve(plan, MEASURED[818857408848130048], 3.0),
+  e818: compareCurve(plan, MEASURED[818857408848130048], 3.0, { baseline: 'equal' }),
+  l818: compareCurve(plan, MEASURED[818857408848130048], 3.0, { baseline: 'linear' }),
+  p806: compareCurve(plan, MEASURED[806856212260278272], 1.5, { mode: 'drag' }),
+  r806: compareCurve(plan, MEASURED[806856212260278272], 1.5),
+};
+
+const tbl = document.querySelector('#tbl tbody');
+tbl.innerHTML = `
+  <tr><td>分趟 flush（本模型）</td><td>${RMS.p818.rms.toFixed(1)}</td><td>${RMS.p806.rms.toFixed(1)}</td></tr>
+  <tr><td>等权重（同结构）</td><td>${RMS.e818.rms.toFixed(1)}</td><td>—</td></tr>
+  <tr><td>不分趟、匀速铺</td><td>${RMS.l818.rms.toFixed(1)}</td><td>—</td></tr>
+  <tr><td>806 用错路径</td><td>—</td><td>${RMS.r806.rms.toFixed(1)}</td></tr>`;
+
+function paintStats(openCount) {
+  const a = areaPct(st);
+  document.getElementById('vArea').textContent = a.toFixed(1);
+  const pi = passIndexOf(st);
+  document.getElementById('vPass').textContent = pi < 0 ? '—' : PASSES[pi].label;
+  document.getElementById('vOpen').textContent = openCount + ' 栋';
+  document.getElementById('rOpen').className = 'row' + (openCount ? ' bad' : ' good');
+  document.getElementById('vFoam').textContent = foamVisible(st) ? '已出现' : '未出现';
+  document.getElementById('vT').textContent = st.t.toFixed(2) + ' s';
+  document.getElementById('vScrub').textContent = st.t.toFixed(2) + ' s';
+  window.__build = {
+    mode, area: +a.toFixed(2), pass: pi < 0 ? null : PASSES[pi].key,
+    openTop: openCount, foam: foamVisible(st), t: +st.t.toFixed(3), popped: st.popped,
+    rms: { pass818: +RMS.p818.rms.toFixed(2), equal818: +RMS.e818.rms.toFixed(2), linear818: +RMS.l818.rms.toFixed(2), drag806: +RMS.p806.rms.toFixed(2), rebuild806: +RMS.r806.rms.toFixed(2) },
+  };
+}
+
+/* ───────── 对照图：实测散点 vs 模型曲线 ───────── */
+function drawChart() {
+  const w = chart.width, h = chart.height, pad = 14;
+  cctx.clearRect(0, 0, w, h);
+  cctx.strokeStyle = '#dde7e5'; cctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad + (h - 2 * pad) * (i / 4);
+    cctx.beginPath(); cctx.moveTo(pad, y); cctx.lineTo(w - 6, y); cctx.stroke();
+  }
+  const X = (u) => pad + (w - pad - 8) * u;
+  const Y = (p) => h - pad - (h - 2 * pad) * (p / 100);
+
+  // 实测 818 归一化散点
+  const A = MEASURED[818857408848130048];
+  const t0m = A[0][0], fw = A[A.length - 1][1];
+  cctx.fillStyle = '#9c4720';
+  for (const [t, v] of A) {
+    const u = (t - t0m) / 3.0, p = (100 * v) / fw;
+    cctx.beginPath(); cctx.arc(X(u), Y(p), 2.2, 0, 7); cctx.fill();
+  }
+  // 模型曲线（按当前 time 逐帧重放）
+  const probe = createBuild(plan, { mode: 'rebuild', duration: 3.0, perFrame: calibrate(plan, 3.0, 'rebuild') });
+  cctx.beginPath(); cctx.strokeStyle = '#1d7a4f'; cctx.lineWidth = 1.6;
+  for (let i = 0; i <= 90; i++) {
+    while (probe.t < (i / 90) * 3.0 - 1e-9) stepBuild(probe, 1 / 60);
+    const px = X(i / 90), py = Y(areaPct(probe));
+    i ? cctx.lineTo(px, py) : cctx.moveTo(px, py);
+  }
+  cctx.stroke();
+  // 当前时刻
+  const uNow = Math.min(1, st.t / 3.0);
+  cctx.strokeStyle = '#1d2f36'; cctx.setLineDash([3, 3]);
+  cctx.beginPath(); cctx.moveTo(X(uNow), pad); cctx.lineTo(X(uNow), h - pad); cctx.stroke();
+  cctx.setLineDash([]);
+  document.getElementById('vFit').textContent =
+    `线性 ${RMS.l818.rms.toFixed(1)} → 分趟 ${RMS.p818.rms.toFixed(1)}（${(RMS.l818.rms / RMS.p818.rms).toFixed(1)}×）`;
+}
+
+/* ───────── 播放 ───────── */
+function play() {
+  cancelAnimationFrame(raf);
+  reset();
+  t0 = performance.now();
+  let last = t0;
+  const step = (now) => {
+    const dt = Math.min(0.05, (now - last) / 1000);
+    last = now;
+    if (st.t < DUR) {
+      stepBuild(st, dt);
+    } else if (palT < 1) {
+      palT = Math.min(1, palT + dt / 0.9);
+    }
+    draw();
+    if (st.t < DUR + 1.6) raf = requestAnimationFrame(step);
+    else { palFrom = palIdx; palT = 1; draw(); }
+  };
+  raf = requestAnimationFrame(step);
+}
+
+document.getElementById('bPlay').onclick = () => { palT = 1; palFrom = palIdx; play(); };
+document.getElementById('bMode').onclick = (e) => {
+  mode = mode === 'rebuild' ? 'drag' : 'rebuild';
+  e.target.textContent = mode === 'rebuild' ? '切换：分趟 / 拖拽（当前 分趟）' : '切换：分趟 / 拖拽（当前 拖拽）';
+  play();
+};
+document.getElementById('bPal').onclick = () => {
+  palFrom = palIdx; palIdx = (palIdx + 1) % 3; palT = 0;
+  const step = () => { palT = Math.min(1, palT + 0.06); draw(); if (palT < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+};
+document.getElementById('scrub').oninput = (e) => {
+  cancelAnimationFrame(raf);
+  const target = (e.target.value / 1000) * DUR;
+  reset();
+  const steps = Math.round(target * 60);
+  for (let i = 0; i < steps; i++) stepBuild(st, 1 / 60);
+  draw();
+};
+
+reset();
+play();
+// 无头验证用：同步跳到某个时刻并画完（截图前要已经画好，所以不能靠 rAF）
+window.__seek = (t) => {
+  cancelAnimationFrame(raf);
+  reset();
+  const steps = Math.round(t * 60);
+  for (let i = 0; i < steps; i++) stepBuild(st, 1 / 60);
+  if (t > DUR) { palFrom = 0; palIdx = 2; palT = Math.min(1, (t - DUR) / 0.9); }
+  draw();
+  return window.__build;
+};
+window.__mode = (m) => { mode = m; play(); return mode; };
+window.__ready = true;
+</script>
+</body>
+</html>

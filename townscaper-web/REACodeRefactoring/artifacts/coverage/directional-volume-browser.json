@@ -1,109 +1,138 @@
 {
-  "reports": [
-    {
-      "kind": "mixed",
-      "stages": [
-        {
-          "bounce": 0,
-          "world": 672,
-          "meanChanges": [],
-          "estimatedBytes": 19701240,
-          "ms": 82
-        },
-        {
-          "bounce": 1,
-          "world": 672,
-          "meanChanges": [
-            0.1252460544740485
-          ],
-          "estimatedBytes": 19701240,
-          "ms": 97
-        },
-        {
-          "bounce": 3,
-          "world": 672,
-          "meanChanges": [
-            0.1252460544740485,
-            0.013611995226297078,
-            0.0032655521925591896
-          ],
-          "estimatedBytes": 19701240,
-          "ms": 117
-        },
-        {
-          "bounce": 6,
-          "world": 672,
-          "meanChanges": [
-            0.1252460544740485,
-            0.013611995226297078,
-            0.0032655521925591896,
-            0.0009446608093298559,
-            0.00030624152008924257,
-            0.0001072103964506657
-          ],
-          "estimatedBytes": 19701240,
-          "ms": 107
-        }
-      ],
-      "checks": {
-        "zeroToOne": 0.75,
-        "oneToThree": 0.4777807593345642,
-        "sliceColors": 4930
-      },
-      "sunChange": 10351.600044071674
+  "report": {
+    "status": {
+      "text": "113880 体素 · 9256 纹素（图集 172×164，984 片）· 光体积 12146/14652 空格 × 6 lobe × 5 射线 · 球步进 940026 / DDA 694451 · SDF-UV 命中纹素=精确穿越面 82.5% · 277 ms\n第1轮 相对变化 122.87% · 第2轮 相对变化 5.50% · 第3轮 相对变化 0.97%",
+      "stats": {
+        "voxels": 113880,
+        "texels": 9256,
+        "atlas": [
+          172,
+          164
+        ],
+        "charts": 984,
+        "lvCells": 14652,
+        "lvEmpty": 12146,
+        "raysPerLobe": 5,
+        "rays": 371376,
+        "sphereSteps": 940026,
+        "ddaSteps": 694451,
+        "uvHits": 83777,
+        "uvMatch": 69094,
+        "uvMatchRate": 0.8247370996812968,
+        "ms": 277,
+        "bounceStats": [
+          {
+            "bounce": 1,
+            "relativeChange": 1.22867
+          },
+          {
+            "bounce": 2,
+            "relativeChange": 0.05496
+          },
+          {
+            "bounce": 3,
+            "relativeChange": 0.00975
+          }
+        ]
+      }
     },
-    {
-      "kind": "quad",
-      "stages": [
+    "canvases": {
+      "lvPanels": [
         {
-          "bounce": 0,
-          "world": 781,
-          "meanChanges": [],
-          "estimatedBytes": 22669920,
-          "ms": 96
+          "mean": 88.3,
+          "inkShare": 0.967
         },
         {
-          "bounce": 1,
-          "world": 781,
-          "meanChanges": [
-            0.12551722302595072
-          ],
-          "estimatedBytes": 22669920,
-          "ms": 115
+          "mean": 91.3,
+          "inkShare": 0.967
         },
         {
-          "bounce": 3,
-          "world": 781,
-          "meanChanges": [
-            0.12551722302595072,
-            0.012517025605439958,
-            0.0028048507026417068
-          ],
-          "estimatedBytes": 22669920,
-          "ms": 112
+          "mean": 138.1,
+          "inkShare": 0.967
         },
         {
-          "bounce": 6,
-          "world": 781,
-          "meanChanges": [
-            0.12551722302595072,
-            0.012517025605439958,
-            0.0028048507026417068,
-            0.0007666008015930864,
-            0.0002366491928043484,
-            0.00007930955349054152
-          ],
-          "estimatedBytes": 22669920,
-          "ms": 137
+          "mean": 87.6,
+          "inkShare": 0.967
+        },
+        {
+          "mean": 88.4,
+          "inkShare": 0.967
+        },
+        {
+          "mean": 90.9,
+          "inkShare": 0.967
         }
       ],
-      "checks": {
-        "zeroToOne": 0.75,
-        "oneToThree": 0.4374600052833557,
-        "sliceColors": 4414
+      "lvSum": {
+        "w": 450,
+        "h": 202,
+        "colors": 7350,
+        "inkShare": 0.807,
+        "darkRed": 0,
+        "magenta": 0
       },
-      "sunChange": 9228.800039291382
-    }
-  ],
-  "errors": []
+      "sdf": {
+        "w": 365,
+        "h": 325,
+        "colors": 54034,
+        "inkShare": 0.96,
+        "darkRed": 22430,
+        "magenta": 30328
+      },
+      "mega": {
+        "w": 172,
+        "h": 164,
+        "colors": 2737,
+        "inkShare": 0.324,
+        "darkRed": 0,
+        "magenta": 0
+      }
+    },
+    "sun": {
+      "az40": [
+        0.5422,
+        0.6035,
+        1.8936,
+        0.8633,
+        0.5444,
+        0.5953
+      ],
+      "az130": [
+        0.5439,
+        0.5964,
+        1.8919,
+        0.8685,
+        0.5868,
+        0.5441
+      ],
+      "anti40": 0.984,
+      "anti130": 1,
+      "lvCanvasChanged": true,
+      "sdfCanvasChanged": false,
+      "megaCanvasChanged": true
+    },
+    "bounces": {
+      "b0": {
+        "uvMatchRate": 0.8247370996812968
+      },
+      "b3": {
+        "uvMatchRate": 0.8247370996812968,
+        "rel": [
+          1.23,
+          0.0538,
+          0.0094
+        ]
+      },
+      "megaChanged": true
+    },
+    "fields": {
+      "exitance": 39098,
+      "albedo": 7850,
+      "direct": 7410,
+      "indirect": 38774
+    },
+    "fieldsDistinct": 4
+  },
+  "errors": [],
+  "fail": []
 }

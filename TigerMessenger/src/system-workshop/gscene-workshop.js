@@ -3,8 +3,8 @@
  * （风格统一 / 整体色调 / 套用风格包），同一套 super agent：改造 Worker → 验证 Worker → 实景预览 → 写入。
  * 旁边是这个场景的「风格（逐个材质）」和「草稿 / 定稿」面板（参考 GenAIWorkPipeline：交付前人工确认，定稿 = 游戏启动用的版本）。
  */
-import { describeGsceneCapabilities } from './gscene/capabilities.js?v=sys-r15';
-import { mountTierWorkshop } from './tier-workshop.js?v=engine-r1';
+import { describeGsceneCapabilities } from './gscene/capabilities.js?v=contract-r2';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 
 export function mountGsceneWorkshop({ host, sideHost, request, openSource, status, sceneLabel }) {
@@ -53,13 +53,13 @@ export function mountGsceneWorkshop({ host, sideHost, request, openSource, statu
     draftsBox.append(ul);
   }
   const view = mountTierWorkshop({
-    host, sideHost, tier: 'scene', sideTier: 'gscene', storageKey: 'gscene', caps, openSource, status,
+    host, sideHost, tier: 'scene', sideTier: 'gscene', storageKey: 'gscene', caps, openSource, status, autoPreload: true, sceneLabel: () => (typeof sceneLabel === 'function' ? sceneLabel() : '') || '',
     intro: '通用场景的场景管线：作用在当前场景的材质色表上（风格统一、整体色调、套用风格包），实景直接预览。',
     goalHint: '例如：颜色太杂，统一成几种主色，整体暖一点',
     scopeText: () => sceneLabel() + ' · 全部材质',
     agentConfig: {
       experienceKey: 'gscene',
-      transformUrl: new URL('./gscene/transform-worker.js?v=engine-r1', import.meta.url), verifyUrl: new URL('./gscene/verify-worker.js?v=sys-r15', import.meta.url),
+      transformUrl: new URL('./gscene/transform-worker.js?v=engine-r1', import.meta.url), verifyUrl: new URL('./gscene/verify-worker.js?v=contract-r1', import.meta.url),
       hooks: {
         input: async () => (await request('gscene.style.get')).materials,
         scanMsg: (materials) => ({ materials }),

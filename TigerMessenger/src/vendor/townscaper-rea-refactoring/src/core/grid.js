@@ -129,12 +129,34 @@ export function buildMixedGrid({ radius = 22, hexSize = 0.62, seed = 1337, merge
  * （就是最佳拟合的正 n 边形），再把每个角拉向对应的位置。外圈顶点钉住。
  * n = 4 时与原来的"最佳拟合正方形"完全一样。
  */
-function relaxPolygons(polys, verts, passes) {
+/**
+ * 每个面趋向自己的正多边形：把各角相对形心的偏移反向旋转 i·2π/n 后取平均
+ * （就是最佳拟合的正 n 边形），再把每个角拉向对应的位置。外圈顶点钉住。
+ * n = 4 时与原来的"最佳拟合正方形"完全一样。
+ *
+ * areaPull（第 117 轮，1302686201401442309）：拟合出来的正多边形半径是「当前偏移的均值」，
+ * 一旦邻格/边界把它挤小，它只会照着更小的半径继续拟合 —— 面积就这么丢了（实测最狠的一格
+ * 收缩到原始点阵的 0.46×，正是片里「没翻折的邻格被拉长去补缺口」的另一半）。
+ * areaPull > 0 时把目标半径朝「与该格原始点阵面积相等的正 n 边形半径」拉：
+ *   R_want = √(2·A_raw / (n·sin(2π/n)))
+ * 外圈仍钉住（钉点的位移为 0），所以块边界的位置一点不变 → 接缝照样是 0。
+ * areaPull = 0 时与旧行为逐位一致（其它调用方不传，行为不变）。
+ */
+function relaxPolygons(polys, verts, passes, areaPull = 0) {
   const fx = new Float64Array(verts.length), fz = new Float64Array(verts.length), fn = new Float64Array(verts.length);
+  const pull = Number.isFinite(areaPull) && areaPull > 0 ? Math.min(1, areaPull) : 0;
+  let wantR = null;
+  if (pull > 0) {
+    wantR = polys.map((pg) => {
+      const n = pg.length;
+      const A = Math.abs(signedArea(pg.map((p) => ({ x: p.x, z: p.z }))));
+      return A > 0 ? Math.sqrt((2 * A) / (n * Math.sin((2 * Math.PI) / n))) : 0;
+    });
+  }
   for (let pass = 0; pass < passes; pass++) {
     fx.fill(0); fz.fill(0); fn.fill(0);
-    for (const pg of polys) {
-      const n = pg.length;
+    for (let pi = 0; pi < polys.length; pi++) {
+      const pg = polys[pi], n = pg.length;
       let cx = 0, cz = 0;
       for (const p of pg) { cx += p.x; cz += p.z; }
       cx /= n; cz /= n;
@@ -145,6 +167,13 @@ function relaxPolygons(polys, verts, passes) {
         vx += ox * ca - oz * sa; vz += ox * sa + oz * ca;
       }
       vx /= n; vz /= n;
+      if (pull > 0 && wantR) {
+        const fitR = Math.hypot(vx, vz), R = wantR[pi];
+        if (fitR > 1e-9 && R > 1e-9) {
+          const k2 = 1 + (R / fitR - 1) * pull;
+          vx *= k2; vz *= k2;
+        }
+      }
       for (let i = 0; i < n; i++) {
         const a = (i * 2 * Math.PI) / n, ca = Math.cos(a), sa = Math.sin(a);
         const tx = vx * ca - vz * sa, tz = vx * sa + vz * ca;
@@ -218,6 +247,103 @@ function finishGrid(polys, verts, { radius, hexSize, kind, triangles }) {
   const vertexCells = new Map();
   for (const [vid, set] of vertCells) vertexCells.set(vid, [...set]);
   return { kind, cells, verts, vertexCells, radius, hexSize, cellCount: cells.length, triangles };
+}
+
+/** 1670790425232175108: "pure triangle/hex and square grids ... mixed approach".
+ * A true regular square control, sharing the existing cell/half-edge contract.
+ * Randomly merging all possible triangle pairs can leave triangles and rhombi;
+ * it is not a pure square lattice. The main game grid choices stay unchanged.
+ */
+export function buildSquareGrid({radius=9, cellSize=1}={}) {
+  if(!Number.isInteger(radius)||radius<0||radius>128||!Number.isFinite(cellSize)||cellSize<=0) throw new RangeError('Invalid square grid size');
+  const side=radius*2+1, verts=[], polys=[];
+  for(let z=0;z<=side;z++)for(let x=0;x<=side;x++)verts.push({id:verts.length,x:(x-radius-.5)*cellSize,z:(z-radius-.5)*cellSize,pinned:x===0||z===0||x===side||z===side});
+  const at=(x,z)=>verts[z*(side+1)+x];
+  for(let z=0;z<side;z++)for(let x=0;x<side;x++)polys.push([at(x,z),at(x+1,z),at(x+1,z+1),at(x,z+1)]);
+  return finishGrid(polys,verts,{radius,hexSize:cellSize,kind:'square',triangles:0});
+}
+
+/** 1670790425232175108: "pure triangle/hex and square grids" — the pure hex control.
+ * Regular pointy-top hexagon cells (n = 6) in a hexagon of `radius` rings, built through
+ * the same finishGrid contract (shared vertices, half-edge twins), so World/terrain/shape
+ * run on it unchanged. A comparison grid only; the main game keeps its mixed/quad grids.
+ */
+export function buildHexGrid({radius=6, cellSize=1}={}) {
+  if(!Number.isInteger(radius)||radius<0||radius>64||!Number.isFinite(cellSize)||cellSize<=0) throw new RangeError('Invalid hex grid size');
+  const verts=[],key=new Map(),polys=[];
+  const vid=(x,z,rim)=>{const k=Math.round(x*1e6)+','+Math.round(z*1e6);let v=key.get(k);if(!v){v={id:verts.length,x,z,pinned:false,rimCount:0};verts.push(v);key.set(k,v);}if(rim)v.rimCount++;return v;};
+  for(let q=-radius;q<=radius;q++)for(let r=-radius;r<=radius;r++){
+    if(Math.abs(q+r)>radius)continue;
+    const cx=cellSize*SQRT3*(q+r/2),cz=cellSize*1.5*r,rim=Math.max(Math.abs(q),Math.abs(r),Math.abs(q+r))===radius;
+    polys.push(Array.from({length:6},(_,k)=>{const a=Math.PI/6+k*Math.PI/3;return vid(cx+Math.cos(a)*cellSize,cz+Math.sin(a)*cellSize,rim);}));
+  }
+  // Boundary vertices touch fewer than three hexagons: pin them like the other generators' rim.
+  const uses=new Map();for(const pg of polys)for(const v of pg)uses.set(v,(uses.get(v)||0)+1);
+  for(const v of verts){v.pinned=uses.get(v)<3;delete v.rimCount;}
+  return finishGrid(polys,verts,{radius,hexSize:cellSize,kind:'hex',triangles:0});
+}
+
+/** Grid-kind metrics on any shared grid (REACode gridmodes latticeStats + quadDegreeStats):
+ * major edge directions (15° bins holding >= 10% of edges), vertex valence (edges) and
+ * cell degree (cells per vertex) for interior vertices, interior-angle median/p05, face
+ * types, planar Euler V-E+F, and the 6-cells-per-vertex defect share for quad grids
+ * (1147881669350891521 "Heuristic to reduce (or eliminate) 6 quad verts").
+ */
+export function gridKindStats(grid) {
+  const edges=new Map(),bins=new Map(),angles=[],faceTypes={},cellsPer=new Map();
+  for(const c of grid.cells){
+    faceTypes[c.n]=(faceTypes[c.n]||0)+1;
+    for(let i=0;i<c.n;i++){
+      const a=c.pts[i],b=c.pts[(i+1)%c.n],d=c.pts[(i+2)%c.n],k=a.id<b.id?a.id+':'+b.id:b.id+':'+a.id;
+      cellsPer.set(a.id,(cellsPer.get(a.id)||0)+1);
+      if(!edges.has(k)){edges.set(k,[a.id,b.id,c.edgeNeighbors[i]<0]);const deg=((Math.atan2(b.z-a.z,b.x-a.x)*180/Math.PI)%180+180)%180,bin=Math.round(deg/15)%12;bins.set(bin,(bins.get(bin)||0)+1);}
+      const ux=a.x-b.x,uz=a.z-b.z,vx=d.x-b.x,vz=d.z-b.z;angles.push(Math.acos(Math.max(-1,Math.min(1,(ux*vx+uz*vz)/(Math.hypot(ux,uz)*Math.hypot(vx,vz)))))*180/Math.PI);
+    }
+  }
+  const boundary=new Set(),valence=new Map();
+  for(const [a,b,rim] of edges.values()){valence.set(a,(valence.get(a)||0)+1);valence.set(b,(valence.get(b)||0)+1);if(rim){boundary.add(a);boundary.add(b);}}
+  const valenceHist={},cellDegreeHist={};let interior=0,six=0;
+  for(const [id,v] of valence){if(boundary.has(id))continue;interior++;valenceHist[v]=(valenceHist[v]||0)+1;const d=cellsPer.get(id);cellDegreeHist[d]=(cellDegreeHist[d]||0)+1;if(d===6)six++;}
+  angles.sort((x,y)=>x-y);const total=edges.size;
+  return {kind:grid.kind,verts:valence.size,faces:grid.cells.length,edges:total,faceTypes,
+    majorDirs:[...bins.values()].filter(v=>v/total>=.1).length,valence:valenceHist,cellDegree:cellDegreeHist,interior,
+    sixPct:faceTypes[4]===grid.cells.length?+(six/Math.max(1,interior)*100).toFixed(2):null,
+    angleMedian:+angles[angles.length>>1].toFixed(2),angleP05:+angles[Math.floor(angles.length*.05)].toFixed(2),
+    euler:valence.size-total+grid.cells.length};
+}
+
+/** 1447494168448753667: quads cut on both diagonals into four triangles.
+ * Derive a new shared-cell grid, retaining parent ownership. This supplies
+ * geometry/adjacency; it does not impose a joint four-subtile WFC constraint.
+ * Source uses the existing clockwise XZ cell contract and is never mutated.
+ */
+export function buildTriangularSubgrid(source) {
+  const verts=[],byId=new Map(),polys=[],owners=[],groups=[],cellIds=new Set();
+  for(const p of source.verts){
+    if(!Number.isInteger(p.id)||byId.has(p.id)||!Number.isFinite(p.x)||!Number.isFinite(p.z))throw new TypeError('Invalid source vertex');
+    const copy={...p,id:verts.length};byId.set(p.id,copy);verts.push(copy);
+  }
+  for(const c of source.cells){
+    if(!Number.isInteger(c.id)||cellIds.has(c.id)||![3,4].includes(c.pts.length))throw new TypeError('Invalid source cell');
+    cellIds.add(c.id);
+    const pts=c.pts.map(p=>{const v=byId.get(p.id);if(!v||v.x!==p.x||v.z!==p.z)throw new TypeError('Unknown source corner');return v;});
+    let area=0;for(let i=0;i<pts.length;i++){const a=pts[i],b=pts[(i+1)%pts.length];area+=a.x*b.z-b.x*a.z;}
+    if(!(area<0)||!isConvex(pts))throw new RangeError('Expected convex clockwise source cell');
+    const children=[];
+    const add=(pg,edge)=>{children.push(polys.length);polys.push([...pg].reverse());owners.push({sourceCell:c.id,sourceEdge:edge});};
+    if(pts.length===3)add(pts,-1);
+    else{
+      const [a,b,c,d]=pts,rx=c.x-a.x,rz=c.z-a.z,sx=d.x-b.x,sz=d.z-b.z,den=rx*sz-rz*sx;
+      const t=((b.x-a.x)*sz-(b.z-a.z)*sx)/den,u=((b.x-a.x)*rz-(b.z-a.z)*rx)/den;
+      if(!Number.isFinite(t)||!Number.isFinite(u)||t<=0||t>=1||u<=0||u>=1)throw new RangeError('Invalid quad diagonal intersection');
+      const center={id:verts.length,x:a.x+t*rx,z:a.z+t*rz,pinned:false};verts.push(center);
+      for(let e=0;e<4;e++)add([pts[e],pts[(e+1)%4],center],e);
+    }
+    groups.push({sourceCell:c.id,children});
+  }
+  const grid=finishGrid(polys,verts,{radius:source.radius,hexSize:source.hexSize,kind:'tri-subtiles',triangles:polys.length});
+  grid.cells.forEach((c,i)=>Object.assign(c,owners[i]));
+  grid.subdivision={parentKind:source.kind,groups};return grid;
 }
 
 /** 对边：方格的第 i 条边对着 i+2；三角格没有对边（返回 -1）。直线行走、拱门都靠它。 */
@@ -310,5 +436,73 @@ function latticeAndMerge({ radius, hexSize, seed, mergeRate }) {
   return { verts, polys, addVert, ekey };
 }
 
-export { signedArea, isConvex };
+// Low-level topology finalizer; callers must validate polygon geometry first.
+export { signedArea, isConvex, relaxPolygons, finishGrid };
 
+/**
+ * 无限网格用的"一块"（1332410042784641026）：中心在三角点阵 (q0, r0) 的六边形块，
+ * 自己的种子 → 合并 → 细分成四边形，不松弛。外圈顶点 pinned，位置就是点阵点 / 外圈边中点，
+ * 所以相邻两块在公共边上的顶点坐标完全相同（用 key 合并即可）。
+ */
+export function quadPatchTopology({ N = 4, L = 1, q0 = 0, r0 = 0, seed = 1 } = {}) {
+  const { verts, polys, addVert, ekey } = latticeAndMerge({ radius: N, hexSize: L, seed, mergeRate: 0.92 });
+  const ox = L * (q0 + r0 / 2), oz = L * (SQRT3 / 2) * r0;
+  for (const v of verts) { v.x += ox; v.z += oz; }
+  const midId = new Map();
+  const mid = (a, b) => {
+    const k = ekey(a, b);
+    let m = midId.get(k);
+    if (!m) { m = addVert((a.x + b.x) / 2, (a.z + b.z) / 2, a.pinned && b.pinned); midId.set(k, m); }
+    return m;
+  };
+  const quads = [];
+  for (const poly of polys) {
+    if (signedArea(poly) < 0) poly.reverse();
+    let cx = 0, cz = 0;
+    for (const p of poly) { cx += p.x; cz += p.z; }
+    const c = addVert(cx / poly.length, cz / poly.length);
+    const n = poly.length;
+    for (let i = 0; i < n; i++) quads.push([poly[i], mid(poly[i], poly[(i + 1) % n]), c, mid(poly[(i + n - 1) % n], poly[i])]);
+  }
+  for (const qd of quads) if (signedArea(qd) < 0) qd.reverse();
+  return { verts, quads, center: [ox, oz] };
+}
+
+
+/**
+ * 拓扑直线（1384958097542819845 "trace topologically straight lines across the Townscaper grid … for the gamepad
+ * controls and possibly some drag-to-paint mode"）：从格子 cell 的第 i 条边出去，每到一个四边形就从对边出去，
+ * 碰到三角格 / 外圈就停。返回经过的格子（不含起点）。
+ */
+export function traceStraightReport(grid, cell, i, max = 200) {
+  if(!Number.isInteger(max)||max<0||max>100000)throw new RangeError('Invalid trace budget');
+  const byId=new Map(grid.cells.map(c=>[c.id,c]));
+  if(byId.size!==grid.cells.length||byId.get(cell?.id)!==cell||!Number.isInteger(i)||i<0||i>=cell.n)throw new TypeError('Invalid trace origin');
+  const cells=[],segments=[],seen=new Set();
+  let c=cell,e=i,reason='budget',closed=false;
+  const initial=cell.id+':'+i;
+  const mid=(c,e)=>{const a=c.pts[e],b=c.pts[(e+1)%c.n];return [(a.x+b.x)/2,(a.z+b.z)/2];};
+  for(let step=0;step<max;step++){
+    const key=c.id+':'+e;
+    if(seen.has(key)){reason=key===initial?'loop':'cycle';closed=key===initial;break;}
+    seen.add(key);
+    const nid=c.edgeNeighbors[e];
+    if(nid===-1){reason='boundary';break;}
+    const next=byId.get(nid),twin=c.edgeTwins[e];
+    if(!next||!Number.isInteger(twin)||twin<0||twin>=next.n||next.edgeNeighbors[twin]!==c.id||next.edgeTwins[twin]!==e)throw new Error('Nonreciprocal trace edge');
+    c=next;cells.push(c);
+    if(c.n!==4){segments.push({cell:c.id,entry:twin,exit:null,a:mid(c,twin),b:[c.cx,c.cz]});reason='nonquad';break;}
+    e=(twin+2)%4;
+    segments.push({cell:c.id,entry:twin,exit:e,a:mid(c,twin),b:mid(c,e)});
+    const nextKey=c.id+':'+e;
+    if(seen.has(nextKey)){reason=nextKey===initial?'loop':'cycle';closed=nextKey===initial;break;}
+  }
+  return {cells,segments,reason,closed,steps:cells.length,max};
+}
+
+/** Compatibility array result: excludes the start unless the walk returns to it.
+ * Loop detection uses a directed cell/exit state, not just a visited cell.
+ */
+export function traceStraight(grid, cell, i, max = 200) {
+  return traceStraightReport(grid,cell,i,max).cells;
+}

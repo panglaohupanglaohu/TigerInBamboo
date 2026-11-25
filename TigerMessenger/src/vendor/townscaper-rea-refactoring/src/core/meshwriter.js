@@ -20,6 +20,16 @@ export class MeshWriter {
     this.pos = [];
     this.col = [];
     this.glow = [];
+    this.field = [];
+    this.fieldFrame = null; // [axisX, axisZ, optional caller-owned surface kind]; null writes zero.
+    // 1707490932017279035 纯纹理灌木：每顶点「到崖边的归一化距离」（0 = 崖边，1 = 格心 / 不是顶面）。
+    // 调用方在写顶面扇形三角前设 edgeTri = [ea, eb, ec]（与 tri 的 a,b,c 对应；翻绕序时一起换）；null 写 1。
+    this.edge = [];
+    this.edgeTri = null;
+    // 第 99 轮 · 逐三角带宽倍率（灌木，1707497006640365880）：调用方在写顶面扇形三角前设 bandTri（一个数，
+    // 三个顶点写同一个值 → 插值后沿三角恒定），1 = 旧行为。见 src/terrain/shrub-band.js。
+    this.band = [];
+    this.bandTri = 1;
     this.softTri = [];      // 每个三角形一个标记
     this.soft = false;
     this.softAngle = 55;
@@ -37,22 +47,36 @@ export class MeshWriter {
     const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
     const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
     const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
-    if (dir && nx * dir[0] + ny * dir[1] + nz * dir[2] < 0) { [b, c] = [c, b]; [s1, s2] = [s2, s1]; }
+    const e = this.edgeTri || [1, 1, 1];
+    let eb = e[1], ec = e[2];
+    if (dir && nx * dir[0] + ny * dir[1] + nz * dir[2] < 0) { [b, c] = [c, b]; [s1, s2] = [s2, s1]; [eb, ec] = [ec, eb]; }
+    this.edge.push(e[0], eb, ec);
+    const bk = this.bandTri;
+    this.band.push(bk, bk, bk);
     this.pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
     this.col.push(color.r * s0, color.g * s0, color.b * s0, color.r * s1, color.g * s1, color.b * s1, color.r * s2, color.g * s2, color.b * s2);
     this.glow.push(g, g, g);
+    const q = this.fieldFrame;
+    for (const p of [a, b, c]) this.field.push(q ? p[0]*q[0]+p[2]*q[1] : 0, q ? -p[0]*q[1]+p[2]*q[0] : 0, q ? (q[2] ?? 1) : 0);
     this.softTri.push(this.soft ? 1 : 0);
   }
 
-  /** 三个顶点各自的颜色（顶面混色用，1781405550061687016）。 */
+  /** 三个顶点各自的颜色（本地顶面混色；不是投射/手工UV patch）。 */
   triC(a, b, c, dir, ca, cb, cc, g = 0) {
     const ux = b[0] - a[0], uy = b[1] - a[1], uz = b[2] - a[2];
     const vx = c[0] - a[0], vy = c[1] - a[1], vz = c[2] - a[2];
     const nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
-    if (dir && nx * dir[0] + ny * dir[1] + nz * dir[2] < 0) { [b, c] = [c, b]; [cb, cc] = [cc, cb]; }
+    const e = this.edgeTri || [1, 1, 1];
+    let eb = e[1], ec = e[2];
+    if (dir && nx * dir[0] + ny * dir[1] + nz * dir[2] < 0) { [b, c] = [c, b]; [cb, cc] = [cc, cb]; [eb, ec] = [ec, eb]; }
+    this.edge.push(e[0], eb, ec);
+    const bk = this.bandTri;
+    this.band.push(bk, bk, bk);
     this.pos.push(a[0], a[1], a[2], b[0], b[1], b[2], c[0], c[1], c[2]);
     this.col.push(ca.r, ca.g, ca.b, cb.r, cb.g, cb.b, cc.r, cc.g, cc.b);
     this.glow.push(g, g, g);
+    const q = this.fieldFrame;
+    for (const p of [a, b, c]) this.field.push(q ? p[0]*q[0]+p[2]*q[1] : 0, q ? -p[0]*q[1]+p[2]*q[0] : 0, q ? (q[2] ?? 1) : 0);
     this.softTri.push(this.soft ? 1 : 0);
   }
 
@@ -187,6 +211,9 @@ export class MeshWriter {
     g.setAttribute('position', new THREE.Float32BufferAttribute(this.pos, 3));
     g.setAttribute('color', new THREE.Float32BufferAttribute(this.col, 3));
     g.setAttribute('aGlow', new THREE.Float32BufferAttribute(this.glow, 1));
+    g.setAttribute('aField', new THREE.Float32BufferAttribute(this.field, 3));
+    g.setAttribute('aEdge', new THREE.Float32BufferAttribute(this.edge, 1));
+    g.setAttribute('aBand', new THREE.Float32BufferAttribute(this.band, 1));   // 第 99 轮：逐三角灌木带宽倍率
     const { normal, outline } = this.normals();
     g.setAttribute('normal', new THREE.Float32BufferAttribute(normal, 3));
     g.setAttribute('aOutline', new THREE.Float32BufferAttribute(outline, 3));   // 描边外扩方向（world/outline.js）

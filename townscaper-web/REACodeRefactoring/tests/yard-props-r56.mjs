@@ -48,7 +48,7 @@ for (const kind of ['quad', 'mixed']) for (const depth of [3, 4, 5]) {
   const writes0 = layer.stats.slotWrites; w.touch(); layer.update(5.01);
   assert.equal(layer.stats.slotWrites, writes0, 'rebuild with same props: nothing re-uploaded, no replay');
   const wall = w.cells[S.wall[0]]; w.setSolid(wall, 2, false); w.setSolid(wall, 3, false); w.touch();
-  layer.update(6); const mid = keys.map((k) => { layer.update(6.06); return layer.scaleOf(k); });
+  layer.update(6); const mid = keys.map((k) => { layer.update(6.012); return layer.scaleOf(k); });   // 第 192 轮：塌陷只一帧
   for (const s of mid) assert.ok(s > 0 && s < 1, 'vanishing props keep their geometry and shrink');
   layer.update(7);
   for (const k of keys) assert.equal(layer.life.slotOf(k), -1, 'slot released after shrink');

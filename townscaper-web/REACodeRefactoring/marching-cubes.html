@@ -40,7 +40,7 @@ scene.add(new THREE.HemisphereLight(0xffffff, 0x555555, 1.3));
 const sun = new THREE.DirectionalLight(0xffffff, 1.7); sun.position.set(-5, 10, 6); scene.add(sun);
 const modeEl = document.getElementById('mode'), tEl = document.getElementById('t'), statEl = document.getElementById('stat');
 modeEl.value = q.get('mode') === 'slab' ? 'slab' : 'cubes';
-let cells, levels, order, wire, solid, t = Number(q.get('t') ?? 1), playing = !!q.get('play'), lastK = -1, cfg;
+let cells, levels, order, wire, solid, t = Number(q.get('t') ?? 1), playing = !!q.get('play'), lastK = -1, cfg, lastResult = null;
 
 function setup() {
   for (const o of [wire, solid]) if (o) { scene.remove(o); o.geometry.dispose(); }
@@ -84,9 +84,35 @@ function apply() {
   solid = new THREE.Mesh(g.toNonIndexed(), new THREE.MeshStandardMaterial({ color: cfg.color, roughness: .8, flatShading: true }));
   solid.geometry.computeVertexNormals();
   scene.add(solid);
+  // 片中实体表面能看到更深的三角剖分线（等值面按格边斜切）→ 叠一层网格边线，?edges=0 关掉
+  if (q.get('edges') !== '0' && r.triangles) {
+    const ep = [], seenE = new Set();
+    for (let i = 0; i < r.indices.length; i += 3) for (let k = 0; k < 3; k++) {
+      const a = r.indices[i + k], b = r.indices[i + (k + 1) % 3], key = a < b ? a + ',' + b : b + ',' + a;
+      if (seenE.has(key)) continue; seenE.add(key);
+      ep.push(r.positions[a * 3], r.positions[a * 3 + 1], r.positions[a * 3 + 2], r.positions[b * 3], r.positions[b * 3 + 1], r.positions[b * 3 + 2]);
+    }
+    const eg = new THREE.BufferGeometry(); eg.setAttribute('position', new THREE.Float32BufferAttribute(ep, 3));
+    solid.add(new THREE.LineSegments(eg, new THREE.LineBasicMaterial({ color: 0x5c0f0c })));
+  }
+  lastResult = r;
   const vol = r.triangles ? meshVolume(r) : 0;
   statEl.textContent = `${modeEl.value} · ${cells.length} 格 × ${levels} 层 · 实心角点 ${k}/${order.length}\n等值面 ${r.triangles} 三角 · 焊接顶点 ${r.vertices} · 涉及 ${r.cellsTouched} 个格层\n闭合 ${r.closed ? '是' : '否'}（边界边 ${r.boundaryEdges}、非流形 ${r.nonManifoldEdges}）· 体积 ${vol.toFixed(2)}（>0 法向朝外）`;
-  window.marchReview = { mode: modeEl.value, k, total: order.length, triangles: r.triangles, closed: r.closed, boundaryEdges: r.boundaryEdges, nonManifoldEdges: r.nonManifoldEdges, volume: vol, cells: cells.length, setProgress: (x) => { t = x; playing = false; apply(); } };
+  window.marchReview = {
+    mode: modeEl.value, k, total: order.length, triangles: r.triangles, closed: r.closed, boundaryEdges: r.boundaryEdges,
+    nonManifoldEdges: r.nonManifoldEdges, vertices: r.vertices, cellsTouched: r.cellsTouched, volume: vol, cells: cells.length, levels,
+    setProgress: (x) => { t = x; playing = false; apply(); },
+    // 运行验收用的几何探针：等值面顶点/索引 + 本网格的格角（xz）与层高，供「面只在格边交点上」逐点对账
+    mesh: () => lastResult && ({
+      mode: modeEl.value, levels, levelHeight: cfg.levelHeight,
+      yOfUsed: modeEl.value === 'slab' ? [0, .02, cfg.levelHeight, cfg.levelHeight + .02] : Array.from({ length: levels + 1 }, (_, l) => l * cfg.levelHeight),
+      positions: Array.from(lastResult.positions), indices: Array.from(lastResult.indices),
+      vertexKinds: Array.from(lastResult.vertexKinds || []), fanCenters: lastResult.fanCenters || 0,
+      cells: cells.map((c) => c.pts.map((p) => [p.x, p.z])),
+      triangles: lastResult.triangles, vertices: lastResult.vertices,
+      closed: lastResult.closed, boundaryEdges: lastResult.boundaryEdges, nonManifoldEdges: lastResult.nonManifoldEdges,
+    }),
+  };
 }
 modeEl.onchange = () => setup();
 tEl.oninput = () => { t = +tEl.value; playing = false; apply(); };

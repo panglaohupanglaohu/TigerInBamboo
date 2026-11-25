@@ -1,0 +1,360 @@
+{
+ "schemaVersion": 1,
+ "date": "2026-11-24",
+ "diff": {
+  "first": true,
+  "prevDate": null,
+  "newCapabilities": [],
+  "removedCapabilities": [],
+  "lineChanges": [],
+  "capabilityLevelChanges": [],
+  "metricDeltas": [],
+  "testFlips": {
+   "drift": {
+    "red": [
+     "every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations",
+     "whole directory has exactly one reviewed row per actual code file, including HTML and tools"
+    ],
+    "green": []
+   },
+   "unit": {
+    "red": [
+     "接线：能力树 / 左栏 / 管线页 / 桥接命令都登记了",
+     "building layer: registered in worker-host, adapters, studio, lineage, bridge (§7.2 \\#4 \\#5)",
+     "every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations",
+     "通过：新山形的地面与画面一致、没有洞，轨道 / 保护区地面 = 原高",
+     "楼梯：一架，踏面一级 L/3，比不插值的一整层小",
+     "逐帧：穿洞那段脚贴洞底，上楼梯那段脚高的最大跳变小于不插值",
+     "窄道 / 弯道 / 岔口：考场上逐格数对",
+     "完整山体：一条管线跑完，四类特征都在（软坡粗糙度降、有台面、河谷后没坑、有岩檐、有梯子）",
+     "游戏侧只是候选：不写 localStorage / 存档，persist ≠ false 拒绝预览，能拆回，原地形只隐藏不删",
+     "执行 + 独立验证：完整山体（软坡 + 硬崖 + 河谷 + 悬垂 + 梯子 + 等高线），不写存档，复算通过",
+     "接线：能力树（collectExecutables）/ Worker / 左栏 / 管线页 / 桥接命令都登记了，版本号已加"
+    ],
+    "green": []
+   }
+  },
+  "stepFlips": [],
+  "frontier": {
+   "from": null,
+   "to": []
+  },
+  "fruit": {
+   "from": null,
+   "to": 27
+  }
+ },
+ "steps": [
+  {
+   "id": "drift",
+   "label": "§5.1 漂移检查（4 个测试）",
+   "status": "fail",
+   "code": 1,
+   "ms": 859,
+   "cwd": ".",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test --test-reporter=tap TigerMessenger/tests/reacode-file-status.test.mjs TigerMessenger/tests/capability-tree.test.mjs TigerMessenger/tests/capability-lineage.test.mjs TigerMessenger/tests/capability-evolution.test.mjs",
+   "note": "21/23 通过，2 红"
+  },
+  {
+   "id": "r1",
+   "label": "① 原版逐文件状态",
+   "status": "pass",
+   "code": 0,
+   "ms": 285,
+   "cwd": ".",
+   "cmd": "python3 TigerMessenger/tools/scene-authoring/build_reacode_file_status.py",
+   "note": "{\"total\": 317, \"extensions\": {\".html\": 116, \".js\": 189, \".mjs\": 12}, \"states\": {\"待页面核验\": 127, \"待运行验收\": 41, \"已迁移待完整核验\": 122, \"本轮代码验证通过\": 4, \"待工具/数据核验\": 16, \"待补动作/美术\": 1, \"已迁移待跨GPU验收\": 1, \"已迁移待集成/性能验收\":"
+  },
+  {
+   "id": "r2",
+   "label": "② 系统目录",
+   "status": "pass",
+   "code": 0,
+   "ms": 416,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/build-system-catalog.mjs ../townscaper-web/REACode ../townscaper-web/REACodeRefactoring",
+   "note": "}"
+  },
+  {
+   "id": "r3",
+   "label": "③ 重构库扫描",
+   "status": "pass",
+   "code": 0,
+   "ms": 368,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/scan-code-library.mjs",
+   "note": "{\"sourceModules\":388,\"sourceFiles\":396,\"rootHtml\":141,\"testCode\":690,\"originalFiles\":317,\"missingTargets\":34}"
+  },
+  {
+   "id": "r4",
+   "label": "④ 场景依赖扫描",
+   "status": "pass",
+   "code": 0,
+   "ms": 152,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/scan-scene-consumers.mjs",
+   "note": "[[\"莫西斯湖\",{\"modules\":240,\"direct\":22,\"identical\":216,\"different\":24,\"absent\":0}],[\"战斗场\",{\"modules\":42,\"direct\":6,\"identical\":21,\"different\":20,\"absent\":1}],[\"十二门徒\",{\"modules\":18,\"direct\":11,\"identical\""
+  },
+  {
+   "id": "jev",
+   "label": "JEV 归线（§5.4）",
+   "status": "skipped",
+   "note": "--no-jev"
+  },
+  {
+   "id": "r5",
+   "label": "⑤ 能力谱系",
+   "status": "pass",
+   "code": 0,
+   "ms": 529,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/build-capability-lineage.mjs",
+   "note": "{\"sources\":285,\"lines\":27,\"generations\":104,\"gaps\":72,\"gapRows\":75,\"highGaps\":9,\"adapt\":0,\"modules\":388,\"ownedModules\":316,\"inferredModules\":70,\"executables\":81,\"linkedExecutables\":71,\"linesWithExecut"
+  },
+  {
+   "id": "goals",
+   "label": "目标路径各跑一次（Node，进程内）",
+   "status": "fail",
+   "ms": 738,
+   "note": "2/7 条在 Node 里跑了，4 条 NOT_RUN，出错：battle；指标 30 条"
+  },
+  {
+   "id": "r6",
+   "label": "⑥ 补学队列（含指标差距分）",
+   "status": "pass",
+   "code": 0,
+   "ms": 490,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/export-learn-queue.mjs",
+   "note": "写入 /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/src/scene-authoring/catalog/learn-queue.json（72 项补学 · 0 条适配）"
+  },
+  {
+   "id": "r7",
+   "label": "⑦ 九级成熟度",
+   "status": "pass",
+   "code": 0,
+   "ms": 390,
+   "cwd": "TigerMessenger",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node tools/refactor/build-capability-maturity.mjs",
+   "note": "已写 TigerMessenger/src/scene-authoring/catalog/capability-maturity.json：72 个能力"
+  },
+  {
+   "id": "unit",
+   "label": "单元测试（test_workshops.py 清单）",
+   "status": "fail",
+   "code": 1,
+   "ms": 3406,
+   "cwd": ".",
+   "cmd": "/Users/panglaohu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node --test --test-reporter=tap TigerMessenger/tests/capability-evolution.test.mjs TigerMessenger/tests/capability-lineage.test.mjs TigerMessenger/tests/capability-tree.test.mjs TigerMessenger/tests/battle-pipeline.test.mjs TigerMessenger/tests/nav-vendor-swap.test.mjs TigerMessenger/tests/nav-parity.test.mjs TigerM",
+   "note": "398/409 通过，11 红"
+  }
+ ],
+ "tests": {
+  "drift": {
+   "tests": 23,
+   "pass": 21,
+   "fail": 2,
+   "skipped": 0,
+   "failures": [
+    "every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations",
+    "whole directory has exactly one reviewed row per actual code file, including HTML and tools"
+   ]
+  },
+  "unit": {
+   "tests": 409,
+   "pass": 398,
+   "fail": 11,
+   "skipped": 0,
+   "failures": [
+    "接线：能力树 / 左栏 / 管线页 / 桥接命令都登记了",
+    "building layer: registered in worker-host, adapters, studio, lineage, bridge (§7.2 \\#4 \\#5)",
+    "every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations",
+    "通过：新山形的地面与画面一致、没有洞，轨道 / 保护区地面 = 原高",
+    "楼梯：一架，踏面一级 L/3，比不插值的一整层小",
+    "逐帧：穿洞那段脚贴洞底，上楼梯那段脚高的最大跳变小于不插值",
+    "窄道 / 弯道 / 岔口：考场上逐格数对",
+    "完整山体：一条管线跑完，四类特征都在（软坡粗糙度降、有台面、河谷后没坑、有岩檐、有梯子）",
+    "游戏侧只是候选：不写 localStorage / 存档，persist ≠ false 拒绝预览，能拆回，原地形只隐藏不删",
+    "执行 + 独立验证：完整山体（软坡 + 硬崖 + 河谷 + 悬垂 + 梯子 + 等高线），不写存档，复算通过",
+    "接线：能力树（collectExecutables）/ Worker / 左栏 / 管线页 / 桥接命令都登记了，版本号已加"
+   ]
+  }
+ },
+ "tree": {
+  "lines": 27,
+  "fruit": 27,
+  "frontier": [],
+  "executablesUnique": 81,
+  "goals": 7
+ },
+ "goals": [
+  {
+   "id": "battle",
+   "name": "场景战役：Bad North 玩法层",
+   "needs": 3,
+   "status": "error",
+   "reason": "没有导航采样（site.nav）：先在实景里扫描战斗舞台"
+  },
+  {
+   "id": "mountain",
+   "name": "圣城山形：有山的模样",
+   "needs": 6,
+   "status": "run",
+   "ms": 78,
+   "report": [
+    {
+     "id": "mountain.protect",
+     "status": "applied",
+     "changed": [
+      "保护 3712 格，可塑陆地 2849 格（25641 m²）"
+     ]
+    },
+    {
+     "id": "mountain.massif",
+     "status": "applied",
+     "changed": [
+      "隆起 2722 格 · 最高点 50.8 m"
+     ]
+    },
+    {
+     "id": "mountain.erode",
+     "status": "applied",
+     "changed": [
+      "下切 2051 格 · 最深 6.3 m · 5 轮"
+     ]
+    },
+    {
+     "id": "mountain.rolling",
+     "status": "applied",
+     "changed": [
+      "连脊填谷 918 格 · 圆润 17061 次 · 起伏 2849 格"
+     ]
+    },
+    {
+     "id": "mountain.talus",
+     "status": "applied",
+     "changed": [
+      "松弛 9840 次 · 休止角 49°"
+     ]
+    },
+    {
+     "id": "mountain.lowpoly",
+     "status": "applied",
+     "changed": [
+      "草坡 5498 · 岩壁 473 · 碎石 573 · 雪 96 · 滩 / 台地 6160 面"
+     ]
+    }
+   ],
+   "verify": {
+    "status": "pass",
+    "summary": "建筑与保护带不动✓ 轨道净空保留✓ 海岸线不变✓ 有主峰✓ 山坡而非方台✓ 竖崖占比✓ 面数预算✓ 着色数据完整✓ 玩家地面与山形一致✓ 山上能走✓"
+   },
+   "metrics": 23
+  },
+  {
+   "id": "fx",
+   "name": "fx",
+   "needs": 9,
+   "status": "run",
+   "ms": 157,
+   "report": [
+    {
+     "id": "fx.campaign",
+     "status": "applied",
+     "changed": [
+      "图 441 点 · 分区 3 · 前线 119 点"
+     ]
+    },
+    {
+     "id": "fx.camera",
+     "status": "applied",
+     "changed": [
+      "环绕 1 圈 · 97 点 · 峰值 30°/s（限 45）"
+     ]
+    },
+    {
+     "id": "fx.wake",
+     "status": "applied",
+     "changed": [
+      "尾迹 134 片泡沫 · 半角 0.69°（Kelvin 上限 19.47°）"
+     ]
+    },
+    {
+     "id": "fx.ornament",
+     "status": "applied",
+     "changed": [
+      "面板 48² · 砖块 16 · 曲线 10 段"
+     ]
+    },
+    {
+     "id": "fx.fire",
+     "status": "applied",
+     "changed": [
+      "点火 3 处（小屋）· 火光 0.18s 剩 58% · 0.39s 剩 23% · 烟面积 ×2.232 · 爆燃 16 张"
+     ]
+    },
+    {
+     "id": "fx.hallway",
+     "status": "applied",
+     "changed": [
+      "走廊展开面 7.4×5.79 · 7 块板 · 3 条竖带 · 纹样 845 个（镜像）"
+     ]
+    },
+    {
+     "id": "fx.sediment",
+     "status": "applied",
+     "changed": [
+      "崖面 38 面 · 层带 372 条（宽窄变异 0.29）· 细深线 256 条 · 弯层"
+     ]
+    },
+    {
+     "id": "fx.projectiles",
+     "status": "applied",
+     "changed": [
+      "箭 8 支 · 解析表 · 平均飞行 0.981s · 最大落点偏差 0 格"
+     ]
+    },
+    {
+     "id": "fx.replay",
+     "status": "applied",
+     "changed": [
+      "图 10 节点 9 边 · 执行 10 帧"
+     ]
+    }
+   ],
+   "verify": {
+    "status": "warn",
+    "summary": "分区覆盖✓ 前线连通且有净空✓ 镜头路径✓ 角速度上限✓ 泡沫数量✓ V 形半角与对称✓ 面板与镜像✓ 回放图可复算✓ 点火处在格网上✓ 火光衰减与烟放大✓ 爆燃团分层✓ 版式可独立复算✓ 板覆盖整面墙✓ 样板落点✓ 崖面可独立重数✓ 层带岩性与首尾✓ 层带宽窄相间! 落点命中✓ 弹道是弧✓"
+   },
+   "metrics": 7
+  },
+  {
+   "id": "apostles-terrain",
+   "name": "apostles-terrain",
+   "needs": 2,
+   "status": "NOT_RUN",
+   "reason": "这一层的输入要浏览器实景采样，只能在端到端里跑"
+  },
+  {
+   "id": "lightlife",
+   "name": "lightlife",
+   "needs": 8,
+   "status": "NOT_RUN",
+   "reason": "这一层的输入要浏览器实景采样，只能在端到端里跑"
+  },
+  {
+   "id": "building",
+   "name": "building",
+   "needs": 3,
+   "status": "NOT_RUN",
+   "reason": "这一层的输入要浏览器实景采样，只能在端到端里跑"
+  },
+  {
+   "id": "relief",
+   "name": "relief",
+   "needs": 6,
+   "status": "NOT_RUN",
+   "reason": "这一层的输入要浏览器实景采样，只能在端到端里跑"
+  }
+ ]
+}

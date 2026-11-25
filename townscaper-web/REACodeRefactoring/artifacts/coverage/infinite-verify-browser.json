@@ -40,12 +40,12 @@
         "border": 330,
         "seam": 0,
         "comparisons": 378,
-        "maxStretch": 1.7544462480710081,
-        "minShrink": 0.46018055194080454,
-        "maxEdgeStretch": 1.5492775762576882,
-        "minEdgeShrink": 0.543883335033447,
+        "maxStretch": 1.487445623676894,
+        "minShrink": 0.639961982323271,
+        "maxEdgeStretch": 1.4545415150810828,
+        "minEdgeShrink": 0.6734726163135755,
         "stretched": 0,
-        "shrunk": 13,
+        "shrunk": 0,
         "stretchLimit": 2,
         "worst": {
           "patch": 15,
@@ -55,7 +55,7 @@
             3387,
             3370
           ],
-          "ratio": 1.7544462480710081
+          "ratio": 1.487445623676894
         }
       },
       "barycentric": {
@@ -78,24 +78,24 @@
         "flipped": 0,
         "invalid": 0,
         "border": 330,
-        "seam": 0.37595922813350574,
+        "seam": 0.33600829106386,
         "comparisons": 378,
-        "maxStretch": 1.851094787686218,
-        "minShrink": 0.4598859972651125,
-        "maxEdgeStretch": 1.5354029399037508,
-        "minEdgeShrink": 0.5390323231931361,
+        "maxStretch": 1.5338374604883365,
+        "minShrink": 0.6387449788118545,
+        "maxEdgeStretch": 1.4579812983470761,
+        "minEdgeShrink": 0.5950073316820201,
         "stretched": 0,
-        "shrunk": 13,
+        "shrunk": 0,
         "stretchLimit": 2,
         "worst": {
           "patch": 12,
           "cell": [
             692,
-            2715,
-            2713,
-            2714
+            824,
+            2769,
+            2715
           ],
-          "ratio": 1.851094787686218
+          "ratio": 1.5338374604883365
         }
       },
       "barycentric": {
@@ -118,24 +118,24 @@
         "flipped": 0,
         "invalid": 0,
         "border": 330,
-        "seam": 3.66205343881779e-15,
+        "seam": 3.972054645195637e-15,
         "comparisons": 378,
-        "maxStretch": 1.8295058385506742,
-        "minShrink": 0.46109086457372517,
-        "maxEdgeStretch": 1.5354113623567762,
-        "minEdgeShrink": 0.5507144292963817,
+        "maxStretch": 1.5224989940171103,
+        "minShrink": 0.640238212028371,
+        "maxEdgeStretch": 1.4559113877444934,
+        "minEdgeShrink": 0.6643634404349203,
         "stretched": 0,
-        "shrunk": 14,
+        "shrunk": 0,
         "stretchLimit": 2,
         "worst": {
           "patch": 12,
           "cell": [
             692,
-            2715,
-            2713,
-            2714
+            824,
+            2769,
+            2715
           ],
-          "ratio": 1.8295058385506742
+          "ratio": 1.5224989940171103
         }
       },
       "barycentric": {

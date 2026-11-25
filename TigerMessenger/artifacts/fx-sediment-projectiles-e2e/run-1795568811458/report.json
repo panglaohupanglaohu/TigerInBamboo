@@ -1,0 +1,207 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/fx-sediment-projectiles-e2e/run-1795568811458",
+  "capabilities": [
+    "fx.sediment",
+    "fx.projectiles"
+  ],
+  "steps": {
+    "scene": "apostles",
+    "scan": "扫描完成：9 / 9 个能力能作用。 已按「十二门徒」自动预装 9 个能力（岛屿分区与前线、环绕镜头路径、船尾迹、界面装饰面板 等），点 ▶ 执行管线一键跑完整条。",
+    "nodes": [
+      "fx.campaign",
+      "fx.camera",
+      "fx.wake",
+      "fx.ornament",
+      "fx.fire",
+      "fx.hallway",
+      "fx.sediment",
+      "fx.projectiles",
+      "fx.replay"
+    ],
+    "candidate": "候选 · 验证通过",
+    "checks": [
+      "✓ 分区覆盖241 格分成 3 区",
+      "✓ 前线连通且有净空前线 92 点 · 段净空 3.47",
+      "✓ 镜头路径97 点 · 半径 8",
+      "✓ 角速度上限峰值 30.2°/s（限 45）",
+      "✓ 泡沫数量134 片",
+      "✓ V 形半角与对称半角 0.69°（重算 0.69° · ≤Kelvin 19.47°）",
+      "✓ 面板与镜像面板 48² · 镜像 UV 对称",
+      "✓ 回放图可复算计划 10 节点 · 独立重建 一致 · 轨迹收敛",
+      "✓ 点火处在格网上3 处 · 都在格网上 · 点火时刻依次",
+      "✓ 火光衰减与烟放大0.18s 0.581（计划 0.581）· 0.39s 0.226（计划 0.226）· 曲线单调",
+      "✓ 爆燃团分层16 张 / 3 层（复算 16 / 3）",
+      "✓ 版式可独立复算7 块板 · 独立重算一致",
+      "✓ 板覆盖整面墙覆盖 100.0% · 无重叠 · 门在墙内",
+      "✓ 样板落点格 (1.6, -0.92) · 8 层",
+      "✓ 崖面可独立重数计划 61 面 · 暴力重数 61 面",
+      "✓ 层带岩性与首尾岩性不符 0 条 · 断缝 0 处（抽查 61 面）",
+      "✓ 层带宽窄相间带宽变异系数 0.402（≥ 0.3 才不是均匀斑马纹）",
+      "✓ 落点命中6 支 · 最大偏差 0.0009 格（限 0.06）· 落点不在岸格 0",
+      "✓ 弹道是弧每条弹道顶点都不低于两端"
+    ],
+    "liveNote": "实景能力没放进场景：场景响应超时",
+    "live": {
+      "active": true,
+      "visible": true,
+      "t": 0.85,
+      "frames": 17,
+      "drawn": [
+        "火 3 处（life/effects.js 火粒子）",
+        "走廊样板 7 块板（build/doodle-hallway.js）",
+        "崖面层带 61 面",
+        "弹道 6 条",
+        "尾迹泡沫 1072 粒（live）"
+      ],
+      "errors": {},
+      "fire": {
+        "sources": 3,
+        "lit": 2,
+        "alive": 1745,
+        "peakLight": 2.489,
+        "rows": [
+          {
+            "lit": true,
+            "alive": 845,
+            "light": 1.259,
+            "visible": true
+          },
+          {
+            "lit": true,
+            "alive": 900,
+            "light": 2.071,
+            "visible": true
+          },
+          {
+            "lit": false,
+            "alive": 0,
+            "light": 0,
+            "visible": false
+          }
+        ]
+      },
+      "hallway": {
+        "placed": true,
+        "meshes": 11,
+        "panels": 7
+      },
+      "sediment": {
+        "faces": 61,
+        "triangles": 760,
+        "lines": 314
+      },
+      "projectiles": {
+        "arcs": 6,
+        "moved": 17
+      },
+      "wake": {
+        "particles": 1072
+      },
+      "camera": {
+        "saved": false,
+        "mode": null,
+        "flying": false,
+        "done": false,
+        "u": 0,
+        "seconds": 0,
+        "frames": 0,
+        "sweep": 0,
+        "expected": null,
+        "samples": 0
+      }
+    },
+    "arrowsMoved": [
+      17,
+      36
+    ],
+    "focus-sediment": {
+      "ok": true,
+      "layer": "sediment",
+      "target": [
+        57.88,
+        74.31,
+        -139.11
+      ]
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "failure": "page.screenshot: Clipped area is either empty or outside the resulting image\nCall log:\n  - taking page screenshot\n  - waiting for fonts to load...\n  - fonts loaded\n\n    at Object.shot (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-live-e2e-common.mjs:19:38)\n    at closeUp (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-live-e2e-common.mjs:64:11)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/fx-sediment-projectiles-browser.mjs:19:3",
+  "state": {
+    "active": true,
+    "visible": true,
+    "t": 3.75,
+    "frames": 75,
+    "drawn": [
+      "火 3 处（life/effects.js 火粒子）",
+      "走廊样板 7 块板（build/doodle-hallway.js）",
+      "崖面层带 61 面",
+      "弹道 6 条",
+      "尾迹泡沫 1072 粒（live）"
+    ],
+    "errors": {},
+    "fire": {
+      "sources": 3,
+      "lit": 3,
+      "alive": 2554,
+      "peakLight": 2.489,
+      "rows": [
+        {
+          "lit": true,
+          "alive": 861,
+          "light": 1.44,
+          "visible": true
+        },
+        {
+          "lit": true,
+          "alive": 830,
+          "light": 1.793,
+          "visible": true
+        },
+        {
+          "lit": true,
+          "alive": 863,
+          "light": 1.548,
+          "visible": true
+        }
+      ]
+    },
+    "hallway": {
+      "placed": true,
+      "meshes": 11,
+      "panels": 7
+    },
+    "sediment": {
+      "faces": 61,
+      "triangles": 760,
+      "lines": 314
+    },
+    "projectiles": {
+      "arcs": 6,
+      "moved": 75
+    },
+    "wake": {
+      "particles": 1072
+    },
+    "camera": {
+      "saved": true,
+      "mode": "focus:sediment",
+      "flying": false,
+      "done": false,
+      "u": 0,
+      "seconds": 0,
+      "frames": 0,
+      "sweep": 0,
+      "expected": null,
+      "samples": 0
+    }
+  }
+}

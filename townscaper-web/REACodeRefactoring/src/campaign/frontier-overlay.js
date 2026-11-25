@@ -25,7 +25,7 @@ export function campaignFrontierFields(nodes, positions = [-6, 0, 6], opts = {})
 
 /** Paint band fields (painter's order: below the first frontier, then above each frontier),
  * the ear-clip triangle wireframe, the frontier curves and band tags on nodes. P maps world (x,y) → screen [sx,sy]. */
-export function drawFrontierFields(ctx, M, P, { alpha = .38, wire = true, nodes = null, tagOffset = 0 } = {}) {
+export function drawFrontierFields(ctx, M, P, { alpha = .38, wire = true, nodes = null, tagOffset = 0, palette = BAND_COLORS, curves = true } = {}) {
   const fillTris = (tris, color) => {
     ctx.fillStyle = color;
     for (const [a, b, c] of tris) { ctx.beginPath(); ctx.moveTo(...P(a.x, a.y)); ctx.lineTo(...P(b.x, b.y)); ctx.lineTo(...P(c.x, c.y)); ctx.closePath(); ctx.fill(); }
@@ -35,8 +35,8 @@ export function drawFrontierFields(ctx, M, P, { alpha = .38, wire = true, nodes 
   let painted = 0;
   ctx.save(); ctx.globalAlpha = alpha;
   // band 0 = below the lowest successful frontier; band k+1 = above frontier k (later ones overpaint)
-  fillTris(M.fields[ok[0]].belowTris, BAND_COLORS[0]); painted += M.fields[ok[0]].belowTris.length;
-  ok.forEach((k, i) => { fillTris(M.fields[k].aboveTris, BAND_COLORS[(i + 1) % BAND_COLORS.length]); painted += M.fields[k].aboveTris.length; });
+  fillTris(M.fields[ok[0]].belowTris, palette[0]); painted += M.fields[ok[0]].belowTris.length;
+  ok.forEach((k, i) => { fillTris(M.fields[k].aboveTris, palette[(i + 1) % palette.length]); painted += M.fields[k].aboveTris.length; });
   ctx.restore();
   if (wire) {
     ctx.save(); ctx.lineWidth = .5; ctx.strokeStyle = 'rgba(30,40,45,.2)';
@@ -48,6 +48,7 @@ export function drawFrontierFields(ctx, M, P, { alpha = .38, wire = true, nodes 
     }
     ctx.restore();
   }
+  if (curves) {
   ctx.save(); ctx.lineWidth = 3; ctx.lineJoin = 'round';
   ok.forEach((k, i) => {
     const path = M.frontiers[k].path;
@@ -55,6 +56,7 @@ export function drawFrontierFields(ctx, M, P, { alpha = .38, wire = true, nodes 
     ctx.strokeStyle = FRONT_COLORS[i % FRONT_COLORS.length]; ctx.lineWidth = 2.5; ctx.beginPath(); path.forEach((p, j) => ctx[j ? 'lineTo' : 'moveTo'](...P(p.x, p.y))); ctx.stroke();
   });
   ctx.restore();
+  }
   if (nodes) {
     ctx.save(); ctx.font = '600 10px system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     nodes.forEach((n, i) => { if (!n) return; const [x0, y0] = P(n.x, n.y), x = x0 + tagOffset, y = y0 - tagOffset; ctx.fillStyle = BAND_COLORS[M.band[i] % BAND_COLORS.length]; ctx.beginPath(); ctx.arc(x, y, 6, 0, 7); ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,.5)'; ctx.lineWidth = 1; ctx.stroke(); ctx.fillStyle = '#1d2f36'; ctx.fillText(String(M.band[i]), x, y + .5); });

@@ -1,0 +1,112 @@
+{
+ "stats": {
+  "fieldSize": 128,
+  "storage": "f32",
+  "quant": 0,
+  "shade": 1,
+  "texture": {
+   "type": "float",
+   "format": "RGBA",
+   "filter": "nearest+bilerp"
+  },
+  "bounds": {
+   "minX": -11.1222,
+   "minZ": -8.9044,
+   "spanX": 18.4883,
+   "spanZ": 16.6384
+  },
+  "geometry": {
+   "triangles": 12854,
+   "vertices": 38562,
+   "source": "view.worldMesh.geometry.clone()"
+  },
+  "steps": 5,
+  "fieldRange": [
+   0,
+   1.01211
+  ]
+ },
+ "band0": {
+  "band": 85019,
+  "frac": 0.760184191702432,
+  "buckets": 18,
+  "colors": 2583,
+  "pairs": 83263,
+  "bigFrac": 0.0035550004203547796,
+  "medDelta": 0.39244186046514073,
+  "p90Delta": 1.1833995343103538
+ },
+ "band8": {
+  "band": 85015,
+  "frac": 0.760148426323319,
+  "buckets": 10,
+  "colors": 441,
+  "pairs": 83259,
+  "bigFrac": 0.010425299367035396,
+  "medDelta": 0,
+  "p90Delta": 0.2483660130719727
+ },
+ "diff": {
+  "changedFrac": 0.6360872675250357,
+  "meanDelta": 18.54909096328112
+ },
+ "pairs": 77,
+ "twinMatch": 76,
+ "checks": [
+  {
+   "name": "geometry = World 自身三角",
+   "pass": true,
+   "detail": "12854 vs 12854"
+  },
+  {
+   "name": "field 128² · RGBA/FLOAT · nearest+bilerp",
+   "pass": true,
+   "detail": "{\"type\":\"float\",\"format\":\"RGBA\",\"filter\":\"nearest+bilerp\"}"
+  },
+  {
+   "name": "色带只铺在几何上（天空未被铺满）",
+   "pass": true,
+   "detail": "色带占比 76.0%"
+  },
+  {
+   "name": "色带连续：色相档 ≥10",
+   "pass": true,
+   "detail": "18 档（10° 一档，>0.3%）"
+  },
+  {
+   "name": "色带连续：相邻色相跳变 <3%",
+   "pass": true,
+   "detail": ">25° 的相邻对 0.36% · 中位 0.39°"
+  },
+  {
+   "name": "同状态回读噪声 0",
+   "pass": true,
+   "detail": "同一 JS turn 内两次 readPixels 逐字节相同（已隐去水面/植被等动画层）"
+  },
+  {
+   "name": "场在平流：120 步后画面变化",
+   "pass": true,
+   "detail": "变化像素 63.6% · 平均差 18.55 级"
+  },
+  {
+   "name": "GPU 颜色 == palette(field(命中点 x,z))（CPU 孪生）",
+   "pass": true,
+   "detail": "76/77 点 Δhue<12° · 中位 0.00° · p90 0.49°"
+  },
+  {
+   "name": "A/B：8 级量化 → 色相档塌缩 / 跳变变多",
+   "pass": true,
+   "detail": "档 18→10 · 跳变 0.36%→1.04% · 离散色 2583→441"
+  },
+  {
+   "name": "截图落盘",
+   "pass": true,
+   "detail": "artifacts/coverage/float-bands-step0-r202.png 等 3 张"
+  },
+  {
+   "name": "0 console error",
+   "pass": true,
+   "detail": "无"
+  }
+ ]
+}

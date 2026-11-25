@@ -1,0 +1,127 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/TigerMessenger/artifacts/mountain-citadel-e2e/run-1795446527484",
+  "steps": {
+    "tree": {
+      "treeLines": "27",
+      "treeBreadth": "279",
+      "treeDepth": "342",
+      "treeGrafts": "163",
+      "treeGoals": "4",
+      "treeExecUnique": "74",
+      "treeExecPerLine": "119",
+      "maturity": "loaded",
+      "needs": [
+        "⚙ 保护带",
+        "⚙ 山体隆起",
+        "⚙ 沟谷侵蚀",
+        "⚙ 连绵圆润",
+        "⚙ 岩屑坡",
+        "⚙ 低面片着色"
+      ],
+      "branches": [
+        "空间基座",
+        "地貌",
+        "构筑",
+        "光影与画面",
+        "生命与天气",
+        "玩法",
+        "表达"
+      ]
+    },
+    "terrainDrawer": "⚙ 可执行能力 · 6 代 · 代码到 A+5\n地形\n\n如何既自然又保留模块边界？\n\n15\n原版文件\n34\n重构模块\n12\n可执行\n\n前置：导航\n\n可执行能力\n⚙ 地形与承托L3\n⚙ 崖顶悬垂L3\n⚙ 海中石柱L3\n⚙ 穿山隧道L3\n⚙ 山体隆起L6\n⚙ 沟谷侵蚀L6\n⚙ 连绵圆润L6\n⚙ 十二门徒软坡\n⚙ 保护带L6\n⚙ 岩屑坡L6\n⚙ 十二门徒库地形色\n⚙ 重解地形L0\n接口没带全 · 11\n\nengine/cage.js\n缺 2：deformCages、resetCages\n\nengine/mesa.js\n缺 4：MESA_PALETTE、TOP_SLOTS、WALL_SLOTS、buildMesa\n\nengine/rivers.js\n缺 1：paintRivers\n\nengine/terrain.js\n缺 2：TERRAIN_PALETTE、buildTerrain\n\nsrc/de",
+    "sceneAfterGoal": {
+      "scene": "citadel",
+      "hash": "#scene",
+      "status": "已把「圣城山形：有山的模样」的 6 个能力放进管线：点 ▶ 执行管线。"
+    },
+    "scan": "扫描完成：6 / 6 个能力能作用。",
+    "site": "采样 101×101 格（3 m）· 陆地 2207 · 建筑 481 · 轨道 616 格 · 最高 76.5 m",
+    "nodes": 6,
+    "cam": [
+      "swampCameraProfile",
+      "rescueCampaign",
+      "cameraRig",
+      "camera"
+    ],
+    "note": "候选已预览。确认前不会写入。",
+    "candidate": "候选 · 通过（需留意）",
+    "report": [
+      "保护带：执行保护 8733 格，可塑陆地 1468 格（13212 m²）",
+      "山体隆起：执行隆起 1343 格 · 最高点 82.9 m",
+      "沟谷侵蚀：执行下切 1314 格 · 最深 6.3 m · 5 轮",
+      "连绵圆润：执行连脊填谷 448 格 · 圆润 8753 次 · 起伏 1468 格",
+      "岩屑坡：执行松弛 162348 次 · 休止角 49°",
+      "低面片着色：执行草坡 1080 · 岩壁 2559 · 碎石 457 · 雪 43 · 滩 / 台地 15861 面"
+    ],
+    "checks": [
+      "✓ 建筑与保护带不动保护区最大高差 0.00 m",
+      "✓ 轨道净空保留轨道 616 格下方地形高差 0.00 m · 轨旁 24 m 内新增山体超出 1.6 坡比包络 0.0 m",
+      "✓ 海岸线不变陆地与海的格子没有翻转",
+      "✓ 有主峰峰顶高出可塑陆地中位 52.2 m（原 52.4 m）· 最高 67.6 m",
+      "✓ 山坡而非方台中等坡 52%（原 47%）· 平顶 1%（原 0%）",
+      "! 竖崖占比>62° 竖崖 14%（原 34%）",
+      "✓ 面数预算20000 个三角面（low poly 预算 9 万）",
+      "✓ 着色数据完整每个三角面都有材质与烘焙明暗",
+      "✓ 玩家地面与山形一致12444 个三角重心复查：地面与画面最大差 0.000 m · 洞 0 个 · 轨道 616 格地面高差 0.00 m · 保护区 703 格 0.00 m",
+      "! 山上能走自由陆地 ≤45° 可走坡 24% · 最大连通片 7%"
+    ],
+    "shape": "山形：中等坡 47% → 52% · 平顶 0% → 1% · 峰高 77 → 68 m",
+    "state": {
+      "active": true,
+      "id": "citadel",
+      "previewing": true,
+      "comparing": false,
+      "triangles": 12444,
+      "hidden": 2,
+      "vegetationMoved": 8,
+      "ground": {
+        "installed": true,
+        "active": true,
+        "queries": 90,
+        "used": 0
+      },
+      "palette": 1,
+      "paletteOverride": false,
+      "autoDeployed": false,
+      "auto": {
+        "id": "citadel",
+        "status": "skipped",
+        "reason": "没有采用记录：游戏里是原山形",
+        "tries": 0,
+        "at": 1795446600710
+      }
+    },
+    "compare": {
+      "active": true,
+      "id": "citadel",
+      "previewing": true,
+      "comparing": true,
+      "triangles": 12444,
+      "hidden": 2,
+      "vegetationMoved": 8,
+      "ground": {
+        "installed": true,
+        "active": false,
+        "queries": 534,
+        "used": 0
+      },
+      "palette": 1,
+      "paletteOverride": false,
+      "autoDeployed": false,
+      "auto": {
+        "id": "citadel",
+        "status": "skipped",
+        "reason": "没有采用记录：游戏里是原山形",
+        "tries": 0,
+        "at": 1795446600710
+      }
+    },
+    "adopted": true
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false
+}

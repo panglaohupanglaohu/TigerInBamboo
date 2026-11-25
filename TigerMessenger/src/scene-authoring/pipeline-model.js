@@ -4,7 +4,7 @@ const NODES=[
  {id:'terrain.preserve',kind:'地形',icon:'△',color:'#c6b48a',name:'地形与承托',description:'保留现有湖面和建筑基础；在原编辑器中编辑体素。',mode:'editor',source:'src/world/morrisTownscaper.js',checks:'承托 / 坡度 / 连通性'},
  {id:'building.edit',kind:'建筑',icon:'▥',color:'#e0a482',name:'建筑与空间',description:'复用建造、拆除与刷色，保留你的湖上建筑群。',mode:'editor',source:'src/world/morrisTownscaperMenu.js',checks:'编码 / 建筑保留 / 通行'},
  {id:'water.surface',kind:'水',icon:'≈',color:'#78bdce',name:'水面与岸浪',description:'实时控制现有岸浪和倒影。',mode:'live',source:'src/world/morrisTownStage.js',checks:'水岸接缝 / 倒影',controls:['waves','reflection']},
- {id:'light.time',kind:'光',icon:'☼',color:'#edcf83',name:'光照与时间',description:'使用游戏现有日间、黄昏和夜间光照。',mode:'live',source:'src/world/morrisTownStage.js',checks:'昼夜可读性',controls:['time']},
+ {id:'light.time',kind:'光',icon:'☼',color:'#edcf83',name:'光照与时间',description:'使用游戏现有日间、黄昏和夜间光照。',mode:'live',source:'src/world/morrisTownStage.js',checks:'昼夜可读性',controls:['time'],ideas:['townscaper-web/REACode/src/scene.js']},
  {id:'world.ink',kind:'世界',icon:'◎',color:'#9ab4da',name:'世界接口 · 描线与网格',description:'实时调整描线与调试网格，不替换场景。',mode:'live',source:'src/world/morrisTownStage.js',checks:'轮廓 / 空间可读性',controls:['outline','grid']},
  {id:'life.layers',legacy:true,kind:'生命',icon:'❧',color:'#9aca9b',name:'植物与飞鸟',description:'控制现有植被与鸟群；物种和位置编辑待接入。',mode:'live',source:'src/world/morrisTownStage.js',checks:'栖息 / 遮挡 / 动态',controls:['vegetation','birds']},
  {id:'weather.atmosphere',kind:'天气',icon:'☁',color:'#a6bccf',name:'天气与风场',description:'实时开关现有雾与风雪；风场箭头仅是调试，不作为天气开关。',mode:'live',source:'src/life/atmosphere.js',checks:'风雪绕障 / 雾可读性',controls:['fog','snow']},

@@ -56,3 +56,53 @@ export function obbOverlapSampled(A, B, n = 14) {
   }
   return false;
 }
+
+/* -------- 第 53 批（G5）：REACode/src/boxtest.js 的其余口径 --------
+ * ① 穿透深度（SAT 最小重叠；负值 = 间隙）——规划器要「贴边不算占用」就看它 > eps；
+ * ② 俯视二维：偏航盒的 XZ 占地四边形、凸多边形 SAT、Sutherland–Hodgman 裁剪面积（笨办法真值，只用于对账）；
+ * 地形岸礁碰撞（landing-plan.js）用 ② 判「航道矩形 × 陆地格多边形」。 */
+export function obbPenetration(A, B) {
+  validateBox(A); validateBox(B);
+  const T = [B.c[0] - A.c[0], B.c[1] - A.c[1], B.c[2] - A.c[2]], axes = [...A.u, ...B.u];
+  for (const a of A.u) for (const b of B.u) { const x = cross(a, b), l = Math.hypot(...x); if (l > 1e-6) axes.push([x[0] / l, x[1] / l, x[2] / l]); }
+  let depth = Infinity;
+  for (const L of axes) {
+    const ra = A.e[0] * Math.abs(dot(A.u[0], L)) + A.e[1] * Math.abs(dot(A.u[1], L)) + A.e[2] * Math.abs(dot(A.u[2], L));
+    const rb = B.e[0] * Math.abs(dot(B.u[0], L)) + B.e[1] * Math.abs(dot(B.u[1], L)) + B.e[2] * Math.abs(dot(B.u[2], L));
+    depth = Math.min(depth, ra + rb - Math.abs(dot(T, L)));
+  }
+  return depth;
+}
+/** 只绕竖轴转的盒 → 俯视占地四边形（逆时针）。 */
+export function obbFootprintXZ(box) {
+  validateBox(box);
+  if (Math.abs(Math.abs(box.u[1][1]) - 1) > 1e-6) throw new RangeError('yaw-only OBB required for XZ footprint');
+  const [ax, , az] = box.u[0], [bx, , bz] = box.u[2], [hx, , hz] = box.e, cx = box.c[0], cz = box.c[2];
+  const pts = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([s, t]) => ({ x: cx + ax * hx * s + bx * hz * t, z: cz + az * hx * s + bz * hz * t }));
+  return polygonAreaXZ(pts) < 0 ? pts.reverse() : pts;
+}
+export function polygonAreaXZ(pts) { let s = 0; for (let i = 0; i < pts.length; i++) { const a = pts[i], b = pts[(i + 1) % pts.length]; s += a.x * b.z - b.x * a.z; } return s / 2; }
+/** 两个凸多边形（XZ）分离轴：返回最小穿透（负 = 间隙）。 */
+export function convexDepthXZ(P, Q) {
+  let depth = Infinity;
+  for (const poly of [P, Q]) for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length], l = Math.hypot(b.x - a.x, b.z - a.z); if (l < 1e-12) continue;
+    const nx = -(b.z - a.z) / l, nz = (b.x - a.x) / l;
+    let p0 = Infinity, p1 = -Infinity, q0 = Infinity, q1 = -Infinity;
+    for (const p of P) { const d = p.x * nx + p.z * nz; p0 = Math.min(p0, d); p1 = Math.max(p1, d); }
+    for (const q of Q) { const d = q.x * nx + q.z * nz; q0 = Math.min(q0, d); q1 = Math.max(q1, d); }
+    depth = Math.min(depth, Math.min(p1, q1) - Math.max(p0, q0));
+  }
+  return depth;
+}
+export const convexOverlapXZ = (P, Q, eps = 1e-9) => convexDepthXZ(P, Q) > eps;
+/** 笨办法真值：把 Q 裁到凸多边形 P 里，剩余面积。 */
+export function clipAreaXZ(P, Q) {
+  const sign = polygonAreaXZ(P) >= 0 ? 1 : -1; let poly = Q.map((p) => ({ x: p.x, z: p.z }));
+  for (let i = 0; i < P.length && poly.length; i++) {
+    const a = P[i], b = P[(i + 1) % P.length], side = (p) => sign * ((b.x - a.x) * (p.z - a.z) - (b.z - a.z) * (p.x - a.x)), out = [];
+    for (let j = 0; j < poly.length; j++) { const c = poly[j], d = poly[(j + 1) % poly.length], sc = side(c), sd = side(d); if (sc >= 0) out.push(c); if ((sc >= 0) !== (sd >= 0)) { const t = sc / (sc - sd); out.push({ x: c.x + (d.x - c.x) * t, z: c.z + (d.z - c.z) * t }); } }
+    poly = out;
+  }
+  return poly.length < 3 ? 0 : Math.abs(polygonAreaXZ(poly));
+}

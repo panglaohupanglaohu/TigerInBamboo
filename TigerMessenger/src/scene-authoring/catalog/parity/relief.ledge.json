@@ -1,0 +1,31 @@
+{
+ "capability": "relief.ledge",
+ "line": "terrain",
+ "verdict": "equivalent",
+ "measured": {
+  "at": "2026-11-24T18:35:11.373Z",
+  "total": 0,
+  "byPath": {},
+  "unregisteredCount": 0,
+  "used": [],
+  "unused": [],
+  "ms": 1
+ },
+ "status": "measured",
+ "note": "Quick 预填（读码推断，2026-11-23 R41–R50）：verdict / measured 为 null = 还没实算；由 Kiro 跑 tools/refactor/record-relief-evidence.mjs 写入（唯一写入方）。登记的 diffs 是「已知会不同、原因已查明」的差异；实算出现登记外的差异 → tests/relief-parity.test.mjs 红。",
+ "original": "townscaper-web/REACode/src/terraceladder.js",
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/terrain/terrace-ladder.js"
+ ],
+ "inputs": {
+  "cfg": "原版 CFG：H 1、三处崖面 run 0.22 / 0.40 / 0.62"
+ },
+ "diffs": [],
+ "flaws": [],
+ "extensions": [
+  "fieldLadders / thinLedges / walkComponents：在任意高度场崖边放梯子、薄岩檐记为薄台、量可走连通（补学 #7 原薄台 / 攀爬）"
+ ],
+ "harness": "TigerMessenger/src/system-workshop/terrain/parity-cases.js + parity.js",
+ "test": "TigerMessenger/tests/relief-parity.test.mjs",
+ "recordedBy": "record-relief-evidence.mjs（实算）"
+}

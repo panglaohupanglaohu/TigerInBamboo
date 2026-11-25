@@ -1,0 +1,32 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/auto-preload-e2e/run-1795443527148",
+  "steps": {
+    "battle": {
+      "scan": "扫描完成：3 / 3 个能力能作用。 已按「十二门徒」自动预装 3 个能力（部署战斗舞台、守军布防、登陆波次），点 ▶ 执行管线一键跑完整条。",
+      "nodes": 3,
+      "names": [
+        "⚙ 部署战斗舞台",
+        "⚙ 守军布防",
+        "⚙ 登陆波次"
+      ],
+      "preloadNote": "扫描完成：3 / 3 个能力能作用。 已按「十二门徒」自动预装 3 个能力（部署战斗舞台、守军布防、登陆波次），点 ▶ 执行管线一键跑完整条。",
+      "candidate": "候选 · 验证通过",
+      "afterRun": "候选已预览。确认前不会写入。",
+      "checks": [
+        "✓ 战场可用陆地 239 格 · 最高 8 层 · 小屋 4",
+        "✓ 防守目标4 个小屋 / 台地目标",
+        "✓ 舞台尺度5 米/格 · 半径 18 格",
+        "✓ 舞台覆盖采样命中陆地 239/4170 格",
+        "✓ 守军规模增援 1 队 × 8 人 = 8 人（装备 1 级）",
+        "✓ 波次节奏首波 3s · 间隔 26s"
+      ],
+      "afterClearNodes": 0,
+      "manualNodes": 3
+    }
+  },
+  "errors": [
+    "fx pageerror: Unexpected identifier '且同目录至少一张'"
+  ],
+  "pass": false,
+  "failure": "page.waitForFunction: Target page, context or browser has been closed"
+}

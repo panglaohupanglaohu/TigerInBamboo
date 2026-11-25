@@ -35,15 +35,21 @@ export const PORTRAIT_SLOTS=Object.freeze([
  {key:'marks',variants:['none','freckles'],needs:'head'},
 ].map(Object.freeze));
 function mulberry(a){return()=>{a|=0;a=(a+0x6d2b79f5)|0;let t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
-export function sampleSlots(seed,slots=PORTRAIT_SLOTS){
+export function sampleSlots(seed,slots=PORTRAIT_SLOTS,{pin=null}={}){
  if(!Number.isSafeInteger(seed)||seed<1||!Array.isArray(slots)||!slots.length)throw new RangeError('Invalid slot sample');
- const provided=new Set(),rnd=mulberry(Math.imul(seed,2654435761)),parts={};
+ const provided=new Set(),rnd=mulberry(Math.imul(seed,2654435761)),parts={},pinned=[];
+ if(pin)for(const k of Object.keys(pin))if(!slots.some((s)=>s.key===k))throw new RangeError(`Pinned variant for unknown slot ${k}`);
  for(const s of slots){
   if(typeof s.key!=='string'||!Array.isArray(s.variants)||!s.variants.length)throw new TypeError('Invalid slot');
   if(s.needs&&!provided.has(s.needs))throw new RangeError(`Slot ${s.key} needs ${s.needs} before it`);
-  parts[s.key]=s.variants[(rnd()*s.variants.length)|0];if(s.provides)provided.add(s.provides);
+  let v=s.variants[(rnd()*s.variants.length)|0];   // 钉槽也照样消耗这一格随机流：同种子下未钉的槽位不变
+  if(pin&&pin[s.key]!=null){
+   if(!s.variants.includes(pin[s.key]))throw new RangeError(`Pinned variant ${s.key}:${pin[s.key]} not in slot`);
+   if(v!==pin[s.key]){v=pin[s.key];pinned.push(s.key);}
+  }
+  parts[s.key]=v;if(s.provides)provided.add(s.provides);
  }
- return{seed,parts,params:{wide:.9+rnd()*.26,long:.9+rnd()*.26,drop:(rnd()-.5)*.06}};
+ return{seed,parts,params:{wide:.9+rnd()*.26,long:.9+rnd()*.26,drop:(rnd()-.5)*.06},pinned};
 }
 /** Head/ear/hair silhouette mask (size²) of a portrait spec. */
 export function portraitSilhouette(spec,size=64){

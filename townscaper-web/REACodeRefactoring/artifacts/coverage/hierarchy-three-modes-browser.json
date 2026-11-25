@@ -1,0 +1,136 @@
+{
+  "labels": [
+    {
+      "value": "none",
+      "text": "无（no smoothing）"
+    },
+    {
+      "value": "dumb",
+      "text": "普通（dumb smoothing）"
+    },
+    {
+      "value": "hierarchical",
+      "text": "分层（hierarchical smoothing）"
+    }
+  ],
+  "table": {
+    "none": {
+      "mode": "none",
+      "slices": 11,
+      "verts": 1519,
+      "kinkTop": 71.80051057852936,
+      "drift": 2.594886449905783e-8,
+      "regularity": 8.635759285370387,
+      "moved": 0,
+      "maxMove": 0,
+      "pinnedBad": 0,
+      "ms": 3.9
+    },
+    "dumb": {
+      "mode": "dumb",
+      "slices": 11,
+      "verts": 1519,
+      "kinkTop": 71.63052562557527,
+      "drift": 0.12844183531826603,
+      "regularity": 9.890017597427091,
+      "moved": 4680,
+      "maxMove": 0.21,
+      "pinnedBad": 0,
+      "ms": 13.4
+    },
+    "hierarchical": {
+      "mode": "hierarchical",
+      "slices": 11,
+      "verts": 1519,
+      "kinkTop": 61.02503443128776,
+      "drift": 0.12241522095842143,
+      "regularity": 10.418235478180097,
+      "moved": 4682,
+      "maxMove": 0.12,
+      "pinnedBad": 0,
+      "ms": 7.9
+    },
+    "diff": {
+      "dumbVsNone": {
+        "n": 4680,
+        "big": 1820,
+        "max": 0.21
+      },
+      "hierVsNone": {
+        "n": 4682,
+        "big": 2287,
+        "max": 0.12
+      },
+      "hierVsDumb": {
+        "n": 4681,
+        "big": 2166,
+        "max": 0.2919
+      },
+      "samples": 16709
+    },
+    "sameWorld": true
+  },
+  "camera": {
+    "target": [
+      0,
+      3.2,
+      0
+    ],
+    "distance": 40,
+    "pitch": 0.62,
+    "yaw": 0.55
+  },
+  "shots": {
+    "none": {
+      "W": 1416,
+      "H": 700
+    },
+    "dumb": {
+      "W": 1416,
+      "H": 700
+    },
+    "hierarchical": {
+      "W": 1416,
+      "H": 700
+    }
+  },
+  "noise": {
+    "none": {
+      "differing": 0,
+      "total": 991200,
+      "pct": 0,
+      "maxd": 0,
+      "mean": 0
+    },
+    "hier": {
+      "differing": 0,
+      "total": 991200,
+      "pct": 0,
+      "maxd": 0,
+      "mean": 0
+    }
+  },
+  "ab": {
+    "noneVsDumb": {
+      "differing": 87015,
+      "total": 991200,
+      "pct": 8.78,
+      "maxd": 634,
+      "mean": 7.24
+    },
+    "noneVsHier": {
+      "differing": 85945,
+      "total": 991200,
+      "pct": 8.67,
+      "maxd": 680,
+      "mean": 7.73
+    },
+    "dumbVsHier": {
+      "differing": 85340,
+      "total": 991200,
+      "pct": 8.61,
+      "maxd": 667,
+      "mean": 7.19
+    }
+  }
+}

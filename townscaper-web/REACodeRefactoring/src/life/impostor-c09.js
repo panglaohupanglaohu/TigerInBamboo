@@ -39,8 +39,11 @@ const AZ_SRC = `float parentYaw = atan(modelMatrix[2].x, modelMatrix[2].z);
 const AZ_DST = `float az = atan(dot(hdir, axX), dot(hdir, axZ));   // 实例矩阵已含绕径向的朝向`;
 const EL_SRC = `float el = atan(toCam.y, max(1e-5, length(toCam.xz)));`;
 const EL_DST = `float el = atan(dot(toCam, up), max(1e-5, length(toCam - up * dot(toCam, up))));`;
-const DRIFT_SRC = `center.x += cloudDrift(uTime,aYaw);`;
-const DRIFT_DST = `/* C09：球面云不沿世界 X 漂；整层云随父组绕球心转 */`;
+const DRIFT_SRC = `center.x += cloudDrift(uTime,aYaw) / cd;   // 沿风向慢慢飘，飘出去从另一边回来
+            // REACode engine/impostor.js 的云风材质（uWindAmt：树 0 / 云 0.6）：相位取实例位置，
+            // 三轴异频起伏，整圈云不一块板一起滑。
+            center += cloudWindBob(uTime, im[3].xyz, uWindAmt) / cd;`;
+const DRIFT_DST = `/* C09：球面云不沿世界轴漂/起伏；整层云随父组绕球心转（近云视差 cd 行保留，未用） */`;
 
 export function patchLocalUp(src) {
   let out = src;

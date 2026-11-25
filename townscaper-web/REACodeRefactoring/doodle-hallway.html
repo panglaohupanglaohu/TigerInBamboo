@@ -1,4 +1,4 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>走廊墙饰 · 第 56 批 C11</title>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><title>走廊墙饰 · 第 56 批 C11</title><link rel="icon" href="data:,">
 <style>html,body{margin:0;height:100%;background:#575757;color:#eee;font:14px/1.5 system-ui;overflow:hidden}#ui{position:absolute;left:10px;top:8px;background:rgba(30,30,30,.72);padding:8px 12px;border-radius:8px;max-width:520px}#ui label{margin-right:10px}#stats{font-size:12px;color:#cfe}#unfold{position:absolute;right:8px;bottom:8px;width:44%;border:2px solid #222;display:none;background:#fff}a{color:#9cf}</style></head>
 <body><div id="ui"><b>走廊墙饰</b>：两面墙 + 内转角 + 圆弧 cove 弯进天花 + 拱门 + 楼梯 + 竖纹护墙板。贴图按展开坐标 (s 沿墙, v 沿表面) 一张画完，UV 跨转角 / cove 连续。<br>
 <label><input id="gray" type="checkbox">黑白版（1890018647655272491）</label><label><input id="mirror" type="checkbox" checked>左右镜像</label><label>种子 <input id="seed" type="number" value="7" style="width:50px"></label><label><input id="anim" type="checkbox" checked>相机沿走廊移动</label><label><input id="flat" type="checkbox">看展开贴图</label>
@@ -28,7 +28,7 @@ function build() {
   const s = hall.paint.stats;
   $('stats').textContent = `${s.panels} 板 · ${s.strips} 竖带 · ${s.motifs} 纹样（左半）· 墨线覆盖 ${s.inkPct}% · 门位内墨线 ${s.doorInkPx}px · 镜像误差 ${s.symmetryErr} · 贴图 ${s.W}×${s.H} · ${(performance.now() - t0).toFixed(0)} ms`;
   $('unfold').src = hall.paint.canvas.toDataURL(); $('unfold').style.display = $('flat').checked ? 'block' : 'none';
-  window.hallwayReview = { stats: s, plan: { S: hall.plan.S, V: hall.plan.V, H: hall.plan.H, R: hall.plan.R, D: hall.plan.D, door: hall.plan.door, panels: hall.plan.panels.length }, verts: hall.geometry.attributes.position.count, built: performance.now() - t0 };
+  window.hallwayReview = { stats: s, plan: { S: hall.plan.S, V: hall.plan.V, H: hall.plan.H, R: hall.plan.R, D: hall.plan.D, coveLen: hall.plan.coveLen, wainscot: hall.plan.wainscot, stairs: hall.plan.stairs, door: hall.plan.door, panels: hall.plan.panels.length, strips: hall.plan.strips.length, panelList: hall.plan.panels.map((p) => ({ s0: p.s0, s1: p.s1, w: p.w, bay: !!p.bay, vBottom: p.vBottom, tint: p.tint, motifs: p.motifs.length })), ppu: s.ppu }, verts: hall.geometry.attributes.position.count, built: performance.now() - t0, canvas: hall.paint.canvas, mask: hall.paint.mask };
 }
 for (const id of ['gray', 'mirror', 'seed']) $(id).onchange = build;
 $('flat').onchange = () => { $('unfold').style.display = $('flat').checked ? 'block' : 'none'; };

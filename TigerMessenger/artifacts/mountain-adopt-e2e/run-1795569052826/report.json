@@ -1,0 +1,72 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/mountain-adopt-e2e/run-1795569052826",
+  "steps": {
+    "scan": "扫描完成：6 / 6 个能力能作用。 已按「高山圣城」自动预装 6 个能力（保护带、山体隆起、沟谷侵蚀、连绵圆润 等），点 ▶ 执行管线一键跑完整条。",
+    "fresh": {
+      "id": "citadel",
+      "adopted": false,
+      "v": null,
+      "at": null,
+      "autoDeploy": false,
+      "sig": null,
+      "palette": null,
+      "gate": {
+        "deploy": false,
+        "reason": "没有采用记录：游戏里是原山形"
+      },
+      "auto": {
+        "id": "citadel",
+        "status": "skipped",
+        "reason": "没有采用记录：游戏里是原山形",
+        "tries": 0,
+        "at": 1795569320736
+      },
+      "deployedNow": false
+    },
+    "freshAuto": {
+      "id": "citadel",
+      "status": "skipped",
+      "reason": "没有采用记录：游戏里是原山形",
+      "tries": 0,
+      "at": 1795569320736
+    },
+    "run": {
+      "h4": "候选 · 通过（需留意）"
+    },
+    "record": {
+      "v": 2,
+      "autoDeploy": true,
+      "sig": {
+        "n": 101,
+        "step": 3,
+        "land": 2207,
+        "structure": 481,
+        "rail": 623
+      },
+      "palette": 1
+    },
+    "auto": {
+      "id": "citadel",
+      "status": "skipped",
+      "reason": "没有采用记录：游戏里是原山形",
+      "tries": 0,
+      "at": 1795569320736
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R28-0-candidate-before-adopt.png",
+    "zz-failure.png"
+  ],
+  "pass": false,
+  "failure": "Error: 重新进游戏没有自动换上采用的山形：skipped 没有采用记录：游戏里是原山形\n    at expect (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-e2e-lib.mjs:15:38)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-adopt-browser.mjs:26:2\n    at async Object.finish (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-e2e-lib.mjs:43:8)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-adopt-browser.mjs:12:1"
+}

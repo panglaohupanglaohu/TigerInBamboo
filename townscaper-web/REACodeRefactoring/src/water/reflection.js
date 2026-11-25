@@ -22,18 +22,18 @@ export function makeReflectionMaterial({time,water,night,cloud=null}) {
     fragmentShader:`
       uniform vec3 uWater;uniform float uNight;uniform float uColorMix;uniform float uOpacity;uniform float uFade;
       varying vec3 vCol;varying float vDepth;varying float vGlow;varying vec3 vCldW;
+      ${cloud ? CLOUD_SHADOW_GLSL : ''}
       void main(){
         if(vDepth<0.0)discard;
         vec3 mid=mix(uWater,vCol,uColorMix);
         mid+=vec3(1.0,.7,.3)*vGlow*uNight*.6;
-        mid*=cloudShadowTone(vCldW);
+        ${cloud ? 'mid*=cloudShadowTone(vCldW);' : ''}
         float fade=exp(-max(vDepth,0.0)*uFade);
         gl_FragColor=vec4(mid,uOpacity*fade);
         #include <colorspace_fragment>
       }`});
   if (cloud) {
     Object.assign(m.uniforms, cloud);
-    m.fragmentShader = m.fragmentShader.replace('varying vec3 vCldW;', 'varying vec3 vCldW;\n' + CLOUD_SHADOW_GLSL);
     m.needsUpdate = true;
   }
   return m;

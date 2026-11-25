@@ -1,0 +1,41 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "townFaces": 10916,
+      "vertices": 63214,
+      "groups": {
+        "town": 10916,
+        "water": 2,
+        "flowers": 24,
+        "shrubs": 13200
+      },
+      "vegParts": [
+        4,
+        33
+      ],
+      "bytes": 11762810,
+      "obj": "artifacts/coverage/scene-mixed.obj",
+      "mtl": "artifacts/coverage/scene-mixed.mtl"
+    },
+    {
+      "grid": "quad",
+      "townFaces": 12185,
+      "vertices": 62154,
+      "groups": {
+        "town": 12185,
+        "water": 2,
+        "flowers": 30,
+        "shrubs": 12000
+      },
+      "vegParts": [
+        5,
+        30
+      ],
+      "bytes": 11544408,
+      "obj": "artifacts/coverage/scene-quad.obj",
+      "mtl": "artifacts/coverage/scene-quad.mtl"
+    }
+  ],
+  "errors": []
+}

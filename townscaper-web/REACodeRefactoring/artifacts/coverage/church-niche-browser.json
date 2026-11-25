@@ -1,0 +1,40 @@
+{
+ "niches": [
+  {
+   "cell": 900,
+   "width": 0.279,
+   "bottom": 0.56,
+   "top": 1.42,
+   "depth": 0.12,
+   "doorTo": 0.77,
+   "squareY": 1.064,
+   "diamondY": 1.322,
+   "steps": 2,
+   "rise": 0.027
+  },
+  {
+   "cell": 1568,
+   "width": 0.242,
+   "bottom": 0.56,
+   "top": 1.42,
+   "depth": 0.12,
+   "doorTo": 0.77,
+   "squareY": 1.068,
+   "diamondY": 1.335,
+   "steps": 2,
+   "rise": 0.027
+  }
+ ],
+ "box": [
+  510,
+  222,
+  692,
+  668
+ ],
+ "pixels": {
+  "blueOn": 34507,
+  "blueOff": 0,
+  "noise": 2512,
+  "changed": 72286
+ }
+}

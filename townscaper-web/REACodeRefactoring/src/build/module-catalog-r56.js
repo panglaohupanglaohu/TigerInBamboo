@@ -62,7 +62,7 @@ export function allSignatures(grid) {
 }
 
 /** 用真实建筑管线造一块：参考格 + 按签名放邻格，只保留参考格第 lv 层（及悬空腿 / 屋顶）的三角形。 */
-export function buildPiece(grid, spec, { L = .5, palette = null, color = 0 } = {}) {
+export function buildPiece(grid, spec, { L = .5, palette = null, color = 0, debugParts = true } = {}) {
   const w = new World(grid); w.palette = palette ?? { colors: ['#efe6d4'] };
   const c = grid.cells[spec.cell], lv = 2;
   if (spec.down) { w.setSolid(c, 1, true); w.setSolid(c, 2, true); } else w.setSolid(c, 2, true);
@@ -74,7 +74,7 @@ export function buildPiece(grid, spec, { L = .5, palette = null, color = 0 } = {
   const tri = m.tri.bind(m), triC = m.triC.bind(m);
   m.tri = (...a) => { own.push(cur === c.id); return tri(...a); };
   m.triC = (...a) => { own.push(cur === c.id); return triC(...a); };
-  const r = buildBuildings(m, w, { L, debugModules: true });
+  const r = buildBuildings(m, w, { L, debugModules: true, debugParts });
   const y0 = spec.down ? (lv - 1) * L - 1e-3 : -1, y1 = spec.up ? lv * L + 1e-3 : 99;
   const pos = [], col = [];
   for (let t = 0; t < own.length; t++) {
@@ -85,7 +85,7 @@ export function buildPiece(grid, spec, { L = .5, palette = null, color = 0 } = {
     col.push(...m.col.slice(t * 9, t * 9 + 9));
   }
   const sigNow = signatureOf(w, c, lv);
-  return { sig: spec.sig, sigRebuilt: sigNow, pos, col, tris: pos.length / 9, modules: r.modules };
+  return { sig: spec.sig, sigRebuilt: sigNow, pos, col, tris: pos.length / 9, modules: r.modules, parts: r.moduleParts };
 }
 
 /** 目录排布：按 (n, up, down) 分族成行，族内按边码排列 —— 片子里同族模块成片摆放。 */

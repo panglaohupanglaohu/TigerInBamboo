@@ -114,7 +114,7 @@ export class CrownSplash {
       this.p.set([cell.cx + Math.cos(a) * 0.6 * scale, 0.1, cell.cz + Math.sin(a) * 0.6 * scale], i * 3);
       this.v.set([Math.cos(a) * sp, 1.8 + this.random() * 1.0, Math.sin(a) * sp], i * 3); this.life[i] = 1.4;
     }
-    this.log.push({ cell: cell.id, t, drops });
+    this.log.push({ cell: cell.id, t, drops, scale });
     return { event: e, drops };
   }
   update(dt) {
@@ -128,5 +128,19 @@ export class CrownSplash {
   }
   /** 当前活着的飞沫数（测试 / 截图度量） */
   get drops() { let n = 0; for (let i = 0; i < this.P; i++) if (this.life[i] > 0) n++; return n; }
+  /** 只读探针：最近一次事件在 t 时刻的形态（条数 / 高度 / 各圈半径与不透明度 / 飞沫）。 */
+  stats(t = this.uTime.value) {
+    const ev = this.log[this.log.length - 1];
+    if (!ev) return { events: 0, drops: this.drops };
+    const age = t - ev.t, scale = ev.scale ?? 1;
+    const rings = RING_DELAYS.map((_, i) => { const [r, a] = ringState(t, i, scale); return { r: +r.toFixed(4), a: +a.toFixed(4), alive: a > 0 }; });
+    const h = crownHeight(age, 0.6 * scale);
+    return {
+      events: this.log.length, age: +age.toFixed(3), scale: +scale.toFixed(3),
+      crown: { strips: CROWN_STRIPS, h: +h.toFixed(4), alive: h > 0.001, life: CROWN_LIFE },
+      rings: { total: RING_DELAYS.length, alive: rings.filter((r) => r.alive).length, life: RING_LIFE, delays: RING_DELAYS.slice(), states: rings },
+      drops: { spawned: ev.drops, live: this.drops },
+    };
+  }
   dispose() { this.group.removeFromParent(); for (const o of [this.crown, this.rings, this.points]) { o.geometry.dispose(); o.material.dispose(); } }
 }

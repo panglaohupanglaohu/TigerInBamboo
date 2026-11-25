@@ -11,9 +11,9 @@ import {CloudShadow,CLOUD_SHADOW_GLSL} from '../light/cloud-shadow.js';
 
 import * as THREE from 'three';
 import {NORMAL_CONTRAST_GLSL} from '../core/normal-contrast.js';
-import {cameraAngularSpeed,smearHistoryWeight} from '../core/camera-motion.js';
+import {cameraAngularSpeed,smearHistoryWeight,whipCapPx,WHIP_SMEAR_GLSL} from '../core/camera-motion.js';
 import {makePalettePatch,PALETTE_PATCH_GLSL} from '../core/palette-patch.js';
-import {makeColorVolume,COLOR_VOLUME_GLSL} from '../core/color-volume.js';
+import {makeColorVolume,makeFeatureColorVolumes,COLOR_VOLUME_FEATURES,COLOR_VOLUME_GLSL} from '../core/color-volume.js';
 import {GroundSurfaceShadow, SURFACE_SHADOW_GLSL} from '../light/surface-shadow.js';
 import {SEDIMENT_GLSL} from '../core/sediment.js';
 import { BLOTCH_GLSL } from '../terrain/blotch-pattern.js';
@@ -93,12 +93,14 @@ function gridQuads(seg, col, perVertex = null) {
 import { WorldMesh } from './worldmesh.js';
 import { buildBakeShellGeometry } from './ao-mesh-debug.js';
 import { makeReflectionMaterial, setReflectionStyle } from '../water/reflection.js';
-import { buildShore, makeSkirtMaterial, makeWaveMaterial } from '../water/shore.js';
+import { makePlanarReflection } from '../water/planar-reflection.js';
+import { buildShore, makeSkirtMaterial, makeWaveMaterial, skirtStats } from '../water/shore.js';
 import { OutlineLayers } from './outline.js';
 import { Birds } from '../life/birds.js';
 import { Vegetation } from '../life/vegetation.js';
 import { Atmosphere } from '../life/atmosphere.js';
 import { Effects, popShaderChunk } from '../life/effects.js';
+import { EditFxQueue } from '../core/edit-fx-schedule.js';
 import { Sound } from '../life/sound.js';
 import { NavLayer } from './navlayer.js';
 import { Waterfalls } from '../water/waterfall.js';
@@ -179,11 +181,19 @@ export class View {
     this.mountainMode = {value:0}; // 0 existing, 1 base colour, 2 local vertex bake, 3 runtime normal
     this.normalContrast = {value:new THREE.Vector4(0,1.25,.35,1)};
     this.strataMode = {value:0};
-    this.strataUniform = {value:new THREE.Vector3(levelHeight,.14,1)};
+    this.strataUniform = {value:new THREE.Vector3(levelHeight,.12,1)};
+    // 裁判同款 sWarp uniforms（SEDIMENT_GLSL 逐式移植需要同名 uniform）：uSedAmp = uStrata.y*2，setStrataStyle 同步
+    this.sedAmpUniform = {value:.24};
+    this.sedFreqUniform = {value:.52};
     this.palettePatchUniforms=Array.from({length:4},()=>({value:new THREE.Vector3(.5,.5,.5)}));
     this.colorVolumeOn={value:0};
     this.colorVolumeMin={value:new THREE.Vector3(.18,.2,.35)};
     this.colorVolumeMax={value:new THREE.Vector3(.35,.5,.65)};
+    this.colorVolumeSteps={value:0};   // 0=连续；>=2 吸附到 i/(steps-1) 离散格（原作 ~12 格色带粒度）
+    // 其他特征（1710031224838771027 残差）：roof/cliff 等表面特征各自的 HSL 范围，按 COLOR_VOLUME_FEATURES 序排
+    this.featVolOn={value:new THREE.Vector3(0,0,0)};
+    this.featVolMin={value:Array.from({length:COLOR_VOLUME_FEATURES.length},()=>new THREE.Vector3(0,0,0))};
+    this.featVolMax={value:Array.from({length:COLOR_VOLUME_FEATURES.length},()=>new THREE.Vector3(0,0,0))};
     this.groundSurfaceShadow = new GroundSurfaceShadow(this);
     this.cloudShadow = new CloudShadow(this);
     // 1243228419162341379：水与植被也接同一份云影 uniform（ShaderMaterial 的 uniforms 是同一对象，后加键即可）
@@ -209,6 +219,10 @@ export class View {
       shader.uniforms.uColorVolumeOn=this.colorVolumeOn;
       shader.uniforms.uColorVolumeMin=this.colorVolumeMin;
       shader.uniforms.uColorVolumeMax=this.colorVolumeMax;
+      shader.uniforms.uColorVolumeSteps=this.colorVolumeSteps;
+      shader.uniforms.uFeatVolOn=this.featVolOn;
+      shader.uniforms.uFeatVolMin=this.featVolMin;
+      shader.uniforms.uFeatVolMax=this.featVolMax;
       shader.uniforms.uSurfaceShadowMap=this.groundSurfaceShadow.map;
       shader.uniforms.uSurfaceShadowXform=this.groundSurfaceShadow.xform;
       shader.uniforms.uSurfaceShadowStrength=this.groundSurfaceShadow.strength;
@@ -225,6 +239,8 @@ export class View {
       shader.uniforms.uMountainMode = this.mountainMode;
       shader.uniforms.uStrataMode = this.strataMode;
       shader.uniforms.uStrata = this.strataUniform;
+      shader.uniforms.uSedAmp = this.sedAmpUniform;
+      shader.uniforms.uSedFreq = this.sedFreqUniform;
       shader.uniforms.uGI = this.giOn;
       Object.assign(shader.uniforms, this.pop.uniforms, this.cloudShadow.uniforms);
       shader.vertexShader = shader.vertexShader
@@ -237,7 +253,7 @@ export class View {
         // 逐顶点体素阴影：顶点朝太阳在体素里走，被挡住就暗
         .replace('#include <lights_fragment_begin>', '#include <lights_fragment_begin>\n')
         .replace('#include <aomap_fragment>', '#include <aomap_fragment>\nreflectedLight.directDiffuse *= 1.0 - uVoxOn * vVox * 0.75;\nreflectedLight.indirectDiffuse = mix(reflectedLight.indirectDiffuse, vGI * diffuseColor.rgb * 0.9, uGI * 0.7);')
-        .replace('#include <color_fragment>', '#include <color_fragment>\nif(uColorVolumeOn>.5 && vField.z>.5 && vField.z<1.5) diffuseColor.rgb=uColorVolumeOn>1.5?palettePatch(vec2(bn(vWPos.xz*.3),clamp(vWPos.y/6.,0.,1.))):colorVolumeSample(vec3(bn(vWPos.xz*.3),.5,clamp(vWPos.y/6.,0.,1.)));\nif(uStrataMode>.5 && vField.z< -1.5) discard;\nif(uStrataMode>.5 && vField.z< -.5) diffuseColor.rgb=sedimentColor(diffuseColor.rgb,vWPos);\nif(uSurfaceShadowStrength>0. && vField.z>.5 && vField.z<1.5 && vUp>.8) diffuseColor.rgb*=surfaceShadowTone(vWPos);\nif (uFields > 0.5) diffuseColor.rgb *= fieldTone(vField);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.93, 0.95, 0.98), uSnow * smoothstep(0.55, 0.85, vUp));\nif (uBlotch > 0.5 && vField.z > 0.5 && vField.z < 1.5 && vUp > 0.8 && diffuseColor.g > diffuseColor.r * 0.82 && diffuseColor.g > diffuseColor.b * 1.05) diffuseColor.rgb *= blotchTone(vWPos);\nif (uShrub > 0.5 && vField.z > 0.5 && vField.z < 1.5 && vUp > 0.8 && vEdge < 0.999) diffuseColor.rgb = shrubApply(diffuseColor.rgb, vEdge, vWPos);')
+        .replace('#include <color_fragment>', '#include <color_fragment>\nif(uColorVolumeOn>2.5){int cvf=vField.z>.5&&vField.z<1.5?0:abs(vField.z)<.5?1:vField.z<-.5?2:-1;if(cvf>=0&&uFeatVolOn[cvf]>.5)diffuseColor.rgb=featVolumeSample(cvf,vec3(bn(vWPos.xz*.3),.5,clamp(vWPos.y/6.,0.,1.)));}\nelse if(uColorVolumeOn>.5 && vField.z>.5 && vField.z<1.5) diffuseColor.rgb=uColorVolumeOn>1.5?palettePatch(vec2(bn(vWPos.xz*.3),clamp(vWPos.y/6.,0.,1.))):colorVolumeSample(vec3(bn(vWPos.xz*.3),.5,clamp(vWPos.y/6.,0.,1.)));\nif(uStrataMode>.5 && vField.z< -1.5) discard;\nif(uStrataMode>.5 && vField.z< -.5) diffuseColor.rgb=sedimentColor(diffuseColor.rgb,vWPos);\nif(uSurfaceShadowStrength>0. && vField.z>.5 && vField.z<1.5 && vUp>.8) diffuseColor.rgb*=surfaceShadowTone(vWPos);\nif (uFields > 0.5) diffuseColor.rgb *= fieldTone(vField);\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.93, 0.95, 0.98), uSnow * smoothstep(0.55, 0.85, vUp));\nif (uBlotch > 0.5 && vField.z > 0.5 && vField.z < 1.5 && vUp > 0.8 && diffuseColor.g > diffuseColor.r * 0.82 && diffuseColor.g > diffuseColor.b * 1.05) diffuseColor.rgb *= blotchTone(vWPos);\nif (uShrub > 0.5 && vField.z > 0.5 && vField.z < 1.5 && vUp > 0.8 && vEdge < 0.999) diffuseColor.rgb = shrubApply(diffuseColor.rgb, vEdge, vWPos);')
         .replace('#include <opaque_fragment>', 'if(uTextureOnly>.5) outgoingLight=diffuseColor.rgb;\nif(uMountainMode>.5 && vField.z<-.5){float tone=1.;if(uMountainMode>1.5)tone=uMountainMode<2.5?vMountainTone:.66+.42*max(0.,dot(normal,normalize((viewMatrix*vec4(-.62,.62,-.48,0.)).xyz)));outgoingLight=diffuseColor.rgb*tone;}\nif(uNormalContrast.x>.5 && abs(vField.z)>.5) outgoingLight=mix(outgoingLight,vec3(.025,.045,.05),normalContrastInk(vWPos)*.85);\noutgoingLight*=cloudShadowTone(vWPos);\n#include <opaque_fragment>')
         .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(1.0, 0.72, 0.32) * vGlow * uNight * 1.6;');
     };
@@ -261,11 +277,19 @@ export class View {
     // 环境（风场、雪、雾）、建造反馈（水花、出现动画、火）、小镇装饰（旗子、彩旗绳、蝴蝶）
     this.atmosphere = new Atmosphere({ scene: this.scene, levelHeight, uTime: this.waterUniforms.uTime });
     this.effects = new Effects({ scene: this.scene, uTime: this.waterUniforms.uTime, popUniforms: this.pop.uniforms });
+    // 1260586697538113537：一帧差分出多个 edit 时按「变心径向波」错拍喂给 effects/sound
+    // （快照只有整笔颗粒度，笔内顺序不可恢复 → 确定序近似原片的依次生长）；setDebug('editfx')/?editfx=0 整层可关
+    this.editFx = new EditFxQueue();
     this.navLayer = new NavLayer({ scene: this.scene, levelHeight });
     this.waterfalls = new Waterfalls({ scene: this.scene, levelHeight, uTime: this.waterUniforms.uTime });   // 1007587812462530561
     this.waterVol = new WaterVolume({ scene: this.scene, uTime: this.waterUniforms.uTime });   // 1758251637280268481 SDF 叠层浅水
     this.lighthouses = new Lighthouses({ scene: this.scene, levelHeight, uTime: this.waterUniforms.uTime, uNight: this.nightUniform });   // 1331905048801144836
-    this.boats = new Boats({ scene: this.scene, uTime: this.waterUniforms.uTime });
+    // 901469409579061248：原片尾迹是**平行走廊**（两条恒定间距边线 + 成排断续泡沫），默认 corridor 档；
+    // `?wake=v` 回到旧 Kelvin V，供 A/B 对照。r184 起 boats.js 真的走 corridor（r183 只有模块档、页面没切）。
+    this.boats = new Boats({
+      scene: this.scene, uTime: this.waterUniforms.uTime,
+      mode: new URLSearchParams(globalThis.location?.search ?? '').get('wake') === 'v' ? 'v' : 'corridor',
+    });
     this.smoke = new Smoke({ scene: this.scene, uTime: this.waterUniforms.uTime });   // 1015140880666300416 等四段                            // 901469409579061248   // 简化导航图 + 楼梯
     this.sound = new Sound();   // 建造音效（WebAudio 合成：咕咚入水 / 磕石头 / 啵）
     this.decor = new Decor({ scene: this.scene, uTime: this.waterUniforms.uTime, uWind: this.atmosphere.uWind, levelHeight });
@@ -278,10 +302,23 @@ export class View {
     this.reflection = new THREE.Mesh(this.worldMesh.geometry, this.reflectMaterial);
     this.reflection.scale.y = -1;
     this.reflection.renderOrder = 1;
+    this.reflection.visible = false;   // r182：主场景改用 RTT 平面反射（见下），旧双网格只在 reflection.html 实验室里开
     this.scene.add(this.reflection);
+
+    // 1758250248483278925 / 1215644531221311488：真平面反射（镜像相机 + 斜近平面 + 水面屏幕空间 UV）。
+    // `?refl=0` 关档；`view.setDebug('reflection', false)` 同效（给 A/B 差分用）。
+    this.planarReflection = makePlanarReflection({ renderer: this.renderer, scene: this.scene, size: 512 });
+    this.planarReflection.enabled = !/refl=0/.test(globalThis.location?.search || '');
+    this.waterUniforms.uRefl.value = this.planarReflection.texture;
+    this.waterUniforms.uReflStrength.value = this.planarReflection.enabled ? 0.72 : 0;
 
     // Shore: static skirt (foam rim + pale halo) and the looping wave ribbons.
     this.skirtMaterial = makeSkirtMaterial(new THREE.Color('#9fd0d3'));
+    // 1991099314714902634：裙带的白段/缝隙跟着同一个水时钟走（与浪带同一 uTime）
+    this.skirtMaterial.uniforms.uTime = this.waterUniforms.uTime;
+    // 实验页读数用：岸线白带的亮段 / 缝隙（与顶点着色器同一条曲线）
+    this.skirtStats = (t = 0) => skirtStats(this.skirt.geometry, t, 0.5,
+      this.skirtMaterial.uniforms.uSkirtDrift.value, this.skirtMaterial.uniforms.uSkirtBreak.value);
     this.skirt = new THREE.Mesh(new THREE.BufferGeometry(), this.skirtMaterial);
     this.skirt.renderOrder = 2;
     this.scene.add(this.skirt);
@@ -309,6 +346,8 @@ export class View {
     installPostExtras(this);
     for (const k of shadingKeysFromURL(globalThis.location?.search)) this.setDebug(k, true);
     { const mp = new URLSearchParams(globalThis.location?.search ?? '').get('mixedPersp'); if (mp !== null) this.mixedPerspReady = import('./view-mixed-persp.js').then((m) => (this.mixedPersp = m.attachMixedPerspective(this, { k: mp === '' ? 1 : +mp }))); } // 1310503825510367232 混合透视（C05 r56，默认不加载）
+    // 1215644531221311488 "(Also, the wave skirt stretches further this time)"：裙带宽度（1 = 旧窄带，原片宽档 1.6）
+    { const sw = new URLSearchParams(globalThis.location?.search ?? '').get('skirtWidth'); this.skirtWidth = sw === null ? 1 : Math.max(0.5, Math.min(3, +sw || 1)); }
     if (new URLSearchParams(globalThis.location?.search ?? '').get('c04') !== null) this.c04Ready = import('./view-c04.js').then((m) => m.installC04(this)); // 第 56 批 C04：?c04=dualcells,rayvis,ssao,dustao,hexslots（默认不加载）
     if (new URLSearchParams(globalThis.location?.search ?? '').get('c07') !== null) this.c07Ready = import('./view-c07.js').then((m) => m.installC07(this)); // 第 56 批 C07：?c07=townskin,decalboil,splash,gardenplots,aolayers,sungizmo（默认不加载）
     if (new URLSearchParams(globalThis.location?.search ?? '').get('c11') !== null) this.c11Ready = import('./view-c11.js').then((m) => m.installC11(this)); // 第 56 批 C11：?c11=grassline,shrubband,megagi,...（默认不加载）
@@ -354,6 +393,14 @@ export class View {
       uDeep: { value: new THREE.Color('#4f8f99') },
       uSky: { value: new THREE.Color('#78b1b8') },
       uFar: { value: new THREE.Vector2(25, 140) },   // 远处溶进天色的距离（Bad North 主题更近：没有地平线）
+      // 1758250248483278925 / 1215644531221311488：真平面反射（RTT 镜像相机 → 水面按屏幕空间 UV 取样）。
+      // strength=0 就是关档；旧"镜像双网格"只留给 reflection.html 实验室，主场景不再画。
+      uRefl: { value: null },
+      uReflMatrix: { value: new THREE.Matrix4() },
+      uReflStrength: { value: 0 },
+      uReflDistort: { value: 0.0032 },
+      // 1215：片内的倒影不是高清镜面，而是"对象色与水色的中间色"（原话 flat colored mid point）
+      uReflTint: { value: 0.45 },
     };
     this.waterUniforms = uniforms;
     this.scene.background = new THREE.Color('#6aa8b0');
@@ -376,6 +423,11 @@ export class View {
         uniform vec3 uDeep;
         uniform vec3 uSky;
         uniform vec2 uFar;
+        uniform sampler2D uRefl;
+        uniform mat4 uReflMatrix;
+        uniform float uReflStrength;
+        uniform float uReflDistort;
+        uniform float uReflTint;
         varying vec3 vWorld;
         ${CLOUD_SHADOW_GLSL}
         void main() {
@@ -389,6 +441,22 @@ export class View {
           col = mix(col, uSky, far);
           // 1243228419162341379：水面也接同一份云影（原来只有合并地形/建筑主材质接收）
           col *= cloudShadowTone(vWorld);
+          // 平面反射：世界坐标 → 镜像相机的屏幕空间 UV（bias·P·V 已在 JS 里乘好）。
+          // 没有几何的地方反射图 alpha=0，按 alpha 混色 → 不会把天空色二次铺到水色上。
+          if (uReflStrength > 0.0) {
+            vec4 rc = uReflMatrix * vec4(vWorld, 1.0);
+            vec2 ruv = rc.xy / max(rc.w, 1e-6);
+            ruv += vec2(sin(vWorld.z * 1.7 + uTime * 1.3), cos(vWorld.x * 1.5 - uTime * 1.1)) * uReflDistort;
+            if (ruv.x > 0.0 && ruv.y > 0.0 && ruv.x < 1.0 && ruv.y < 1.0) {
+              vec4 refl = texture2D(uRefl, ruv);
+              // 中间色：倒影色朝水体色拉 45%，既压掉二次 tonemap 的偏亮，也是 1215 说的 flat mid point
+              vec3 reflMid = mix(refl.rgb, (uDeep + uShallow) * 0.5, uReflTint);
+              // 反射图边界羽化：不羽化会在 uv 越界处留一条硬直的横线（水面上一眼假）
+              float edge = smoothstep(0.0, 0.05, ruv.x) * smoothstep(0.0, 0.05, 1.0 - ruv.x)
+                         * smoothstep(0.0, 0.05, ruv.y) * smoothstep(0.0, 0.05, 1.0 - ruv.y);
+              col = mix(col, reflMid, clamp(refl.a, 0.0, 1.0) * uReflStrength * edge);
+            }
+          }
           gl_FragColor = vec4(col, 1.0);
           #include <colorspace_fragment>
         }`,
@@ -490,10 +558,32 @@ export class View {
 
   setGroundColorVolume(options=null) {
     if(options===null){this.colorVolumeOn.value=0;return;}
-    const vol=makeColorVolume(options);
+    const{steps=0,...ranges}=options??{};
+    if(!Number.isInteger(steps)||steps===1||steps<0||steps>256)throw new RangeError('color volume steps');
+    const vol=makeColorVolume(ranges);
     this.colorVolumeMin.value.set(vol.h[0],vol.s[0],vol.l[0]);
     this.colorVolumeMax.value.set(vol.h[1],vol.s[1],vol.l[1]);
+    this.colorVolumeSteps.value=steps;
     this.colorVolumeOn.value=1;
+  }
+
+  /**
+   * 1710031224838771027 残差「其他特征」：每个表面特征一段独立 HSL 范围。
+   * map: { ground:{h,s,l}, roof:{h,s,l}, cliff:{h,s,l} }（可只给部分特征；
+   * 未给的特征保持顶点基色）。vField.z 分桶：ground .5–1.5 / roof |z|<.5 / cliff z<-.5。
+   * steps: 0=连续采样；>=2 吸附到 i/(steps-1) 离散格（原作 Inspector ~12 格色带）。
+   */
+  setFeatureColorVolumes(map=null, {steps=0}={}) {
+    if(map===null){this.colorVolumeOn.value=0;return;}
+    if(!Number.isInteger(steps)||steps===1||steps<0||steps>256)throw new RangeError('color volume steps');
+    const vols=makeFeatureColorVolumes(map);
+    COLOR_VOLUME_FEATURES.forEach((k,i)=>{
+      const v=vols[k];
+      this.featVolOn.value.setComponent(i,v?1:0);
+      if(v){this.featVolMin.value[i].set(v.h[0],v.s[0],v.l[0]);this.featVolMax.value[i].set(v.h[1],v.s[1],v.l[1]);}
+    });
+    this.colorVolumeSteps.value=steps;
+    this.colorVolumeOn.value=3;
   }
 
   /** 纯纹理灌木参数（1707490932017279035）：width 0–0.6、ragged 0–0.3、shadow 0–1、coverage 0–1、color 十六进制 */
@@ -1106,12 +1196,20 @@ export class View {
       case 'shorelines': this.shoreLine.visible = on; this.seaLine.visible = on; break;
       case 'wavewire': this.waveMaterial.wireframe = on; this.skirt.visible = !on; break;
       case 'waves': this.waves.visible = on; this.skirt.visible = on; break;
-      case 'reflection': this.reflection.visible = on; this.birds.reflections = on; break;
+      case 'reflection':
+        // r182：开关改成"反射强度"（RTT 平面反射），旧镜像双网格只留实验室页面。
+        this.planarReflection.enabled = on;
+        this.reflectStrength = on ? 0.72 : 0;
+        this.waterUniforms.uReflStrength.value = this.reflectStrength;
+        this.birds.reflections = on;
+        break;
       case 'birds': this.birds.visible = on; break;
       case 'vegetation': this.vegetation.visible = on; break;
       case 'grass': case 'shrubs': case 'trees': case 'flowers': this.vegetation.setLayer(name, on); break;
       case 'leafy': this.vegetation.leafyOn = on; break;
       case 'impostor': this.vegetation.impostor = on; break;
+      // 1205420678859632640 残差：距离阈值 LOD——远处树冠换共享图集交叉面片（life/leaf-impostor.js）
+      case 'treelod': this.vegetation.updateCrownLOD(this.camera, on ? 8 : 0); break;
       case 'cloudshadow': this.cloudShadow.setEnabled(on); break;
       case 'clouds': this.vegetation.clouds = on; break;
       case 'moody': this.vegetation.moody = on; break;
@@ -1120,6 +1218,8 @@ export class View {
       case 'fog': this.atmosphere.showFog = on; break;
       case 'fire': this.effects.showFire = on; break;
       case 'sound': this.sound.enabled = on; break;
+      // 1260586697538113537：编辑特效层（弹出/水花/灰尘+音效）总开关——关掉时连已排程的一起丢
+      case 'editfx': this.editFx.enabled = on; if (!on) this.editFx.clear(); break;
       case 'nav':
         if (on) { if (this.navLayer.walkGraph) this.navLayer.walk = false; this.navLayer.showGraph = true; }
         else if (!this.navLayer.walkGraph) this.navLayer.showGraph = false;
@@ -1185,7 +1285,7 @@ export class View {
         // 壳视图下不叠正常网格，否则看不出烘焙面在哪
         this.mesh.visible = !on;
         this.outline.group.visible = !on;
-        this.reflection.visible = !on;
+        this.reflection.visible = false;   // r182：主场景走 RTT，旧双网格常隐
         break;
       }
       case 'smooth': this.worldMesh.smooth = on; this.worldMesh.invalidate(); break;
@@ -1198,6 +1298,19 @@ export class View {
         this.material.vertexColors = !on;
         this.material.color.set(on ? 0xf2efe8 : 0xffffff);
         this.material.needsUpdate = true;
+        break;
+      // 793557992931266561：原片五级阶梯是**只看烘焙**的对照（flat / up normal / voxel AO / directional AO），
+      // 每级只差顶点色，画面里没有任何实时光照/投影/阴影。lightonly 是"白模 + 光照"（正相反），
+      // textureonly 只把 albedo 当结果、仍走标准材质 —— 缺的是"把烘焙结果直接铺满"的无光照档，本 case 补这一档。
+      case 'bakedonly':
+        this.bakedOnlyOn = on;
+        this.bakedMat ??= new THREE.MeshBasicMaterial({ vertexColors: true });
+        if (on) {
+          if (this.lightOnlyOn) this.setDebug('lightonly', false);
+          this.mesh.material = this.bakedMat;
+        } else if (this.mesh.material === this.bakedMat) {
+          this.mesh.material = this.material;
+        }
         break;
       case 'wire': this.material.wireframe = on; break;
       default: this.shading?.set(name, on); break;
@@ -1362,9 +1475,30 @@ export class View {
     this.hover.visible = true;
   }
 
-  setStrataStyle({mode=this.strataMode.value,period=this.strataUniform.value.x,amplitude=this.strataUniform.value.y,strength=this.strataUniform.value.z}={}){
-    if(!Number.isInteger(mode)||mode<0||mode>4||![period,amplitude,strength].every(Number.isFinite)||period<.05||period>5||amplitude<0||amplitude>2||strength<0||strength>1)throw new RangeError('invalid sediment controls');
+  /**
+   * 1215644531221311488 "(Also, the wave skirt stretches further this time)"：
+   * 裙带宽度的**尺度**参数（不是贴图）。重建一次岸浪几何并返回裙带读数，默认 1 = 旧窄带。
+   */
+  setSkirtWidth(w) {
+    if (!Number.isFinite(w) || w < 0.5 || w > 3) throw new RangeError('skirt width');
+    this.skirtWidth = w;
+    const shore = buildShore(this.town, this.grid, this.index, {
+      posts: this.worldMesh.posts, shape: this.worldMesh.shape, skirtWidth: w,
+    });
+    this.skirt.geometry.dispose();
+    this.waves.geometry.dispose();
+    this.shoreLine.geometry.dispose();
+    this.seaLine.geometry.dispose();
+    this.skirt.geometry = shore.skirt;
+    this.waves.geometry = shore.waves;
+    this.shoreLine.geometry = shore.shoreLine;
+    this.seaLine.geometry = shore.seaLine;
+    return this.skirtStats(0);
+  }
+
+  setStrataStyle({mode=this.strataMode.value,period=this.strataUniform.value.x,amplitude=this.strataUniform.value.y,strength=this.strataUniform.value.z}={}){    if(!Number.isInteger(mode)||mode<0||mode>4||![period,amplitude,strength].every(Number.isFinite)||period<.05||period>5||amplitude<0||amplitude>2||strength<0||strength>1)throw new RangeError('invalid sediment controls');
     this.strataMode.value=mode;this.strataUniform.value.set(period,amplitude,strength);
+    this.sedAmpUniform.value=amplitude*2; // 裁判 uSedAmp 口径 = 本地峰值 ×2，sWarp 与 sedimentOffset 同源
   }
 
   render(dt) {
@@ -1386,7 +1520,8 @@ export class View {
       if (this.giOn.value) { clearTimeout(this.giTimer); this.giTimer = setTimeout(() => this.bakeGI(), 600); }
       this.reflection.geometry = this.worldMesh.geometry;
       this.outline.setGeometry(this.worldMesh.geometry);
-      for (const e of this.worldMesh.edits || []) { this.effects.onEdit(e.cell, e.before, e.after, this.levelHeight); this.sound.onEdit(e.cell, e.before, e.after); }
+      // 1260586697538113537：edits 先排程错拍（径向波），到期在下方统一 drain —— 撤销/重做/回放同路
+      if (this.worldMesh.edits?.length) this.editFx.push(this.worldMesh.edits, this.waterUniforms.uTime.value);
       // 屋顶变了：等编辑停下来再重新找屋脊（拖动时不每帧重算）
       clearTimeout(this.birdTimer);
       this.birdTimer = setTimeout(() => {
@@ -1412,7 +1547,7 @@ export class View {
       const t0 = performance.now();
       // 岸浪只在陆地 / 钢柱 / 海岸形状变了时重建（盖高楼、刷颜色不用）
       if (this.worldMesh.shoreDirty) {
-      const shore = buildShore(this.town, this.grid, this.index, { posts: this.worldMesh.posts, shape: this.worldMesh.shape });
+      const shore = buildShore(this.town, this.grid, this.index, { posts: this.worldMesh.posts, shape: this.worldMesh.shape, skirtWidth: this.skirtWidth ?? 1 });
       this.skirt.geometry.dispose();
       this.waves.geometry.dispose();
       this.skirt.geometry = shore.skirt;
@@ -1427,6 +1562,8 @@ export class View {
     this.birds.update(dt);
     this.atmosphere.update(dt);
     this.effects.update(dt, this.atmosphere.uWind.value);
+    // 到期的编辑特效这帧才发（灰尘/水花按 spawn 时刻生成，不能提前）；uTime 已在本帧开头 += dt
+    this.editFx.drain(this.waterUniforms.uTime.value, (e) => { this.effects.onEdit(e.cell, e.before, e.after, this.levelHeight); this.sound.onEdit(e.cell, e.before, e.after); });
     this.boats.update(dt);
     this.smoke.update(dt, this.atmosphere.uWind.value, this.camera);
     this.decor.update(dt);
@@ -1434,6 +1571,8 @@ export class View {
     this.groundSurfaceShadow.refresh();
     this.shading.update();
     this.cloudShadow.update();
+    // 距离 LOD 只在阈值开着且镜头移动时重划（updateCrownLOD 内部有缓存）
+    if (this.vegetation.crownLodDistance > 0) this.vegetation.updateCrownLOD(this.camera);
     // autoUpdate=false：只有太阳方向或镜头目标变了才重画阴影图（轨道旋转不会移动 target，所以转视角不重画）
     if (!this._shadowSunDir) { this._shadowSunDir = new THREE.Vector3(1e9, 0, 0); this._shadowTarget = new THREE.Vector3(1e9, 0, 0); }
     if (!this._shadowSunDir.equals(this.sunDir) || !this._shadowTarget.equals(this.target)) {
@@ -1441,17 +1580,36 @@ export class View {
       this._shadowTarget.copy(this.target);
       this.renderer.shadowMap.needsUpdate = true;
     }
+    // 1758/1215：反射图必须在主渲染之前画（水面材质在同一帧里取样），
+    // 反射通道里隐藏水面/影接收面/裙带/浪带/旧倒影层 —— 反射不该把自己拍进去。
+    if (this.planarReflection.enabled) {
+      this.planarReflection.update(this.camera, {
+        hide: [this.water, this.shadowCatcher, this.skirt, this.waves, this.reflection],
+        planeY: 0,
+      });
+      this.waterUniforms.uRefl.value = this.planarReflection.texture;
+      this.waterUniforms.uReflMatrix.value.copy(this.planarReflection.textureMatrix);
+      this.waterUniforms.uReflStrength.value = this.reflectStrength ?? 0.72;
+    }
     this.renderer.render(this.scene, this.camera);
     this.#smear(dt);
   }
 
   /**
    * 运动模糊拖影（1727315611959865407 "I've shipped two whole games with orbital cameras and not once have I previously
-   * though about adding motion blur smear"）：相机转得快时，把上一帧（本身已带拖影）按转速半透明叠在这一帧上。
+   * though about adding motion blur smear"；1727324352264474664 快速转镜拖抹续作）：
+   * 相机转得快时，把上一显示帧（本身已带拖影）按转速叠在这一帧上。
+   * r220：叠法从「同位置半透明重影」升级为**轮廓加权方向性拖尾**（whipSmear，CPU 孪生在 core/camera-motion.js）——
+   * 上一帧沿本帧内容速度（切向 + 俯仰竖移）往回 streak，透明度再乘 .45+.55·轮廓强度：
+   * 硬轮廓被整段拉长（片内可判行为），平区少受历史污染；停转/无效 dt 依旧零历史。
    */
   #smear(dt) {
     const yaw = this.yaw, pitch = this.pitch;
     const speed = cameraAngularSpeed(yaw,pitch,this._lastYaw,this._lastPitch,dt);
+    // 带符号分量：屏旋量 = yaw 差 × sin(俯角)，俯仰竖移 = dpitch × 焦距(px)。±π 接缝用 atan2(sin,cos) 包裹。
+    const dyaw = Number.isFinite(yaw) && Number.isFinite(this._lastYaw)
+      ? Math.atan2(Math.sin(yaw - this._lastYaw), Math.cos(yaw - this._lastYaw)) : 0;
+    const dpitch = Number.isFinite(pitch) && Number.isFinite(this._lastPitch) ? pitch - this._lastPitch : 0;
     this._lastYaw = yaw; this._lastPitch = pitch;
     if (!this.motionBlur) { this._smearReady=false; return; }
     const r = this.renderer, size = r.getDrawingBufferSize(new THREE.Vector2());
@@ -1460,18 +1618,38 @@ export class View {
       this.smearQuad?.geometry.dispose();
       this.smearQuad?.material.dispose();
       this.smearTex = new THREE.FramebufferTexture(size.x, size.y);
+      // r220：拖尾沿速度方向双线性采样（REACode smear.js「必须双线性」同款口径；默认 Nearest 会让亚像素位移丢失）
+      this.smearTex.magFilter = THREE.LinearFilter; this.smearTex.minFilter = THREE.LinearFilter;
       this.smearQuad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
         transparent: true, depthTest: false, depthWrite: false,
-        uniforms: { uTex: { value: this.smearTex }, uA: { value: 0 } },
+        uniforms: {
+          uTex: { value: this.smearTex }, uA: { value: 0 },
+          uRes: { value: new THREE.Vector2(size.x, size.y) }, uCenter: { value: new THREE.Vector2(size.x / 2, size.y / 2) },
+          uShift: { value: 0 }, uPan: { value: 0 }, uEdge: { value: 48 / 255 }, uCap: { value: 32 },
+        },
         vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
-        fragmentShader: 'uniform sampler2D uTex; uniform float uA; varying vec2 vUv; void main() { gl_FragColor = vec4(texture2D(uTex, vUv).rgb, uA); }',
+        fragmentShader: 'uniform sampler2D uTex; uniform float uA; uniform vec2 uRes; uniform vec2 uCenter; uniform float uShift; uniform float uPan; uniform float uEdge; uniform float uCap; varying vec2 vUv;\n' + WHIP_SMEAR_GLSL +
+          '\nvoid main() { gl_FragColor = whipSmear(uTex, vUv, uRes, uCenter, uShift, uPan, uA, uEdge, uCap); }',
       }));
       this.smearScene = new THREE.Scene(); this.smearScene.add(this.smearQuad);
       this.smearCam = new THREE.Camera();
       this._smearReady = false;
     }
     const a = smearHistoryWeight(speed,dt);
-    this.smearStats={speed,alpha:this._smearReady?a:0};
+    // 内容速度场参数：切向（轨道旋转绕 target 投影点）+ 俯仰竖移（dpitch × 半高/tan(半fov)）
+    const c = this.target.clone().project(this.camera), u = this.smearQuad.material.uniforms;
+    const focalPx = (size.y / 2) / Math.tan((this.camera.fov ?? 40) * Math.PI / 360);
+    const shift = dyaw * Math.sin(pitch), pan = -dpitch * focalPx;
+    // r228：拖尾上限。默认仍是 32（旧口径逐像素等价，既有 r220 验收与各页 A/B 不受影响）；
+    // `smearCap = 0`（页面 `?whiplen=auto`）改按本帧外圈位移自适应 —— 片内快速转镜的拖影长到画面宽 1/3，
+    // 慢转时又几乎为零，常数 32 会把长拖尾截成短影。给正数则钉死该像素值。
+    const cap = this.smearCap === 0 ? whipCapPx(shift, pan, size.x, size.y, { k: this.smearCapK ?? 1.6 })
+      : (this.smearCap > 0 ? this.smearCap : 32);
+    u.uCap.value = cap;
+    u.uRes.value.set(size.x, size.y);
+    u.uCenter.value.set((c.x * .5 + .5) * size.x, (c.y * .5 + .5) * size.y);
+    u.uShift.value = shift; u.uPan.value = pan;
+    this.smearStats={speed,alpha:this._smearReady?a:0,shift,pan,center:[Math.round(u.uCenter.value.x),Math.round(u.uCenter.value.y)],taps:4,maxPx:+cap.toFixed(3),edge:48/255};
     if (this._smearReady && a > 0.01) {
       this.smearQuad.material.uniforms.uA.value = a;
       const ac = r.autoClear; r.autoClear = false; r.render(this.smearScene, this.smearCam); r.autoClear = ac;

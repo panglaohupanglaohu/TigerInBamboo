@@ -1,5 +1,5 @@
 // 距离场等值线（902103473365417984 "Distances this time"）逻辑验收
-import { distanceField, isoContours, evenLevels } from '../src/core/distance-isolines.js';
+import { distanceField, isoContours, evenLevels, polygonDistance } from '../src/core/distance-isolines.js';
 
 let pass = 0;
 const ok = (label, cond, extra = '') => {
@@ -96,6 +96,55 @@ const close = (a, b, tol) => Math.abs(a - b) <= tol;
   const per = inner.map((L) => L.segments.reduce((s, [x1, y1, x2, y2]) => s + Math.hypot(x2 - x1, y2 - y1), 0));
   const monotone = per.every((p, i) => i === 0 || p < per[i - 1]);
   ok('越靠内周长越短', monotone, per.map((p) => p.toFixed(1)).join(' → '));
+}
+
+// 7. 任意多边形占地：polygonDistance 有向距离（负=内部），凸/凹/斜边全支持
+{
+  const sq = [[2, 2], [6, 2], [6, 6], [2, 6]];
+  ok('方形内部为负', close(polygonDistance(4, 4, sq), -2, 1e-9));
+  ok('方形边上为 0', close(polygonDistance(4, 2, sq), 0, 1e-9));
+  ok('方形外到角', close(polygonDistance(0, 0, sq), 2 * Math.SQRT2, 1e-9));
+  // 菱形（斜边）：点 (7,5) 最近边是 (7.1,5.5)→(5.5,3.9)，线 x−y=1.6 → |7−5−1.6|/√2 = 0.4/√2
+  const dia = [[7.1, 5.5], [5.5, 7.1], [3.9, 5.5], [5.5, 3.9]];
+  ok('菱形斜边距离', close(polygonDistance(7, 5, dia), 0.4 / Math.SQRT2, 1e-9), `got ${polygonDistance(7, 5, dia)}`);
+  ok('菱形内部', polygonDistance(5.5, 5.5, dia) < 0);
+  // 凹 L 形：凹口里算外部
+  const L = [[0, 0], [4, 0], [4, 2], [2, 2], [2, 4], [0, 4]];
+  ok('凹口内=外部', polygonDistance(3, 3, L) > 0 && close(polygonDistance(3, 3, L), 1, 1e-9));
+  ok('凹形实体内部', polygonDistance(1, 1, L) < 0);
+  ok('顶点不足报错', (() => { try { polygonDistance(0, 0, [[0, 0], [1, 1]]); return false; } catch { return true; } })());
+  ok('非有限顶点报错', (() => { try { polygonDistance(0, 0, [[0, 0], [1, 0], [NaN, 1]]); return false; } catch { return true; } })());
+}
+
+// 8. 多边形占地进距离场：斜边 footprint 的亚格精度 + 等值线贴真实边线
+{
+  const w = 13, h = 13, mask = new Array(w * h).fill(1);
+  const dia = [[9.1, 6.5], [6.5, 9.1], [3.9, 6.5], [6.5, 3.9]];   // 菱形楼：中心 (6.5,6.5)、半对角 2.6，斜边 x±y 穿格
+  const f = distanceField(mask, { w, h, obstacles: [dia] });
+  const g = distanceField(mask, { w, h });
+  // |x-6.5|+|y-6.5| ≤ 2.6 为内部：(6,6)→1.0、(7,7)→1.0 内；(9,6)→3.0 外
+  ok('占地内格心距离 0', f.dist[6 * w + 6] === 0 && f.dist[7 * w + 7] === 0, `got ${f.dist[6 * w + 6]},${f.dist[7 * w + 7]}`);
+  // 格心 (9,6)：最近边 (9.1,6.5)→(6.5,3.9)，线 x−y=2.6 → |9−6−2.6|/√2 = 0.4/√2 ≈ 0.2828
+  ok('斜边亚格距离', close(f.dist[6 * w + 9], 0.4 / Math.SQRT2, 1e-6), `got ${f.dist[6 * w + 9]} vs ${(0.4 / Math.SQRT2).toFixed(4)}`);
+  ok('at() 同精度', close(f.at(9, 6), 0.4 / Math.SQRT2, 1e-6) && f.at(6.5, 6.5) === 0);
+  // (9,6) 无占地时 EDT 距离 = 到岛外列 x=13 的 4，占地把它压到 0.2828；远角 (11,0) 不受影响
+  ok('占地是更近的源', f.dist[6 * w + 9] < g.dist[6 * w + 9] && close(g.dist[6 * w + 9], 4, 1e-6), `plain ${g.dist[6 * w + 9]}`);
+  ok('远离占地不受影响', f.dist[11] === g.dist[11], `${f.dist[11]} vs ${g.dist[11]}`);
+  ok('obstacles:[] 结果不变', [...distanceField(mask, { w, h, obstacles: [] }).dist].every((v, i) => v === g.dist[i]));
+  ok('坏占地报错', (() => { try { distanceField(mask, { w, h, obstacles: [[[0, 0], [1, 1]]] }); return false; } catch { return true; } })());
+  // 等值线贴真实菱形边线：level .8 只剩绕楼一圈（边界格距离 1 > .8 没有岛缘环）
+  const [L8] = isoContours(f, { levels: [0.8] });
+  ok('绕楼单闭环', L8.closed === 1 && !L8.openEnds, `closed ${L8.closed} open ${L8.openEnds}`);
+  let worst8 = 0;
+  for (const path of L8.paths) for (const p of path.points) worst8 = Math.max(worst8, Math.abs(polygonDistance(p.x, p.y, dia) - 0.8));
+  ok('等值线贴斜边（亚格）', worst8 < 0.06, `max dev ${worst8.toFixed(3)}`);
+  // level .8 环长 ≈ 菱形 .8 偏移环（凸形 Steiner：周长 + 2π·r = 4·2.6·√2 + 2π·.8 ≈ 19.72）
+  const ring8 = L8.paths.find((p) => p.closed);
+  const per8 = ring8.points.reduce((acc, q, i) => i ? acc + Math.hypot(q.x - ring8.points[i - 1].x, q.y - ring8.points[i - 1].y) : acc, 0);
+  ok('环长≈Steiner 偏移', Math.abs(per8 - (4 * 2.6 * Math.SQRT2 + 2 * Math.PI * 0.8)) < 0.9, `got ${per8.toFixed(2)}`);
+  // level 1.5：绕楼一圈 + 岛缘一圈
+  const [L15] = isoContours(f, { levels: [1.5] });
+  ok('楼环+岛缘两闭环', L15.closed >= 2, `closed ${L15.closed}`);
 }
 
 console.log(`PASS distance-isolines ${pass} checks`);

@@ -10,10 +10,11 @@ const OLD = `  float phase = p.x * 5.0 + .22 * sin(p.y * 3.0);
   stripe = mix(stripe, .44, smoothstep(.35, .9, fw));
   return mix(1.0, .90 + .18 * stripe, clamp(p.z, 0.0, 1.0));`;
 assert.ok(FIELD_GLSL.includes('float fieldToneStripes(vec3 p) {\n' + OLD));
-assert.ok(/float fieldTone\(vec3 p\) \{ return uFields > 1\.5 \? fieldTonePlots\(p\) : fieldToneStripes\(p\); \}/.test(FIELD_GLSL));
+assert.ok(/float fieldTone\(vec3 p\) \{ return uFields > 2\.5 \? fieldToneBands\(p\) : \(uFields > 1\.5 \? fieldTonePlots\(p\) : fieldToneStripes\(p\)\); \}/.test(FIELD_GLSL));
 // balanced braces / single fieldTone definition
 assert.equal((FIELD_GLSL.match(/\{/g) || []).length, (FIELD_GLSL.match(/\}/g) || []).length);
 assert.equal((FIELD_GLSL.match(/float fieldTone\(/g) || []).length, 1);
+assert.equal((FIELD_GLSL.match(/float fieldToneBands\(/g) || []).length, 1);
 // plot partition: a ~1.5-unit tile contains several plots; plots are spatially coherent
 const ids = new Set(); let same = 0, n = 0;
 for (let i = 0; i < 40; i++) for (let j = 0; j < 40; j++) {

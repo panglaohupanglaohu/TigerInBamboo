@@ -4,7 +4,7 @@
 // 820977247083528192 挥砍弧；821321422140309504 小队轮廓；886199305522085890 点线世界尺寸；906416813810049025 / 906425294533394432 / 797119718477991936 洞穴岛多层导航。
 import assert from 'node:assert/strict';
 import { makeIsland, makeView, Battle, THREE, World } from './fixtures/g5-battle.mjs';
-const { splatAlpha, tumbleMatrix, C02_FLAGS } = await import('../src/badnorth/battle-c02.js');
+const { splatAlpha, tumbleMatrix, C02_FLAGS, C02_DEFAULT_ON } = await import('../src/badnorth/battle-c02.js');
 const { kickDamageNumber, stepDamageKick, addDamageNumber, stepDamageNumbers } = await import('../src/badnorth/damage-numbers.js');
 const { generateBadNorth } = await import('../src/badnorth/island.js');
 const { buildQuadGrid, buildMixedGrid } = await import('../src/core/grid.js');
@@ -13,10 +13,10 @@ const { BattleNavigation } = await import('../src/world/battle-navigation.js');
 const out = {};
 const run = (b, n, dt = 1 / 30) => { for (let k = 0; k < n; k++) b.update(dt); };
 
-// ── 默认全关：不改血材质、不画任何东西
+// ── 默认关（只有 C02_DEFAULT_ON 里的 scorch 例外，见 1007587828992266240）：不改血材质、不画任何东西
 {
   const { world, view } = makeIsland('quad', 7), b = new Battle(view); b.start(world); run(b, 60);
-  assert.ok(C02_FLAGS.every((k) => b.c02.on[k] === false), '默认全关');
+  assert.ok(C02_FLAGS.every((k) => b.c02.on[k] === C02_DEFAULT_ON.includes(k)), '默认关（仅 scorch 默认开）');
   assert.equal(b.blood.material.map, null); assert.equal(b.c02.scorch.count, 0); assert.equal(b.c02.stats.foam, 0);
   assert.equal(b.c02.gridLines.visible || b.c02.faces.visible || b.c02.navLines.visible || b.c02.rainLines.visible || b.c02.fpLines.visible, false);
 }
@@ -173,13 +173,23 @@ for (const kind of ['quad', 'mixed']) {
   out.footprint = { squads: 3, segs: pos.count / 2 };
 }
 
-// ── 886199：点线世界尺寸，关掉恢复
+// ── 886199：默认 = 世界尺寸点 + 物理像素下限；`passageScreen` 反过来切回旧固定 7px 对照
 {
   const { world, view } = makeIsland('quad', 7), b = new Battle(view); b.start(world);
-  const m = b.passageDots.material, s0 = m.size, a0 = m.sizeAttenuation;
-  b.c02.set('passageWorld', true); b.update(1 / 30); assert.ok(m.sizeAttenuation && m.size >= .14, '世界尺寸点径');
-  assert.ok(b.c02.stats.passagePx >= 4);
-  b.c02.set('passageWorld', false); assert.equal(m.size, s0); assert.equal(m.sizeAttenuation, a0);
+  const m = b.passageDots.material, floor = m.userData.pointFloor;
+  assert.ok(m.sizeAttenuation, '默认走世界尺寸（点径随距离放大）');
+  assert.equal(m.size, b.passageDotStyle.world);
+  assert.ok(floor && floor.uniform.value >= 7, '下限按物理像素给：' + (floor && floor.uniform.value));
+  // node 夹具没有真实渲染器/地形网格 → 点阵为空，逐点像素口径留给浏览器测试（traffic-dots / passage-dots-world）。
+  const w0 = b.passageDotPx();
+  assert.equal(w0.mode, 'world');
+  assert.equal(w0.floorCss, 7);
+  b.c02.set('passageScreen', true); b.update(1 / 30);
+  assert.ok(!m.sizeAttenuation && m.size === 7, '对照档 = 固定 7px 屏幕点');
+  assert.equal(floor.uniform.value, 0, '屏幕档不该再托底');
+  b.c02.set('passageScreen', false);
+  assert.ok(m.sizeAttenuation && m.size === b.passageDotStyle.world, '关掉对照回到世界尺寸');
+  assert.ok(m.userData.pointFloor.uniform.value >= 7);
 }
 
 // ── 906416 / 906425 / 797119：洞穴岛 → 同一格两层可走面（洞底 + 洞顶），Battle 能从洞底穿过去

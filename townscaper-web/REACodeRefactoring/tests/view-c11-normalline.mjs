@@ -22,12 +22,16 @@ const renderer = {
 };
 const pass = new ScreenOutlinePass(renderer, { thickness: 1 });
 const origFrag = pass.material.fragmentShader, origNormalMat = pass.normalMaterial;
-assert.ok(origFrag.includes(NL.ND_TOKEN), '合成着色器里有默认法线阈值');
+// r143：outline-pass.js 已把硬编码阈值换成 uNormalThreshold uniform（源里不再有 ND_TOKEN）——
+// 这正是本开关当时抛 "composite token missing" 的原因；现在阈值改为直接设 uniform，不再碰着色器源码。
+assert.ok(origFrag.includes('smoothstep(uNormalThreshold.x, uNormalThreshold.y, nd)'), '合成着色器用 uNormalThreshold uniform');
+assert.equal(pass.uniforms.uNormalThreshold.value.x, 0.55);
 
-// ① 合成源补丁：阈值换 uniform，其他不动
-const patched = NL.patchCompositeSource(origFrag);
+// ① 合成源补丁函数保留（兼容旧源码）：阈值换 uniform，其他不动；当前源无该 token → 必须显式报错而不是静默
+const synthetic = 'uniform float uFade;\nfloat e = smoothstep(0.55, 0.98, nd);';
+const patched = NL.patchCompositeSource(synthetic);
 assert.ok(patched.includes('smoothstep(uNdLo, uNdHi, nd)') && patched.includes('uniform float uNdLo;') && !patched.includes(NL.ND_TOKEN));
-assert.equal(patched.replace('smoothstep(uNdLo, uNdHi, nd)', NL.ND_TOKEN).replace('\nuniform float uNdLo;\nuniform float uNdHi;', ''), origFrag, '只改了阈值两处');
+assert.equal(patched.replace('smoothstep(uNdLo, uNdHi, nd)', NL.ND_TOKEN).replace('\nuniform float uNdLo;\nuniform float uNdHi;', ''), synthetic, '只改了阈值两处');
 assert.throws(() => NL.patchCompositeSource('void main(){}'), /token/);
 
 // ② 法线遍材质：与主材质同一套扰动，最近邻副本，海面平法线
@@ -72,12 +76,17 @@ const nl = NL.install(view);
 await nl.set(true);
 assert.ok(state.outline && debug.paintnormal, '打开 outline + paintnormal');
 assert.equal(pass.uniforms.uDepthMix.value, 0, '只用法线反差（剪影不另描）');
-assert.ok(pass.material.fragmentShader.includes('uNdLo') && pass.uniforms.uNdLo.value === 0.025);
+assert.equal(pass.uniforms.uNormalThreshold.value.x, 0.025, '阈值走 pass 自己的 uniform（笔触级 0.025–0.09）');
+assert.equal(pass.uniforms.uNormalThreshold.value.y, 0.09);
+assert.equal(pass.material.fragmentShader, origFrag, '不碰着色器源码（幂等，关→开再来一遍也不炸）');
+assert.ok(pass.c11NormalOnly && pass.c11NormalOnly.size === 1, '线源限定为共享地形材质');
 assert.ok(Object.prototype.hasOwnProperty.call(pass, 'render'), '实例上挂过滤 render');
 const s1 = nl.stats(); assert.ok(s1.on && s1.paintedNormalPass);
-nl.setThresholds(0.02, 0.07); assert.equal(pass.uniforms.uNdHi.value, 0.07); assert.throws(() => nl.setThresholds(0.1, 0.05), RangeError);
+nl.setThresholds(0.02, 0.07); assert.equal(pass.uniforms.uNdHi.value, 0.07); assert.equal(pass.uniforms.uNormalThreshold.value.y, 0.07); assert.throws(() => nl.setThresholds(0.1, 0.05), RangeError);
 await nl.set(false);
 assert.equal(pass.material.fragmentShader, origFrag, '合成着色器逐字还原');
+assert.equal(pass.uniforms.uNormalThreshold.value.x, 0.55, '阈值 uniform 还原');
+assert.equal(pass.uniforms.uNormalThreshold.value.y, 0.98);
 assert.equal(pass.normalMaterial, origNormalMat, '法线遍材质还原');
 assert.equal(pass.uniforms.uDepthMix.value, 1, 'uDepthMix 还原');
 assert.ok(!Object.prototype.hasOwnProperty.call(pass, 'render') && typeof pass.render === 'function', '实例 render 删掉，回到类方法');

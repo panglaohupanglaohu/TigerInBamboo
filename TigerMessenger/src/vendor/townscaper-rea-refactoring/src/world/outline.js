@@ -34,8 +34,13 @@ void main() {
   dir = l > 1e-6 ? dir / l : vec2(0.0);
   clip.xy += dir * uWidth * 2.0 / uRes * clip.w;
   clip.z += 0.00002 * clip.w;   // 往后推一点，避免和本体抢深度
-  // 逆光：镜头看向太阳（camDir 与 sun 反向越多越亮） × 法线背离镜头且偏向太阳
-  float into = clamp(dot(-uCamDir, -uSun) * 1.0, 0.0, 1.0);          // 1 = 正对太阳
+  // 逆光：镜头是否"顶着太阳看"× 该点法线背向太阳的程度（只在剪影上、迎光的那一侧出现）。
+  // 这里只能按水平方位判：相机俯视 30–40° 时 dot(camDir,sun) 永远 ≤0（camDir.y<0, sun.y>0），
+  // 旧写法在这个机位下恒为 0，亮边一次都不会出现；原片正是在这个俯角下出现亮边的。
+  vec2 camH = uCamDir.xz;
+  vec2 sunH = uSun.xz;
+  float align = dot(normalize(camH + vec2(1e-5)), normalize(sunH + vec2(1e-5)));
+  float into = smoothstep(0.15, 0.85, clamp(align, 0.0, 1.0));    // 1 = 太阳在岛后面
   float facing = clamp(dot(wn, uSun) * 0.8 + 0.35, 0.0, 1.0);         // 迎光一侧
   float lit = clamp(wn.y * 0.6 + 0.6, 0.0, 1.0);                      // 朝下的面视为在阴影里
   vRim = into * facing * lit;

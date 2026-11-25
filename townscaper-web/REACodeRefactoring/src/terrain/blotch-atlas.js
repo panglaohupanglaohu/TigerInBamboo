@@ -9,10 +9,14 @@
  * 移植的机制（原版 createBlotchAtlas / createRimField / BODY）：
  *   - 可平铺 128² 图集：R 冷色大笔触、G 暖色笔触、B 细颗粒；周期值噪声 + Math.imul 哈希（原版踩过浮点哈希把分布压扁的坑）
  *   - 边缘场：源 = 顶面高度与任一边邻居不同（或外圈）的台地格；chamfer 距离变换（世界单位），G = 本格顶面高度
+ *   - B = **崖肩顶面高度**（邻域 max 窗口）：崖面片元的世界 XZ 正好压在台地边界上，双线性取 G 会与**下面那一格**
+ *     的顶面混成一半（r169 实测 below 常为 −0.2…−1.9 → bleedMask 恒 0，等深带量不出来）→ 「我这一侧崖肩有多高」
+ *     必须取邻域最高顶面，不能取本纹素。R/G 语义不变（node 测试仍按 G=本格顶校验）。
  *   - 受控渗漏：只在 rimDist≈0 的崖面上、垂直方向到 bleed 深度齐平收口（底边是等深线）
  *   - 漩涡角度场、低频密度、高度分段线、坡向条纹：CPU 参考函数 + 同式 GLSL
  * 数据直接读共享 World（top / grid.edgeNeighbors），World.version 变化即重烘；不另建世界。
- * 未做：接进 View 地表材质（view.js 由另一会话持有），所以实景仍用 blotch-pattern.js 的旧着色。
+ * 已接进 View 地表材质：view-shading.js `?shade=blotchatlas`（uShBR → COLOR_BODY 乘 diffuseColor，
+ * 只动 albedo、不改高光/粗糙度 —— 与裁判 MeshStandardMaterial 上沉积/笔触只改 diffuseColor 同构）。
  */
 import { buildCellIndex, decorateCells } from '../core/spatial.js';
 
@@ -64,10 +68,15 @@ export function sampleBlotchAtlas(atlas, u, v) {
 /**
  * 原版 createRimField，改读共享 World：栅格中心落在哪个格子由共享 cellIndex 决定（不按包围盒刷）。
  * 源点 = 台地崖肩格（顶面与任一边邻居不同或在外圈）。距离为世界单位 chamfer（正反两遍）。
+ *
+ * 三个通道：R = 到崖肩的水平距离 / maxDist、G = 本纹素所属格的顶面高度、B = **崖肩顶面高度**。
+ * B 是把 G 做一次 (2·shoulder+1)² 的 max 窗口（纹素）—— 崖面片元的 XZ 压在台地边界上，
+ * 直接双线性取 G 会掺进下面那一格的顶（below 变负 → 渗漏永远为 0）。shoulder=0 时 B ≡ G（旧口径，仅供对照）。
  */
-export function buildBlotchRimField(world, { res = 96, maxDist = 1, levelHeight = .5, index = null } = {}) {
+export function buildBlotchRimField(world, { res = 96, maxDist = 1, levelHeight = .5, index = null, shoulder = 2 } = {}) {
   if (!world || !world.grid || !Array.isArray(world.cells)) throw new TypeError('shared World required');
   if (!Number.isInteger(res) || res < 8 || res > 512 || !Number.isFinite(maxDist) || maxDist <= 0 || !Number.isFinite(levelHeight) || levelHeight <= 0) throw new RangeError('rim field options');
+  if (!Number.isInteger(shoulder) || shoulder < 0 || shoulder > 8) throw new RangeError('rim shoulder window');
   if (world.cells.some((c) => !Number.isFinite(c.minX))) decorateCells(world.grid);
   const cells = world.cells, idx = index ?? buildCellIndex(world.grid);
   let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity, maxTop = 1;
@@ -99,20 +108,29 @@ export function buildBlotchRimField(world, { res = 96, maxDist = 1, levelHeight 
     dist[i] = b;
   }
   const data = new Uint8Array(n * 4);
+  // 崖肩高度：邻域 max（把「崖上那一格」的顶面铺到墙脚/墙面的纹素上，双线性才不会被下格拉低）
+  const shoulderY = new Float32Array(n);
+  for (let z = 0; z < res; z++) for (let x = 0; x < res; x++) {
+    let m = 0;
+    for (let dz = -shoulder; dz <= shoulder; dz++) { const zz = z + dz; if (zz < 0 || zz >= res) continue;
+      for (let dx = -shoulder; dx <= shoulder; dx++) { const xx = x + dx; if (xx < 0 || xx >= res) continue; const v = topY[zz * res + xx]; if (v > m) m = v; } }
+    shoulderY[z * res + x] = m;
+  }
+  const q8 = (v, span) => Math.round(Math.min(1, v / Math.max(1e-3, span)) * 255);
   for (let i = 0; i < n; i++) {
     const d = Math.min(maxDist, dist[i]), v = Math.round(d / maxDist * 255);
-    data[i * 4] = v; data[i * 4 + 1] = Math.round(Math.min(1, topY[i] / Math.max(1e-3, topSpan)) * 255); data[i * 4 + 2] = v; data[i * 4 + 3] = 255;
+    data[i * 4] = v; data[i * 4 + 1] = q8(topY[i], topSpan); data[i * 4 + 2] = q8(shoulderY[i], topSpan); data[i * 4 + 3] = 255;
   }
   const rimCount = rimCell.reduce((s, v) => s + v, 0);
-  return { res, maxDist, topSpan, levelHeight, dist, topY, owner, data, rimCell, rimCount, xform: [minX, minZ, 1 / spanX, 1 / spanZ], version: world.version,
-    /** 世界 XZ → [rimDist(世界单位, ≤maxDist), 本格顶面高度]，与着色器同一 clamp-to-edge 双线性口径 */
+  return { res, maxDist, topSpan, levelHeight, shoulder, dist, topY, shoulderY, owner, data, rimCell, rimCount, xform: [minX, minZ, 1 / spanX, 1 / spanZ], version: world.version,
+    /** 世界 XZ → [rimDist(世界单位, ≤maxDist), 本格顶面高度, 崖肩顶面高度]，与着色器同一 clamp-to-edge 双线性口径 */
     sample(xw, zw) {
       if (![xw, zw].every(Number.isFinite)) throw new RangeError('rim sample');
       const u = Math.min(1, Math.max(0, (xw - minX) / spanX)) * res - .5, v = Math.min(1, Math.max(0, (zw - minZ) / spanZ)) * res - .5;
       const cl = (k) => Math.min(res - 1, Math.max(0, k)), x0 = Math.floor(u), z0 = Math.floor(v), fx = u - x0, fz = v - z0;
       const g = (arr, a, b) => arr[cl(b) * res + cl(a)];
       const bil = (arr, cap) => { const f = (a, b) => Math.min(cap, g(arr, a, b)); return (f(x0, z0) * (1 - fx) + f(x0 + 1, z0) * fx) * (1 - fz) + (f(x0, z0 + 1) * (1 - fx) + f(x0 + 1, z0 + 1) * fx) * fz; };
-      return [bil(dist, maxDist), bil(topY, Infinity)];
+      return [bil(dist, maxDist), bil(topY, Infinity), bil(shoulderY, Infinity)];
     } };
 }
 
@@ -137,9 +155,10 @@ export function swirlUV(x, z, { scale = .09, swirl = 2.3 } = {}) {
   const ang = (blotchWobble(x * .3, z * .3) - .5) * 2 * swirl, c = Math.cos(ang), s = Math.sin(ang);
   return [c * u + s * v, -s * u + c * v, ang];   // GLSL mat2(ca,-sa,sa,ca) 列主序
 }
-/** 完整色块调色（顶面/崖面），与 BLOTCH_RIM_GLSL 同式；footprint = fwidth 的世界口径。 */
+/** 完整色块调色（顶面/崖面），与 BLOTCH_RIM_GLSL 同式；footprint = fwidth 的世界口径。
+ *  below 用 **崖肩顶面高度**（B 通道）减本片元高度 —— 崖面 XZ 压在台地边界上，用本纹素顶面会掺下格。 */
 export function blotchRimTint(atlas, rim, p, normal, { strength = 1, bleed = .14, streak = .75, density = .55, swirl = 2.3, segments = .12, scale = .09, segFootprint = .02 } = {}) {
-  const [rimDist, localTop] = rim.sample(p[0], p[2]), below = localTop - p[1];
+  const [rimDist, localTop, shoulderTop] = rim.sample(p[0], p[2]), below = shoulderTop - p[1];
   const len = Math.hypot(...normal), n = normal.map((v) => v / len);
   const { rimMask, flatMask, bleedMask } = blotchMasks({ rimDist, below, normalY: n[1], bleed });
   const [bu, bv] = swirlUV(p[0], p[2], { scale, swirl }), bl = sampleBlotchAtlas(atlas, bu, bv);
@@ -155,7 +174,12 @@ export function blotchRimTint(atlas, rim, p, normal, { strength = 1, bleed = .14
   const dl = Math.hypot(n[0], n[2]), down = dl > 1e-3 ? [-n[0] / dl, -n[2] / dl] : [0, 1], perp = [-down[1], down[0]];
   const st = sstep(.46, .60, sampleBlotchAtlas(atlas, (p[0] * perp[0] + p[2] * perp[1]) * .055, (p[0] * down[0] + p[2] * down[1]) * .008)[1]) * steep * streak;
   t = t.map((x) => x * (1 + .34 * st) * (1 - .15 * steep * streak * (1 - st)) * (1 + .12 * steep * streak * sstep(.40, .04, below)));
-  return { tint: t, rimDist, below, rimMask, flatMask, bleedMask, cold, warm, density: dens, coverage: w };
+  // 细颗粒（裁判 BODY 末项，2026-11-24 补）：只在色块权重内撒 B 通道高频点，像素宽淡出防远处噪闪。
+  // CPU 侧没有 fwidth，segFootprint 就是「|fwidth(wp.xz)| 的世界口径」参数（同 seg 线共用）。
+  const grainRes = 1 - sstep(.010, .030, segFootprint * 14);
+  const grain = (bl[2] >= .80 ? 1 : 0) * w * .22 * grainRes;
+  t = t.map((x) => x * (1 - grain));
+  return { tint: t, rimDist, below, localTop, shoulderTop, rimMask, flatMask, bleedMask, cold, warm, density: dens, coverage: w, grain };
 }
 
 /** 与上面同式的 GLSL（函数名 br* 前缀，避免与 BLOTCH_GLSL 的 bh/bn/bfbm 冲突）。需要 vec3 wp 世界坐标与世界法线。 */
@@ -172,9 +196,11 @@ float brWobble(vec2 p){return brNoise(p)*.72+brNoise(p*2.07+17.3)*.28;}
 vec3 blotchRimTint(vec3 wp, vec3 nIn){
   vec3 n=normalize(nIn);
   vec4 rt=texture2D(uBlotchRim,clamp((wp.xz-uBlotchRimX.xy)*uBlotchRimX.zw,0.,1.));
-  float rimDist=rt.r*uBlotchRimP.x, below=rt.g*uBlotchRimP.y-wp.y;
+  float rimDist=rt.r*uBlotchRimP.x, below=rt.b*uBlotchRimP.y-wp.y;   // B = 崖肩顶面（邻域 max），不是本纹素 G
   float rimMask=smoothstep(.06,.30,rimDist), flatMask=smoothstep(.88,.985,n.y);
-  float bleedMask=(1.-flatMask)*smoothstep(.10,.02,rimDist)*smoothstep(uBlotchRimQ.x,uBlotchRimQ.x*.35,below)*smoothstep(0.,.04,below);
+  // r172：bleed=0 必须真的关掉。smoothstep(0,0,below) 是退化区间（e1-e0=0 → 除法溢出 → 钳成 1），
+  // 于是 bleed=0 在 GPU 上等于「无限深」——与 CPU 的 \`bleed>0 ? … : 0\` 相反，也让 bleed=0/20 逐像素相同。
+  float bleedMask=(1.-flatMask)*smoothstep(.10,.02,rimDist)*smoothstep(uBlotchRimQ.x,uBlotchRimQ.x*.35,below)*smoothstep(0.,.04,below)*step(1e-4,uBlotchRimQ.x);
   vec2 buv=wp.xz*uBlotchRimP.z;
   if(uBlotchRimQ.w>.001){float a=(brWobble(wp.xz*.3)-.5)*2.*uBlotchRimQ.w;float ca=cos(a),sa=sin(a);buv=mat2(ca,-sa,sa,ca)*buv;}
   vec4 bl=texture2D(uBlotchAtlas,buv);
@@ -187,6 +213,9 @@ vec3 blotchRimTint(vec3 wp, vec3 nIn){
   float dl=length(n.xz); vec2 dn=dl>1e-3?-n.xz/dl:vec2(0.,1.), pp=vec2(-dn.y,dn.x);
   float st=smoothstep(.46,.60,texture2D(uBlotchAtlas,vec2(dot(wp.xz,pp)*.055,dot(wp.xz,dn)*.008)).g)*steep*uBlotchRimQ.y;
   t*=(1.+.34*st)*(1.-.15*steep*uBlotchRimQ.y*(1.-st))*(1.+.12*steep*uBlotchRimQ.y*smoothstep(.40,.04,below));
+  // 细颗粒（裁判 BODY 末项）：B 通道高频点只在色块权重内撒，像素宽>阈值淡出（远处不闪）
+  float grainRes=1.-smoothstep(.010,.030,length(fwidth(wp.xz))*14.);
+  t*=1.-step(.80,bl.b)*w*.22*grainRes;
   return t;
 }
 `;

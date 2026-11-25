@@ -54,8 +54,17 @@ export function attachMixedPerspective(view, { k = 1, pivotY } = {}) {
       const inv = new THREE.Matrix4().multiplyMatrices(cam.projectionMatrix, cam.matrixWorldInverse).invert();
       const a = new THREE.Vector3(ndcX, ndcY, -1).applyMatrix4(inv);
       const b = new THREE.Vector3(ndcX, ndcY, 1).applyMatrix4(inv);
-      ray.ray.origin.copy(a);
-      ray.ray.direction.copy(b.sub(a).normalize());
+      const dir = b.sub(a);
+      const len = dir.length() || 1;
+      dir.multiplyScalar(1 / len);
+      // 起点取「这条线上离相机最近的点」，不直接用 z=-1 反投影得到的 a：
+      // 混合投影改过深度行后，NDC z=-1 不再对应近平面（实测落在离眼点 8.36 世界里氏的地方），
+      // 那个点可能已经在近处柱子的内部/背后 → view.pick 的步进会从几何体内侧开始，
+      // 更近的柱子被整根跳过（第 171 轮实测：24 个探针里 12 个命中更远的一格）。
+      const toEye = cam.getWorldPosition(new THREE.Vector3()).sub(a);
+      const t = toEye.dot(dir);
+      ray.ray.origin.copy(a).addScaledVector(dir, t > 0 ? t : 0);
+      ray.ray.direction.copy(dir);
     },
     /** 诊断：世界竖线 (x,z,y0→y1) 两端在屏幕上的像素横移（k=1 应 ≈0）与该线屏幕高度。 */
     verticalDrift(x, z, y0, y1) {

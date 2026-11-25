@@ -1,0 +1,62 @@
+{
+ "capability": "terrain.overhang",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "terrain",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/overhangterrain.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js"
+ ],
+ "inputs": {
+  "originalSeed": 7,
+  "arena": "9×9 崖台+海岸"
+ },
+ "metrics": [
+  {
+   "id": "origHang",
+   "name": "原版悬垂体素（实心下空）",
+   "original": 1309,
+   "refactored": "—"
+  },
+  {
+   "id": "capSeastack",
+   "name": "原版海柱帽比柱宽",
+   "original": "stemR 1.5 < capR 3.9 · 帽 120 格",
+   "refactored": "柱 1 格 + 帽圈 上沿一圈"
+  },
+  {
+   "id": "refMatch",
+   "name": "本侧 overhang 候选/放置",
+   "original": "—",
+   "refactored": "12 / 3"
+  },
+  {
+   "id": "refHang",
+   "name": "本侧悬垂体素（实心下空）",
+   "original": "—",
+   "refactored": 3
+  },
+  {
+   "id": "stackPlaced",
+   "name": "本侧 seastack 放置",
+   "original": "—",
+   "refactored": 1
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "rule",
+   "id": "悬垂选址",
+   "original": "脚本化：海柱帽半径>柱径 + 海蚀洞顶保留",
+   "refactored": "规则化：邻格落差 ≥3 层的崖顶外伸 / 离岸两格水格立柱",
+   "note": "「实心体素悬空」机制一致，放哪里两边各自规则 — 如实登记"
+  }
+ ],
+ "basis": "原版 buildTerrain 实测悬垂体素 1309 个（蘑菇帽+洞顶）；本侧 overhang 在崖台擂场真放置 3 个悬垂体素、seastack 立柱 1 根带帽——机制同「实心悬空」，选址规则不同如实登记。"
+}

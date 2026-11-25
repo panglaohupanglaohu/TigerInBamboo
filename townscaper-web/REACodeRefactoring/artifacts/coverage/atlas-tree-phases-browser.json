@@ -1,0 +1,83 @@
+{
+  "phase2d": {
+    "n": 18,
+    "minX": 0,
+    "minY": 0,
+    "maxTop": 80,
+    "px": {
+      "W": 900,
+      "H": 900,
+      "yellow": 362,
+      "cyan": 896,
+      "pale": 5898,
+      "bright": 5,
+      "color": 25468,
+      "halfInk": 11759,
+      "box": [
+        91,
+        449,
+        719,
+        810
+      ]
+    },
+    "st": "18 块 · 占用 5.1% · 空闲叶 19/37 · 树深 19 · 本次手指 1（剪掉 17 枝，试了 22 个候选）· 近 20 次平均手指 1.00"
+  },
+  "phase3d": {
+    "geo": {
+      "nodes": 243,
+      "branches": 242,
+      "leaves": 122,
+      "maxDepth": 27,
+      "layers": 28,
+      "span": 243.26209840280083,
+      "rootHighest": true
+    },
+    "px": {
+      "W": 900,
+      "H": 900,
+      "yellow": 195,
+      "cyan": 0,
+      "pale": 19717,
+      "bright": 13349,
+      "color": 37479,
+      "halfInk": 50104,
+      "box": [
+        317,
+        646,
+        825,
+        897
+      ]
+    }
+  },
+  "phaseTop": {
+    "geo": {
+      "nodes": 243,
+      "branches": 242,
+      "leaves": 122,
+      "maxDepth": 27,
+      "layers": 28,
+      "span": 69.35319252082805,
+      "rootHighest": false
+    },
+    "px": {
+      "W": 900,
+      "H": 900,
+      "yellow": 244,
+      "cyan": 0,
+      "pale": 21102,
+      "bright": 16232,
+      "color": 30313,
+      "halfInk": 15991,
+      "box": [
+        366,
+        634,
+        825,
+        899
+      ]
+    },
+    "spanRatio": 0.2850965809149229
+  },
+  "noise": {
+    "same": true
+  }
+}

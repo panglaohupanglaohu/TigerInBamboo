@@ -23,7 +23,7 @@ export const BATTLE_CONTROL_GROUPS=[
  ['c01','北境·战斗反馈与环境',[
  ['squadHud','旗顶小队状态'],['plank','小屋木跳板'],['nodeNet','战斗节点网络'],['orderPillar','命令目标柱'],['skyBeam','天光命中柱'],['bloodAge','血迹随时间变暗'],['bloodStack','重叠血迹加深'],['fireGlow','火源辉光'],['column','行军纵队'],['routePreview','命令路线预览'],['shoreFoam','岸边泡沫'],['waterBlood','水中血色'],['smokeShape','烟团形状'],['windTraces','风向轨迹'],['raidBoxes','来袭提示框'],['portraits','小队头像'],['groundTint','地面渐进染色'],['houseChar','房屋焦黑']]],
  ['c02','北境·特效与导航',[
- ['bloodShape','不规则血斑'],['scorch','焦痕与余烬'],['dmgKick','受击飘字抖动'],['flowGrid','流场背景格网'],['flowFaces','流场区域配色'],['tumble','落崖翻滚'],['wakes','长船泡沫尾迹'],['navmesh','共享导航面'],['rain','雨丝与溅点'],['swingArc','挥砍弧形拖影'],['footprint','小队地面轮廓'],['passageWorld','窄道点线世界尺寸']]],
+ ['bloodShape','不规则血斑'],['scorch','焦痕与余烬'],['dmgKick','受击飘字抖动'],['flowGrid','流场背景格网'],['flowFaces','流场区域配色'],['tumble','落崖翻滚'],['wakes','长船泡沫尾迹'],['navmesh','共享导航面'],['rain','雨丝与溅点'],['swingArc','挥砍弧形拖影'],['footprint','小队地面轮廓'],['passageScreen','窄道点线（旧·固定 7px 对照）']]],
  ['c03','北境·玩法与演示',[
  ['kpow','周期爆炸演示'],['houseFx','小屋燃烧与爆炸'],['torches','向小屋投火团'],['plunge','指挥官跃击'],['confirm','命令二次确认'],['distIso','距离等值线'],['tierUp','兵种升级外观'],['flair','UI依次出现']]],
  ['g3','北境·精细导航与战斗',[

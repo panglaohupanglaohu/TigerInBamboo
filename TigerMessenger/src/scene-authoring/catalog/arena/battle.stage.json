@@ -1,0 +1,27 @@
+{
+ "capability": "battle.stage",
+ "line": "battle",
+ "schemaVersion": 1,
+ "pass": true,
+ "basis": "本能力在 nav-lab 演示岛考场（battle.json）真实跑过 match→run，成绩见共享表——判定规则写在表头，不手改。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/arena/battle.json#battle.stage",
+ "runner": "TigerMessenger/tools/refactor/record-battle-arena.mjs（实算）",
+ "test": "TigerMessenger/tests/workshops-browser.mjs（battle 工坊实景段）",
+ "arena": {
+  "fixture": "nav-lab 演示岛"
+ },
+ "result": {
+  "verdict": "擂过",
+  "targets": 1,
+  "applied": 1,
+  "planKeys": [
+   "scale",
+   "gridRadius",
+   "unitHeight"
+  ],
+  "changed": 1,
+  "error": null,
+  "ms": 0
+ },
+ "recordedAt": "2026-11-25"
+}

@@ -1,0 +1,45 @@
+{
+ "capability": "grid.contours",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "grid",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/march.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/contour.js"
+ ],
+ "inputs": {
+  "grid": "10×8 quads·共享角点id",
+  "iso": 6,
+  "segs": 18
+ },
+ "metrics": [
+  {
+   "id": "segs",
+   "name": "iso=6 线段集合逐点一致",
+   "original": 18,
+   "refactored": 18,
+   "equal": true
+  },
+  {
+   "id": "corner",
+   "name": "cornerCount",
+   "original": 99,
+   "refactored": 99
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "validation",
+   "id": "marchGrid(NaN valueOf)",
+   "original": "不校验",
+   "refactored": "TypeError"
+  }
+ ],
+ "basis": "同一批共享角点的四边形格 + 同一 valueOf 喂两边 marchGrid；原版按量化坐标并角、重构按顶点 id——输入显式给共享 id 时两者应同构。"
+}

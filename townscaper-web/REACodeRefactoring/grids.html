@@ -4,6 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>网格实验室 · REACode 重构版</title>
+<link rel="icon" href="data:," />
 <style>
   :root { --bg: #2a3238; --card: rgba(255,255,255,.94); --accent: #2f7f8a; }
   html, body { margin: 0; height: 100%; background: var(--bg); font: 14px/1.5 -apple-system, system-ui, "PingFang SC", "Microsoft YaHei", sans-serif; overflow: hidden; }
@@ -54,7 +55,13 @@ const NOTES = {
   atlas: '1764958522398146667 "A cute binary tree rect packer … using the tree properly for fast collision checks"；1765115069837221962：递归解析树的过程，板子越碎"手指"越多；1765041830461055127：也能删除矩形，用久了会碎，但仍然紧。本地保留first-fit，并可切换候选+跨叶放置；青线显示真实搜索，黄框是命中、橙框是尺寸拒绝，可暂停逐步查看。删除只合并空兄弟，跨切线空区仍可能放不下；最大空闲占比只是叶面积指标，不是最优装填证明。候选是边角+有界随机尝试，不保证最优。原3D树和完整兼容接口仍待补。',
   bary: '974579499802202113：预先算好三角形里的两个向量，重心坐标只要 1 次减法 + 1 次点积。974564862729838592：讲课用的小工具。移动鼠标。',
 };
+const Q0 = new URLSearchParams(location.search);
 let tab = 'kinds', sub = 'mixed', showDual = false, infMode = 'blend', picked = null, mouse = null;
+/* 1447496205282549761「底图就是一张不规则三角网」的页面入口：
+ *   ?kind=tri|square|rhombi|mixed 选底图；?wire=1 只画格线（原片是深底白线、没有填色）；
+ *   ?tri2=1 把每个四边格沿 pts[0]–pts[2] 一条对角线切成两个三角 —— 原片底图的三角化口径。 */
+let wire = Q0.get('wire') === '1', tri2 = Q0.get('tri2') === '1';
+if (['tri', 'square', 'rhombi', 'mixed'].includes(Q0.get('kind'))) sub = Q0.get('kind');
 const cache = {};
 const grids = {
   tri: () => buildMixedGrid({ radius: 9, hexSize: 1, mergeRate: 0, seed: 5 }),
@@ -77,7 +84,7 @@ function setTab(t) {
   const s = document.getElementById('sub');
   s.innerHTML = '';
   const add = (label, on, fn) => { const b = document.createElement('button'); b.textContent = label; b.classList.toggle('on', on); b.onclick = () => { fn(); setTab(tab); }; s.appendChild(b); };
-  if (t === 'kinds') { for (const [k, l] of [['tri', '纯三角'], ['square', '纯方格'], ['rhombi', '合并菱形（含三角）'], ['mixed', '混合']]) add(l, sub === k, () => (sub = k)); add('对偶图', showDual, () => (showDual = !showDual)); }
+  if (t === 'kinds') { for (const [k, l] of [['tri', '纯三角'], ['square', '纯方格'], ['rhombi', '合并菱形（含三角）'], ['mixed', '混合']]) add(l, sub === k, () => (sub = k)); add('对偶图', showDual, () => (showDual = !showDual)); add('只画格线', wire, () => (wire = !wire)); add('四边格切对角', tri2, () => (tri2 = !tri2)); }
   if (t === 'infinite') {
     // 1151137783785771008：片中区域是一块块往外长的（1 块 → 7 块 → 19 块），先给定环数再比模式
     for (const k of [0, 1, 2]) add(k === 0 ? '1 块' : `环 ${k}（${1 + 3 * k * (k + 1)} 块）`, infRings === k, () => { if (infRings !== k) { infRings = k; inf = null; } });
@@ -136,7 +143,11 @@ function drawGrid(g, hl = new Map()) {
   V = view(boundsOf(g.verts.map((v) => [v.x, v.z])));
   for (const c of g.cells) {
     const fill = hl.get(c.id) || (c.n === 3 ? '#e9d9b0' : '#cfe2d6');
-    poly(c.pts.map((p) => V.P(p.x, p.z)), fill, '#2a3238', 1.2);
+    if (!wire) { poly(c.pts.map((p) => V.P(p.x, p.z)), fill, '#2a3238', 1.2); continue; }
+    // wire：只画线段（原片底图 = 深底白线）；tri2：四边格沿 0–2 对角线切两个三角
+    const P = c.pts.map((p) => V.P(p.x, p.z));
+    if (tri2 && c.n >= 4) { for (let i = 1; i < P.length - 1; i++) poly([P[0], P[i], P[i + 1]], null, '#dfe7e4', 1.3); }
+    else poly(P, null, '#dfe7e4', 1.3);
   }
   if (showDual && tab === 'kinds') {
     ctx.strokeStyle = 'rgba(214,80,60,.85)'; ctx.lineWidth = 1.2;
@@ -270,7 +281,25 @@ function startAtlas(){if(atlasState.timer)return;atlasState.timer=setInterval(()
 function stopAtlas(){clearInterval(atlasState.timer);atlasState.timer=null;}
 addEventListener('pagehide',stopAtlas);
 resize(); setTab(new URLSearchParams(location.search).get('t') || 'kinds');
-window.gridLab = { get infiniteReview(){return inf?{mode:infMode,report:verify(inf,infMode),barycentric:{...inf.barycentricStats},patches:inf.patches.length,clusters:inf.clusters.length,origin:infOrigin.slice(),seam:infSeam}:null}, panInfinite, selectLineCell(id){if(tab!=='lines')setTab('lines');const g=get('townscaper');picked=g.cells.find(c=>c.id===id);draw();}, setTab, atlasStep, resetAtlas, pauseAtlas(){atlasState.running=false;stopAtlas();if(tab==='atlas')setTab('atlas')}, get selectedGrid(){return tab==='kinds'?get(sub):null}, get gridKind(){return sub}, get atlas(){return atlasState.atlas}, get atlasLive(){return atlasState.live.slice()} };
+/** 底图几何台账（1447496205282549761）：格型 / 顶点共用 / Euler / 格面积离散度 / 三角化口径。
+ *  三角化口径 = 每个 n≥4 的格沿一条对角线切两片（diagonals 个对角、tris 个三角）。 */
+function kindsReport(kind = sub) {
+  const g = get(kind);
+  const byV = new Map(), byE = new Set(), sides = {};
+  for (const c of g.cells) { sides[c.n] = (sides[c.n] || 0) + 1; for (const p of c.pts) byV.set(p.id, (byV.get(p.id) || 0) + 1); }
+  for (const c of g.cells) for (let i = 0; i < c.n; i++) { const a = c.pts[i].id, b = c.pts[(i + 1) % c.n].id; byE.add(a < b ? a + ':' + b : b + ':' + a); }
+  const share = {}; for (const [, k] of byV) share[k] = (share[k] || 0) + 1;
+  const areas = g.cells.map((c) => { let a = 0; for (let i = 0; i < c.n; i++) { const p = c.pts[i], q2 = c.pts[(i + 1) % c.n]; a += p.x * q2.z - q2.x * p.z; } return Math.abs(a) / 2; });
+  const mean = areas.reduce((s, x) => s + x, 0) / areas.length;
+  const sd = Math.sqrt(areas.reduce((s, x) => s + (x - mean) ** 2, 0) / areas.length);
+  const forked = g.cells.filter((c) => c.n >= 4).length;
+  return {
+    kind, cells: g.cells.length, sides, verts: byV.size, edges: byE.size, euler: byV.size - byE.size + g.cells.length, vertexSharing: share,
+    areaMean: +mean.toFixed(4), areaCv: +(sd / mean).toFixed(4), areaMin: +Math.min(...areas).toFixed(4), areaMax: +Math.max(...areas).toFixed(4),
+    quads: forked, triangles: g.cells.length - forked, diagonals: tri2 ? forked : 0, tris: g.cells.length - forked + (tri2 ? forked * 2 : 0), wire, tri2,
+  };
+}
+window.gridLab = { get kindsReport() { return kindsReport(sub); }, reportOf: kindsReport, setWire(v) { wire = !!v; draw(); }, setTri2(v) { tri2 = !!v; draw(); }, get viewMode() { return { wire, tri2, kind: sub }; }, get infiniteReview(){return inf?{mode:infMode,report:verify(inf,infMode),barycentric:{...inf.barycentricStats},patches:inf.patches.length,clusters:inf.clusters.length,origin:infOrigin.slice(),seam:infSeam}:null}, panInfinite, selectLineCell(id){if(tab!=='lines')setTab('lines');const g=get('townscaper');picked=g.cells.find(c=>c.id===id);draw();}, setTab, atlasStep, resetAtlas, pauseAtlas(){atlasState.running=false;stopAtlas();if(tab==='atlas')setTab('atlas')}, get selectedGrid(){return tab==='kinds'?get(sub):null}, get gridKind(){return sub}, get atlas(){return atlasState.atlas}, get atlasLive(){return atlasState.live.slice()} };
 </script>
 </body>
 </html>

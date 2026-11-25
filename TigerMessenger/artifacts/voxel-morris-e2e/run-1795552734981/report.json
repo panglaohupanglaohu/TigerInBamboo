@@ -1,0 +1,15 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "mount": "ok",
+  "state": {
+   "cells": 10132,
+   "radius": 28,
+   "allowed": 6111
+  }
+ },
+ "pass": false,
+ "failure": "page.evaluate: Error: PipeLineEngine：build.assembly.kind 必须是有限数值\n    at w.onmessage (eval at evaluate (:311:30), <anonymous>:5:109)\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/voxel-caps-browser.mjs:62:26"
+}

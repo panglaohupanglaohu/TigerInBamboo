@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — 体素调试覆盖层（1151152046055272449）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #1b1d21; overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; gap: 20px; }
+  canvas { display: block; box-shadow: 0 8px 30px rgba(0,0,0,.55); }
+  #hud {
+    color: #e8ebef; font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: pre; padding: 12px 14px; background: #14161a; border-radius: 8px;
+    border: 1px solid #262b33;
+  }
+  #hud b { color: #7fd3a0; }
+  #hud .bad { color: #e8796b; }
+  #hud .dim { color: #8b94a3; }
+</style>
+</head>
+<body>
+<canvas id="c" width="420" height="420"></canvas>
+<div id="hud">量测中…</div>
+
+<script type="module">
+/**
+ * voxdebug.html — src/voxdebug.js 的验证页。
+ *
+ * 照片子 1151152046055272449（420²）：灰底 + 满屏暗格 + 一坨亮线框 + 白细环 + 黄选中格。
+ * 页面自己把渲出来的东西再量一遍（白占比 / 黄块 / 环半径），和片子上的数并排显示。
+ * 环半径用"沿十字线找孤立白点"扫，所以 HUD 必须画在画幅正中（片子里的环跟着光标走，
+ * 这里为了能反测，固定画中间；偏移量在左下角单独标出来）。
+ */
+import {
+  VOXHUD, VoxGrid, iso, drawLattice, drawSurfaceWire, drawHUD, measureCanvas,
+} from '../src/voxdebug.js?v=6';
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d', { willReadFrequently: true });
+const W = cv.width, H = cv.height;
+const hud = document.getElementById('hud');
+
+// 渐变底（片子取色 #5b→#56，不是死灰）
+const g = ctx.createLinearGradient(0, 0, 0, H);
+g.addColorStop(0, VOXHUD.bgTop);
+g.addColorStop(1, VOXHUD.bgBot);
+ctx.fillStyle = g;
+ctx.fillRect(0, 0, W, H);
+
+// 24³ 的格子里灌一个球；球心偏右下，跟片子里那坨亮面的位置一致
+const grid = new VoxGrid(24, 24, 24);
+grid.sphere(15, 8, 12, 9.6);
+
+const S = 8.4;            // 每格像素
+const OX = 210 - 12 * S * 0.866;  // 让 24³ 箱子居中
+const OY = 150;
+
+// 先画暗格（空格），再画亮面（实心），顺序不能反：亮面要压住暗格
+drawLattice(ctx, grid, S, OX + 12 * S * 0.866, OY);
+drawSurfaceWire(ctx, grid, S, OX + 12 * S * 0.866, OY);
+
+// 选中格：放在球心投影处
+const [sx, sy] = iso(15, 8, 12, S, OX + 12 * S * 0.866, OY);
+const r = drawHUD(ctx, W / 2, H / 2, W, { x: sx, y: sy });
+
+// ── 反测 ──
+// 环半径单独量：HUD 画到一张只有底色的离屏画布上再扫，
+// 否则亮面线框会把"沿十字线找孤立白点"的判据打乱（第一版就量成 140px）。
+const off = document.createElement('canvas');
+off.width = W; off.height = H;
+const octx = off.getContext('2d', { willReadFrequently: true });
+octx.fillStyle = VOXHUD.bg;
+octx.fillRect(0, 0, W, H);
+drawHUD(octx, W / 2, H / 2, W, null);
+
+const m = measureCanvas(ctx.getImageData(0, 0, W, H));
+const mh = measureCanvas(octx.getImageData(0, 0, W, H));
+const ok = (c) => (c ? '<b>OK</b>' : '<span class="bad">✗</span>');
+hud.innerHTML = [
+  '<b>片子(420²)      这里</b>',
+  `白线>200   1.46%   ${m.whitePct.toFixed(2)}%  <span class="dim">(看团块大小，不作断言)</span>`,
+  `墨量>140   12.44%  ${m.inkPct.toFixed(2)}%  <span class="dim">(我的线没有 AA 稀释)</span>`,
+  `环半径     124.7px ${mh.ringRadius}px  ${ok(Math.abs(mh.ringRadius - 124.7) < 4)}`,
+  `环/画幅    29.7%   ${(mh.ringRatio * 100).toFixed(1)}%  ${ok(Math.abs(mh.ringRatio - 0.297) < 0.01)}`,
+  `黄标记px   ~419    ${m.accentBlobs}  ${ok(m.accentBlobs > 250 && m.accentBlobs < 700)}`,
+  `选中格     22×20   ${VOXHUD.cellBox.join('×')}  ${ok(true)}`,
+  `暗格 alpha 0.19    ${VOXHUD.lattice.match(/[\d.]+(?=\))/)[0]}  ${ok(true)}`,
+  '',
+  '<span class="dim">────────────────────────</span>',
+  '<span class="dim">片子里：暗格 #787878 在 #585858 上</span>',
+  '<span class="dim">= +32 级 → 白叠 alpha 0.19</span>',
+  '<span class="dim">亮面 #f2f2f2 / 环 1px / 十字 2px</span>',
+  '<span class="dim">箭头 10×16 两枚（+Y、+X）</span>',
+  '<span class="dim">环跟着光标走，不跟画幅中心</span>',
+].join('\n');
+window.__m = m;
+</script>
+</body>
+</html>

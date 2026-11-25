@@ -1,0 +1,23 @@
+{
+ "capability": "object.path-spacing",
+ "line": "tools",
+ "schemaVersion": 1,
+ "pass": true,
+ "basis": "本能力在固定布局考场（object.json）真实跑过 match→run，成绩见共享表——判定规则写在表头，不手改。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/arena/object.json#object.path-spacing",
+ "runner": "TigerMessenger/tools/refactor/record-object-arena.mjs（实算）",
+ "test": "TigerMessenger/tests/object-gscene-browser.mjs",
+ "arena": {
+  "fixture": "10 物件布局"
+ },
+ "result": {
+  "verdict": "擂过",
+  "targets": 2,
+  "edits": 2,
+  "maxDelta": 0.0078,
+  "deterministic": true,
+  "lockedTouched": [],
+  "ms": 1
+ },
+ "recordedAt": "2026-11-25"
+}

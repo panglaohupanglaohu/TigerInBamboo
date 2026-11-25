@@ -1,0 +1,52 @@
+{
+ "capability": "light.bounce",
+ "verdict": "diff-registered",
+ "line": "light",
+ "generatedAt": "2026-11-23T18:26:01.288Z",
+ "generator": "TigerMessenger/tools/refactor/lightlife-parity.mjs",
+ "basis": "本能力在光影与生命管线里真实调用 townscaper-web/REACodeRefactoring/src/light/voxel-light.js（meta.modules）；这份是它对原版 townscaper-web/REACode/src/lighting.js 的对照登记，完整内容见 lighting.json。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/parity/lighting.json",
+ "sameCriteriaEqual": true,
+ "original": [
+  "townscaper-web/REACode/src/lighting.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/light/voxel-light.js",
+  "townscaper-web/REACodeRefactoring/src/light/bake.js"
+ ],
+ "inputs": {
+  "n": 12,
+  "step": 1,
+  "levelHeight": 0.5,
+  "seed": 5,
+  "res": 0.09,
+  "pad": 0.9,
+  "blurRadius": 4,
+  "blurPasses": 2,
+  "bounce": {
+   "passes": 3,
+   "gain": 0.9,
+   "stride": 3,
+   "airGain": 0.25
+  }
+ },
+ "gaps": 0,
+ "diffs": [
+  {
+   "id": "lighting.library.vertexAO",
+   "metric": "vertexColor",
+   "kind": "design",
+   "original": 0.571643,
+   "refactored": 0.571746,
+   "note": "重构库 light/bake.js 与原版单跳 AO 不逐值相同（最大差 0.03587，平均差 0.002315，相关 0.999667）：bake.js 包围盒外扩 0.8（原版 0.9）、扫描线栅格化（原版逐像素点在格内测试）、只在每层有内容的窗口里模糊、第 0 层不采样；数学同一套（1 − 0.62·占用 + 0.42 反弹）。"
+  },
+  {
+   "id": "lighting.library.multiBounce",
+   "metric": "multiBounce",
+   "kind": "design",
+   "original": "diffuseBounce",
+   "refactored": "voxel-light.js diffuseBounce（本轮嫁接）",
+   "note": "重构库原有的 bake.js 没有多跳扩散；本轮嫁接到 light/voxel-light.js。多跳相对单跳平均改了 0.041229（最大 0.189169）。"
+  }
+ ]
+}

@@ -1,0 +1,7 @@
+{
+  "errors": [],
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/capability-evolution-20261114/both-1795568756132",
+  "sourceFingerprint": "sha256:01619b6c46ac4b008cab6ef3862cd2671281b95b6f1f7416fdc57cc2fc1125aa",
+  "pass": false,
+  "failure": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(await page.locator('[data-completion-priority=\"高\"]').count()>=4)\n\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/capability-evolution-browser.mjs:11:9"
+}

@@ -1,0 +1,56 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "planet": {
+   "ok": true,
+   "layers": {
+    "terrain": false,
+    "water": true,
+    "clouds": true,
+    "version": "v9"
+   },
+   "recipe": {
+    "seed": 1,
+    "radius": 160,
+    "landformChain": true,
+    "subdivision": 1,
+    "chartLimit": 0,
+    "resolution": 3,
+    "seaLevel": 0
+   }
+  },
+  "recipePreview": {
+   "seed": 7,
+   "chartLimit": 8,
+   "resolution": 32,
+   "seaLevel": 0.5
+  },
+  "previewApplied": {
+   "preview": {
+    "seed": 7,
+    "chartLimit": 8,
+    "resolution": 32,
+    "seaLevel": 0.5
+   },
+   "recipe": {
+    "seed": 7,
+    "radius": 160,
+    "landformChain": true,
+    "subdivision": 1,
+    "chartLimit": 8,
+    "resolution": 32,
+    "seaLevel": 0.5
+   },
+   "layers": {
+    "terrain": false,
+    "water": true,
+    "clouds": true,
+    "version": "v9"
+   }
+  }
+ },
+ "pass": false,
+ "failure": "frame.waitForFunction: Target crashed \n    at waitGame (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/planet-caps-browser.mjs:50:11)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/planet-caps-browser.mjs:92:11"
+}

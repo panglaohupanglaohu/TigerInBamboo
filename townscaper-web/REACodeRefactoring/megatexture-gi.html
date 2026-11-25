@@ -13,7 +13,7 @@
 <script type="module">
 import { sdfImage, lightVolumeImage, megaTextureImage } from './src/light/megatexture-gi-debug.js';
 const $ = (s) => document.querySelector(s), frame = $('#scene');
-let view, gi, stage = null;
+let view, gi, stage = null, playToken = 0;
 const put = (id, img) => { const c = $(id); c.width = img.w; c.height = img.h; c.getContext('2d').putImageData(new ImageData(img.data, img.w, img.h), 0, 0); };
 function draw(snap) {
   const r = view.megaGI; if (!r) return;
@@ -36,12 +36,18 @@ frame.onload = async () => {
 };
 function applySun() { const az = +$('#az').value; view.setSunPosition(az, 42); clearTimeout(view.giTimer); gi.options({ bounces: +$('#bounces').value, keepSnapshots: true }); draw(); report(); }
 async function play() {
+  // 第 136 轮：慢放序列必须可被「结束慢放」中断 —— 旧版没有取消令牌，点结束后循环仍每 900ms 覆写 stage。
+  const token = ++playToken;
   const r = view.megaGI; if (!r.snapshots.length) { gi.options({ keepSnapshots: true }); }
   const n = view.megaGI.snapshots.length;
-  for (let i = 0; i < n; i++) { stage = gi.showStage(i); draw(view.megaGI.snapshots[i]); report(`慢放：${stage.stage}${stage.bounce ? ' ' + stage.bounce : ''}（${i + 1}/${n}）`); await new Promise((res) => setTimeout(res, 900)); }
+  for (let i = 0; i < n; i++) {
+    if (token !== playToken) return;
+    stage = gi.showStage(i); draw(view.megaGI.snapshots[i]); report(`慢放：${stage.stage}${stage.bounce ? ' ' + stage.bounce : ''}（${i + 1}/${n}）`);
+    await new Promise((res) => setTimeout(res, 900));
+  }
 }
 window.megaPage = { get view() { return view; }, get gi() { return gi; }, draw, applySun, show: (i) => { stage = gi.showStage(i); draw(view.megaGI.snapshots[i]); report(`慢放：${stage.stage}${stage.bounce ? ' ' + stage.bounce : ''}`); return stage; } };
 $('#az').onchange = applySun; $('#bake').onclick = applySun; $('#bounces').onchange = applySun; $('#megaField').onchange = () => draw();
-$('#play').onclick = play; $('#end').onclick = () => { gi.endStages(); stage = null; draw(); report(); };
+$('#play').onclick = play; $('#end').onclick = () => { playToken++; gi.endStages(); stage = null; draw(); report(); };
 $('#grid').onchange = load; load();
 </script></html>

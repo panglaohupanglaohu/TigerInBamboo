@@ -1,0 +1,350 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "① 体检项真的在读数（陆地/主岛占比/层数/崖边/台阶/石柱/洞穴）",
+      "pass": true,
+      "detail": "main 1.000/层 9/崖 203/阶 445/石柱 2/洞穴 9 | main 1.000/层 9/崖 229/阶 469/石柱 4/洞穴 8 | main 1.000/层 9/崖 194/阶 467/石柱 1/洞穴 8 | main 1.000/层 8/崖 171/阶 364/石柱 1/洞穴 10"
+    },
+    {
+      "name": "② 「consistently」：默认开体检时连播 4 座**每座**都 cool",
+      "pass": true,
+      "detail": "seed12658:cool=true tries=2 / seed2:cool=true tries=1 / seed3:cool=true tries=1 / seed36415:cool=true tries=2"
+    },
+    {
+      "name": "② 派生种子只在必要时介入（tries ≥ 1，且至少有几座一次过）",
+      "pass": true,
+      "detail": "tries=2,1,1,2"
+    },
+    {
+      "name": "④ 海岸轮廓线画出来了",
+      "pass": true,
+      "detail": "shoreSegments=152,180,138,152"
+    },
+    {
+      "name": "③ 关掉体检后 8 个种子里确有不合格岛（体检/重生不是摆设）",
+      "pass": true,
+      "detail": "不合格 2/8 → seed1:landFrac,mainFrac,cliffs | seed4:mainFrac"
+    },
+    {
+      "name": "⑤ 阶段真的换画面（sea 只剩海面 / shore 多出轮廓线 / silhouette 纯黑覆盖材质 / full 岛体与网格全回来）",
+      "pass": true,
+      "detail": "可见对象 sea 5 / shore 6（+1=轮廓线）/ silhouette 18(override true) / full 22；网格数 sea 1 → full 6"
+    },
+    {
+      "name": "⑥ 0 页面/控制台错误",
+      "pass": true,
+      "detail": "none"
+    }
+  ],
+  "islands": [
+    {
+      "grid": "quad",
+      "seed": 12658,
+      "asked": 1,
+      "tries": 2,
+      "pruned": 15,
+      "shore": 152,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 760,
+        "landFrac": 0.302066772655008,
+        "mainFrac": 1,
+        "islets": 0,
+        "levels": 9,
+        "maxLevel": 9,
+        "stacks": 2,
+        "caves": 9,
+        "cliffEdges": 203,
+        "stepEdges": 445,
+        "riverCells": 95,
+        "lakes": 18
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 2,
+      "asked": 2,
+      "tries": 1,
+      "pruned": 10,
+      "shore": 180,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 845,
+        "landFrac": 0.33585055643879175,
+        "mainFrac": 1,
+        "islets": 0,
+        "levels": 9,
+        "maxLevel": 9,
+        "stacks": 4,
+        "caves": 8,
+        "cliffEdges": 229,
+        "stepEdges": 469,
+        "riverCells": 101,
+        "lakes": 11
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 3,
+      "asked": 3,
+      "tries": 1,
+      "pruned": 10,
+      "shore": 138,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 818,
+        "landFrac": 0.3251192368839428,
+        "mainFrac": 1,
+        "islets": 0,
+        "levels": 9,
+        "maxLevel": 9,
+        "stacks": 1,
+        "caves": 8,
+        "cliffEdges": 194,
+        "stepEdges": 467,
+        "riverCells": 108,
+        "lakes": 16
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 36415,
+      "asked": 4,
+      "tries": 2,
+      "pruned": 10,
+      "shore": 152,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 780,
+        "landFrac": 0.31001589825119236,
+        "mainFrac": 1,
+        "islets": 0,
+        "levels": 8,
+        "maxLevel": 8,
+        "stacks": 1,
+        "caves": 10,
+        "cliffEdges": 171,
+        "stepEdges": 364,
+        "riverCells": 91,
+        "lakes": 10
+      }
+    }
+  ],
+  "raw": [
+    {
+      "grid": "quad",
+      "seed": 1,
+      "asked": 1,
+      "tries": 1,
+      "pruned": 0,
+      "shore": 244,
+      "cool": false,
+      "failed": [
+        "landFrac",
+        "mainFrac",
+        "cliffs"
+      ],
+      "report": {
+        "cells": 2516,
+        "land": 397,
+        "landFrac": 0.15779014308426073,
+        "mainFrac": 0.7329974811083123,
+        "islets": 3,
+        "levels": 6,
+        "maxLevel": 6,
+        "stacks": 0,
+        "caves": 5,
+        "cliffEdges": 19,
+        "stepEdges": 218,
+        "riverCells": 22,
+        "lakes": 0
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 2,
+      "asked": 2,
+      "tries": 1,
+      "pruned": 0,
+      "shore": 202,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 855,
+        "landFrac": 0.33982511923688397,
+        "mainFrac": 0.9883040935672515,
+        "islets": 2,
+        "levels": 9,
+        "maxLevel": 9,
+        "stacks": 5,
+        "caves": 9,
+        "cliffEdges": 236,
+        "stepEdges": 470,
+        "riverCells": 101,
+        "lakes": 11
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 3,
+      "asked": 3,
+      "tries": 1,
+      "pruned": 0,
+      "shore": 162,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 828,
+        "landFrac": 0.32909379968203495,
+        "mainFrac": 0.9879227053140096,
+        "islets": 2,
+        "levels": 9,
+        "maxLevel": 9,
+        "stacks": 1,
+        "caves": 14,
+        "cliffEdges": 196,
+        "stepEdges": 467,
+        "riverCells": 108,
+        "lakes": 16
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 4,
+      "asked": 4,
+      "tries": 1,
+      "pruned": 0,
+      "shore": 242,
+      "cool": false,
+      "failed": [
+        "mainFrac"
+      ],
+      "report": {
+        "cells": 2516,
+        "land": 534,
+        "landFrac": 0.212241653418124,
+        "mainFrac": 0.8408239700374532,
+        "islets": 1,
+        "levels": 6,
+        "maxLevel": 6,
+        "stacks": 0,
+        "caves": 9,
+        "cliffEdges": 73,
+        "stepEdges": 241,
+        "riverCells": 57,
+        "lakes": 1
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 5,
+      "asked": 5,
+      "tries": 1,
+      "pruned": 0,
+      "shore": 166,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 850,
+        "landFrac": 0.33783783783783783,
+        "mainFrac": 0.9882352941176471,
+        "islets": 2,
+        "levels": 10,
+        "maxLevel": 10,
+        "stacks": 3,
+        "caves": 13,
+        "cliffEdges": 183,
+        "stepEdges": 531,
+        "riverCells": 124,
+        "lakes": 10
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 6,
+      "asked": 6,
+      "tries": 1,
+      "pruned": 0,
+      "shore": 224,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 753,
+        "landFrac": 0.2992845786963434,
+        "mainFrac": 0.9867197875166003,
+        "islets": 2,
+        "levels": 9,
+        "maxLevel": 10,
+        "stacks": 4,
+        "caves": 12,
+        "cliffEdges": 154,
+        "stepEdges": 345,
+        "riverCells": 43,
+        "lakes": 10
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 7,
+      "asked": 7,
+      "tries": 1,
+      "pruned": 0,
+      "shore": 158,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 737,
+        "landFrac": 0.29292527821939585,
+        "mainFrac": 0.9932157394843962,
+        "islets": 1,
+        "levels": 10,
+        "maxLevel": 10,
+        "stacks": 0,
+        "caves": 11,
+        "cliffEdges": 236,
+        "stepEdges": 354,
+        "riverCells": 58,
+        "lakes": 5
+      }
+    },
+    {
+      "grid": "quad",
+      "seed": 8,
+      "asked": 8,
+      "tries": 1,
+      "pruned": 0,
+      "shore": 158,
+      "cool": true,
+      "failed": [],
+      "report": {
+        "cells": 2516,
+        "land": 693,
+        "landFrac": 0.27543720190779014,
+        "mainFrac": 0.9927849927849928,
+        "islets": 1,
+        "levels": 8,
+        "maxLevel": 8,
+        "stacks": 5,
+        "caves": 10,
+        "cliffEdges": 140,
+        "stepEdges": 442,
+        "riverCells": 113,
+        "lakes": 7
+      }
+    }
+  ]
+}

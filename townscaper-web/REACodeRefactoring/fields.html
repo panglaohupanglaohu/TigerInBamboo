@@ -1,56 +1,268 @@
-<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>格块田纹 · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:12px 22px}iframe{width:100%;height:76vh;border:0}a{color:#26758a}label{margin-right:18px}</style><header><b>共享World地形 · 格块田纹</b> · <a href="pipeline.html" target="_top">管线</a> · <a href="textures.html">像素采样实验</a> · <a href="artifacts/coverage/texture-fields-review.md">逐帧证据</a><p>1714613599035863191：条纹沿格块改变方向，四次切换岛屿并显示生成过程。本地用格块坐标与导数抗锯齿曲线近似；尚无原作手绘田纹atlas/投射patch。</p><label>网格<select id="grid"><option value="mixed">三角＋四边</option><option value="quad">四边形</option></select></label><label><input id="show" type="checkbox" checked>地形田纹（关闭可对照）</label><label><input id="plots" type="checkbox">田块拼贴（r56 C08：格内不规则地块，各自色调/垄向/垄沟描边）</label><span id="status">加载…</span></header><iframe id="scene" title="共享地形田纹"></iframe><section id="plots-wrap"><h2>田块耕纹主轴 · 1798310423554658732</h2><p>左：同一地块的格共用一条主轴，垄线是中线对折的人字（本模块 <code>src/core/field-plots.js</code>）。右：照旧逐格 <code>hash01(c.id*19+5)</code> 取角（现行 <code>src/terrain/terrainmesh.js:143</code>）——同一块地里垄沟互相顶死。灰黄一圈是田埂格。</p><label>种子<input id="seed" type="number" min="1" max="99" value="5" style="width:56px"></label><span id="plotsStats">…</span><br><canvas id="plots" width="836" height="396" style="max-width:100%;border-radius:8px;background:#e7efe6"></canvas></section><script type="module">
-const $=s=>document.querySelector(s);let api;function apply(){if(!api)return;api.view.setDebug('fields',$('#show').checked);if($('#show').checked&&$('#plots').checked)api.view.fieldOn.value=2;$('#status').textContent=`World ${api.world.version} · 顶面专用属性，不修改存档`;}function load(){api=null;window.fieldReview=null;$('#scene').src='index.html?scene=terrain&grid='+$('#grid').value+'&on=fields'}$('#scene').onload=()=>{const ready=()=>{const r=$('#scene').contentWindow.rea;if(!r?.view?.worldMesh.geometry.attributes.aField?.count){setTimeout(ready,100);return}api=r;window.fieldReview={api};apply()};ready()};$('#grid').onchange=load;$('#show').oninput=apply;$('#plots').checked=new URLSearchParams(location.search).get('plots')==='1';$('#plots').oninput=apply;load();
-
-// ── 田块耕纹对照画布（1798310423554658732）─────────────────────────────
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>格块田纹 · REACode重构版</title><link rel="icon" href="data:,"><style>body{margin:0;background:#edf4f0;color:#20343c;font:14px/1.6 system-ui}header{padding:12px 22px}iframe{width:100%;height:76vh;border:0}a{color:#26758a}label{margin-right:18px}</style>
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<header><b>共享World地形 · 格块田纹</b> · <a href="pipeline.html" target="_top">管线</a> · <a href="textures.html">像素采样实验</a> · <a href="artifacts/coverage/1714613599035863191-review-r158.md">逐帧证据</a> · <a href="index.html?scene=terrain&grid=mixed&shade=fieldplots" target="_top">主场景实地（?shade=fieldplots）</a> · <a href="artifacts/coverage/1798310423554658732-review-r212.md">r212 逐帧证据</a>
+<p>1714613599035863191：条纹沿格块改变方向，四次换岛时依次显示「剪影黑 → 无光贴图 → 光照 → 田纹」。本地用格块坐标与导数抗锯齿曲线近似；原片文本里的「手绘纹样 / 人工与自然混布」是作者的<b>后续打算</b>（"In the end I probably want…"），片内没有出现。</p>
+<label>网格<select id="grid"><option value="mixed">三角＋四边</option><option value="quad">四边形</option></select></label>
+<label>显示阶段<select id="stage"><option value="fields">光照＋田纹</option><option value="lit">光照</option><option value="unlit">无光贴图</option><option value="shape">剪影（纯黑）</option></select></label>
+<label><input id="show" type="checkbox" checked>地形田纹（关闭可对照）</label>
+<label><input id="plotsOn" type="checkbox">田块拼贴（r56 C08：格内不规则地块，各自色调/垄向/垄沟描边）</label>
+<label><input id="bandsOn" type="checkbox">宽软带（r159：片中那种 1:1 占空比、软边沿的带，取代 0.18 细线）</label>
+<label><input id="vegOn" type="checkbox" checked>植被/瀑布/云/船（关掉＝片中那种裸顶面）</label>
+<span id="status">加载…</span></header><iframe id="scene" title="共享地形田纹"></iframe><section id="plots-wrap"><h2>田块耕纹主轴 · 1798310423554658732</h2><p>左：同一地块的格共用一条主轴，垄线是中线对折的人字（本模块 <code>src/core/field-plots.js</code>）。右：照旧逐格 <code>hash01(c.id*19+5)</code> 取角（现行 <code>src/terrain/terrainmesh.js:143</code>）——同一块地里垄沟互相顶死。灰黄一圈是田埂格。<br>r212 起同一套地块/主轴/人字也接进了 View 主材质（<code>src/world/field-plot-map.js</code> 烘世界 XZ 浮点图 + <code>?shade=fieldplots</code>，页头第一个链接）——本页画布是图集口径，主场景那张才是实地。</p><label>种子<input id="seed" type="number" min="1" max="99" value="5" style="width:56px"></label><span id="plotsStats">…</span><br><canvas id="plots" width="836" height="396" style="max-width:100%;border-radius:8px;background:#e7efe6"></canvas></section><script type="module">
+/* 1714613599035863191 · 抽象田野贴图
+ * 片内可数的四件事，本页都能上台：
+ *   ① 逐格方向：每个裸露岩石顶面有自己的「田纹坐标系」（aField.xy = 该格旋转后的世界 XZ），
+ *      所以条纹在格边改向 —— 这就是原文「they show the game tiles quite clearly」的机制。
+ *   ② 四次换岛时依次出现「纯黑剪影 → 无光贴图 → 光照 → 田纹」，共 4 段（0135/0258/0474/0571 前后空屏）。
+ *   ③ 条纹是等间距细线（非手绘），间距不随格大小变。
+ *   ④ r56 C08 的田块拼贴（uFields=2）把「格内再切地块」那一层也放在同一格坐标系里。
+ * 本页只读共享 World：不改 World、不改几何，只切 uniform 与材质引用。 */
+import * as THREE from 'three';
 import { buildSquareGrid } from './src/core/grid.js';
 import { partitionPlots, plotUV, mulberry32, plotBorderCells } from './src/core/field-plots.js';
-const R=5, N=R*2+1, PW=396, PH=396, GAP=44, Wd=2*PW+GAP;
-const cvs=$('#plots'), ctx=cvs.getContext('2d');
-const grid=buildSquareGrid({radius:R});
-const cells=grid.cells, byId=new Map(cells.map(c=>[c.id,c]));
-const nb=c=>c.edgeNeighbors.filter(i=>i>=0).map(i=>byId.get(i));
-const cellAt=(x,z)=>{const ix=Math.round(x+R), iz=Math.round(z+R);return (ix<0||iz<0||ix>=N||iz>=N)?null:byId.get(iz*N+ix)};
-const dirt=[201,188,152];
-function draw(){
-  const seed=Math.max(1,Math.min(99,+$('#seed').value||5));
-  const {plotOf,plots}=partitionPlots({cells,neighbors:nb,seed,joinChance:.72,maxCells:10});
-  const borders=plotBorderCells({cells,neighbors:nb,plotOf});
-  const img=ctx.createImageData(Wd,PH), d=img.data;
-  const skew=.3, width=.18;
-  for(let py=0;py<PH;py++)for(let px=0;px<Wd;px++){
-    const o=(py*Wd+px)*4;
-    const panel=px<PW?0:(px>PW+GAP-1?1:-1);
-    if(panel<0){d[o]=d[o+1]=d[o+2]=231;d[o+3]=255;continue}
-    const lx=(panel?px-PW-GAP:px), wx=lx/PW*(N+1)-(N+1)/2, wz=py/PH*(N+1)-(N+1)/2;
-    const cell=cellAt(wx,wz);
-    if(!cell){d[o]=231;d[o+1]=239;d[o+2]=230;d[o+3]=255;continue}
-    let row;
-    if(!panel){const p=plotOf.get(cell.id), pl=plots[p]; const {u,v}=plotUV(pl,wx,wz); row=v-skew*Math.abs(u);}
-    else {const ang=mulberry32(cell.id*19+5)()*Math.PI, u=(wx-cell.cx)*Math.cos(ang)+(wz-cell.cz)*Math.sin(ang), v=-(wx-cell.cx)*Math.sin(ang)+(wz-cell.cz)*Math.cos(ang); row=v-skew*Math.abs(u);}
-    const band=Math.floor(row/width), t=row/width-band;
-    const ridge=.5+.5*Math.cos(Math.PI*2*t);
-    let r=124+58*ridge, g=176+54*ridge, b=92+36*ridge;
-    // 田埂只在"对面是别的地块"的那几条边上画一圈细土带（约 0.09 格宽）
-    const ex=wx-cell.cx, ez=wz-cell.cz, me=plotOf.get(cell.id), T=.09;
-    if(Math.abs(ex)>.5-T||Math.abs(ez)>.5-T){
-      let dirtEdge=false;
-      if(.5-Math.abs(ex)<T){const nx=cellAt(wx+Math.sign(ex)*.62,wz); if(!nx||plotOf.get(nx.id)!==me) dirtEdge=true}
-      if(.5-Math.abs(ez)<T){const nz=cellAt(wx,wz+Math.sign(ez)*.62); if(!nz||plotOf.get(nz.id)!==me) dirtEdge=true}
-      if(dirtEdge){r=dirt[0];g=dirt[1];b=dirt[2]}
-    }
-    d[o]=r;d[o+1]=g;d[o+2]=b;d[o+3]=255;
-  }
-  ctx.putImageData(img,0,0);
-  ctx.strokeStyle='#20343c';ctx.lineWidth=1;ctx.strokeRect(.5,.5,PW-1,PH-1);ctx.strokeRect(PW+GAP+.5,.5,PW-1,PH-1);
-  // 统计：块内主轴差（应为 0）+ 异块主轴差中位数（应显著 > 0）
-  const diffs=[], seen=new Set();
-  for(const c of cells){const a=plotOf.get(c.id);for(const o of nb(c)){const b=plotOf.get(o.id);if(a===b)continue;const k=a<b?a+'|'+b:b+'|'+a;if(seen.has(k))continue;seen.add(k);let dd=Math.abs((plots[a].axis-plots[b].axis)*180/Math.PI)%180;if(dd>90)dd=180-dd;diffs.push(dd)}}
-  diffs.sort((x,y)=>x-y);
-  $('#plotsStats').textContent=`seed ${seed} · ${plots.length} 块 / ${cells.length} 格 · 异块边界 ${diffs.length} 条，主轴中位差 ${diffs.length?diffs[(diffs.length/2)|0].toFixed(1):0}° · 块内主轴差 0°`;
-  // 找一条"块内接缝"（两格同块且都不是田埂格），给验收脚本量左右栏在接缝上的连续性
-  let seam=null;
-  for(const c of cells){if(borders.has(c.id))continue;for(const o of nb(c)){if(o.cz!==c.cz)continue;if(plotOf.get(o.id)!==plotOf.get(c.id))continue;if(borders.has(o.id))continue;const mx=(c.cx+o.cx)/2, mz=c.cz;seam={px:(mx+(N+1)/2)/(N+1)*PW, py:(mz+(N+1)/2)/(N+1)*PH, cells:[c.id,o.id], plot:plotOf.get(c.id)};break}if(seam)break}
-  window.fieldPlotsDemo={ready:true,seed,plots:plots.length,cells:cells.length,borders:borders.size,borderAngles:diffs,seam,stats:{median:diffs.length?diffs[(diffs.length/2)|0]:0}};
+
+const $ = (s) => document.querySelector(s);
+const qs = new URLSearchParams(location.search);
+let api = null;
+let stage = qs.get('stage') || 'fields';
+let savedShape = null;
+
+/* r159 · 剪影阶段改成**整场景** overrideMaterial（片 0138 是整岛含树/灌丛一起黑掉）。
+ * r158 只换地形网格材质 → 树、灌丛、瀑布还是原色。做法照 islands-c09.html?stage=silhouette。
+ * 海面/反射先藏起来：原片剪影帧里没有海面，且这样「剪影 vs 光照」整帧差分圈出来的就是岛本身。 */
+function clearShape() {
+  if (!savedShape) return;
+  const v = api.view;
+  v.scene.overrideMaterial = savedShape.override;
+  for (const [o, vis] of savedShape.hidden) o.visible = vis;
+  savedShape = null;
 }
-$('#seed').oninput=draw;draw();
+
+function applyStage() {
+  if (!api) return;
+  const v = api.view;
+  clearShape();
+  const showFields = stage === 'fields' && $('#show').checked;
+  const vegOn = $('#vegOn').checked;
+  v.setDebug('textureonly', stage === 'unlit');
+  v.setDebug('fields', showFields);
+  v.setDebug('shrub', false);   // 片子里顶面是裸田纹，没有灌丛叠色（灌丛会把条纹压成绿斑）
+  // 片中顶面没有树/灌丛/瀑布/云/船：关掉这几层，顶面才读得出田纹
+  v.setDebug('vegetation', vegOn);
+  v.setDebug('waterfalls', vegOn);
+  v.setDebug('clouds', vegOn);
+  v.setDebug('boats', vegOn);
+  v.setDebug('birds', vegOn);   // 片中田纹帧没有飞鸟（白点会盖在顶面上）
+  v.fieldOn.value = showFields ? ($('#bandsOn').checked ? 3 : ($('#plotsOn').checked ? 2 : 1)) : 0;
+  if (stage === 'shape') {
+    // 片 0138–0144：整岛纯黑（含植被与瀑布），背景只剩底色
+    const sc = v.scene, black = new THREE.MeshBasicMaterial({ color: 0x000000 }), hidden = [];
+    for (const o of [v.waves, v.skirt, v.reflection, v.birds]) if (o && o.visible) { hidden.push([o, o.visible]); o.visible = false; }
+    // 半径 >100 的大网格（天空罩 / 接影平面）也被 overrideMaterial 刷黑会把整帧变黑块 → 先藏起来，
+    // 让 scene.background 的底色露出来（原片剪影帧就是「黑岛 + 一片平底色」）
+    sc.traverse((o) => {
+      if (!o.visible || !o.isMesh) return;
+      const g = o.geometry;
+      if (g && !g.boundingSphere) { try { g.computeBoundingSphere(); } catch (e) { return; } }
+      const R = g?.boundingSphere?.radius ?? 0;
+      if (R > 100) { hidden.push([o, o.visible]); o.visible = false; }
+    });
+    savedShape = { override: sc.overrideMaterial, hidden };
+    sc.overrideMaterial = black;
+  }
+  $('#status').textContent = `World ${api.world.version} · 阶段 ${stage} · uFields=${v.fieldOn.value}${vegOn ? '' : ' · 裸顶面'} · 顶面专用属性，不修改存档`;
+}
+
+function load() {
+  api = null; window.fieldReview = null;   // null 而不是删除：旧测试用 fieldReview?.api 轮询
+  $('#scene').src = 'index.html?scene=terrain&grid=' + $('#grid').value + '&on=';
+}
+
+$('#scene').onload = () => {
+  const ready = () => {
+    const r = $('#scene').contentWindow.rea;
+    if (!r?.view?.worldMesh?.geometry?.attributes?.aField?.count) { setTimeout(ready, 100); return; }
+    api = r; window.fieldReview = fieldReviewApi;
+    // 原片是「只有地形 + 田纹」的干净取景：本页把 HUD 面板与灌木叠层关掉，免得盖住/染色顶面
+    try {
+      const d = $('#scene').contentDocument;
+      d.querySelectorAll('#hud, #topright, #scenes, #palette, #tools, #coverage-progress, [data-progress-badge]').forEach((el) => { el.style.display = 'none'; });
+      d.querySelectorAll('body > div').forEach((el) => { if (!el.querySelector('canvas') && el.style.position === 'fixed') el.style.display = 'none'; });
+    } catch (e) { /* 跨文档失败就算了 */ }
+    applyStage();
+  };
+  ready();
+};
+
+/* ── 探针：把「格块读得出来」变成可量的数 ─────────────────────────────
+ * 逐三角用 aField 反解该格的田纹坐标系：u = x·c + z·s，v = −x·s + z·c，
+ * 由两个顶点的 (Δx,Δz) 与 (Δu,Δv) 解出 (c,s) → 该格条纹方向角。 */
+function report() {
+  const v = api.view, g = v.mesh.geometry;
+  const pos = g.getAttribute('position').array, fa = g.getAttribute('aField').array;
+  const groups = new Map();
+  let fieldTris = 0, otherTris = 0, bad = 0;
+  for (let t = 0; t < pos.length / 9; t++) {
+    const o = t * 9;
+    const z0 = fa[o + 2], z1 = fa[o + 5], z2 = fa[o + 8];
+    if (!(z0 > .5 && z0 < 1.5 && z1 > .5 && z1 < 1.5 && z2 > .5 && z2 < 1.5)) { otherTris++; continue; }
+    fieldTris++;
+    const dx = pos[o + 3] - pos[o], dz = pos[o + 5] - pos[o + 2];
+    const du = fa[o + 3] - fa[o], dv = fa[o + 4] - fa[o + 1];
+    const l2 = dx * dx + dz * dz;
+    if (!(l2 > 1e-10)) { bad++; continue; }
+    let c = (dx * du - dz * dv) / l2, s = (dz * du + dx * dv) / l2;
+    const ln = Math.hypot(c, s); c /= ln; s /= ln;
+    const ang = Math.atan2(s, c);
+    const key = Math.round(ang * 2000);
+    let gr = groups.get(key);
+    if (!gr) groups.set(key, (gr = { key, ang, tris: 0, x: 0, y: 0, z: 0 }));
+    gr.tris++;
+    gr.x += (pos[o] + pos[o + 3] + pos[o + 6]) / 3;
+    gr.y += (pos[o + 1] + pos[o + 4] + pos[o + 7]) / 3;
+    gr.z += (pos[o + 2] + pos[o + 5] + pos[o + 8]) / 3;
+  }
+  const tiles = [...groups.values()].map((t) => ({ ang: t.ang, deg: +(t.ang * 180 / Math.PI).toFixed(2), tris: t.tris, c: [t.x / t.tris, t.y / t.tris, t.z / t.tris] }))
+    .filter((t) => t.tris >= 2)
+    .map((t) => {
+      const p = project(t.c);
+      // 条纹周期：phase = u·5（u 为世界单位）→ 一个周期 = 0.2 世界单位
+      const ax = Math.cos(t.ang), az = Math.sin(t.ang);
+      const p2 = project([t.c[0] + .2 * ax, t.c[1], t.c[2] + .2 * az]);
+      return { ...t, screen: p, screen2: p2, periodPx: p && p2 ? +Math.hypot(p2[0] - p[0], p2[1] - p[1]).toFixed(2) : null, ux: [ax, az] };
+    });
+  // 方向分布（0..180° 十档，条纹方向无正负）
+  const hist = new Array(18).fill(0);
+  for (const t of tiles) hist[Math.min(17, Math.floor(((t.deg + 180) % 180) / 10))]++;
+  const degs = tiles.map((t) => (t.deg + 180) % 180).sort((a, b) => a - b);
+  return {
+    fieldTris, otherTris, degenerate: bad, vertices: g.getAttribute('aField').count,
+    tiles: tiles.length, hist, occupiedBins: hist.filter((h) => h > 0).length,
+    degMin: degs[0] ?? null, degMax: degs[degs.length - 1] ?? null,
+    degMedian: degs.length ? degs[(degs.length / 2) | 0] : null,
+    period: { medianPx: median(tiles.map((t) => t.periodPx).filter((x) => x > 0).sort((a, b) => a - b)) },
+    tileList: tiles, stage, uFields: v.fieldOn.value,
+    camera: { yaw: v.yaw, pitch: v.pitch, distance: v.distance },
+  };
+}
+
+function median(a) { return a.length ? a[(a.length / 2) | 0] : null; }
+
+/* r159 · 逐**三角**取样点：顶面每个三角自己有田纹坐标系，(c, ux, r) 足够在近景里沿 u 轴
+ * 取一条**不出格**的样（r = 内切半径×0.85，任何方向都不会越界）。r158 的 64px 取样会跨格，
+ * 主频读数被邻格方向与崖边污染 —— 这里的 r 就是为了不再跨格。 */
+function cellSamples() {
+  const g = api.view.mesh.geometry;
+  const pos = g.getAttribute('position').array, fa = g.getAttribute('aField').array;
+  const out = [];
+  for (let t = 0; t < pos.length / 9; t++) {
+    const o = t * 9;
+    if (!(fa[o + 2] > .5 && fa[o + 2] < 1.5)) continue;
+    const A = [pos[o], pos[o + 1], pos[o + 2]], B = [pos[o + 3], pos[o + 4], pos[o + 5]], C = [pos[o + 6], pos[o + 7], pos[o + 8]];
+    const c = [(A[0] + B[0] + C[0]) / 3, (A[1] + B[1] + C[1]) / 3, (A[2] + B[2] + C[2]) / 3];
+    const dx = B[0] - A[0], dz = B[2] - A[2], du = fa[o + 3] - fa[o], dv = fa[o + 4] - fa[o + 1];
+    const l2 = dx * dx + dz * dz;
+    if (!(l2 > 1e-10)) continue;
+    let ax = (dx * du - dz * dv) / l2, az = (dz * du + dx * dv) / l2;
+    const ln = Math.hypot(ax, az) || 1; ax /= ln; az /= ln;
+    // 内切半径 = 2·面积 / 周长（在 XZ 平面上算，顶面近似水平）
+    const e = [[A, B], [B, C], [C, A]].map(([p, q]) => Math.hypot(q[0] - p[0], q[2] - p[2]));
+    const s = (e[0] + e[1] + e[2]) / 2;
+    const area = Math.sqrt(Math.max(0, s * (s - e[0]) * (s - e[1]) * (s - e[2])));
+    const r = 2 * area / Math.max(1e-6, e[0] + e[1] + e[2]);
+    out.push({ c: c.map((x) => +x.toFixed(4)), ux: [+ax.toFixed(5), +az.toFixed(5)], r: +r.toFixed(4), deg: +(Math.atan2(az, ax) * 180 / Math.PI).toFixed(2), p3: [A, B, C] });
+  }
+  return out;
+}
+
+/** 世界点 → iframe 内画布像素（自己乘矩阵，页面里没有 THREE 的便利方法）。 */
+function project(p) {
+  if (!api) return null;
+  const cam = api.view.camera;
+  cam.updateMatrixWorld();
+  const e = cam.matrixWorldInverse.elements, pr = cam.projectionMatrix.elements;
+  const x = p[0], y = p[1], z = p[2];
+  const vx = e[0] * x + e[4] * y + e[8] * z + e[12];
+  const vy = e[1] * x + e[5] * y + e[9] * z + e[13];
+  const vz = e[2] * x + e[6] * y + e[10] * z + e[14];
+  const cx = pr[0] * vx + pr[4] * vy + pr[8] * vz + pr[12];
+  const cy = pr[1] * vx + pr[5] * vy + pr[9] * vz + pr[13];
+  const cw = pr[3] * vx + pr[7] * vy + pr[11] * vz + pr[15];
+  if (!(cw > 1e-6)) return null;
+  const cvs = api.view.renderer.domElement;
+  return [(cx / cw * .5 + .5) * cvs.clientWidth, (-cy / cw * .5 + .5) * cvs.clientHeight];
+}
+
+const fieldReviewApi = { get api() { return api; }, report, cells: cellSamples, project, get stage() { return stage; }, setStage: (s) => { $('#stage').value = s; stage = s; applyStage(); },
+  setBands: (on) => { $('#bandsOn').checked = !!on; $('#plotsOn').checked = false; applyStage(); },
+  setVeg: (on) => { $('#vegOn').checked = !!on; applyStage(); },
+  /** 近景取景：对准某点，pitch 接近俯视（这样屏幕 xy ≈ 世界 xz，量条纹不受透视压缩）。 */
+  look(c, distance = 2.4, pitch = 1.35, yaw = 0) {
+    const v = api.view; v.target.set(c[0], c[1], c[2]); v.distance = distance; v.pitch = pitch; v.yaw = yaw; v.updateCamera();
+  } };
+// 只有 World 就绪后才挂 window.fieldReview（旧测试以 fieldReview?.api.gridKind 轮询）
+
+/* ── 页面接线 ───────────────────────────────────────────── */
+$('#grid').onchange = load;
+$('#show').oninput = applyStage;
+$('#stage').onchange = () => { stage = $('#stage').value; applyStage(); };
+$('#plotsOn').checked = qs.get('plots') === '1';
+$('#plotsOn').oninput = applyStage;
+$('#bandsOn').checked = qs.get('fields') === 'bands';
+$('#bandsOn').oninput = applyStage;
+$('#vegOn').checked = qs.get('veg') !== '0';
+$('#vegOn').oninput = applyStage;
+$('#stage').value = stage;
+load();
+
+/* ── 田块耕纹对照画布（1798310423554658732）───────────────────────────── */
+const R = 5, N = R * 2 + 1, PW = 396, PH = 396, GAP = 44, Wd = 2 * PW + GAP;
+const cvs = $('#plots'), ctx = cvs.getContext('2d');
+const grid = buildSquareGrid({ radius: R });
+const cells = grid.cells, byId = new Map(cells.map((c) => [c.id, c]));
+const nb = (c) => c.edgeNeighbors.filter((i) => i >= 0).map((i) => byId.get(i));
+const cellAt = (x, z) => { const ix = Math.round(x + R), iz = Math.round(z + R); return (ix < 0 || iz < 0 || ix >= N || iz >= N) ? null : byId.get(iz * N + ix); };
+const dirt = [201, 188, 152];
+function draw() {
+  const seed = Math.max(1, Math.min(99, +$('#seed').value || 5));
+  const { plotOf, plots } = partitionPlots({ cells, neighbors: nb, seed, joinChance: .72, maxCells: 10 });
+  const borders = plotBorderCells({ cells, neighbors: nb, plotOf });
+  const img = ctx.createImageData(Wd, PH), d = img.data;
+  const skew = .3, width = .18;
+  for (let py = 0; py < PH; py++) for (let px = 0; px < Wd; px++) {
+    const o = (py * Wd + px) * 4;
+    const panel = px < PW ? 0 : (px > PW + GAP - 1 ? 1 : -1);
+    if (panel < 0) { d[o] = d[o + 1] = d[o + 2] = 231; d[o + 3] = 255; continue; }
+    const lx = (panel ? px - PW - GAP : px), wx = lx / PW * (N + 1) - (N + 1) / 2, wz = py / PH * (N + 1) - (N + 1) / 2;
+    const cell = cellAt(wx, wz);
+    if (!cell) { d[o] = 231; d[o + 1] = 239; d[o + 2] = 230; d[o + 3] = 255; continue; }
+    let row;
+    if (!panel) { const p = plotOf.get(cell.id), pl = plots[p]; const { u, v } = plotUV(pl, wx, wz); row = v - skew * Math.abs(u); }
+    else { const ang = mulberry32(cell.id * 19 + 5)() * Math.PI, u = (wx - cell.cx) * Math.cos(ang) + (wz - cell.cz) * Math.sin(ang), v = -(wx - cell.cx) * Math.sin(ang) + (wz - cell.cz) * Math.cos(ang); row = v - skew * Math.abs(u); }
+    const band = Math.floor(row / width), t = row / width - band;
+    const ridge = .5 + .5 * Math.cos(Math.PI * 2 * t);
+    let r = 124 + 58 * ridge, g = 176 + 54 * ridge, b = 92 + 36 * ridge;
+    // 田埂只在"对面是别的地块"的那几条边上画一圈细土带（约 0.09 格宽）
+    const ex = wx - cell.cx, ez = wz - cell.cz, me = plotOf.get(cell.id), T = .09;
+    if (Math.abs(ex) > .5 - T || Math.abs(ez) > .5 - T) {
+      let dirtEdge = false;
+      if (.5 - Math.abs(ex) < T) { const nx = cellAt(wx + Math.sign(ex) * .62, wz); if (!nx || plotOf.get(nx.id) !== me) dirtEdge = true; }
+      if (.5 - Math.abs(ez) < T) { const nz = cellAt(wx, wz + Math.sign(ez) * .62); if (!nz || plotOf.get(nz.id) !== me) dirtEdge = true; }
+      if (dirtEdge) { r = dirt[0]; g = dirt[1]; b = dirt[2]; }
+    }
+    d[o] = r; d[o + 1] = g; d[o + 2] = b; d[o + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  ctx.strokeStyle = '#20343c'; ctx.lineWidth = 1; ctx.strokeRect(.5, .5, PW - 1, PH - 1); ctx.strokeRect(PW + GAP + .5, .5, PW - 1, PH - 1);
+  // 统计：块内主轴差（应为 0）+ 异块主轴差中位数（应显著 > 0）
+  const diffs = [], seen = new Set();
+  for (const c of cells) { const a = plotOf.get(c.id); for (const o of nb(c)) { const b = plotOf.get(o.id); if (a === b) continue; const k = a < b ? a + '|' + b : b + '|' + a; if (seen.has(k)) continue; seen.add(k); let dd = Math.abs((plots[a].axis - plots[b].axis) * 180 / Math.PI) % 180; if (dd > 90) dd = 180 - dd; diffs.push(dd); } }
+  diffs.sort((x, y) => x - y);
+  $('#plotsStats').textContent = `seed ${seed} · ${plots.length} 块 / ${cells.length} 格 · 异块边界 ${diffs.length} 条，主轴中位差 ${diffs.length ? diffs[(diffs.length / 2) | 0].toFixed(1) : 0}° · 块内主轴差 0°`;
+  // 找一条"块内接缝"（两格同块且都不是田埂格），给验收脚本量左右栏在接缝上的连续性
+  let seam = null;
+  for (const c of cells) { if (borders.has(c.id)) continue; for (const o of nb(c)) { if (o.cz !== c.cz) continue; if (plotOf.get(o.id) !== plotOf.get(c.id)) continue; if (borders.has(o.id)) continue; const mx = (c.cx + o.cx) / 2, mz = c.cz; seam = { px: (mx + (N + 1) / 2) / (N + 1) * PW, py: (mz + (N + 1) / 2) / (N + 1) * PH, cells: [c.id, o.id], plot: plotOf.get(c.id) }; break; } if (seam) break; }
+  window.fieldPlotsDemo = { ready: true, seed, plots: plots.length, cells: cells.length, borders: borders.size, borderAngles: diffs, seam, stats: { median: diffs.length ? diffs[(diffs.length / 2) | 0] : 0 } };
+}
+$('#seed').oninput = draw; draw();
 </script></html>

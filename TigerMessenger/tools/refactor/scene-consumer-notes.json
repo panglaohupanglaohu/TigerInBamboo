@@ -5,6 +5,152 @@
       "text": "同机位对照（无存档的生成岩体）：整套换成最新库后崖壁折面更硬、崖顶多出橙色灌木带，不比认可的现状柔和；再打开缓坡省与连续软坡顶面，台地顶面几乎没有变化，并出现一处半透明破面。结论：直接同步不是改进；地形不柔和的主因是高度场本身（偶数层量化的平顶台地 + 竖直崖），以及地形线的软坡 / 分级平滑在库里也只是部分实现。",
       "evidence": "TigerMessenger/artifacts/apostles-soft-terrain-20261115/run-1794746305986",
       "doc": "TigerMessenger/docs/APOSTLES_TERRAIN_DIAGNOSIS.md"
+    },
+    {
+      "date": "2026-11-25",
+      "round": "补学·斜向崖脊 r216",
+      "text": "补学队列 clip 1708815475801505819 残差收口：REACodeRefactoring 新 src/terrain/mesa-field.js（裁判 engine/mesa.js 逐式移植：域扭曲fbm+脊线→偶数层台地→独立圆塔→去单格→脊线切峡谷→边界穿洞拱→平顶苔/崖面分级上色→平顶小屋；外置 grid+Town 使同一套公式能跑裁判 Town 逐位对拍也能跑共享 World 的 core/town-graph Town）。vendor 侧：terrain/mesa-field.js + terrain/rockforms-c09.js（r56 已有但此前未拷入）逐字新拷入；import 闭包自足（mesa-field 仅依赖 core/noise.js，vendor 已 SAME；rockforms-c09 无 import）。游戏侧当前无消费者（岩体走 apostlesReacode 内联 bend），如实登记；tests/mesa-referee.mjs 4/4：3 种子×6846 格×12 层体素+颜色 0 差异对拍、确定性重建、拱下空洞/柱群塔/苔只长平顶/屋间距同口径、共享 World buildQuadGrid 语义验收过。"
+    }
+  ],
+  "battle": [
+    {
+      "date": "2026-11-23",
+      "round": "R33",
+      "text": "vendor 副本只换导航一小组为最新库（逐字拷贝）：world/battle-navigation.js、world/layerednav.js、world/navgraph.js、core/path-samples.js 换新；world/fine-portals.js、world/navmesh-flow.js、core/arch-floor-budget.js 新加。原因：Guide §9 D 组——游戏实际跑的 vendor 副本里没有精细门户（finePortals）、体型重路由（treeTo allow）、连通块统计（layerednav.stats）、脚高（footHeight / surfaceHeight / stairAt），导航能力进不了游戏。core/world.js 没换（最新库只多了 splicedHouses 撤销栈字段，导航不用）；badnorth/battle.js 与 world/traffic.js 没换。默认行为的变化：BattleNavigation 新默认 doorCost 1.35 只作用在洞道/拱下节点（实景采样是实心柱，默认没有这种节点）；换层时瞄准楼梯中线（原来瞄准下一格格心）；贴脚一挪只判终点。finePortals / continuousFlow 默认关，只由战役管线的导航能力按计划打开。回归测试 tests/nav-vendor-swap.test.mjs（旧件快照在 tests/fixtures/vendor-nav-legacy/）。",
+      "replaced": [
+        "src/world/battle-navigation.js",
+        "src/world/layerednav.js",
+        "src/world/navgraph.js",
+        "src/core/path-samples.js"
+      ],
+      "added": [
+        "src/world/fine-portals.js",
+        "src/world/navmesh-flow.js",
+        "src/core/arch-floor-budget.js"
+      ],
+      "evidence": "TigerMessenger/artifacts/r21-r70-backup/R33/swap-manifest.json",
+      "doc": "TigerMessenger/docs/WORKSHOP_LOG.md"
+    },
+    {
+      "date": "2026-11-24",
+      "round": "R71",
+      "text": "Guide §10 R71–R80 第一批：战斗导航组再同步。盘点发现 R33 换入的导航核心（world/battle-navigation.js、fine-portals.js、navgraph.js、navmesh-flow.js、layerednav.js、core/arch-floor-budget.js、path-samples.js、portal-aim.js、minheap.js）与最新库逐字相同，无需重换。本次换：world/traffic.js 升最新（battle.js 与 nav-lab 都在用的窄道会车模块；新增 heightRaster/sightFade/insideCell 为纯加项，唯一行为变化是 passageMarkers 默认点距 0.16→0.28，上游按原片点距≈2.2 倍点径调过）；world/navlayer.js 升最新（morrisTownStage 在用的导航调试层；新增木梯/可走图调试层默认关，楼梯几何改走共享 ladderAnchors，默认输出与旧版同参同形）+ 新依赖 core/ladder-profile.js（自包含纯数学）。没换：badnorth/battle.js（含 [TM] 击退落水/单位放大/装备外观定制，且最新版要再带 battle-g3/c01/c02/c03、point-floor、damage-numbers、info-graph、squad-footprint、unit-batch-lod 共 9 个新模块及其依赖链，finePortals 走 BattleNavigation 不需要它）；core/world.js（nav-vendor-swap 回归断言 vendor 不含 splicedHouses，导航用不到）；core/grid.js、core/spatial.js（新网格种类，舞台/实验台只用 quad 路径）；world/app.js、scenes.js、view.js、save.js、worldmesh.js、outline.js、townDemo.js（vendor 演示壳与渲染层，游戏不走 app.js；worldmesh 差异全是烘焙/灌木带/装饰统计等渲染特征）；core/ballistic-table.js、combat-state.js、unit-ground-height.js、obb.js、badnorth/landing-plan.js、life/unit-shadow-batch.js、core/unit-shadow.js（只被新版 battle.js 需要）；terrain/water/life/ui 各目录（与导航无关，红线）。启用：reaBattleStage.navDefaults={finePortals:true}，sceneBattle.applyNavigation 改为「计划显式 false 才关，否则本项目场景默认开」（unitHeight 缺省按 stage.unitHeightM/scale 换算）。验证：单元 40/40（nav-fine-portals/parity/vendor-swap/footing/traffic/battle-pipeline）；browser nav-fine-portals/parity/traffic/footing/battle-apostles 全 PASS；无计划开战 finePortals 真开（unitHeight 0.34）、计划显式 false 真关（nav-default-on 探针）。实景穿洞：apostles/citadel 各只有 1 列死角拱、moss/bookshop 无拱候选（unitHeight 修正后复测，nav-arch-through 探针），单位实穿 NOT_VERIFIED；穿拱行为由 nav-arch-demo 演示页实证（开 0 擦墙帧 / 关 7 帧）。",
+      "replaced": [
+        "src/world/traffic.js",
+        "src/world/navlayer.js"
+      ],
+      "added": [
+        "src/core/ladder-profile.js"
+      ],
+      "kept": [
+        "src/badnorth/battle.js（[TM] 定制 + 9 新模块依赖链）",
+        "src/core/world.js（回归断言 splicedHouses 不在）",
+        "src/core/grid.js、spatial.js（新网格种类未用）",
+        "world/app.js、scenes.js、view.js、save.js、worldmesh.js、outline.js（演示壳/渲染层，非导航）",
+        "core/ballistic-table.js、combat-state.js、unit-ground-height.js、obb.js、landing-plan.js、unit-shadow*.js（仅新 battle.js 需要）"
+      ],
+      "evidence": "TigerMessenger/artifacts/nav-fine-portals-e2e/run-1795501588762、nav-parity-e2e/run-1795501600131、nav-arch-through-e2e/run-1795501846280、nav-default-on-e2e/run-1795502289464、nav-traffic-e2e/run-1795501949073、nav-footing-e2e/run-1795502059770、battle-apostles-e2e/run-1795502168961",
+      "doc": "TigerMessenger/docs/WORKSHOP_LOG.md"
+    },
+    {
+      "date": "2026-11-24",
+      "round": "补学-弹道Validity",
+      "text": "补学队列 987267068495003648（弹道 Validity 契约）库层收口：REACodeRefactoring core/ballistic-table.js 新增 createShotContract（射程环/沿弧遮挡采样/落点地表容差）与 pickBallisticShot（候选逐条过滤，表达式表被墙挡自动换高抛弧），badnorth/battle.js 新增 opt-in shotContract + makeShotContract()（默认不装，射前拦，飞行 clearSegment/命中校验不动）。vendor 侧：core/ballistic-table.js 是旧快照（无表达式表/无契约），badnorth/battle.js 为 [TM] 定制副本（与库差 1024 行，R71 已书面记录不换理由：击退落水/单位放大/装备外观定制 + 新版拖 9 个新模块依赖链）。本轮有意不同步：契约在库层是纯加项、opt-in，游戏侧弓手行为与旧版一致；将来若换，路径无侵入 = 拷贝 core/ballistic-table.js 新版 + battle.shotContract = battle.makeShotContract({minRange,maxRange}) 一行接线，表达式表另带 projectileState 烘表 shot 兼容。验收=库层 node --test 7/7 + 24 相关套件回归 PASS，vendor 消费未声称。"
+    },
+    {
+      "date": "2026-11-24",
+      "round": "vendor battle 整树换库（C批硬骨头收口）",
+      "text": "Guide §10 C批收官：vendor badnorth/battle.js 从「r49 + 29 处 [TM] 补丁」整文件换成最新库版（821→1624 行），连同全部 9 扩展模块与依赖链逐字拷入，[TM] 定制全部上游化为 opt-in 接缝——今后同步 = cp + 测试，无 patch 漂移。上游接缝（REACodeRefactoring/src/badnorth/battle.js，全部默认行为不变）：core/knockoff-water.js 新模块（击退落水/溺水/水花，矛轴推 0.12）；view.knockoffWater 开关；view.unitScale/boatScale 构造参数；公开 spawnSquad/setSquadEmblems；u.tmGoal 外部导航目标（VIK 且 DEF 邻近度<0.6 时守军目标仍优先）；旗 userData.scale；view.boatOrigins() 母舰出发 + b.inDur 按距离计波次；view.visualOffset() 单位/旗子合成偏移；u.bodyColor 装备外观；#hit 第三参 thrust 透传 hitShove；resolveFallLanding 溺水结局 + #drown；splashes/splashGeo/drownStats。保平开关（reaBattleStage.js 逐项关，旧 vendor 行为不变）：g3.continuousFlow=false（转向只走 steerTarget）、infoSharing=false（维京人不读守军转告位置）、c01.houseChar/shoreFlowers=false、c02.scorch=false（画在 REA 导航面上有 visualOffset 位差）、footprint=false（旧版无脚印线）、unitShadows.enabled=false（旧版不画软盘影）。保留库版新默认：damage numbers/arrowTrail/mSpearTip/poolGrow/bleedWall/deckPool/boatCorpse/brace/footHeight/#step 斜滑自救（渲染与手感改进、不漂移导航）。TM 侧薄适配：reaBattleStage view 加 knockoffWater:true + smoke setFireCoupling/ignite no-op；test stubs 同步。core/world.js 仍不换（R72 splicedHouses 断言）。验证：Node——nav-vendor-swap 5/5（真实 vendor Battle 30s 无 NaN/朝小屋走）、test_rea_knockoff_water 全 TM 契约（spin/drowned/splashes/drownStats/无血/矛推/spawnSquad×2.36/母舰出发）、test_rea_stage_curved（boatOrigins+inDur）、nav-fine-portals/footing/parity/traffic 28/28、test_viking_moss_batian_attack（u.tmGoal 实战）PASS；上游 battle 全套件绿。浏览器——battle-apostles e2e PASS（run-1795519565162：probe 扫描、6 能力管线、preview 实景开战 40 人 wave1、finePortals 开、16 项检查全绿、adopt/revert）、nav-arch-through e2e PASS（run-1795519684390：deploySceneBattle 实景四场景 apostles/citadel/moss/bookshop 全部开战成功、零页错）。已知边界：404 资源缺为既有噪音；上游 learn/data.js 被并发 palette 子代理改动（partial 注记口径使 capability-evolution 单测暂红，与本换库无关）；单位阴影/岸花/焦痕等保平关闭项若要恢复需先解决 visualOffset 位差。",
+      "files": [
+        "src/badnorth/battle.js",
+        "src/badnorth/battle-g3.js",
+        "src/badnorth/battle-c01.js",
+        "src/badnorth/battle-c02.js",
+        "src/badnorth/battle-c03.js",
+        "src/badnorth/damage-numbers.js",
+        "src/badnorth/info-graph.js",
+        "src/badnorth/squad-footprint.js",
+        "src/badnorth/unit-batch-lod.js",
+        "src/badnorth/squad-hud.js",
+        "src/badnorth/squad-standard.js",
+        "src/badnorth/ground-stain.js",
+        "src/badnorth/house-char.js",
+        "src/badnorth/landing-plan.js",
+        "src/core/knockoff-water.js",
+        "src/core/ballistic-table.js",
+        "src/core/unit-ground-height.js",
+        "src/core/combat-state.js",
+        "src/core/melee-sweep.js",
+        "src/core/playful-layout.js",
+        "src/core/route-preview.js",
+        "src/core/ui-reveal.js",
+        "src/core/wake-sampling.js",
+        "src/core/obb.js",
+        "src/core/unit-shadow.js",
+        "src/core/part-random.js",
+        "src/world/point-floor.js",
+        "src/life/unit-shadow-batch.js",
+        "src/ui/game-portrait-c01.js",
+        "src/ui/slot-portrait.js"
+      ],
+      "evidence": "TigerMessenger/artifacts/battle-apostles-e2e/run-1795519565162、nav-arch-through-e2e/run-1795519684390、workshop-tests/20261124T112445652881Z"
+    }
+  ],
+  "morris-lake": [
+    {
+      "date": "2026-11-24",
+      "round": "R72-A",
+      "text": "Guide §10 R72 vendor 精换 A 批（11 文件，按 diff 逐文件定性，只跑 Node 单测、不跑浏览器）。已对齐（整文件 cp，与最新库逐字相同）：terrain/features.js（仅注释修正，1708815475801505819 剪辑注记改实）；world/outline.js（逆光 GLSL 修复：camDir/sun 改按水平方位判 + smoothstep，俯角 30–40° 下旧写法恒 0 亮边不出现；制服与 OutlineLayers API 不变，citadelInkOutline/morrisTownStage 直接受益—— rim 亮边在该俯角下会真的出现）；core/palette.js（仅注释 + 新增 withPaletteColors/blendWallPalettes 两个函数，未改任何已发配色值——配色零变化）；core/banner.js（纯加项：SQUAD_EMBLEMS/bakeEmblemAtlas/SQUAD_ROLES/hslToRgb/squadRolePalette/bannerBillboardYaw，依赖的 BANNER_EMBLEMS/inkAt vendor 已有；windBanners 用的 bakeBanner 未动）；core/meshwriter.js（纯加项：field/edge/band 三份逐顶点缓冲与 edgeTri/bandTri/fieldFrame 通道，tri/triC 签名不变、未设通道时写默认值，citadelVoxelMountain 不受影响）；core/spatial.js（纯加项：baryPrep/baryPrep3/baryCramer3 重心坐标工具，pointInQuad 等旧导出未动，8 处游戏侧引用全兼容）；world/worldmesh.js（edgeTri/bandTri 代理修复、setBakeLighting/shapeOptions/buildStats 扩展、新 aField/aEdge/aBand/aMountainTone 顶点属性——默认行为逐行核对不变：bakeLightingOptions 未设时 bakeLighting 参数与旧版相同）。带依赖一起换：life/decor.js（新电线走 planWire 精确多边形裁切可越矮屋顶、彩旗间隔挂白色衣物、蝴蝶换落点真换掉当前点——refresh/setLayer/update 签名不变，仅 morrisTownStage 消费）+ 新文件 core/wire-route.js（自包含，只引 vendor 已有的 grid.signedArea）；新文件 core/mountain-bake.js（只引 noise.js）+ light/bake.js 升最新（AO_MODES/normalizeSunShadow/sunShadow/keepField 全部默认关——aoMode='vertex' 且 sunShadow=null 时逐顶点路径与旧版同行同值，morrisTownStage 的 worldMesh.bake=on 开关不受影响）。保留定制（最小 patch）：ui/learnpanel.js 整体换新（新页目/DEFAULT_ON 新开关/太阳方位滑杆/审核状态链），仅把滑杆 handler 的 view.setSunAngle(…) 改为可选链 view.setSunAngle?.(…)——morrisTownscaperMenu 的 view 契约没有 setSunAngle（上游 View 才有），不补丁会在拖滑杆时 TypeError；面板仅 UI_DEV 开发模式挂载。没换（书面理由）：core/world.js——tests/nav-vendor-swap.test.mjs:48 断言 vendor 版不含 splicedHouses（该断言是 R33/R71 换件基线锚点），新版 snapshot/restore 的 spliced/house 字段还依赖未进 vendor 的 splice/multicell 登记链，换掉必红；world/scenes.js——新版静态 import ../build/multicell.js（红线：别的任务在改，vendor 无此文件）与 ../badnorth/island.js（vendor 无，且它还要 island-caves.js 等一串依赖），换入即模块解析失败、morrisTownscaperMenu 的 SCENES/buildScene 全挂，且 badnorth 场景项也不该进莫里斯湖菜单。验证：node --test nav-parity/battle-pipeline/building-joint-wfc/apostles-measure-pick 27/27、nav-vendor-swap/nav-fine-portals/nav-footing/nav-traffic 25/25、code-library-catalog/plateau-diag/lightlife-grafts/lightlife-parity 18/18 全绿；test_workshops.py --skip-browser 全步 PASS（artifacts/workshop-tests/20261124T084415374161Z）；未跑浏览器（红线）。",
+      "replaced": [
+        "src/terrain/features.js",
+        "src/world/outline.js",
+        "src/core/palette.js",
+        "src/core/banner.js",
+        "src/core/meshwriter.js",
+        "src/core/spatial.js",
+        "src/world/worldmesh.js",
+        "src/life/decor.js",
+        "src/light/bake.js",
+        "src/ui/learnpanel.js（+[TM] setSunAngle 可选链守卫）"
+      ],
+      "added": [
+        "src/core/wire-route.js",
+        "src/core/mountain-bake.js"
+      ],
+      "kept": [
+        "src/core/world.js（nav-vendor-swap 断言不含 splicedHouses；新版撤销字段依赖未进 vendor 的 splice/multicell 链）",
+        "src/world/scenes.js（缺 build/multicell.js（红线在改）+ badnorth/island.js→island-caves 依赖串；badnorth 场景项不进莫里斯菜单）"
+      ],
+      "evidence": "artifacts/workshop-tests/20261124T084415374161Z（skip-browser 全步 PASS）；node --test 70 项单测全绿（见 WORKSHOP_LOG R72 段）",
+      "doc": "TigerMessenger/docs/WORKSHOP_LOG.md"
+    },
+    {
+      "date": "2026-11-24",
+      "round": "R73-B",
+      "text": "Guide §10 R73 vendor 精换 B 批（6 个中风险文件，整文件与最新库逐字对齐 + 带入全部新依赖）。已对齐：life/effects.js（新 splash 水面粒子走 life/splash-c07.js、烟雾排序抽 core/smoke-order.js；makeSplashParticles/addSparkle/updateEffects API 不变）；life/atmosphere.js（雾包络 core/fog-envelope.js、风流场 core/wind-flow.js、云底探针 core/world-probes.js——后两者只需 World 的 MAX_LEVEL/isSolid/isRock/index.cellAt，vendor world.js 全有）；terrain/terrainmesh.js（屋顶拼合 build/splice.js+splice-polygon-c09.js+core/hip-roof.js+core/straight-skeleton.js 四件新依赖，软顶 terrain/soft-tops.js，排水链 terrain/drainage.js+core/depression-fill.js+terrain/river-network.js+core/river-network.js，灌木边 shrub-edges-c09.js/shrub-band.js/shrub-texture.js 三件套；splicedHouses 引用全部 ?. 守卫，vendor world.js 不加该字段、nav-vendor-swap 断言仍绿）；terrain/generate.js（同排水/河网链，drainage/riverNetwork/softSlopes/lakes/erosion/basins/ledges 等新选项全部默认关——同种子新旧生成体素逐格比对 IDENTICAL，实测非推断）；water/shore.js（岸线环 core/shore-loops.js+波浪周期 core/wave-cycle.js+剖面 core/shore-profile.js；新岸裙几何带 aArc/aIn/aOut/aCrest/aWidth/aPeriod 属性，makeSkirtMaterial 新增 uTime/uSkirtBreak/uSkirtDrift/uSkirtGap、makeWaveMaterial 新增 uCrestBreakup、裙材质改 DoubleSide）；life/vegetation.js（云深 core/cloud-depth.js+core/cloud-motion.js+light/cloud-shadow.js、分层植被 core/level-flora.js、新草丛=广告牌卡 core/anchored-billboard.js+core/edge-inset.js、新花=白色平贴六角点、叶表面 life/leaf-surface.js+core/leaf-atlas.js+core/texel-skip.js+core/canopy.js；新增 setCloudShadowUniforms 导出）。消费方适配（TM 侧非 vendor 红线）：world/morrisTownStage.js 补 skirtMaterial.uniforms.uTime 接线；world/apostlesReacode.js 更新裙/波 shader 字符串替换以匹配新着色器（vA*vA*vCover / -vA*vCover）；vendor world/view.js 同款 uTime 接线+skirtStats 助手（2 行扩 4 行）。保留定制：无——本批 6 文件全部整文件对齐，无 [TM] patch。有意未换并书面记录：core/world.js（R72 已记 splicedHouses 断言理由，本批 ?. 守卫兼容成立）、world/save.js/core/grid.js/badnorth/battle.js（C 批硬骨头）。已知边界：vendor world/view.js 未注入 SEDIMENT_GLSL/SHRUB_GLSL（上游在 view.js:235 经 core/sediment.js 注入），aEdge/aBand 属性已写出但着色消费取决于各消费方材质 onBeforeCompile——morrisTownStage 定制材质未带这两个注入，属后续独立能力项非本批回归。验收：Node --test 14 套件全绿（nav-parity 27/battle-pipeline 25/building-joint-wfc 32/apostles-measure-pick 33 等）、test_workshops --skip-browser 全步 PASS、apostles-look-views approved 实景 PASS（6 岩体稳定、4/4 机位有效、transparentRock 0、foamStray 0.0002）、build-scene-editor morris 实景编辑/保存/重载 PASS。",
+      "evidence": "TigerMessenger/artifacts/workshop-tests/20261124T100731997674Z ; TigerMessenger/artifacts/apostles-look-views-e2e/run-1795514865996 ; TigerMessenger/artifacts/build-scene-editor-20261114/browser.json (2026-11-24 18:11 rerun)",
+      "doc": "TigerMessenger/docs/WORKSHOP_LOG.md R73 section"
+    }
+  ],
+  "building": [
+    {
+      "date": "2026-11-24",
+      "round": "补学·钢架编辑",
+      "text": "补学队列 rank2「296帧：钢架编辑全核」机制收口（REACodeRefactoring 新 src/build/steel-frame-edit.js：编辑/移除楼层→钢架显露判定、planSteelReveal 逐步 diff、commitSteelReveal 走 module-patch-commit fit 事务+撤回、frameCollisions 可走面审计）。vendor 有意未接：vendor build/buildings.js 是 B 批待换旧快照（537 行 vs 库 948 行、603 行差），连 steel-r56.js 都没有，本文件依赖 emitSteelFrame + commitModulePatch，无侵入同步路径=整文件随 B 批换 buildings.js 时一并带入。TigerMessenger building 层消费的是 prefab-socket 高度场 joint-wfc（building.joint-wfc 能力），不走 voxel 楼层编辑，本机制当前无游戏内消费者，如实登记。"
+    }
+  ],
+  "sediment": [
+    {
+      "date": "2026-11-26",
+      "round": "补学·弯层理剪切场",
+      "text": "补学队列 clip 1699146321318314094 残差收口：REACodeRefactoring core/sediment.js 场形从解析正弦场换成与裁判 engine/surface.js 逐字一致的 sHash/sNoise/sWobble/sWarp（二倍频值噪声、位移 vec3(b,a,b*.7)·uSedAmp 含 xz 分量），unwarpSediment 改为 (x,z) 定点迭代逆（解析逆不存在，雅可比≈0.19，往返 3.55e-15）；sediment-bands-c09.js 弯层裂纹/砂砾改吃歪过的 sed.xz（与裁判 sed=wp+sWarp(wp) 同构）。vendor 侧：core/sediment.js + core/sediment-bands-c09.js 逐字新拷入（此前 vendor 无此二文件），import 闭包自足（sediment.js 仅依赖 bands，bands 无依赖）；learn/data.js+pipeline.js 同步逐字。有意未换 world/view.js（R73-B 已记 vendor view.js 不注 SEDIMENT_GLSL，属 B 批待换渲染层：新 sWarp 需 uSedAmp/uSedFreq uniform，只有上游新 view.js 接线——vendor 当前无着色消费者）。游戏侧 frontier-lines.js 的 fx.sediment 直接 import 上游库 sedimentOffset（bend 走新场形），fx-sediment-projectiles 8/8 PASS。"
+    }
+  ],
+  "sphere": [
+    {
+      "date": "2026-11-24",
+      "round": "补学·球面接线层",
+      "text": "补学队列 rank3「put this on a sphere」(clip 1768627849529893109) 残差收口第一批：REACodeRefactoring 新 src/sphere/world-sphere.js（平面World→球面贴片：'bend' 模式与实景 apostlesReacode.js bendU/toWorld/uBend=S/(2Rw)/帽面法线逐式同口径、'sphere' 方位等距严格上球、柱格姿态 modulePose/mapGridCells、球面岸线 worldShorelines 连续闭环+Taubin+测地外推蓝线）。vendor 有意未接：vendor 副本尚无 sphere/world-sphere.js（本批新文件，属换批范围；游戏跑 src/vendor 旧副本）。复用路径=每块岩体 (seaAnchor→anchor, worldUp→up, frame X/Z→e1/e2, Rw→R, S→格/米换算) 直接构 patch，替换 apostlesReacode 内联 bend 数学即可同口径；当前游戏内无消费者，如实登记。验收=库层 node --test tests/world-sphere.mjs 8/8 + sphere/planet/shore 相关 24 套件 PASS；浏览器未跑（红线）。"
     }
   ]
 }

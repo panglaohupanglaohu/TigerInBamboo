@@ -1,0 +1,29 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/nav-parity-e2e/run-1795469060437",
+  "capabilities": [],
+  "steps": {
+    "scene": "apostles",
+    "parity": {
+      "state": "error",
+      "rows": [],
+      "gaps": null,
+      "gapItems": [],
+      "live": {
+        "error": "Failed to fetch dynamically imported module: http://localhost:8931/TigerMessenger/src/system-workshop/battle/nav-parity.js?v=nav-r1"
+      }
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "pass": false,
+  "failure": "对照现算失败：{\"error\":\"Failed to fetch dynamically imported module: http://localhost:8931/TigerMessenger/src/system-workshop/battle/nav-parity.js?v=nav-r1\"}"
+}

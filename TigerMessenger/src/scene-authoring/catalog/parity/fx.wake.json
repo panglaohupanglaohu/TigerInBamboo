@@ -1,0 +1,38 @@
+{
+ "capability": "fx.wake",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T15:27:35.730Z",
+ "generator": "TigerMessenger/tools/refactor/fx-parity.mjs",
+ "verdict": "diff-registered",
+ "line": "fx",
+ "basis": "原版 Ship/Wake 是逐帧发射模拟；重构版把同一条 V 形尾迹做成固定间隔采样带。常量一致，发射模型口径不同，登记不判等价。",
+ "metrics": [
+  {
+   "id": "kelvin",
+   "name": "KELVIN 半角常量",
+   "original": 19.47,
+   "refactored": 19.47
+  },
+  {
+   "id": "foam-1s",
+   "name": "原版 Wake 直线 1s 泡沫发射数（speed46·rate300）",
+   "original": 600,
+   "refactored": "模型不同不直接可比"
+  }
+ ],
+ "inputs": {
+  "ship": "speed=46 len=54 beam=15",
+  "steps": "60×1/60s"
+ },
+ "diffs": [
+  {
+   "kind": "design",
+   "id": "emission-model",
+   "original": "Wake.step 每帧按 rate·dt·2 舷侧发射（Ship/Wake 状态模拟）",
+   "refactored": "advanceWake/makeWakeParticles 按固定 interval·spread 采样带"
+  }
+ ],
+ "gaps": 0,
+ "skipped": []
+}

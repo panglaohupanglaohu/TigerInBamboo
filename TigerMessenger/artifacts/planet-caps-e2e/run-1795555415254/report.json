@@ -1,0 +1,81 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "planet": {
+   "ok": true,
+   "layers": {
+    "terrain": false,
+    "water": true,
+    "clouds": true,
+    "version": "v9"
+   },
+   "recipe": {
+    "seed": 1,
+    "radius": 160,
+    "landformChain": true,
+    "subdivision": 1,
+    "chartLimit": 0,
+    "resolution": 3,
+    "seaLevel": 0
+   }
+  },
+  "scan": "扫描完成：22 / 22 个能力能作用。星球 73 ms 编译完成。",
+  "pipelineNodes": 22,
+  "checks": [
+   "✓ 编译8 个阶段全部完成，532 ms",
+   "✓ 编译器检查10 项（接缝 / 全局约束 / 路线 / 战斗面 / 书店坡度…）通过",
+   "✓ 确定性独立复算哈希一致",
+   "✓ 场景锚点10 个场景锚点都在原位，陆上场景都高于海平面",
+   "✓ 陆地比例76% → 61%",
+   "✓ 编译预算53 ms → 532 ms（游戏启动时同步编译）",
+   "✓ 岸带距离场2048×1024 经纬格 · 每格约 0.49 米 · 量了 7294 个陆地网格 · 陆地占 19% · 岸边格 93331 · 508 ms",
+   "✓ 海面形状海面网格没有改动（只改外观）",
+   "✓ 高山圣城海湾一起统一（海湾矩形内也换成莫西斯湖效果，没有接缝）",
+   "✓ 莫西斯湖不参与：湖面材质和倒影都不碰",
+   "✓ 倒影220 个岸边网格（候选 561）· 197958 三角形 · 69 种颜色",
+   "✓ 帧耗时100 → 100 ms/帧（中位数）· 绘制调用 15978 → 16059",
+   "✓ 实景天气雨（带闪电） · 风 1.2 · 45° · 雾 淡雾 0.35 · 雨雪下在工坊镜头前方（游玩时在玩家周围）",
+   "✓ 时刻时刻 0.76（游戏现在 0.76）· 停在这个时刻",
+   "✓ 光照直射 ×1 · PCF 软阴影 · 天光 ×1 · 反弹 0.35 · 体素 AO 未开（需 ?oskLightingV1=1&voxelAoV1=1） · 圣城墨线未装（离圣城太远或未建好） · 岩层 1 · 冷灰 0.6 · 视图 正常 · 饱和 1 · 曝光 1",
+   "✓ 积雪莫西斯湖城镇积雪 0.8（正在盖上：0.85）",
+   "✓ 云阴云 0.4 · 云影用了离镜头最近的 15 朵云（投在海面上）",
+   "✓ 天气雾已渐入（当前 0.324，目标 0.35）",
+   "✓ 帧耗时100 → 116.7 ms/帧（中位数）"
+  ],
+  "fails": [],
+  "note": "候选已预览。确认前不会写入。",
+  "recipePreview": {
+   "seed": 7,
+   "chartLimit": 8,
+   "resolution": 32,
+   "seaLevel": 0.5
+  },
+  "previewApplied": {
+   "preview": {
+    "seed": 7,
+    "chartLimit": 8,
+    "resolution": 32,
+    "seaLevel": 0.5
+   },
+   "recipe": {
+    "seed": 7,
+    "radius": 160,
+    "landformChain": true,
+    "subdivision": 1,
+    "chartLimit": 8,
+    "resolution": 32,
+    "seaLevel": 0.5
+   },
+   "layers": {
+    "terrain": false,
+    "water": true,
+    "clouds": true,
+    "version": "v9"
+   }
+  }
+ },
+ "pass": false,
+ "failure": "frame.waitForFunction: Target crashed \n    at waitGame (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/planet-caps-browser.mjs:50:11)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/planet-caps-browser.mjs:126:3"
+}

@@ -28,7 +28,7 @@
 </div>
 <script type="module">
 import { buildInfinite, verify, createInfiniteStream, clusterCost } from './src/core/infinite.js';
-import { streamWindow, windowDual, areaStats, restoreArea, patchLattice } from './src/core/infinite-c06.js';
+import { streamWindow, windowDual, areaStats, densityStats, restoreArea, patchLattice } from './src/core/infinite-c06.js';
 
 const q = new URLSearchParams(location.search);
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
@@ -61,8 +61,9 @@ function drawStream() {
   // 块边界两侧一致性：同一顶点在不同块的最终化结果
   let seam = 0; const seen = new Map(); for (const P of win.finals) for (const [id, p] of P.pos) { const o = seen.get(id); if (o) seam = Math.max(seam, Math.hypot(o[0] - p[0], o[1] - p[1])); else seen.set(id, p); }
   const st = areaStats(quads, (v) => posMap.get(v.id));
-  statEl.textContent = `焦点 (${focus[0].toFixed(1)}, ${focus[1].toFixed(1)}) · 最终化 ${win.finals.length} 块 / ${quads.length} 格 · 圈外未松弛 ${win.raws.length} 块\n累计生成拓扑 ${win.counters.patches} 块 · 块松弛 ${win.counters.patchRelax} · 簇松弛 ${win.counters.clusterRelax} · 丢弃 ${win.counters.evicted || 0}\n当前缓存 ${JSON.stringify(win.cached)}\n块间接缝 ${seam.toExponential(1)} · 翻折 ${st.flipped} · 面积比 ${st.min.toFixed(2)}–${st.max.toFixed(2)}${dual ? ` · 黑网 ${dual.faces.length} 面` : ''}\n3 块一簇最终化一块需 ${cost.tri} 块拓扑；7 块一簇需 ${cost.hept} 块（×${cost.ratio.toFixed(2)}） · 本帧 ${ms.toFixed(0)} ms`;
-  window.infStream = { focus: focus.slice(), finals: win.finals.length, raws: win.raws.length, quads: quads.length, counters: win.counters, cached: win.cached, seam, area: st, dualFaces: dual?.faces.length ?? 0, cost };
+  const den = densityStats(win);
+  statEl.textContent = `焦点 (${focus[0].toFixed(1)}, ${focus[1].toFixed(1)}) · 最终化 ${win.finals.length} 块 / ${quads.length} 格 · 圈外未松弛 ${win.raws.length} 块\n累计生成拓扑 ${win.counters.patches} 块 · 块松弛 ${win.counters.patchRelax} · 簇松弛 ${win.counters.clusterRelax} · 丢弃 ${win.counters.evicted || 0}\n当前缓存 ${JSON.stringify(win.cached)}\n块间接缝 ${seam.toExponential(1)} · 翻折 ${st.flipped} · 面积比 ${st.min.toFixed(2)}–${st.max.toFixed(2)}${dual ? ` · 黑网 ${dual.faces.length} 面` : ''}\n疏密均匀度：面积 p10 ${den ? den.area.p10.toFixed(2) : '-'} / p50 ${den ? den.area.p50.toFixed(2) : '-'} / p90 ${den ? den.area.p90.toFixed(2) : '-'}（p90÷p10 ${den ? den.area.span.toFixed(2) : '-'}×、CV ${den ? den.area.cv.toFixed(3) : '-'}）· 边长 CV ${den ? den.edge.cv.toFixed(3) : '-'}\n块间 vs 块内：块均值 CV ${den ? den.between.toFixed(3) : '-'} / 块内平均 CV ${den ? den.within.toFixed(3) : '-'}（块间≈块内 → 看不出块边界）\n3 块一簇最终化一块需 ${cost.tri} 块拓扑；7 块一簇需 ${cost.hept} 块（×${cost.ratio.toFixed(2)}） · 本帧 ${ms.toFixed(0)} ms`;
+  window.infStream = { focus: focus.slice(), finals: win.finals.length, raws: win.raws.length, quads: quads.length, counters: win.counters, cached: win.cached, seam, area: st, density: den, dualFaces: dual?.faces.length ?? 0, cost };
 }
 function drawBug() {
   const key = bugEl.value + '|' + areaEl.checked;

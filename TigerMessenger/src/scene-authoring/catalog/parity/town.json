@@ -1,0 +1,84 @@
+{
+ "capability": "town",
+ "generatedAt": "2026-11-23T18:26:01.288Z",
+ "generator": "TigerMessenger/tools/refactor/lightlife-parity.mjs",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "line": "grid",
+ "verdict": "diff-registered",
+ "sameCriteriaEqual": true,
+ "original": [
+  "townscaper-web/REACode/src/town.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/town-graph.js",
+  "townscaper-web/REACodeRefactoring/src/core/world.js",
+  "townscaper-web/REACodeRefactoring/src/core/spatial.js",
+  "townscaper-web/REACodeRefactoring/src/core/palette.js"
+ ],
+ "clips": [],
+ "inputs": {
+  "n": 14,
+  "seed": 9,
+  "ops": 220
+ },
+ "cases": {
+  "columns": {
+   "same": true
+  },
+  "regions": {
+   "original": {
+    "regions": 75,
+    "walkways": 8
+   },
+   "graft": {
+    "regions": 75,
+    "walkways": 8
+   },
+   "worldRegions": 52,
+   "same": true
+  },
+  "aliases": {
+   "pointInQuad": {
+    "samples": 400,
+    "same": 400
+   },
+   "buildCellIndex": {
+    "samples": 400,
+    "bothFind": 400
+   },
+   "palettesSame": true,
+   "terrainSharedKeys": [
+    "grass"
+   ]
+  }
+ },
+ "diffs": [
+  {
+   "id": "town.library.regions",
+   "metric": "regions",
+   "kind": "design",
+   "original": 75,
+   "refactored": 52,
+   "note": "重构库原有 World.regions() 只连顶部是建筑的格子、不分走道；原版 Town.regions() 连所有顶部同高的柱子（含 1 层走道 isWalkway）。两种都留：town-graph.js 给需要原版口径的消费者。"
+  },
+  {
+   "id": "town.library.TERRAIN",
+   "metric": "TERRAIN",
+   "kind": "design",
+   "original": 14,
+   "refactored": 14,
+   "note": "原版 town.js 的 TERRAIN 是灰泥 / 屋顶 / 路面 / 码头等城镇材质色，重构库 core/palette.js 的同名 TERRAIN 是岩石 / 沙 / 草等地形色——同名不同物，共有键 1 个（grass）。"
+  },
+  {
+   "id": "town.library.decorateCells",
+   "metric": "size",
+   "kind": "design",
+   "original": "对角线一半的均值",
+   "refactored": "角到格心平均距离 × 0.7",
+   "note": "decorateCells 的 cell.size 口径不同（方格时接近）；包围盒相同。"
+  }
+ ],
+ "gaps": 0,
+ "basis": "同一份固定输入喂给原版与嫁接模块（同判据，应逐值相同），再与重构库原有的同职责模块比（设计差异，逐条写原因）。一致只说明这几个统计量在这份输入上一致。"
+}

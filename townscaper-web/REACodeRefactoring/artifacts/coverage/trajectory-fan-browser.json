@@ -2,52 +2,102 @@
   "reports": [
     {
       "drag": 0,
+      "model": "linear",
       "arcs": 23,
-      "tickCount": 188,
-      "maxRange": 5.9094,
+      "tickCount": 331,
+      "maxRange": 8.004,
       "maxApex": 2.9547,
       "analytic45": 5.9094,
-      "speed": 7.61
+      "groundY": -2.473684210526316,
+      "reach": null,
+      "speed": 7.61,
+      "gravity": 9.8,
+      "grid": {
+        "nodes": 176,
+        "solved": 154,
+        "unreachable": 22,
+        "model": "linear"
+      }
     },
     {
       "drag": 0.83,
+      "model": "linear",
       "arcs": 23,
-      "tickCount": 125,
-      "maxRange": 3.6675,
+      "tickCount": 253,
+      "maxRange": 5.1223,
       "maxApex": 2.0922,
       "analytic45": 5.9094,
-      "speed": 7.61
+      "groundY": -2.473684210526316,
+      "reach": null,
+      "speed": 7.61,
+      "gravity": 9.8,
+      "grid": {
+        "nodes": 176,
+        "solved": 100,
+        "unreachable": 76,
+        "model": "linear"
+      }
     },
     {
       "drag": 1.26,
+      "model": "linear",
       "arcs": 23,
-      "tickCount": 108,
-      "maxRange": 3.0691,
+      "tickCount": 229,
+      "maxRange": 4.2889,
       "maxApex": 1.8279,
       "analytic45": 5.9094,
-      "speed": 7.61
+      "groundY": -2.473684210526316,
+      "reach": null,
+      "speed": 7.61,
+      "gravity": 9.8,
+      "grid": {
+        "nodes": 176,
+        "solved": 78,
+        "unreachable": 98,
+        "model": "linear"
+      }
     },
     {
       "drag": 2,
+      "model": "linear",
       "arcs": 23,
-      "tickCount": 88,
-      "maxRange": 2.3837,
+      "tickCount": 205,
+      "maxRange": 3.3011,
       "maxApex": 1.5086,
       "analytic45": 5.9094,
-      "speed": 7.61
+      "groundY": -2.473684210526316,
+      "reach": null,
+      "speed": 7.61,
+      "gravity": 9.8,
+      "grid": {
+        "nodes": 176,
+        "solved": 59,
+        "unreachable": 117,
+        "model": "linear"
+      }
     }
   ],
   "fast": {
+    "model": "linear",
     "arcs": 23,
-    "tickCount": 203,
-    "maxRange": 5.6595,
+    "tickCount": 332,
+    "maxRange": 7.146,
     "maxApex": 3.3204,
     "analytic45": 10.2041,
+    "groundY": -2.473684210526316,
+    "reach": null,
     "speed": 10,
-    "drag": 0.83
+    "drag": 0.83,
+    "gravity": 9.8,
+    "grid": {
+      "nodes": 176,
+      "solved": 154,
+      "unreachable": 22,
+      "model": "linear"
+    }
   },
   "canvas": {
-    "teal": 6290,
-    "white": 776
+    "teal": 12134,
+    "white": 1766
   }
 }

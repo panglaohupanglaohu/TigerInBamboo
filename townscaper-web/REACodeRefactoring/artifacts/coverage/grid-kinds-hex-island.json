@@ -1,0 +1,269 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "①[hex] 页面按 ?grid=hex 选中「纯六边形」且是地形场景",
+      "pass": true,
+      "detail": "gridKind=hex 高亮=纯六边形 按钮=四边形/三角 + 方格/纯六边形/纯方格/纯三角"
+    },
+    {
+      "name": "②[hex] 每格恒为 6 边（纯净格型）",
+      "pass": true,
+      "detail": "{\"6\":271}"
+    },
+    {
+      "name": "③[hex] 顶点最多被 3 格共用 + V−E+F=1（晶格类型与圆盘拓扑）",
+      "pass": true,
+      "detail": "perVertex=3 V=600 E=870 F=271 euler=1 互反违例=0/1512"
+    },
+    {
+      "name": "④[hex] 同一套地形管线真的生成出岛（陆地占比 / 台地层数 / 渲染提交）",
+      "pass": true,
+      "detail": "陆地 95/271=0.3506 台地 6 层 [1,2,3,4,5,6] calls=62 tris=279096"
+    },
+    {
+      "name": "⑤[hex] 格线层按晶格画（唯一段/陆地格 ≈7.4–9.2）",
+      "pass": true,
+      "detail": "格线 787 段 / 陆地格 95 = 8.284"
+    },
+    {
+      "name": "①[square] 页面按 ?grid=square 选中「纯方格」且是地形场景",
+      "pass": true,
+      "detail": "gridKind=square 高亮=纯方格 按钮=四边形/三角 + 方格/纯六边形/纯方格/纯三角"
+    },
+    {
+      "name": "②[square] 每格恒为 4 边（纯净格型）",
+      "pass": true,
+      "detail": "{\"4\":961}"
+    },
+    {
+      "name": "③[square] 顶点最多被 4 格共用 + V−E+F=1（晶格类型与圆盘拓扑）",
+      "pass": true,
+      "detail": "perVertex=4 V=1024 E=1984 F=961 euler=1 互反违例=0/3720"
+    },
+    {
+      "name": "④[square] 同一套地形管线真的生成出岛（陆地占比 / 台地层数 / 渲染提交）",
+      "pass": true,
+      "detail": "陆地 372/961=0.3871 台地 8 层 [1,2,3,4,5,6,7,8] calls=66 tris=397800"
+    },
+    {
+      "name": "⑤[square] 格线层按晶格画（唯一段/陆地格 ≈3.7–4.5）",
+      "pass": true,
+      "detail": "格线 1535 段 / 陆地格 372 = 4.126"
+    },
+    {
+      "name": "①[tri] 页面按 ?grid=tri 选中「纯三角」且是地形场景",
+      "pass": true,
+      "detail": "gridKind=tri 高亮=纯三角 按钮=四边形/三角 + 方格/纯六边形/纯方格/纯三角"
+    },
+    {
+      "name": "②[tri] 每格恒为 3 边（纯净格型）",
+      "pass": true,
+      "detail": "{\"3\":1944}"
+    },
+    {
+      "name": "③[tri] 顶点最多被 6 格共用 + V−E+F=1（晶格类型与圆盘拓扑）",
+      "pass": true,
+      "detail": "perVertex=6 V=1027 E=2970 F=1944 euler=1 互反违例=0/5724"
+    },
+    {
+      "name": "④[tri] 同一套地形管线真的生成出岛（陆地占比 / 台地层数 / 渲染提交）",
+      "pass": true,
+      "detail": "陆地 576/1944=0.2963 台地 10 层 [1,2,3,4,5,6,7,8,9,10] calls=52 tris=400916"
+    },
+    {
+      "name": "⑤[tri] 格线层按晶格画（唯一段/陆地格 ≈2.5–3.1）",
+      "pass": true,
+      "detail": "格线 1625 段 / 陆地格 576 = 2.821"
+    },
+    {
+      "name": "① 页面内「纯六边形 → 纯方格」换网格后场景不丢",
+      "pass": true,
+      "detail": "url=?grid=square&scene=terrain kind=square sides={\"4\":961}"
+    },
+    {
+      "name": "⑥ 0 页面/控制台错误",
+      "pass": true,
+      "detail": "none"
+    }
+  ],
+  "kinds": {
+    "hex": {
+      "gridKind": "hex",
+      "cells": 271,
+      "sides": {
+        "6": 271
+      },
+      "v": 600,
+      "e": 870,
+      "euler": 1,
+      "perVertex": 3,
+      "vHist": {
+        "1": 60,
+        "2": 54,
+        "3": 486
+      },
+      "land": 95,
+      "landRatio": 0.3506,
+      "terraces": 6,
+      "levels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "nbChecked": 1512,
+      "reciprocalBad": 0,
+      "btns": [
+        {
+          "t": "四边形",
+          "on": false
+        },
+        {
+          "t": "三角 + 方格",
+          "on": false
+        },
+        {
+          "t": "纯六边形",
+          "on": true
+        },
+        {
+          "t": "纯方格",
+          "on": false
+        },
+        {
+          "t": "纯三角",
+          "on": false
+        }
+      ],
+      "calls": 62,
+      "tris": 279096,
+      "lineSegs": 787,
+      "lineCells": 95,
+      "segPerCell": 8.284,
+      "url": "?grid=hex&scene=terrain"
+    },
+    "square": {
+      "gridKind": "square",
+      "cells": 961,
+      "sides": {
+        "4": 961
+      },
+      "v": 1024,
+      "e": 1984,
+      "euler": 1,
+      "perVertex": 4,
+      "vHist": {
+        "1": 4,
+        "2": 120,
+        "4": 900
+      },
+      "land": 372,
+      "landRatio": 0.3871,
+      "terraces": 8,
+      "levels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "nbChecked": 3720,
+      "reciprocalBad": 0,
+      "btns": [
+        {
+          "t": "四边形",
+          "on": false
+        },
+        {
+          "t": "三角 + 方格",
+          "on": false
+        },
+        {
+          "t": "纯六边形",
+          "on": false
+        },
+        {
+          "t": "纯方格",
+          "on": true
+        },
+        {
+          "t": "纯三角",
+          "on": false
+        }
+      ],
+      "calls": 66,
+      "tris": 397800,
+      "lineSegs": 1535,
+      "lineCells": 372,
+      "segPerCell": 4.126,
+      "url": "?grid=square&scene=terrain"
+    },
+    "tri": {
+      "gridKind": "tri",
+      "cells": 1944,
+      "sides": {
+        "3": 1944
+      },
+      "v": 1027,
+      "e": 2970,
+      "euler": 1,
+      "perVertex": 6,
+      "vHist": {
+        "2": 6,
+        "3": 102,
+        "6": 919
+      },
+      "land": 576,
+      "landRatio": 0.2963,
+      "terraces": 10,
+      "levels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "nbChecked": 5724,
+      "reciprocalBad": 0,
+      "btns": [
+        {
+          "t": "四边形",
+          "on": false
+        },
+        {
+          "t": "三角 + 方格",
+          "on": false
+        },
+        {
+          "t": "纯六边形",
+          "on": false
+        },
+        {
+          "t": "纯方格",
+          "on": false
+        },
+        {
+          "t": "纯三角",
+          "on": true
+        }
+      ],
+      "calls": 52,
+      "tris": 400916,
+      "lineSegs": 1625,
+      "lineCells": 576,
+      "segPerCell": 2.821,
+      "url": "?grid=tri&scene=terrain"
+    }
+  }
+}

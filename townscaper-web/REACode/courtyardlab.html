@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>封闭区域 → 后院（Voronoi 路网 + 草地 + 树 + 小屋）</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:112ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; inset:92px 322px 52px 16px; display:flex; align-items:center;
+    justify-content:center; background:#5b6b7a; border-radius:12px; border:1px solid var(--line); }
+  canvas { display:block; border-radius:10px; }
+  #panel { position:fixed; right:16px; top:92px; width:296px; bottom:52px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:11px 13px; display:flex;
+    flex-direction:column; gap:8px; overflow:auto; box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.03em; }
+  .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  button { font:inherit; font-size:12.5px; padding:6px 10px; border-radius:7px;
+    border:1px solid #b9cbc9; background:#fff; color:var(--ink); cursor:pointer; }
+  button:hover { background:#f2f7f6; }
+  button.on { background:#1d5c58; color:#fff; border-color:#1d5c58; }
+  label.chk { display:flex; gap:7px; align-items:center; font-size:12.5px; cursor:pointer; }
+  #foot { position:fixed; left:18px; bottom:10px; right:322px; font-size:11.5px; color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>围起来才会变后院 — 判定用可达性，路网用 Voronoi 边</h1>
+  <p>原文：<b>“if you build an enclosed area it becomes a backyard”</b>。片子里石板地 0.831s 仍是灰的，0.914s 整块铺草，
+  0.982s 出现带闭环的小路，1.065s 长树，1.581s 放一栋小木屋 —— 时间轴就按这个来。</p>
+</header>
+
+<div id="stage"><canvas id="cv" width="660" height="660"></canvas></div>
+
+<div id="panel">
+  <h2>状态</h2>
+  <div class="row"><span>是否封闭</span><b id="sEnc">—</b></div>
+  <div class="row"><span>院子面积</span><b id="sArea">—</b></div>
+  <div class="row"><span>小路占比</span><b id="sPath">—</b></div>
+  <div class="row"><span>树 / 长椅</span><b id="sTree">—</b></div>
+  <div class="row"><span>树到路最小格距</span><b id="sClr">—</b></div>
+  <div class="row"><span>Voronoi 胞数</span><b id="sCell">—</b></div>
+  <h2>操作</h2>
+  <button id="bGap">开一个门洞</button>
+  <button id="bPlay">重放生成</button>
+  <label class="chk"><input id="bWire" type="checkbox" /> 显示网格与 Voronoi 站点</label>
+  <div class="row"><span>阶段</span><b id="sStage">—</b></div>
+</div>
+<div id="foot">路网 = Voronoi(d2−d1 &lt; 1.15 格) ∪ 贴墙一圈；树只落在“离路 ≥1 格”的草地上 —— 所以“树不压路”是构造保证，不靠碰撞检测。</div>
+
+<script type="module">
+import { planBackyard, exampleRing, pointInRing, STAGES, YARD } from './src/courtyard.js';
+
+const W = 30, H = 30;
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+
+let gap = false, showWire = false, stageT = 99;
+let plan = null;
+
+function recompute() {
+  const solid = exampleRing(W, H, { gap });
+  plan = planBackyard(W, H, solid, { seed: 7 });
+  plan.solid = solid;
+  stageT = 99;
+  paintStats();
+}
+
+function paintStats() {
+  const s = plan.stats;
+  document.getElementById('sEnc').textContent = plan.enclosed ? '是（内部可达不到边界）' : '否（有一处漏）';
+  document.getElementById('sArea').textContent = plan.enclosed ? s.area + ' 格' : '—';
+  document.getElementById('sPath').textContent = plan.enclosed ? s.pathPct.toFixed(1) + '%' : '—';
+  document.getElementById('sTree').textContent = plan.enclosed ? s.trees + ' / ' + (s.benches || 0) : '—';
+  document.getElementById('sClr').textContent = plan.enclosed ? s.clearance + ' 格' : '—';
+  document.getElementById('sCell').textContent = plan.enclosed ? s.cellsPerYard : '—';
+  window.__plan = { enclosed: plan.enclosed, stats: s };
+}
+
+// 45° 俯视：格子压扁成菱形，跟片子机位接近
+const SX = 13.2, SY = 6.8, OX = 330, OY = 196;
+function toScreen(x, y) {
+  return [OX + (x - y) * SX, OY + (x + y) * SY];
+}
+
+function draw() {
+  ctx.clearRect(0, 0, 660, 660);
+  ctx.fillStyle = '#5b6b7a'; ctx.fillRect(0, 0, 660, 660);
+  const solid = plan.solid;
+  const t = stageT;
+  const show = {
+    grass: t >= 0,
+    path: t >= 0.083,
+    tree: t >= 0.234,
+    shed: t >= 0.75,
+  };
+
+  // 地面
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = y * W + x;
+      if (solid[i]) continue;
+      // 「石板地」= 环内的地面（不管封没封）；后院内容只加在**真的封闭**的格子上
+      const paved = pointInRing(x + 0.5, y + 0.5);
+      const isIn = plan.interior[i];
+      let col = [72, 84, 96];                                 // 环外的地面（深色）
+      if (paved) col = YARD.slate;
+      if (isIn && show.grass) col = YARD.grass;
+      if (isIn && show.path && plan.path[i]) col = YARD.path;
+      const [px, py] = toScreen(x, y);
+      ctx.fillStyle = `rgb(${col[0]},${col[1]},${col[2]})`;
+      ctx.beginPath();
+      ctx.moveTo(px, py - SY); ctx.lineTo(px + SX, py);
+      ctx.lineTo(px, py + SY); ctx.lineTo(px - SX, py);
+      ctx.closePath(); ctx.fill();
+    }
+  }
+
+  if (showWire) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+    for (const [sx, sy] of plan.sites) {
+      const [px, py] = toScreen(sx, sy);
+      ctx.beginPath(); ctx.arc(px, py, 3.5, 0, 7); ctx.stroke();
+    }
+  }
+
+  // 建筑（带高度，挡住后面的地面）
+  const HGT = 40;
+  for (let y = 0; y < H; y++) {
+    for (let x = 0; x < W; x++) {
+      const i = y * W + x;
+      if (!solid[i]) continue;
+      const [px, py] = toScreen(x, y);
+      const occ = (xx, yy) => (xx < 0 || yy < 0 || xx >= W || yy >= H) ? 0 : solid[yy * W + xx];
+      // 侧面只在邻居是空的时候画 —— 否则 2 格厚的墙会画成一排栅栏
+      if (!occ(x, y + 1)) {
+        ctx.fillStyle = '#b8543f';
+        ctx.beginPath();
+        ctx.moveTo(px - SX, py); ctx.lineTo(px, py + SY);
+        ctx.lineTo(px, py + SY - HGT); ctx.lineTo(px - SX, py - HGT);
+        ctx.closePath(); ctx.fill();
+      }
+      if (!occ(x + 1, y)) {
+        ctx.fillStyle = '#933f2f';
+        ctx.beginPath();
+        ctx.moveTo(px, py + SY); ctx.lineTo(px + SX, py);
+        ctx.lineTo(px + SX, py - HGT); ctx.lineTo(px, py + SY - HGT);
+        ctx.closePath(); ctx.fill();
+      }
+      // 顶面（瓦片感：交替明暗）
+      ctx.fillStyle = ((x + y) & 1) ? '#d98a63' : '#cf7f59';
+      ctx.beginPath();
+      ctx.moveTo(px, py - SY - HGT); ctx.lineTo(px + SX, py - HGT);
+      ctx.lineTo(px, py + SY - HGT); ctx.lineTo(px - SX, py - HGT);
+      ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = 'rgba(120,50,35,0.35)'; ctx.stroke();
+    }
+  }
+
+  // 树
+  if (show.tree) {
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      if (!plan.tree[y * W + x]) continue;
+      const [px, py] = toScreen(x, y);
+      const r = 5.6;
+      ctx.fillStyle = 'rgba(30,50,40,0.28)';
+      ctx.beginPath(); ctx.ellipse(px + 2, py + 3, r, r * 0.55, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = YARD.leaf;
+      ctx.beginPath(); ctx.arc(px, py - 4, r, 0, 7); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.18)';
+      ctx.beginPath(); ctx.arc(px - 2, py - 6, r * 0.45, 0, 7); ctx.fill();
+    }
+  }
+
+  // 长椅
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    if (!plan.bench[y * W + x]) continue;
+    const [px, py] = toScreen(x, y);
+    ctx.fillStyle = '#6b4a3a';
+    ctx.fillRect(px - 4, py - 4, 8, 5);
+  }
+
+  // 小屋
+  if (show.shed && plan.stats.shed) {
+    const [sx, sy] = plan.stats.shed;
+    const [px, py] = toScreen(sx + 0.5, sy + 1);
+    const hh = 26;
+    ctx.fillStyle = '#c05a44';
+    ctx.beginPath();
+    ctx.moveTo(px - SX, py); ctx.lineTo(px, py + SY);
+    ctx.lineTo(px, py + SY - hh); ctx.lineTo(px - SX, py - hh);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#a94b39';
+    ctx.beginPath();
+    ctx.moveTo(px, py + SY); ctx.lineTo(px + SX, py);
+    ctx.lineTo(px + SX, py - hh); ctx.lineTo(px, py + SY - hh);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = YARD.shedRoof;
+    ctx.beginPath();
+    ctx.moveTo(px, py - SY - hh); ctx.lineTo(px + SX, py - hh);
+    ctx.lineTo(px, py + SY - hh); ctx.lineTo(px - SX, py - hh);
+    ctx.closePath(); ctx.fill();
+  }
+
+  const shown = STAGES.filter(s => t >= s.at).map(s => s.key);
+  document.getElementById('sStage').textContent = shown.length ? shown.join(' → ') : '石板地';
+}
+
+// —— 按片上实测时间轴重放 ——
+let raf = 0, t0 = 0;
+function play() {
+  cancelAnimationFrame(raf);
+  t0 = performance.now();
+  stageT = -1;
+  const step = (now) => {
+    stageT = (now - t0) / 1000;
+    draw(); paintStats();
+    if (stageT < 0.95) raf = requestAnimationFrame(step);
+    else { stageT = 99; draw(); }
+  };
+  raf = requestAnimationFrame(step);
+}
+
+document.getElementById('bGap').onclick = (e) => {
+  gap = !gap;
+  e.target.textContent = gap ? '补上门洞' : '开一个门洞';
+  e.target.classList.toggle('on', gap);
+  recompute(); draw();
+  if (!gap) play();
+};
+document.getElementById('bPlay').onclick = () => { if (plan.enclosed) play(); };
+document.getElementById('bWire').onchange = (e) => { showWire = e.target.checked; draw(); };
+
+recompute();
+draw();
+if (plan.enclosed) play();
+window.__ready = true;
+</script>
+</body>
+</html>

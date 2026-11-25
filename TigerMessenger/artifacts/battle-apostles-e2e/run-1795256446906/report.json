@@ -1,0 +1,11 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/battle-apostles-e2e/run-1795256446906",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描失败：游戏场景尚未就绪"
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "Error: probe scan failed: 扫描失败：游戏场景尚未就绪\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/battle-apostles-browser.mjs:31:52"
+}

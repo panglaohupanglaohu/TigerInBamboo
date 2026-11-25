@@ -1,0 +1,879 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-surface-e2e/run-1795448109721",
+  "looks": {
+    "approved": {
+      "look": "approved",
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "totals": {
+        "masses": 6,
+        "considered": 74940,
+        "inverted": 0,
+        "openEdges": 54394,
+        "transparentRock": 0,
+        "plants": 1940,
+        "plantBad": 222,
+        "foam": 14376,
+        "foamStray": 3,
+        "coast": 2880,
+        "foamUncovered": 0,
+        "plantBadShare": 0.1144,
+        "foamStrayShare": 0.0002,
+        "foamUncoveredShare": 0
+      },
+      "status": "warn",
+      "masses": [
+        {
+          "id": "back-left",
+          "status": "warn",
+          "plants": {
+            "count": 372,
+            "ok": 336,
+            "floating": 0,
+            "buried": 36,
+            "offSurface": 0,
+            "badShare": 0.0968,
+            "p95": 1.044,
+            "status": "warn"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 8,
+              "ok": 8,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.001,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 3000,
+            "coast": 588,
+            "strayed": 3,
+            "uncovered": 0,
+            "strayShare": 0.001,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 8076 · 退化 0 · 非有限 0（水线以上 12368 / 12760 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "warn",
+              "detail": "372 株抽样：悬空 0 · 埋入 36 · 脚下无岩面 0 · |高差| p95 1.044 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 3/3000 · 水线 3 米内无白沫 0/588"
+            }
+          ]
+        },
+        {
+          "id": "back-right",
+          "status": "warn",
+          "plants": {
+            "count": 372,
+            "ok": 304,
+            "floating": 4,
+            "buried": 64,
+            "offSurface": 0,
+            "badShare": 0.1828,
+            "p95": 1.393,
+            "status": "warn"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 8,
+              "ok": 8,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.001,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 3000,
+            "coast": 684,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 19532 · 退化 0 · 非有限 0（水线以上 24598 / 25054 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "warn",
+              "detail": "372 株抽样：悬空 4 · 埋入 64 · 脚下无岩面 0 · |高差| p95 1.393 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/3000 · 水线 3 米内无白沫 0/684"
+            }
+          ]
+        },
+        {
+          "id": "front-left",
+          "status": "warn",
+          "plants": {
+            "count": 372,
+            "ok": 302,
+            "floating": 4,
+            "buried": 66,
+            "offSurface": 0,
+            "badShare": 0.1882,
+            "p95": 1.427,
+            "status": "warn"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 8,
+              "ok": 8,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.001,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 3000,
+            "coast": 600,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 10508 · 退化 0 · 非有限 0（水线以上 15622 / 16022 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "warn",
+              "detail": "372 株抽样：悬空 4 · 埋入 66 · 脚下无岩面 0 · |高差| p95 1.427 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/3000 · 水线 3 米内无白沫 0/600"
+            }
+          ]
+        },
+        {
+          "id": "front-right",
+          "status": "warn",
+          "plants": {
+            "count": 372,
+            "ok": 324,
+            "floating": 14,
+            "buried": 34,
+            "offSurface": 0,
+            "badShare": 0.129,
+            "p95": 1.243,
+            "status": "warn"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 8,
+              "ok": 8,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.001,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 2944,
+            "coast": 552,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 10868 · 退化 0 · 非有限 0（水线以上 15188 / 15556 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "warn",
+              "detail": "372 株抽样：悬空 14 · 埋入 34 · 脚下无岩面 0 · |高差| p95 1.243 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/2944 · 水线 3 米内无白沫 0/552"
+            }
+          ]
+        },
+        {
+          "id": "bay-1",
+          "status": "warn",
+          "plants": {
+            "count": 226,
+            "ok": 226,
+            "floating": 0,
+            "buried": 0,
+            "offSurface": 0,
+            "badShare": 0,
+            "p95": 0.136,
+            "status": "pass"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 2,
+              "ok": 2,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 1376,
+            "coast": 258,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 3088 · 退化 0 · 非有限 0（水线以上 4172 / 4344 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "pass",
+              "detail": "226 株抽样：悬空 0 · 埋入 0 · 脚下无岩面 0 · |高差| p95 0.136 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/1376 · 水线 3 米内无白沫 0/258"
+            }
+          ]
+        },
+        {
+          "id": "bay-2",
+          "status": "warn",
+          "plants": {
+            "count": 226,
+            "ok": 226,
+            "floating": 0,
+            "buried": 0,
+            "offSurface": 0,
+            "badShare": 0,
+            "p95": 0.1,
+            "status": "pass"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 2,
+              "ok": 2,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 1056,
+            "coast": 198,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 2322 · 退化 0 · 非有限 0（水线以上 2992 / 3124 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "pass",
+              "detail": "226 株抽样：悬空 0 · 埋入 0 · 脚下无岩面 0 · |高差| p95 0.1 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/1056 · 水线 3 米内无白沫 0/198"
+            }
+          ]
+        }
+      ],
+      "shots": [
+        {
+          "ok": true,
+          "view": "top",
+          "label": "俯视",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.84,
+            35.64,
+            -140.63
+          ],
+          "distance": 232.2,
+          "heightAboveSea": 225.1,
+          "look": {
+            "id": "approved",
+            "soft": false,
+            "palette": false,
+            "latest": false
+          },
+          "file": "approved-veg-top.png"
+        },
+        {
+          "ok": false,
+          "reason": "back-right 找不到水线上的崖脚点",
+          "file": "approved-foam-cliff.png"
+        }
+      ],
+      "pass": true
+    },
+    "soft": {
+      "look": "soft",
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "totals": {
+        "masses": 6,
+        "considered": 87050,
+        "inverted": 0,
+        "openEdges": 68576,
+        "transparentRock": 0,
+        "plants": 1580,
+        "plantBad": 225,
+        "foam": 10360,
+        "foamStray": 0,
+        "coast": 2910,
+        "foamUncovered": 0,
+        "plantBadShare": 0.1424,
+        "foamStrayShare": 0,
+        "foamUncoveredShare": 0
+      },
+      "status": "fail",
+      "masses": [
+        {
+          "id": "back-left",
+          "status": "warn",
+          "plants": {
+            "count": 312,
+            "ok": 281,
+            "floating": 22,
+            "buried": 9,
+            "offSurface": 0,
+            "badShare": 0.0994,
+            "p95": 1.48,
+            "status": "warn"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 8,
+              "ok": 8,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.001,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 2156,
+            "coast": 606,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 11391 · 退化 0 · 非有限 0（水线以上 15232 / 15636 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "warn",
+              "detail": "312 株抽样：悬空 22 · 埋入 9 · 脚下无岩面 0 · |高差| p95 1.48 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/2156 · 水线 3 米内无白沫 0/606"
+            }
+          ]
+        },
+        {
+          "id": "back-right",
+          "status": "warn",
+          "plants": {
+            "count": 312,
+            "ok": 268,
+            "floating": 35,
+            "buried": 9,
+            "offSurface": 0,
+            "badShare": 0.141,
+            "p95": 1.559,
+            "status": "warn"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 8,
+              "ok": 8,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.186,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 2408,
+            "coast": 690,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 23245 · 退化 6 · 非有限 0（水线以上 27642 / 28102 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "warn",
+              "detail": "312 株抽样：悬空 35 · 埋入 9 · 脚下无岩面 0 · |高差| p95 1.559 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/2408 · 水线 3 米内无白沫 0/690"
+            }
+          ]
+        },
+        {
+          "id": "front-left",
+          "status": "fail",
+          "plants": {
+            "count": 312,
+            "ok": 239,
+            "floating": 46,
+            "buried": 27,
+            "offSurface": 0,
+            "badShare": 0.234,
+            "p95": 1.629,
+            "status": "fail"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 8,
+              "ok": 8,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.442,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 2128,
+            "coast": 606,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 10553 · 退化 3 · 非有限 0（水线以上 15570 / 15974 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "fail",
+              "detail": "312 株抽样：悬空 46 · 埋入 27 · 脚下无岩面 0 · |高差| p95 1.629 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/2128 · 水线 3 米内无白沫 0/606"
+            }
+          ]
+        },
+        {
+          "id": "front-right",
+          "status": "warn",
+          "plants": {
+            "count": 312,
+            "ok": 271,
+            "floating": 30,
+            "buried": 11,
+            "offSurface": 0,
+            "badShare": 0.1314,
+            "p95": 1.629,
+            "status": "warn"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 8,
+              "ok": 8,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0.001,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 1980,
+            "coast": 552,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 16765 · 退化 5 · 非有限 0（水线以上 20410 / 20778 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "warn",
+              "detail": "312 株抽样：悬空 30 · 埋入 11 · 脚下无岩面 0 · |高差| p95 1.629 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/1980 · 水线 3 米内无白沫 0/552"
+            }
+          ]
+        },
+        {
+          "id": "bay-1",
+          "status": "warn",
+          "plants": {
+            "count": 166,
+            "ok": 163,
+            "floating": 0,
+            "buried": 2,
+            "offSurface": 1,
+            "badShare": 0.0181,
+            "p95": 0.249,
+            "status": "pass"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 2,
+              "ok": 2,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 960,
+            "coast": 258,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 4107 · 退化 0 · 非有限 0（水线以上 5064 / 5236 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "pass",
+              "detail": "166 株抽样：悬空 0 · 埋入 2 · 脚下无岩面 1 · |高差| p95 0.249 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/960 · 水线 3 米内无白沫 0/258"
+            }
+          ]
+        },
+        {
+          "id": "bay-2",
+          "status": "warn",
+          "plants": {
+            "count": 166,
+            "ok": 133,
+            "floating": 23,
+            "buried": 10,
+            "offSurface": 0,
+            "badShare": 0.1988,
+            "p95": 1.677,
+            "status": "warn"
+          },
+          "plantsByMesh": {
+            "plants": {
+              "count": 2,
+              "ok": 2,
+              "floating": 0,
+              "buried": 0,
+              "offSurface": 0,
+              "badShare": 0,
+              "p95": 0,
+              "status": "pass"
+            }
+          },
+          "foam": {
+            "foam": 728,
+            "coast": 198,
+            "strayed": 0,
+            "uncovered": 0,
+            "strayShare": 0,
+            "uncoveredShare": 0,
+            "status": "pass"
+          },
+          "checks": [
+            {
+              "id": "material",
+              "name": "岩体材质不透明",
+              "status": "pass",
+              "detail": "1 个岩体材质不透明；白沫 / 浪 / 悬停框按设计半透明 3 个"
+            },
+            {
+              "id": "integrity",
+              "name": "水线以上破面",
+              "status": "warn",
+              "detail": "反面三角 0 · 开口边 2515 · 退化 0 · 非有限 0（水线以上 3132 / 3264 面；与 approved 同机位比才下结论）"
+            },
+            {
+              "id": "plants",
+              "name": "植被贴地",
+              "status": "warn",
+              "detail": "166 株抽样：悬空 23 · 埋入 10 · 脚下无岩面 0 · |高差| p95 1.677 米"
+            },
+            {
+              "id": "foam",
+              "name": "岸线白沫跟随",
+              "status": "pass",
+              "detail": "白沫离水线超 3 米 0/728 · 水线 3 米内无白沫 0/198"
+            }
+          ]
+        }
+      ],
+      "shots": [
+        {
+          "ok": true,
+          "view": "top",
+          "label": "俯视",
+          "valid": true,
+          "tries": 0,
+          "occluder": null,
+          "target": [
+            62.86,
+            35.73,
+            -140.58
+          ],
+          "distance": 232.7,
+          "heightAboveSea": 225.6,
+          "look": {
+            "id": "soft",
+            "soft": true,
+            "palette": false,
+            "latest": true
+          },
+          "file": "soft-veg-top.png"
+        },
+        {
+          "ok": false,
+          "reason": "back-right 找不到水线上的崖脚点",
+          "file": "soft-foam-cliff.png"
+        }
+      ],
+      "pass": true
+    },
+    "soft+palette": {
+      "look": "soft,palette",
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "pass": false,
+      "failure": "frame.waitForFunction: Target page, context or browser has been closed\n    at openApostles (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/apostles-e2e.mjs:27:15)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/apostles-surface-browser.mjs:18:15 | 比 approved 变差：没有检查结果 undefined→undefined"
+    }
+  },
+  "regressions": {
+    "soft": [],
+    "soft+palette": [
+      {
+        "id": "missing",
+        "name": "没有检查结果"
+      }
+    ]
+  },
+  "pass": false
+}

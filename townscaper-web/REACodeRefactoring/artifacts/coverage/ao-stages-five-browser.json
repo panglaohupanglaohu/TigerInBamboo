@@ -1,0 +1,115 @@
+{
+  "state": {
+    "aoMode": "vertex",
+    "bake": true,
+    "c04": true,
+    "ssaoOn": false,
+    "unlit": true,
+    "materialIsUnlit": true,
+    "vertices": 36555,
+    "levels": null,
+    "lightOnly": false
+  },
+  "pix": {
+    "size": [
+      1280,
+      745
+    ],
+    "bg": [
+      16,
+      20,
+      24
+    ],
+    "area": 288977,
+    "frac": 0.303,
+    "flat": {
+      "mean": 142.481,
+      "sd": 43.67,
+      "p05": 71.6,
+      "p50": 153.7,
+      "p95": 218.9,
+      "range": 147.3,
+      "darkFrac": 0.5932,
+      "chromaMean": 58.77,
+      "warmMean": 44.36,
+      "leftRB": 44.09,
+      "rightRB": 40.09,
+      "hf": 4.48
+    },
+    "up": {
+      "mean": 135.201,
+      "sd": 40.984,
+      "p05": 58.3,
+      "p50": 145.1,
+      "p95": 208,
+      "range": 149.7,
+      "darkFrac": 0.6321,
+      "chromaMean": 59.75,
+      "warmMean": 45.08,
+      "leftRB": 44.33,
+      "rightRB": 41.87,
+      "hf": 4.56
+    },
+    "voxel": {
+      "mean": 133.959,
+      "sd": 43.906,
+      "p05": 64.2,
+      "p50": 146.8,
+      "p95": 208,
+      "range": 143.8,
+      "darkFrac": 0.5376,
+      "chromaMean": 59.36,
+      "warmMean": 45.09,
+      "leftRB": 44.64,
+      "rightRB": 41.34,
+      "hf": 4.62
+    },
+    "ssao": {
+      "mean": 128.375,
+      "sd": 47.163,
+      "p05": 43,
+      "p50": 140.1,
+      "p95": 204.3,
+      "range": 161.3,
+      "darkFrac": 0.548,
+      "chromaMean": 59.4,
+      "warmMean": 45.29,
+      "leftRB": 44.99,
+      "rightRB": 41.45,
+      "hf": 7.74
+    },
+    "directional": {
+      "mean": 133.786,
+      "sd": 44.075,
+      "p05": 64,
+      "p50": 146.8,
+      "p95": 208,
+      "range": 144,
+      "darkFrac": 0.5376,
+      "chromaMean": 59.31,
+      "warmMean": 45.22,
+      "leftRB": 44.72,
+      "rightRB": 41.44,
+      "hf": 4.61
+    },
+    "diff": {
+      "flatUp": 193562,
+      "upVoxel": 164968,
+      "voxelSsao": 108901,
+      "voxelDir": 0,
+      "ssaoDir": 102591,
+      "noiseA": 0,
+      "noiseB": 0
+    }
+  },
+  "shots": [
+    "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/ao-stages-five-flat-r234.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/ao-stages-five-up-r234.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/ao-stages-five-voxel-r234.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/ao-stages-five-ssao-r234.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/ao-stages-five-directional-r234.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/ao-stages-five-voxel-r234.png",
+    "/Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring/artifacts/coverage/ao-stages-five-voxel-r234.png"
+  ],
+  "errors": []
+}

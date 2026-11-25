@@ -1,0 +1,255 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/capability-maturity-e2e/run-1795445570124",
+  "steps": {
+    "json": {
+      "rows": 69,
+      "byLevel": {
+        "0": 5,
+        "1": 17,
+        "2": 0,
+        "3": 11,
+        "4": 0,
+        "5": 18,
+        "6": 18,
+        "7": 0,
+        "8": 0,
+        "9": 0
+      },
+      "missingEverywhere": [
+        4,
+        7,
+        8,
+        9
+      ],
+      "counts": [
+        {
+          "id": "sidebar",
+          "value": 43,
+          "seen": 39
+        },
+        {
+          "id": "lineage",
+          "value": 61,
+          "seen": 55
+        },
+        {
+          "id": "tree-script",
+          "value": 94,
+          "seen": 64
+        },
+        {
+          "id": "tree-page",
+          "value": 110,
+          "seen": 105
+        },
+        {
+          "id": "unique",
+          "value": 69,
+          "seen": null
+        }
+      ]
+    },
+    "tree": {
+      "maturity": "loaded",
+      "execUnique": "71",
+      "execPerLine": "114",
+      "lines": 27,
+      "withExec": 27,
+      "badged": [
+        {
+          "line": "grid",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "wfc",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "sphere",
+          "level": "3",
+          "text": "L3"
+        },
+        {
+          "line": "tools",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "terrain",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "shore",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "sediment",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "water-effects",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "building",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "hallway",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "light",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "shadows",
+          "level": "3",
+          "text": "L3"
+        },
+        {
+          "line": "reflection",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "lines",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "palette",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "atlas",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "camera",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "plants",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "animals",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "wind",
+          "level": "5",
+          "text": "L5"
+        },
+        {
+          "line": "smoke",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "fire",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "navigation",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "combat",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "projectiles",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "campaign",
+          "level": "6",
+          "text": "L6"
+        },
+        {
+          "line": "ui-decoration",
+          "level": "6",
+          "text": "L6"
+        }
+      ],
+      "pill": "71可执行（去重）",
+      "dist": "九级成熟度① 来源 17② 原版 0③ 重构 11④ 等价 0⑤ 单测 18⑥ 实景 18⑦ 擂台 0⑧ 采用 0⑨ 默认 0无证据 569 个能力（去重）· 没有任何能力达到：④ 行为等价或差异已登记、⑦ 过了擂台、⑧ 用户采用、⑨ 默认进游戏 · 生成于 2026-11-23T14:49"
+    },
+    "drawer": {
+      "line": "terrain",
+      "buttons": [
+        {
+          "text": "⚙ 地形与承托L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 崖顶悬垂L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 海中石柱L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 穿山隧道L3",
+          "level": "3"
+        },
+        {
+          "text": "⚙ 山体隆起L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 沟谷侵蚀L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 连绵圆润L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 十二门徒软坡",
+          "level": null
+        },
+        {
+          "text": "⚙ 保护带L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 岩屑坡L6",
+          "level": "6"
+        },
+        {
+          "text": "⚙ 十二门徒库地形色",
+          "level": null
+        },
+        {
+          "text": "⚙ 重解地形L0",
+          "level": "0"
+        }
+      ]
+    }
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "抽屉里有能力没有级别：[{\"text\":\"⚙ 十二门徒软坡\",\"level\":null},{\"text\":\"⚙ 十二门徒库地形色\",\"level\":null}]"
+}

@@ -3,8 +3,8 @@
  * 验证 Worker 独立复算 + 编译器检查 + 场景锚点 + 预算。定稿写入 tm.planet.final.v1，
  * 游戏的星球运行时（src/world/planetV8/runtime.js）启动时读取它。
  */
-import { describePlanetCapabilities, DEFAULT_PLANET_RECIPE, FINAL_KEY, cleanRecipe } from './planet/capabilities.js?v=sys-r15';
-import { mountTierWorkshop } from './tier-workshop.js?v=engine-r1';
+import { describePlanetCapabilities, DEFAULT_PLANET_RECIPE, FINAL_KEY, cleanRecipe } from './planet/capabilities.js?v=contract-r3';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
 
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || 'null') ?? d; } catch { return d; } };

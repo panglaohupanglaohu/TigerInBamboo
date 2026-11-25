@@ -1,0 +1,58 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/apostles-soft-terrain-20261115/run-1795568497001",
+  "looks": {
+    "approved": {
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "pass": false,
+      "failure": "locator.selectOption: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#scene')\n    - locator resolved to <select id=\"scene\">…</select>\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/apostles-look-browser.mjs:16:32"
+    },
+    "latest": {
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "pass": false,
+      "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#edit')\n    - locator resolved to <button id=\"edit\" title=\"进入当前场景的编辑\">进入编辑 ↗</button>\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/apostles-look-browser.mjs:16:85"
+    },
+    "soft": {
+      "errors": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "stable": {
+        "ok": true,
+        "samples": 3,
+        "resets": 0,
+        "count": 6,
+        "look": "soft"
+      },
+      "state": {
+        "look": {
+          "soft": true,
+          "latest": true,
+          "palette": false,
+          "id": "soft"
+        },
+        "meshes": 0,
+        "massIds": [],
+        "triangles": 0,
+        "camera": [
+          51.87,
+          102.85,
+          -189.34
+        ],
+        "softTops": [],
+        "hasScene": false
+      },
+      "pass": false,
+      "failure": "locator.screenshot: Timeout 28301.34600000002ms exceeded.\nCall log:\n  - taking element screenshot\n  - waiting for fonts to load...\n  - fonts loaded\n  - attempting scroll into view action\n    - waiting for element to be stable\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/apostles-look-browser.mjs:24:84"
+    }
+  }
+}

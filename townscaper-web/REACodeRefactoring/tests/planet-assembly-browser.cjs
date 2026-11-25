@@ -53,9 +53,35 @@ const path = require('path');
     await p.screenshot({ path: path.join(out, 'planet-assembly-clay-shell.png') });
     if (!mats.clay || mats.vertexColors) throw Error('白模没生效');
     if (!mats.shell || mats.children !== 1) throw Error('薄壳没生效（应只剩陆地一层）');
+    // r216 起点可指定（页面层）：setRoot 换任意陆地格 → 序列第一格 = 该格，装配前缀从新起点生长
+    const rc = await p.evaluate(() => {
+      const target = planetAssembly.order[planetAssembly.order.length - 1];
+      const ok = planetAssembly.setRoot(target);
+      planetAssembly.set(0.02);
+      const prefix = planetDemo.only ? [...planetDemo.only] : [];
+      planetAssembly.set(1);
+      return { target, ok, first: planetAssembly.order[0], root: planetAssembly.root, prefix };
+    });
+    if (rc.ok !== rc.target || rc.first !== rc.target || rc.root !== rc.target) throw Error('setRoot 未生效：' + JSON.stringify(rc));
+    if (!rc.prefix.includes(rc.target)) throw Error('装配前缀不含新起点格：' + JSON.stringify(rc));
+    // 「起点：点格」点选球面 → 最近的陆地格成为新起点（不预知选中谁，但必须落到陆地格并生效）
+    await p.click('#pickroot');
+    await p.mouse.click(720, 500);
+    await p.waitForTimeout(80);
+    const pk = await p.evaluate(() => ({ root: planetAssembly.root, first: planetAssembly.order[0], land: planetDemo.planet.H[planetAssembly.root] > 0 }));
+    if (!pk.land || pk.first !== pk.root) throw Error('点选起点失败：' + JSON.stringify(pk));
+    // ?root=<陆地格> 进页面直接生效（非法格回退默认根，不报错）
+    await p.goto('http://localhost:8769/planet.html?root=' + rc.target);
+    await p.waitForFunction(() => window.planetAssembly && window.planetDemo);
+    const qr = await p.evaluate(() => ({ root: planetAssembly.root, first: planetAssembly.order[0] }));
+    if (qr.first !== rc.target || qr.root !== rc.target) throw Error('?root= 未生效：' + JSON.stringify(qr));
+    await p.goto('http://localhost:8769/planet.html?root=999999');
+    await p.waitForFunction(() => window.planetAssembly && window.planetDemo);
+    const qbad = await p.evaluate(() => ({ root: planetAssembly.root, first: planetAssembly.order[0], cells: planetDemo.only ? planetDemo.only.size : planetAssembly.order.length }));
+    if (qbad.root !== null || qbad.cells !== total) throw Error('非法 ?root= 未回退：' + JSON.stringify(qbad));
     if (errors.length) throw Error('页面报错：' + errors.join(' | '));
-    fs.writeFileSync(path.join(out, 'planet-assembly-browser.json'), JSON.stringify({ total, reports, mats, errors }, null, 2));
-    console.log({ total, reports: reports.map((r) => [r.asm, r.cells, r.verts]), mats });
+    fs.writeFileSync(path.join(out, 'planet-assembly-browser.json'), JSON.stringify({ total, reports, mats, rootChecks: { setRoot: rc, picked: pk, query: qr, badQuery: qbad }, errors }, null, 2));
+    console.log({ total, reports: reports.map((r) => [r.asm, r.cells, r.verts]), mats, roots: { setRoot: rc.target, picked: pk.root, query: qr.first } });
   } finally {
     await b.close();
   }

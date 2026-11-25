@@ -1,0 +1,8 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [],
+ "errors": [],
+ "steps": {},
+ "pass": false,
+ "failure": "frame.waitForFunction: Timeout 300000ms exceeded.\n    at waitGame (/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/planet-caps-browser.mjs:45:11)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/planet-caps-browser.mjs:56:17"
+}

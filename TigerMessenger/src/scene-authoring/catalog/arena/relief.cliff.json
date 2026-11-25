@@ -1,0 +1,125 @@
+{
+ "capability": "relief.cliff",
+ "line": "terrain",
+ "beat": "relief.soft",
+ "arena": {
+  "seed": 20261123,
+  "n": 61,
+  "cell": 3,
+  "generator": "terrain/arena-generic.js arenaSite"
+ },
+ "rule": {
+  "better": [
+   {
+    "key": "flat",
+    "dir": 1,
+    "tol": 0.005
+   },
+   {
+    "key": "cliff",
+    "dir": 1,
+    "tol": 0.005
+   }
+  ],
+  "guard": [
+   {
+    "key": "hardEdge",
+    "dir": -1,
+    "tol": 0.05
+   }
+  ]
+ },
+ "prev": {
+  "free": 1785,
+  "midSlope": 0.8028,
+  "flat": 0.0062,
+  "cliff": 0.079,
+  "drainage": 0.9748,
+  "pits": 12,
+  "hardEdge": 0,
+  "overhang": 0,
+  "reach": 0.6308,
+  "climb": 0.2255,
+  "contour": 0,
+  "rough": 0.1812
+ },
+ "next": {
+  "free": 1785,
+  "midSlope": 0.4162,
+  "flat": 0.1317,
+  "cliff": 0.3249,
+  "drainage": 0.985,
+  "pits": 11,
+  "hardEdge": 0,
+  "overhang": 0,
+  "reach": 0.6426,
+  "climb": 0.1563,
+  "contour": 0,
+  "rough": 0.6952
+ },
+ "metrics": {
+  "free": 1785,
+  "midSlope": 0.4162,
+  "flat": 0.1317,
+  "cliff": 0.3249,
+  "drainage": 0.985,
+  "pits": 11,
+  "hardEdge": 0,
+  "overhang": 0,
+  "reach": 0.6426,
+  "climb": 0.1563,
+  "contour": 0,
+  "rough": 0.6952
+ },
+ "judge": {
+  "pass": true,
+  "rows": [
+   {
+    "key": "hardEdge",
+    "prev": 0,
+    "next": 0,
+    "delta": 0,
+    "role": "guard",
+    "tol": 0.05,
+    "ok": true
+   },
+   {
+    "key": "flat",
+    "prev": 0.0062,
+    "next": 0.1317,
+    "delta": 0.1255,
+    "role": "better",
+    "tol": 0.005,
+    "ok": true,
+    "better": true
+   },
+   {
+    "key": "cliff",
+    "prev": 0.079,
+    "next": 0.3249,
+    "delta": 0.2459,
+    "role": "better",
+    "tol": 0.005,
+    "ok": true,
+    "better": true
+   }
+  ],
+  "why": "赢：flat、cliff 变好，守护指标都没退步"
+ },
+ "pass": true,
+ "status": "measured",
+ "note": "Quick 预填（2026-11-23 R47）：规则先定后量，pass / prev / next 为 null = 还没实算；由 Kiro 跑 tools/refactor/record-relief-evidence.mjs 写入。登记后，任何改动让这一代任一规则指标比登记成绩差过 0.002（坑：0 格）→ tests/relief-arena.test.mjs 红。",
+ "runner": "TigerMessenger/src/system-workshop/relief/arena.js runArena",
+ "test": "TigerMessenger/tests/relief-arena.test.mjs",
+ "recordedAt": "2026-11-24T18:35:11.373Z",
+ "recordedBy": "record-relief-evidence.mjs（实算）",
+ "planSummary": {
+  "applied": [
+   "relief.soft",
+   "relief.cliff"
+  ],
+  "lips": 0,
+  "ladders": 0,
+  "river": null
+ }
+}

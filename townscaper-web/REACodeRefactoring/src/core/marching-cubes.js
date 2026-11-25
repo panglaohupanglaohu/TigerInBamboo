@@ -30,6 +30,9 @@ export function marchIrregular(cells, { levels, value, iso = .5, levelHeight = .
   if (!Array.isArray(cells) || !Number.isInteger(levels) || levels < 1 || typeof value !== 'function' || !Number.isFinite(iso)) throw new RangeError('invalid marching cubes input');
   const Y = yOf ?? ((l) => l * levelHeight);
   const verts = [], vkey = new Map(), tris = [];
+  // 顶点类别：1 = 格边上的真实交点（等值面只在这里穿过）；0 = 环扇形三角化补的中心点（内部辅助点，不在格边上）
+  const kinds = [];
+  let fanCenters = 0;
   const vcache = new Map();
   const val = (vid, l) => { const k = vid * 4096 + l; let v = vcache.get(k); if (v === undefined) { v = value(vid, l); if (!Number.isFinite(v)) throw new TypeError('nonfinite field sample'); vcache.set(k, v); } return v; };
   let touched = 0;
@@ -62,7 +65,7 @@ export function marchIrregular(cells, { levels, value, iso = .5, levelHeight = .
         let id = vkey.get(key);
         if (id === undefined) {
           const vl = val(lo.vid, lo.l), vh = val(hi.vid, hi.l), t = (iso - vl) / (vh - vl);
-          id = verts.length / 3; verts.push(lo.p[0] + (hi.p[0] - lo.p[0]) * t, lo.p[1] + (hi.p[1] - lo.p[1]) * t, lo.p[2] + (hi.p[2] - lo.p[2]) * t); vkey.set(key, id);
+          id = verts.length / 3; verts.push(lo.p[0] + (hi.p[0] - lo.p[0]) * t, lo.p[1] + (hi.p[1] - lo.p[1]) * t, lo.p[2] + (hi.p[2] - lo.p[2]) * t); kinds.push(1); vkey.set(key, id);
         }
         return id;
       };
@@ -88,7 +91,7 @@ export function marchIrregular(cells, { levels, value, iso = .5, levelHeight = .
         else {
           let cx = 0, cy = 0, cz = 0;
           for (const id of loop) { cx += verts[id * 3]; cy += verts[id * 3 + 1]; cz += verts[id * 3 + 2]; }
-          const cid = verts.length / 3; verts.push(cx / loop.length, cy / loop.length, cz / loop.length);
+          const cid = verts.length / 3; verts.push(cx / loop.length, cy / loop.length, cz / loop.length); kinds.push(0); fanCenters++;
           for (let i = 0; i < loop.length; i++) tris.push(cid, loop[i], loop[(i + 1) % loop.length]);
         }
       }
@@ -99,7 +102,7 @@ export function marchIrregular(cells, { levels, value, iso = .5, levelHeight = .
   for (let i = 0; i < tris.length; i += 3) for (let k = 0; k < 3; k++) { const a = tris[i + k], b = tris[i + (k + 1) % 3]; const key = a + ',' + b; half.set(key, (half.get(key) || 0) + 1); }
   let boundaryEdges = 0, nonManifoldEdges = 0, windingConflicts = 0;
   for (const [key, cnt] of half) { const [a, b] = key.split(','); const back = half.get(b + ',' + a) || 0; if (cnt > 1) windingConflicts++; if (!back) boundaryEdges++; else if (back > 1 || cnt > 1) nonManifoldEdges++; }
-  return { positions: new Float32Array(verts), indices: new Uint32Array(tris), triangles: tris.length / 3, vertices: verts.length / 3, cellsTouched: touched, closed: boundaryEdges === 0 && windingConflicts === 0, boundaryEdges, nonManifoldEdges, windingConflicts };
+  return { positions: new Float32Array(verts), indices: new Uint32Array(tris), triangles: tris.length / 3, vertices: verts.length / 3, cellsTouched: touched, closed: boundaryEdges === 0 && windingConflicts === 0, boundaryEdges, nonManifoldEdges, windingConflicts, vertexKinds: new Uint8Array(kinds), fanCenters };
 }
 
 /** 有符号体积（闭合网格）：正 = 法向朝外。用来验证朝向。 */

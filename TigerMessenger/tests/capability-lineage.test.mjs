@@ -81,7 +81,13 @@ test('真实资料：全部来源入线，队列覆盖全部未被替代的缺�
   assert.equal(L.lines.reduce((n, l) => n + l.generations.reduce((k, g) => k + g.members.length, 0) + l.loose.length, 0), evolution.events.reduce((n, e) => n + e.families.length, 0));
   const gaps = new Set(evolution.events.filter((e) => e.status === 'partial' && e.families.some((f) => L.lines.find((l) => l.id === f).kind === 'line') && !e.outgoing.some((k) => { const r = evolution.relations.find((x) => x.id === k); return r.valid && r.type === 'supersedes'; })).map((e) => e.id));
   assert.deepEqual(new Set(L.queue.map((q) => q.id)), gaps);
-  assert.equal(L.queue.length, gaps.size, '同一来源只排一次'); assert.ok(L.queue.some((q) => q.alsoIn.length));
+  assert.equal(L.queue.length, gaps.size, '同一来源只排一次');
+  // 交叉线标记（alsoIn）：只许标同事件确实覆盖的其他线。1241046107125399552 出队后真实资料暂无跨线
+  // partial——不假设跨线行必然存在，存在时必须标注正确。
+  const famByEvent = new Map(evolution.events.map((e) => [e.id, e.families]));
+  assert.ok(L.queue.every((q) => q.alsoIn.every((f) => f !== q.line && (famByEvent.get(q.id) || []).includes(f))), 'alsoIn 只标同事件的其他线');
+  const multiLaneGaps = [...gaps].filter((id) => (famByEvent.get(id) || []).length > 1);
+  assert.ok(multiLaneGaps.every((id) => L.queue.find((q) => q.id === id).alsoIn.length > 0), '跨线缺口必须带 alsoIn');
   assert.ok(L.queue.every((q, i) => i === 0 || L.queue[i - 1].score >= q.score));
   for (const l of L.lines.filter((x) => x.kind === 'line')) { assert.ok(l.generations.length >= 1, l.id); assert.ok(l.generations.every((g, i) => i === 0 || g.from >= l.generations[i - 1].from), l.id + ' 代际按时间'); if (l.target) assert.ok(l.target.mode === 'backfill' || l.target.generation > l.frontier); }
   assert.ok(L.executables.every((x) => x.lines.length), '能力库 registry 的能力都能排进能力线');

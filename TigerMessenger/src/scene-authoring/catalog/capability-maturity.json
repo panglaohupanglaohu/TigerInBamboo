@@ -1,0 +1,5195 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-25T15:28:31.259Z",
+ "generator": "TigerMessenger/tools/refactor/build-capability-maturity.mjs",
+ "levels": [
+  {
+   "n": 1,
+   "key": "source",
+   "name": "看过来源",
+   "short": "来源",
+   "evidence": "learn/data.js 里的来源帖子",
+   "home": "townscaper-web/REACodeRefactoring/learn/data.js#<帖子ID>"
+  },
+  {
+   "n": 2,
+   "key": "original",
+   "name": "原版有实现",
+   "short": "原版",
+   "evidence": "原版 REACode 文件",
+   "home": "townscaper-web/REACode/<文件>"
+  },
+  {
+   "n": 3,
+   "key": "refactored",
+   "name": "重构版有落点",
+   "short": "重构",
+   "evidence": "重构库模块",
+   "home": "townscaper-web/REACodeRefactoring/<模块>"
+  },
+  {
+   "n": 4,
+   "key": "parity",
+   "name": "行为等价或差异已登记",
+   "short": "等价",
+   "evidence": "对照登记",
+   "home": "TigerMessenger/src/scene-authoring/catalog/parity/<能力ID>.json"
+  },
+  {
+   "n": 5,
+   "key": "unit",
+   "name": "封装成可执行能力且有单元测试",
+   "short": "单测",
+   "evidence": "单元测试文件",
+   "home": "TigerMessenger/tests/<x>.test.mjs#<能力ID>"
+  },
+  {
+   "n": 6,
+   "key": "e2e",
+   "name": "实景端到端跑通且有截图",
+   "short": "实景",
+   "evidence": "端到端报告 + 截图",
+   "home": "TigerMessenger/artifacts/<层>-<场景>-e2e/run-*/report.json"
+  },
+  {
+   "n": 7,
+   "key": "arena",
+   "name": "过了擂台",
+   "short": "擂台",
+   "evidence": "擂台成绩",
+   "home": "TigerMessenger/src/scene-authoring/catalog/arena/<能力ID>.json"
+  },
+  {
+   "n": 8,
+   "key": "adopted",
+   "name": "用户采用",
+   "short": "采用",
+   "evidence": "采用记录",
+   "home": "TigerMessenger/src/scene-authoring/catalog/adoptions.json#<能力ID>"
+  },
+  {
+   "n": 9,
+   "key": "default",
+   "name": "默认进游戏",
+   "short": "默认",
+   "evidence": "默认启用登记",
+   "home": "TigerMessenger/src/scene-authoring/catalog/defaults.json#<能力ID>"
+  }
+ ],
+ "evidenceHome": {
+  "source": "townscaper-web/REACodeRefactoring/learn/data.js",
+  "parity": "TigerMessenger/src/scene-authoring/catalog/parity",
+  "arena": "TigerMessenger/src/scene-authoring/catalog/arena",
+  "adoptions": "TigerMessenger/src/scene-authoring/catalog/adoptions.json",
+  "defaults": "TigerMessenger/src/scene-authoring/catalog/defaults.json",
+  "tests": "TigerMessenger/tests",
+  "e2e": "TigerMessenger/artifacts"
+ },
+ "e2eRule": "⑥：TigerMessenger/artifacts/*-e2e/run-*/report.json 里 pass === true 且同目录有 .png。report.capabilities 写了就只覆盖写明的能力（条目可为字符串或 {id}）；没写就按目录名第一段对层（battle-*/nav-* → 战役层，fx-* → 表现层，mountain-* → 山形层，apostles-* → 十二门徒地形层，building-* → 建筑层），整层覆盖（粗口径）。UI 类端到端不算能力证据（E2E_UI_DIRS：面板/渲染验收目录，含写了 capabilities 花名册的 capability-contracts-e2e）；仓库根下误生成的 artifacts/ 不扫。",
+ "unitTests": "test_workshops.py 单元清单",
+ "counts": [
+  {
+   "id": "sidebar",
+   "label": "系统工坊左栏「可执行 N」",
+   "seen": 39,
+   "basis": "当前工坊（默认场景层）里能拖进管线的 ⚙ 能力，按能力 ID 去重；不含球系统层、物件层。来源：场景管线节点（mode 为 editor / live / code，含启动时登记的重构库能力代码）+ 通用场景 + 战役 + 山形 + 表现层。浏览器本机的「归属调配」会改变它。",
+   "code": "TigerMessenger/src/system-workshop/capability-sidebar.js renderLineage() 末尾 items.size（工坊分区视图是各分区 runnable 之和）；能力清单来自 studio.js 的 sources.scene",
+   "value": 49
+  },
+  {
+   "id": "lineage",
+   "label": "能力谱系「可执行能力」",
+   "seen": 55,
+   "basis": "computeLineage 登记的可执行能力条目：重构库能力注册表（按场景层）+ 通用场景 + 球系统 + 物件 + 战役 + 山形 + 表现层。不含场景管线里的 editor / live 节点。条目不去重。",
+   "code": "TigerMessenger/tools/refactor/build-capability-lineage.mjs computeLineage() → REACodeRefactoring/src/core/capability-lineage.js loop.executables = execRows.length",
+   "value": 85
+  },
+  {
+   "id": "tree-script",
+   "label": "能力树摘要（脚本口径）",
+   "seen": 64,
+   "basis": "对 27 条能力线逐条数可执行能力再求和。一个能力按来源帖子 / 模块归到几条线就算几次，所以比能力个数大。",
+   "code": "REACodeRefactoring/src/core/capability-tree.js buildCapabilityTree() summary.executables = Σ nodes[线].executables.length（输入：computeLineage 的能力清单）",
+   "value": 151
+  },
+  {
+   "id": "tree-page",
+   "label": "能力树页面顶栏「可执行」",
+   "seen": 105,
+   "basis": "与上一行同一个按线求和，但输入是页面 studio.js getExecutables()：多了场景管线的 editor / live / code 节点，它们的来源帖子多、归线多、重复也多。R23 起顶栏改显示去重数，按线求和只留在提示里。",
+   "code": "TigerMessenger/src/scene-authoring/studio.js getExecutables → REACodeRefactoring/src/ui/capability-tree.js 顶栏 S.executables（R23 前）",
+   "value": 151
+  },
+  {
+   "id": "unique",
+   "label": "去重后的可执行能力（唯一对外数字）",
+   "seen": null,
+   "primary": true,
+   "basis": "以上所有来源按能力 ID 合并去重，每个能力只数一次；等于 capability-maturity.json 的行数。对外、文档、汇报一律用这个数。",
+   "code": "TigerMessenger/tools/refactor/build-capability-maturity.mjs（rows.length）；页面：能力树顶栏 summary.executablesUnique、左栏括号里的「全系统去重」",
+   "value": 95
+  }
+ ],
+ "countsDetail": {
+  "sidebarByTier": {
+   "scene": 49,
+   "planet": 22,
+   "object": 4
+  },
+  "lineageEntries": 85,
+  "lineageUnique": 85,
+  "pageEntries": 86,
+  "pageUnique": 86,
+  "treeScriptLinkedUnique": 85,
+  "treePageLinkedUnique": 86,
+  "onlyInPage": [
+   "animals.birds",
+   "building.edit",
+   "effects.fire",
+   "life.layers",
+   "light.time",
+   "terrain.preserve",
+   "vegetation.layers",
+   "water.surface",
+   "weather.atmosphere",
+   "world.ink"
+  ],
+  "onlyInLineage": [
+   "life.animals",
+   "life.plant-atlas",
+   "life.smoke",
+   "life.wind",
+   "light.bounce",
+   "light.megatex",
+   "light.voxel-ao",
+   "scene.plateau-diag",
+   "scene.town-graph"
+  ],
+  "sceneNodesRead": true
+ },
+ "distribution": {
+  "total": 95,
+  "byLevel": {
+   "0": 0,
+   "1": 0,
+   "2": 0,
+   "3": 0,
+   "4": 0,
+   "5": 0,
+   "6": 1,
+   "7": 94,
+   "8": 0,
+   "9": 0
+  },
+  "byStrict": {
+   "0": 3,
+   "1": 3,
+   "2": 9,
+   "3": 14,
+   "4": 0,
+   "5": 0,
+   "6": 1,
+   "7": 65,
+   "8": 0,
+   "9": 0
+  },
+  "reachedBy": {
+   "1": 92,
+   "2": 90,
+   "3": 84,
+   "4": 77,
+   "5": 95,
+   "6": 95,
+   "7": 94,
+   "8": 0,
+   "9": 0
+  },
+  "gapRows": {
+   "1": 3,
+   "2": 5,
+   "3": 11,
+   "4": 18
+  },
+  "missingEverywhere": [
+   8,
+   9
+  ],
+  "note": "没有任何能力达到：⑧ 用户采用、⑨ 默认进游戏"
+ },
+ "lines": {
+  "grid": {
+   "id": "grid",
+   "name": "网格",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "grid.contours",
+   "count": 11,
+   "counts": {
+    "6": 1,
+    "7": 10
+   }
+  },
+  "wfc": {
+   "id": "wfc",
+   "name": "模块约束",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "build.assembly",
+   "count": 7,
+   "counts": {
+    "7": 7
+   }
+  },
+  "terrain": {
+   "id": "terrain",
+   "name": "地形",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "apostles.palette",
+   "count": 19,
+   "counts": {
+    "7": 19
+   }
+  },
+  "sphere": {
+   "id": "sphere",
+   "name": "球面",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "planet.light-ambient-bounce",
+   "count": 7,
+   "counts": {
+    "6": 1,
+    "7": 6
+   }
+  },
+  "shore": {
+   "id": "shore",
+   "name": "岸线",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "planet.sea-shore-field",
+   "count": 6,
+   "counts": {
+    "7": 6
+   }
+  },
+  "reflection": {
+   "id": "reflection",
+   "name": "倒影",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "planet.sea-shore-field",
+   "count": 6,
+   "counts": {
+    "7": 6
+   }
+  },
+  "light": {
+   "id": "light",
+   "name": "光照",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "grid.contours",
+   "count": 22,
+   "counts": {
+    "7": 22
+   }
+  },
+  "shadows": {
+   "id": "shadows",
+   "name": "阴影",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "light.voxel-ao",
+   "count": 5,
+   "counts": {
+    "7": 5
+   }
+  },
+  "lines": {
+   "id": "lines",
+   "name": "描线与纹理",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "mountain.lowpoly",
+   "count": 7,
+   "counts": {
+    "7": 7
+   }
+  },
+  "plants": {
+   "id": "plants",
+   "name": "植被",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "life.layers",
+   "count": 9,
+   "counts": {
+    "7": 9
+   }
+  },
+  "atlas": {
+   "id": "atlas",
+   "name": "精灵表示",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "life.plant-atlas",
+   "count": 5,
+   "counts": {
+    "7": 5
+   }
+  },
+  "wind": {
+   "id": "wind",
+   "name": "共享风",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "life.smoke",
+   "count": 11,
+   "counts": {
+    "7": 11
+   }
+  },
+  "navigation": {
+   "id": "navigation",
+   "name": "导航",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "battle.navFinePortals",
+   "count": 8,
+   "counts": {
+    "7": 8
+   }
+  },
+  "building": {
+   "id": "building",
+   "name": "建筑",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "battle.navFinePortals",
+   "count": 9,
+   "counts": {
+    "7": 9
+   }
+  },
+  "sediment": {
+   "id": "sediment",
+   "name": "岩层",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "fx.sediment",
+   "count": 2,
+   "counts": {
+    "7": 2
+   }
+  },
+  "projectiles": {
+   "id": "projectiles",
+   "name": "弹道",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "fx.projectiles",
+   "count": 1,
+   "counts": {
+    "7": 1
+   }
+  },
+  "smoke": {
+   "id": "smoke",
+   "name": "烟火",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "effects.smoke",
+   "count": 3,
+   "counts": {
+    "7": 3
+   }
+  },
+  "tools": {
+   "id": "tools",
+   "name": "工具",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "apostles.palette",
+   "count": 7,
+   "counts": {
+    "7": 7
+   }
+  },
+  "campaign": {
+   "id": "campaign",
+   "name": "战役",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "fx.campaign",
+   "count": 1,
+   "counts": {
+    "7": 1
+   }
+  },
+  "fire": {
+   "id": "fire",
+   "name": "火焰",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "effects.fire",
+   "count": 2,
+   "counts": {
+    "7": 2
+   }
+  },
+  "ui-decoration": {
+   "id": "ui-decoration",
+   "name": "界面装饰",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "fx.ornament",
+   "count": 1,
+   "counts": {
+    "7": 1
+   }
+  },
+  "palette": {
+   "id": "palette",
+   "name": "配色",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "apostles.palette",
+   "count": 7,
+   "counts": {
+    "7": 7
+   }
+  },
+  "camera": {
+   "id": "camera",
+   "name": "镜头",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "fx.camera",
+   "count": 1,
+   "counts": {
+    "7": 1
+   }
+  },
+  "animals": {
+   "id": "animals",
+   "name": "生物与装饰",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "animals.birds",
+   "count": 7,
+   "counts": {
+    "7": 7
+   }
+  },
+  "combat": {
+   "id": "combat",
+   "name": "战斗反馈",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "battle.navFooting",
+   "count": 5,
+   "counts": {
+    "7": 5
+   }
+  },
+  "water-effects": {
+   "id": "water-effects",
+   "name": "水的消费者",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "fx.wake",
+   "count": 3,
+   "counts": {
+    "7": 3
+   }
+  },
+  "hallway": {
+   "id": "hallway",
+   "name": "建筑纹理",
+   "level": 7,
+   "strictLevel": 7,
+   "missing": [],
+   "label": "L7",
+   "by": "fx.hallway",
+   "count": 1,
+   "counts": {
+    "7": 1
+   }
+  }
+ },
+ "rows": [
+  {
+   "id": "animals.birds",
+   "name": "动物层 · 飞鸟",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "animals",
+   "lineName": "生物与装饰",
+   "lines": [
+    "animals"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1244892370392489989",
+    "2": "townscaper-web/REACode/engine/birds.js",
+    "3": "townscaper-web/REACodeRefactoring/src/life/birds.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/animals.birds.json#animals.birds",
+    "5": "TigerMessenger/tests/capability-library.test.mjs#animals.birds",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#animals.birds",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/animals.birds.json#animals.birds"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "apostles.palette",
+   "name": "十二门徒库地形色",
+   "tier": "scene",
+   "layer": "apostles-terrain",
+   "origin": "apostles-terrain",
+   "file": "TigerMessenger/src/system-workshop/apostles-terrain/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain",
+    "palette",
+    "tools"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1200520827898343425",
+    "2": "townscaper-web/REACode/src/palette.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/palette.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/apostles.palette.json#apostles.palette",
+    "5": "TigerMessenger/tests/apostles-terrain-pipeline.test.mjs#apostles.palette",
+    "6": "TigerMessenger/artifacts/apostles-measure-pick-e2e/run-1795509418765/report.json#apostles.palette",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/apostles.palette.json#apostles.palette"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 apostles-measure-pick-e2e → apostles-terrain 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R31 开发（Quick 写码，待 Kiro 验收）—）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "apostles.soft",
+   "name": "十二门徒软坡",
+   "tier": "scene",
+   "layer": "apostles-terrain",
+   "origin": "apostles-terrain",
+   "file": "TigerMessenger/src/system-workshop/apostles-terrain/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1447488323845509121",
+    "2": "townscaper-web/REACode/engine/mesa.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/generate.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/apostles.soft.json#apostles.soft",
+    "5": "TigerMessenger/tests/apostles-terrain-pipeline.test.mjs#apostles.soft",
+    "6": "TigerMessenger/artifacts/apostles-measure-pick-e2e/run-1795509418765/report.json#apostles.soft",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/apostles.soft.json#apostles.soft"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 apostles-measure-pick-e2e → apostles-terrain 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R31 开发（Quick 写码，待 Kiro 验收）—）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "battle.garrison",
+   "name": "守军布防",
+   "tier": "scene",
+   "layer": "battle",
+   "origin": "battle",
+   "file": "TigerMessenger/src/system-workshop/battle/capabilities.js",
+   "line": "combat",
+   "lineName": "战斗反馈",
+   "lines": [
+    "combat"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#839067977781768193",
+    "2": "townscaper-web/REACode/src/combatfx.js",
+    "3": "townscaper-web/REACodeRefactoring/src/badnorth/battle.js",
+    "5": "TigerMessenger/tests/battle-pipeline.test.mjs#battle.garrison",
+    "6": "TigerMessenger/artifacts/battle-apostles-e2e/run-1795519565162/report.json#battle.garrison",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/battle.garrison.json#battle.garrison"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 battle-apostles-e2e → battle 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-21",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-21 战役管线端到端跑通（十二门徒 Bad North））"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "battle.navFinePortals",
+   "name": "拱洞精细门户",
+   "tier": "scene",
+   "layer": "battle",
+   "origin": "battle",
+   "file": "TigerMessenger/src/system-workshop/battle/capabilities.js",
+   "line": "navigation",
+   "lineName": "导航",
+   "lines": [
+    "navigation",
+    "building"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#906425294533394432",
+    "2": "townscaper-web/REACode/src/cheesenav.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/battle-navigation.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/battle.navFinePortals.json#battle.navFinePortals",
+    "5": "TigerMessenger/tests/battle-pipeline.test.mjs#battle.navFinePortals",
+    "6": "TigerMessenger/artifacts/nav-through-synthetic-e2e/run-1795569273352/report.json#battle.navFinePortals",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/battle.navFinePortals.json#battle.navFinePortals"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "meta",
+    "label": "能力 meta.added 登记"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "battle.navFooting",
+   "name": "穿洞与脚高插值",
+   "tier": "scene",
+   "layer": "battle",
+   "origin": "battle",
+   "file": "TigerMessenger/src/system-workshop/battle/capabilities.js",
+   "line": "navigation",
+   "lineName": "导航",
+   "lines": [
+    "navigation",
+    "combat"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#906425294533394432",
+    "2": "townscaper-web/REACode/src/cheesenav.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/battle-navigation.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/battle.navFooting.json#battle.navFooting",
+    "5": "TigerMessenger/tests/battle-pipeline.test.mjs#battle.navFooting",
+    "6": "TigerMessenger/artifacts/nav-footing-e2e/run-1795569261103/report.json#battle.navFooting",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/battle.navFooting.json#battle.navFooting"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "meta",
+    "label": "能力 meta.added 登记"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "battle.navTraffic",
+   "name": "窄道会车",
+   "tier": "scene",
+   "layer": "battle",
+   "origin": "battle",
+   "file": "TigerMessenger/src/system-workshop/battle/capabilities.js",
+   "line": "navigation",
+   "lineName": "导航",
+   "lines": [
+    "navigation"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#880853661936734211",
+    "2": "townscaper-web/REACode/src/holenav.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/battle-navigation.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/battle.navTraffic.json#battle.navTraffic",
+    "5": "TigerMessenger/tests/battle-pipeline.test.mjs#battle.navTraffic",
+    "6": "TigerMessenger/artifacts/nav-traffic-e2e/run-1795569277628/report.json#battle.navTraffic",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/battle.navTraffic.json#battle.navTraffic"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "meta",
+    "label": "能力 meta.added 登记"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "battle.stage",
+   "name": "部署战斗舞台",
+   "tier": "scene",
+   "layer": "battle",
+   "origin": "battle",
+   "file": "TigerMessenger/src/system-workshop/battle/capabilities.js",
+   "line": "combat",
+   "lineName": "战斗反馈",
+   "lines": [
+    "combat",
+    "plants",
+    "grid",
+    "navigation",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#959530111187013632",
+    "2": "townscaper-web/REACode/src/walkreach.js",
+    "3": "townscaper-web/REACodeRefactoring/src/badnorth/battle.js",
+    "5": "TigerMessenger/tests/battle-pipeline.test.mjs#battle.stage",
+    "6": "TigerMessenger/artifacts/battle-apostles-e2e/run-1795519565162/report.json#battle.stage",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/battle.stage.json#battle.stage"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 battle-apostles-e2e → battle 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-21",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-21 战役管线端到端跑通（十二门徒 Bad North））"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "battle.waves",
+   "name": "登陆波次",
+   "tier": "scene",
+   "layer": "battle",
+   "origin": "battle",
+   "file": "TigerMessenger/src/system-workshop/battle/capabilities.js",
+   "line": "combat",
+   "lineName": "战斗反馈",
+   "lines": [
+    "combat"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#974325184525201409",
+    "2": "townscaper-web/REACode/engine/flags.js",
+    "3": "townscaper-web/REACodeRefactoring/src/badnorth/battle.js",
+    "5": "TigerMessenger/tests/battle-pipeline.test.mjs#battle.waves",
+    "6": "TigerMessenger/artifacts/battle-apostles-e2e/run-1795519565162/report.json#battle.waves",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/battle.waves.json#battle.waves"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 battle-apostles-e2e → battle 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-21",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-21 战役管线端到端跑通（十二门徒 Bad North））"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "build.assembly",
+   "name": "逐块拼装（围合楼体 / 桥廊）",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/build.js",
+   "line": "wfc",
+   "lineName": "模块约束",
+   "lines": [
+    "wfc"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#787319655648100352",
+    "2": "townscaper-web/REACode/src/tileplace.js",
+    "3": "townscaper-web/REACodeRefactoring/src/build/assembly-sequence.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/build.assembly.json#build.assembly",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#build.assembly",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#build.assembly",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/build.assembly.json#build.assembly"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-24（续五）：补学「67帧3D模块逐步拼装」收口（wfc 线 A）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "build.lighthouse",
+   "name": "海边灯塔",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/build.js",
+   "line": "building",
+   "lineName": "建筑",
+   "lines": [
+    "building"
+   ],
+   "level": 7,
+   "strictLevel": 1,
+   "label": "L7（缺 ②）",
+   "reached": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    2
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1331905048801144836",
+    "3": "townscaper-web/REACodeRefactoring/src/capabilities/build.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/build.lighthouse.json#build.lighthouse",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#build.lighthouse",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#build.lighthouse",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/build.lighthouse.json#build.lighthouse"
+   },
+   "basis": {
+    "3": "能力代码本身在重构库 src/capabilities/",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "build.lighthouse-light",
+   "name": "灯塔灯室与光束",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+   "line": "building",
+   "lineName": "建筑",
+   "lines": [
+    "building"
+   ],
+   "level": 7,
+   "strictLevel": 1,
+   "label": "L7（缺 ②）",
+   "reached": [
+    1,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    2
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1331905048801144836",
+    "3": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/build.lighthouse-light.json#build.lighthouse-light",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#build.lighthouse-light",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#build.lighthouse-light",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/build.lighthouse-light.json#build.lighthouse-light"
+   },
+   "basis": {
+    "3": "能力代码本身在重构库 src/capabilities/",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "building.edit",
+   "name": "建筑与空间",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "light",
+   "lineName": "光照",
+   "lines": [
+    "light",
+    "building",
+    "tools"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1197909675443916803",
+    "2": "townscaper-web/REACode/engine/props.js",
+    "3": "townscaper-web/REACodeRefactoring/src/build/buildings.js",
+    "5": "TigerMessenger/tests/workshop-caps.test.mjs#building.edit",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#building.edit",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/building.edit.json#building.edit"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "building.joint-wfc",
+   "name": "联合 WFC 摆建筑群",
+   "tier": "scene",
+   "layer": "building",
+   "origin": "building",
+   "file": "TigerMessenger/src/system-workshop/building/capabilities.js",
+   "line": "building",
+   "lineName": "建筑",
+   "lines": [
+    "building",
+    "wfc",
+    "grid"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1751932427272909032",
+    "2": "townscaper-web/REACode/src/gridmodes.js",
+    "3": "townscaper-web/REACodeRefactoring/src/build/prefab-socket.js",
+    "5": "TigerMessenger/tests/contract-verify.test.mjs#building.joint-wfc",
+    "6": "TigerMessenger/artifacts/contract-verify-e2e/run-1795568776840/report.json#building.joint-wfc",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/building.joint-wfc.json#building.joint-wfc"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R55 开发（Quick 写码，NOT_RUN，待 K）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "building.prefabs",
+   "name": "多格 prefab 目录",
+   "tier": "scene",
+   "layer": "building",
+   "origin": "building",
+   "file": "TigerMessenger/src/system-workshop/building/capabilities.js",
+   "line": "wfc",
+   "lineName": "模块约束",
+   "lines": [
+    "wfc",
+    "grid",
+    "building"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1751932427272909032",
+    "2": "townscaper-web/REACode/src/town.js",
+    "3": "townscaper-web/REACodeRefactoring/src/build/prefab-socket.js",
+    "5": "TigerMessenger/tests/contract-verify.test.mjs#building.prefabs",
+    "6": "TigerMessenger/artifacts/building-prefab-e2e/run-1795568537089/report.json#building.prefabs",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/building.prefabs.json#building.prefabs"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R54 开发（Quick 写码，NOT_RUN，待 K）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "building.sites",
+   "name": "建筑选址",
+   "tier": "scene",
+   "layer": "building",
+   "origin": "building",
+   "file": "TigerMessenger/src/system-workshop/building/capabilities.js",
+   "line": "grid",
+   "lineName": "网格",
+   "lines": [
+    "grid",
+    "wfc",
+    "building"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1579483114178768898",
+    "2": "townscaper-web/REACode/src/town.js",
+    "3": "townscaper-web/REACodeRefactoring/src/build/prefab-socket.js",
+    "5": "TigerMessenger/tests/contract-verify.test.mjs#building.sites",
+    "6": "TigerMessenger/artifacts/auto-assemble-e2e/run-1795460505496/report.json#building.sites",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/building.sites.json#building.sites"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "first-seen",
+    "label": "成熟度脚本第一次见到它"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "effects.fire",
+   "name": "特效层 · 火",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "fire",
+   "lineName": "火焰",
+   "lines": [
+    "fire"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1056990611738451968",
+    "2": "townscaper-web/REACode/engine/splash.js",
+    "3": "townscaper-web/REACodeRefactoring/src/life/effects.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/effects.fire.json#effects.fire",
+    "5": "TigerMessenger/tests/pipeline-model.test.mjs#effects.fire",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#effects.fire",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/effects.fire.json#effects.fire"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "effects.smoke",
+   "name": "特效层 · 烟",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+   "line": "smoke",
+   "lineName": "烟火",
+   "lines": [
+    "smoke"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1015140880666300416",
+    "2": "townscaper-web/REACode/src/smokefx.js",
+    "3": "townscaper-web/REACodeRefactoring/src/life/smoke.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/effects.smoke.json#effects.smoke",
+    "5": "TigerMessenger/tests/capability-library.test.mjs#effects.smoke",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#effects.smoke",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/effects.smoke.json#effects.smoke"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.camera",
+   "name": "环绕镜头路径",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "camera",
+   "lineName": "镜头",
+   "lines": [
+    "camera"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1727315611959865407",
+    "2": "townscaper-web/REACode/src/smear.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/camera-motion.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/fx.camera.json#fx.camera",
+    "5": "TigerMessenger/tests/fx-pipeline.test.mjs#fx.camera",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.camera",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.camera.json#fx.camera"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R40 开发 —— 镜头真实飞一圈；夜间重建第一版；指）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.campaign",
+   "name": "岛屿分区与前线",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "campaign",
+   "lineName": "战役",
+   "lines": [
+    "campaign",
+    "wfc"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1042732450730913793",
+    "2": "townscaper-web/REACode/src/campaignmap.js",
+    "3": "townscaper-web/REACodeRefactoring/src/campaign/campaign.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/fx.campaign.json#fx.campaign",
+    "5": "TigerMessenger/tests/fx-pipeline.test.mjs#fx.campaign",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.campaign",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.campaign.json#fx.campaign"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.fire",
+   "name": "小屋点火",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "fire",
+   "lineName": "火焰",
+   "lines": [
+    "fire",
+    "animals",
+    "smoke"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1056990611738451968",
+    "2": "townscaper-web/REACode/engine/splash.js",
+    "3": "townscaper-web/REACodeRefactoring/src/life/fire-coupling.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/fx.fire.json#fx.fire",
+    "5": "TigerMessenger/tests/fx-fire.test.mjs#fx.fire",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.fire",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.fire.json#fx.fire"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "meta",
+    "label": "能力 meta.added 登记"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.hallway",
+   "name": "涂鸦走廊样板",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "hallway",
+   "lineName": "建筑纹理",
+   "lines": [
+    "hallway"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1897266928961700215",
+    "2": "townscaper-web/REACode/src/doodlewall.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/doodle-hallway-layout.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/fx.hallway.json#fx.hallway",
+    "5": "TigerMessenger/tests/fx-hallway.test.mjs#fx.hallway",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.hallway",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.hallway.json#fx.hallway"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "meta",
+    "label": "能力 meta.added 登记"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.ornament",
+   "name": "界面装饰面板",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "ui-decoration",
+   "lineName": "界面装饰",
+   "lines": [
+    "ui-decoration"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1061221291137605633",
+    "2": "townscaper-web/REACode/src/mirrordecor.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/mirror-uv.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/fx.ornament.json#fx.ornament",
+    "5": "TigerMessenger/tests/fx-pipeline.test.mjs#fx.ornament",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.ornament",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.ornament.json#fx.ornament"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.projectiles",
+   "name": "守军箭雨弹道",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "projectiles",
+   "lineName": "弹道",
+   "lines": [
+    "projectiles"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#987267068495003648",
+    "2": "townscaper-web/REACode/src/ballistic.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/ballistic-table.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/fx.projectiles.json#fx.projectiles",
+    "5": "TigerMessenger/tests/fx-sediment-projectiles.test.mjs#fx.projectiles",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.projectiles",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.projectiles.json#fx.projectiles"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "meta",
+    "label": "能力 meta.added 登记"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.replay",
+   "name": "管线回放图",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "tools",
+   "lineName": "工具",
+   "lines": [
+    "tools"
+   ],
+   "level": 7,
+   "strictLevel": 0,
+   "label": "L7（缺 ①②④）",
+   "reached": [
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    1,
+    2,
+    4
+   ],
+   "evidence": {
+    "3": "townscaper-web/REACodeRefactoring/src/core/node-graph-runtime.js",
+    "5": "TigerMessenger/tests/fx-pipeline.test.mjs#fx.replay",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.replay",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.replay.json#fx.replay"
+   },
+   "basis": {
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续：relief 实景 e2e 跑通 + rel）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.sediment",
+   "name": "崖面沉积层带",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "sediment",
+   "lineName": "岩层",
+   "lines": [
+    "sediment"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1699038611125985317",
+    "2": "townscaper-web/REACode/engine/surface.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/sediment-bands-c09.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/fx.sediment.json#fx.sediment",
+    "5": "TigerMessenger/tests/fx-sediment-projectiles.test.mjs#fx.sediment",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.sediment",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.sediment.json#fx.sediment"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "meta",
+    "label": "能力 meta.added 登记"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "fx.wake",
+   "name": "船尾迹",
+   "tier": "scene",
+   "layer": "fx",
+   "origin": "fx",
+   "file": "TigerMessenger/src/system-workshop/fx/capabilities.js",
+   "line": "water-effects",
+   "lineName": "水的消费者",
+   "lines": [
+    "water-effects"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#901469409579061248",
+    "2": "townscaper-web/REACode/src/wake.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/wake-sampling.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/fx.wake.json#fx.wake",
+    "5": "TigerMessenger/tests/fx-pipeline.test.mjs#fx.wake",
+    "6": "TigerMessenger/artifacts/fx-apostles-e2e/run-1795549502842/report.json#fx.wake",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/fx.wake.json#fx.wake"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "grid.contours",
+   "name": "网格等值线与层区域边界",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+   "line": "grid",
+   "lineName": "网格",
+   "lines": [
+    "grid",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1120036868966502401",
+    "2": "townscaper-web/REACode/src/march.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/contour-overlay.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/grid.contours.json#grid.contours",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#grid.contours",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#grid.contours",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/grid.contours.json#grid.contours"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-15",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-15 能力网、场景诊断、网格线第一项能力、十二门徒地形对照）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "life.animals",
+   "name": "小动物（导航面流动）",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "animals",
+   "lineName": "生物与装饰",
+   "lines": [
+    "animals",
+    "navigation"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#810157485638189056",
+    "2": "townscaper-web/REACode/src/flowfield.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/navmesh-flow.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/life.animals.json#life.animals",
+    "5": "TigerMessenger/tests/lightlife-arena.test.mjs#life.animals",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#life.animals",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/life.animals.json#life.animals"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "life.layers",
+   "name": "植物与飞鸟",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "animals",
+   "lineName": "生物与装饰",
+   "lines": [
+    "animals",
+    "plants"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1244892370392489989",
+    "2": "townscaper-web/REACode/engine/birds.js",
+    "3": "townscaper-web/REACodeRefactoring/src/life/birds.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/life.layers.json#life.layers",
+    "5": "TigerMessenger/tests/pipeline-model.test.mjs#life.layers",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#life.layers",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/life.layers.json#life.layers"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "life.plant-atlas",
+   "name": "植物图集（全场景共用）",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "plants",
+   "lineName": "植被",
+   "lines": [
+    "plants",
+    "atlas"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1593215065423245313",
+    "2": "townscaper-web/REACode/engine/spritepack.js",
+    "3": "townscaper-web/REACodeRefactoring/src/life/sprite-pack-c09.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/life.plant-atlas.json#life.plant-atlas",
+    "5": "TigerMessenger/tests/lightlife-arena.test.mjs#life.plant-atlas",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#life.plant-atlas",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/life.plant-atlas.json#life.plant-atlas"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "life.smoke",
+   "name": "烟（烟囱）",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "smoke",
+   "lineName": "烟火",
+   "lines": [
+    "smoke",
+    "wind"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1015142746372366336",
+    "2": "townscaper-web/REACode/src/smokefx.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/smoke-order.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/life.smoke.json#life.smoke",
+    "5": "TigerMessenger/tests/lightlife-arena.test.mjs#life.smoke",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#life.smoke",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/life.smoke.json#life.smoke"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "life.wind",
+   "name": "风",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "wind",
+   "lineName": "共享风",
+   "lines": [
+    "wind",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#926903893866541057",
+    "2": "townscaper-web/REACode/src/wind.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/wind-flow.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/life.wind.json#life.wind",
+    "5": "TigerMessenger/tests/lightlife-arena.test.mjs#life.wind",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#life.wind",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/life.wind.json#life.wind"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "light.bounce",
+   "name": "彩色反弹 · 多跳",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "light",
+   "lineName": "光照",
+   "lines": [
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1237305125070426112",
+    "2": "townscaper-web/REACode/src/lighting.js",
+    "3": "townscaper-web/REACodeRefactoring/src/light/voxel-light.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/light.bounce.json#light.bounce",
+    "5": "TigerMessenger/tests/lightlife-parity.test.mjs#light.bounce",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#light.bounce",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/light.bounce.json#light.bounce"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "first-seen",
+    "label": "成熟度脚本第一次见到它"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "light.megatex",
+   "name": "大纹理（一张图集）",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "atlas",
+   "lineName": "精灵表示",
+   "lines": [
+    "atlas",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1481661852887265288",
+    "2": "townscaper-web/REACode/src/megatex.js",
+    "3": "townscaper-web/REACodeRefactoring/src/light/mega-atlas.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/light.megatex.json#light.megatex",
+    "5": "TigerMessenger/tests/lightlife-parity.test.mjs#light.megatex",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#light.megatex",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/light.megatex.json#light.megatex"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "first-seen",
+    "label": "成熟度脚本第一次见到它"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "light.time",
+   "name": "光照与时间",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "shadows",
+   "lineName": "阴影",
+   "lines": [
+    "shadows",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1313840428685447170",
+    "2": "townscaper-web/REACode/src/scene.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/view.js",
+    "5": "TigerMessenger/tests/workshop-caps.test.mjs#light.time",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#light.time",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/light.time.json#light.time"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "light.voxel-ao",
+   "name": "体素遮蔽（AO）",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "shadows",
+   "lineName": "阴影",
+   "lines": [
+    "shadows",
+    "light",
+    "wind",
+    "navigation"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1168571866405097472",
+    "2": "townscaper-web/REACode/src/lighting.js",
+    "3": "townscaper-web/REACodeRefactoring/src/light/voxel-light.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/light.voxel-ao.json#light.voxel-ao",
+    "5": "TigerMessenger/tests/lightlife-parity.test.mjs#light.voxel-ao",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#light.voxel-ao",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/light.voxel-ao.json#light.voxel-ao"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "first-seen",
+    "label": "成熟度脚本第一次见到它"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "mountain.erode",
+   "name": "沟谷侵蚀",
+   "tier": "scene",
+   "layer": "mountain",
+   "origin": "mountain",
+   "file": "TigerMessenger/src/system-workshop/mountain/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1447488323845509121",
+    "2": "townscaper-web/REACode/src/depfill.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/depression-fill.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/mountain.erode.json#mountain.erode",
+    "5": "TigerMessenger/tests/workshop-caps.test.mjs#mountain.erode",
+    "6": "TigerMessenger/artifacts/mountain-views-e2e/run-1795569127222/report.json#mountain.erode",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/mountain.erode.json#mountain.erode"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 mountain-views-e2e → mountain 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续：relief 实景 e2e 跑通 + rel）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "mountain.lowpoly",
+   "name": "低面片着色",
+   "tier": "scene",
+   "layer": "mountain",
+   "origin": "mountain",
+   "file": "TigerMessenger/src/system-workshop/mountain/capabilities.js",
+   "line": "lines",
+   "lineName": "描线与纹理",
+   "lines": [
+    "lines",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1786014232594485497",
+    "2": "townscaper-web/REACode/src/mountainlight.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/mountain-bake.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/mountain.lowpoly.json#mountain.lowpoly",
+    "5": "TigerMessenger/tests/workshop-caps.test.mjs#mountain.lowpoly",
+    "6": "TigerMessenger/artifacts/mountain-views-e2e/run-1795569127222/report.json#mountain.lowpoly",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/mountain.lowpoly.json#mountain.lowpoly"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 mountain-views-e2e → mountain 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-22",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-22 Bad North 方向 · 连绵圆润山形 + BN/To）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "mountain.massif",
+   "name": "山体隆起",
+   "tier": "scene",
+   "layer": "mountain",
+   "origin": "mountain",
+   "file": "TigerMessenger/src/system-workshop/mountain/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1447488323845509121",
+    "2": "townscaper-web/REACode/engine/mesa.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/noise.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/mountain.massif.json#mountain.massif",
+    "5": "TigerMessenger/tests/mountain-evolve.test.mjs#mountain.massif",
+    "6": "TigerMessenger/artifacts/mountain-views-e2e/run-1795569127222/report.json#mountain.massif",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/mountain.massif.json#mountain.massif"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 mountain-views-e2e → mountain 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-22",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-22 Bad North 方向 · 连绵圆润山形 + BN/To）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "mountain.protect",
+   "name": "保护带",
+   "tier": "scene",
+   "layer": "mountain",
+   "origin": "mountain",
+   "file": "TigerMessenger/src/system-workshop/mountain/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain",
+    "grid"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1120036868966502401",
+    "2": "townscaper-web/REACode/engine/watervol.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/voxel-distance.js",
+    "5": "TigerMessenger/tests/capability-contracts.test.mjs#mountain.protect",
+    "6": "TigerMessenger/artifacts/mountain-views-e2e/run-1795569127222/report.json#mountain.protect",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/mountain.protect.json#mountain.protect"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 mountain-views-e2e → mountain 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "mountain.rolling",
+   "name": "连绵圆润",
+   "tier": "scene",
+   "layer": "mountain",
+   "origin": "mountain",
+   "file": "TigerMessenger/src/system-workshop/mountain/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1670720537662836736",
+    "2": "townscaper-web/REACode/src/depfill.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/noise.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/mountain.rolling.json#mountain.rolling",
+    "5": "TigerMessenger/tests/mountain-seeds.test.mjs#mountain.rolling",
+    "6": "TigerMessenger/artifacts/mountain-views-e2e/run-1795569127222/report.json#mountain.rolling",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/mountain.rolling.json#mountain.rolling"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 mountain-views-e2e → mountain 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-22",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-22 Bad North 方向 · 连绵圆润山形 + BN/To）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "mountain.talus",
+   "name": "岩屑坡",
+   "tier": "scene",
+   "layer": "mountain",
+   "origin": "mountain",
+   "file": "TigerMessenger/src/system-workshop/mountain/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1671808851895627776",
+    "2": "townscaper-web/REACode/src/overhangterrain.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/soft-tops.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/mountain.talus.json#mountain.talus",
+    "5": "TigerMessenger/tests/experience-unified.test.mjs#mountain.talus",
+    "6": "TigerMessenger/artifacts/mountain-views-e2e/run-1795569127222/report.json#mountain.talus",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/mountain.talus.json#mountain.talus"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "目录名 mountain-views-e2e → mountain 层整层覆盖"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "object.path-spacing",
+   "name": "沿现有排布等距",
+   "tier": "object",
+   "layer": "object",
+   "origin": "object",
+   "file": "TigerMessenger/src/system-workshop/object/capabilities.js",
+   "line": "tools",
+   "lineName": "工具",
+   "lines": [
+    "tools",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 0,
+   "label": "L7（缺 ①）",
+   "reached": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    1
+   ],
+   "evidence": {
+    "2": "townscaper-web/REACode/src/navribbon.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/path-samples.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/object.path-spacing.json#object.path-spacing",
+    "5": "TigerMessenger/tests/object-path-spacing.test.mjs#object.path-spacing",
+    "6": "TigerMessenger/artifacts/object-caps-e2e/run-1795569373399/report.json#object.path-spacing",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/object.path-spacing.json#object.path-spacing"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-12",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-12 113条待办逐项核销/分类；补首项实际物件能力）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "object.scale-variety",
+   "name": "同类尺寸变化",
+   "tier": "object",
+   "layer": "object",
+   "origin": "object",
+   "file": "TigerMessenger/src/system-workshop/object/capabilities.js",
+   "line": "tools",
+   "lineName": "工具",
+   "lines": [
+    "tools",
+    "plants"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③④）",
+   "reached": [
+    1,
+    2,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3,
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1580158269267406849",
+    "2": "townscaper-web/REACode/src/blobrelax.js",
+    "5": "TigerMessenger/tests/system-workshop.test.mjs#object.scale-variety",
+    "6": "TigerMessenger/artifacts/object-caps-e2e/run-1795569373399/report.json#object.scale-variety",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/object.scale-variety.json#object.scale-variety"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "object.spacing-relax",
+   "name": "间距松弛",
+   "tier": "object",
+   "layer": "object",
+   "origin": "object",
+   "file": "TigerMessenger/src/system-workshop/object/capabilities.js",
+   "line": "tools",
+   "lineName": "工具",
+   "lines": [
+    "tools",
+    "building",
+    "atlas"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③）",
+   "reached": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#797844857821732864",
+    "2": "townscaper-web/REACode/src/rectpack.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/object.spacing-relax.json#object.spacing-relax",
+    "5": "TigerMessenger/tests/system-workshop.test.mjs#object.spacing-relax",
+    "6": "TigerMessenger/artifacts/object-caps-e2e/run-1795569373399/report.json#object.spacing-relax",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/object.spacing-relax.json#object.spacing-relax"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "object.yaw-variety",
+   "name": "朝向变化",
+   "tier": "object",
+   "layer": "object",
+   "origin": "object",
+   "file": "TigerMessenger/src/system-workshop/object/capabilities.js",
+   "line": "tools",
+   "lineName": "工具",
+   "lines": [
+    "tools",
+    "plants"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③④）",
+   "reached": [
+    1,
+    2,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3,
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1580158269267406849",
+    "2": "townscaper-web/REACode/src/blobrelax.js",
+    "5": "TigerMessenger/tests/system-workshop.test.mjs#object.yaw-variety",
+    "6": "TigerMessenger/artifacts/object-caps-e2e/run-1795569373399/report.json#object.yaw-variety",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/object.yaw-variety.json#object.yaw-variety"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.chart-split",
+   "name": "切图数",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "sphere",
+   "lineName": "球面",
+   "lines": [
+    "sphere"
+   ],
+   "level": 7,
+   "strictLevel": 1,
+   "label": "L7（缺 ②③）",
+   "reached": [
+    1,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    2,
+    3
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1768627849529893109",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.chart-split.json#planet.chart-split",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.chart-split",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.chart-split",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.chart-split.json#planet.chart-split"
+   },
+   "basis": {
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.light-ambient-bounce",
+   "name": "天光与反弹色",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "light",
+   "lineName": "光照",
+   "lines": [
+    "light",
+    "sphere"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1237305125070426112",
+    "2": "townscaper-web/REACode/src/bouncegi.js",
+    "3": "townscaper-web/REACodeRefactoring/src/light/bake.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.light-ambient-bounce.json#planet.light-ambient-bounce",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.light-ambient-bounce",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.light-ambient-bounce",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.light-ambient-bounce.json#planet.light-ambient-bounce"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.light-ao",
+   "name": "环境遮蔽（AO）",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "shadows",
+   "lineName": "阴影",
+   "lines": [
+    "shadows",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1168168400155267072",
+    "2": "townscaper-web/REACode/src/voxelao.js",
+    "3": "townscaper-web/REACodeRefactoring/src/light/voxel-ao.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.light-ao.json#planet.light-ao",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.light-ao",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.light-ao",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.light-ao.json#planet.light-ao"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.light-ink-rim",
+   "name": "墨线与逆光亮边",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "lines",
+   "lineName": "描线与纹理",
+   "lines": [
+    "lines",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③④）",
+   "reached": [
+    1,
+    2,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3,
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1017355723171344385",
+    "2": "townscaper-web/REACode/engine/outline.js",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.light-ink-rim",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.light-ink-rim",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.light-ink-rim.json#planet.light-ink-rim"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.light-rock",
+   "name": "山岩明暗与岩层",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "light",
+   "lineName": "光照",
+   "lines": [
+    "light",
+    "lines",
+    "plants"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1786014232594485497",
+    "2": "townscaper-web/REACode/src/mountainlight.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/mountain-bake.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.light-rock.json#planet.light-rock",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.light-rock",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.light-rock",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.light-rock.json#planet.light-rock"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.light-sun-shadow",
+   "name": "太阳与投影",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "shadows",
+   "lineName": "阴影",
+   "lines": [
+    "shadows"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1305948413872267265",
+    "2": "townscaper-web/REACode/src/lighting.js",
+    "3": "townscaper-web/REACodeRefactoring/src/light/surface-shadow.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.light-sun-shadow.json#planet.light-sun-shadow",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.light-sun-shadow",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.light-sun-shadow",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.light-sun-shadow.json#planet.light-sun-shadow"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.light-time",
+   "name": "时刻与太阳",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "light",
+   "lineName": "光照",
+   "lines": [
+    "light",
+    "shadows"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③）",
+   "reached": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1313840428685447170",
+    "2": "townscaper-web/REACode/src/scene.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.light-time.json#planet.light-time",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.light-time",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.light-time",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.light-time.json#planet.light-time"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.light-view-grade",
+   "name": "视图与调色",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "palette",
+   "lineName": "配色",
+   "lines": [
+    "palette",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1313841094069817344",
+    "2": "townscaper-web/REACode/engine/contour.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/view.js",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.light-view-grade",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.light-view-grade",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.light-view-grade.json#planet.light-view-grade"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.reseed",
+   "name": "重解地形",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain",
+    "sphere",
+    "wfc"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#784847588893814785",
+    "2": "townscaper-web/REACode/src/tileplace.js",
+    "3": "townscaper-web/REACodeRefactoring/src/sphere/planet-wfc-c06.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.reseed.json#planet.reseed",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.reseed",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.reseed",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.reseed.json#planet.reseed"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.sea-foam",
+   "name": "岸边白沫与光晕",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "shore",
+   "lineName": "岸线",
+   "lines": [
+    "shore",
+    "reflection"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1215644531221311488",
+    "2": "townscaper-web/REACode/src/shore.js",
+    "3": "townscaper-web/REACodeRefactoring/src/water/foam-mask.js",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.sea-foam",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.sea-foam",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.sea-foam.json#planet.sea-foam"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.sea-level",
+   "name": "海平面",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "shore",
+   "lineName": "岸线",
+   "lines": [
+    "shore"
+   ],
+   "level": 7,
+   "strictLevel": 0,
+   "label": "L7（缺 ①②③）",
+   "reached": [
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    1,
+    2,
+    3
+   ],
+   "evidence": {
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.sea-level.json#planet.sea-level",
+    "5": "TigerMessenger/tests/experience-unified.test.mjs#planet.sea-level",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.sea-level",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.sea-level.json#planet.sea-level"
+   },
+   "basis": {
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.sea-reflection",
+   "name": "彩色中间倒影",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "reflection",
+   "lineName": "倒影",
+   "lines": [
+    "reflection",
+    "animals"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1215644531221311488",
+    "2": "townscaper-web/REACode/src/shore.js",
+    "3": "townscaper-web/REACodeRefactoring/src/water/reflection.js",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.sea-reflection",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.sea-reflection",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.sea-reflection.json#planet.sea-reflection"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.sea-shore-field",
+   "name": "岸带距离场",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "shore",
+   "lineName": "岸线",
+   "lines": [
+    "shore",
+    "lines",
+    "reflection"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1849732997945110651",
+    "2": "townscaper-web/REACode/src/shore.js",
+    "3": "townscaper-web/REACodeRefactoring/src/water/shorefield.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.sea-shore-field.json#planet.sea-shore-field",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.sea-shore-field",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.sea-shore-field",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.sea-shore-field.json#planet.sea-shore-field"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.sea-tint",
+   "name": "莫西斯湖水色",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "water-effects",
+   "lineName": "水的消费者",
+   "lines": [
+    "water-effects",
+    "lines",
+    "reflection",
+    "shore"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1783792917183606829",
+    "2": "townscaper-web/REACode/src/shore.js",
+    "3": "townscaper-web/REACodeRefactoring/src/water/shore.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.sea-tint.json#planet.sea-tint",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.sea-tint",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.sea-tint",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.sea-tint.json#planet.sea-tint"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.sea-waves",
+   "name": "外推浪带",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "water-effects",
+   "lineName": "水的消费者",
+   "lines": [
+    "water-effects",
+    "shore"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1849732997945110651",
+    "2": "townscaper-web/REACode/src/shore.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/wave-cycle.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.sea-waves.json#planet.sea-waves",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.sea-waves",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.sea-waves",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.sea-waves.json#planet.sea-waves"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.surface-detail",
+   "name": "地表分辨率",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "grid",
+   "lineName": "网格",
+   "lines": [
+    "grid",
+    "sphere"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1338825080844021760",
+    "2": "townscaper-web/REACode/engine/relax.js",
+    "3": "townscaper-web/REACodeRefactoring/src/sphere/planet.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.surface-detail.json#planet.surface-detail",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.surface-detail",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.surface-detail",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.surface-detail.json#planet.surface-detail"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.weather-clouds",
+   "name": "云（阴云与云影）",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "wind",
+   "lineName": "共享风",
+   "lines": [
+    "wind",
+    "atlas",
+    "animals"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1852334860137849222",
+    "2": "townscaper-web/REACode/src/clouddeck.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/cloud-motion.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.weather-clouds.json#planet.weather-clouds",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.weather-clouds",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.weather-clouds",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.weather-clouds.json#planet.weather-clouds"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.weather-fog",
+   "name": "天气雾",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "wind",
+   "lineName": "共享风",
+   "lines": [
+    "wind"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#906207980802252801",
+    "2": "townscaper-web/REACode/engine/fog.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/fog-envelope.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.weather-fog.json#planet.weather-fog",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.weather-fog",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.weather-fog",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.weather-fog.json#planet.weather-fog"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.weather-kind",
+   "name": "天气类型",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "wind",
+   "lineName": "共享风",
+   "lines": [
+    "wind",
+    "plants"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③）",
+   "reached": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#943230624369868800",
+    "2": "townscaper-web/REACode/engine/snow.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.weather-kind.json#planet.weather-kind",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.weather-kind",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.weather-kind",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.weather-kind.json#planet.weather-kind"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.weather-snow-cover",
+   "name": "积雪（雪后的建筑）",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "wind",
+   "lineName": "共享风",
+   "lines": [
+    "wind",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#943230624369868800",
+    "2": "townscaper-web/REACode/engine/snow.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/view.js",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.weather-snow-cover",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.weather-snow-cover",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.weather-snow-cover.json#planet.weather-snow-cover"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.weather-wind",
+   "name": "风",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "wind",
+   "lineName": "共享风",
+   "lines": [
+    "wind",
+    "light",
+    "combat"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#926903893866541057",
+    "2": "townscaper-web/REACode/src/wind.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/wind-flow.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.weather-wind.json#planet.weather-wind",
+    "5": "TigerMessenger/tests/planet-caps.test.mjs#planet.weather-wind",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.weather-wind",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/planet.weather-wind.json#planet.weather-wind"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "relief.cliff",
+   "name": "硬崖（陡崖省台阶）",
+   "tier": "scene",
+   "layer": "relief",
+   "origin": "relief",
+   "file": "TigerMessenger/src/system-workshop/relief/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1447488323845509121",
+    "2": "townscaper-web/REACode/src/overhangterrain.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/overhang-terrain.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/relief.cliff.json#relief.cliff",
+    "5": "TigerMessenger/tests/relief-parity.test.mjs#relief.cliff",
+    "6": "TigerMessenger/artifacts/relief-moss-e2e/run-1795547951621/report.json#relief.cliff",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/relief.cliff.json#relief.cliff"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R46 开发（Quick 写码，NOT_RUN）——地）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "relief.ledge",
+   "name": "薄台与攀爬（崖边梯子）",
+   "tier": "scene",
+   "layer": "relief",
+   "origin": "relief",
+   "file": "TigerMessenger/src/system-workshop/relief/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#781957658597269506",
+    "2": "townscaper-web/REACode/src/terraceladder.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/terrace-ladder.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/relief.ledge.json#relief.ledge",
+    "5": "TigerMessenger/tests/relief-parity.test.mjs#relief.ledge",
+    "6": "TigerMessenger/artifacts/relief-moss-e2e/run-1795547951621/report.json#relief.ledge",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/relief.ledge.json#relief.ledge"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R45 开发（Quick 写码，NOT_RUN）——原）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "relief.overhang",
+   "name": "悬垂（崖顶岩檐）",
+   "tier": "scene",
+   "layer": "relief",
+   "origin": "relief",
+   "file": "TigerMessenger/src/system-workshop/relief/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1671808851895627776",
+    "2": "townscaper-web/REACode/src/overhangterrain.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/overhang-terrain.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/relief.overhang.json#relief.overhang",
+    "5": "TigerMessenger/tests/relief-parity.test.mjs#relief.overhang",
+    "6": "TigerMessenger/artifacts/relief-moss-e2e/run-1795547951621/report.json#relief.overhang",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/relief.overhang.json#relief.overhang"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R42 开发（Quick 写码，NOT_RUN）——嫁）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "relief.passes",
+   "name": "三遍（等高线 = 层界格边）",
+   "tier": "scene",
+   "layer": "relief",
+   "origin": "relief",
+   "file": "TigerMessenger/src/system-workshop/relief/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1669315384619540487",
+    "2": "townscaper-web/REACode/src/islandpasses.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/island-passes.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/relief.passes.json#relief.passes",
+    "5": "TigerMessenger/tests/relief-parity.test.mjs#relief.passes",
+    "6": "TigerMessenger/artifacts/relief-moss-e2e/run-1795547951621/report.json#relief.passes",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/relief.passes.json#relief.passes"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R43 开发（Quick 写码，NOT_RUN）——嫁）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "relief.soft",
+   "name": "软坡（缓坡省连续）",
+   "tier": "scene",
+   "layer": "relief",
+   "origin": "relief",
+   "file": "TigerMessenger/src/system-workshop/relief/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1447488323845509121",
+    "2": "townscaper-web/REACode/src/overhangterrain.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/overhang-terrain.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/relief.soft.json#relief.soft",
+    "5": "TigerMessenger/tests/relief-parity.test.mjs#relief.soft",
+    "6": "TigerMessenger/artifacts/relief-moss-e2e/run-1795547951621/report.json#relief.soft",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/relief.soft.json#relief.soft"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R46 开发（Quick 写码，NOT_RUN）——地）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "relief.valley",
+   "name": "河谷（开河 + 填洼）",
+   "tier": "scene",
+   "layer": "relief",
+   "origin": "relief",
+   "file": "TigerMessenger/src/system-workshop/relief/capabilities.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain",
+    "sphere"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1769691526924292506",
+    "2": "townscaper-web/REACode/engine/rivers.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/river-valley.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/relief.valley.json#relief.valley",
+    "5": "TigerMessenger/tests/relief-parity.test.mjs#relief.valley",
+    "6": "TigerMessenger/artifacts/relief-moss-e2e/run-1795547951621/report.json#relief.valley",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/relief.valley.json#relief.valley"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-23 夜：R44 开发（Quick 写码，NOT_RUN）——河）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "scene.oklab-contrast",
+   "name": "感知明暗层次",
+   "tier": "scene",
+   "layer": "gscene",
+   "origin": "gscene",
+   "file": "TigerMessenger/src/system-workshop/gscene/capabilities.js",
+   "line": "palette",
+   "lineName": "配色",
+   "lines": [
+    "palette",
+    "lines"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1482346496460828674",
+    "2": "townscaper-web/REACode/engine/outline.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/oklab.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/scene.oklab-contrast.json#scene.oklab-contrast",
+    "5": "TigerMessenger/tests/code-library-catalog.test.mjs#scene.oklab-contrast",
+    "6": "TigerMessenger/artifacts/gscene-caps-e2e/run-1795569373399/report.json#scene.oklab-contrast",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/scene.oklab-contrast.json#scene.oklab-contrast"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-12",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-12 继续补场景执行接口：感知色板与层次）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "scene.oklab-palette",
+   "name": "感知色板归并",
+   "tier": "scene",
+   "layer": "gscene",
+   "origin": "gscene",
+   "file": "TigerMessenger/src/system-workshop/gscene/capabilities.js",
+   "line": "palette",
+   "lineName": "配色",
+   "lines": [
+    "palette"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1710031224838771027",
+    "2": "townscaper-web/REACode/src/palette.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/oklab.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/scene.oklab-palette.json#scene.oklab-palette",
+    "5": "TigerMessenger/tests/code-library-catalog.test.mjs#scene.oklab-palette",
+    "6": "TigerMessenger/artifacts/gscene-caps-e2e/run-1795569373399/report.json#scene.oklab-palette",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/scene.oklab-palette.json#scene.oklab-palette"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-12",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-12 继续补场景执行接口：感知色板与层次）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "scene.palette-unify",
+   "name": "风格统一（主色归并）",
+   "tier": "scene",
+   "layer": "gscene",
+   "origin": "gscene",
+   "file": "TigerMessenger/src/system-workshop/gscene/capabilities.js",
+   "line": "palette",
+   "lineName": "配色",
+   "lines": [
+    "palette"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③）",
+   "reached": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1200520827898343425",
+    "2": "townscaper-web/REACode/src/palette.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/scene.palette-unify.json#scene.palette-unify",
+    "5": "TigerMessenger/tests/workshop-caps.test.mjs#scene.palette-unify",
+    "6": "TigerMessenger/artifacts/gscene-caps-e2e/run-1795569373399/report.json#scene.palette-unify",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/scene.palette-unify.json#scene.palette-unify"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "scene.plateau-diag",
+   "name": "台地诊断（同高片 · 逻辑阶差面积）",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "grid",
+   "lineName": "网格",
+   "lines": [
+    "grid",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#815236105079398400",
+    "2": "townscaper-web/REACode/src/terracecliff.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/terrace-profile.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/scene.plateau-diag.json#scene.plateau-diag",
+    "5": "TigerMessenger/tests/lightlife-arena.test.mjs#scene.plateau-diag",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#scene.plateau-diag",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/scene.plateau-diag.json#scene.plateau-diag"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-24（续）：补学 #6「185帧台地诊断」落地（grid 线 A）"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "scene.style-pack",
+   "name": "套用风格包",
+   "tier": "scene",
+   "layer": "gscene",
+   "origin": "gscene",
+   "file": "TigerMessenger/src/system-workshop/gscene/capabilities.js",
+   "line": "palette",
+   "lineName": "配色",
+   "lines": [
+    "palette"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③）",
+   "reached": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1200520827898343425",
+    "2": "townscaper-web/REACode/src/palette.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/scene.style-pack.json#scene.style-pack",
+    "5": "TigerMessenger/tests/workshop-caps.test.mjs#scene.style-pack",
+    "6": "TigerMessenger/artifacts/gscene-caps-e2e/run-1795569373399/report.json#scene.style-pack",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/scene.style-pack.json#scene.style-pack"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "scene.tone",
+   "name": "整体色调",
+   "tier": "scene",
+   "layer": "gscene",
+   "origin": "gscene",
+   "file": "TigerMessenger/src/system-workshop/gscene/capabilities.js",
+   "line": "palette",
+   "lineName": "配色",
+   "lines": [
+    "palette"
+   ],
+   "level": 7,
+   "strictLevel": 2,
+   "label": "L7（缺 ③）",
+   "reached": [
+    1,
+    2,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    3
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1200520827898343425",
+    "2": "townscaper-web/REACode/src/palette.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/scene.tone.json#scene.tone",
+    "5": "TigerMessenger/tests/pipeline-engine.test.mjs#scene.tone",
+    "6": "TigerMessenger/artifacts/gscene-caps-e2e/run-1795569373399/report.json#scene.tone",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/scene.tone.json#scene.tone"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "scene.town-graph",
+   "name": "体素图 · 区域图",
+   "tier": "scene",
+   "layer": "lightlife",
+   "origin": "lightlife",
+   "file": "TigerMessenger/src/system-workshop/lightlife/capabilities.js",
+   "line": "grid",
+   "lineName": "网格",
+   "lines": [
+    "grid",
+    "light",
+    "wind"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#931196707236392960",
+    "2": "townscaper-web/REACode/src/town.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/town-graph.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/scene.town-graph.json#scene.town-graph",
+    "5": "TigerMessenger/tests/lightlife-parity.test.mjs#scene.town-graph",
+    "6": "TigerMessenger/artifacts/lightlife-moss-e2e/run-1795569037041/report.json#scene.town-graph",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/scene.town-graph.json#scene.town-graph"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力真实调用的重构库模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-23",
+    "basis": "first-seen",
+    "label": "成熟度脚本第一次见到它"
+   },
+   "inPage": false,
+   "inLineage": true
+  },
+  {
+   "id": "terrain.arch",
+   "name": "石拱 / 天桥",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+   "line": "wfc",
+   "lineName": "模块约束",
+   "lines": [
+    "wfc",
+    "building"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1670794261669769217",
+    "2": "townscaper-web/REACode/src/archvoid.js",
+    "3": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/terrain.arch.json#terrain.arch",
+    "5": "TigerMessenger/tests/experience-unified.test.mjs#terrain.arch",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#terrain.arch",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/terrain.arch.json#terrain.arch"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力代码本身在重构库 src/capabilities/",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "terrain.ledge",
+   "name": "沿墙薄檐 / 薄平台",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain",
+    "animals"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#781957658597269506",
+    "2": "townscaper-web/REACode/src/terracecliff.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/thin-platform.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/terrain.ledge.json#terrain.ledge",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#terrain.ledge",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#terrain.ledge",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/terrain.ledge.json#terrain.ledge"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-24（续四）：补学「109帧黄色薄平台」机制收口（terrain）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "terrain.overhang",
+   "name": "崖顶悬垂",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1671808851895627776",
+    "2": "townscaper-web/REACode/src/overhangterrain.js",
+    "3": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/terrain.overhang.json#terrain.overhang",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#terrain.overhang",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#terrain.overhang",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/terrain.overhang.json#terrain.overhang"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力代码本身在重构库 src/capabilities/",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "terrain.preserve",
+   "name": "地形与承托",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain",
+    "sphere",
+    "sediment"
+   ],
+   "level": 7,
+   "strictLevel": 3,
+   "label": "L7（缺 ④）",
+   "reached": [
+    1,
+    2,
+    3,
+    5,
+    6,
+    7
+   ],
+   "missing": [
+    4
+   ],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1447488323845509121",
+    "2": "townscaper-web/REACode/engine/cage.js",
+    "3": "townscaper-web/REACodeRefactoring/src/terrain/generate.js",
+    "5": "TigerMessenger/tests/workshop-caps.test.mjs#terrain.preserve",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#terrain.preserve",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/terrain.preserve.json#terrain.preserve"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "terrain.seastack",
+   "name": "海中石柱",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+   "line": "terrain",
+   "lineName": "地形",
+   "lines": [
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1708815475801505819",
+    "2": "townscaper-web/REACode/src/overhangterrain.js",
+    "3": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/terrain.seastack.json#terrain.seastack",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#terrain.seastack",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#terrain.seastack",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/terrain.seastack.json#terrain.seastack"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力代码本身在重构库 src/capabilities/",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "terrain.shrub-texture",
+   "name": "纯纹理灌木（台地边）",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+   "line": "plants",
+   "lineName": "植被",
+   "lines": [
+    "plants"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1707490932017279035",
+    "2": "townscaper-web/REACode/src/paintblotch.js",
+    "3": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/terrain.shrub-texture.json#terrain.shrub-texture",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#terrain.shrub-texture",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#terrain.shrub-texture",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/terrain.shrub-texture.json#terrain.shrub-texture"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力代码本身在重构库 src/capabilities/",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "terrain.tunnel",
+   "name": "穿山隧道",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+   "line": "navigation",
+   "lineName": "导航",
+   "lines": [
+    "navigation",
+    "terrain"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#906425294533394432",
+    "2": "townscaper-web/REACode/src/cavepath.js",
+    "3": "townscaper-web/REACodeRefactoring/src/capabilities/terrain.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/terrain.tunnel.json#terrain.tunnel",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#terrain.tunnel",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#terrain.tunnel",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/terrain.tunnel.json#terrain.tunnel"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力代码本身在重构库 src/capabilities/",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "vegetation.layers",
+   "name": "植被层",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "plants",
+   "lineName": "植被",
+   "lines": [
+    "plants",
+    "atlas"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#959530111187013632",
+    "2": "townscaper-web/REACode/engine/bncanopy.js",
+    "3": "townscaper-web/REACodeRefactoring/src/life/vegetation.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/vegetation.layers.json#vegetation.layers",
+    "5": "TigerMessenger/tests/pipeline-model.test.mjs#vegetation.layers",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#vegetation.layers",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/vegetation.layers.json#vegetation.layers"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "water.surface",
+   "name": "水面与岸浪",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "shore",
+   "lineName": "岸线",
+   "lines": [
+    "shore",
+    "reflection",
+    "light"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1991101097818403263",
+    "2": "townscaper-web/REACode/engine/contour.js",
+    "3": "townscaper-web/REACodeRefactoring/src/water/shore.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/water.surface.json#water.surface",
+    "5": "TigerMessenger/tests/pipeline-model.test.mjs#water.surface",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#water.surface",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/water.surface.json#water.surface"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "water.volume",
+   "name": "体积浅水（SDF 叠层）",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+   "line": "reflection",
+   "lineName": "倒影",
+   "lines": [
+    "reflection"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1758251637280268481",
+    "2": "townscaper-web/REACode/engine/watervol.js",
+    "3": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/water.volume.json#water.volume",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#water.volume",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#water.volume",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/water.volume.json#water.volume"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力代码本身在重构库 src/capabilities/",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-24",
+    "basis": "file-mtime",
+    "label": "登记文件最后修改时间（加入日期不晚于此）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "weather.atmosphere",
+   "name": "天气与风场",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "wind",
+   "lineName": "共享风",
+   "lines": [
+    "wind"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#926903893866541057",
+    "2": "townscaper-web/REACode/engine/fog.js",
+    "3": "townscaper-web/REACodeRefactoring/src/life/atmosphere.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/weather.atmosphere.json#weather.atmosphere",
+    "5": "TigerMessenger/tests/capability-library.test.mjs#weather.atmosphere",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#weather.atmosphere",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/weather.atmosphere.json#weather.atmosphere"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "world.ink",
+   "name": "世界接口 · 描线与网格",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "pipeline-model",
+   "file": "TigerMessenger/src/scene-authoring/pipeline-model.js",
+   "line": "lines",
+   "lineName": "描线与纹理",
+   "lines": [
+    "lines",
+    "grid",
+    "light",
+    "wind"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1751945034851570056",
+    "2": "townscaper-web/REACode/engine/backlit.js",
+    "3": "townscaper-web/REACodeRefactoring/src/world/outline.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/world.ink.json#world.ink",
+    "5": "TigerMessenger/tests/workshop-caps.test.mjs#world.ink",
+    "6": "TigerMessenger/artifacts/morris-live-e2e/run-1795569048614/report.json#world.ink",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/world.ink.json#world.ink"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": false
+  },
+  {
+   "id": "world.openness",
+   "name": "三维空间开阔度（射线灰度场）",
+   "tier": "scene",
+   "layer": "voxel",
+   "origin": "registry",
+   "file": "townscaper-web/REACodeRefactoring/src/capabilities/layers-meta.js",
+   "line": "navigation",
+   "lineName": "导航",
+   "lines": [
+    "navigation"
+   ],
+   "level": 7,
+   "strictLevel": 7,
+   "label": "L7",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#798580832906739712",
+    "2": "townscaper-web/REACode/src/rayvis.js",
+    "3": "townscaper-web/REACodeRefactoring/src/core/space-visibility.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/world.openness.json#world.openness",
+    "5": "TigerMessenger/tests/registry-caps.test.mjs#world.openness",
+    "6": "TigerMessenger/artifacts/voxel-morris-e2e/run-1795569506596/report.json#world.openness",
+    "7": "TigerMessenger/src/scene-authoring/catalog/arena/world.openness.json#world.openness"
+   },
+   "basis": {
+    "2": "能力 sources / ideas 写明的原版文件",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  },
+  {
+   "id": "planet.grid-subdivision",
+   "name": "网格细分",
+   "tier": "planet",
+   "layer": "planet",
+   "origin": "planet",
+   "file": "TigerMessenger/src/system-workshop/planet/capabilities.js",
+   "line": "grid",
+   "lineName": "网格",
+   "lines": [
+    "grid",
+    "sphere"
+   ],
+   "level": 6,
+   "strictLevel": 6,
+   "label": "L6",
+   "reached": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "missing": [],
+   "evidence": {
+    "1": "townscaper-web/REACodeRefactoring/learn/data.js#1338825080844021760",
+    "2": "townscaper-web/REACode/engine/relax.js",
+    "3": "townscaper-web/REACodeRefactoring/src/sphere/planet.js",
+    "4": "TigerMessenger/src/scene-authoring/catalog/parity/planet.grid-subdivision.json#planet.grid-subdivision",
+    "5": "TigerMessenger/tests/system-workshop.test.mjs#planet.grid-subdivision",
+    "6": "TigerMessenger/artifacts/planet-caps-e2e/run-1795569406046/report.json#planet.grid-subdivision"
+   },
+   "basis": {
+    "2": "静态对账：这个原版文件的重构落点含本能力调用的模块（不代表行为等价）",
+    "3": "能力学习内容在重构库的落点模块",
+    "5": "test_workshops.py 单元清单",
+    "6": "report.capabilities 写明"
+   },
+   "added": {
+    "date": "2026-11-25",
+    "basis": "workshop-log",
+    "label": "工坊日志首次提到（2026-11-25 · 阶段5续（二）：④裁判二批+官方统一入口实跑收口）"
+   },
+   "inPage": true,
+   "inLineage": true
+  }
+ ],
+ "limits": [
+  "② 的「静态对账」只说明原版文件的重构落点里有本能力调用的模块，不代表行为等价（那是 ④）。",
+  "⑥ 没写 report.capabilities 的报告按层整层覆盖：同一层后来新加的能力也会被算进去，直到报告写明能力清单。",
+  "⑤ 只看测试文件里有没有以引号写出能力 ID，不看断言强弱。",
+  "⑧ 不读浏览器本机采用记录；⑨ 只认 defaults.json 登记。现在 ④⑦⑧⑨ 都没有证据文件，所以这几级是 0。",
+  "加入日期的依据逐行写在 added.basis；file-mtime 只是上限（文件后来又改过），不是真实加入日。"
+ ]
+}

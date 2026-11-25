@@ -33,7 +33,11 @@ export class BattleNavigation {
       return Math.abs(a.floor-b.floor)<=1;
     },edgeCost:(a,b,distance)=>{
       if(a.floor===world.top(a.cell)&&b.floor===world.top(b.cell)&&surface.walk[a.cell.id]&&surface.walk[b.cell.id])return surface.cost(a.cell,b.cell);
-      return distance*(a.floor===b.floor?1:1.8)*(covered(a)||covered(b)?this.doorCost:1);
+      // 906425294533394432 / holenav 门洞加价：一条洞道有**两个洞口**（进、出各排一次队），
+      // 通道内部一律平价。只按「b 被覆盖」单侧收会变成方向相关（同一棵树里读出的距离非对称），
+      // 且逐格收会把 5 格长隧道的排队价放大 5 倍 —— 两种都不对。这里只数「跨了几个洞口」：0 或 2 收 1，1 收 doorCost。
+      const mouths=(covered(a)?1:0)+(covered(b)?1:0);
+      return distance*(a.floor===b.floor?1:1.8)*(mouths===1?this.doorCost:1);
     }});
     this.version=world.version;this.trees.clear();
     this._fineBuilt=!!this.finePortals;this.fine=this.finePortals?buildFinePortals(world,this.graph,{L:this.L,unitHeight:this.unitHeight}):null;
@@ -119,6 +123,16 @@ export class BattleNavigation {
     const radius=unit.radius??this.radius;
     if(!Number.isFinite(radius)||radius<0)return false;
     const length=Math.hypot(x-unit.x,z-unit.z),steps=Math.max(1,Math.ceil(length/Math.max(.01,radius*.5)));
+    /* 816743289500106752（第 174 轮）：贴脚一挪（≤ 一个身体直径）只判**终点**。
+     * 原实现把整段逐点采 1/2 半径，任何中间点压到格子拐角的斜向缺格就整步作废 ——
+     * 一支队列在目标格门口会稳定停在离落位 0.06 处（终点本身 `discFits` 是过的）。
+     * 只在「步长 ≤ 2×半径 且终点合法、且起终点同属 from/next」时放行，不会穿墙、不跨第三格。 */
+    if(length<=radius*2){
+      const a=this.index.cellAt(unit.x,unit.z),b=this.index.cellAt(x,z);
+      const ok=(c)=>c&&(c.id===plan.from.cell.id||c.id===plan.next.cell.id);
+      const node=b?(b.id===plan.next.cell.id?plan.next:plan.from):null;
+      if(ok(a)&&ok(b)&&node&&(!radius||this.discFits(node,x,z,radius))){unit.x=x;unit.z=z;unit.navFloor=node.floor;return true;}
+    }
     let floor=plan.from.floor;
     for(let k=0;k<=steps;k++){
       const t=k/steps,px=unit.x+(x-unit.x)*t,pz=unit.z+(z-unit.z)*t,c=this.index.cellAt(px,pz);

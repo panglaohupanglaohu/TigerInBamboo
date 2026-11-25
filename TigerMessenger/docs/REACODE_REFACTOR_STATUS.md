@@ -4,7 +4,7 @@
 
 有落点/有局部证据不等于完整重构验收；本轮通过仅对应明确交付范围，保留扩展差距。
 
-共 290 文件：{'.html': 104, '.js': 175, '.mjs': 11}。
+共 337 文件：{'.html': 126, '.js': 199, '.mjs': 12}。
 
 | 原文件 | 类别 | 当前状态 | 重构落点 |
 |---|---|---|---|
@@ -12,14 +12,21 @@
 | alivelab.html | 页面/内联代码 | 待页面核验 | grids.html、leaf-surface.html、src/build/buildings.js、src/core/camera-motion.js、src/core/grid.js、src/core/prop-anim.js、src/core/wfc.js、src/core/world.js、src/life/leaf-surface.js、src/life/vegetation.js、src/world/app.js、src/world/prop-anim-layer.js、src/world/view-post-extras.js、textures.html、wfc.html |
 | archvoidlab.html | 页面/内联代码 | 待页面核验 | src/build/buildings.js、src/core/arch-profile.js |
 | blobshadowlab.html | 页面/内联代码 | 待页面核验 | src/badnorth/battle-g3.js、src/life/unit-shadow-batch.js |
+| bloodfieldlab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| blotchpaintlab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | bouncelab.html | 页面/内联代码 | 待页面核验 | src/core/paint-normal.js、src/light/surface-bounce.js、src/world/view-shading.js、src/world/view.js |
+| buildanimlab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | campaignmaplab.html | 页面/内联代码 | 待页面核验 | campaign.html、src/campaign/campaign.js、src/core/campaign-graph.js |
+| candlelab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | cavepathlab.html | 页面/内联代码 | 待页面核验 | navigation.html、src/world/battle-navigation.js、src/world/layerednav.js |
 | clouddecklab.html | 页面/内联代码 | 待页面核验 | src/core/cloud-depth.js、src/world/cloud-deck-layer.js |
 | colorvolumelab.html | 页面/内联代码 | 待页面核验 | src/core/color-volume.js、src/ui/shading-panel.js、src/world/view-shading.js |
 | combatlab.html | 页面/内联代码 | 待页面核验 | src/badnorth/battle-g3.js、src/badnorth/battle.js、src/core/melee-sweep.js |
-| compare.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| compare.html | 页面/内联代码 | 待页面核验 | compare.html |
 | contrasttexlab.html | 页面/内联代码 | 待页面核验 | src/core/contrast-field.js、src/world/view-shading.js |
+| courtyardlab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| darkcontourlab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| decalboillab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | decolab.html | 页面/内联代码 | 待页面核验 | float.html、grids.html、prefab.html、src/build/buildings.js、src/core/grid.js、src/core/module-patch.js、src/core/surface-decoration.js、src/core/wfc.js、src/world/float-advect-gpu.js、textures.html |
 | depfilllab.html | 页面/内联代码 | 待页面核验 | src/core/depression-fill.js、src/terrain/drainage.js、src/terrain/terrainmesh.js、terrain-r55.html |
 | engine/aoviz.html | 页面/内联代码 | 待页面核验 | ao-stages.html、src/light/bake.js、src/light/voxel-ao.js、src/terrain/generate.js、src/world/worldmesh.js |
@@ -64,7 +71,7 @@
 | engine/normalsmooth.js | 核心模块 | 待运行验收 | src/terrain/shape.js |
 | engine/ornament.html | 页面/内联代码 | 待页面核验 | ornament.html、src/core/ornament-field.js、src/core/ui-reveal.js、src/ui/ornament.js、textures.html |
 | engine/ornament.js | 核心模块 | 已迁移待完整核验 | ornament.html、src/core/ornament-field.js、src/core/ui-reveal.js、src/ui/ornament.js、textures.html |
-| engine/outline.js | 核心模块 | 本轮代码验证通过 | outline-painted.html、src/world/outline-painted-normal.js、src/world/outline-pass.js、src/world/view-post-extras.js |
+| engine/outline.js | 核心模块 | 本轮代码待复验 | outline-painted.html、src/world/outline-painted-normal.js、src/world/outline-pass.js、src/world/view-post-extras.js |
 | engine/piperepair.html | 页面/内联代码 | 待页面核验 | src/core/infinite.js |
 | engine/portrait.html | 页面/内联代码 | 待页面核验 | src/ui/slot-portrait.js、ui.html |
 | engine/props.html | 页面/内联代码 | 待页面核验 | src/build/buildings.js |
@@ -75,7 +82,8 @@
 | engine/repair.html | 页面/内联代码 | 待页面核验 | src/core/wfc.js、wfc.html |
 | engine/rivers.js | 核心模块 | 已迁移待完整核验 | planet-rivers-r55.html、src/terrain/generate.js、terrain-r55.html |
 | engine/roofs.js | 核心模块 | 待运行验收 | src/build/buildings.js |
-| engine/shorefield.js | 核心模块 | 已迁移待完整核验 | src/core/shore-profile.js、src/water/shore.js |
+| engine/shorefield.js | 核心模块 | 已迁移待完整核验 | src/core/shore-profile.js、src/water/shore.js、src/water/shorefield.js |
+| engine/skylab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | engine/snapshot.js | 核心模块 | 已迁移待完整核验 | snapshot.html、src/campaign/campaign.js、src/world/island-snapshot.js |
 | engine/snow.js | 核心模块 | 已迁移待完整核验 | src/core/wind-flow.js、src/life/atmosphere.js |
 | engine/sphere.html | 页面/内联代码 | 待页面核验 | planet.html、src/sphere/planet.js、src/sphere/sphere-stages.js |
@@ -90,6 +98,7 @@
 | engine/terrain.js | 核心模块 | 待运行验收 | src/terrain/generate.js |
 | engine/texlab.html | 页面/内联代码 | 待页面核验 | sediment.html、src/core/mountain-bake.js、src/core/sediment.js、src/light/surface-shadow.js、src/terrain/patch-blend.js、src/terrain/terrainmesh.js、src/world/view-shading.js、src/world/view.js |
 | engine/tileplace.html | 页面/内联代码 | 待页面核验 | assembly.html、src/build/tile-assembly.js、src/core/wfc.js |
+| engine/timberlab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | engine/traffic.html | 页面/内联代码 | 待页面核验 | src/world/battle-navigation.js、src/world/layerednav.js |
 | engine/triflow.html | 页面/内联代码 | 待页面核验 | src/badnorth/flowfield.js |
 | engine/trigraph.html | 页面/内联代码 | 待页面核验 | src/core/trigraph.js、trigraph.html |
@@ -97,6 +106,7 @@
 | engine/unitbatch.html | 页面/内联代码 | 待页面核验 | src/badnorth/battle.js、src/badnorth/unit-batch-lod.js |
 | engine/units.html | 页面/内联代码 | 待页面核验 | sprites.html、src/badnorth/battle.js、src/core/sprite-ambiguity.js、src/life/unit-sprites.js、ui.html |
 | engine/vertexlight.js | 核心模块 | 已迁移待完整核验 | planet.html、src/core/cube-height.js、src/light/cube-height.js、src/sphere/planet.js |
+| engine/voxdebug.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | engine/voxelshadow.js | 核心模块 | 已迁移待完整核验 | ao-stages.html、src/light/bake.js、src/world/worldmesh.js |
 | engine/waterfall.js | 核心模块 | 待运行验收 | src/water/waterfall.js |
 | engine/watervol.js | 核心模块 | 已迁移待完整核验 | src/core/voxel-distance.js、src/water/land-distance.js、src/water/watervol.js |
@@ -108,6 +118,7 @@
 | foliagebloblab.html | 页面/内联代码 | 待页面核验 | src/core/canopy.js、src/life/vegetation.js |
 | fusion.html | 页面/内联代码 | 待页面核验 | src/build/buildings.js、src/build/multicell.js、src/world/scenes.js |
 | game.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| grassedgelab.html | 页面/内联代码 | 待页面核验 | grids.html、leaf-surface.html、src/core/grid.js、src/core/world.js、src/life/leaf-surface.js、src/life/vegetation.js |
 | gridpatchlab.html | 页面/内联代码 | 待页面核验 | gridpatch.html、src/core/radial-patch.js |
 | hiprooflab.html | 页面/内联代码 | 待页面核验 | building-kit-r55.html、src/build/buildings.js、src/core/hip-roof.js、src/core/straight-skeleton.js |
 | housekitlab.html | 页面/内联代码 | 待页面核验 | building-kit-r55.html、src/build/village.js、src/core/house-kit.js |
@@ -120,20 +131,30 @@
 | learn.html | 页面/内联代码 | 待页面核验 | learn.html |
 | learned.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | levelfloralab.html | 页面/内联代码 | 待页面核验 | src/core/level-flora.js、src/life/flora-species.js |
+| looptintlab.html | 页面/内联代码 | 待页面核验 | src/core/grid.js、src/core/halfedge.js |
+| lsystemlab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | megatexlab.html | 页面/内联代码 | 待页面核验 | src/core/atlas.js、src/light/texel-owner.js |
+| meshmergelab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | mirrordecorlab.html | 页面/内联代码 | 待页面核验 | mirror.html、ornament.html、src/core/mirror-uv.js、src/core/ornament-field.js、src/ui/ornament.js |
 | mixedwfclab.html | 页面/内联代码 | 待页面核验 | src/core/grid.js、src/core/wfc.js、wfc.html |
 | navribbonlab.html | 页面/内联代码 | 待页面核验 | src/badnorth/battle.js、src/core/path-samples.js、src/world/battle-navigation.js |
+| occmasklab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | oldclips.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| orderbadgelab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | overhangterrainlab.html | 页面/内联代码 | 待页面核验 | src/terrain/soft-tops.js、src/terrain/terrain-collide.js、src/terrain/terrainmesh.js |
 | overview.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | patchclusterlab.html | 页面/内联代码 | 待页面核验 | src/core/infinite.js |
 | penumbralab.html | 页面/内联代码 | 待页面核验 | src/light/penumbra.js、src/world/penumbra-terrain.js |
 | piercefloorlab.html | 页面/内联代码 | 待页面核验 | src/build/buildings.js、src/core/arch-floor-budget.js、src/world/navgraph.js |
 | pipeline.html | 页面/内联代码 | 待页面核验 | pipeline.html |
+| planetatmolab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | plantlab.html | 页面/内联代码 | 待页面核验 | garden.html、leaf-surface.html、src/build/buildings.js、src/core/edge-inset.js、src/core/garden-paths.js、src/core/leaf-atlas.js、src/core/texel-skip.js、src/life/leaf-surface.js、src/life/vegetation.js、src/light/surface-bounce.js、src/world/view-shading.js、textures.html |
 | propframelab.html | 页面/内联代码 | 待页面核验 | src/build/buildings.js、src/core/opening-footprint.js |
 | quadinflab.html | 页面/内联代码 | 待页面核验 | grids.html、src/core/infinite.js |
+| quadmclab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| quadspherelab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| rimlinelab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| shorelab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | shrubcardlab.html | 页面/内联代码 | 待页面核验 | src/life/vegetation.js、src/world/view-post-extras.js |
 | slotsolvelab.html | 页面/内联代码 | 待页面核验 | slots.html、src/core/wfc.js |
 | smokelab.html | 页面/内联代码 | 待页面核验 | src/core/smoke-order.js、src/life/effects.js |
@@ -151,10 +172,14 @@
 | src/birds.js | 核心模块 | 待运行验收 | src/life/birds.js |
 | src/blobrelax.js | 核心模块 | 已迁移待完整核验 | src/core/canopy.js、src/life/impostor.js、src/life/vegetation.js |
 | src/blobshadow.js | 核心模块 | 已迁移待完整核验 | src/badnorth/battle-g3.js、src/life/unit-shadow-batch.js |
+| src/bloodfield.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/borderpath.js | 核心模块 | 已迁移待完整核验 | campaign.html、src/campaign/frontier-overlay.js |
 | src/bouncegi.js | 核心模块 | 已迁移待完整核验 | src/light/surface-bounce.js、src/world/view-shading.js |
 | src/boxtest.js | 核心模块 | 已迁移待完整核验 | src/badnorth/landing-plan.js、src/core/obb.js |
+| src/buildanim.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/campaignmap.js | 核心模块 | 待运行验收 | campaign.html、src/campaign/campaign.js、src/core/campaign-graph.js |
+| src/candleprops.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| src/cascades.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/cavepath.js | 核心模块 | 待运行验收 | navigation.html、src/world/battle-navigation.js、src/world/layerednav.js |
 | src/cheesenav.js | 核心模块 | 已迁移待完整核验 | navigation.html、src/world/battle-navigation.js、src/world/fine-portals.js |
 | src/clouddeck.js | 核心模块 | 已迁移待完整核验 | src/core/cloud-depth.js、src/world/cloud-deck-layer.js |
@@ -164,6 +189,9 @@
 | src/contrast.js | 核心模块 | 待运行验收 | textures.html |
 | src/contrasttex.js | 核心模块 | 已迁移待完整核验 | src/core/contrast-field.js、src/world/view-shading.js |
 | src/coroutine.js | 核心模块 | 已迁移待完整核验 | scheduler.html、src/core/coroutine.js |
+| src/courtyard.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| src/darkcontour.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| src/decalfield.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/demo.js | 核心模块 | 待运行验收 | src/world/townDemo.js |
 | src/depfill.js | 核心模块 | 已迁移待完整核验 | src/core/depression-fill.js、src/terrain/drainage.js、src/terrain/terrainmesh.js、terrain-r55.html |
 | src/dfgrow.js | 核心模块 | 待运行验收 | textures.html |
@@ -179,6 +207,7 @@
 | src/frontier.js | 核心模块 | 已迁移待完整核验 | src/core/frontier-candidates.js |
 | src/fusion.js | 核心模块 | 已迁移待完整核验 | src/build/buildings.js、src/build/multicell.js、src/world/scenes.js |
 | src/grasscards.js | 核心模块 | 待运行验收 | leaf-surface.html、src/life/leaf-surface.js、src/life/vegetation.js |
+| src/grassedge.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/grid.js | 核心模块 | 待运行验收 | src/core/grid.js |
 | src/gridmodes.js | 核心模块 | 已迁移待完整核验 | joint3d.html、src/core/wfc.js |
 | src/gridpatch.js | 核心模块 | 已迁移待完整核验 | gridpatch.html、src/core/radial-patch.js |
@@ -188,17 +217,21 @@
 | src/hiproof.js | 核心模块 | 已迁移待完整核验 | building-kit-r55.html、src/build/buildings.js、src/core/hip-roof.js、src/core/straight-skeleton.js |
 | src/holenav.js | 核心模块 | 已迁移待完整核验 | navigation.html、src/world/battle-navigation.js、src/world/fine-portals.js |
 | src/housekit.js | 核心模块 | 已迁移待完整核验 | building-kit-r55.html、src/build/village.js、src/core/house-kit.js |
+| src/icefringe.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/infograph.js | 核心模块 | 已迁移待完整核验 | src/badnorth/battle.js、src/badnorth/info-graph.js |
 | src/islandpasses.js | 核心模块 | 已迁移待完整核验 | src/core/terrace-edges.js、src/world/terrace-edges.js |
 | src/learnpanel.js | 核心模块 | 待运行验收 | src/ui/learnpanel.js |
 | src/levelflora.js | 核心模块 | 已迁移待完整核验 | src/core/level-flora.js、src/life/flora-species.js |
 | src/lighting.js | 核心模块 | 已迁移待完整核验 | src/light/bake.js、src/light/voxel-field.js、src/world/view-shading.js |
 | src/lightingcache.js | 核心模块 | 待运行验收 | src/world/worldmesh.js |
+| src/looptint.js | 页面/内联代码 | 待页面核验 | src/core/grid.js、src/core/halfedge.js |
 | src/looptown.js | 核心模块 | 待运行验收 | src/build/buildings.js |
+| src/lsystem.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/mandala.js | 核心模块 | 待运行验收 | textures.html |
 | src/march.js | 核心模块 | 已迁移待完整核验 | contour.html、grids.html、src/core/contour.js |
 | src/megatex.js | 核心模块 | 已迁移待完整核验 | src/core/atlas.js、src/light/texel-owner.js |
 | src/mesh.js | 核心模块 | 已迁移待完整核验 | save-mesh.html、src/core/meshwriter.js、src/tools/mesh-audit.js、src/world/worldmesh.js |
+| src/meshmerge.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/mipcustom.js | 核心模块 | 已迁移待完整核验 | src/light/mip-chain.js、textures.html |
 | src/mipfilter.js | 核心模块 | 本轮代码验证通过 | mip-ground.html、src/light/mip-chain.js、src/light/mip-ground.js |
 | src/mirrordecor.js | 核心模块 | 已迁移待完整核验 | mirror.html、ornament.html、src/core/mirror-uv.js、src/core/ornament-field.js、src/ui/ornament.js |
@@ -207,7 +240,10 @@
 | src/navgraph.js | 核心模块 | 已迁移待完整核验 | river-nav.html、src/world/save.js |
 | src/navgrid.js | 核心模块 | 待运行验收 | src/world/navgraph.js |
 | src/navribbon.js | 核心模块 | 已迁移待完整核验 | src/badnorth/battle.js、src/core/path-samples.js、src/world/battle-navigation.js |
+| src/occmask.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| src/orderbadge.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/overhangterrain.js | 核心模块 | 已迁移待完整核验 | src/terrain/soft-tops.js、src/terrain/terrain-collide.js、src/terrain/terrainmesh.js |
+| src/paintblotch.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/paintnormal.js | 核心模块 | 已迁移待完整核验 | src/core/paint-normal.js、src/world/view-shading.js |
 | src/palette.js | 核心模块 | 已迁移待完整核验 | qa-replay.html、src/core/palette.js、src/core/qa-replay.js、src/world/app.js、wall-palette.html |
 | src/partsprites.js | 核心模块 | 待运行验收 | ui.html |
@@ -216,21 +252,26 @@
 | src/penumbra.js | 核心模块 | 已迁移待完整核验 | src/light/penumbra.js、src/world/penumbra-terrain.js |
 | src/piercefloor.js | 核心模块 | 已迁移待完整核验 | src/build/buildings.js、src/core/arch-floor-budget.js、src/world/navgraph.js |
 | src/piperepair.js | 核心模块 | 待运行验收 | src/core/infinite.js |
+| src/planetatmo.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/portrait.js | 核心模块 | 已迁移待完整核验 | src/ui/slot-portrait.js、ui.html |
 | src/propanim.js | 核心模块 | 已迁移待完整核验 | src/core/prop-anim.js、src/world/app.js、src/world/prop-anim-layer.js |
 | src/propframe.js | 核心模块 | 已迁移待完整核验 | src/build/buildings.js、src/core/opening-footprint.js |
 | src/quadgrid.js | 核心模块 | 待运行验收 | grids.html、src/core/grid.js |
 | src/quadinf.js | 核心模块 | 已迁移待完整核验 | grids.html、src/core/infinite.js |
+| src/quadmc.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| src/quadsphere.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/quadtex.js | 核心模块 | 待运行验收 | textures.html |
 | src/rayvis.js | 核心模块 | 已迁移待完整核验 | src/core/space-visibility.js、src/world/space-visibility.js |
 | src/rectpack.js | 核心模块 | 已迁移待完整核验 | src/core/atlas.js |
 | src/reflstreak.js | 核心模块 | 待运行验收 | src/world/view.js |
 | src/repeatbreak.js | 核心模块 | 待运行验收 | textures.html |
+| src/rimline.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/save.js | 核心模块 | 已迁移待完整核验 | save-mesh.html、src/world/app.js、src/world/save.js |
 | src/savestring.js | 核心模块 | 已迁移待完整核验 | save-mesh.html、src/world/app.js、src/world/save.js |
 | src/scene.js | 核心模块 | 待运行验收 | src/world/view.js |
 | src/shore.js | 核心模块 | 已迁移待完整核验 | shoreloops.html、src/core/shore-loops.js、src/core/shore-profile.js、src/water/shore.js |
 | src/shrubcard.js | 核心模块 | 已迁移待完整核验 | src/life/vegetation.js、src/world/view-post-extras.js |
+| src/skyfilm.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/slotsolve.js | 核心模块 | 已迁移待完整核验 | slots.html、src/core/wfc.js |
 | src/smear.js | 核心模块 | 已迁移待完整核验 | src/core/camera-motion.js、src/world/view-post-extras.js |
 | src/smokefx.js | 核心模块 | 已迁移待完整核验 | src/core/smoke-order.js、src/life/effects.js |
@@ -243,6 +284,7 @@
 | src/squadbanner.js | 核心模块 | 已迁移待完整核验 | src/badnorth/battle-g3.js、src/badnorth/squad-standard.js |
 | src/squarehex.js | 核心模块 | 已迁移待完整核验 | src/core/corner-footprint.js |
 | src/squigglefield.js | 核心模块 | 已迁移待完整核验 | ornament.html、src/core/ornament-field.js、src/ui/ornament.js |
+| src/stilts.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/storydatum.js | 核心模块 | 已迁移待完整核验 | src/core/story-datum.js |
 | src/surfacedeco.js | 核心模块 | 已迁移待完整核验 | src/build/buildings.js、src/core/surface-decoration.js |
 | src/surfaceshadow.js | 核心模块 | 已迁移待完整核验 | src/light/surface-shadow.js、src/world/view-shading.js |
@@ -250,9 +292,11 @@
 | src/terraceladder.js | 核心模块 | 已迁移待完整核验 | src/badnorth/battle-g3.js、src/world/battle-navigation.js |
 | src/terrainmesh.js | 核心模块 | 待运行验收 | src/terrain/terrainmesh.js |
 | src/texelsnap.js | 核心模块 | 已迁移待完整核验 | leaf-surface.html、src/core/leaf-atlas.js、src/core/texel-skip.js、src/life/leaf-surface.js、src/life/vegetation.js、textures.html |
+| src/tideflat.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/tileforce.js | 核心模块 | 已迁移待完整核验 | prefab.html、src/core/module-patch.js、src/core/wfc.js |
 | src/tileplace.js | 核心模块 | 已迁移待完整核验 | assembly.html、src/build/tile-assembly.js、src/core/wfc.js |
 | src/tilerepair.js | 核心模块 | 已迁移待完整核验 | src/core/wfc.js、wfc.html |
+| src/timberframe.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/topoline.js | 核心模块 | 已迁移待完整核验 | grids.html、src/core/grid.js |
 | src/town.js | 核心模块 | 待运行验收 | src/core/world.js |
 | src/townmesh.js | 核心模块 | 已迁移待完整核验 | garden.html、src/build/buildings.js、src/core/courtyards.js、src/world/worldmesh.js |
@@ -266,6 +310,7 @@
 | src/uikit.js | 核心模块 | 已迁移待完整核验 | src/badnorth/battle-g3.js、src/core/playful-layout.js |
 | src/unitbatch.js | 核心模块 | 已迁移待完整核验 | src/badnorth/battle.js、src/badnorth/unit-batch-lod.js |
 | src/unitsnap.js | 核心模块 | 已迁移待完整核验 | src/badnorth/battle.js、src/core/unit-ground-height.js、src/world/battle-navigation.js |
+| src/voxdebug.js | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | src/voxelao.js | 核心模块 | 已迁移待完整核验 | ao-stages.html、src/light/bake.js、src/light/voxel-ao.js、src/world/worldmesh.js |
 | src/voxelflow.js | 核心模块 | 已迁移待完整核验 | src/core/wind-flow.js、src/world/view-post-extras.js |
 | src/voxelnav.js | 核心模块 | 已迁移待完整核验 | src/world/battle-navigation.js、src/world/fine-portals.js、src/world/layerednav.js |
@@ -273,6 +318,7 @@
 | src/walkreach.js | 核心模块 | 已迁移待完整核验 | src/terrain/walk-reach.js |
 | src/wind.js | 核心模块 | 已迁移待完整核验 | src/life/atmosphere.js、src/world/view-post-extras.js |
 | src/wobbletex.js | 核心模块 | 已迁移待完整核验 | sediment.html、src/core/sediment.js、src/terrain/terrainmesh.js、src/world/view.js |
+| stiltslab.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | storydatumlab.html | 页面/内联代码 | 待页面核验 | src/core/story-datum.js |
 | terraceclifflab.html | 页面/内联代码 | 待页面核验 | src/core/terrace-profile.js、src/terrain/soft-tops.js |
 | terraceladderlab.html | 页面/内联代码 | 待页面核验 | src/badnorth/battle-g3.js、src/world/battle-navigation.js |
@@ -284,8 +330,9 @@
 | tools/batch.mjs | 开发工具 | 待工具/数据核验 | 待建立落点 |
 | tools/contact-sheet.mjs | 开发工具 | 待工具/数据核验 | tools/extract-review-frames.py |
 | tools/mark.mjs | 开发工具 | 待工具/数据核验 | tools/record-review.mjs |
-| tools/measure.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
+| tools/measure.html | 页面/内联代码 | 待页面核验 | tools/measure.html |
 | tools/measure.mjs | 开发工具 | 待工具/数据核验 | 待建立落点 |
+| tools/pixprobe.mjs | 开发工具 | 待工具/数据核验 | 待建立落点 |
 | tools/player.html | 页面/内联代码 | 待页面核验 | 待建立落点 |
 | tools/posters.mjs | 开发工具 | 待工具/数据核验 | 待建立落点 |
 | tools/report.mjs | 开发工具 | 待工具/数据核验 | tools/gen-pipeline-md.mjs |

@@ -1,3 +1,17 @@
+## 2026-11-16 维京远征主战场改十二门徒（代码接完，浏览器未验）
+
+用户决定：维京人战争从苔庭改到十二门徒（apostles 场景已有 deploySceneBattle 实测与 battle-apostles e2e，霸天出征顺序本就先打 apostles，窗口更顺）。改动只在 src/ 游戏侧：
+
+- `src/world/vikings/vikingVoyage.js`：新增 `resolveVikingSite()`（默认 'apostles'，`?vikingSite=moss` 切回）、`estimateSiteBattleEtaSec(snap,targets,timing,siteId)`、`planBookshopToSite`（A* 优先；moss 保留固化航点表兜底，其他站退大圆绕行→直线兜底）；`planBookshopToMoss`/`estimateMossBattleEtaSec`/`scheduleBeforeMoss` 保留为兼容包装。
+- `src/world/vikings/campaignDirector.js`：主战场参数化 battleSite；阶段 id 随站走（sail-apostles/hold-apostles/apostles）；apostles 舞台用 sceneBattle 实测口径 scale 5 / 半径 18 格，守军 = REA 默认 3 队（岩群无驻军编制，不写假守军），霸天舰队仍作攻方对抗面；apostles 锚地加第二轮放宽搜索兜底；`api.battleSite`/`estimateSiteEta` 暴露。site='moss' 时走原苔庭路径（西芳寺方阵接管、scale 4/半径 9、固化表）。
+- `src/world/vikings/mossBatianAttack.js`：`site` 选项，透传给船体结算；与地点无关。
+- `src/world/saihojiFleetContact.js`、`src/world/saihojiBattleTrigger.js`：新增 site 参数（默认 'moss'，苔庭原调用不变）。
+- `src/main.js`：batianMossGate 按 `vikingCampaign.battleSite || ?vikingSite` 对齐等锚地（hold-<site> 后放行霸天攻该站）；auto-muster 改用 estimateSiteBattleEtaSec + vikingBattleSiteParam。
+
+验证：6 个改动文件 `node --check` 全过；esbuild 整包 bundle（main.js 入口）无错（仅 messengerIsland 预存重复键警告，与本次无关）；tools/tests 三个维京测试全过（voyage_timing / moss_batian_attack / deck_slots）；Node 直引 vikingVoyage 验 eta：apostles 未开战 250s / 打 apostles transit 35s / blockade 0s，site 解析与兼容包装正常。浏览器实测（航线到 apostles 锚地、舞台开战、霸天同步窗口）未跑——锚地可行性与 A* 结果需实机确认。
+
+遗留：apostles 锚地第一轮 findAnchorage 若失败有放宽兜底，最终退到战场中心方向（可能压岩柱，航线 source 记 'straight-fallback'）；霸天旗舰距 apostles hub >145 m 时 hold 最多等 5 分钟兜底放行；苔庭战役代码全部保留可切回。未提交、未发布。
+
 ## 2026-10-23 重甲兵1.5倍／黑娃可见治疗修正
 
 用户先反馈湖沼看不到黑娃治疗，再要求重甲兵放大1.5倍。本轮默认vanguardTrooper/squad改1.5线性比例（武器同步，显式scale保留）。原医疗只隐藏伤员计时；现新增batianSwampTreatment复用原伤员几何作床边视觉，固定喂鲸筏附近治疗点，黑娃移动到床边伸臂，光环/连线/恢复条，逐人24秒治疗并以医者距离为门槛，原权威伤员始终预留给原运输艇，返航完成后才解除占用。离开战斗也更新渲染批次，避免残影。
@@ -2809,20 +2823,20 @@ Final cloud follow-up: repaired duplicated -52 composition translation via expli
 ### 2026-11-14 学习工坊 ⇄ 能力库闭环
 - [x] 规划 WORKSHOP_LOOP_PLAN.md；能力谱系计算、两页共用界面、左栏能力线视图、CLI 生成 CAPABILITY_LINEAGE.md。
 - [x] 可执行能力 / 执行经验 / 场景管线需求回流到队列；学习工坊 ⇄ 左栏 ⇄ 管线互跳实测。
-- [ ] 经验统一回写并可导出；补学队列落盘供 8769 学习任务读取。
+- [x] 经验统一回写并可导出；补学队列落盘供 8769 学习任务读取（experience.js unifiedStore v2 + export()/import() + scheduleExperiencePush → backend/main.py:320 /api/workshop/experience → catalog/experience-rows.json；learn-queue.json 由 export-learn-queue.mjs（夜间⑥）生成、nightly-lib 晨报消费）。
 - [ ] 按适配队列封装：网格 → 界面装饰 → 战役 → 火焰 → 工具 → 水的消费者。
 - [ ] 按补学队列补缺口（以 CAPABILITY_LINEAGE.md 当时顺序为准）。
 - [ ] 球系统 / 物件管线待完成节点进入需求；Worker 回执带能力线与代际。
 - [ ] 90 源码模块 / 40 原版文件补来源映射或确认不属能力线。
-- [ ] 更新 workshops-browser.mjs 至当前系统工坊界面（25 例失败）。
+- [x] 更新 workshops-browser.mjs 至当前系统工坊界面（2026-11-25：选择器全量迁到 map/tree 模式+新侧栏+more 下拉+dialog 顶层按钮 CSS/dispatchEvent，官方入口 browser 段 36/36 绿 ×2 次复验）。
 
 ### 2026-11-15 能力网与十二门徒地形
 - [x] 能力网（节点 / 前置边 / 分层）与场景诊断；场景消费清单扫描；文档与页面。
 - [x] 网格线第一项可执行能力 grid.contours（Node 用例）。
-- [ ] grid.contours 在真实游戏里生成候选、看原始 / 看候选、放弃的验收。
+- [x] grid.contours 在真实游戏里生成候选、看原始 / 看候选、放弃的验收（voxel-morris-e2e/run-1795553340475：pass、layer3d=contours 1434 点、cap.preview 候选→cap.show 原始/候选→revert，截图 1–3）。
 - [x] 十二门徒 vendor / 最新库 / 软坡 同机位对照（结论：候选不可采用）。
-- [ ] 库：地形 A+++ 软坡做出可见连续坡面并修破面（补学队列 #20）。
+- [x] 库：地形 A+++ 软坡做出可见连续坡面并修破面（补学队列 #20）（soft-tops 混合顶点放宽 + terrainmesh 同级填缝墙，r55 浏览器同机位 A/B 25782px/30级，crack.bad:[]）。
 - [ ] 十二门徒：缓坡高度场候选（占地与净空不变）交用户确认；配色单独候选并查清空白画面原因。
 - [ ] 其余场景（莫西斯湖 25、战斗场 24、高山圣城 7 个旧副本）逐个对照后决定是否同步。
 - [x] 学习工坊清爽化：能力地图为默认页，三个常用页签 + 更多资料。
-- [ ] 库软坡：放宽 soft-tops 成面条件并修破面，terrain-r55 同机位确认可见连续坡面（limitSoftSlopes 已有，效果未达标）。
+- [x] 库软坡：放宽 soft-tops 成面条件并修破面，terrain-r55 同机位确认可见连续坡面（limitSoftSlopes 已有，效果未达标）（顶点规则放宽为「只拒水/开放边界」，plain 只要顶层岩；同级高差填缝墙防破面；collide-r55 顶点 ~3×，浏览器 ALL PASS）。

@@ -1,0 +1,32 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/building-layer-e2e/run-1795450805735",
+  "capabilities": [],
+  "steps": {
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「高山圣城（通用插件 + 构建面板）」自动预装 3 个能力（建筑选址、多格 prefab 目录、联合 WFC 摆建筑群），点 ▶ 执行管线一键跑完整条。",
+    "pane": {
+      "shown": true,
+      "h": 497,
+      "scene": "1"
+    },
+    "nodes": [
+      "⚙ 建筑选址",
+      "⚙ 多格 prefab 目录",
+      "⚙ 联合 WFC 摆建筑群"
+    ]
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "zz-failure.png"
+  ],
+  "pass": false,
+  "failure": "Error: 左栏没有建筑能力\n    at expect (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:15:38)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/building-layer-browser.mjs:11:69\n    at async Object.finish (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:52:8)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/building-layer-browser.mjs:5:1"
+}

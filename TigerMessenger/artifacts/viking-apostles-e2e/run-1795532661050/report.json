@@ -1,0 +1,102 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/viking-apostles-e2e/run-1795532661050",
+  "steps": {
+    "worldReady": "ok",
+    "muster": {
+      "site": "apostles"
+    },
+    "board0": {
+      "count": 0,
+      "walking": 72,
+      "refillLeft": 228
+    },
+    "board20": {
+      "count": 0,
+      "walking": 87,
+      "refillLeft": 213
+    },
+    "board40": {
+      "count": 0,
+      "walking": 101,
+      "refillLeft": 199
+    },
+    "board60": {
+      "count": 0,
+      "walking": 110,
+      "refillLeft": 190
+    },
+    "board80": {
+      "count": 2,
+      "walking": 108,
+      "refillLeft": 190
+    },
+    "boardStat": {
+      "i": 100,
+      "whistled": false,
+      "active": true,
+      "departed": false,
+      "departedFrame": -1,
+      "refillLeft": 188,
+      "walking": 104,
+      "ships": [
+        {
+          "id": "leebai",
+          "count": 0,
+          "walkers": 56
+        },
+        {
+          "id": "duke",
+          "count": 8,
+          "walkers": 48
+        }
+      ]
+    },
+    "boarded": [
+      {
+        "id": "leebai",
+        "count": 0
+      },
+      {
+        "id": "duke",
+        "count": 8
+      }
+    ],
+    "sailPhase": "sail-apostles",
+    "route": {
+      "routeMeta": null,
+      "legs": [
+        {
+          "id": "leebai",
+          "source": "astar",
+          "len": 328
+        },
+        {
+          "id": "duke"
+        }
+      ]
+    },
+    "holdPhase": "hold-apostles",
+    "gate": {
+      "open": true,
+      "waitingSec": 0
+    },
+    "battlePhase": "apostles",
+    "stage": {
+      "name": "viking-apostles-battle",
+      "scale": 5,
+      "gridRadius": 18,
+      "defSquads": 0,
+      "defUnits": 24,
+      "atkUnits": 0,
+      "wave": 0,
+      "houses": 4
+    }
+  },
+  "errors": [
+    "console: THREE.WebGLProgram: Shader Error 0 - VALIDATE_STATUS false\n\nMaterial Name: \nMaterial Type: MeshStandardMaterial\n\nProgram Info Log: Vertex shader is not compiled.\nVERTEX\n\nERROR: 0:566: 'uSoakPivot' : undeclared identifier\n\n  561: #endif\n  562: vec3 transformed = vec3( position );\n  563: #ifdef USE_AL",
+    "console: THREE.WebGLProgram: Shader Error 1282 - VALIDATE_STATUS false\n\nMaterial Name: \nMaterial Type: MeshStandardMaterial\n\nProgram Info Log: Vertex shader is not compiled.\nVERTEX\n\nERROR: 0:566: 'uSoakPivot' : undeclared identifier\n\n  561: #endif\n  562: vec3 transformed = vec3( position );\n  563: #ifdef USE",
+    "console: THREE.WebGLProgram: Shader Error 1282 - VALIDATE_STATUS false\n\nMaterial Name: \nMaterial Type: MeshStandardMaterial\n\nProgram Info Log: Vertex shader is not compiled.\nVERTEX\n\nERROR: 0:566: 'uSoakPivot' : undeclared identifier\n\n  561: #endif\n  562: vec3 transformed = vec3( position );\n  563: #ifdef USE"
+  ],
+  "pass": false,
+  "failure": "Error: 守军应为 REA 默认 3 队，实际 0\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/viking-apostles-browser.mjs:49:32"
+}

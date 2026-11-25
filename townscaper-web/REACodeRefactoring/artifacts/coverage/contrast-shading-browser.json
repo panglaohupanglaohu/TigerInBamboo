@@ -1,0 +1,42 @@
+{
+  "id": "1482346496460828674",
+  "stats": {
+    "tris": 10064,
+    "edges": 15012,
+    "res": 512,
+    "sameDE": 0.103,
+    "contrastDE": 17.89,
+    "minContrastDE": 14.28,
+    "beforeSameDE": 13.755
+  },
+  "u": {
+    "shCT_on": 1,
+    "texW": 512,
+    "bounds": [
+      -14.5,
+      -12.62,
+      0.03448
+    ]
+  },
+  "twin": {
+    "checked": 9919,
+    "mismatched": 0,
+    "land": 9919
+  },
+  "mapShape": {
+    "pairs": 39568,
+    "jumps": 897,
+    "jumpFrac": 0.0227
+  },
+  "screen": {
+    "px": 307200,
+    "changed": 25133,
+    "changeFrac": 0.0818,
+    "ink": 2946,
+    "noise": 0,
+    "restored": 0
+  },
+  "wired": true,
+  "uniformOff": 0,
+  "errors": []
+}

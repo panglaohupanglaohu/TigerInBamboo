@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>岸线三段：崖上小瀑布 / 崖脚冰帘 / 岛脚沙滩与泡沫边</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:96px; right:332px; bottom:8px;
+    display:grid; grid-template-columns:repeat(3,1fr); grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; object-fit:contain; border-radius:9px;
+    border:1px solid var(--line); background:#cfdadb; }
+  #panel { position:fixed; right:12px; top:96px; width:308px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:6px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  .chips { display:flex; gap:5px; flex-wrap:wrap; }
+  button { font:inherit; font-size:11.5px; padding:3px 7px; border-radius:5px;
+    border:1px solid var(--line); background:#fff; color:var(--ink); cursor:pointer; }
+  button.on { background:#1d2f36; color:#fff; border-color:#1d2f36; }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>岸线三段：崖上小瀑布（cascades）/ 崖脚冰帘（icefringe）/ 岛脚沙滩与泡沫边（tideflat）</h1>
+  <p>三条片子 <b>1007587828992266240 · 1007587825024425984 · 1007587817021636609</b> 全是 2018-06-15 同一天同机位的屏录，<b>没有一句实现描述</b>。
+  所有数字来自逐像素：瀑布槽口 <b>17px</b>、落水带 5→10px、基部白扇 <b>30px</b>；冰帘条宽 <b>11–13px</b>、缝 3–20px、覆盖 <b>7.2%</b>；沙裙湿边 <b>7px</b>（提亮不是压暗）、泡沫边中位 <b>5px</b>。
+  下排是同一场景关掉该效果的对照，面板里的"反测"是把渲染结果再量一遍。
+  <br /><b>注意：这个等距方墩只是量测台架</b>，不是对片子场景的还原——它只保证"崖面高宽比 / 像素倍率 / 配色"三件事和片子对得上，
+  好让上面的反测数字能和片子里的数字直接比。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>① 瀑布</b> 槽口 + 上青下白 + 基部摊开</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span><b>② 冰帘</b> 圆头 + 长短乱 + 缝里见岩</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>③ 沙滩</b> 沙裙 + 湿边 + 断泡沫</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span>对照：<b>不掉水</b>（崖面是干的）</span><canvas id="cvD"></canvas></div>
+  <div class="cell"><span>对照：<b>不挂冰帘</b>（只剩岩面）</span><canvas id="cvE"></canvas></div>
+  <div class="cell"><span>对照：<b>沙裙画成等宽圆环</b>（典型错法）</span><canvas id="cvF"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 瀑布（目标 顶5 / 底10 / 扇30）</h2>
+  <div class="row" id="rTop"><span>顶部宽 px</span><b>—</b></div>
+  <div class="row" id="rBot"><span>入水处宽 px</span><b>—</b></div>
+  <div class="row" id="rNotch"><span>槽口宽 px</span><b>—</b></div>
+  <div class="row" id="rRamp"><span>色标 顶→底</span><b>—</b></div>
+  <hr />
+  <h2>反测 · 冰帘（目标 11–13 / 缝3–20 / 覆盖7.2%）</h2>
+  <div class="row" id="rIceW"><span>条宽中位 px</span><b>—</b></div>
+  <div class="row" id="rIceGap"><span>缝中位 px</span><b>—</b></div>
+  <div class="row" id="rIceCov"><span>覆盖率</span><b>—</b></div>
+  <hr />
+  <h2>反测 · 沙滩（目标 泡沫5 / 湿边7）</h2>
+  <div class="row" id="rFoam"><span>泡沫游程中位 px</span><b>—</b></div>
+  <div class="row" id="rFoamRows"><span>带泡沫的行占比</span><b>—</b></div>
+  <div class="row" id="rWet"><span>湿边 G 提升</span><b>—</b></div>
+  <hr />
+  <h2>控制</h2>
+  <div class="chips">
+    <button id="bAll" class="on">全部</button>
+    <button id="bSlow" class="on">水面流动</button>
+  </div>
+  <div class="row"><span>片中尺度 → 画布</span><b id="vScale">2.0×</b></div>
+  <hr />
+  <h2>同机位 A/B（同场景、只差该效果）</h2>
+  <div class="row" id="dFall"><span>① 瀑布 有/无</span><b>—</b></div>
+  <div class="row" id="dIce"><span>② 冰帘 有/无</span><b>—</b></div>
+  <div class="row" id="dSand"><span>③ 沙滩 沙裙/等宽环</span><b>—</b></div>
+</div>
+
+<script type="module">
+import { paintIsoBox, rgbCss as stiltsRgb } from './src/stilts.js';
+import * as CA from './src/cascades.js';
+import * as IC from './src/icefringe.js';
+import * as TF from './src/tideflat.js';
+
+const S = 2;              // 片中像素 → 画布像素
+const CW = 380, CH = 380; // 画布 CSS 尺寸
+
+function setup(id) {
+  const cv = document.getElementById(id);
+  cv.width = CW * S; cv.height = CH * S;
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  return { cv, ctx };
+}
+
+/* 一个共同的等距小岛场景。三个模块共用，保证"同机位"。 */
+// 两套配色：片中 788992266240 是白石灰岩（崖上瀑布），另外两条是深色玄武岩（冰帘/沙裙）。
+const LIMESTONE = { rock: [201, 210, 209], rockLit: [232, 237, 236], grass: [169, 195, 154] };
+const BASALT = { rock: [76, 67, 79], rockLit: [96, 86, 99], grass: [166, 174, 122] };
+
+function scene({ withFall = true, withIce = false, apronMode = 'lobed', pal = BASALT } = {}) {
+  return (ctx) => {
+    ctx.clearRect(0, 0, CW * S, CH * S);
+    const cx = (CW / 2) * S, cy = 385;
+    const w = 260, d = 260, h = 150;
+
+    // 水
+    TF.paintWater(ctx, CW * S, CH * S, cx, cy - 60, 150);
+
+    // 沙滩（画在岛体下面，被岛体压住中间部分 —— 顺序：水 → 沙 → 岛）
+    const apron = TF.makeApron({ cx, cy, r: 140, scale: S, seed: 11, lobes: 11 });
+    if (apronMode === 'lobed') {
+      const foam = TF.makeFoam(apron, { seed: 17 });
+      TF.paintApron(ctx, apron, foam, {});
+    } else {
+      // 对照：等宽圆环（典型错法）——正圆、等宽、连续描边、无湿边
+      ctx.fillStyle = 'rgba(184,152,139,0.95)';
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, 150 * 1.2247, 150 * 0.7071, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(245,247,246,0.97)';
+      ctx.lineWidth = 6 * S;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, 150 * 1.2247, 150 * 0.7071, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // 岛体（湿沙/岩）
+    const box = paintIsoBox(ctx, {
+      cx, cy, w, d, h,
+      top: IC.rgbCss(pal.grass),
+      left: IC.rgbCss(pal.rock),
+      right: IC.rgbCss(pal.rockLit),
+    });
+
+    // 崖面几何：+x 面（右前），corners 1..2。顶边在银幕上是斜的，所以按 x 插值。
+    const t1 = box.top[1], t2 = box.top[2], b1 = box.bottom[1], b2 = box.bottom[2];
+    const faceX0 = t2[0], faceX1 = t1[0];           // x 从小到大：corner2 → corner1
+    const topAt = (x) => {
+      const u = (x - faceX0) / (faceX1 - faceX0);
+      return t2[1] + (t1[1] - t2[1]) * u;
+    };
+    const baseAt = (x) => {
+      const u = (x - faceX0) / (faceX1 - faceX0);
+      return b2[1] + (b1[1] - b2[1]) * u;
+    };
+    const xAt = (u) => faceX0 + (faceX1 - faceX0) * u;
+
+    if (withIce) {
+      const fr = IC.makeFringe({
+        x0: xAt(0.06), x1: xAt(0.94),
+        topY: topAt, baseY: baseAt,
+        scale: S, seed: 5,
+      });
+      IC.paintFringe(ctx, fr, {});
+      window.__fringe = fr;
+    }
+
+    if (withFall) {
+      const cs = [];
+      [0.30, 0.68].forEach((u, i) => {
+        const x = xAt(u);
+        cs.push(CA.makeCascade({
+          x, topY: topAt(x), baseY: baseAt(x),
+          scale: S, seed: 3 + i * 7, mode: i ? 'slot' : 'ledge',
+        }));
+      });
+      for (const c of cs) CA.paintCascade(ctx, c, {});
+      window.__cascade = cs[0];
+    }
+  };
+}
+
+const A = setup('cvA'), B = setup('cvB'), C = setup('cvC');
+const D = setup('cvD'), E = setup('cvE'), F = setup('cvF');
+
+function render() {
+  scene({ withFall: true, withIce: false, apronMode: 'lobed', pal: LIMESTONE })(A.ctx);
+  scene({ withFall: false, withIce: true, apronMode: 'lobed', pal: BASALT })(B.ctx);
+  scene({ withFall: false, withIce: false, apronMode: 'lobed' })(C.ctx);
+  scene({ withFall: false, withIce: false, apronMode: 'lobed', pal: LIMESTONE })(D.ctx);
+  scene({ withFall: false, withIce: false, apronMode: 'lobed' })(E.ctx);
+  scene({ withFall: false, withIce: false, apronMode: 'plain' })(F.ctx);
+  measure();
+}
+
+/** 两张同机位画布的像素差：全画面平均差 + 差异>8 的像素占比。 */
+function diffPair(a, b) {
+  const A1 = a.ctx.getImageData(0, 0, a.cv.width, a.cv.height).data;
+  const B1 = b.ctx.getImageData(0, 0, b.cv.width, b.cv.height).data;
+  let sum = 0, n = 0, hit = 0;
+  for (let i = 0; i < A1.length; i += 4) {
+    const d = (Math.abs(A1[i] - B1[i]) + Math.abs(A1[i + 1] - B1[i + 1]) + Math.abs(A1[i + 2] - B1[i + 2])) / 3;
+    sum += d; n++;
+    if (d > 8) hit++;
+  }
+  return { mean: sum / n, pct: (hit / n) * 100 };
+}
+
+const setRow = (id, txt, ok) => {
+  const el = document.getElementById(id);
+  el.querySelector('b').textContent = txt;
+  el.classList.toggle('good', !!ok);
+  el.classList.toggle('bad', ok === false);
+};
+
+function measure() {
+  // ① 瀑布
+  const cas = window.__cascade;
+  if (cas) {
+    const p = CA.probeFall(A.ctx, cas, 10);
+    const top = p.widths[0] / S, bot = p.widths[p.widths.length - 1] / S;
+    setRow('rTop', top.toFixed(1), Math.abs(top - 5) < 2.2);
+    setRow('rBot', bot.toFixed(1), Math.abs(bot - 10) < 3);
+    setRow('rNotch', (cas.notch.w / S).toFixed(1), Math.abs(cas.notch.w / S - 17) < 1);
+    const r0 = p.ramp[0], r9 = p.ramp[p.ramp.length - 1];
+    setRow('rRamp', `(${r0.join(',')})→(${r9.join(',')})`, r0[2] > r0[0] + 18 && r9[0] > 240);
+  }
+  // ② 冰帘
+  const fr = window.__fringe;
+  if (fr) {
+    const q = IC.probeFringe(B.ctx, fr, 0.45);
+    const w = q.widths.slice().sort((a, b) => a - b);
+    const g = q.gaps.slice().sort((a, b) => a - b);
+    const med = w.length ? w[Math.floor(w.length / 2)] / S : 0;
+    const gmed = g.length ? g[Math.floor(g.length / 2)] / S : 0;
+    setRow('rIceW', med.toFixed(1), med > 9 && med < 15);
+    setRow('rIceGap', gmed.toFixed(1), gmed > 2 && gmed < 22);
+    setRow('rIceCov', (q.areaCover * 100).toFixed(1) + '%', q.areaCover > 0.045 && q.areaCover < 0.11);
+  }
+  // ③ 沙滩
+  const ap = TF.makeApron({ cx: (CW / 2) * S, cy: 385, r: 140, scale: S, seed: 11, lobes: 11 });
+  const fp = TF.probeFoam(C.ctx, ap);
+  setRow('rFoam', (fp.med / S).toFixed(1) + ' (' + fp.n + '段)', fp.med / S > 2 && fp.med / S < 12);
+  setRow('rFoamRows', (fp.rows * 100).toFixed(0) + '%', fp.rows > 0.2 && fp.rows < 0.85);
+
+  // 湿边：在多个列上量"沙带里最外一圈的 G 提升"，取沙带最长的那一列（沙裙各方向宽度不等）
+  const cv = C.cv, ctx = C.ctx;
+  const img = ctx.getImageData(0, 0, cv.width, cv.height).data;
+  const at = (x, y) => { const i = (y * cv.width + x) * 4; return [img[i], img[i + 1], img[i + 2]]; };
+  let bestLen = 0, bestFirst = null, bestLast = null, bestX = 0, bestEnd = 0;
+  for (let xx = 0; xx < cv.width; xx += 5) {
+    let y = 0;
+    while (y < cv.height) {
+      const c = at(xx, y);
+      const isSand = c[0] > c[1] + 8 && c[0] > c[2] + 20 && c[0] > 150 && c[0] < 235;  // 排除草色 (169,195,154)：草是 g>r，沙是 r>g
+      if (isSand) {
+        const s = y, first = c;
+        while (y < cv.height) {
+          const c2 = at(xx, y);
+          if (!(c2[0] > c2[1] + 8 && c2[0] > c2[2] + 20 && c2[0] > 150 && c2[0] < 235)) break;
+          y++;
+        }
+        if (y - s > bestLen) { bestLen = y - s; bestFirst = first; bestLast = at(xx, y - 1); bestX = xx; bestEnd = y; }
+      } else y++;
+    }
+  }
+  if (bestLen > 20) {
+    // 比的是"湿圈"而不是最外那一像素：最外一像素被泡沫盖住，量出来会是 +43（假的）
+    const gWet = at(bestX, bestEnd - 5)[1];
+    const gDry = at(bestX, bestEnd - 25)[1];
+    const d = gWet - gDry;
+    setRow('rWet', '+' + d + ' (带 ' + (bestLen / S).toFixed(0) + 'px)', d > 5 && d < 24);
+  } else setRow('rWet', '—', null);
+
+  // 同机位 A/B
+  const d1 = diffPair(A, D), d2 = diffPair(B, E), d3 = diffPair(C, F);
+  setRow('dFall', d1.pct.toFixed(2) + '% 像素差 · 均值 ' + d1.mean.toFixed(1), null);
+  setRow('dIce', d2.pct.toFixed(2) + '% 像素差 · 均值 ' + d2.mean.toFixed(1), null);
+  setRow('dSand', d3.pct.toFixed(2) + '% 像素差 · 均值 ' + d3.mean.toFixed(1), null);
+}
+
+const bAll = document.getElementById('bAll');
+bAll.onclick = () => { bAll.classList.toggle('on'); render(); };
+document.getElementById('bSlow').onclick = (e) => e.currentTarget.classList.toggle('on');
+
+render();
+window.__ready = true;
+</script>
+</body>
+</html>

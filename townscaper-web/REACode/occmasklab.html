@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>占据表用位集：粗格先否掉，再问叶子</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13.5px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:12px 18px 4px; }
+  h1 { margin:0 0 3px; font-size:15px; }
+  header p { margin:0; color:var(--muted); font-size:12.5px; max-width:108ch; }
+  header b { color:#9c4720; font-weight:650; }
+  #stage { position:fixed; inset:104px 300px 66px 16px; background:#232729; border-radius:12px;
+    border:1px solid var(--line); overflow:hidden; }
+  #cv { position:absolute; inset:0; width:100%; height:100%; display:block; }
+  #panel { position:fixed; right:16px; top:104px; width:272px; bottom:66px; background:#fff;
+    border:1px solid var(--line); border-radius:10px; padding:11px 13px; display:flex;
+    flex-direction:column; gap:7px; overflow:auto; box-shadow:0 2px 10px rgba(20,40,45,.08); }
+  #panel h2 { margin:0; font-size:11.5px; color:var(--muted); font-weight:600; letter-spacing:.02em; }
+  #panel .row { display:flex; justify-content:space-between; font-size:12px; color:var(--muted);
+    font-variant-numeric:tabular-nums; }
+  #panel .row b { color:var(--ink); }
+  #panel input[type=range] { width:100%; margin:0; }
+  #panel label.chk { display:flex; gap:7px; align-items:center; font-size:12.5px; cursor:pointer; }
+  #stats { position:fixed; left:18px; bottom:14px; right:16px; font-size:12px; color:var(--muted);
+    background:rgba(255,255,255,.94); border:1px solid var(--line); border-radius:8px; padding:7px 12px;
+    font-variant-numeric:tabular-nums; z-index:5; }
+  #stats b { color:#1d2f36; }
+  #stats .ok { color:#146c4a; font-weight:650; }
+  #stats .warn { color:#9c4720; font-weight:650; }
+  button { font:12.5px -apple-system,sans-serif; padding:5px 9px; border-radius:7px;
+    border:1px solid #cfdad9; background:#f6faf9; color:#1d2f36; cursor:pointer; }
+  button:hover { background:#eaf3f1; }
+</style>
+</head>
+<body>
+<header>
+  <h1>占据 / 合法性：<b>位集 + 粗格先否</b><span style="font-size:12px;color:#5c727a;font-weight:400"> · 794993371261665280</span></h1>
+  <p>片子里白线框大盒和黄色小片是同两份数据的两级：白 = 这一格被占，黄 = 空着可放。
+     查询先问粗格，粗格空就一次移位加与运算否掉八格。</p>
+</header>
+<div id="stage"><canvas id="cv"></canvas></div>
+<div id="panel">
+  <h2>参数</h2>
+  <label class="chk"><input type="checkbox" id="wc" checked> 白线框（粗格）</label>
+  <label class="chk"><input type="checkbox" id="wy" checked> 黄片（空叶子）</label>
+  <label class="chk"><input type="checkbox" id="wi" checked> 岛体（占用的叶子）</label>
+  <div class="row"><span>体素高度 ny</span><b id="vny">16</b></div>
+  <input type="range" id="ny" min="8" max="28" value="16" step="1">
+  <div class="row"><span>相机方位</span><b id="vaz">38°</b></div>
+  <input type="range" id="az" min="0" max="359" value="38" step="1">
+  <h2 style="margin-top:4px">位集 vs Set&lt;string&gt;</h2>
+  <div class="row"><span>位集</span><b id="vb">–</b></div>
+  <div class="row"><span>Set 镜像</span><b id="vs">–</b></div>
+  <div class="row"><span>粗格排除率</span><b id="vx">–</b></div>
+  <button id="run">跑 20 万次查询</button>
+</div>
+<div id="stats"></div>
+
+<script type="module">
+import { OccMask, makeIsland, buildSetMirror, bench } from './src/occmask.js';
+
+const $ = (id) => document.getElementById(id);
+const cv = $('cv');
+const ctx = cv.getContext('2d');
+let W = 0, H = 0, dpr = Math.min(2, window.devicePixelRatio || 1);
+
+function fit() {
+  const r = cv.parentElement.getBoundingClientRect();
+  W = r.width; H = r.height;
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  draw();
+}
+
+let mask = null, setMirror = null, result = null;
+
+function rebuild() {
+  const ny = +$('ny').value;
+  mask = makeIsland(24, ny, 24);
+  setMirror = buildSetMirror(mask);
+  $('vny').textContent = ny;
+  result = null;
+  draw();
+}
+
+/* 等距投影。y 朝上，x/z 是两个水平轴；az 只用来在屏幕上错开 x 与 z 的权重。 */
+function projector(az) {
+  const s = Math.min(W, H) / 44;
+  const a = (az * Math.PI) / 180;
+  const c = Math.cos(a), sn = Math.sin(a);
+  const cx = 12, cz = 12; // 以岛心为原点
+  return (i, j, k) => {
+    const x = (i - cx), z = (k - cz);
+    const rx = x * c - z * sn;
+    const rz = x * sn + z * c;
+    return [
+      W / 2 + (rx - rz) * 0.86 * s,
+      H * 0.66 - j * s + (rx + rz) * 0.42 * s,
+    ];
+  };
+}
+
+function draw() {
+  if (!mask) return;
+  ctx.clearRect(0, 0, W, H);
+  const p = projector(+$('az').value);
+  $('vaz').textContent = $('az').value + '°';
+
+  // 地面网格，给个参照（片子里也有灰底网格）
+  ctx.strokeStyle = 'rgba(255,255,255,0.055)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 24; i += 2) {
+    const a = p(i, 0, 0), b = p(i, 0, 24);
+    ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); ctx.stroke();
+    const c = p(0, 0, i), d = p(24, 0, i);
+    ctx.beginPath(); ctx.moveTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.stroke();
+  }
+
+  // 岛体：每个占用叶子的顶面填色（画在底层）
+  if ($('wi').checked) {
+    const occ = mask.leafCells(1e9);
+    ctx.fillStyle = 'rgba(226,214,214,0.95)';
+    for (const { i, j, k } of occ) {
+      const a = p(i, j + 1, k), b = p(i + 1, j + 1, k), c = p(i + 1, j + 1, k + 1), d = p(i, j + 1, k + 1);
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+      ctx.lineTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.closePath(); ctx.fill();
+    }
+    // 侧面：让岛有厚度（只画朝相机的那两侧）
+    ctx.fillStyle = 'rgba(168,152,156,0.95)';
+    for (const { i, j, k } of occ) {
+      if (mask.has(i, j, k + 1)) continue;
+      const a = p(i, j + 1, k + 1), b = p(i + 1, j + 1, k + 1), c = p(i + 1, j, k + 1), d = p(i, j, k + 1);
+      ctx.beginPath(); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]);
+      ctx.lineTo(c[0], c[1]); ctx.lineTo(d[0], d[1]); ctx.closePath(); ctx.fill();
+    }
+  }
+
+  // 每列的地表高度，黄片就撒在它上面那层空气里（片子里黄片是悬在模型上方的）
+  const top = new Int16Array(mask.nx * mask.nz).fill(-1);
+  for (const { i, j, k } of mask.leafCells(1e9)) {
+    const t = i * mask.nz + k;
+    if (j > top[t]) top[t] = j;
+  }
+
+  // 黄片：空叶子 —— 片子里那批"密但有缺格"的小黄片，悬在地表上方几层
+  if ($('wy').checked) {
+    ctx.fillStyle = 'rgba(240,224,54,0.95)';
+    ctx.strokeStyle = 'rgba(110,95,0,0.45)';
+    ctx.lineWidth = 0.7;
+    let drawn = 0;
+    for (let i = 0; i < mask.nx; i++) {
+      for (let k = 0; k < mask.nz; k++) {
+        const t = top[i * mask.nz + k];
+        if (t < 0) continue;
+        for (let j = t + 1; j <= Math.min(mask.ny - 1, t + 7); j++) {
+          if (mask.has(i, j, k)) continue;
+          // 稀疏：片子里的黄片是隔一格出现的，不是实心一片
+          if (((i * 7 + k * 13 + j * 5) & 3) > 1) continue;
+          const a = p(i + 0.5, j + 0.5, k + 0.5);
+          const sz = 2.6;
+          ctx.beginPath();
+          ctx.rect(a[0] - sz, a[1] - sz, sz * 2, sz * 2);
+          ctx.fill(); ctx.stroke();
+          if (++drawn > 1400) break;
+        }
+      }
+    }
+  }
+
+  // 白线框：粗格（8 个叶子一格），只画"露在外面"的那层，否则 159 个盒子叠成一坨
+  if ($('wc').checked) {
+    ctx.strokeStyle = 'rgba(255,255,255,0.72)';
+    ctx.lineWidth = 0.9;
+    const c = mask.coarse;
+    const cells = mask.coarseCells().filter(({ i, j, k }) => {
+      const nb = [[1, 0, 0], [-1, 0, 0], [0, 1, 0], [0, -1, 0], [0, 0, 1], [0, 0, -1]];
+      return nb.some(([a, b, d]) => {
+        const ii = i + a, jj = j + b, kk = k + d;
+        if (ii < 0 || jj < 0 || kk < 0 || ii >= mask.cx || jj >= mask.cy || kk >= mask.cz) return jj >= 0;
+        return !(mask.cbits[mask._cw(ii, jj, kk)] & mask._b(kk));
+      });
+    });
+    // 远的先画
+    cells.sort((A, B) => (A.i + A.k + A.j) - (B.i + B.k + B.j));
+    for (const { i, j, k, s } of cells) {
+      const x0 = i * s, x1 = x0 + s, y0 = j * s, y1 = y0 + s, z0 = k * s, z1 = z0 + s;
+      const c = [
+        p(x0, y0, z0), p(x1, y0, z0), p(x1, y0, z1), p(x0, y0, z1),
+        p(x0, y1, z0), p(x1, y1, z0), p(x1, y1, z1), p(x0, y1, z1),
+      ];
+      const E = [[0, 1], [1, 2], [2, 3], [3, 0], [4, 5], [5, 6], [6, 7], [7, 4], [0, 4], [1, 5], [2, 6], [3, 7]];
+      ctx.beginPath();
+      for (const [a, b] of E) { ctx.moveTo(c[a][0], c[a][1]); ctx.lineTo(c[b][0], c[b][1]); }
+      ctx.stroke();
+    }
+  }
+
+  updateStats();
+}
+
+function updateStats() {
+  const occN = mask.n;
+  const total = mask.nx * mask.ny * mask.nz;
+  const b = result;
+  $('vb').textContent = b ? b.bitsetNs.toFixed(1) + ' ns' : '–';
+  $('vs').textContent = b ? b.setNs.toFixed(1) + ' ns' : '–';
+  $('vx').textContent = b ? (b.exclude * 100).toFixed(1) + '%' : '–';
+  if (b) { $('vb').className = 'ok'; $('vs').className = 'warn'; }
+  $('stats').innerHTML =
+    `叶子占用 <b>${occN}</b> / ${total} 格（<b>${((occN / total) * 100).toFixed(1)}%</b>）` +
+    ` · 粗格 <b>${mask.cn}</b> / ${mask.cx * mask.cy * mask.cz}` +
+    ` · 位集省内存：<span class="ok">${((1 - (mask.bits.length * 4) / (total * 24)) * 100).toFixed(0)}%</span>` +
+    (b ? ` · 20 万次查询：位集 <span class="ok">${b.bitsetNs.toFixed(1)} ns</span> vs Set <span class="warn">${b.setNs.toFixed(1)} ns</span>` +
+      ` → <b>${(b.setNs / b.bitsetNs).toFixed(1)}×</b>；粗格排除 <b>${(b.exclude * 100).toFixed(1)}%</b>` +
+      `；命中数一致 <b>${b.hits[0] === b.hits[1] ? '✔ ' + b.hits[0] : '✘ ' + b.hits.join('/')}</b>` : '');
+  window.__occ = {
+    occN, total, coarse: mask.cn, bitsetNs: b?.bitsetNs ?? null, setNs: b?.setNs ?? null,
+    exclude: b?.exclude ?? null, hits: b?.hits ?? null,
+  };
+}
+
+$('run').addEventListener('click', () => {
+  result = bench(mask, setMirror, 200000);
+  updateStats();
+});
+$('ny').addEventListener('input', rebuild);
+$('az').addEventListener('input', draw);
+['wc', 'wy', 'wi'].forEach((id) => $(id).addEventListener('change', draw));
+window.addEventListener('resize', fit);
+fit(); rebuild();
+window.__runBench = () => { result = bench(mask, setMirror, 200000); updateStats(); return window.__occ; };
+window.__setNy = (n) => { $('ny').value = n; rebuild(); return window.__occ; };
+</script>
+</body>
+</html>

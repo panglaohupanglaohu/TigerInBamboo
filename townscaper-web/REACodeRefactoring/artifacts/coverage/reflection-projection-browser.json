@@ -1,0 +1,55 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "versionUnchanged": true,
+      "nodesSampled": 2985,
+      "aboveWaterSampled": 2969,
+      "screenYAboveWater": [
+        2.5,
+        507.9
+      ],
+      "horizon": -425.9,
+      "layerPx": 0,
+      "leakAbove": 0,
+      "reflectionOn": false,
+      "occTested": 234,
+      "occLeaks": 0,
+      "freeTested": 0,
+      "freeHits": 0,
+      "occSamples": [],
+      "freeSamples": [],
+      "noise": 0,
+      "abDiff": 0,
+      "offIsZero": true,
+      "shared": true,
+      "scaleY": -1
+    },
+    {
+      "kind": "quad",
+      "versionUnchanged": true,
+      "nodesSampled": 3463,
+      "aboveWaterSampled": 3442,
+      "screenYAboveWater": [
+        2,
+        506.9
+      ],
+      "horizon": -425.9,
+      "layerPx": 9,
+      "leakAbove": 0,
+      "reflectionOn": false,
+      "occTested": 278,
+      "occLeaks": 0,
+      "freeTested": 0,
+      "freeHits": 0,
+      "occSamples": [],
+      "freeSamples": [],
+      "noise": 0,
+      "abDiff": 9,
+      "offIsZero": true,
+      "shared": true,
+      "scaleY": -1
+    }
+  ],
+  "errors": []
+}

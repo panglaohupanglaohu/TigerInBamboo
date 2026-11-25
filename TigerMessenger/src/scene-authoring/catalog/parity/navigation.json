@@ -1,0 +1,220 @@
+{
+ "capability": "navigation",
+ "generatedAt": "2026-11-25T15:27:02.437Z",
+ "generator": "TigerMessenger/tools/refactor/nav-parity.mjs",
+ "schemaVersion": 1,
+ "line": "navigation",
+ "parityVersion": 1,
+ "verdict": "diff-registered",
+ "sameCriteriaEqual": true,
+ "original": [
+  "townscaper-web/REACode/src/cheesenav.js",
+  "townscaper-web/REACode/src/holenav.js"
+ ],
+ "refactored": [
+  "TigerMessenger/src/vendor/townscaper-rea-refactoring/src/world/layerednav.js",
+  "TigerMessenger/src/vendor/townscaper-rea-refactoring/src/world/battle-navigation.js"
+ ],
+ "clips": [
+  "906425294533394432",
+  "797119718477991936"
+ ],
+ "inputs": {
+  "cheese": {
+   "w": 20,
+   "h": 11,
+   "d": 20,
+   "seed": 7,
+   "tunnels": 7,
+   "tunnelLen": 60
+  },
+  "holes": {
+   "W": 15,
+   "D": 15,
+   "openness": 0.55,
+   "seed": 7
+  },
+  "pairs": 200,
+  "pairSeed": 11
+ },
+ "metrics": [
+  {
+   "id": "nodes",
+   "name": "可站节点数"
+  },
+  {
+   "id": "components",
+   "name": "连通块数"
+  },
+  {
+   "id": "largestShare",
+   "name": "最大块占比"
+  },
+  {
+   "id": "covered",
+   "name": "被覆盖节点数"
+  }
+ ],
+ "cases": [
+  {
+   "id": "cheese",
+   "title": "瑞士奶酪（cheesenav.carveCheese）",
+   "input": {
+    "fn": "carveCheese",
+    "w": 20,
+    "h": 11,
+    "d": 20,
+    "seed": 7,
+    "tunnels": 7,
+    "tunnelLen": 60
+   },
+   "original": {
+    "nodes": 268,
+    "components": 79,
+    "largest": 62,
+    "largestShare": 0.2313,
+    "covered": 268
+   },
+   "sameCriteria": {
+    "nodes": 268,
+    "components": 79,
+    "largest": 62,
+    "largestShare": 0.2313,
+    "covered": 268
+   },
+   "battleCriteria": {
+    "nodes": 1013,
+    "components": 10,
+    "largest": 429,
+    "largestShare": 0.4235,
+    "covered": 613
+   }
+  },
+  {
+   "id": "holes",
+   "title": "门洞图（holenav.makeCheese）",
+   "input": {
+    "fn": "makeCheese",
+    "W": 15,
+    "D": 15,
+    "openness": 0.55,
+    "seed": 7,
+    "pairs": 200,
+    "pairSeed": 11
+   },
+   "original": {
+    "nodes": 104,
+    "components": 8,
+    "largest": 86,
+    "largestShare": 0.8269,
+    "covered": 23
+   },
+   "sameCriteria": {
+    "nodes": 104,
+    "components": 8,
+    "largest": 86,
+    "largestShare": 0.8269,
+    "covered": 23
+   },
+   "battleCriteria": {
+    "nodes": 248,
+    "components": 9,
+    "largest": 144,
+    "largestShare": 0.5806,
+    "covered": 23
+   },
+   "routes": {
+    "pairs": 196,
+    "reachableBoth": 141,
+    "reachMismatch": 0,
+    "differ": 0,
+    "meanRatio": 1,
+    "minRatio": 1,
+    "maxRatio": 1,
+    "doorCost": 1.35
+   }
+  }
+ ],
+ "diffs": [
+  {
+   "id": "cheese.battle.nodes",
+   "case": "cheese",
+   "criteria": "battle",
+   "metric": "nodes",
+   "original": 268,
+   "refactored": 1013,
+   "kind": "design",
+   "note": "战役判据按 1 层净空（士兵身高 0.18 < 半层 0.5）取可站点，原版要头顶两格空气；外壳顶面在重构版里也算可站。"
+  },
+  {
+   "id": "cheese.battle.components",
+   "case": "cheese",
+   "criteria": "battle",
+   "metric": "components",
+   "original": 79,
+   "refactored": 10,
+   "kind": "design",
+   "note": "战役判据允许 1–2 层的台阶边（maxStep 2），原版只走同一层；外壳顶面连成一块。"
+  },
+  {
+   "id": "cheese.battle.largestShare",
+   "case": "cheese",
+   "criteria": "battle",
+   "metric": "largestShare",
+   "original": 0.2313,
+   "refactored": 0.4235,
+   "kind": "design",
+   "note": "同上：台阶边与外壳顶面把碎块并进了大块。"
+  },
+  {
+   "id": "cheese.battle.covered",
+   "case": "cheese",
+   "criteria": "battle",
+   "metric": "covered",
+   "original": 268,
+   "refactored": 613,
+   "kind": "design",
+   "note": "净空要求变低后，更多矮洞里的点被算成可站的洞道节点。"
+  },
+  {
+   "id": "holes.battle.nodes",
+   "case": "holes",
+   "criteria": "battle",
+   "metric": "nodes",
+   "original": 104,
+   "refactored": 248,
+   "kind": "design",
+   "note": "战役判据把墙顶与门楣顶也算成可站点（原版墙不可站）。"
+  },
+  {
+   "id": "holes.battle.components",
+   "case": "holes",
+   "criteria": "battle",
+   "metric": "components",
+   "original": 8,
+   "refactored": 9,
+   "kind": "design",
+   "note": "墙顶 / 门楣顶连成的走道在重构版里是另外的连通块。"
+  },
+  {
+   "id": "holes.battle.largestShare",
+   "case": "holes",
+   "criteria": "battle",
+   "metric": "largestShare",
+   "original": 0.8269,
+   "refactored": 0.5806,
+   "kind": "design",
+   "note": "同上：节点总数变多，最大块占比被摊薄。"
+  }
+ ],
+ "gaps": 0,
+ "decisions": [
+  {
+   "id": "navigation:design",
+   "decided": "keep-battle-criteria",
+   "at": "2026-11-25",
+   "note": "战役判据与原版口径不同处定案保留：细粒度导航图是刻意的战役功能差异，向原版口径靠拢会退化可达性表达。design diffs 继续登记，不再作为补学需求。"
+  }
+ ],
+ "basis": "同一座岛（固定种子）喂给原版与重构版；「同判据」一致只说明这几个统计量在这两座岛上一致，不代表任意输入等价；「战役判据」是游戏里 BattleNavigation 的默认参数。"
+}

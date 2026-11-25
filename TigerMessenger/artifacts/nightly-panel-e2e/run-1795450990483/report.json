@@ -1,0 +1,49 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/nightly-panel-e2e/run-1795450990483",
+  "capabilities": [],
+  "steps": {
+    "A": {
+      "state": "missing",
+      "date": null,
+      "text": "夜间晨报还没有晨报（404）。在 TigerMessenger 目录运行 $NODE tools/nightly/run-nightly.mjs --no-jev 生成。",
+      "height": 33,
+      "href": null,
+      "items": []
+    },
+    "B": {
+      "state": "ready",
+      "date": "2026-11-24",
+      "text": "夜间晨报 · 2026-11-24新增能力 2线升级 1指标 变好 1 / 变差 1单元 9/10 · 1 红漂移 绿⚙ 27/27 线 · 前沿 0打开晨报明细",
+      "height": 48,
+      "href": "artifacts/nightly/2026-11-24/morning-report.md",
+      "items": []
+    },
+    "Bdetail": {
+      "state": "ready",
+      "date": "2026-11-24",
+      "text": "夜间晨报 · 2026-11-24新增能力 2线升级 1指标 变好 1 / 变差 1单元 9/10 · 1 红漂移 绿⚙ 27/27 线 · 前沿 0打开晨报收起新增 fx.fire 小屋点火 · 线 fire · L5（缺 ④）新增 fx.hallway 涂鸦走廊样板 · 线 hallway · L5（缺 ④）↑ 火焰：L0 → L5变差：fx · 走廊板覆盖率 1 → 0.95目标路径 fx：run · 验证 pass目标路径 gscene：NOT_RUN红：某个红了的用例生成于 2026-11-24T03:00:00.000Z · 数据 artifacts/nightly/latest.json",
+      "height": 196,
+      "href": "artifacts/nightly/2026-11-24/morning-report.md",
+      "items": [
+        "新增 fx.fire 小屋点火 · 线 fire · L5（缺 ④）",
+        "新增 fx.hallway 涂鸦走廊样板 · 线 hallway · L5（缺 ④）",
+        "↑ 火焰：L0 → L5",
+        "变差：fx · 走廊板覆盖率 1 → 0.95",
+        "目标路径 fx：run · 验证 pass",
+        "目标路径 gscene：NOT_RUN",
+        "红：某个红了的用例"
+      ]
+    },
+    "C": {
+      "state": "missing",
+      "date": null,
+      "text": "夜间晨报还没有晨报（404）。在 TigerMessenger 目录运行 $NODE tools/nightly/run-nightly.mjs --no-jev 生成。",
+      "height": 33,
+      "href": null,
+      "items": []
+    },
+    "realLatest": false
+  },
+  "errors": [],
+  "pass": true
+}

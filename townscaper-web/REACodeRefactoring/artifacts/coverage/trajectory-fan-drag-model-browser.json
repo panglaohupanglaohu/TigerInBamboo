@@ -1,0 +1,140 @@
+{
+  "lin": {
+    "model": "linear",
+    "arcs": 23,
+    "tickCount": 253,
+    "maxRange": 5.1223,
+    "maxApex": 2.0922,
+    "analytic45": 5.9094,
+    "groundY": -2.473684210526316,
+    "reach": null,
+    "speed": 7.61,
+    "drag": 0.83,
+    "gravity": 9.8,
+    "grid": {
+      "nodes": 176,
+      "solved": 100,
+      "unreachable": 76,
+      "model": "linear"
+    }
+  },
+  "quad": {
+    "model": "quadratic",
+    "arcs": 23,
+    "tickCount": 184,
+    "maxRange": 2.1699,
+    "maxApex": 1.0697,
+    "analytic45": 5.9094,
+    "groundY": -2.473684210526316,
+    "reach": 1.587,
+    "speed": 7.61,
+    "drag": 0.83,
+    "gravity": 9.8,
+    "grid": {
+      "nodes": 176,
+      "solved": 34,
+      "unreachable": 142,
+      "model": "quadratic"
+    }
+  },
+  "linPx": {
+    "teal": 12134,
+    "white": 1766,
+    "sum": 80923947
+  },
+  "quadPx": {
+    "teal": 10053,
+    "white": 995,
+    "sum": 78926387
+  },
+  "backPx": {
+    "teal": 12134,
+    "white": 1766,
+    "sum": 80923947
+  },
+  "checks": [
+    {
+      "name": "quad 档被页面采纳",
+      "ok": true,
+      "detail": {
+        "model": "quadratic",
+        "grid": "quadratic"
+      }
+    },
+    {
+      "name": "quad 射程更短",
+      "ok": true,
+      "detail": {
+        "quad": 2.1699,
+        "lin": 5.1223
+      }
+    },
+    {
+      "name": "quad 有射程上界且有限",
+      "ok": true,
+      "detail": {
+        "reach": 1.587
+      }
+    },
+    {
+      "name": "linear 无射程上界",
+      "ok": true,
+      "detail": {
+        "reach": null
+      }
+    },
+    {
+      "name": "quad 够不着的格点更多",
+      "ok": true,
+      "detail": {
+        "quad": 142,
+        "lin": 76
+      }
+    },
+    {
+      "name": "quad 划线更少",
+      "ok": true,
+      "detail": {
+        "quad": 184,
+        "lin": 253
+      }
+    },
+    {
+      "name": "画布青点真的少了",
+      "ok": true,
+      "detail": {
+        "quad": 10053,
+        "lin": 12134
+      }
+    },
+    {
+      "name": "画布白划线真的变了",
+      "ok": true,
+      "detail": {
+        "quad": 995,
+        "lin": 1766
+      }
+    },
+    {
+      "name": "?model=quadratic 生效",
+      "ok": true,
+      "detail": "quadratic"
+    },
+    {
+      "name": "切回线性像素回位",
+      "ok": true,
+      "detail": {
+        "back": {
+          "teal": 12134,
+          "white": 1766,
+          "sum": 80923947
+        },
+        "lin": {
+          "teal": 12134,
+          "white": 1766,
+          "sum": 80923947
+        }
+      }
+    }
+  ]
+}

@@ -26,7 +26,8 @@
  *                                    跨台阶自然变竖列）；到达后按 4 列 N 排方块落位（朝向 = 行军方向）
  *   routePreview 995043346778415104  #drawPath 换成 route-preview.js（落崖弧 + 圆角 + 等距点），并在小队走完前常驻、
  *                                    走过的部分逐段消掉（不再是 2.5s 淡出的一次性点串）
- *   shoreFoam    946660607008403456  沿岸白泡沫带（岛缘外一圈呼吸的白带 + 碎白点）+ 草地上的白 / 浅粉小花簇
+ *   shoreFoam    946660607008403456  沿岸白泡沫带（岛缘外一圈呼吸的白带 + 碎白点）—— 第 185 轮起**只管泡沫**，默认关（该片水面干净）
+ *   shoreFlowers 946660607008403456  草地上的米白 / 浅粉小花簇（4–7 朵一簇、只长在四邻同高的台面格），默认开
  *   waterBlood   946660607008403456  落在水面的血 → 粉红血雾，6s 内铺开、随流漂、14s 淡出
  *   windTraces   926903893866541057  风矢量之外的红色风粒子轨迹：岛周一圈 + 台地上方播种，用 atmosphere.trace（共享风场 + World 体素滑移）积分画出
  *   raidBoxes    974325184525201409  维京登陆规划的 3D 盒子：每条船的泊位盒 + 整条进场走廊盒（按船着色的线框），
@@ -42,21 +43,29 @@ import { bannerBar } from './squad-hud.js';
 import { buildRoutePreview } from '../core/route-preview.js';
 import { berthBox, approachBox, seawayBlocked, LANE_ANGLES } from './landing-plan.js';
 import { obbOverlap } from '../core/obb.js';
-import { drawGamePortrait } from '../ui/game-portrait-c01.js';
+import { drawGamePortrait, squadPortraitIdentity } from '../ui/game-portrait-c01.js';
 import { stainProgress, stainHex } from './ground-stain.js';
 import { charHouseVerts, restoreChar } from './house-char.js';
 
-export const C01_FLAGS = ['squadHud', 'plank', 'nodeNet', 'orderPillar', 'skyBeam', 'bloodAge', 'bloodStack', 'fireGlow', 'column', 'routePreview', 'shoreFoam', 'waterBlood', 'smokeShape', 'windTraces', 'raidBoxes', 'portraits', 'groundTint', 'houseChar'];
+export const C01_FLAGS = ['squadHud', 'plank', 'nodeNet', 'orderPillar', 'skyBeam', 'bloodAge', 'bloodStack', 'fireGlow', 'column', 'routePreview', 'shoreFoam', 'shoreFlowers', 'waterBlood', 'smokeShape', 'windTraces', 'raidBoxes', 'portraits', 'groundTint', 'houseChar'];
 /**
  * 第 97 轮 · **默认开**的层（其余仍全关，保持「实验层不改旧行为」）。
  * houseChar 破例的唯一理由：837027901853810688 里「屋体失守后转炭黑」是**原片默认观感**（f0082→f0083 一帧跳完、
  * 之后 13s 不扩大、中位色 [46,29,51] 冷紫黑），不是可选特效；本仓渲出 [45,30,52] 与原片差 ≤1。
  * 关法：URL `?c01=-houseChar` 或 `c01.set('houseChar', false)`。
+ * **第 185 轮破例之二 `shoreFlowers`**（946660607008403456）：原文点名 "adding pretty little flowers"，原片 0150 的 10× 裁切里
+ * 草地上是一片米白小花（不是个别点），属于原片默认观感的岸上陈设；而它原先和「沿岸白泡沫带」挤在同一个 `shoreFoam` 开关里
+ * （该片水面全程干净、那条白是栈桥白边），所以两者必须拆开：花默认开、泡沫带仍旧默认关。
  * 开默认的同轮必须同步三条回归：tests/battle-c01.mjs（默认全关断言）、tests/ground-stain-browser.cjs、
  * tests/smoke-solid-base-browser.cjs（炭黑会改像素差集）。
  */
-export const C01_DEFAULT_ON = ['houseChar'];
+export const C01_DEFAULT_ON = ['houseChar', 'shoreFlowers'];
 const MAXB = 600;
+/**
+ * 816743289500106752 · 拐角减速三参数：转角阈值（rad）、拐点邻近半径（世界单位）、最大降速比例。
+ * turn=0.35(20°) 以下的直线段不降；near=0.45 之外不降；drop=0.60 时 90° 且贴拐点 ≈0.40 倍速。
+ */
+export const CORNER_SLOW = { turn: 0.35, near: 0.45, drop: 0.6 };
 /**
  * 血斑配色与老化节奏。
  *   第 92 轮按 837027901853810688 重标了 aging：全片红掩膜（r>110 & r−g>55 & r−b>45）逐帧中位
@@ -262,7 +271,7 @@ export class BattleC01 {
     this.stainT0 = null;      // 第一次伤害的时刻（b.t），染色从这里起步
     this.stainForce = null;   // 手动锁进度（测试/截图用）
   }
-  #zero() { return { hudRedraws: 0, hitFlashes: 0, edges: 0, nodes: 0, arrowLines: 0, diamonds: 0, pillars: 0, beams: 0, beamWidth: 0, beamHeight: 0, beamTopY: 0, beamBaseY: 0, beamUnits: 0, beamUnitWidth: 0, beamUnitBaseY: 0, beamUnitColor: '', planks: 0, glows: 0, bloodTracked: 0, stacked: 0, maxStack: 0, waits: 0, slotted: 0, routeSamples: 0, routeArcs: 0, routeCorners: 0, routeTrimmed: 0, coast: 0, foamDots: 0, flowers: 0, hazes: 0, stainCells: 0, stainProgress: 0, stainAge: 0, stainColor: '', housesCharred: 0, charredVerts: 0 }; }
+  #zero() { return { hudRedraws: 0, hitFlashes: 0, edges: 0, nodes: 0, arrowLines: 0, diamonds: 0, pillars: 0, beams: 0, beamWidth: 0, beamHeight: 0, beamTopY: 0, beamBaseY: 0, beamUnits: 0, beamUnitWidth: 0, beamUnitBaseY: 0, beamUnitColor: '', planks: 0, glows: 0, bloodTracked: 0, stacked: 0, maxStack: 0, waits: 0, slotted: 0, cornerTurns: 0, cornerSlows: 0, minSpeedK: 1, routeSamples: 0, routeArcs: 0, routeCorners: 0, routeTrimmed: 0, coast: 0, foamDots: 0, flowers: 0, flowerClusters: 0, hazes: 0, stainCells: 0, stainProgress: 0, stainAge: 0, stainColor: '', housesCharred: 0, charredVerts: 0 }; }
 
   set(name, value) {
     if (!C01_FLAGS.includes(name)) throw new RangeError('unknown C01 flag ' + name);
@@ -280,7 +289,7 @@ export class BattleC01 {
     this.stain = null; this.stainT0 = null; this.stainForce = null;
     this.huds.clear(); this.diamonds.clear(); this.planks.clear(); this.glows.clear(); this.pillars = [];
     for (const o of [this.foam, this.flowers, this.foamDots, this.traces, this.raid]) if (o) { this.group.remove(o); o.geometry.dispose(); }
-    this.foam = this.flowers = this.foamDots = this.traces = this.raid = null;
+    this.foam = this.flowers = this.foamDots = this.traces = this.raid = null; this.flowerCells = null;
     this.net.visible = this.ticks.visible = this.arrowLines.visible = false; this.hazeMesh.count = 0; this.hazes = [];
     if (this.cards) { this.cards.el.remove?.(); this.cards = null; }
     this.#bloodMaterial(false);
@@ -309,7 +318,10 @@ export class BattleC01 {
     }
     if (b.running && b.world) {
       if (this.on.shoreFoam && !this.foam) this.#buildShore();
-      for (const o of [this.foam, this.flowers, this.foamDots]) if (o) o.visible = this.on.shoreFoam;
+      for (const o of [this.foam, this.foamDots]) if (o) o.visible = this.on.shoreFoam;
+      // 花与泡沫带解耦（第 185 轮）：946660607008403456 的水面干净、只有岸上有花
+      if (this.on.shoreFlowers && !this.flowers) this.#buildFlowers();
+      if (this.flowers) this.flowers.visible = this.on.shoreFlowers;
       if (this.on.groundTint && !this.stain) this.#buildStain();
       if (this.stain) this.stain.mesh.visible = this.on.groundTint;
     }
@@ -352,7 +364,8 @@ export class BattleC01 {
         const bar = document.createElement('div'); bar.style.cssText = 'width:70px;height:6px;background:#16202a;border-radius:2px;overflow:hidden';
         const fill = document.createElement('div'); fill.style.cssText = 'height:100%;width:100%;background:#68ce7c'; bar.appendChild(fill);
         card.appendChild(cv); card.appendChild(bar); el.appendChild(card);
-        const r = drawGamePortrait(cv.getContext('2d'), 101 + sq.id * 37, { x: 0, y: 0, w: 88, h: 88 });
+        // 角色接口：卡面装备/底色按小队真数据钉槽（矛兵→锁甲、弓手→兜帽、队序→底色），种子仍按 sq.id 稳定
+        const r = drawGamePortrait(cv.getContext('2d'), 101 + sq.id * 37, { x: 0, y: 0, w: 88, h: 88 }, { identity: squadPortraitIdentity(sq) });
         this.cards.items.push({ sq, card, fill, spec: r.spec }); this.stats.portraits = (this.stats.portraits ?? 0) + 1;
       }
     }
@@ -781,6 +794,48 @@ export class BattleC01 {
   }
 
   /* ---------------------------------------------- 816743289500106752：成列行军 + 方块集结 */
+  /**
+   * 拐角减速（第 173 轮补）：片子里长蛇在台地拐角处**收拢**——队伍不散开、内圈更慢。
+   * 判据两轴：① 转向角（当前朝向 vs 期望方向）② 到下一个导航节点（= 这一段的拐点）的平面距离。
+   * 距离拐点越近 = 越在内圈 → 降得越多；直线段（转角 < 0.35）与离拐点远的段完全不降。
+   * 返回速度倍率（1 = 原速），同时把逐人读数写进 u.c01SpeedK 供探针取用。
+   */
+  #cornerSpeed(u, plan, tx, tz) {
+    const dx = tx - u.x, dz = tz - u.z, d = Math.hypot(dx, dz);
+    if (d <= 1e-4) return 1;
+    const hx = Math.sin(u.face ?? 0), hz = Math.cos(u.face ?? 0);
+    const turn = Math.acos(Math.max(-1, Math.min(1, (hx * dx + hz * dz) / d)));
+    const node = plan?.next, to = node ? Math.hypot(node.x - u.x, node.z - u.z) : Infinity;
+    u.c01Turn = turn; u.c01Pivot = to;
+    if (turn < CORNER_SLOW.turn || to > CORNER_SLOW.near) { u.c01SpeedK = 1; return 1; }
+    const sharp = Math.min(1, turn / (Math.PI / 2));
+    const prox = 1 - Math.min(1, to / CORNER_SLOW.near);
+    const k = 1 - CORNER_SLOW.drop * sharp * (0.35 + 0.65 * prox);
+    u.c01SpeedK = k;
+    this.stats.cornerTurns++;
+    if (k < 0.995) { this.stats.cornerSlows++; this.stats.minSpeedK = Math.min(this.stats.minSpeedK, k); }
+    return k;
+  }
+  /** 只读探针：逐人列队读数（rank / 等待 / 速度倍率 / 转角 / 离拐点 / 落位格）。 */
+  columnStats() {
+    const b = this.b, sq = b.squads.find((s) => s.c01) || null;
+    if (!sq) return null;
+    const c = sq.c01, alive = c.order.filter((v) => !v.dead && !v.onBoat && !v.fall);
+    return {
+      squad: sq.id, n: alive.length, spacing: c.spacing, goal: sq.goal ? [sq.goal.cx, sq.goal.cz] : null,
+      // 第 174 轮：缩步重试记账（battle.#step 的只读计数）—— crawls = 靠缩步才走动的帧数，stuck = 缩到 1/16 仍被拒的帧数
+      crawls: b.crawlSteps ?? 0, stuck: b.stuckSteps ?? 0, slides: b.slideSteps ?? 0,
+      men: alive.map((u, r) => {
+        const s = blockSlot(r, alive.length, c.fx, c.fz);
+        return {
+          r, x: u.x, z: u.z, y: u.y, floor: u.navFloor, face: u.face ?? 0,
+          waiting: c.waiting?.get(u) ?? false, speedK: u.c01SpeedK ?? 1,
+          turn: u.c01Turn ?? 0, pivot: u.c01Pivot ?? null,
+          slot: [sq.goal.cx + s.x, sq.goal.cz + s.z], cols: s.cols, rows: s.rows,
+        };
+      }),
+    };
+  }
   #orderColumn(sq, picked) {
     const b = this.b, men = sq.members.filter((u) => !u.dead && !u.onBoat && !u.fall);
     if (!men.length) return;
@@ -791,18 +846,18 @@ export class BattleC01 {
     let fx = picked.cell.cx - cx, fz = picked.cell.cz - cz; if (Math.hypot(fx, fz) < 1e-3) { fx = 0; fz = 1; }
     sq.c01 = { order, fx, fz, spacing: 0.15, last: new Map(order.map((u) => [u, [u.x, u.z]])), moved: new Map() };
   }
-  /** battle 的行军循环里调用：返回（可能修改过的）目标点。 */
+  /** battle 的行军循环里调用：返回（可能修改过的）目标点 + 速度倍率（拐角减速）。 */
   steer(u, plan, tx, tz, near) {
-    if (!this.on.column || u.team !== 0 || !u.squad) return { tx, tz };
+    if (!this.on.column || u.team !== 0 || !u.squad) return { tx, tz, speed: 1 };
     const sq = u.squad, c = sq.c01 ?? (sq.c01 = { order: sq.members.slice(), fx: 0, fz: 1, spacing: 0.15, last: new Map(), moved: new Map() });
     const alive = c.order.filter((v) => !v.dead && !v.onBoat && !v.fall), r = alive.indexOf(u);
-    if (r < 0) return { tx, tz };
+    if (r < 0) return { tx, tz, speed: 1 };
     // 记录每人这一帧走了没有（等人的判据：前一个在动、且离我不到 spacing）
     const prev = c.last.get(u); c.moved.set(u, prev ? Math.hypot(u.x - prev[0], u.z - prev[1]) : 0); c.last.set(u, [u.x, u.z]);
     if (near) {
       const goal = plan.from.cell, s = blockSlot(r, alive.length, c.fx, c.fz);
       this.stats.slotted++;
-      return { tx: goal.cx + s.x, tz: goal.cz + s.z };
+      return { tx: goal.cx + s.x, tz: goal.cz + s.z, speed: 1 };
     }
     // 路线距离 = 下一节点到目标的树距离 + 自己到下一节点的直线（同一棵树，前后两人可比）
     const routeDist = (v, pl) => pl ? pl.tree.distance[pl.next.id] + Math.hypot(v.x - pl.next.x, v.z - pl.next.z) : Infinity;
@@ -811,9 +866,9 @@ export class BattleC01 {
     if (r > 0) {
       const ahead = alive[r - 1], ad = c.dist.get(ahead) ?? routeDist(ahead, this.b.navigation.plan(ahead, sq.goal, sq.goalFloor ?? this.b.world.top(sq.goal)));
       const busy = (c.moved.get(ahead) ?? 0) > 1e-4 || c.waiting.get(ahead);   // 前一个在走或在排队；卡住 / 打起来了就不等
-      if (busy && mine - ad < c.spacing) { this.stats.waits++; c.waiting.set(u, true); return { tx: u.x, tz: u.z }; }
+      if (busy && mine - ad < c.spacing) { this.stats.waits++; c.waiting.set(u, true); return { tx: u.x, tz: u.z, speed: 0 }; }
     }
-    return { tx, tz };
+    return { tx, tz, speed: this.#cornerSpeed(u, plan, tx, tz) };
   }
 
   /* ---------------------------------------------- 995043346778415104：常驻路线预览 */
@@ -867,19 +922,63 @@ export class BattleC01 {
     const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.Float32BufferAttribute(dots, 3));
     this.foamDots = new THREE.Points(dg, new THREE.PointsMaterial({ color: '#ffffff', size: 3, sizeAttenuation: false, transparent: true, opacity: 0.85, depthWrite: false, toneMapped: false }));
     this.foamDots.frustumCulled = false; this.group.add(this.foamDots);
-    // 小花簇：平地格（四邻同高、不是小屋）里按种子挑一部分，每簇 4–7 朵白 / 浅粉
-    const houses = new Set((w.bnHouses || []).map((c) => c.id)), fp = [], fc = [];
-    const white = new THREE.Color('#fbf7f2'), pink = new THREE.Color('#f2c4cf');
+    this.stats.coast = edges.length; this.stats.foamDots = dots.length / 3;
+    this.#buildFlowers();
+  }
+  /** 岸上小花簇（第 185 轮从 `#buildShore` 里拆出来，独立 `shoreFlowers` 开关）：
+   *  平地格（四邻同高、不是小屋）里按种子挑一部分，每簇 4–7 朵**米白 / 浅粉**（原片 0150 的 10× 裁切是成片米白，不是个别点）。
+   *  与泡沫带解耦的原因见 C01_DEFAULT_ON 注释：946660607008403456 的水面干净、只有岸上有花。 */
+  #buildFlowers() {
+    const b = this.b, w = b.world;
+    if (this.flowers) { this.group.remove(this.flowers); this.flowers.geometry.dispose(); this.flowers = null; }
+    const houses = new Set((w.bnHouses || []).map((c) => c.id)), fp = [], fc = [], cells = [];
+    const rnd = mulberry(w.cells.length * 29 + 11);
+    const cream = new THREE.Color('#f6efdd'), pink = new THREE.Color('#f2c4cf');
     for (const c of w.cells) {
       const t = w.top(c); if (t < 1 || houses.has(c.id)) continue;   // 北境的台地本身是岩体（isRock），花长在台面上
-      if (!c.edgeNeighbors.every((id) => id >= 0 && w.top(w.cells[id]) === t) || rnd() > 0.22) continue;
-      const n = 4 + Math.floor(rnd() * 4), ox = (rnd() - 0.5) * 0.5, oz = (rnd() - 0.5) * 0.5, col = rnd() < 0.6 ? white : pink;
-      for (let k = 0; k < n; k++) { const x = c.cx + ox + (rnd() - 0.5) * 0.16, z = c.cz + oz + (rnd() - 0.5) * 0.16; fp.push(x, t * b.L + (b.view.visualOffset ? b.view.visualOffset(x, z) : 0) + 0.012, z); fc.push(col.r, col.g, col.b); }
+      if (!c.edgeNeighbors.every((id) => id >= 0 && w.top(w.cells[id]) === t)) continue;
+      if (rnd() > 0.22) continue;
+      const n = 4 + Math.floor(rnd() * 4), ox = (rnd() - 0.5) * 0.5, oz = (rnd() - 0.5) * 0.5, col = rnd() < 0.7 ? cream : pink;
+      const start = fp.length / 3;
+      for (let k = 0; k < n; k++) { const x = c.cx + ox + (rnd() - 0.5) * 0.16, z = c.cz + oz + (rnd() - 0.5) * 0.10; fp.push(x, t * b.L + (b.view.visualOffset ? b.view.visualOffset(x, z) : 0) + 0.012, z); fc.push(col.r, col.g, col.b); }
+      cells.push({ cell: c.id, top: t, size: n, at: start });
     }
     const fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.Float32BufferAttribute(fp, 3)); fg.setAttribute('color', new THREE.Float32BufferAttribute(fc, 3));
-    this.flowers = new THREE.Points(fg, new THREE.PointsMaterial({ vertexColors: true, size: 0.032, sizeAttenuation: true, toneMapped: false }));
+    this.flowers = new THREE.Points(fg, new THREE.PointsMaterial({ vertexColors: true, size: 0.05, sizeAttenuation: true, toneMapped: false }));
     this.flowers.frustumCulled = false; this.group.add(this.flowers);
-    this.stats.coast = edges.length; this.stats.foamDots = dots.length / 3; this.stats.flowers = fp.length / 3;
+    this.stats.flowers = fp.length / 3; this.stats.flowerClusters = cells.length;
+    this.flowerCells = cells;
+  }
+  /** 只读探针（第 185 轮运行验收用，零渲染改动）：
+   *   clusters = 每簇格 + 朵数（应为 4–7）+ 台面高度；land = 全部落点是否都在陆地台面上；
+   *   y 偏差 = 落点 y 与「格顶 + 视觉偏移」的差（应为 +0.012）。 */
+  flowerProbe() {
+    const b = this.b, w = b.world, pos = this.flowers?.geometry.attributes.position.array ?? [];
+    const idx = b.view?.index ?? b.index ?? null;
+    const cells = (this.flowerCells || []).map((c) => ({ ...c }));
+    const sizes = cells.map((c) => c.size);
+    let offLand = 0, yOff = 0;
+    for (let i = 0; i < pos.length / 3; i++) {
+      const x = pos[i * 3], z = pos[i * 3 + 2];
+      const cell = idx?.cellAt ? idx.cellAt(x, z) : null;
+      if (!cell || w.top(cell) < 1) offLand++;
+      const t = cell ? w.top(cell) : 0;
+      yOff += Math.abs(pos[i * 3 + 1] - (t * b.L + (b.view.visualOffset ? b.view.visualOffset(x, z) : 0) + 0.012));
+    }
+    return {
+      on: !!this.on.shoreFlowers, visible: !!this.flowers?.visible, points: pos.length / 3, clusters: cells.length,
+      sizes: { min: sizes.length ? Math.min(...sizes) : 0, max: sizes.length ? Math.max(...sizes) : 0 },
+      cells, offLand, maxYOff: pos.length ? yOff / (pos.length / 3) : 0,
+      foamOn: !!this.on.shoreFoam, foamBuilt: !!this.foam,
+      colorMix: this.#flowerColorMix(),
+    };
+  }
+  #flowerColorMix() {
+    const c = this.flowers?.geometry.attributes.color?.array; if (!c) return null;
+    let cream = 0, pink = 0;
+    for (let i = 0; i < c.length / 3; i++) { const g = c[i * 3 + 1]; if (g > 0.86) cream++; else pink++; }   // 米白 #f6efdd g=.937 / 浅粉 #f2c4cf g=.769
+    const n = c.length / 3 || 1;
+    return { cream: cream / n, pink: pink / n };
   }
   #addHaze(x, z) {
     if (this.hazes.length >= 48) this.hazes.shift();

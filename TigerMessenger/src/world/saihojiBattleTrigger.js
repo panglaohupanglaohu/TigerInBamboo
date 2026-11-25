@@ -1,10 +1,11 @@
 // One shared gate for whale reveal and the defending formation. Patrol scans,
 // story signals, escort-only visits and attacks elsewhere cannot open this battle.
-export function saihojiBattleTrigger(fleet,hub,radius=160){
+// site：只认霸天正在打的那一站（苔庭原行为 'moss'；维京远征按当前主战场传 'apostles' 等）。
+export function saihojiBattleTrigger(fleet,hub,radius=160,site='moss'){
  const s=fleet?.snapshot?.();
  const blocked=reason=>({allowed:false,reason,cycle:s?.cycle??0,distance:null});
  if(!fleet?.active||!s)return blocked('flagship-idle');
- if(s.target!=='moss')return blocked('other-target');
+ if(s.target!==site)return blocked('other-target');
  if(!['blockade','pincer','cannon','guard'].includes(s.phase))return blocked('not-attacking');
  const p=s.flagshipPosition;
  if(!Array.isArray(p)||p.length!==3||!p.every(Number.isFinite)||!hub)return blocked('missing-flagship-position');

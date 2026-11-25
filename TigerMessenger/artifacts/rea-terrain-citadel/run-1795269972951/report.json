@@ -1,0 +1,66 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/rea-terrain-citadel/run-1795269972951",
+  "steps": {
+    "probe": {
+      "ms": 948,
+      "r": {
+        "ok": true,
+        "id": "citadel",
+        "label": "高山圣城",
+        "previewing": false,
+        "site": {
+          "tris": 179233,
+          "rays": 13186,
+          "plateauRaised": 0,
+          "ms": 57,
+          "meshes": 730,
+          "cells": 13186,
+          "land": 3921,
+          "maxLevel": 12,
+          "houses": 4,
+          "scale": 5,
+          "gridRadius": 32,
+          "levelHeight": 0.45
+        },
+        "clearance": {
+          "rails": 3586,
+          "samples": 14011,
+          "minClearance": -18.92,
+          "minAt": {
+            "x": 5.4,
+            "z": -8.1,
+            "railY": -0.63,
+            "level": 7
+          }
+        }
+      }
+    },
+    "preview": {
+      "previewing": true,
+      "hiddenMeshes": 2,
+      "ok": true
+    },
+    "bridgeState": {
+      "active": true,
+      "id": "citadel",
+      "previewing": true,
+      "hiddenMeshes": 2,
+      "site": {
+        "tris": 179233,
+        "rays": 13186,
+        "plateauRaised": 0,
+        "ms": 57,
+        "meshes": 730,
+        "cells": 13186,
+        "land": 3921,
+        "maxLevel": 12,
+        "houses": 4,
+        "scale": 5,
+        "levelHeight": 0.45
+      }
+    },
+    "reverted": true
+  },
+  "errors": [],
+  "pass": true
+}

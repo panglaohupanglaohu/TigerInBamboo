@@ -1,0 +1,551 @@
+{
+ "endpoint": "https://jevtypesafeai.com/api/v1/decide",
+ "task": "Each item is an unfinished capability gap in a procedural game-building pipeline. Decide what kind of result finishing it would produce.",
+ "type": "choice",
+ "threshold": 0.85,
+ "usage": {
+  "items": 76,
+  "requests": 10,
+  "cache_hits": 0,
+  "input": 31636,
+  "output": 4483,
+  "cost_usd": 0.013291,
+  "errors": [],
+  "answered": 76
+ },
+ "decisions": {
+  "01-navigation-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.98,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "02-grid-A+5": {
+   "choice": "editor-tool",
+   "confidence": 0.99,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "03-navigation-A++": {
+   "choice": "visible-behaviour",
+   "confidence": 1,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "04-navigation-A+++": {
+   "choice": "visible-behaviour",
+   "confidence": 0.99,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "05-navigation-A+++": {
+   "choice": "internal",
+   "confidence": 0.7,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "06-wfc-A+9": {
+   "choice": "editor-tool",
+   "confidence": 0.74,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "07-terrain-A": {
+   "choice": "visible-world",
+   "confidence": 0.84,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "08-grid-A": {
+   "choice": "internal",
+   "confidence": 0.96,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "09-wfc-A+6": {
+   "choice": "internal",
+   "confidence": 0.66,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "10-sphere-A++": {
+   "choice": "visible-world",
+   "confidence": 0.95,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "11-building-A+": {
+   "choice": "visible-world",
+   "confidence": 0.85,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "12-lines-A+": {
+   "choice": "visible-world",
+   "confidence": 0.98,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "13-sphere-A+++": {
+   "choice": "internal",
+   "confidence": 0.49,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "14-light-A": {
+   "choice": "visible-world",
+   "confidence": 0.5,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "15-light-A+": {
+   "choice": "visible-world",
+   "confidence": 1,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "16-combat-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.99,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "17-plants-A": {
+   "choice": "visible-world",
+   "confidence": 0.99,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "18-projectiles-A+": {
+   "choice": "visible-behaviour",
+   "confidence": 0.91,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "19-palette-A+++": {
+   "choice": "visible-world",
+   "confidence": 0.94,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "20-projectiles-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.5,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "21-sediment-A": {
+   "choice": "visible-world",
+   "confidence": 1,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "22-navigation-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.98,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "23-navigation-A": {
+   "choice": "editor-tool",
+   "confidence": 0.98,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "24-terrain-A+": {
+   "choice": "visible-world",
+   "confidence": 0.96,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "25-navigation-A+++": {
+   "choice": "editor-tool",
+   "confidence": 0.2,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "26-wind-A": {
+   "choice": "visible-world",
+   "confidence": 0.89,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "27-smoke-A": {
+   "choice": "visible-world",
+   "confidence": 0.2,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "28-light-A+": {
+   "choice": "visible-world",
+   "confidence": 0.65,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "29-tools-A+": {
+   "choice": "editor-tool",
+   "confidence": 0.89,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "30-shore-A": {
+   "choice": "visible-world",
+   "confidence": 0.92,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "31-grid-A+4": {
+   "choice": "visible-world",
+   "confidence": 0.92,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "32-terrain-A+++": {
+   "choice": "visible-world",
+   "confidence": 0.96,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "33-light-A+4": {
+   "choice": "visible-world",
+   "confidence": 0.61,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "34-shadows-A+4": {
+   "choice": "visible-world",
+   "confidence": 0.92,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "35-terrain-A+4": {
+   "choice": "visible-world",
+   "confidence": 0.99,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "36-atlas-A+4": {
+   "choice": "visible-world",
+   "confidence": 0.94,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "37-wfc-A": {
+   "choice": "visible-world",
+   "confidence": 0.51,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "38-combat-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.56,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "39-combat-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.95,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "40-combat-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.3,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "41-combat-A": {
+   "choice": "visible-world",
+   "confidence": 0.35,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "42-combat-A": {
+   "choice": "visible-world",
+   "confidence": 0.2,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "43-atlas-A+": {
+   "choice": "internal",
+   "confidence": 0.44,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "44-palette-A+++": {
+   "choice": "editor-tool",
+   "confidence": 0.7,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "45-wfc-A++": {
+   "choice": "visible-world",
+   "confidence": 0.2,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "46-wind-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.74,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "47-wind-A": {
+   "choice": "visible-world",
+   "confidence": 0.75,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "48-wind-A": {
+   "choice": "visible-world",
+   "confidence": 0.87,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "49-lines-A+++": {
+   "choice": "visible-world",
+   "confidence": 0.95,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "50-lines-A+4": {
+   "choice": "visible-world",
+   "confidence": 1,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "51-lines-A+4": {
+   "choice": "visible-world",
+   "confidence": 0.96,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "52-atlas-A+4": {
+   "choice": "visible-world",
+   "confidence": 0.95,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "53-shadows-A+": {
+   "choice": "visible-world",
+   "confidence": 0.94,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "54-shore-A+": {
+   "choice": "visible-world",
+   "confidence": 0.37,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "55-atlas-A++": {
+   "choice": "editor-tool",
+   "confidence": 0.4,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "56-ui-decoration-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.92,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "57-building-A+": {
+   "choice": "visible-world",
+   "confidence": 0.6,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "58-plants-A+": {
+   "choice": "visible-world",
+   "confidence": 0.74,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "59-plants-A+": {
+   "choice": "visible-world",
+   "confidence": 1,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "60-building-A+++": {
+   "choice": "visible-world",
+   "confidence": 0.81,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "61-building-A+4": {
+   "choice": "visible-behaviour",
+   "confidence": 0.52,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "62-sediment-A+": {
+   "choice": "visible-world",
+   "confidence": 0.71,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "63-sphere-A": {
+   "choice": "visible-world",
+   "confidence": 0.99,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "64-navigation-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.51,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "65-light-A": {
+   "choice": "visible-world",
+   "confidence": 0.52,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "66-terrain-A++": {
+   "choice": "visible-world",
+   "confidence": 0.75,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "67-tools-A+": {
+   "choice": "visible-behaviour",
+   "confidence": 0.8,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "68-tools-A+": {
+   "choice": "internal",
+   "confidence": 0.9,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "69-tools-A+": {
+   "choice": "visible-world",
+   "confidence": 0.34,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "70-camera-A+": {
+   "choice": "visible-behaviour",
+   "confidence": 0.91,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "71-combat-A": {
+   "choice": "visible-behaviour",
+   "confidence": 0.68,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "72-combat-A": {
+   "choice": "visible-world",
+   "confidence": 0.77,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "73-ui-decoration-A+4": {
+   "choice": "editor-tool",
+   "confidence": 0.59,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "74-sphere-A": {
+   "choice": "visible-world",
+   "confidence": 0.55,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": false
+  },
+  "75-sphere-A": {
+   "choice": "visible-world",
+   "confidence": 0.94,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  },
+  "76-shore-A+": {
+   "choice": "visible-world",
+   "confidence": 0.85,
+   "model": "jev-1.14.0",
+   "cached": false,
+   "accepted": true
+  }
+ },
+ "scope": "文字证据的批量小判断。不看图、不审源码、不替代硬性检查；未达阈值的交给开发模型复核。"
+}

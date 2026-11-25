@@ -4541,10 +4541,11 @@
       "source": "engine/shorefield.js",
       "targets": [
         "src/water/shore.js",
-        "src/core/shore-profile.js"
+        "src/core/shore-profile.js",
+        "src/water/shorefield.js"
       ],
       "status": "已迁移/增强（本轮验证）",
-      "gap": "已有chamfer栅格迁移到共享水层，本轮补起点阈值/硬步长上限和4M栅格预算；不是精确欧氏场，也未保留独立buildShoreDistance导出。",
+      "gap": "chamfer栅格迁移到共享水层（shore.js内部场，含shape形变定界）；独立原版buildShoreDistance API本轮逐式移植为src/water/shorefield.js，tests/shorefield-referee.mjs与裁判逐位对拍（sample/march maxDiff=0）。仍非精确欧氏场（1/√2 chamfer近似），Oskar原作真实算法未公开（卡点·C）。",
       "clips": [
         "1664566546683899905"
       ],
@@ -4552,10 +4553,11 @@
         "buildShoreDistance"
       ],
       "idReferences": [
+        "src/water/shorefield.js",
         "refactoring-audit.html"
       ],
       "frameReview": true,
-      "evidence": "artifacts/coverage/shore-review.md"
+      "evidence": "artifacts/coverage/1664566546683899905-shorefield-r211.md"
     },
     {
       "source": "engine/snapshot.js",

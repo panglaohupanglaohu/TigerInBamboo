@@ -1,0 +1,205 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>无缝 patch 混合 · 岸带手工 UV · REACode 重构版</title><link rel="icon" href="data:,">
+<style>
+body{margin:0;background:#2b3238;color:#dfe9ec;font:14px/1.55 system-ui,"PingFang SC",sans-serif}
+header{padding:12px 18px;background:#222a30}
+h1{font-size:15px;margin:0 0 4px}
+p{margin:3px 0;font-size:12.5px;color:#9fb4bb}
+button{margin:2px 4px 2px 0;padding:4px 10px;border:1px solid #48606a;border-radius:7px;background:#31424b;color:#e6f0f3;font:inherit;font-size:12.5px;cursor:pointer}
+button.on{background:#2f7f8a;border-color:#2f7f8a}
+.wrap{display:flex;gap:14px;padding:12px 18px;align-items:flex-start;flex-wrap:wrap}
+figure{margin:0;background:#1b2227;border:1px solid #3a4c55;border-radius:8px;padding:8px}
+figcaption{font-size:12px;color:#9fb4bb;margin-top:4px}
+canvas{display:block;background:#101619;image-rendering:pixelated}
+pre{margin:0 18px 18px;padding:10px 12px;background:#1b2227;border:1px solid #3a4c55;border-radius:8px;font:12px/1.45 ui-monospace,monospace;white-space:pre-wrap;max-height:40vh;overflow:auto}
+a{color:#7fd0dc}
+.swatch{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:4px}
+</style>
+<header>
+  <h1>无缝 patch 混合 · 1781405550061687016</h1>
+  <p>同一个共享 World 上三种合成并列：<code>hard</code> 最高者硬切（原版对照基线）/ <code>alpha</code> 覆盖平均（无缝但糊）/ <code>height</code> 前两名按高度差 smoothstep（原文做法）。
+     草与水是 <b>世界 XZ 投影</b>（跨格连续），岸带是 <b>手工 UV</b>（u = 沿岸弧长、v = 到岸有符号距离）。<a href="index.html?scene=terrain&shade=patchblend" target="_top">主场景实景 ?shade=patchblend →</a></p>
+  <p>
+    <button id="m-hard">hard 硬切</button><button id="m-alpha">alpha 平均</button><button id="m-height">height 高度混合</button>
+    <label><input id="waves" type="checkbox" checked> 岸带白浪线</label>
+    <label><input id="dots" type="checkbox" checked> 等距白点</label>
+    <button id="zoom-near">窗口对到岸线</button><button id="zoom-in">窗口放大</button><button id="zoom-out">窗口缩小</button>
+  </p>
+</header>
+<div class="wrap">
+  <figure><canvas id="map" width="512" height="512"></canvas><figcaption>整岛 patch 图（世界 XZ 俯视，1 纹素 = 0.1 世界单位）</figcaption></figure>
+  <figure><canvas id="zoom" width="360" height="360"></canvas><figcaption>窗口：岸带世界空间近景（最近邻放大）</figcaption></figure>
+  <figure><canvas id="uv" width="520" height="140"></canvas><figcaption>岸带 UV 展开条：横 = 沿岸弧长 u（每 0.4 一颗白点）、纵 = 到岸有符号距离 v（0 水侧 → 1 陆侧）。原片那扇 “Planet.psd @175%” 窗展示的就是这张图集，替身放在这里</figcaption></figure>
+</div>
+<pre id="report">加载中…</pre>
+<script type="module">
+/* URL: ?mode=hard|alpha|height&grid=quad|mixed&seed=3&zoom=1.5&waves=0&dots=0
+ * 只读探针：window.patchBlend（field / patches / ab / img / setMode / sample / canvases / shore 分布）。
+ * 不改 World、不改 View —— 这一页只画 patch 图与接缝指标。 */
+import { buildQuadGrid, buildMixedGrid } from './src/core/grid.js';
+import { World } from './src/core/world.js';
+import { generateTerrain } from './src/terrain/generate.js';
+import { decorateCells, buildCellIndex } from './src/core/spatial.js';
+import { buildPatchField, makePatches, renderPatches, seamStats, edgeJump, abModes, shoreArcs, shoreColor, grassColor, waterColor } from './src/terrain/patch-blend.js';
+
+const q = new URLSearchParams(location.search);
+const gridKind = q.get('grid') === 'mixed' ? 'mixed' : 'quad';
+const seed = Number(q.get('seed') || 3);
+const grid = decorateCells(gridKind === 'mixed' ? buildMixedGrid({ radius: 8, seed, relaxPasses: 3 }) : buildQuadGrid({ radius: 8, seed }));
+const world = new World(grid); generateTerrain(world, { seed });
+const index = buildCellIndex(grid);
+const field = buildPatchField(world, { res: .1, index });
+if (!field) throw new Error('patch field 为空：World 里没有陆地');
+const opts = { shoreHalf: .45 };
+const patches = makePatches(opts);
+let wavesOn = q.get('waves') !== '0', dotsOn = q.get('dots') !== '0';
+const patchesX = makePatches(opts);
+// 关档：把 shore 的颜色换成无浪线/无点版本（同一 coverage/heightAt，只改图案）
+patchesX[1].color = (x, z, f, i) => shoreColor(f.U[i], Math.max(0, Math.min(1, f.SD[i] / .45 * .5 + .5)), f.SD[i], { waves: wavesOn, dotSpacing: dotsOn ? .4 : 0 });
+const ab = abModes(field, patchesX, { band: .1 });
+let img0 = renderPatches(field, patchesX, 'height');
+
+const cw = 512, ch = 512, mc = document.querySelector('#map'), mctx = mc.getContext('2d');
+const zc = document.querySelector('#zoom'), zctx = zc.getContext('2d');
+const uc = document.querySelector('#uv'), uvctx = uc.getContext('2d');
+const off = document.createElement('canvas'); off.width = field.w; off.height = field.h; const octx = off.getContext('2d');
+const put = (img) => { const id = new Uint8ClampedArray(img.data); octx.putImageData(new ImageData(id, field.w, field.h), 0, 0); };
+
+let mode = ['hard', 'alpha', 'height'].includes(q.get('mode')) ? q.get('mode') : 'height';
+let zoomScale = Number(q.get('zoom') || 1.5), zoomC = null;
+const state = {};
+
+function drawMap() {
+  const img = mode === 'height' ? img0 : renderPatches(field, patchesX, mode); put(img);
+  mctx.imageSmoothingEnabled = false; mctx.clearRect(0, 0, cw, ch);
+  const s = Math.min(cw / field.w, ch / field.h);
+  mctx.drawImage(off, 0, 0, field.w * s, field.h * s);
+  state.img = img;
+  if (mode === 'height') {
+    // 岸线环画在世界像素上（判据：岸带贴着它）
+    mctx.strokeStyle = 'rgba(255,255,255,.55)'; mctx.lineWidth = 1;
+    for (const g of field.segs) { mctx.beginPath(); mctx.moveTo((g.ax - field.minX) / field.res * s, (g.az - field.minZ) / field.res * s); mctx.lineTo((g.bx - field.minX) / field.res * s, (g.bz - field.minZ) / field.res * s); mctx.stroke(); }
+  }
+}
+
+/** 取一个「离岸 0.1 世界单位、弧长中段」的纹素当窗口中心；没有就退回最近的岸带纹素。 */
+function pickZoomCenter() {
+  let best = null, bestScore = Infinity;
+  for (let i = 0; i < field.w * field.h; i++) {
+    if (field.SD[i] <= 0.02 || field.SD[i] > 0.12) continue;
+    const score = Math.abs(field.SD[i] - 0.06) + 0.02 * Math.abs(Math.sin(field.U[i] * .7));
+    if (score < bestScore) { bestScore = score; best = i; }
+  }
+  return best ?? [...field.SD.keys()].find((i) => Math.abs(field.SD[i]) < .2);
+}
+
+function drawZoom() {
+  const i = zoomC ?? (zoomC = pickZoomCenter());
+  const cx = i % field.w, cz = Math.floor(i / field.w);
+  const half = Math.max(24, Math.round(160 / zoomScale));
+  const sx = Math.max(0, Math.min(field.w - half * 2, cx - half)), sz = Math.max(0, Math.min(field.h - half * 2, cz - half));
+  zctx.imageSmoothingEnabled = false; zctx.fillStyle = '#101619'; zctx.fillRect(0, 0, 360, 360);
+  zctx.drawImage(off, sx, sz, half * 2, half * 2, 0, 0, 360, 360);
+  zctx.strokeStyle = 'rgba(120,220,235,.9)'; zctx.lineWidth = 2; zctx.strokeRect(0, 0, 360, 360);
+  // 水陆分界（sd=0）在窗口内的位置
+  state.zoom = { texel: i, cx, cz, half, sx, sz, scale: zoomScale, sd: field.SD[i], u: field.U[i] };
+}
+
+/** 岸带 UV 展开条：x = 沿岸弧长 u，y = v（1 陆侧 → 0 水侧）。手工 UV 的「形制」在这里一眼可数。 */
+function drawUV() {
+  const W = 520, H = 140, span = 8;                       // 8 个世界单位的弧长（= 20 颗白点）
+  uvctx.imageSmoothingEnabled = false; uvctx.clearRect(0, 0, W, H);
+  const id = uvctx.createImageData(W, H);
+  for (let y = 0; y < H; y++) {
+    const v = 1 - (y + .5) / H;
+    for (let x = 0; x < W; x++) {
+      const u = (x + .5) / W * span;
+      const c = shoreColor(u, v, (v - .5) * .9, { waves: wavesOn, dotSpacing: dotsOn ? .4 : 0 });
+      const o = (y * W + x) * 4; id.data[o] = c[0] * 255; id.data[o + 1] = c[1] * 255; id.data[o + 2] = c[2] * 255; id.data[o + 3] = 255;
+    }
+  }
+  uvctx.putImageData(id, 0, 0);
+}
+
+/** 沿弧长扫白点（岸带水侧带内），返回点间距表；沿 v 扫白浪线，返回白线所在的 v 列表。 */
+function shoreScan() {
+  const white = (c) => Math.min(c[0], c[1], c[2]) > .87;   // 岸带底色最暗 min≈.52；白点/浪线 min≈.91
+  const dots = [];
+  for (let u = 0; u < 6; u += .005) { if (white(shoreColor(u, .12, -.2, { waves: wavesOn, dotSpacing: dotsOn ? .4 : 0 }))) dots.push(u); }
+  const runs = []; let prev = -9;
+  for (const u of dots) { if (u - prev > .02) runs.push(u); prev = u; }
+  const gaps = runs.slice(2).map((u, k) => +(u - runs[k + 1]).toFixed(3));
+  const lines = [];
+  for (let v = 0; v <= 1.0001; v += .005) { if (white(shoreColor(.2, v, -.2, { waves: wavesOn, dotSpacing: 0 }))) lines.push(+v.toFixed(3)); }
+  const lr = []; let last = -9;
+  for (const v of lines) { if (v - last > .02) lr.push(v); last = v; }
+  return { dotCount: runs.length, dotGaps: gaps, waveVs: lr };
+}
+
+/** UV 展开条的像素读数：整行都白的行 = 白浪线；白点行上数连续白段 = 白点颗数。 */
+function uvStats() {
+  const W = 520, H = 140, d = uvctx.getImageData(0, 0, W, H).data;
+  const rows = [];
+  for (let y = 0; y < H; y++) { let n = 0; for (let x = 0; x < W; x++) { const o = (y * W + x) * 4; if (Math.min(d[o], d[o + 1], d[o + 2]) > 222) n++; } rows.push(n / W); }
+  const whiteRowYs = rows.map((f, i) => (f > .5 ? i : -1)).filter((i) => i >= 0);
+  const bands = []; let prev = -9; for (const y of whiteRowYs) { if (y - prev > 1) bands.push([y]); else bands[bands.length - 1].push(y); prev = y; }
+  const yDot = Math.round(H * (1 - .12)) - 1; let runs = 0, on = false;
+  for (let x = 0; x < W; x++) { const o = (yDot * W + x) * 4; const w = Math.min(d[o], d[o + 1], d[o + 2]) > 222; if (w && !on) runs++; on = w; }
+  return { whiteBands: bands.length, whiteRows: whiteRowYs.length, whiteRowYs, bandCenters: bands.map((b) => +((b[0] + b[b.length - 1]) / 2 / H).toFixed(3)), dotRuns: runs };
+}
+
+/** 投影 patch 的格边连续性：跨 cell 边的相邻纹素亮度差分 vs 同 patch 内部的差分。 */
+function cellEdgeStats() {
+  const d = state.img.data, lum = (i) => (d[i * 4] * .299 + d[i * 4 + 1] * .587 + d[i * 4 + 2] * .114) / 255;
+  const at = (x, y) => index.cellAt(field.minX + (x + .5) * field.res, field.minZ + (y + .5) * field.res)?.id ?? -1;
+  const cross = [], inner = [];
+  for (let y = 1; y < field.h - 1; y++) for (let x = 1; x < field.w - 2; x++) {
+    const i = y * field.w + x, a = at(x, y), b = at(x + 1, y); if (a < 0 || b < 0) continue;
+    const jump = Math.abs(lum(i + 1) - lum(i));
+    (a !== b ? cross : inner).push(jump);
+  }
+  const p = (arr, q) => { if (!arr.length) return 0; const s = [...arr].sort((a, b) => a - b); return +s[Math.min(s.length - 1, Math.floor(q * s.length))].toFixed(4); };
+  return { crossN: cross.length, innerN: inner.length, crossP50: p(cross, .5), crossP95: p(cross, .95), innerP50: p(inner, .5), innerP95: p(inner, .95) };
+}
+
+function report() {
+  const seam = ab[mode].seam, jump = ab[mode].jump;
+  const lines = [
+    `grid=${gridKind} seed=${seed} field=${field.w}×${field.h} res=${field.res} 岸线环=${field.loops} 段=${field.segs.length}`,
+    `mode=${mode}  覆盖直方图 1/2/3 层 patch = ${ab[mode].covHist[1]}/${ab[mode].covHist[2]}/${ab[mode].covHist[3]}`,
+    `seam: 边界带宽 ${seam.bandShare}% of 图 · 边界梯度 ${seam.gradBand} vs 内部 ${seam.gradInner} (比 ${seam.ratio}) · softMeanPx ${seam.softMeanPx}`,
+    `edgeJump: n=${jump.n} mean=${jump.meanJump} max=${jump.maxJump}`,
+    `三模式对照: hard jump ${ab.hard.jump.meanJump} / alpha ${ab.alpha.jump.meanJump} / height ${ab.height.jump.meanJump}；细节保留 ${ab.hard.detailKeptPct}%/${ab.alpha.detailKeptPct}%/${ab.height.detailKeptPct}%；跳跃削减 ${ab.hard.jumpCutPct}%/${ab.alpha.jumpCutPct}%/${ab.height.jumpCutPct}%`,
+  ];
+  const sc = shoreScan();
+  lines.push(`岸带手工UV: 白点 ${sc.dotCount} 颗 · 间距 ${sc.dotGaps.slice(0, 6).join('/')} · 白浪线 v=${sc.waveVs.join(',') || '无'}`);
+  const ce = cellEdgeStats();
+  const uvs = uvStats();
+  lines.push(`投影 patch 跨格: 跨格边 ${ce.crossN} 对 p50 ${ce.crossP50} p95 ${ce.crossP95}；同格内部 ${ce.innerN} 对 p50 ${ce.innerP50} p95 ${ce.innerP95}`);
+  lines.push(`UV 展开条: 白浪线 ${uvs.whiteBands} 道（各 ${uvs.whiteRows / Math.max(1, uvs.whiteBands)} 行，中心 v=${uvs.bandCenters.join(',')}）· 白点行白段 ${uvs.dotRuns} 颗`);
+  lines.push(`窗口: 纹素 #${state.zoom?.texel} @ (${state.zoom?.cx},${state.zoom?.cz}) sd=${state.zoom?.sd?.toFixed(3)} u=${state.zoom?.u?.toFixed(3)} 放大 ${zoomScale}×`);
+  document.querySelector('#report').textContent = lines.join('\n');
+  window.patchBlend = {
+    ready: true, gridKind, seed, field: { w: field.w, h: field.h, res: field.res, loops: field.loops, segs: field.segs.length },
+    ab, mode, shore: sc, cellEdge: ce, uv: uvs, zoom: state.zoom, canvases: { map: mc, zoom: zc, uv: uc },
+    setMode: (m) => { if (!['hard', 'alpha', 'height'].includes(m)) throw new RangeError('mode'); mode = m; sync(); drawMap(); drawZoom(); report(); },
+    redrawUV: () => drawUV(),
+    sample: (x, z) => ({ grass: grassColor(x, z), water: waterColor(x, z) }),
+    shoreColorAt: (u, v, sd) => shoreColor(u, v, sd, { waves: wavesOn, dotSpacing: dotsOn ? .4 : 0 }),
+    field_: field,
+  };
+}
+
+function sync() { for (const m of ['hard', 'alpha', 'height']) document.querySelector('#m-' + m).classList.toggle('on', m === mode); }
+document.querySelector('#m-hard').onclick = () => { mode = 'hard'; sync(); drawMap(); report(); };
+document.querySelector('#m-alpha').onclick = () => { mode = 'alpha'; sync(); drawMap(); report(); };
+document.querySelector('#m-height').onclick = () => { mode = 'height'; sync(); drawMap(); report(); };
+for (const [id, key] of [['waves', 'wavesOn'], ['dots', 'dotsOn']]) document.querySelector('#' + id).onchange = (e) => {
+  if (key === 'wavesOn') wavesOn = e.target.checked; else dotsOn = e.target.checked;
+  img0 = renderPatches(field, patchesX, 'height'); drawMap(); drawZoom(); drawUV(); report();
+};
+document.querySelector('#waves').checked = wavesOn; document.querySelector('#dots').checked = dotsOn;
+document.querySelector('#zoom-near').onclick = () => { zoomC = null; drawZoom(); report(); };
+document.querySelector('#zoom-in').onclick = () => { zoomScale = Math.min(6, zoomScale * 1.5); drawZoom(); report(); };
+document.querySelector('#zoom-out').onclick = () => { zoomScale = Math.max(.75, zoomScale / 1.5); drawZoom(); report(); };
+drawMap(); drawZoom(); drawUV(); sync(); report();
+</script></html>

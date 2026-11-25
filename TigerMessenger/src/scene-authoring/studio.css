@@ -144,6 +144,14 @@ body[data-tier=planet] #scene-banner{display:none}
 /* 通用场景（书店镇等）：场景管线换成材质色表管线；风格与草稿在实景旁 */
 #gscene-workshop{display:none}
 body[data-tier=scene][data-scene-edit=view] #gscene-workshop{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+#battle-workshop{display:none}
+#mountain-workshop{display:none}
+body[data-tier=scene][data-scene-edit=view][data-scene-mountain="1"] #mountain-workshop{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;margin-top:16px}
+body[data-tier=scene][data-scene-edit=view] .tier-side[data-tier=mountain]{display:block}
+body[data-tier=scene][data-scene-edit=view][data-scene-battle="1"] #battle-workshop{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;margin-top:16px}
+body[data-tier=scene][data-scene-edit=view][data-scene-battle="1"] #fx-workshop{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;margin-top:16px}
+body[data-tier=scene][data-scene-edit=view] .tier-side[data-tier=battle]{display:block}
+body[data-tier=scene][data-scene-edit=view][data-scene-battle="1"] .tier-side[data-tier=fx]{display:block}
 body[data-scene-edit=view] #scene-pane{display:none!important}
 body[data-tier=scene][data-scene-edit=view] .tier-side[data-tier=gscene]{display:block}
 body[data-scene-edit=view] .viewer-side .studio-docks{display:none}
@@ -251,3 +259,34 @@ body[data-scene-edit=view] .viewer-side .studio-docks{display:none}
 #learning-workshop .learning-tabs button:hover{color:var(--ink);background:none}#learning-workshop .learning-tabs button.primary{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
 #learning-workshop .learning-tabs select{margin-left:auto;background:none;border:0;color:var(--muted);font-size:13px;padding:6px 4px;cursor:pointer}#learning-workshop .learning-tabs select.primary{color:var(--accent)}
 #learning-workshop.learning-map-mode{max-width:1680px;padding:18px 26px 28px}
+
+/* R21 直达入口：战役 / 山形 / 表现层各有页签；直达时只显示这一块并撑到能看清的高度 */
+.pipe-tabs button.focus-tab{color:#9fc7c0}
+.pipe-tabs button.focus-tab[aria-selected=true]{color:var(--ink)}
+#battle-workshop,#mountain-workshop,#fx-workshop{min-height:420px}
+body[data-layer-focus] #scene-pane,body[data-layer-focus] #gscene-workshop,body[data-layer-focus] #scene-banner{display:none!important}
+body[data-layer-focus=battle] #mountain-evolve,body[data-layer-focus=fx] #mountain-evolve{display:none!important}
+body[data-layer-focus=battle] #mountain-workshop,body[data-layer-focus=battle] #fx-workshop,body[data-layer-focus=mountain] #battle-workshop,body[data-layer-focus=mountain] #fx-workshop,body[data-layer-focus=fx] #battle-workshop,body[data-layer-focus=fx] #mountain-workshop{display:none!important}
+body[data-layer-focus=battle] #battle-workshop{display:grid!important;grid-template-columns:minmax(0,1fr) 300px;gap:16px;margin-top:0;min-height:60vh}
+body[data-layer-focus=mountain] #mountain-workshop{display:grid!important;grid-template-columns:minmax(0,1fr) 300px;gap:16px;margin-top:0;min-height:60vh}
+body[data-layer-focus=fx] #fx-workshop{display:grid!important;grid-template-columns:minmax(0,1fr) 300px;gap:16px;margin-top:0;min-height:60vh}
+#battle-workshop:empty::before,#mountain-workshop:empty::before,#fx-workshop:empty::before{grid-column:1/-1;align-self:center;justify-self:center;color:var(--muted);font-size:13px}
+#battle-workshop:empty::before{content:'战役管线正在挂载：等游戏连接并切到十二门徒 / 苔庭 / 高山圣城 / 书店…'}
+#mountain-workshop:empty::before{content:'山形管线正在挂载：等游戏连接并切到高山圣城…'}
+#fx-workshop:empty::before{content:'表现层管线正在挂载：等游戏连接并切到十二门徒 / 苔庭 / 高山圣城 / 书店…'}
+/* R23 九级成熟度徽章（左栏 ⚙ 能力） */
+.cap-mat{flex:none;padding:0 5px;border-radius:8px;font-size:9.5px;line-height:15px;font-weight:600;color:#14201f;background:#8a9a98;letter-spacing:0}.cap-mat.m3{background:#9fb3a6}.cap-mat.m4{background:#b9d0a0}.cap-mat.m5{background:#e3c06b}.cap-mat.m6{background:#f0a35a}.cap-mat.m7{background:#e9785b;color:#fff}.cap-mat.m8{background:#c95e9e;color:#fff}.cap-mat.m9{background:#7d6bd8;color:#fff}
+.section-title .cap-count{font-size:10.5px;color:var(--muted);cursor:help}
+/* R24 「最近新增」栏：管线区上方一条，横向滚动；点一项去能跑它的工坊 */
+.recent-additions{border-bottom:1px solid var(--line);background:#141e20;padding:6px 16px 8px;max-height:150px;overflow:auto}.recent-additions .dock-loading{margin:4px 0;font-size:11px;color:var(--muted)}
+.recent-head{display:flex;align-items:baseline;gap:10px;font-size:12px;margin-bottom:5px}.recent-head b{color:#e3b36b;font-weight:600}.recent-head small{color:var(--muted);font-size:10.5px;flex:1;min-width:0}.recent-more{font-size:10.5px;padding:2px 8px}
+.recent-list{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}.recent-additions[data-total] .recent-list:has(.recent-item:nth-child(9)){flex-wrap:wrap}
+.recent-item{flex:none;display:grid;grid-template-columns:1fr auto;gap:1px 8px;align-items:baseline;text-align:left;min-width:180px;max-width:240px;padding:5px 8px;border:1px solid #3f5254;border-radius:6px;background:#1a2729;color:var(--ink);cursor:pointer}.recent-item:hover{border-color:#c58b34;background:#1f2e30}
+.recent-item .recent-name{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.recent-item small{grid-column:1/-1;font-size:10px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recent-level{font-style:normal;font-size:9.5px;font-weight:600;padding:0 5px;border-radius:8px;line-height:15px;color:#14201f;background:#8a9a98}.recent-level.m3{background:#9fb3a6}.recent-level.m4{background:#b9d0a0}.recent-level.m5{background:#e3c06b}.recent-level.m6{background:#f0a35a}.recent-level.m7{background:#e9785b;color:#fff}.recent-level.m8{background:#c95e9e;color:#fff}.recent-level.m9{background:#7d6bd8;color:#fff}
+.cap-item.cap-flash{outline:2px solid #e3b36b;box-shadow:0 0 0 4px rgba(227,179,107,.25)}
+/* R33–R36 战役侧栏导航块 */
+.nav-panel{margin-top:10px;border-top:1px solid rgba(255,255,255,.08);padding-top:8px}.nav-panel h4{margin:8px 0 4px}
+.nav-parity-table{border-collapse:collapse;font-size:11px;width:100%}.nav-parity-table th,.nav-parity-table td{padding:2px 5px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left}
+.nav-parity-table td.eq{color:#9fd3a6}.nav-parity-table td.ne{color:#f0a35a}.nav-parity-verdict{font-size:12px;margin:6px 0 2px}
+.nav-parity-gaps,.nav-cap-list{margin:2px 0;padding-left:16px;font-size:11px}.nav-parity-gaps small,.nav-cap-list small{display:block;color:var(--muted)}

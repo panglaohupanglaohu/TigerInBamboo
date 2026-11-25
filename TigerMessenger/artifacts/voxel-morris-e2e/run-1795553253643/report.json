@@ -1,0 +1,10 @@
+{
+ "scene": "morris-lake",
+ "capabilities": [],
+ "errors": [],
+ "steps": {
+  "mount": "ok"
+ },
+ "pass": false,
+ "failure": "frame.evaluate: TypeError: Failed to fetch dynamically imported module: http://localhost:8931/TigerMessenger/src/vendor/townscaper-rea-refactoring/src/capabilities/ops.js\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/voxel-caps-browser.mjs:57:28"
+}

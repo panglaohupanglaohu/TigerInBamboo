@@ -30,11 +30,13 @@ export function solveWFC(grid,{tiles,seed=1,pins={},allowed={},preferred={},maxS
   const causes=[],conflicts=[];const cause=r=>{if(explain)causes.push(Object.freeze({...r,decisions}));};
   const restore=(mark,cmark=causes.length)=>{while(trail.length>mark){const[id,d]=trail.pop();domains.set(id,d);}causes.length=Math.min(causes.length,cmark);};
   const twin=(c,e,b)=>{const t=c.edgeTwins?.[e]??b.edgeNeighbors.indexOf(c.id);if(t<0||b.edgeNeighbors[t]!==c.id)throw Error('Nonreciprocal WFC edge');return t;};
+  // Emptied cell / red chain of the latest failed propagation, so a contradiction trace frame can name them.
+  let lastEmpty=null,lastChain=null;
   const propagate=ids=>{
-    const queue=new Set(ids);
-    while(queue.size){tick();let id=Infinity;for(const queued of queue)id=Math.min(id,queued);queue.delete(id);const c=byCell.get(id),d=domains.get(id);if(!d.length)return false;
+    lastEmpty=null;lastChain=null;const queue=new Set(ids);
+    while(queue.size){tick();let id=Infinity;for(const queued of queue)id=Math.min(id,queued);queue.delete(id);const c=byCell.get(id),d=domains.get(id);if(!d.length){lastEmpty=id;return false;}
       for(let e=0;e<c.n;e++){const bid=c.edgeNeighbors[e];if(bid<0)continue;const b=byCell.get(bid);if(!b)throw Error('Unknown neighbor');const t=twin(c,e,b),before=domains.get(bid),after=before.filter(bt=>d.some(at=>compatible(at.edges[e],bt.edges[t])));
-        if(after.length!==before.length){set(bid,after);cause({cell:bid,from:id,edge:e,removed:before.filter(t=>!after.includes(t)).map(t=>String(t.id)),left:after.length});if(!after.length){if(explain&&conflicts.length<16)conflicts.push(Object.freeze(dependencyChain(causes,bid)));return false;}queue.add(bid);}
+        if(after.length!==before.length){set(bid,after);cause({cell:bid,from:id,edge:e,removed:before.filter(t=>!after.includes(t)).map(t=>String(t.id)),left:after.length});if(!after.length){lastEmpty=bid;if(explain){const ch=Object.freeze(dependencyChain(causes,bid));lastChain=ch;if(conflicts.length<16)conflicts.push(ch);}return false;}queue.add(bid);}
       }
     }return true;
   };
@@ -44,22 +46,49 @@ export function solveWFC(grid,{tiles,seed=1,pins={},allowed={},preferred={},maxS
     return d.map((t,i)=>{const u=(hash(seed^0x5bd1e995,c.id*977+i,decisions)+.5)/4294967296;return{t,k:Math.log(u)/W.get(t)};}).sort((a,b)=>b.k-a.k||compare(String(a.t.id),String(b.t.id))).map(x=>x.t);};
   const push=c=>{decisions++;const d=domains.get(c.id);const options=order(c,d),old=options.findIndex(t=>String(t.id)===String(preferred[c.id]));if(old>0)options.unshift(options.splice(old,1)[0]);frames.push({id:c.id,options,index:0,mark:trail.length,cmark:causes.length});};
   // 865200072685912064: bounded playback of actual candidate domains, not fabricated animation.
+  // Decision frames name the decided cell/tile; contradiction frames name the emptied cell and (with explain) its red chain,
+  // so wfcTraceSteps can export a step-level trajectory without re-running the solver.
   const trace=[];let traceEvents=0;
-  const record=stage=>{if(!traceLimit)return;traceEvents++;if(trace.length>=traceLimit)return;
+  const record=(stage,extra)=>{if(!traceLimit)return;traceEvents++;if(trace.length>=traceLimit)return;
     const snapshot=Object.fromEntries(cells.map(c=>[c.id,Object.freeze(domains.get(c.id).map(t=>String(t.id)))]));
-    trace.push(Object.freeze({stage,steps,decisions,domains:Object.freeze(snapshot)}));};
-  const result=(ok,reason)=>{record(reason);return {ok,reason,tiles:ok?Object.fromEntries(cells.map(c=>[c.id,String(domains.get(c.id)[0].id)])):{},steps,decisions,backtracks,contradictions,...(traceLimit?{trace:Object.freeze(trace.slice()),traceEvents,traceTruncated:traceEvents>trace.length}:{}),...(explain?{causes:Object.freeze(causes.slice()),conflicts:Object.freeze(conflicts.slice())}:{})};};
+    trace.push(Object.freeze({stage,steps,decisions,domains:Object.freeze(snapshot),...(extra||{})}));};
+  const failExtra=()=>({...(lastEmpty==null?{}:{empty:lastEmpty}),...(lastChain?{chain:lastChain}:{})});
+  const result=(ok,reason)=>{record(reason,reason==='contradiction'?failExtra():undefined);return {ok,reason,tiles:ok?Object.fromEntries(cells.map(c=>[c.id,String(domains.get(c.id)[0].id)])):{},steps,decisions,backtracks,contradictions,...(traceLimit?{trace:Object.freeze(trace.slice()),traceEvents,traceTruncated:traceEvents>trace.length}:{}),...(explain?{causes:Object.freeze(causes.slice()),conflicts:Object.freeze(conflicts.slice())}:{})};};
   for(const[id,ids]of Object.entries(allowed)){if(!byCell.has(Number(id))||!Array.isArray(ids)||ids.some(x=>!byTile.has(String(x))))throw new Error('Unknown allowed domain');const keep=new Set(ids.map(String));domains.set(Number(id),domains.get(Number(id)).filter(t=>keep.has(String(t.id))));}
   for(const[id,tile]of Object.entries(pins)){const c=byCell.get(Number(id)),t=byTile.get(String(tile));if(!c||!t)throw Error('Unknown pin');domains.set(c.id,domains.get(c.id).filter(x=>x===t));cause({cell:c.id,from:null,kind:'pin',tile:String(t.id)});}
   try{
     if(!propagate(cells.map(c=>c.id)))return result(false,'contradiction');trail.length=0;record('initial');const first=pick();if(!first)return result(true,'solved');push(first);
     while(frames.length){tick();const f=frames.at(-1);restore(f.mark,f.cmark);if(f.index===f.options.length){frames.pop();backtracks++;continue;}
-      set(f.id,[f.options[f.index++]]);cause({cell:f.id,from:null,kind:'decision',tile:String(f.options[f.index-1].id)});if(!propagate([f.id])){contradictions++;backtracks++;record('contradiction');continue;}
-      record('decision');const c=pick();if(!c)return result(true,'solved');push(c);
+      set(f.id,[f.options[f.index++]]);cause({cell:f.id,from:null,kind:'decision',tile:String(f.options[f.index-1].id)});if(!propagate([f.id])){contradictions++;backtracks++;record('contradiction',failExtra());continue;}
+      record('decision',{cell:f.id,tile:String(f.options[f.index-1].id)});const c=pick();if(!c)return result(true,'solved');push(c);
     }return result(false,'contradiction');
   }catch(e){if(e===LIMIT)return result(false,'budget');throw e;}
 }
 
+
+/** 865200072685912064 step-level trajectory export: diff consecutive recorded candidate-domain
+ * snapshots into per-step {decided, shrunk, restored, empty, chain} so the solving process can be
+ * replayed or diagnosed without re-running the solver. Domains only ever shrink inside a branch;
+ * `restored` cells (domains that re-grew) appear only right after a contradiction frame, where
+ * backtracking re-opened earlier candidates. Requires result.trace (solve with traceLimit>0). */
+export function wfcTraceSteps(result){
+  const trace=result?.trace;if(!Array.isArray(trace)||!trace.length)return Object.freeze([]);
+  const steps=[];
+  for(let i=0;i<trace.length;i++){
+    const f=trace[i],prev=i?trace[i-1]:null,shrunk=[],restored=[];
+    if(prev)for(const[id,dom]of Object.entries(f.domains)){
+      const before=prev.domains[id]||[],lost=before.filter(t=>!dom.includes(t)),gained=dom.filter(t=>!before.includes(t));
+      if(lost.length)shrunk.push(Object.freeze({cell:Number(id),removed:Object.freeze(lost),left:dom.length}));
+      if(gained.length)restored.push(Object.freeze({cell:Number(id),added:Object.freeze(gained),left:dom.length}));
+    }
+    steps.push(Object.freeze({index:i,stage:f.stage,steps:f.steps,decisions:f.decisions,
+      ...(f.cell!==undefined?{decided:Object.freeze({cell:f.cell,tile:f.tile})}:{}),
+      ...(f.empty!==undefined?{empty:f.empty}:{}),
+      ...(f.chain?{chain:f.chain}:{}),
+      shrunk:Object.freeze(shrunk),restored:Object.freeze(restored)}));
+  }
+  return Object.freeze(steps);
+}
 
 /** Check all half-edge sockets independently of solver domain state. */
 export function findWFCConflicts(grid,assignment,tiles,{compatible=(a,b)=>a===b}={}){

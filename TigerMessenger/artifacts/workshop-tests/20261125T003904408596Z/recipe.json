@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "scene": "morris-lake",
+  "goal": "TEST ONLY: protect lake buildings",
+  "nodes": [
+    {
+      "id": "terrain.preserve",
+      "enabled": true
+    },
+    {
+      "id": "building.edit",
+      "enabled": true
+    },
+    {
+      "id": "water.surface",
+      "enabled": true
+    },
+    {
+      "id": "light.time",
+      "enabled": true
+    },
+    {
+      "id": "world.ink",
+      "enabled": true
+    },
+    {
+      "id": "weather.atmosphere",
+      "enabled": true
+    },
+    {
+      "id": "vegetation.layers",
+      "enabled": true
+    },
+    {
+      "id": "animals.birds",
+      "enabled": true
+    },
+    {
+      "id": "effects.fire",
+      "enabled": true
+    },
+    {
+      "id": "effects.smoke",
+      "enabled": true
+    },
+    {
+      "id": "vehicles.boats",
+      "enabled": true
+    },
+    {
+      "id": "vehicles.aircraft",
+      "enabled": true
+    },
+    {
+      "id": "vehicles.cars",
+      "enabled": true
+    },
+    {
+      "id": "combat.encounter",
+      "enabled": true
+    }
+  ],
+  "settings": {
+    "waves": true,
+    "reflection": true,
+    "time": "day",
+    "outline": true,
+    "grid": false,
+    "vegetation": true,
+    "birds": true,
+    "fog": false,
+    "snow": false,
+    "fire": true
+  }
+}

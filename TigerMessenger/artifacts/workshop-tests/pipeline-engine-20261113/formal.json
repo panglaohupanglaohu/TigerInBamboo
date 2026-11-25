@@ -1,6 +1,6 @@
 {
   "scope": "Normal pipeline app + unmodified game iframe, new non-persistent context; preview/discard only",
-  "started": "2026-11-13T00:56:55.196Z",
+  "started": "2026-11-25T01:16:42.626Z",
   "errors": [],
   "options": [
     {
@@ -277,8 +277,8 @@
     "previewing": false
   },
   "visualBefore": {
-    "colorBins": 176,
-    "dominantRatio": 0.13631606488749345
+    "colorBins": 171,
+    "dominantRatio": 0.11760858189429618
   },
   "candidate": {
     "scene": "bookshop",
@@ -287,7 +287,7 @@
         "id": "m0",
         "name": "黑色材质 0",
         "base": "#796244",
-        "color": "#846042",
+        "color": "#7f6d45",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -296,7 +296,7 @@
         "id": "m1",
         "name": "黑色材质 1",
         "base": "#59452f",
-        "color": "#603f26",
+        "color": "#383632",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -305,7 +305,7 @@
         "id": "m2",
         "name": "绿色材质 2",
         "base": "#5a8f5a",
-        "color": "#589859",
+        "color": "#679456",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -314,7 +314,7 @@
         "id": "m3",
         "name": "白色材质 3",
         "base": "#f5f5f0",
-        "color": "#fffff5",
+        "color": "#fdfff3",
         "uses": 5,
         "locked": false,
         "shared": false
@@ -323,7 +323,7 @@
         "id": "m4",
         "name": "黑色材质 4",
         "base": "#211e19",
-        "color": "#181614",
+        "color": "#212123",
         "uses": 21,
         "locked": false,
         "shared": true
@@ -332,7 +332,7 @@
         "id": "m5",
         "name": "橙色材质 5",
         "base": "#b87352",
-        "color": "#ba7d5e",
+        "color": "#83915c",
         "uses": 3,
         "locked": false,
         "shared": false
@@ -341,7 +341,7 @@
         "id": "m6",
         "name": "黑色材质 6",
         "base": "#211e19",
-        "color": "#181614",
+        "color": "#212123",
         "uses": 5,
         "locked": false,
         "shared": true
@@ -350,7 +350,7 @@
         "id": "m7",
         "name": "橙色材质 7",
         "base": "#8a5a42",
-        "color": "#8d5c42",
+        "color": "#816c45",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -359,7 +359,7 @@
         "id": "m8",
         "name": "黑色材质 8",
         "base": "#2c3440",
-        "color": "#2b2f34",
+        "color": "#2e3236",
         "uses": 10,
         "locked": false,
         "shared": false
@@ -368,7 +368,7 @@
         "id": "m9",
         "name": "黑色材质 9",
         "base": "#3a2c22",
-        "color": "#2f2823",
+        "color": "#2c2e2e",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -377,7 +377,7 @@
         "id": "m10",
         "name": "黑色材质 10",
         "base": "#241a14",
-        "color": "#191310",
+        "color": "#212122",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -386,7 +386,7 @@
         "id": "m11",
         "name": "棕色材质 11",
         "base": "#d4af37",
-        "color": "#dac169",
+        "color": "#e2db72",
         "uses": 4,
         "locked": false,
         "shared": false
@@ -395,7 +395,7 @@
         "id": "m12",
         "name": "黑色材质 12",
         "base": "#111111",
-        "color": "#080807",
+        "color": "#18181c",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -404,7 +404,7 @@
         "id": "m13",
         "name": "白色材质 13",
         "base": "#ffffff",
-        "color": "#fffff8",
+        "color": "#fdfff5",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -413,7 +413,7 @@
         "id": "m14",
         "name": "黄色材质 14",
         "base": "#bfb5a0",
-        "color": "#d1c59b",
+        "color": "#e0da7b",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -422,7 +422,7 @@
         "id": "m15",
         "name": "棕色材质 15",
         "base": "#ad9e81",
-        "color": "#baab7d",
+        "color": "#dbd476",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -431,7 +431,7 @@
         "id": "m16",
         "name": "白色材质 16",
         "base": "#f4f7ed",
-        "color": "#fffff3",
+        "color": "#fdfff3",
         "uses": 1,
         "locked": false,
         "shared": true
@@ -440,7 +440,7 @@
         "id": "m17",
         "name": "绿色材质 17",
         "base": "#43a047",
-        "color": "#53a656",
+        "color": "#679656",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -449,7 +449,7 @@
         "id": "m18",
         "name": "蓝色材质 18",
         "base": "#a9cbef",
-        "color": "#d2ddd0",
+        "color": "#f9fae6",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -458,7 +458,7 @@
         "id": "m19",
         "name": "黑色材质 19",
         "base": "#2e7d32",
-        "color": "#338037",
+        "color": "#2e4339",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -467,7 +467,7 @@
         "id": "m20",
         "name": "黄绿色材质 20",
         "base": "#cbe685",
-        "color": "#eff5a4",
+        "color": "#e6e47e",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -476,7 +476,7 @@
         "id": "m21",
         "name": "黑色材质 21",
         "base": "#211e19",
-        "color": "#181614",
+        "color": "#212123",
         "uses": 1,
         "locked": false,
         "shared": true
@@ -485,7 +485,7 @@
         "id": "m22",
         "name": "黑色材质 22",
         "base": "#211e19",
-        "color": "#181614",
+        "color": "#212123",
         "uses": 1,
         "locked": false,
         "shared": true
@@ -494,7 +494,7 @@
         "id": "m23",
         "name": "橙色材质 23",
         "base": "#ffdfae",
-        "color": "#fff8d9",
+        "color": "#fdffea",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -503,7 +503,7 @@
         "id": "m24",
         "name": "橙色材质 24",
         "base": "#ffdfae",
-        "color": "#fff8d9",
+        "color": "#fdffea",
         "uses": 1,
         "locked": false,
         "shared": false
@@ -514,8 +514,8 @@
   },
   "changed": 25,
   "visualCandidate": {
-    "colorBins": 192,
-    "dominantRatio": 0.1512297226582941
+    "colorBins": 171,
+    "dominantRatio": 0.1564625850340136
   },
   "restored": {
     "scene": "bookshop",
@@ -759,7 +759,7 @@
         "tier": "scene",
         "sceneId": "morris-lake"
       },
-      "catalogHash": "138a209492d7d08105840ad11c5b3b1eaecc55b9714d9396c9e5c395eadc074e"
+      "catalogHash": "edab768fba2fcd91b79cf258284673c0075a9de6fe8493a0aa850504e62829c9"
     },
     {
       "name": "PipeLineEngine",
@@ -770,7 +770,29 @@
         "tier": "scene",
         "sceneId": "bookshop"
       },
-      "catalogHash": "f2df29a7951d09233931acbe2cab10d63ba262ea77c65d104ad5fec74677a2a1"
+      "catalogHash": "532ac989502538893016217c65b1b5532eb3f9adb472af3a6b0f196b221a1b3e"
+    },
+    {
+      "name": "PipeLineEngine",
+      "version": 1,
+      "adapter": "fx",
+      "status": "scanned",
+      "context": {
+        "tier": "fx",
+        "sceneId": "bookshop"
+      },
+      "catalogHash": "f7ea79777978f4e957ff50b337f1003b99b810929ff04f4e00e7488b15679c97"
+    },
+    {
+      "name": "PipeLineEngine",
+      "version": 1,
+      "adapter": "battle",
+      "status": "scanned",
+      "context": {
+        "tier": "battle",
+        "sceneId": "bookshop"
+      },
+      "catalogHash": "66c6db550a6d87351221f12ad8760a9cd4f52dedfe4f04af79fb7233abca1383"
     },
     {
       "name": "PipeLineEngine",
@@ -781,7 +803,7 @@
         "tier": "scene",
         "sceneId": "bookshop"
       },
-      "catalogHash": "f2df29a7951d09233931acbe2cab10d63ba262ea77c65d104ad5fec74677a2a1"
+      "catalogHash": "532ac989502538893016217c65b1b5532eb3f9adb472af3a6b0f196b221a1b3e"
     },
     {
       "name": "PipeLineEngine",
@@ -792,10 +814,10 @@
         "tier": "scene",
         "sceneId": "bookshop"
       },
-      "catalogHash": "f2df29a7951d09233931acbe2cab10d63ba262ea77c65d104ad5fec74677a2a1",
-      "planHash": "3b716b072e5753951d21c49333ab9f299616a6c2f237f8294872ca5f569e8868",
+      "catalogHash": "532ac989502538893016217c65b1b5532eb3f9adb472af3a6b0f196b221a1b3e",
+      "planHash": "5aa03e5a19b992da704f3eeeb5dc841722020a0a456c874260703d57bedd60d1",
       "inputHash": "755377cfd69e69474282134df20f6d0e631de5e263280625cdfa0cc378674ae2",
-      "outputHash": "92ee98a78897aaae5aac121c9b34ce545525823e715b18d237f18e924c65db1c",
+      "outputHash": "75aaf599a0d84758b4fbe54bae9539383b352dc5e0246fe47585de5a66ff679d",
       "steps": [
         {
           "id": "scene.oklab-palette",
@@ -807,10 +829,34 @@
           }
         },
         {
+          "id": "scene.palette-unify",
+          "params": {
+            "colors": 6,
+            "strength": 0.6,
+            "includeEdited": false
+          }
+        },
+        {
+          "id": "scene.style-pack",
+          "params": {
+            "strength": 0.5,
+            "includeEdited": false
+          }
+        },
+        {
           "id": "scene.oklab-contrast",
           "params": {
             "gain": 1.15,
             "maxDelta": 8,
+            "includeEdited": false
+          }
+        },
+        {
+          "id": "scene.tone",
+          "params": {
+            "hue": 10,
+            "sat": 1.1,
+            "light": 0,
             "includeEdited": false
           }
         }
@@ -821,8 +867,20 @@
           "module": "src/system-workshop/gscene/capabilities.js#scene.oklab-palette"
         },
         {
+          "id": "scene.palette-unify",
+          "module": "src/system-workshop/gscene/capabilities.js#scene.palette-unify"
+        },
+        {
+          "id": "scene.style-pack",
+          "module": "src/system-workshop/gscene/capabilities.js#scene.style-pack"
+        },
+        {
           "id": "scene.oklab-contrast",
           "module": "src/system-workshop/gscene/capabilities.js#scene.oklab-contrast"
+        },
+        {
+          "id": "scene.tone",
+          "module": "src/system-workshop/gscene/capabilities.js#scene.tone"
         }
       ]
     }

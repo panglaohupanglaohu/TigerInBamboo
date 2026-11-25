@@ -1,0 +1,91 @@
+{
+ "capability": "planet.sea-tint",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": false,
+ "verdict": "diff-registered",
+ "original": [
+  "townscaper-web/REACode/src/shore.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/water/shore.js"
+ ],
+ "inputs": {
+  "period": 4.6,
+  "tint": "#3a6a8a"
+ },
+ "metrics": [
+  {
+   "id": "waveU",
+   "name": "wave uniforms 一致",
+   "equal": false
+  },
+  {
+   "id": "waveV",
+   "name": "wave vertex GLSL 一致",
+   "equal": false
+  },
+  {
+   "id": "waveF",
+   "name": "wave fragment GLSL 一致",
+   "equal": true
+  }
+ ],
+ "diffs": [
+  {
+   "kind": "value",
+   "id": "waveMaterial.uniforms",
+   "original": {
+    "uTime": 0,
+    "uPeriod": 4.6,
+    "uFoam": "#fbfeff"
+   },
+   "refactored": {
+    "uTime": 0,
+    "uPeriod": 4.6,
+    "uCrestBreakup": 1,
+    "uFoam": "#fbfeff"
+   }
+  },
+  {
+   "kind": "value",
+   "id": "waveMaterial.vertexShader",
+   "original": "912ch",
+   "refactored": "1079ch",
+   "note": "GLSL 去空白后不相等"
+  },
+  {
+   "kind": "value",
+   "id": "skirtMaterial.uniforms",
+   "original": {
+    "uFoam": "#f7fbfa",
+    "uTint": "#3a6a8a"
+   },
+   "refactored": {
+    "uFoam": "#f7fbfa",
+    "uTint": "#3a6a8a",
+    "uTime": 0,
+    "uSkirtBreak": 1,
+    "uSkirtDrift": 0.35,
+    "uSkirtGap": 0.14
+   }
+  },
+  {
+   "kind": "value",
+   "id": "skirtMaterial.vertexShader",
+   "original": "135ch",
+   "refactored": "630ch"
+  },
+  {
+   "kind": "api",
+   "id": "buildShore 形参",
+   "original": "(town,grid,index,{posts,reach,waves,foot})",
+   "refactored": "(town,grid,index,{posts,reach,waves,foot,shape,skirtWidth})+RangeError 校验",
+   "note": "shape/skirtWidth 是重构新增；buildShore 本体（traceLoops+distanceField）未逐点拍"
+  }
+ ],
+ "basis": "ShaderMaterial 的 uniforms 默认值 + 去空白 GLSL 全文对比；buildShore 需要完整 town/grid/index 三角网格，登记形参差异而非伪造输入。"
+}

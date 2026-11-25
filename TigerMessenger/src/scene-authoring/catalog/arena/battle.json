@@ -1,0 +1,107 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-25T00:27:40.750Z",
+ "arena": {
+  "fixture": "nav-lab 演示岛（台地岛 + 洞道墙 nav 采样，网格=实景同款 buildQuadGrid）",
+  "runner": "TigerMessenger/tools/refactor/record-battle-arena.mjs（实算）"
+ },
+ "judge": "规则写死：match targets≥1 且 run applied≥1 且 site.plan 新增至少一键为「擂过」。",
+ "results": [
+  {
+   "id": "battle.stage",
+   "name": "部署战斗舞台",
+   "domain": "battle",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "scale",
+    "gridRadius",
+    "unitHeight"
+   ],
+   "changed": 1,
+   "ms": 0,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "battle.garrison",
+   "name": "守军布防",
+   "domain": "battle",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "garrison{squads,size,tier,archer}"
+   ],
+   "changed": 1,
+   "ms": 0,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "battle.waves",
+   "name": "登陆波次",
+   "domain": "battle",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "waves{first,interval}"
+   ],
+   "changed": 1,
+   "ms": 0,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "battle.navFinePortals",
+   "name": "拱洞精细门户",
+   "domain": "battle",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "navigation{finePortals,arches,unitHeight,fine}"
+   ],
+   "changed": 3,
+   "ms": 17,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "battle.navTraffic",
+   "name": "窄道会车",
+   "domain": "battle",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "navigation{traffic}"
+   ],
+   "changed": 3,
+   "ms": 22,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "battle.navFooting",
+   "name": "穿洞与脚高插值",
+   "domain": "battle",
+   "targets": 1,
+   "applied": 1,
+   "planKeys": [
+    "navigation{footing}"
+   ],
+   "changed": 3,
+   "ms": 4,
+   "error": null,
+   "pass": true,
+   "verdict": "擂过"
+  }
+ ],
+ "counts": {
+  "caps": 6,
+  "passed": 6
+ }
+}

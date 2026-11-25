@@ -1,6 +1,6 @@
 import {hexToOklab,deltaE} from '../../../../townscaper-web/REACodeRefactoring/src/core/oklab.js';
 /** 通用场景管线 · 验证：数值、改动量、明度预算、对比度（明暗层次）保留、颜色不过度坍缩。 */
-import { helpers } from './capabilities.js?v=sys-r15';
+import { helpers } from './capabilities.js?v=contract-r2';
 const { hex2rgb, rgb2hsl } = helpers;
 export function verifyGscene(M, colors, {steps=[]}={}) {
   const checks = [], add = (id, name, status, detail) => checks.push({ id, name, status, detail });

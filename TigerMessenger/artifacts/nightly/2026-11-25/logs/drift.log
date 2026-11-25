@@ -1,0 +1,170 @@
+TAP version 13
+# Subtest: all posts preserve evidence and are sorted by exact author time, never study round or scan time
+ok 1 - all posts preserve evidence and are sorted by exact author time, never study round or scan time
+  ---
+  duration_ms: 16.614208
+  type: 'test'
+  ...
+# Subtest: same-post explanations and cross-project combinations remain distinct from scoped replacements
+ok 2 - same-post explanations and cross-project combinations remain distinct from scoped replacements
+  ---
+  duration_ms: 7.31325
+  type: 'test'
+  ...
+# Subtest: changed source invalidates only dependent interpretation and changes shared fingerprint
+ok 3 - changed source invalidates only dependent interpretation and changes shared fingerprint
+  ---
+  duration_ms: 34.907167
+  type: 'test'
+  ...
+# Subtest: physical scan and catalog carry the same evolution fingerprint without promoting executable status
+ok 4 - physical scan and catalog carry the same evolution fingerprint without promoting executable status
+  ---
+  duration_ms: 284.437458
+  type: 'test'
+  ...
+# Subtest: every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations
+ok 5 - every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations
+  ---
+  duration_ms: 3.401375
+  type: 'test'
+  ...
+# Subtest: 代际按关系与阶段切分，方向先向前
+ok 6 - 代际按关系与阶段切分，方向先向前
+  ---
+  duration_ms: 7.229417
+  type: 'test'
+  ...
+# Subtest: 模块归线、import 推断与组合前置
+ok 7 - 模块归线、import 推断与组合前置
+  ---
+  duration_ms: 0.434125
+  type: 'test'
+  ...
+# Subtest: 补学队列：得分、理由，以及经验 / 管线需求回流
+ok 8 - 补学队列：得分、理由，以及经验 / 管线需求回流
+  ---
+  duration_ms: 0.691666
+  type: 'test'
+  ...
+# Subtest: 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置
+ok 9 - 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置
+  ---
+  duration_ms: 0.443792
+  type: 'test'
+  ...
+# Subtest: 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定
+ok 10 - 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定
+  ---
+  duration_ms: 53.995791
+  type: 'test'
+  ...
+# Subtest: 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学
+ok 11 - 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学
+  ---
+  duration_ms: 132.728
+  type: 'test'
+  ...
+# Subtest: 每条能力线恰好挂在一个枝上，枝的合计等于各线之和
+ok 12 - 每条能力线恰好挂在一个枝上，枝的合计等于各线之和
+  ---
+  duration_ms: 0.386041
+  type: 'test'
+  ...
+# Subtest: 双源对账：每个原版叶子状态与对齐数据一致
+ok 13 - 双源对账：每个原版叶子状态与对齐数据一致
+  ---
+  duration_ms: 0.142208
+  type: 'test'
+  ...
+# Subtest: JEV 归线只采纳置信度 ≥ 0.85 的结果
+ok 14 - JEV 归线只采纳置信度 ≥ 0.85 的结果
+  ---
+  duration_ms: 0.161834
+  type: 'test'
+  ...
+# Subtest: 嫁接队列按分排序，条目都是只在原版或接口没带全
+ok 15 - 嫁接队列按分排序，条目都是只在原版或接口没带全
+  ---
+  duration_ms: 0.073584
+  type: 'test'
+  ...
+# Subtest: 解锁前沿：自己不能执行、前置都能执行
+ok 16 - 解锁前沿：自己不能执行、前置都能执行
+  ---
+  duration_ms: 0.04275
+  type: 'test'
+  ...
+# Subtest: 目标路径「圣城山形」：6 个能力都挂在存在的能力线上，声明调用的库模块真实存在
+ok 17 - 目标路径「圣城山形」：6 个能力都挂在存在的能力线上，声明调用的库模块真实存在
+  ---
+  duration_ms: 0.366917
+  type: 'test'
+  ...
+# Subtest: 山形：六步管线把方台变成山，保护区 / 轨道 / 海岸一格不动
+ok 18 - 山形：六步管线把方台变成山，保护区 / 轨道 / 海岸一格不动
+  ---
+  duration_ms: 59.820833
+  type: 'test'
+  ...
+# Subtest: 山形：同样输入结果确定；步骤乱序也按固定顺序执行
+ok 19 - 山形：同样输入结果确定；步骤乱序也按固定顺序执行
+  ---
+  duration_ms: 46.248417
+  type: 'test'
+  ...
+# Subtest: 验证：改动保护区 / 淹掉海岸 / 山体压到轨旁都判失败
+ok 20 - 验证：改动保护区 / 淹掉海岸 / 山体压到轨旁都判失败
+  ---
+  duration_ms: 50.133875
+  type: 'test'
+  ...
+# Subtest: whole directory has exactly one reviewed row per actual code file, including HTML and tools
+ok 21 - whole directory has exactly one reviewed row per actual code file, including HTML and tools
+  ---
+  duration_ms: 0.837458
+  type: 'test'
+  ...
+# Subtest: source identities and all claimed target paths exist; pages cannot inherit core completion
+not ok 22 - source identities and all claimed target paths exist; pages cannot inherit core completion
+  ---
+  duration_ms: 1.274958
+  type: 'test'
+  location: '/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/reacode-file-status.test.mjs:5:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+    
+    + 'c3079296b2141ca2c1f1c5c20c4b8efa241625a1d50250b554fb4bc9433c7492'
+    - 'a95df2b97075948a26c99aead76d19118b4f7d92e4506ebb242f4d1ab0c828f7'
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'a95df2b97075948a26c99aead76d19118b4f7d92e4506ebb242f4d1ab0c828f7'
+  actual: 'c3079296b2141ca2c1f1c5c20c4b8efa241625a1d50250b554fb4bc9433c7492'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/reacode-file-status.test.mjs:5:139)
+    Test.runInAsyncScope (node:async_hooks:227:14)
+    Test.run (node:internal/test_runner/test:1402:25)
+    Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+    Test.postRun (node:internal/test_runner/test:1542:19)
+    Test.run (node:internal/test_runner/test:1467:12)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3)
+  ...
+# Subtest: verified deliveries are explicitly scoped with execution evidence and residual gaps
+ok 23 - verified deliveries are explicitly scoped with execution evidence and residual gaps
+  ---
+  duration_ms: 0.084083
+  type: 'test'
+  ...
+1..23
+# tests 23
+# suites 0
+# pass 22
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 616.479667

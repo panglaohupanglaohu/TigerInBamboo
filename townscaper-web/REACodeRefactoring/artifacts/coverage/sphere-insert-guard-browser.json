@@ -1,0 +1,87 @@
+{
+  "out": {
+    "good": {
+      "k": 70,
+      "total": 199,
+      "realTris": 124,
+      "superTris": 17,
+      "liftFaces": 396,
+      "closed": true,
+      "closedEff": true,
+      "orphan": 0,
+      "euler": 2,
+      "roundTrip": 1.1747498196266412e-15,
+      "retri": [
+        15,
+        3,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "guard": {
+        "pole": 56,
+        "rotated": false,
+        "minSin": 0.1254200835531139,
+        "merged": 0,
+        "maxR": 8.810985443359836,
+        "bound": 10.13263325986381
+      },
+      "ink": {
+        "whiteRatio": 0.0063,
+        "levels": 21,
+        "w": 900,
+        "h": 760
+      },
+      "ks": [
+        0,
+        20,
+        100,
+        199
+      ]
+    },
+    "fat": {
+      "k": 198,
+      "total": 198,
+      "realTris": 388,
+      "superTris": 9,
+      "liftFaces": 394,
+      "closed": false,
+      "closedEff": true,
+      "orphan": 1,
+      "euler": 2,
+      "roundTrip": 1.4626424656167145e-15,
+      "retri": [
+        15,
+        3,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "guard": {
+        "pole": 134,
+        "rotated": true,
+        "minSin": 0.12118573853115484,
+        "merged": 1,
+        "maxR": 8.79463329015558,
+        "bound": 10.113828283678917
+      },
+      "ink": {
+        "whiteRatio": 0.0057,
+        "levels": 21,
+        "w": 900,
+        "h": 760
+      }
+    }
+  },
+  "errors": []
+}

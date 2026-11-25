@@ -117,11 +117,252 @@ export function buildQuadGrid({ radius = 14, hexSize = 1.0, seed = 1337, mergeRa
  * 和 Townscaper 网格的区别只有一处：合并完不再细分。剩下的三角形就是三角格，合并出的菱形就是方格；
  * 松弛时三角格趋向正三角形、方格趋向正方形 —— 边长一致，所以"方，又带着六边形的味道"（1471817524148940807）。
  */
-export function buildMixedGrid({ radius = 22, hexSize = 0.62, seed = 1337, mergeRate = 0.55, relaxPasses = 90 } = {}) {
-  const { verts, polys } = latticeAndMerge({ radius, hexSize, seed, mergeRate });
+export function buildMixedGrid({ radius = 22, hexSize = 0.62, seed = 1337, mergeRate = 0.55, relaxPasses = 90, rigid = 0, square = 0 } = {}) {
+  const { verts, polys } = latticeAndMerge({ radius, hexSize, seed, mergeRate, rigid });
   for (const p of polys) if (signedArea(p) < 0) p.reverse();
   relaxPolygons(polys, verts, relaxPasses);
-  return finishGrid(polys, verts, { radius, hexSize, kind: 'mixed', triangles: polys.filter((p) => p.length === 3).length });
+  const sq = Number.isFinite(square) && square > 0 ? unshearPatches(polys, verts, { pull: Math.min(1, square) }) : null;
+  const grid = finishGrid(polys, verts, { radius, hexSize, kind: 'mixed', triangles: polys.filter((p) => p.length === 3).length });
+  if (Number.isFinite(rigid) && rigid > 0) {
+    // cell.family 记的是**生成期点阵轴向**（0/30/60 的精确值），松弛只允许在这个轴向上找正方形。
+    const fams = [...new Set(polys.filter((p) => p.familyDeg != null).map((p) => p.familyDeg))].sort((a, b) => a - b);
+    grid.rigid = { block: rigid, families: fams };
+  }
+  if (sq) grid.square = sq;
+  return grid;
+}
+
+/**
+ * 补丁级方形子点阵（1459169210752507904「And another」第 230 轮）：
+ * 片里每块补丁内部是**正方**（90° 角、行列严格对齐），只有补丁之间才是三角过渡带。
+ * 三角点阵上把两个三角形合并只能得到 60° 菱形（r229 已验证：单向合并 + 松弛后角偏差 p50 26.55°），
+ * 所以"补丁内正方形"不可能靠合并方向约束得到，必须**换基**：
+ *
+ * 一块补丁在拓扑上就是三角点阵里的一个方格网格（每格 = 一个菱形单胞），
+ * 几何 = 单胞基矢 (u, w)（夹角 60°）的整数仿射像。把 (u, w) 换成正交等长基 (a, b)、
+ * 再把顶点吸附到整数格点，同一块补丁里所有格子就同时变成正方形。每块补丁各换各的，
+ * 所以补丁朝向互不相同（片里就是如此）；补丁之间的三角格是柔性的，形变由它们吸收，
+ * 顶点对象仍是共享的，拓扑与接缝一条都没动。
+ *
+ * 为什么不是"整体乘一个仿射矩阵"：松弛已经先动过一遍，补丁是"局部半方"的折中状态
+ * （角分布 60°/90°/120° 三峰），再乘一个全局 shear 会让本来已方的格子过冲成 120° → 翻面。
+ * 所以取"正交基 + 整数吸附"：把松弛的折中结果丢掉，回到理想方格点阵，误差全推给补丁缝。
+ *
+ *   pull  0–1 强度（0 = 不动）；<1 时目标位置按比例插值，翻面风险小但方形不彻底。
+ *   面积守恒：L = √(|U||W|·sinθ)（菱形单胞面积），所以换基后补丁总体不胀不小。
+ *   仍翻面时整块补丁绕自身形心等比收缩（等比缩放不改角度 → 还是正方形），最多 6 次。
+ * 只在 rigid>0（补丁已聚成大块）时有意义；rigid=0 的逐格碎片不做。
+ */
+export function unshearPatches(polys, verts, { pull = 1 } = {}) {
+  const quad = polys.filter((p) => p.length === 4 && p.family != null);
+  if (quad.length === 0) return { patches: 0, applied: 0, flips: 0, scale: 1, maxMove: 0, roundErr: 0 };
+
+  // 补丁 = 同族 + 共边的四边格连通块（与 grid-wireframe.patchLayout 同口径）
+  const key = (a, b) => (a.id < b.id ? a.id * 1e6 + b.id : b.id * 1e6 + a.id);
+  /* 每格自己的两条**整数边方向**（无向、归一）。合并方向不同的块可能落在同一个
+   * familyDeg 上（轴向 mod 90 会把不同方向折叠成同一族），那样的连通块不是一张单一点阵，
+   * 混在一起换基会把其中一族切成 45° 菱形 —— 所以方向对也进连通条件。 */
+  const nrm = (dq, dr) => { if (dq < 0 || (dq === 0 && dr < 0)) { dq = -dq; dr = -dr; } return dq + ',' + dr; };
+  const cellDirs = quad.map((c) => {
+    if (!c.every((v) => Number.isFinite(v.q) && Number.isFinite(v.r))) return null;
+    const ds = [];
+    for (let k = 0; k < 4; k++) {
+      const dq = c[(k + 1) % 4].q - c[k].q, dr = c[(k + 1) % 4].r - c[k].r;
+      if (Math.abs(dq) > 1 || Math.abs(dr) > 1) return null;
+      const kk = nrm(dq, dr);
+      if (!ds.includes(kk)) ds.push(kk);
+    }
+    return ds.length === 2 ? ds.sort().join('|') : null;
+  });
+  const edge = new Map();
+  quad.forEach((p, i) => {
+    for (let k = 0; k < 4; k++) {
+      const ek = key(p[k], p[(k + 1) % 4]);
+      const list = edge.get(ek);
+      if (list) list.push(i); else edge.set(ek, [i]);
+    }
+  });
+  const parent = quad.map((_, i) => i);
+  const find = (x) => { while (parent[x] !== x) { parent[x] = parent[parent[x]]; x = parent[x]; } return x; };
+  for (const list of edge.values()) {
+    if (list.length !== 2) continue;
+    const [i, j] = list;
+    if (quad[i].familyDeg !== quad[j].familyDeg) continue;
+    if (!cellDirs[i] || cellDirs[i] !== cellDirs[j]) continue;
+    const ri = find(i), rj = find(j);
+    if (ri !== rj) parent[rj] = ri;
+  }
+  const groups = new Map();
+  quad.forEach((p, i) => {
+    const r = find(i);
+    if (!groups.has(r)) groups.set(r, []);
+    groups.get(r).push(p);
+  });
+
+  /** 每块补丁：求它自己的整数方向对 → 单模反解 (i,j) → 放到正交基上。 */
+  const blocks = [];
+  let roundErr = 0;
+  /* 顶点归属：大补丁先占（跨补丁共角只落一个位置），另一侧由缝上的三角格吸收。
+   * 第 232 轮量过两条替代路径都不成立，见文件末「r232 试错账」。 */
+  const claimed = new Set();
+  const ordered = [...groups.values()].sort((a, b) => b.length - a.length);
+  for (const cells of ordered) {
+    if (cells.length < 4) continue;   // 单格碎片没有"行列"可言，不做
+    const usable = cells.every((c) => c.every((v) => Number.isFinite(v.q) && Number.isFinite(v.r)));
+    if (!usable) continue;
+    /* 合并出来的菱形边长可能沿点阵的**任意两个方向**（(1,0)/(0,1)、(1,0)/(1,-1) …），
+     * 所以不能拿全局 (q,r) 当方格坐标 —— 要先看这块补丁的边落在哪两个整数方向上。
+     * 方向按无向归类（v 与 −v 同族），取出现次数最多的两个。 */
+    const dirs = new Map();
+    const world = new Map();   // 方向 → 世界向量累加
+    let area = 0;
+    for (const c of cells) {
+      area += Math.abs(signedArea(c.map((p) => ({ x: p.x, z: p.z }))));
+      for (let k = 0; k < 4; k++) {
+        const p = c[k], q = c[(k + 1) % 4];
+        let dq = q.q - p.q, dr = q.r - p.r;
+        const sgnE = (dq < 0 || (dq === 0 && dr < 0)) ? -1 : 1;
+        dq *= sgnE; dr *= sgnE;
+        if (Math.abs(dq) > 1 || Math.abs(dr) > 1) continue;   // 非单位边（不该有）
+        const kk = nrm(dq, dr);
+        dirs.set(kk, (dirs.get(kk) || 0) + 1);
+        const w = world.get(kk) || { x: 0, z: 0, dq: 0, dr: 0 };
+        w.x += (q.x - p.x) * sgnE; w.z += (q.z - p.z) * sgnE;
+        w.dq = dq; w.dr = dr;
+        world.set(kk, w);
+      }
+    }
+    const top = [...dirs.entries()].sort((a, b) => b[1] - a[1] || (a[0] < b[0] ? -1 : 1));
+    if (top.length < 2) continue;
+    const d1 = world.get(top[0][0]), d2 = world.get(top[1][0]);
+    if (!d1 || !d2) continue;
+    const det = d1.dq * d2.dr - d1.dr * d2.dq;   // 单模（±1）才保证 (i,j) 是整数
+    if (Math.abs(det) !== 1) continue;
+    const lu = Math.hypot(d1.x, d1.z), lw = Math.hypot(d2.x, d2.z);
+    if (!(lu > 1e-9 && lw > 1e-9)) continue;
+    const crossW = d1.x * d2.z - d1.z * d2.x;
+    if (!(Math.abs(crossW) / (lu * lw) > 0.2)) continue;
+    // 正交基：a 沿 d1 的世界方向，b 与 a 垂直、手性与 d2 一致；
+    // 边长取 √(单格平均面积) → 面积守恒（菱形 0.866L² → 方格 L²），补丁不会胀出去
+    const L = Math.sqrt(area / cells.length);
+    const a = { x: (L * d1.x) / lu, z: (L * d1.z) / lu };
+    const sgn = crossW >= 0 ? 1 : -1;
+    const b = { x: -a.z * sgn, z: a.x * sgn };
+
+    const vs = [];
+    const inset = new Set();
+    for (const c of cells) for (const v of c) if (!inset.has(v)) { inset.add(v); vs.push(v); }
+    // (q,r) → (i,j)：按本补丁的方向对单模反解（整数，不会有半格误差）
+    const ij = vs.map((v) => [
+      (d2.dr * v.q - d2.dq * v.r) / det,
+      (-d1.dr * v.q + d1.dq * v.r) / det,
+    ]);
+    let mi = 0, mj = 0, mx0 = 0, mz0 = 0;
+    vs.forEach((v, n) => { mi += ij[n][0]; mj += ij[n][1]; mx0 += v.x; mz0 += v.z; });
+    mi /= vs.length; mj /= vs.length; mx0 /= vs.length; mz0 /= vs.length;
+    roundErr = Math.max(roundErr, ...ij.map(([i, j]) => Math.max(Math.abs(i - Math.round(i)), Math.abs(j - Math.round(j)))));
+    const targets = [];
+    for (let n = 0; n < vs.length; n++) {
+      const v = vs[n];
+      if (claimed.has(v)) continue;   // 已被更大的补丁占位
+      claimed.add(v);
+      const tx = mx0 + (ij[n][0] - mi) * a.x + (ij[n][1] - mj) * b.x;
+      const tz = mz0 + (ij[n][0] - mi) * a.z + (ij[n][1] - mj) * b.z;
+      targets.push({ v, x: v.x + (tx - v.x), z: v.z + (tz - v.z) });
+    }
+    if (targets.length === 0) continue;
+    blocks.push({ cells, targets, cx: mx0, cz: mz0 });
+  }
+  if (blocks.length === 0) return { patches: 0, applied: 0, flips: 0, scale: 1, maxMove: 0, roundErr };
+  const sign = new Map();
+  for (const pg of polys) {
+    const s = signedArea(pg);
+    sign.set(pg, s === 0 ? 0 : Math.sign(s));
+  }
+
+  /* 补丁缝里的三角格是柔性层：换基后会有几个被挤翻。只对**纯三角顶点**
+   * （不属于任何四边格、且没钉在外圈）做几轮拉普拉斯，四边形顶点一律不动 →
+   * 方形一格都不会被拉歪，翻面的三角格则被摊平。 */
+  const quadVerts = new Set();
+  for (const pg of polys) if (pg.length === 4) for (const v of pg) quadVerts.add(v);
+  const nbr = new Map();
+  for (const pg of polys) {
+    for (let i = 0; i < pg.length; i++) {
+      const a = pg[i], b = pg[(i + 1) % pg.length];
+      if (!quadVerts.has(a)) { const l = nbr.get(a); if (l) l.push(b); else nbr.set(a, [b]); }
+      if (!quadVerts.has(b)) { const l = nbr.get(b); if (l) l.push(a); else nbr.set(b, [a]); }
+    }
+  }
+  const smoothSeam = (passes) => {
+    const movable = [...nbr.keys()].filter((v) => !v.pinned);
+    for (let p = 0; p < passes; p++) {
+      const move = [];
+      for (const v of movable) {
+        const list = nbr.get(v);
+        let sx = 0, sz = 0;
+        for (const o of list) { sx += o.x; sz += o.z; }
+        move.push([v, sx / list.length - v.x, sz / list.length - v.z]);
+      }
+      for (const [v, dx, dz] of move) { v.x += dx * 0.5; v.z += dz * 0.5; }
+    }
+  };
+
+  const countFlips = () => {
+    let flips = 0;
+    for (const pg of polys) {
+      const s = signedArea(pg) * sign.get(pg);
+      if (s < -1e-9) flips++;           // 真正反向（不是被摊平的薄片）
+    }
+    return flips;
+  };
+  const trial = (scale, smooth) => {
+    const save = [];
+    for (const bl of blocks) {
+      for (const t of bl.targets) {
+        const v = t.v;
+        save.push([v, v.x, v.z]);
+        v.x = bl.cx + (t.x - bl.cx) * scale;
+        v.z = bl.cz + (t.z - bl.cz) * scale;
+      }
+    }
+    for (const v of nbr.keys()) save.push([v, v.x, v.z]);
+    if (smooth > 0) smoothSeam(smooth);
+    const flips = countFlips();
+    for (const [v, x, z] of save) { v.x = x; v.z = z; }
+    return flips;
+  };
+
+  /* 整块补丁绕自身形心等比收缩（等比缩放不改角度 → 还是正方形），直到补丁缝不再翻面。
+   * 只缩不拉：片里的补丁缝本来就是"被三角形撑开的带"，缩一点正好。 */
+  let scale = 1, smooth = 0;
+  let flips = trial(1, 0);
+  for (let i = 0; i < 6 && flips > 0; i++) { scale *= 0.98; flips = trial(scale, 0); }   // 最多缩到 0.886
+
+  const k = Math.min(1, Math.max(0, pull));
+  let maxMove = 0;
+  for (const bl of blocks) {
+    for (const t of bl.targets) {
+      const v = t.v;
+      const tx = bl.cx + (t.x - bl.cx) * scale;
+      const tz = bl.cz + (t.z - bl.cz) * scale;
+      const dx = (tx - v.x) * k, dz = (tz - v.z) * k;
+      maxMove = Math.max(maxMove, Math.hypot(dx, dz));
+      v.x += dx;
+      v.z += dz;
+    }
+  }
+
+  return {
+    patches: blocks.length, applied: k, flips: countFlips(), scale: +scale.toFixed(3),
+    smooth, maxMove: +maxMove.toFixed(4), roundErr: +roundErr.toFixed(3),
+  };
+}
+
+/** 四边格第一条边的方向，折到 0–90°（与 grid-wireframe.cellAxisDeg 同式）。 */
+function axisDegOf(pts) {
+  const a = pts[0], b = pts[1];
+  const ang = (Math.atan2(b.z - a.z, b.x - a.x) * 180) / Math.PI;
+  return ((ang % 90) + 90) % 90;
 }
 
 /**
@@ -129,12 +370,34 @@ export function buildMixedGrid({ radius = 22, hexSize = 0.62, seed = 1337, merge
  * （就是最佳拟合的正 n 边形），再把每个角拉向对应的位置。外圈顶点钉住。
  * n = 4 时与原来的"最佳拟合正方形"完全一样。
  */
-function relaxPolygons(polys, verts, passes) {
+/**
+ * 每个面趋向自己的正多边形：把各角相对形心的偏移反向旋转 i·2π/n 后取平均
+ * （就是最佳拟合的正 n 边形），再把每个角拉向对应的位置。外圈顶点钉住。
+ * n = 4 时与原来的"最佳拟合正方形"完全一样。
+ *
+ * areaPull（第 117 轮，1302686201401442309）：拟合出来的正多边形半径是「当前偏移的均值」，
+ * 一旦邻格/边界把它挤小，它只会照着更小的半径继续拟合 —— 面积就这么丢了（实测最狠的一格
+ * 收缩到原始点阵的 0.46×，正是片里「没翻折的邻格被拉长去补缺口」的另一半）。
+ * areaPull > 0 时把目标半径朝「与该格原始点阵面积相等的正 n 边形半径」拉：
+ *   R_want = √(2·A_raw / (n·sin(2π/n)))
+ * 外圈仍钉住（钉点的位移为 0），所以块边界的位置一点不变 → 接缝照样是 0。
+ * areaPull = 0 时与旧行为逐位一致（其它调用方不传，行为不变）。
+ */
+function relaxPolygons(polys, verts, passes, areaPull = 0, axisTargets = null) {
   const fx = new Float64Array(verts.length), fz = new Float64Array(verts.length), fn = new Float64Array(verts.length);
+  const pull = Number.isFinite(areaPull) && areaPull > 0 ? Math.min(1, areaPull) : 0;
+  let wantR = null;
+  if (pull > 0) {
+    wantR = polys.map((pg) => {
+      const n = pg.length;
+      const A = Math.abs(signedArea(pg.map((p) => ({ x: p.x, z: p.z }))));
+      return A > 0 ? Math.sqrt((2 * A) / (n * Math.sin((2 * Math.PI) / n))) : 0;
+    });
+  }
   for (let pass = 0; pass < passes; pass++) {
     fx.fill(0); fz.fill(0); fn.fill(0);
-    for (const pg of polys) {
-      const n = pg.length;
+    for (let pi = 0; pi < polys.length; pi++) {
+      const pg = polys[pi], n = pg.length;
       let cx = 0, cz = 0;
       for (const p of pg) { cx += p.x; cz += p.z; }
       cx /= n; cz /= n;
@@ -145,6 +408,13 @@ function relaxPolygons(polys, verts, passes) {
         vx += ox * ca - oz * sa; vz += ox * sa + oz * ca;
       }
       vx /= n; vz /= n;
+      if (pull > 0 && wantR) {
+        const fitR = Math.hypot(vx, vz), R = wantR[pi];
+        if (fitR > 1e-9 && R > 1e-9) {
+          const k2 = 1 + (R / fitR - 1) * pull;
+          vx *= k2; vz *= k2;
+        }
+      }
       for (let i = 0; i < n; i++) {
         const a = (i * 2 * Math.PI) / n, ca = Math.cos(a), sa = Math.sin(a);
         const tx = vx * ca - vz * sa, tz = vx * sa + vz * ca;
@@ -178,6 +448,7 @@ function finishGrid(polys, verts, { radius, hexSize, kind, triangles }) {
     for (const p of pts) { cx += p.x; cz += p.z; }
     return {
       id, n, pts, cx: cx / n, cz: cz / n,
+      family: pg.familyDeg,
       edges: new Array(n).fill(null),
       edgeNeighbors: new Array(n).fill(-1),
       edgeTwins: new Array(n).fill(-1),
@@ -322,7 +593,7 @@ export function oppositeEdge(cell, i) { return cell.n === 4 ? (i + 2) % 4 : -1; 
 
 
 /** 1–2：六边形里的三角点阵 + 随机把相邻三角形两两合并成菱形（两种网格共用）。 */
-function latticeAndMerge({ radius, hexSize, seed, mergeRate }) {
+function latticeAndMerge({ radius, hexSize, seed, mergeRate, rigid = 0 }) {
   const rnd = mulberry32(seed);
   const N = radius;
   const L = hexSize;
@@ -344,7 +615,10 @@ function latticeAndMerge({ radius, hexSize, seed, mergeRate }) {
       const x = L * (q + r / 2);
       const z = L * (SQRT3 / 2) * r;
       const rim = Math.max(Math.abs(q), Math.abs(r), Math.abs(q + r)) === N;
-      latticeId.set(lkey(q, r), addVert(x, z, rim));
+      const v = addVert(x, z, rim);
+      // 点阵整数坐标（第 230 轮：补丁换基要用它把顶点重新放到方格点阵上）
+      v.q = q; v.r = r;
+      latticeId.set(lkey(q, r), v);
     }
   }
   const lv = (q, r) => latticeId.get(lkey(q, r));
@@ -373,6 +647,28 @@ function latticeAndMerge({ radius, hexSize, seed, mergeRate }) {
 
   const used = new Uint8Array(tris.length);
   const polys = [];
+
+  /* ---- 2b. 补丁族（1459169210752507904「And another」） -------------------
+   * 片里的方格不是"逐格各转一个角度"：整块补丁共用一套轴向（补丁内抖动 0°），
+   * 补丁之间才出现三角形过渡带。合并时三角形的对角边方向就决定了菱形的轴向，
+   * 所以"补丁级刚性"= 让同一块补丁里的合并只走同一个对角方向，其余方向留成三角格。
+   *
+   * rigid = 补丁块的边长（以点阵步长 hexSize 为单位，0 = 关，行为与旧版逐位一致）。
+   * 块族用纯哈希取（不消耗 mulberry32 的随机流，关档时随机序列一字不差）。
+   */
+  const RIGID = Number.isFinite(rigid) && rigid > 0 ? rigid : 0;
+  const blockFamily = (x, z) => {
+    const bi = Math.floor(x / (RIGID * hexSize));
+    const bj = Math.floor(z / (RIGID * hexSize * (SQRT3 / 2)));
+    let h = Math.imul(bi | 0, 374761393) ^ Math.imul(bj | 0, 668265263) ^ Math.imul(seed | 0, 1274126177);
+    h = Math.imul(h ^ (h >>> 13), 1274126177);
+    return (((h ^ (h >>> 16)) >>> 0) % 3);
+  };
+  const edgeDir = (a, b) => {
+    const ang = (Math.atan2(b.z - a.z, b.x - a.x) * 180) / Math.PI;
+    return ((Math.round(ang / 60) % 3) + 3) % 3;
+  };
+
   const order = tris.map((_, i) => i);
   for (let i = order.length - 1; i > 0; i--) {
     const j = (rnd() * (i + 1)) | 0;
@@ -384,8 +680,15 @@ function latticeAndMerge({ radius, hexSize, seed, mergeRate }) {
     if (rnd() < mergeRate) {
       // candidate partners across each edge, in random order
       const cands = [];
+      let fam = -1;
+      if (RIGID) {
+        let cx = 0, cz = 0;
+        for (const v of t) { cx += v.x; cz += v.z; }
+        fam = blockFamily(cx / 3, cz / 3);
+      }
       for (let i = 0; i < 3; i++) {
         const k = ekey(t[i], t[(i + 1) % 3]);
+        if (RIGID && edgeDir(t[i], t[(i + 1) % 3]) !== fam) continue;
         for (const o of edgeTris.get(k)) if (o !== ti && !used[o]) cands.push([o, i]);
       }
       if (cands.length > 0) {
@@ -394,7 +697,19 @@ function latticeAndMerge({ radius, hexSize, seed, mergeRate }) {
         const a = t[i], b = t[(i + 1) % 3], c = t[(i + 2) % 3];
         const d = other.find((v) => v !== a && v !== b);
         // quad a-d-b-c keeps the shared edge (a,b) as its diagonal
-        polys.push([a, d, b, c]);
+        const q = [a, d, b, c];
+        if (RIGID) {
+          // 刚性档：四边格的起点统一到 id 最小的角（绕序不变、几何不变）。
+          // 不统一的话，同一个对角方向会因"从哪个端点起笔"读成两个相差 30° 的轴向，
+          // 补丁就会被逐格切成碎片（实测 rigid=6 仍 221 块）。
+          let mi = 0;
+          for (let k = 1; k < 4; k++) if (q[k].id < q[mi].id) mi = k;
+          if (mi) q.push(...q.splice(0, mi));
+        }
+        // 轴向取 3 位小数：点阵几何算出来的 30.000000000000007 与 29.999999999999993 是同族，
+        // 不取整会被 patchLayout 的 === 当成两个补丁（实测把 101 块炸成 276 块）。
+        if (RIGID) { q.family = fam; q.familyDeg = Math.round(axisDegOf(q) * 1000) / 1000; }
+        polys.push(q);
         used[ti] = 1;
         used[o] = 1;
         continue;
@@ -477,3 +792,16 @@ export function traceStraightReport(grid, cell, i, max = 200) {
 export function traceStraight(grid, cell, i, max = 200) {
   return traceStraightReport(grid,cell,i,max).cells;
 }
+
+/* ---- r232 试错账（1459169210752507904 / 1466059785703460870 补丁缝） --------------
+ * r230 的换基 + 整块等比收缩（0.886）仍是目前最好档：补丁内角偏差 0.00°，缝上 35 格反向。
+ * 第 232 轮试了三条"绕开收缩"的路，全部用读数否掉，代码已回滚（现档与 r231 逐位相同）：
+ *   ① 共用顶点两侧平摊（各补丁提案取均值，不再大补丁独占）→ 反向 35 → 50；
+ *      两侧私有点都还钉在各自方格上，中间那圈落在谁也不认的位置，两侧一起坏。
+ *   ② 换基前把"带共用顶点的四边格"沿对角线退化成三角（片里缝就是三角带）→ 反向 35 → 63，
+ *      四边格 1331 → 1140、三角 242 → 624；两顶点在缝上的过渡三角照样折。
+ *   ③ ①②合用 → 73；②且不收缩 → 89。说明缺口不在"格形"，而在两条正交基不一致时
+ *      共用顶点无解：要真正收口得让缝上的顶点**不属于任何一块的方格**（独立过渡带的顶点表），
+ *      即按补丁边界重排顶点，而不是在共享顶点表上做折中。
+ * 复现命令：node -e "import('./src/core/grid.js').then(m=>console.log(m.buildMixedGrid({rigid:20,mergeRate:0.95,square:1}).square))"
+ * --------------------------------------------------------------------------------- */

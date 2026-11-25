@@ -1,0 +1,91 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/mountain-ground-e2e/run-1795447161575",
+  "steps": {
+    "scan": "扫描完成：6 / 6 个能力能作用。 已按「高山圣城」自动预装 6 个能力（保护带、山体隆起、沟谷侵蚀、连绵圆润 等），点 ▶ 执行管线一键跑完整条。",
+    "run": {
+      "h4": "候选 · 通过（需留意）",
+      "checks": [
+        "✓ 建筑与保护带不动保护区最大高差 0.00 m",
+        "✓ 轨道净空保留轨道 616 格下方地形高差 0.00 m · 轨旁 24 m 内新增山体超出 1.6 坡比包络 0.0 m",
+        "✓ 海岸线不变陆地与海的格子没有翻转",
+        "✓ 有主峰峰顶高出可塑陆地中位 52.2 m（原 52.4 m）· 最高 67.6 m",
+        "✓ 山坡而非方台中等坡 52%（原 47%）· 平顶 1%（原 0%）",
+        "! 竖崖占比>62° 竖崖 14%（原 34%）",
+        "✓ 面数预算20000 个三角面（low poly 预算 9 万）",
+        "✓ 着色数据完整每个三角面都有材质与烘焙明暗",
+        "✓ 玩家地面与山形一致12444 个三角重心复查：地面与画面最大差 0.000 m · 洞 0 个 · 轨道 616 格地面高差 0.00 m · 保护区 703 格 0.00 m",
+        "! 山上能走自由陆地 ≤45° 可走坡 24% · 最大连通片 7%"
+      ],
+      "state": {
+        "active": true,
+        "id": "citadel",
+        "previewing": true,
+        "comparing": false,
+        "triangles": 12444,
+        "hidden": 3,
+        "vegetationMoved": 8,
+        "ground": {
+          "installed": true,
+          "active": true,
+          "queries": 66,
+          "used": 0
+        },
+        "palette": 1,
+        "paletteOverride": false,
+        "autoDeployed": false,
+        "auto": {
+          "id": "citadel",
+          "status": "skipped",
+          "reason": "没有采用记录：游戏里是原山形",
+          "tries": 0,
+          "at": 1795447239612
+        }
+      }
+    },
+    "groundCheck": "✓ 玩家地面与山形一致12444 个三角重心复查：地面与画面最大差 0.000 m · 洞 0 个 · 轨道 616 格地面高差 0.00 m · 保护区 703 格 0.00 m",
+    "walk": {
+      "ok": true,
+      "chainAvailable": true,
+      "comparing": false,
+      "samples": {
+        "count": 578,
+        "holes": 4,
+        "chainAgree": 574,
+        "chainHigher": 0,
+        "chainLower": 0,
+        "chainNull": 0,
+        "maxChainErr": 0,
+        "maxMeshErr": 1.536
+      },
+      "recheck": {
+        "railCells": 616,
+        "railDiff": 0.005,
+        "structureCells": 481,
+        "structureDiff": 0.005
+      },
+      "path": {
+        "steps": 80,
+        "holes": 0,
+        "maxJump": 14.41,
+        "through": [
+          57,
+          15
+        ]
+      },
+      "pass": false
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R25-1-candidate-oblique.png",
+    "R25-2-walk-panel.png",
+    "zz-failure.png"
+  ],
+  "pass": false,
+  "failure": "Error: 新山面有洞：{\"count\":578,\"holes\":4,\"chainAgree\":574,\"chainHigher\":0,\"chainLower\":0,\"chainNull\":0,\"maxChainErr\":0,\"maxMeshErr\":1.536}\n    at expect (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-e2e-lib.mjs:15:38)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-ground-browser.mjs:18:2\n    at async Object.finish (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-e2e-lib.mjs:43:8)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/mountain-ground-browser.mjs:8:1"
+}

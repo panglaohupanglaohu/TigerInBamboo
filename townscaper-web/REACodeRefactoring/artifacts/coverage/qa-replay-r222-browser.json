@@ -1,0 +1,33 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "steps": 16,
+      "maxFaces": 354,
+      "maxFloating": 10,
+      "uncovered": 0,
+      "unsupported": 0,
+      "archSeen": 1,
+      "flatSeen": 4,
+      "supported": true,
+      "failureRestored": true,
+      "successRestored": true,
+      "maxDegenerate": 0
+    },
+    {
+      "grid": "quad",
+      "steps": 16,
+      "maxFaces": 384,
+      "maxFloating": 7,
+      "uncovered": 0,
+      "unsupported": 0,
+      "archSeen": 2,
+      "flatSeen": 3,
+      "supported": true,
+      "failureRestored": true,
+      "successRestored": true,
+      "maxDegenerate": 0
+    }
+  ],
+  "errors": []
+}

@@ -1,5 +1,5 @@
 import {listSceneObjects,getSceneObject,describeSceneObject} from './scene-objects.js';
-import {setGroup,setCaptureMode,isCaptureMode} from '../ui/uiLayers.js?v=ui-layers-r4-release-edit';
+import {setGroup,setCaptureMode,isCaptureMode} from '../ui/uiLayers.js?v=ui-layers-r5-scenejump';
 import {validateRecipe,effectiveSettings} from './pipeline-model.js';
 import {createVersionStore} from './store.js';
 import {playtestSceneId} from './playtest-target.js?v=playtest-r1';
@@ -41,6 +41,7 @@ function grabCanvasPng(){
 }
 
 const HEX=/^#[0-9a-f]{6}$/i;
+async function waitTmScene(ms=45000){for(let t=0;t<ms;t+=250){if(globalThis.__tm?.scene)return globalThis.__tm.scene;await new Promise(r=>setTimeout(r,250));}throw Error('游戏场景尚未就绪');}
 function checkStyle(o){
  if(typeof o!=='object'||Array.isArray(o)||JSON.stringify(o).length>200000)throw Error('风格覆盖无效');
  if(o.walls!==undefined&&(!Array.isArray(o.walls)||o.walls.length!==15||!o.walls.every(c=>HEX.test(c))))throw Error('墙面色槽须为 15 个 #rrggbb');
@@ -98,6 +99,82 @@ export function mountPipelineBridge(plugin){
  case 'scenes.focus':{if(typeof plugin.frameScene!=='function')throw Error('此插件不支持场景切换');const id=String(payload?.id||'');if(!/^[\w:-]{1,64}$/.test(id))throw Error('场景 id 无效');document.getElementById('start-btn')?.click();setGroup(null);document.body.classList.add('studio-edit');setCaptureMode(true);if(id!==plugin.id){activeScene=plugin.sceneAdapter?.(id)?id:plugin.id;}else activeScene=plugin.id;result={...plugin.frameScene(id,{preserveCamera:payload?.preserveCamera===true}),active:activeScene};break;}
  case 'scenes.editor':{const id=String(payload?.id||'');if(!/^[\w:-]{1,64}$/.test(id))throw Error('场景 id 无效');result=plugin.openSceneEditor?.(id);break;}
  case 'planet.state':result=plugin.planetState?.()||null;break;
+ // 场景战役（world/rea/sceneBattle.js）：Bad North 玩法层；probe 只采样不交战，preview 按计划开战，commit 采用并持久化
+ case 'battle.supported':{result=import('../world/rea/sceneBattle.js').then(m=>({scenes:m.BATTLE_SCENES}));break;}
+ case 'battle.probe':{const id=String(payload?.id||activeScene);result=import('../world/rea/sceneBattle.js').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');return m.probeSceneBattle({scene:globalThis.__tm?.scene,camera:globalThis.__tm?.camera,id,scale:payload?.scale,gridRadius:payload?.gridRadius});});break;}
+ case 'battle.preview':{const plan=payload?.plan&&typeof payload.plan==='object'?structuredClone(payload.plan):null;result=import('../world/rea/sceneBattle.js').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');const r=m.deploySceneBattle({scene:globalThis.__tm?.scene,camera:globalThis.__tm?.camera,id:String(payload?.id||activeScene),plan});if(!r.ok)throw Error(r.reason||'战斗部署失败');return r;});break;}
+ case 'battle.compare':{result=import('../world/rea/sceneBattle.js').then(m=>m.compareSceneBattle(!!payload?.on));break;}
+ case 'battle.revert':{result=import('../world/rea/sceneBattle.js').then(m=>({stopped:m.stopSceneBattle()}));break;}
+ case 'battle.commit':{const plan=payload?.plan&&typeof payload.plan==='object'?structuredClone(payload.plan):null;result=import('../world/rea/sceneBattle.js').then(m=>m.commitSceneBattle(String(payload?.id||activeScene),plan));break;}
+ case 'battle.unadopt':{result=import('../world/rea/sceneBattle.js').then(m=>m.unadoptSceneBattle(String(payload?.id||activeScene)));break;}
+ case 'battle.state':{result=import('../world/rea/sceneBattle.js').then(m=>m.battleSnapshot());break;}
+ // 山形管线（world/rea/mountainCandidate.js）：probe 采高度网格与掩码，preview 换 low poly 山体，revert 恢复，commit 存本机
+ // 表现层（world/rea/fxOverlay.js）：fx 工坊验证过的计划画成实景线层（前线/镜头/尾迹），不写存档
+ case 'fx.preview':{const plan=payload?.plan&&typeof payload.plan==='object'?structuredClone(payload.plan):null;result=import('../world/rea/fxOverlay.js').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');const r=m.previewSceneFx({scene:globalThis.__tm.scene,id:String(payload?.id||activeScene),plan});if(!r.ok)throw Error(r.reason||'fx 预览失败');return r;});break;}
+ case 'fx.compare':{result=import('../world/rea/fxOverlay.js').then(m=>m.compareSceneFx(!!payload?.on));break;}
+ case 'fx.revert':{result=import('../world/rea/fxOverlay.js').then(m=>m.revertSceneFx());break;}
+ case 'fx.state':{result=import('../world/rea/fxOverlay.js').then(m=>m.fxState());break;}
+ // R37–R40 表现层实景能力（world/rea/fxLive.js）：火粒子 / 走廊样板 / 崖面层带 / 弹道 + fx.camera 路径真实驱动镜头；只存本机草稿，不改存档
+ case 'fx.live.preview':{const plan=payload?.plan&&typeof payload.plan==='object'?structuredClone(payload.plan):null;result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');return m.previewSceneFxLive({scene:globalThis.__tm.scene,id:String(payload?.id||activeScene),plan});});break;}
+ case 'fx.live.compare':{result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>m.compareSceneFxLive(!!payload?.on));break;}
+ case 'fx.live.revert':{result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>m.revertSceneFxLive());break;}
+ case 'fx.live.commit':{const plan=payload?.plan&&typeof payload.plan==='object'?structuredClone(payload.plan):null;result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>m.commitSceneFxLive({id:String(payload?.id||activeScene),plan}));break;}
+ case 'fx.live.state':{result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>m.fxLiveState());break;}
+ case 'fx.live.focus':{const layer=String(payload?.layer||'fire');if(!['fire','hallway','sediment','projectiles'].includes(layer))throw Error('未知层 '+layer);result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>m.focusSceneFxLive({layer,distance:Number(payload?.distance)||9}));break;}
+ case 'fx.camera.fly':{const plan=payload?.plan&&typeof payload.plan==='object'?structuredClone(payload.plan):null;result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>m.startCameraFlight({id:String(payload?.id||activeScene),plan,seconds:payload?.seconds==null?null:Number(payload.seconds),autoRestore:!!payload?.autoRestore}));break;}
+ case 'fx.camera.stop':{result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>m.stopCameraFlight());break;}
+ case 'fx.camera.state':{result=import('../world/rea/fxLive.js?v=fxe-r3').then(m=>m.cameraFlightState());break;}
+ case 'mountain.probe':{const id=String(payload?.id||activeScene);result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');return m.probeMountain({scene:globalThis.__tm.scene,id});});break;}
+ case 'mountain.preview':{const plan=payload?.plan;if(!plan||typeof plan!=='object'||!Array.isArray(plan.h)||plan.h.length>400000)throw Error('山形计划无效');result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');const r=m.previewMountain({scene:globalThis.__tm.scene,id:String(payload?.id||activeScene),plan});if(!r.ok)throw Error(r.reason||'山形预览失败');return r;});break;}
+ case 'mountain.compare':{result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.compareMountain(!!payload?.on));break;}
+ case 'mountain.revert':{result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.revertMountain());break;}
+ case 'mountain.commit':{const plan=payload?.plan;if(!plan||!Array.isArray(plan.h))throw Error('山形计划无效');result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>{const r=m.commitMountain(String(payload?.id||activeScene),plan);if(!r.ok)throw Error(r.reason);return r;});break;}
+ case 'mountain.state':{result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.mountainState());break;}
+ // R25–R28 山形验收：走一圈检验 / 固定机位 / 实景换配色 / 当前计划 / 回原山形 / 采用状态（与 main.js 同一个 ?v，保证是同一份模块状态）
+ case 'mountain.walk':{result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.walkCheck({placePlayer:!!payload?.placePlayer,readPlayer:!!payload?.readPlayer}));break;}
+ case 'mountain.camera':{const view=String(payload?.view||'front');if(!/^(front|side|top|oblique|eye|free)$/.test(view))throw Error('没有这个机位');result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.cameraView({view}));break;}
+ case 'mountain.palette':{const p=payload?.palette;if(p!=null&&![0,1,2].includes(Number(p)))throw Error('没有这套配色');result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.paletteMountain(p==null?null:Number(p)));break;}
+ case 'mountain.current':{result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.currentMountain());break;}
+ case 'mountain.unadopt':{result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.unadoptMountain(String(payload?.id||activeScene)));break;}
+ case 'mountain.adopted':{result=import('../world/rea/mountainCandidate.js?v=mountain-r28').then(m=>m.adoptedState(String(payload?.id||activeScene)));break;}
+ // R57–R60 建筑管线（world/rea/buildingCandidate.js）：probe 采高度网格（圣城复用山形采样，山形候选在预览时用候选高度）；preview 加一组独立网格；revert 删掉；commit 只记 tm.building.adopted.v1:<场景>，不改已有建筑和存档
+ case 'building.probe':{const id=String(payload?.id||activeScene);result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');return m.probeBuilding({scene:globalThis.__tm.scene,id});});break;}
+ case 'building.preview':{const layout=payload?.layout;if(!layout||typeof layout!=='object'||!Array.isArray(layout.placements)||layout.placements.length>2000)throw Error('建筑群计划无效');result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');const r=m.previewBuilding({scene:globalThis.__tm.scene,id:String(payload?.id||activeScene),layout:structuredClone(layout)});if(!r.ok)throw Error(r.reason||'建筑预览失败');return r;});break;}
+ case 'building.compare':{result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>m.compareBuilding(!!payload?.on));break;}
+ case 'building.revert':{result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>m.revertBuilding());break;}
+ case 'building.commit':{const layout=payload?.layout;if(!layout||!Array.isArray(layout.placements))throw Error('建筑群计划无效');result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>{const r=m.commitBuilding(String(payload?.id||activeScene),structuredClone(layout));if(!r.ok)throw Error(r.reason);return r;});break;}
+ case 'building.unadopt':{result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>m.unadoptBuilding(String(payload?.id||activeScene)));break;}
+ case 'building.adopted':{result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>({record:m.adoptedBuilding(String(payload?.id||activeScene))}));break;}
+ case 'building.camera':{const view=String(payload?.view||'oblique');if(!/^(oblique|top|free)$/.test(view))throw Error('没有这个机位');result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>m.buildingCamera({view}));break;}
+ case 'building.state':{result=import('../world/rea/buildingCandidate.js?v=building-r1').then(m=>m.buildingState());break;}
+ // REA 地形候选（world/rea/reaTerrainCandidate.js）：库的方法重建地形——采样→细胞网格层化→台地几何
+ // 轨道 / 桥采样时天然排除，净空保留；probe 只审不画，preview 藏原地形换候选，revert 拆回原样
+ // 十二门徒地形候选（world/rea/apostlesLookProbe.js，R29–R32）：只读采样与检查；view 只动编辑镜头。外观切换走网址参数重载，这里不写任何存档 / localStorage
+ case 'apostles.look.state':{result=import('../world/rea/apostlesLookProbe.js?v=apt-r1').then(m=>m.sampleApostleState());break;}
+ case 'apostles.look.probe':{result=import('../world/rea/apostlesLookProbe.js?v=apt-r1').then(m=>m.probeApostlesLook());break;}
+ case 'apostles.look.checks':{result=import('../world/rea/apostlesLookProbe.js?v=apt-r1').then(m=>m.checkApostlesSurface());break;}
+ case 'apostles.look.view':{const view=String(payload?.view||''),massId=typeof payload?.massId==='string'&&/^[\w-]{1,32}$/.test(payload.massId)?payload.massId:undefined;result=import('../world/rea/apostlesLookProbe.js?v=apt-r1').then(m=>m.setApostleView(view,{massId}));break;}
+ // R48 地貌候选（world/rea/reliefCandidate.js，地形管线重做旧港湾等场景）：probe 只采样；preview 藏原地形、贴候选；compare / revert 对照与拆回；不写任何存档 / localStorage、不改默认
+ case 'relief.probe':{const id=String(payload?.id||activeScene||'old-port'),terrain=typeof payload?.terrain==='string'?payload.terrain:null;result=import('../world/rea/reliefCandidate.js?v=relief-r2').then(async m=>{const s=await waitTmScene();return m.probeRelief({scene:s,id,terrain});});break;}
+ case 'relief.preview':{const id=String(payload?.id||activeScene||'old-port');result=import('../world/rea/reliefCandidate.js?v=relief-r2').then(async m=>{const s=await waitTmScene();return m.previewRelief({scene:s,id,plan:payload?.plan,lines:payload?.lines!==false});});break;}
+ case 'relief.compare':{result=import('../world/rea/reliefCandidate.js?v=relief-r2').then(m=>m.compareRelief({on:payload?.on!==false}));break;}
+ case 'relief.revert':{result=import('../world/rea/reliefCandidate.js?v=relief-r2').then(m=>m.revertRelief());break;}
+ case 'relief.state':{result=import('../world/rea/reliefCandidate.js?v=relief-r2').then(m=>m.reliefState());break;}
+ case 'relief.view':{const id=String(payload?.id||activeScene||'old-port'),view=String(payload?.view||'oblique');result=import('../world/rea/reliefCandidate.js?v=relief-r2').then(m=>m.reliefView({camera:globalThis.__tm?.camera,id,view}));break;}
+ // R66–R70 光影与生命（world/rea/lightlifeCandidate.js）：probe 采网格；preview 克隆几何体改顶点色 + 可撤的生命图层（风 / 烟 / 小动物）；compare / revert；camera 固定机位。不写存档 / localStorage
+ case 'lightlife.probe':{const id=String(payload?.id||activeScene);result=import('../world/rea/lightlifeCandidate.js?v=light-r66').then(async m=>{await waitTmScene();return m.probeLightLife({id});});break;}
+ case 'lightlife.preview':{const plan=payload?.plan;if(!plan||typeof plan!=='object'||plan.persist!==false||JSON.stringify(plan).length>8000000)throw Error('光影候选无效');const p=structuredClone(plan);result=import('../world/rea/lightlifeCandidate.js?v=light-r66').then(async m=>{const s=await waitTmScene();const r=m.previewLightLife({scene:s,id:String(payload?.id||activeScene),plan:p});if(!r.ok)throw Error(r.reason||'光影预览失败');return r;});break;}
+ case 'lightlife.compare':{result=import('../world/rea/lightlifeCandidate.js?v=light-r66').then(m=>m.compareLightLife(!!payload?.on));break;}
+ case 'lightlife.revert':{result=import('../world/rea/lightlifeCandidate.js?v=light-r66').then(m=>m.revertLightLife());break;}
+ case 'lightlife.state':{result=import('../world/rea/lightlifeCandidate.js?v=light-r66').then(m=>m.lightLifeState());break;}
+ case 'lightlife.camera':{const pose=String(payload?.pose||'front');if(!/^(front|side|top|oblique|free)$/.test(pose))throw Error('没有这个机位');result=import('../world/rea/lightlifeCandidate.js?v=light-r66').then(m=>m.cameraPose({pose,id:String(payload?.id||activeScene)}));break;}
+ // R-A4 通用默认加载钩子（world/rea/defaultsHook.js）：读 tm.defaults.v1 本场景记录 → 逐层核对/调度；defaults.state 查结果，defaults.apply 重跑
+ case 'defaults.state':{result=Promise.resolve(globalThis.__tmDefaultsHook||{status:'never-run',results:{}});break;}
+ case 'defaults.apply':{const id=String(payload?.id||activeScene||'');result=import('../world/rea/defaultsHook.js?v=defaults-r2').then(m=>m.applyDefaultsForScene(id));break;}
+ case 'terrain.rea.probe':{const id=String(payload?.id||activeScene);result=import('../world/rea/reaTerrainCandidate.js').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');return m.probeReaTerrain({scene:globalThis.__tm?.scene,camera:globalThis.__tm?.camera,id,scale:payload?.scale,gridRadius:payload?.gridRadius,levelHeight:payload?.levelHeight});});break;}
+ case 'terrain.rea.preview':{const id=String(payload?.id||activeScene);result=import('../world/rea/reaTerrainCandidate.js').then(m=>{if(!globalThis.__tm?.scene)throw Error('游戏场景尚未就绪');return m.previewReaTerrain({scene:globalThis.__tm?.scene,camera:globalThis.__tm?.camera,id,scale:payload?.scale,gridRadius:payload?.gridRadius,levelHeight:payload?.levelHeight});});break;}
+ case 'terrain.rea.revert':{result=import('../world/rea/reaTerrainCandidate.js').then(m=>m.revertReaTerrain());break;}
+ case 'terrain.rea.state':{result=import('../world/rea/reaTerrainCandidate.js').then(m=>m.reaTerrainState());break;}
  case 'objects.layout':{const ed=edits();if(!ed)throw Error('此场景未接入物件编辑');result={scene:activeScene,rows:ed.layout()};break;}
  case 'objects.preview':{const ed=edits();if(!ed)throw Error('此场景未接入物件编辑');const next=payload?.edits;if(!next||typeof next!=='object'||Object.keys(next).length>2000)throw Error('候选改动无效');for(const [id,e]of Object.entries(next)){if(id.length>128||!e||typeof e!=='object')throw Error('候选改动无效');for(const k of ['dx','dy','dz','ry','s'])if(e[k]!==undefined&&(!Number.isFinite(e[k])||Math.abs(e[k])>200))throw Error('编辑数值无效');}result=ed.previewEdits(next);break;}
  case 'objects.preview.compare':result=edits()?.compare(!!payload?.on);break;

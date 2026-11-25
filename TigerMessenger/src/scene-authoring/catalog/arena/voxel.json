@@ -1,0 +1,228 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-25T00:23:02.920Z",
+ "arena": {
+  "seed": 20261125,
+  "grid": "9×9 体素擂台岛（水缘+铺地内院+细高塔+岩台崖+拱桥对+隧道脊+孤水格）",
+  "runner": "TigerMessenger/tools/refactor/record-voxel-arena.mjs（实算）"
+ },
+ "judge": "规则写死：几何类 targets≥1 且 applied≥1 为「擂过」；layer 类 targets≥1 且声明 layer3d 显示层（层附着实景证据在 voxel-caps e2e）。",
+ "results": [
+  {
+   "id": "terrain.arch",
+   "name": "石拱 / 天桥",
+   "kind2": "geometry",
+   "layer3d": null,
+   "targets": 3,
+   "tried": 3,
+   "ms": 1,
+   "applied": 3,
+   "voxels": 11,
+   "pass": true,
+   "reasons": [
+    "岩柱 15 ↔ 17 之间隔 1 格、低 ≥2 层，可在第 5 层架石拱",
+    "岩柱 15 ↔ 51 之间隔 3 格、低 ≥2 层，可在第 4 层架石拱",
+    "楼 64 ↔ 68 之间隔 3 格、低 ≥2 层，可在第 4 层架天桥"
+   ],
+   "verdict": "擂过"
+  },
+  {
+   "id": "terrain.overhang",
+   "name": "崖顶悬垂",
+   "kind2": "geometry",
+   "layer3d": null,
+   "targets": 18,
+   "tried": 18,
+   "ms": 0,
+   "applied": 17,
+   "voxels": 34,
+   "pass": true,
+   "reasons": [
+    "崖顶 15（5 层）比邻格 14（0 层）高 5 层，可外伸",
+    "崖顶 15（5 层）比邻格 6（0 层）高 5 层，可外伸",
+    "崖顶 15（5 层）比邻格 16（1 层）高 4 层，可外伸",
+    "崖顶 15（5 层）比邻格 24（0 层）高 5 层，可外伸",
+    "崖顶 17（5 层）比邻格 8（0 层）高 5 层，可外伸",
+    "崖顶 17（5 层）比邻格 26（0 层）高 5 层，可外伸",
+    "崖顶 50（4 层）比邻格 49（0 层）高 4 层，可外伸",
+    "崖顶 50（4 层）比邻格 41（1 层）高 3 层，可外伸",
+    "崖顶 51（4 层）比邻格 42（1 层）高 3 层，可外伸",
+    "崖顶 52（4 层）比邻格 43（1 层）高 3 层，可外伸",
+    "崖顶 52（4 层）比邻格 53（0 层）高 4 层，可外伸",
+    "崖顶 59（4 层）比邻格 58（0 层）高 4 层，可外伸",
+    "崖顶 68（4 层）比邻格 67（0 层）高 4 层，可外伸",
+    "崖顶 68（4 层）比邻格 77（1 层）高 3 层，可外伸",
+    "崖顶 69（4 层）比邻格 78（1 层）高 3 层，可外伸",
+    "崖顶 70（4 层）比邻格 71（0 层）高 4 层，可外伸",
+    "崖顶 70（4 层）比邻格 79（0 层）高 4 层，可外伸"
+   ],
+   "verdict": "擂过"
+  },
+  {
+   "id": "terrain.seastack",
+   "name": "海中石柱",
+   "kind2": "geometry",
+   "layer3d": null,
+   "targets": 3,
+   "tried": 3,
+   "ms": 0,
+   "applied": 2,
+   "voxels": 16,
+   "pass": true,
+   "reasons": [
+    "水格 56 离岸两格、四周是水，可立石柱",
+    "水格 66 离岸两格、四周是水，可立石柱"
+   ],
+   "verdict": "擂过"
+  },
+  {
+   "id": "terrain.tunnel",
+   "name": "穿山隧道",
+   "kind2": "geometry",
+   "layer3d": null,
+   "targets": 2,
+   "tried": 2,
+   "ms": 0,
+   "applied": 2,
+   "voxels": 12,
+   "pass": true,
+   "reasons": [
+    "41 与 77 同在第 1 层，中间 3 格岩体更高，可在第 2 层打通",
+    "42 与 78 同在第 1 层，中间 3 格岩体更高，可在第 2 层打通"
+   ],
+   "verdict": "擂过"
+  },
+  {
+   "id": "terrain.ledge",
+   "name": "沿墙薄檐 / 薄平台",
+   "kind2": "geometry",
+   "layer3d": null,
+   "targets": 8,
+   "tried": 8,
+   "ms": 0,
+   "applied": 7,
+   "voxels": 14,
+   "pass": true,
+   "reasons": [
+    "格 16（顶 1 层）挨着 5 层岩壁 15，可在第 3 层贴一层悬空窄檐（落差 2）",
+    "格 41（顶 1 层）挨着 4 层岩壁 50，可在第 3 层贴一层悬空窄檐（落差 2）",
+    "格 42（顶 1 层）挨着 4 层岩壁 51，可在第 3 层贴一层悬空窄檐（落差 2）",
+    "格 43（顶 1 层）挨着 4 层岩壁 52，可在第 3 层贴一层悬空窄檐（落差 2）",
+    "格 73（顶 1 层）挨着 6 层岩壁 64，可在第 3 层贴一层悬空窄檐（落差 2）",
+    "格 77（顶 1 层）挨着 4 层岩壁 68，可在第 3 层贴一层悬空窄檐（落差 2）",
+    "格 78（顶 1 层）挨着 4 层岩壁 69，可在第 3 层贴一层悬空窄檐（落差 2）"
+   ],
+   "verdict": "擂过"
+  },
+  {
+   "id": "build.lighthouse",
+   "name": "海边灯塔",
+   "kind2": "geometry",
+   "layer3d": "lighthouse",
+   "targets": 15,
+   "tried": 15,
+   "ms": 0,
+   "applied": 15,
+   "voxels": 14,
+   "pass": true,
+   "reasons": [
+    "楼 10（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 11（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 12（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 13（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 19（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 22（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 28（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 31（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 37（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 38（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 39（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 40（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔",
+    "楼 64 已 6 层、临水、邻格都矮 —— 直接是灯塔",
+    "楼 73（1 层）临水、邻格最高 6 层，加高到 8 层即成灯塔",
+    "楼 74（1 层）临水、邻格最高 1 层，加高到 6 层即成灯塔"
+   ],
+   "verdict": "擂过"
+  },
+  {
+   "id": "build.assembly",
+   "name": "逐块拼装（围合楼体 / 桥廊）",
+   "kind2": "geometry",
+   "layer3d": null,
+   "targets": 2,
+   "tried": 2,
+   "ms": 3,
+   "applied": 1,
+   "voxels": 11,
+   "pass": true,
+   "reasons": [
+    "16 格连通铺地、4 格内院，环铺地砌 2 层墙加顶即成围合楼体"
+   ],
+   "verdict": "擂过"
+  },
+  {
+   "id": "terrain.shrub-texture",
+   "name": "纯纹理灌木（台地边）",
+   "kind2": "layer",
+   "layer3d": "shrubtex",
+   "targets": 1,
+   "tried": 1,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "water.volume",
+   "name": "体积浅水（SDF 叠层）",
+   "kind2": "layer",
+   "layer3d": "watervol",
+   "targets": 1,
+   "tried": 1,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "build.lighthouse-light",
+   "name": "灯塔灯室与光束",
+   "kind2": "layer",
+   "layer3d": "lighthouse",
+   "targets": 1,
+   "tried": 1,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "effects.smoke",
+   "name": "特效层 · 烟（烟囱炊烟）",
+   "kind2": "layer",
+   "layer3d": "smoke",
+   "targets": 1,
+   "tried": 1,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "grid.contours",
+   "name": "网格等值线与层区域边界",
+   "kind2": "layer",
+   "layer3d": "contours",
+   "targets": 1,
+   "tried": 1,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "world.openness",
+   "name": "三维空间开阔度（射线灰度场）",
+   "kind2": "layer",
+   "layer3d": "rayvis",
+   "targets": 1,
+   "tried": 1,
+   "pass": true,
+   "verdict": "擂过"
+  }
+ ],
+ "counts": {
+  "caps": 13,
+  "passed": 13
+ }
+}

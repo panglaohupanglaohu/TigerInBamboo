@@ -2,13 +2,13 @@
 <style>body{margin:0;background:#8a96a8;color:#1d2a33;font:13px/1.5 system-ui}header{padding:6px 12px;position:absolute;top:0;left:0;right:0;background:#eef3f1d8;z-index:2}canvas{display:block;width:100vw;height:100vh}#report{position:absolute;right:8px;bottom:8px;max-width:440px;max-height:45vh;overflow:auto;background:#fffd;padding:6px 8px;border-radius:6px;font:11px/1.35 ui-monospace,monospace;white-space:pre-wrap;z-index:2}a{color:#26758a}</style>
 <header><b>拼图块目录 r56</b> · <a href="index.html" target="_top">首页</a> · 片子 1279107097108635649 "a tour of the puzzle pieces … 545 of them" ·
 <label><input type=radio name=m value=used checked>本场景用到的</label><label><input type=radio name=m value=all>网格上理论全部</label> · <label><input id=fly type=checkbox checked>飞行巡览</label>
-<small>URL：?grid=quad|mixed&mode=used|all&t=秒（冻结镜头时刻）&clean=1</small></header>
+<small>URL：?grid=quad|mixed&mode=used|all&t=秒（冻结镜头时刻）&clean=1&parts=0（只给墙身分色）</small></header>
 <canvas id="c"></canvas><div id="report"></div>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 <script type="module">
 import*as THREE from'three';import{buildQuadGrid,buildMixedGrid}from'./src/core/grid.js';import{decorateCells}from'./src/core/spatial.js';import{World}from'./src/core/world.js';import{PALETTES}from'./src/core/palette.js';import{buildScene}from'./src/world/scenes.js';
 import{MeshWriter}from'./src/core/meshwriter.js';import{buildBuildings}from'./src/build/buildings.js';import{usedSignatures,allSignatures,buildPiece,catalogLayout,referenceCells}from'./src/build/module-catalog-r56.js';
-const q=new URLSearchParams(location.search),kind=q.get('grid')==='mixed'?'mixed':'quad';
+const q=new URLSearchParams(location.search),kind=q.get('grid')==='mixed'?'mixed':'quad',partsOn=q.get('parts')!=='0';
 const grid=decorateCells(kind==='mixed'?buildMixedGrid({radius:22,hexSize:.62}):buildQuadGrid({radius:14,hexSize:1})),world=new World(grid);world.palette=PALETTES.town;buildScene(world,q.get('scene')||'town',+(q.get('seed')||7));
 const renderer=new THREE.WebGLRenderer({canvas:document.querySelector('#c'),antialias:true});renderer.setPixelRatio(1);renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=THREE.SRGBColorSpace;
 const scene=new THREE.Scene();scene.background=new THREE.Color('#8b97a9');scene.fog=new THREE.Fog('#8b97a9',14,40);
@@ -19,14 +19,15 @@ function build(mode){if(group){scene.remove(group);group.traverse(o=>o.geometry?
  const ref=referenceCells(grid),used=usedSignatures(world);
  const specs=mode==='all'?allSignatures(grid).map(s=>({...s,count:used.get(s.sig)?.count??0})):[...used.values()].map(s=>({...s,cell:ref.get(s.n)?.id??s.cell}));
  layout=catalogLayout(specs,{spacing:1.7,perRow:mode==='all'?15:9});
- let tris=0,mismatch=0;const mat=new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide});
- for(const s of layout){const p=buildPiece(grid,s,{palette:world.palette});if(p.sigRebuilt!==s.sig)mismatch++;tris+=p.tris;
+ let tris=0,mismatch=0,pc={wall:0,roof:0,base:0};const mat=new THREE.MeshLambertMaterial({vertexColors:true,side:THREE.DoubleSide});
+ for(const s of layout){const p=buildPiece(grid,s,{palette:world.palette,debugParts:partsOn});if(p.sigRebuilt!==s.sig)mismatch++;tris+=p.tris;for(const k of ['wall','roof','base'])pc[k]=Math.max(pc[k],p.parts[k]);
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(p.pos,3));g.setAttribute('color',new THREE.Float32BufferAttribute(p.col,3));g.computeVertexNormals();
   const m=new THREE.Mesh(g,mat);m.position.set(s.x,s.down?-.5:-.3,s.z);group.add(m);   // 这一层落到地面；悬空块留一截腿
   // 底下一块浅色托板：表示这块拼图占的格
   const c=grid.cells[s.cell],sh=new THREE.Shape(c.pts.map(pt=>new THREE.Vector2(pt.x-c.cx,-(pt.z-c.cz))));const pl=new THREE.Mesh(new THREE.ShapeGeometry(sh),new THREE.MeshBasicMaterial({color:s.count?'#b9c3d1':'#a3adbb'}));pl.rotation.x=-Math.PI/2;pl.position.set(s.x,.002,s.z);group.add(pl);}
  const W=Math.max(...layout.map(s=>s.x))+3,D=Math.max(...layout.map(s=>s.z))+3,gh=new THREE.GridHelper(Math.max(W,D)*2+20,Math.round(Math.max(W,D)*2+20),'#5b6678','#667183');gh.position.set(W/2-1.5,.001,D/2-1.5);group.add(gh);const fl=new THREE.Mesh(new THREE.PlaneGeometry(400,400),new THREE.MeshLambertMaterial({color:'#7e8a9c'}));fl.rotation.x=-Math.PI/2;fl.position.y=-.002;group.add(fl);
- info={kind,mode,pieces:layout.length,families:new Set(layout.map(s=>s.family)).size,usedInScene:used.size,sceneModulesStat:buildBuildings(new MeshWriter(),world,{L:.5}).modules,theoretical:allSignatures(grid).length,sigMismatch:mismatch,tris};
+ const dbg=buildBuildings(new MeshWriter(),world,{L:.5,debugModules:true,debugParts:partsOn});
+ info={kind,mode,partsOn,pieces:layout.length,families:new Set(layout.map(s=>s.family)).size,usedInScene:used.size,sceneModulesStat:dbg.modules,scenePartColors:dbg.moduleParts,piecePartColors:pc,theoretical:allSignatures(grid).length,sigMismatch:mismatch,tris};
  document.querySelector('#report').textContent=JSON.stringify(info,null,1);window.r56cat={...info,layout:layout.map(s=>({sig:s.sig,n:s.n,up:s.up,down:s.down,edges:s.edges.join(''),count:s.count,x:s.x,z:s.z}))};}
 build(q.get('mode')||'used');for(const r of document.querySelectorAll('[name=m]')){if(r.value===(q.get('mode')||'used'))r.checked=true;r.onchange=()=>build(r.value);}
 if(q.get('clean')){document.querySelector('header').style.display='none';document.querySelector('#report').style.display='none';}

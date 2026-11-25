@@ -76,7 +76,11 @@ html, body {
 /* ---------- tools ---------- */
 #tools {
   position: absolute;
-  left: 16px;
+  /* 第 161 轮：左下角本来就是「重构版 · 最新进度」信息条（bottom:8px，z-index 100）和
+     进度折叠面板 #coverage-progress（bottom:46px，z-index 7）的地盘，工具条压在这两块底下 ——
+     撤销/重做（以及本轮新增的「选择」格）实际点不动。挪到底部居中，两不遮挡。 */
+  left: 50%;
+  transform: translateX(-50%);
   bottom: 16px;
   display: flex;
   align-items: center;

@@ -67,6 +67,8 @@ assert.equal(at(bleed), 0); assert.equal(at(bleed + .2), 0); assert.equal(at(0),
 for (let d = .04; d < bleed; d += .01) assert.ok(at(d + .01) <= at(d) + 1e-9 || d < .05, 'monotone fade to isodepth');
 assert.equal(at(.06, .2), 0, 'no bleed where rim is horizontally far');
 assert.equal(blotchMasks({ rimDist: 0, below: .06, normalY: 0, bleed: 0 }).bleedMask, 0, 'bleed=0 disables');
+// r172：GLSL 也必须真的关掉 —— smoothstep(0,0,below) 在 GPU 上是退化区间（除零 → 钳成 1），bleed=0 会等于「无限深」
+assert.ok(/step\(1e-4,\s*uBlotchRimQ\.x\)/.test(BLOTCH_RIM_GLSL), 'GLSL bleedMask must gate on bleed>0');
 
 // 4) 漩涡：角度场低频、岛内正负都有（顺/逆时针），旋转保长
 const angs = []; for (let x = -8; x <= 8; x += .5) for (let z = -8; z <= 8; z += .5) angs.push(swirlUV(x, z).at(2));

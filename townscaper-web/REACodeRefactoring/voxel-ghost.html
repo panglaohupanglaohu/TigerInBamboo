@@ -20,6 +20,13 @@ button:hover{background:#e9f2ee}
 <label>装配序 <select id="mode"><option value="scan">scan · 自下而上</option><option value="radial">radial · 由中轴向外</option><option value="spine">spine · 先中轴竖柱后横铺</option><option value="shuffle">shuffle · 定种子打乱</option></select></label>
 <label><input id="porder" type="checkbox"> 点按装配序出现</label>
 <label><input id="layers" type="checkbox" checked> 逐层材质</label>
+<label><input id="punch" type="checkbox" checked> 窗洞</label>
+<label><input id="cavity" type="checkbox" checked> 内腔玫瑰墙</label>
+<label><input id="grad" type="checkbox" checked> 室内进深渐变</label>
+<label><input id="props" type="checkbox" checked> 屋顶小件</label>
+<label><input id="plants" type="checkbox" checked> 基座小树</label>
+<label>方位角 <input id="az" type="range" min="-180" max="180" step="1" value="0"><output id="azv">0°</output></label>
+<label><input id="orbit" type="checkbox"> 环绕</label>
 <button id="go">Go!</button><button id="play">播放</button><button id="reset">归零</button>
 <span id="status">加载…</span></header>
 <div id="hud"></div>
@@ -27,7 +34,7 @@ button:hover{background:#e9f2ee}
 <canvas id="cv" width="1060" height="600"></canvas>
 <canvas id="strip" width="1060" height="210"></canvas>
 <script type="module">
-import { rasterizeBoxes, voxelOrder, previewState, phaseCounts, isoProject, depthOf, cubeFaces, layerMaterials, spineColumn, LAYER_PALETTE } from './src/world/voxel-ghost.js';
+import { rasterizeBoxes, voxelOrder, previewState, phaseCounts, isoProject, depthOf, cubeFaces, layerMaterials, spineColumn, LAYER_PALETTE, cavityCells, interiorFaces, INTERIOR_TONE, interiorTone, roofProps, propStats, groundPlants, plantStats, windowSlot, windowStats } from './src/world/voxel-ghost.js';
 
 const $ = (s) => document.querySelector(s);
 const DPR = Math.min(2, window.devicePixelRatio || 1);
@@ -62,23 +69,51 @@ const orders = {
 const LAYERS = layerMaterials(voxels, { bandHeight: 3 });
 const SPINE = spineColumn(voxels);
 
-// 场景缩放/居中：按整模型投影包围盒算一次
-const PROJ = { scale: 11, tilt: 0.5 };
-function bounds(list) {
+// 场景缩放/居中：按当前**方位角**下的投影包围盒算一次（环绕时机位一变就得重算，
+// 否则转到 30° 模型就顶出画面外）
+const PROJ = { scale: 11, tilt: 0.5, azimuth: 0 };
+const boundsCache = new Map();
+function bounds(list, azimuth = PROJ.azimuth) {
+  const hit = boundsCache.get(azimuth);
+  if (hit) return hit;
   let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9;
-  for (const v of list) for (const f of Object.values(cubeFaces(v, PROJ))) for (const [px, py] of f) {
+  for (const v of list) for (const f of Object.values(cubeFaces(v, { ...PROJ, azimuth }))) for (const [px, py] of f) {
     x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py);
   }
-  return { x0, x1, y0, y1 };
+  const b = { x0, x1, y0, y1 };
+  boundsCache.set(azimuth, b);
+  return b;
 }
-const B = bounds(orders.scan);
-const fit = (W, H, pad = 16, zoom = 1) => {
-  const s = Math.min((W - 2 * pad) / (B.x1 - B.x0), (H - 2 * pad) / (B.y1 - B.y0)) * zoom;
-  return { k: s, ox: W / 2 - ((B.x0 + B.x1) / 2) * s, oy: H / 2 - ((B.y0 + B.y1) / 2) * s };
+const B = bounds(orders.scan, 0);
+const fit = (W, H, pad = 16, zoom = 1, bb = B) => {
+  const s = Math.min((W - 2 * pad) / (bb.x1 - bb.x0), (H - 2 * pad) / (bb.y1 - bb.y0)) * zoom;
+  return { k: s, ox: W / 2 - ((bb.x0 + bb.x1) / 2) * s, oy: H / 2 - ((bb.y0 + bb.y1) / 2) * s };
 };
 
 // 片尾（t>0.78）镜头往塔身推近：原片最后 2 秒是在半空绕塔并压近，不是固定机位
 const dollyAt = (t) => 1 + 0.22 * Math.max(0, Math.min(1, (t - 0.78) / 0.22));
+// 环绕：原片机位沿竖直轴慢转（竖直棱恒竖 → 正交环绕，不是透视）。t>0.35 后开始，t=1 转满 26°
+const orbitAt = (t) => (t <= 0.35 ? 0 : (t - 0.35) / 0.65 * 26);
+
+// 内腔：凹龛格（房间/门洞后面的空腔）+ 它们的可见侧壁面；建好就不再变
+const CAVITY = cavityCells(voxels);                       // 完全封死的腔（塔身空腔）
+const CAVITY_WALLS = interiorFaces(voxels, { reach: 16 }); // 键 'x,y,z,axis' → 该面面前空气的进深+1
+const WINDOWS = windowStats(voxels);
+// 屋顶小件（天线/圆盘/栏杆/露台小树）与它们的统计
+const PROPS = roofProps(voxels);
+const PROP_STATS = propStats(voxels);
+// 基座广场小树（r187：片子里的树在底板上排一列，不在露台）
+const PLANTS = groundPlants(voxels);
+const PLANT_STATS = plantStats(voxels);
+// 进深 → 颜色（缓存：一面墙一个深度，最多十几个深度值）
+const TONE_CACHE = new Map();
+const toneAt = (depth) => {
+  if (!TONE_CACHE.has(depth)) TONE_CACHE.set(depth, interiorTone(depth));
+  return TONE_CACHE.get(depth);
+};
+const INTERIOR_DEPTHS = [...CAVITY_WALLS.values()];
+const DEPTH_HIST = {};
+for (const d of INTERIOR_DEPTHS) DEPTH_HIST[d] = (DEPTH_HIST[d] || 0) + 1;
 
 const C = {
   bg: '#f7fbf9',
@@ -87,6 +122,8 @@ const C = {
   ghostLine: 'rgba(140,155,146,.85)',
   ghostFill: 'rgba(150,165,156,.07)',
   point: '#e0a800',
+  // 窗槽：凹进去 → 背光 + 自遮蔽，三个面各一档
+  windowDark: ['rgba(74,92,84,.42)', 'rgba(64,82,74,.46)', 'rgba(56,72,65,.50)'],
 };
 
 // 逐层材质：每个色槽生成三面明暗（顶亮 / 右中 / 左暗），保持和单色时同一套光照口径
@@ -104,8 +141,9 @@ const LAYER_FACES = LAYERS.counts.map((_, i) => {
   return [shade(hex, 1.06), shade(hex, 0.96), shade(hex, 0.86)];
 });
 
-function drawScene(ctx, W, H, order, t, { frame, zoom = 1 } = {}) {
-  const f = fit(W, H, 16, zoom);
+function drawScene(ctx, W, H, order, t, { frame, zoom = 1, azimuth = PROJ.azimuth } = {}) {
+  const P0 = { ...PROJ, azimuth };
+  const f = fit(W, H, 16, zoom, bounds(order, azimuth));
   const P = (p) => [p[0] * f.k + f.ox, p[1] * f.k + f.oy];
   ctx.save();
   ctx.clearRect(0, 0, W, H);
@@ -113,36 +151,121 @@ function drawScene(ctx, W, H, order, t, { frame, zoom = 1 } = {}) {
   if (frame) { ctx.strokeStyle = '#b9cdc6'; ctx.lineWidth = 1; ctx.strokeRect(.5, .5, W - 1, H - 1); }
   const st = previewState(order, t, { pointMode: $('#porder').checked ? 'order' : 'scatter' });
   const useLayers = $('#layers').checked;
-  const all = [...st.solid, ...st.ghost, ...st.points].sort((a, b) => depthOf(a) - depthOf(b));
+  const usePunch = $('#punch').checked;
+  const useCavity = $('#cavity').checked;
+  const useGrad = $('#grad').checked;
+  const all = [...st.solid, ...st.ghost, ...st.points].sort((a, b) => depthOf(a, P0) - depthOf(b, P0));
   const isSolid = new Set(st.solid.map((v) => v.x + ',' + v.y + ',' + v.z));
   const isGhost = new Set(st.ghost.map((v) => v.x + ',' + v.y + ',' + v.z));
+  const quad = (pts) => {
+    ctx.beginPath();
+    pts.forEach(([px, py], j) => (j ? ctx.lineTo(...P([px, py])) : ctx.moveTo(...P([px, py]))));
+    ctx.closePath();
+  };
+  // 格面归一化矩形 → 屏幕四边形（双线性插值；面点序为 [c0,c1,c2,c3] 一圈）
+  const insetQuad = (face, slot) => {
+    const at = (u, v) => {
+      const a = (1 - u) * (1 - v), b = u * (1 - v), c = u * v, d = (1 - u) * v;
+      return [0, 1].map((ax) => a * face[0][ax] + b * face[1][ax] + c * face[2][ax] + d * face[3][ax]);
+    };
+    return [at(slot.u0, slot.v0), at(slot.u1, slot.v0), at(slot.u1, slot.v1), at(slot.u0, slot.v1)];
+  };
+  // 屋顶小件：与格子同一套 painter 序（depth +0.35 → 画在自己那格的屋顶之后，
+  // 但仍在更靠近机位的格子之前，所以塔后面的栏杆不会从塔身前面穿出来）
+  const useProps = $('#props').checked;
+  const usePlants = $('#plants').checked;
+  const pick = (list, on) => (on ? list
+    .filter((p) => p.cell && isSolid.has(p.cell.x + ',' + p.cell.y + ',' + p.cell.z))
+    .map((p) => ({ p, d: depthOf(p.cell, P0) + 0.35 })) : []);
+  const propDraw = [...pick(PROPS.props, useProps), ...pick(PLANTS.plants, usePlants)]
+    .sort((x, y) => x.d - y.d);
+  const drawProp = (p) => {
+    // 注意：P() 吃的是**已投影**的等轴测坐标，世界坐标要先过 isoProject
+    const W3 = (x, y, z) => P(isoProject({ x, y, z }, P0));
+    const seg = (a, b, w, col) => {
+      ctx.beginPath(); ctx.moveTo(...W3(...a)); ctx.lineTo(...W3(...b));
+      ctx.strokeStyle = col; ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.stroke();
+    };
+    const wpx = Math.max(1, 0.055 * f.k);
+    // 坑（第 187 轮）：小件的**屏幕半径**必须按「世界单位 × PROJ.scale × f.k」算。
+    // 原来只乘了 f.k，等于把半径缩小 11 倍 —— 树看起来是「细针顶三个小点」、圆盘成了针尖上的点。
+    const kx = PROJ.scale * f.k;
+    if (p.kind === 'antenna') {
+      seg([p.x, p.y, p.z], [p.x, p.y + p.h, p.z], wpx, '#9fb2a6');
+      const [tx, ty] = W3(p.x, p.y + p.h, p.z);
+      ctx.beginPath(); ctx.arc(tx, ty, Math.max(1, wpx * .85), 0, Math.PI * 2);
+      ctx.fillStyle = '#93a79a'; ctx.fill();
+    } else if (p.kind === 'rail') {
+      seg([p.x, p.y, p.z], [p.x, p.y + p.h, p.z], wpx, '#a3b6aa');
+    } else if (p.kind === 'dish') {
+      const [cx, cy] = W3(p.x, p.y, p.z);
+      const r = Math.max(2.4, p.r * kx);
+      const stem = p.axis === 'x' ? [p.x - .16, p.y, p.z] : [p.x, p.y, p.z - .16];
+      seg(stem, [p.x, p.y, p.z], Math.max(1, wpx * .9), '#9dafa4');
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fillStyle = '#e7eee1'; ctx.fill();
+      ctx.strokeStyle = 'rgba(84,104,94,.55)'; ctx.lineWidth = Math.max(1, .045 * f.k); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx - r * .18, cy - r * .2, r * .55, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(208,220,205,.8)'; ctx.fill();
+    } else if (p.kind === 'tree') {
+      const s = p.s;
+      seg([p.x, p.y, p.z], [p.x, p.y + .30 * s, p.z], Math.max(1.4, .035 * s * kx), '#9fae9d');
+      // 三球叠起来（原片 0116 露台那棵：下球最大、上球最小）
+      for (const [h0, r0, tone] of [[.34, .21, '#dfeada'], [.52, .19, '#d7e4d2'], [.68, .13, '#cfddca']]) {
+        const [bx, by] = W3(p.x, p.y + h0 * s, p.z);
+        ctx.beginPath(); ctx.arc(bx, by, Math.max(2, r0 * s * kx), 0, Math.PI * 2);
+        ctx.fillStyle = tone; ctx.fill();
+        ctx.strokeStyle = 'rgba(88,108,88,.45)'; ctx.lineWidth = Math.max(.8, .03 * f.k); ctx.stroke();
+      }
+      // 花池：树脚下的一圈矮边
+      const [px, py] = W3(p.x, p.y, p.z);
+      ctx.beginPath(); ctx.ellipse(px, py, Math.max(2.4, .30 * s * kx), Math.max(1.4, .16 * s * kx), 0, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(104,126,108,.65)'; ctx.lineWidth = Math.max(1, .045 * f.k); ctx.stroke();
+    }
+  };
+  let pi = 0;
   for (const v of all) {
+    const dcell = depthOf(v, P0);
+    while (pi < propDraw.length && propDraw[pi].d <= dcell) drawProp(propDraw[pi++].p);
     const k = v.x + ',' + v.y + ',' + v.z;
-    const faces = cubeFaces(v, PROJ);
     if (isSolid.has(k)) {
+      const faces = cubeFaces(v, P0);
       const pal = v.y === 0 ? C.plate : (useLayers ? (LAYER_FACES[LAYERS.of.get(k)] || C.solid) : C.solid);
+      // ① 房间墙（+x / +z 面朝凹龛格）：透过门洞才看得见，暖玫瑰色（关档时退回外墙色）
+      const warmX = useCavity && v.y > 0 ? CAVITY_WALLS.get(k + ',x') : 0;
+      const warmZ = useCavity && v.y > 0 ? CAVITY_WALLS.get(k + ',z') : 0;
+      // ② 可见三面（顶/右/左）+ 每面的内凹窗槽
       ['top', 'right', 'left'].forEach((name, i) => {
-        ctx.beginPath();
-        faces[name].forEach(([px, py], j) => (j ? ctx.lineTo(...P([px, py])) : ctx.moveTo(...P([px, py]))));
-        ctx.closePath();
-        ctx.fillStyle = pal[i]; ctx.fill();
+        quad(faces[name]);
+        const wd = name === 'right' ? warmX : name === 'left' ? warmZ : 0;
+        // 第 186 轮：进深渐变 —— 同一面墙按「面前空气离洞口几格」取色，越深越压暗
+        const warmHex = wd ? (useGrad ? toneAt(wd).hex : INTERIOR_TONE) : null;
+        ctx.fillStyle = warmHex ? shade(warmHex, [1.0, .93, .84][i]) : pal[i];
+        ctx.fill();
         ctx.strokeStyle = 'rgba(70,90,80,.10)'; ctx.lineWidth = .6; ctx.stroke();
+        if (usePunch && v.y > 0 && name !== 'top' && f.k > 1.0) {
+          const slot = windowSlot(v);
+          if (slot.on) {
+            quad(insetQuad(faces[name], slot));
+            ctx.fillStyle = C.windowDark[i]; ctx.fill();
+          }
+        }
       });
     } else if (isGhost.has(k)) {
       // 线框：只勾棱，内部给一点点膜，保证"看得见但没实体"
+      const faces = cubeFaces(v, P0);
       for (const name of ['top', 'right', 'left']) {
-        ctx.beginPath();
-        faces[name].forEach(([px, py], j) => (j ? ctx.lineTo(...P([px, py])) : ctx.moveTo(...P([px, py]))));
-        ctx.closePath();
+        quad(faces[name]);
         ctx.fillStyle = C.ghostFill; ctx.fill();
         ctx.strokeStyle = C.ghostLine; ctx.lineWidth = .8; ctx.stroke();
       }
     } else {
-      const c = isoProject({ x: v.x + .5, y: v.y + .5, z: v.z + .5 }, PROJ);
+      const c = isoProject({ x: v.x + .5, y: v.y + .5, z: v.z + .5 }, P0);
       const [sx, sy] = P(c), r = Math.max(1.4, 1.1 * f.k / 11);
       ctx.beginPath(); ctx.arc(sx, sy, r, 0, Math.PI * 2); ctx.fillStyle = C.point; ctx.fill();
     }
   }
+  while (pi < propDraw.length) drawProp(propDraw[pi++].p);
   ctx.restore();
   return st;
 }
@@ -170,10 +293,18 @@ function render() {
   const t = +$('#t').value;
   $('#tv').textContent = t.toFixed(3);
   const order = orders[$('#mode').value];
-  const st = drawScene(g, 1060, 600, order, t, { frame: true, zoom: dollyAt(t) });
+  const auto = $('#orbit').checked;
+  const az = auto ? orbitAt(t) : +$('#az').value;
+  $('#azv').textContent = az.toFixed(0) + '°';
+  PROJ.azimuth = az;
+  const st = drawScene(g, 1060, 600, order, t, { frame: true, zoom: dollyAt(t), azimuth: az });
   const c = phaseCounts(st);
   const layerInfo = $('#layers').checked ? ` · 材质 ${LAYERS.bands} 段/${LAYERS.counts.filter((n) => n > 0).length} 色` : ' · 单色';
-  $('#hud').textContent = `t=${t.toFixed(3)} · ${st.phase} · 点 ${c.points} · 线框 ${c.ghost} · 实体 ${c.solid} · 未出现 ${c.hidden} · 合计 ${order.length} 格 · 完成度 ${(c.solid / order.length * 100).toFixed(1)}%${layerInfo}`;
+  const punchInfo = $('#punch').checked ? ` · 窗洞 ${WINDOWS.withWindow}/${WINDOWS.cells} 格` : ' · 无窗';
+  const cavInfo = $('#cavity').checked ? ` · 内墙 ${CAVITY_WALLS.size} 面${$('#grad').checked ? `（进深 ${Math.min(...INTERIOR_DEPTHS)}–${Math.max(...INTERIOR_DEPTHS)} 格）` : '（单色）'}` : ' · 无内腔';
+  const propInfo = $('#props').checked ? ` · 屋顶件 天线 ${PROP_STATS.antenna}/栏杆 ${PROP_STATS.rail}/碟 ${PROP_STATS.dish}/树 ${PROP_STATS.tree}` : ' · 无屋顶件';
+  const plantInfo = $('#plants').checked ? ` · 基座小树 ${PLANT_STATS.plants}（花池 ${PLANT_STATS.plants}）` : ' · 无基座小树';
+  $('#hud').textContent = `t=${t.toFixed(3)} · ${st.phase} · 点 ${c.points} · 线框 ${c.ghost} · 实体 ${c.solid} · 未出现 ${c.hidden} · 合计 ${order.length} 格 · 完成度 ${(c.solid / order.length * 100).toFixed(1)}%${layerInfo}${punchInfo}${cavInfo}${propInfo}${plantInfo} · 方位角 ${az.toFixed(0)}°`;
   drawStrip(t);
   window.voxelGhost.last = c;
 }
@@ -222,6 +353,55 @@ window.voxelGhost = {
   counts: () => phaseCounts(previewState(orders[$('#mode').value], +$('#t').value, { pointMode: $('#porder').checked ? 'order' : 'scatter' })),
   setPointOrder: (on) => { $('#porder').checked = !!on; render(); },
   setLayers: (on) => { $('#layers').checked = !!on; render(); },
+  setPunch: (on) => { $('#punch').checked = !!on; render(); },
+  setCavity: (on) => { $('#cavity').checked = !!on; render(); },
+  setGradient: (on) => { $('#grad').checked = !!on; render(); },
+  setProps: (on) => { $('#props').checked = !!on; render(); },
+  setPlants: (on) => { $('#plants').checked = !!on; render(); },
+  get props() { return { on: $('#props').checked, ...PROP_STATS }; },
+  propList: (kind) => PROPS.props.filter((p) => !kind || p.kind === kind).map((p) => ({ ...p })),
+  get plants() { return { on: $('#plants').checked, ...PLANT_STATS }; },
+  plantList: () => PLANTS.plants.map((p) => ({ ...p })),
+  // 基座小树的屏幕落点（测试用它把「花池/树冠」圈到像素上）
+  // 注意 zoom 必须跟当前 t 的推镜一致（render 用 dollyAt(t)），否则落点会偏一整档
+  plantSpots: (azimuth = PROJ.azimuth, zoom = dollyAt(+$('#t').value)) => {
+    const f = fit(1060, 600, 16, zoom, bounds(orders[$('#mode').value], azimuth));
+    return PLANTS.plants.map((p) => {
+      const v = isoProject({ x: p.x, y: p.y, z: p.z }, { ...PROJ, azimuth }); // 返回 [x, y]（已含 scale）
+      // 树在屏幕上向上长：花池半径 / 冠半径 / 冠顶高度都给出来，测试按矩形圈像素
+      const px = (u) => u * PROJ.scale * f.k;
+      return {
+        cell: p.cell, s: p.s, at: [v[0] * f.k + f.ox, v[1] * f.k + f.oy],
+        r: Math.max(2, px(.24 * p.s)), rCrown: Math.max(2, px(.21 * p.s)), hpx: px(.81 * p.s),
+      };
+    });
+  },
+  // 进深渐变探针：浅/深各挑一面墙，给出进深、色值与屏幕多边形（测试用它取像素）
+  interiorProbe: (azimuth = PROJ.azimuth, zoom = 1) => {
+    const depths = [...new Set(INTERIOR_DEPTHS)].sort((a, b) => a - b);
+    if (!depths.length) return null;
+    const want = [depths[0], depths[Math.floor(depths.length / 2)], depths[depths.length - 1]];
+    const f = fit(1060, 600, 16, zoom, bounds(orders[$('#mode').value], azimuth));
+    const pick = want.map((d) => {
+      const entry = [...CAVITY_WALLS.entries()].find(([, dd]) => dd === d);
+      const [key0, axis] = [entry[0].split(','), entry[0].slice(-1)];
+      const v = { x: +key0[0], y: +key0[1], z: +key0[2] };
+      const faces = cubeFaces(v, { ...PROJ, azimuth });
+      const poly = faces[axis === 'x' ? 'right' : 'left'].map(([px, py]) => [px * f.k + f.ox, py * f.k + f.oy]);
+      const cxp = poly.reduce((s, p) => s + p[0], 0) / poly.length;
+      const cyp = poly.reduce((s, p) => s + p[1], 0) / poly.length;
+      return { depth: d, tone: interiorTone(d).hex, t: interiorTone(d).t, cell: v, axis, at: [cxp, cyp], poly };
+    });
+    return { depths, hist: { ...DEPTH_HIST }, picks: pick };
+  },
+  get gradient() { return { on: $('#grad').checked, faces: CAVITY_WALLS.size, min: Math.min(...INTERIOR_DEPTHS), max: Math.max(...INTERIOR_DEPTHS), hist: { ...DEPTH_HIST } }; },
+  setAzimuth: (deg) => { $('#orbit').checked = false; $('#az').value = String(Math.max(-180, Math.min(180, deg))); render(); },
+  setOrbit: (on) => { $('#orbit').checked = !!on; render(); },
+  get azimuth() { return PROJ.azimuth; },
+  orbitAt: (t) => orbitAt(t),
+  get cavity() { const ax = [...CAVITY_WALLS.keys()].filter((k) => k.endsWith(',x')).length; return { cells: CAVITY.size, walls: CAVITY_WALLS.size, axisX: ax, axisZ: CAVITY_WALLS.size - ax }; },
+  get windows() { return { ...WINDOWS, on: $('#punch').checked }; },
+  windowSlotOf: (v) => windowSlot(v),
   get layers() { return { on: $('#layers').checked, bands: LAYERS.bands, counts: LAYERS.counts.slice() }; },
   get spine() { return { x: SPINE.x, z: SPINE.z, cells: SPINE.cells.length, bottom: SPINE.cells[0] || null, top: SPINE.cells[SPINE.cells.length - 1] || null }; },
   go: goOnce,
@@ -230,7 +410,26 @@ window.voxelGhost = {
   voxels: voxels.size,
   last: null,
 };
-$('#status').textContent = `模型 ${voxels.size} 格 · scan/radial/spine/shuffle 四套装配序 · 中轴柱 ${SPINE.cells.length} 格 · 材质 ${LAYERS.bands} 段`;
+// URL 开关：?azim=<度> 定机位方位角、?orbit=1 片尾环绕、?punch=0 关窗洞、?interior=0 关内腔玫瑰墙、?plants=0 关基座小树
+const Q = new URLSearchParams(location.search);
+if (Q.has('azim')) {
+  const q = Math.max(-180, Math.min(180, Number(Q.get('azim')) || 0));
+  $('#az').value = String(q); $('#orbit').checked = false;
+}
+if (Q.get('orbit') === '1') $('#orbit').checked = true;
+if (Q.get('punch') === '0') $('#punch').checked = false;
+if (Q.get('interior') === '0') $('#cavity').checked = false;
+if (Q.get('grad') === '0') $('#grad').checked = false;
+if (Q.get('props') === '0') $('#props').checked = false;
+if (Q.get('plants') === '0') $('#plants').checked = false;
+$('#az').addEventListener('input', () => { $('#orbit').checked = false; render(); });
+$('#punch').addEventListener('change', render);
+$('#cavity').addEventListener('change', render);
+$('#grad').addEventListener('change', render);
+$('#props').addEventListener('change', render);
+$('#plants').addEventListener('change', render);
+$('#orbit').addEventListener('change', render);
+$('#status').textContent = `模型 ${voxels.size} 格 · scan/radial/spine/shuffle 四套装配序 · 中轴柱 ${SPINE.cells.length} 格 · 材质 ${LAYERS.bands} 段 · 内腔 ${CAVITY.size} 格 · 内墙 ${CAVITY_WALLS.size} 面 · 窗洞 ${WINDOWS.withWindow}/${WINDOWS.cells} 格 · 屋顶件 ${PROP_STATS.props} 件（天线 ${PROP_STATS.antenna}/栏杆 ${PROP_STATS.rail}/碟 ${PROP_STATS.dish}/树 ${PROP_STATS.tree}）· 基座小树 ${PLANT_STATS.plants} 棵（花池 ${PLANT_STATS.plants}）`;
 render();
 </script>
 </html>

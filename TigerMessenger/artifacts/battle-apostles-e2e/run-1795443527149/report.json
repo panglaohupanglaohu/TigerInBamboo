@@ -1,0 +1,34 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/TigerMessenger/artifacts/battle-apostles-e2e/run-1795443527149",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「十二门徒」自动预装 3 个能力（部署战斗舞台、守军布防、登陆波次），点 ▶ 执行管线一键跑完整条。",
+    "siteInfo": "舞台采样：陆地 239 格 · 最高 8 层 · 小屋 4",
+    "pipelineNodes": 3,
+    "candidate": "候选 · 验证通过",
+    "checks": [
+      "✓ 战场可用陆地 239 格 · 最高 8 层 · 小屋 4",
+      "✓ 防守目标4 个小屋 / 台地目标",
+      "✓ 舞台尺度5 米/格 · 半径 18 格",
+      "✓ 舞台覆盖采样命中陆地 239/4170 格",
+      "✓ 守军规模增援 1 队 × 8 人 = 8 人（装备 1 级）",
+      "✓ 波次节奏首波 3s · 间隔 26s"
+    ],
+    "liveBattle": {
+      "stage": true,
+      "running": true,
+      "battle": {
+        "units": 40,
+        "wave": 1,
+        "houses": 4,
+        "groupVisible": true
+      }
+    },
+    "compareHidden": true,
+    "adoptedNote": "扫描完成：3 / 3 个能力能作用。",
+    "adoptedFlag": true
+  },
+  "errors": [],
+  "pass": true
+}

@@ -1,0 +1,22 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/battle-apostles-e2e/run-1795257282029",
+  "steps": {
+    "tmReady": "ok",
+    "mount": "ok",
+    "scan": "扫描完成：3 / 3 个能力能作用。",
+    "siteInfo": "舞台采样：陆地 239 格 · 最高 8 层 · 小屋 4",
+    "pipelineNodes": 3
+  },
+  "errors": [],
+  "pass": false,
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#battle-workshop .tier-head-actions .primary')\n    - locator resolved to <button type=\"button\" class=\"primary\">▶ 执行管线</button>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is not visible\n    - retrying click action\n      - waiting 100ms\n    38 × waiting for element to be visible, enabled and stable\n       - element is not visible\n     - retrying click action\n       - waiting 500ms\n\n    at /Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/battle-apostles-browser.mjs:47:69",
+  "state": {
+    "ds": {
+      "tier": "scene",
+      "sceneEdit": "view",
+      "sceneBattle": "1"
+    },
+    "status": "登陆波次（战役）：双击或拖进中间的场景管线。",
+    "note": "已加入管线：登陆波次"
+  }
+}

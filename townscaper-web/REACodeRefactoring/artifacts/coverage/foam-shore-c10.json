@@ -1,0 +1,99 @@
+{
+  "reports": [
+    {
+      "grid": "mixed",
+      "worldVersion": 672,
+      "versionKept": true,
+      "waves": {
+        "vertices": 1612,
+        "segments": 1612
+      },
+      "shoreclamp": {
+        "before": 0.08436724565756824,
+        "after": 0.022332506203473945,
+        "worstBefore": 0.9583333333333335,
+        "worstAfter": 0.9166666666666665,
+        "crossingBefore": 136,
+        "crossingAfter": 36,
+        "stats": {
+          "clamped": 136,
+          "before": 0.08436724565756824,
+          "after": 0.022332506203473945
+        },
+        "medianDisplacement": 0.67605,
+        "degenerate": 8
+      },
+      "foam": {
+        "texels": 112000,
+        "W": 350,
+        "H": 320,
+        "band": 24383,
+        "strong": 420,
+        "holes": 89704,
+        "foamCover": 0.21770535714285713,
+        "stats": {
+          "W": 350,
+          "H": 320,
+          "foamTexels": 24383,
+          "meanFoam": 0.24626741355738999,
+          "ms": 8
+        }
+      },
+      "screen": {
+        "diff": 5203,
+        "brighter": 5203,
+        "maxL": 165.954,
+        "noise": 0,
+        "pixels": 262144
+      }
+    },
+    {
+      "grid": "quad",
+      "worldVersion": 781,
+      "versionKept": true,
+      "waves": {
+        "vertices": 1744,
+        "segments": 1744
+      },
+      "shoreclamp": {
+        "before": 0.11697247706422019,
+        "after": 0.009174311926605505,
+        "worstBefore": 0.9166666666666665,
+        "worstAfter": 0.875,
+        "crossingBefore": 204,
+        "crossingAfter": 16,
+        "stats": {
+          "clamped": 204,
+          "before": 0.11697247706422019,
+          "after": 0.009174311926605505
+        },
+        "medianDisplacement": 0.67684,
+        "degenerate": 8
+      },
+      "foam": {
+        "texels": 125027,
+        "W": 337,
+        "H": 371,
+        "band": 24765,
+        "strong": 442,
+        "holes": 102437,
+        "foamCover": 0.19807721532149056,
+        "stats": {
+          "W": 337,
+          "H": 371,
+          "foamTexels": 24765,
+          "meanFoam": 0.24812002243567974,
+          "ms": 8
+        }
+      },
+      "screen": {
+        "diff": 5542,
+        "brighter": 5542,
+        "maxL": 183.412,
+        "noise": 0,
+        "pixels": 262144
+      }
+    }
+  ],
+  "errors": []
+}

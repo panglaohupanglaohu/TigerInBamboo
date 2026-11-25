@@ -72,11 +72,14 @@ function draw(name, fs, extra = () => {}) {
   gl.uniform1f(gl.getUniformLocation(p, 'uTime'), performance.now() / 1000);
   gl.uniform1f(gl.getUniformLocation(p, 'uZoom'), zoom);
   gl.uniform1f(gl.getUniformLocation(p, 'uMode'), mode);
+  const uMipOn = gl.getUniformLocation(p, 'uMipOn'); if (uMipOn) gl.uniform1f(uMipOn, mipOn ? 1 : 0);
+  const uShow = gl.getUniformLocation(p, 'uShow'); if (uShow) gl.uniform1f(uShow, showCol);
+  const uCell = gl.getUniformLocation(p, 'uCell'); if (uCell) gl.uniform2f(uCell, probeCell[0], probeCell[1]);
   extra(p);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
 }
-let zoom = 1, mode = 0, tab = 'fwidth', anim = true;
-addEventListener('wheel', (e) => { zoom *= e.deltaY > 0 ? 1.1 : 0.9; zoom = Math.min(40, Math.max(0.05, zoom)); }, { passive: true });
+let zoom = 10, mode = 0, tab = 'fwidth', anim = true, mipOn = true, showCol = -1, probeCell = [1, 0]; // 只填了 SKIN_SLOTS[0..7]（gy=0 那一排），探针别挑空格
+addEventListener('wheel', (e) => { zoom *= e.deltaY > 0 ? 1.1 : 0.9; zoom = Math.min(40, Math.max(0.02, zoom)); }, { passive: true });
 
 /* ------------------------------------------------------------ 1 抗锯齿线 */
 const FS_FWIDTH = `
@@ -103,37 +106,60 @@ void main() {
 /* ------------------------------------------------------------ 2 隔像素一条线 */
 // 1241096929490149376 "I make the UVs speed past every 2nd pixel before sampling. It's core to my art style and what lets me get
 // away with one 128² texture and crisp antialiased lines"：贴图里每隔一个像素是"线像素"；采样前把 UV 重新映射，
-// 放大时让线的积分宽度约1屏幕像素，线性过滤保留亚像素过渡；缩小仍需mipmap。
-let pixTex = null;
-function makePixTex() {
-  const N = 128, d = new Uint8Array(N * N * 4);
-  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
-    const k = (y * N + x) * 4;
-    const lineX = x % 2 === 1, lineY = y % 2 === 1;
-    // 内容像素：4×4 个"砖"一组，组边界那条线像素画深色，组内的线像素和内容同色（隐形）
-    const bx = Math.floor(x / 8), by = Math.floor(y / 8);
-    const brick = ((bx * 37 + by * 91) % 5) / 5;
-    let c = [210 - brick * 40, 190 - brick * 30, 160 - brick * 50];
-    const edgeX = lineX && x % 8 === 7, edgeY = lineY && y % 8 === 7;
-    if (edgeX || edgeY) c = [50, 45, 55];
-    d.set([...c, 255], k);
-  }
-  const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, N, N, 0, gl.RGBA, gl.UNSIGNED_BYTE, d);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
-  return t;
+// 放大时让线的积分宽度约1屏幕像素，线性过滤保留亚像素过渡；**缩小时走主场景同一套色格内 box mip 链**
+// （core/town-skin.js 的 buildSkinMips，把 4 级 mip 打包在同一张 128² 图里，建筑墙格与右下 32² 植物角共用）。
+// 这一页现在直接吃真实图集（不是玩具贴图），三列分别是：最近邻 / 连续重映射（无 mip）/ 连续重映射 + mip。
+import { buildSkinAtlas, buildSkinMips, SKIN_SLOTS, PLANT_RECT } from './src/core/town-skin.js';
+// 片子里那几堵墙：橙砖 / 红瓦 / 绿墙 / 石灰 / 深灰 / 青 / 黄 / 蓝
+const SKIN_COLORS = [
+  { r: .86, g: .50, b: .36 }, { r: .74, g: .32, b: .28 }, { r: .30, g: .72, b: .47 }, { r: .72, g: .76, b: .78 },
+  { r: .40, g: .47, b: .50 }, { r: .24, g: .66, b: .62 }, { r: .90, g: .80, b: .42 }, { r: .42, g: .52, b: .74 },
+];
+let skin = null;
+function makeSkin() {
+  if (skin) return skin;
+  const level0 = buildSkinAtlas(SKIN_COLORS);
+  const packed = buildSkinMips(level0);
+  const up = (data) => {
+    const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 128, 128, 0, gl.RGBA, gl.UNSIGNED_BYTE, data);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    return t;
+  };
+  skin = { level0, packed, tex: up(level0), mip: up(packed) };
+  return skin;
 }
 const FS_PIXEL = `
 ${TEXEL_SKIP_GLSL}
+uniform sampler2D uMip;
+uniform vec2 uCell;
+uniform float uMipOn;
+uniform float uShow;
+// 与 town-skin.js 的 c07Level 同口径：k<0.5 走放大（连续重映射），k>=0.5 走打包 mip 的第 k 级
+vec3 texLevel(float k, vec2 t, vec2 fw) {
+  if (k < 0.5) {
+    vec2 q = clamp(vec2(skipTexel(t.x, fw.x), skipTexel(t.y, fw.y)), vec2(.5), vec2(15.5));
+    return texture(uTex, (uCell * 16.0 + q) / 128.0).rgb;
+  }
+  float s = 16.0 / exp2(k), ox = 128.0 - 256.0 / exp2(k);
+  vec2 q = clamp(t / exp2(k), vec2(.5), vec2(s - .5));
+  return texture(uMip, (vec2(ox, 0.0) + uCell * s + q) / 128.0).rgb;
+}
 void main() {
   vec2 px = gl_FragCoord.xy;
-  float z = uZoom * (1.0 + 7.0 * (0.5 + 0.5 * sin(uTime * 0.35)));
-  vec2 t = (px - uRes * 0.5) / z + 64.0;
+  float fw = 1.0 / max(uZoom, 0.0001);                    // 一个屏幕像素覆盖多少图集纹素（必须分支外求）
+  vec2 p = (px - uRes * 0.5) * fw + uCell * 16.0 + 8.0;    // 图集纹素坐标
+  vec2 t = fract(p / 16.0) * 16.0;
+  int col = uShow < -0.5 ? (px.x < uRes.x / 3.0 ? 0 : (px.x < uRes.x * 2.0 / 3.0 ? 1 : 2)) : int(uShow + 0.5);
   vec3 c;
-  if (px.x < uRes.x * 0.5) c = texture(uTex, (floor(t) + 0.5) / 128.0).rgb;   // 左：直接最近邻 —— 线跟着放大变粗
-  else { vec2 w = fwidth(t); c = texture(uTex, vec2(skipTexel(t.x, w.x), skipTexel(t.y, w.y)) / 128.0).rgb; }
-  if (abs(px.x - uRes.x * 0.5) < 1.0) c = vec3(0.85, 0.3, 0.25);
+  if (col == 0) c = texture(uTex, (uCell * 16.0 + floor(t) + 0.5) / 128.0).rgb;   // 左：最近邻 —— 线跟着放大变粗
+  else if (col == 1 || uMipOn < 0.5) c = texLevel(0.0, t, vec2(fw));              // 中：连续重映射（缩小会混叠、细线会消失）
+  else {
+    float lod = clamp(log2(max(fw, 0.0001)), 0.0, 4.0), k0 = floor(lod);          // 右：+ 打包 mip，两级间插值
+    c = mix(texLevel(k0, t, vec2(fw)), texLevel(min(k0 + 1.0, 4.0), t, vec2(fw)), lod - k0);
+  }
+  if (uShow < -0.5) { const float e = 1.0; if (abs(px.x - uRes.x / 3.0) < e || abs(px.x - uRes.x * 2.0 / 3.0) < e) c = vec3(0.85, 0.3, 0.25); }
   o = vec4(c, 1.0);
 }`;
 
@@ -396,7 +422,7 @@ function drawDeco() {
 /* ------------------------------------------------------------ 调度 */
 const NOTES = {
   fwidth: '978211952504852480 "use fwidth, ddx and ddy to create crisp, pixel perfect, zoom independent, antialiased lines"。左边：固定宽度的 step（远处断、近处粗、锯齿）；右边：宽度 = fwidth(uv)，永远 1 像素、抗锯齿。滚轮缩放。',
-  pixel: '1241096929490149376 "I make the UVs speed past every 2nd pixel before sampling … one 128² texture and crisp antialiased lines"。贴图里每隔一个像素是"线像素"。左边是直接最近邻采样，放大后线跟着变粗；右边先重映射 UV，放大时线的积分宽度约1屏幕像素，线性采样抗锯齿；缩小时仍需mipmap。',
+  pixel: '1241096929490149376 "I make the UVs speed past every 2nd pixel before sampling … one 128² texture and crisp antialiased lines"。三列同一张 128² 真实图集（8×8 色格 + 右下 32² 植物角）：左 = 直接最近邻，放大后线跟着变粗；中 = 只做连续重映射（放大时线的积分宽度约 1 屏幕像素），缩小到 1 纹素以下时"线像素"整条被跳过 → 墙面变纯色；右 = 再叠一层色格内 box mip 链（主场景 town-skin 同一套，四级打包进同一张图），缩小仍保留砖缝的平均暗带。`?zoom= / ?mip=0 / ?show=0|1|2 / ?cell=gx,gy` 可钉死；`window.texelSkip.measure()` 读回数值。',
   contrast: '1482346496460828674是后来的专用反差迭代，本页保留该旧近似。1482011744843223042更早：由程序化法线map反差生成细线，不能用三角值迭代代替；共享法线场局部近似见normal-contrast.html。',
   blotch: '1480635131614355459 大块颜料斑；1703750394164199473 旋涡团块；1704246032626762189 疏密 + 高度分段线；1696864977171189980 色块不跨重要的边（每级台阶一套色块）；1714613599035863191 抽象田地。主场景面板里勾「地面笔触」可套到地形顶面上。',
   radial: '1478114309263839244 "the radial (instead of directional) size-sorting … that big coherent chunk in the middle"：原片是UV不规则图块/三角网和棋盘格模型对照；本页圆块螺旋只表示大小布局意图，不能代表原UV分片/参数化/无重叠打包。',
@@ -413,8 +439,9 @@ function setTab(t) {
   document.getElementById('note').textContent = NOTES[t];
   const glOn = ['fwidth', 'pixel', 'blotch', 'squiggly'].includes(t);
   gl.canvas.style.display = glOn ? 'block' : 'none'; cv.style.display = glOn ? 'none' : 'block';
-  document.getElementById('tagL').textContent = t === 'fwidth' ? '固定宽度 step' : t === 'pixel' ? '最近邻（线变粗）' : '';
-  document.getElementById('tagR').textContent = t === 'fwidth' ? 'fwidth 抗锯齿' : t === 'pixel' ? '连续重映射 + 线性采样（放大验收）' : '';
+  document.getElementById('tagL').textContent = t === 'fwidth' ? '固定宽度 step' : t === 'pixel' ? '左 最近邻（线变粗）' : '';
+  document.getElementById('tagR').textContent = t === 'fwidth' ? 'fwidth 抗锯齿' : t === 'pixel' ? '右 重映射 + mip（缩小验收）' : '';
+  if (t === 'pixel') document.getElementById('tagL').textContent = '左 最近邻 · 中 仅重映射（缩小丢线） · 右 +mip';
   document.getElementById('tagL').style.display = document.getElementById('tagR').style.display = (t === 'fwidth' || t === 'pixel') ? 'block' : 'none';
   if (t === 'contrast' && !contrast) initContrast();
   if (t === 'radial') document.getElementById('stat').textContent = `放下 ${drawRadial()} 个笔触`;
@@ -425,7 +452,15 @@ function setTab(t) {
 document.querySelectorAll('#tabs button').forEach((b) => (b.onclick = () => setTab(b.dataset.t)));
 function frame() {
   if (tab === 'fwidth') draw('fwidth', FS_FWIDTH);
-  else if (tab === 'pixel') { if (!pixTex) pixTex = makePixTex(); draw('pixel', FS_PIXEL, () => { gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, pixTex); }); }
+  else if (tab === 'pixel') {
+    const s = makeSkin();
+    draw('pixel', FS_PIXEL, () => {
+      gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, s.tex); gl.uniform1i(gl.getUniformLocation(progs.pixel, 'uTex'), 0);
+      gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, s.mip); gl.uniform1i(gl.getUniformLocation(progs.pixel, 'uMip'), 1);
+    });
+    const st = document.getElementById('stat');
+    st.textContent = `图集 128² · ${SKIN_SLOTS.length} 色格 + 右下 32² 植物角 · 放大 ${zoom.toFixed(2)} 屏px/纹素 · mip ${mipOn ? '开' : '关'}${showCol >= 0 ? ' · 单列 ' + showCol : ''}`;
+  }
   else if (tab === 'blotch') draw('blotch', FS_BLOTCH);
   else if (tab === 'squiggly') draw('squiggly', FS_SQUIG);
   else if (tab === 'deco') drawDeco();
@@ -458,6 +493,85 @@ function frame() {
 }
 setTab(new URLSearchParams(location.search).get('t') || 'fwidth');
 frame();
+/* ------------------------------------------------------------ 验收探针（1241096929490149376） */
+// 同一图集、同一 cell，只切 mip 开 / 关与放大倍率，读回中心方块量：相邻像素差（细节量）、
+// 暗缝占比（砖缝还看不看得见）、暗缝连续段（线的屏幕宽度）。
+function pixelMeasure({ mag = 6, mip = true, show = 2, cell = [1, 0], size = 512 } = {}) {
+  const s = makeSkin();
+  // 画进离屏 target 再读回：默认帧缓冲在合成后会被清，读回来全是 0
+  if (!skin.fbo) {
+    const tex = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, size, size, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    const fb = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, tex, 0);
+    skin.fbo = { fb, tex, size };
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  }
+  const f = skin.fbo, o = { mipOn, showCol, zoom, cell: probeCell };
+  mipOn = !!mip; showCol = show; zoom = mag; probeCell = cell;
+  gl.bindFramebuffer(gl.FRAMEBUFFER, f.fb);
+  gl.viewport(0, 0, f.size, f.size);
+  gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+  draw('pixel', FS_PIXEL, () => {
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, s.tex); gl.uniform1i(gl.getUniformLocation(progs.pixel, 'uTex'), 0);
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, s.mip); gl.uniform1i(gl.getUniformLocation(progs.pixel, 'uMip'), 1);
+  });
+  const W = f.size, H = f.size;
+  const buf = new Uint8Array(W * H * 4);
+  gl.readPixels(0, 0, W, H, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  mipOn = o.mipOn; showCol = o.showCol; zoom = o.zoom; probeCell = o.cell;
+  const lum = new Float32Array(W * H);
+  for (let i = 0; i < W * H; i++) { const k = i * 4; lum[i] = (buf[k] * .299 + buf[k + 1] * .587 + buf[k + 2] * .114) / 255; }
+  let sum = 0, mad = 0, n = 0;
+  for (const v of lum) sum += v;
+  const mean = sum / lum.length;
+  for (let y = 0; y < H; y++) for (let x = 0; x < W - 1; x++) { mad += Math.abs(lum[y * W + x] - lum[y * W + x + 1]); n++; }
+  const thr = mean * .96;
+  let dark = 0; for (const v of lum) if (v < thr) dark++;
+  // 中线附近 40 行里暗像素的连续段长度（线宽，屏幕像素）
+  const runs = [];
+  for (let y = (H >> 1) - 20; y < (H >> 1) + 20; y++) {
+    let run = 0;
+    for (let x = 0; x < W; x++) { const d = lum[y * W + x] < thr; if (d) run++; else if (run) { runs.push(run); run = 0; } }
+    if (run) runs.push(run);
+  }
+  runs.sort((a, b) => a - b);
+  const q = (p) => (runs.length ? runs[Math.min(runs.length - 1, Math.floor(p * runs.length))] : 0);
+  return { mag, mip: !!mip, show, w: W, h: H, mean: +mean.toFixed(4), mad: +(mad / n).toFixed(5), darkFrac: +(dark / lum.length).toFixed(4), runP50: q(.5), runP90: q(.9), runs: runs.length };
+}
+// 图集本体：色格数、植物角（32²）亮度标准差、打包 mip 第 4 级 vs 色格均值（box 滤波自证）
+function atlasReport() {
+  const s = makeSkin(), d = s.level0;
+  const at = (x, y) => { const o = (y * 128 + x) * 4; return (d[o] * .299 + d[o + 1] * .587 + d[o + 2] * .114) / 255; };
+  let cs = 0, cs2 = 0, cn = 0;
+  for (let y = PLANT_RECT.y; y < PLANT_RECT.y + PLANT_RECT.h; y++) for (let x = PLANT_RECT.x; x < PLANT_RECT.x + PLANT_RECT.w; x++) { const v = at(x, y); cs += v; cs2 += v * v; cn++; }
+  const cm = cs / cn, cStd = Math.sqrt(Math.max(0, cs2 / cn - cm * cm));
+  const level4Err = [];
+  for (let slot = 0; slot < Math.min(6, SKIN_SLOTS.length); slot++) {
+    const [gx, gy] = SKIN_SLOTS[slot];
+    let r = 0, g2 = 0, b = 0;
+    for (let y = 0; y < 16; y++) for (let x = 0; x < 16; x++) { const o = ((gy * 16 + y) * 128 + gx * 16 + x) * 4; r += d[o]; g2 += d[o + 1]; b += d[o + 2]; }
+    const px = 128 - 16 + gx, py = gy;  // 第 4 级：每格 1 像素，x 起点 = 128 - 256/16 = 112
+    const o = (py * 128 + px) * 4;
+    level4Err.push(Math.max(Math.abs(r / 256 - s.packed[o]), Math.abs(g2 / 256 - s.packed[o + 1]), Math.abs(b / 256 - s.packed[o + 2])));
+  }
+  return { size: 128, slots: SKIN_SLOTS.length, plant: { ...PLANT_RECT }, plantMean: +cm.toFixed(4), plantStd: +cStd.toFixed(4), level4MaxErr: +Math.max(...level4Err).toFixed(2), level4Err };
+}
+const QP = new URLSearchParams(location.search);
+if (QP.has('zoom')) zoom = Math.max(0.02, Math.min(40, +QP.get('zoom')));
+if (QP.has('mip')) mipOn = QP.get('mip') !== '0';
+if (QP.has('show')) showCol = +QP.get('show');
+if (QP.has('cell')) { const c = QP.get('cell').split(',').map(Number); if (c.length === 2 && c.every(Number.isFinite)) probeCell = c; }
+window.texelSkip = {
+  atlas: atlasReport, measure: pixelMeasure,
+  get state() { return { zoom, mip: mipOn, show: showCol, cell: probeCell.slice() }; },
+  set({ zoom: z, mip, show, cell } = {}) {
+    if (z) zoom = z; if (mip != null) mipOn = !!mip; if (show != null) showCol = show; if (cell) probeCell = cell.slice();
+    return this.state;
+  },
+};
 window.texLab = { setTab, get contrast() { return contrast; } };
 </script>
 </body>

@@ -1,0 +1,89 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/defaults-panel-e2e/run-1795536571565",
+  "steps": {
+    "A": {
+      "rows": [
+        "apostles:apostles-terrain",
+        "citadel:building",
+        "citadel:mountain",
+        "crystal:building",
+        "old-port:relief"
+      ],
+      "text": "当前默认场景层能力谁定的时间apostlesapostles-terrainapostles.look手动采用2026/11/25 00:09:32撤回citadelbuilding待你决定 · P-R57-01待决定登记2026/11/25 00:09:32去处理撤回citadelmountainmountain.pipeline手动采用2026/11/24 09:00:00撤回crystalbuilding待你决定 · P-R57-01待决定登记2026/11/25 00:09:32去处理撤回old-portreliefrelief.soft按实测选优代选2026/11/24 10:00:00撤回"
+    },
+    "afterRevert": {
+      "rows": [
+        "apostles:apostles-terrain",
+        "citadel:building",
+        "crystal:building",
+        "old-port:relief"
+      ],
+      "stored": {
+        "apostles:apostles-terrain": {
+          "capabilityId": "apostles.look",
+          "planId": "approved",
+          "plan": {
+            "look": "approved",
+            "lookId": "approved",
+            "scores": {
+              "approved": 113228,
+              "soft": 141652,
+              "soft,palette": 141652
+            }
+          },
+          "adoptedBy": "user",
+          "at": "2026-11-24T16:09:32.050Z",
+          "source": "decide",
+          "note": "P-R32-01（2026-11-24 用户认可现状）：实测 approved=113228 < soft/soft,palette=141652（缺陷分越低越好，软坡缺陷分多 25%），采用 approved 不换外观。",
+          "status": "active",
+          "pendingRef": null
+        },
+        "old-port:relief": {
+          "capabilityId": "relief.soft",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "auto-test",
+          "at": "2026-11-24T02:00:00.000Z",
+          "source": "auto-test",
+          "note": "",
+          "status": "active",
+          "pendingRef": null
+        },
+        "citadel:building": {
+          "capabilityId": "building.plan",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "user",
+          "at": "2026-11-24T16:09:32.051Z",
+          "source": "pending-seed",
+          "note": "高山圣城建筑群：采用后要不要像山形一样进游戏自动换上（现状 autoDeploy:false）待用户决定。",
+          "status": "pending-user",
+          "pendingRef": "P-R57-01"
+        },
+        "crystal:building": {
+          "capabilityId": "building.plan",
+          "planId": null,
+          "plan": null,
+          "adoptedBy": "user",
+          "at": "2026-11-24T16:09:32.051Z",
+          "source": "pending-seed",
+          "note": "水晶城建筑群：同 P-R57-01，采用后是否进游戏自动换上待用户决定。",
+          "status": "pending-user",
+          "pendingRef": "P-R57-01"
+        }
+      }
+    },
+    "B": {
+      "rows": [
+        "apostles:apostles-terrain",
+        "citadel:building",
+        "citadel:mountain",
+        "crystal:building",
+        "old-port:relief"
+      ],
+      "text": "当前默认场景层能力谁定的时间apostlesapostles-terrainapostles.look手动采用2026/11/25 00:09:35撤回citadelbuilding待你决定 · P-R57-01待决定登记2026/11/25 00:09:35去处理撤回citadelmountain待你决定 · P-R27-01,P-R28-01,P-R28-02待决定登记2026/11/25 00:09:35去处理撤回crystalbuilding待你决定 · P-R57-01待决定登记2026/11/25 00:09:35去处理撤回old-portrelief待你决定 · P-R49-01待决定登记2026/11/25 00:09:35去处理撤回"
+    }
+  },
+  "errors": [],
+  "pass": true
+}

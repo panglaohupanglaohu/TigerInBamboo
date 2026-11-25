@@ -1,0 +1,30 @@
+{
+ "capability": "planet.weather-clouds",
+ "schemaVersion": 1,
+ "parityVersion": 1,
+ "generatedAt": "2026-11-25T02:20:34.998Z",
+ "generator": "TigerMessenger/tools/refactor/mech-parity.mjs",
+ "line": "planet",
+ "sameCriteriaEqual": true,
+ "verdict": "equivalent",
+ "original": [
+  "townscaper-web/REACode/engine/impostor.js"
+ ],
+ "refactored": [
+  "townscaper-web/REACodeRefactoring/src/core/cloud-motion.js"
+ ],
+ "inputs": {
+  "samples": "32 组合（t×位置×amt）"
+ },
+ "metrics": [
+  {
+   "id": "bob",
+   "name": "cloudWindBob 96 分量最大差",
+   "original": 0,
+   "refactored": 0,
+   "equal": true
+  }
+ ],
+ "diffs": [],
+ "basis": "重构文件自述「与 engine 同式的函数化移植」——把 impostor.js 顶点着色器里的云起伏式子逐字取到 JS，同参逐位对拍。"
+}

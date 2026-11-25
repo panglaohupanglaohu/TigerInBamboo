@@ -1,0 +1,31 @@
+{
+ "capability": "apostles.palette",
+ "line": "terrain",
+ "schemaVersion": 1,
+ "pass": true,
+ "basis": "本能力在双岩体考场（apostles.json）真实跑过 match→run，成绩见共享表——判定规则写在表头，不手改。",
+ "see": "TigerMessenger/src/scene-authoring/catalog/arena/apostles.json#apostles.palette",
+ "runner": "TigerMessenger/tools/refactor/record-apostles-arena.mjs（实算）",
+ "test": "TigerMessenger/tests/apostles-terrain-pipeline.test.mjs",
+ "arena": {
+  "fixture": "双岩体（台地 + 颜色）"
+ },
+ "result": {
+  "verdict": "擂过",
+  "targets": 2,
+  "applied": 1,
+  "planKeys": [
+   "flags",
+   "look",
+   "lookId",
+   "persist",
+   "metrics"
+  ],
+  "flagSet": true,
+  "metricsRows": 2,
+  "changed": "顶面 / 崖壁平均色离库地形色（草 #86a160 · 岩 #a7a49d）平均 ΔE 12.121",
+  "error": null,
+  "ms": 0
+ },
+ "recordedAt": "2026-11-25"
+}

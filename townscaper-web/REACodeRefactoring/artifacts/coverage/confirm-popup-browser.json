@@ -1,0 +1,101 @@
+{
+  "ok": 16,
+  "fix": {
+    "c1": 136,
+    "c2": 344,
+    "c3": 379,
+    "floor": 6,
+    "floor2": 6,
+    "floor3": 4,
+    "squads": 3
+  },
+  "r1": {
+    "eaten": true,
+    "options": [
+      "move"
+    ],
+    "picked": {
+      "id": 379,
+      "cx": -2.0809350051669098,
+      "cz": -1.9314857948562836,
+      "floor": 4,
+      "other": null
+    },
+    "buttons": [
+      "Move"
+    ],
+    "popupInDom": true,
+    "markerVisible": true,
+    "markerPos": [
+      -2.08,
+      2.04,
+      -1.93
+    ],
+    "c3": [
+      -2.0809350051669098,
+      2,
+      -1.9314857948562836
+    ],
+    "goal": 136
+  },
+  "r2": {
+    "goal": 379,
+    "floor": 4,
+    "popup": false,
+    "pending": false,
+    "marker": false,
+    "sel": null,
+    "moves": 1
+  },
+  "r3": {
+    "pending": false,
+    "marker": false,
+    "goal": 379
+  },
+  "r4": {
+    "opts": [
+      "select",
+      "move",
+      "swap"
+    ],
+    "other": true,
+    "before": [
+      379,
+      344,
+      4,
+      6
+    ],
+    "after": [
+      344,
+      379,
+      6,
+      4
+    ],
+    "c2": 344,
+    "marker": false,
+    "popup": false,
+    "swaps": 1,
+    "sel": null
+  },
+  "r5": {
+    "sel": 1,
+    "s2id": 1,
+    "pending": false
+  },
+  "pxOn": {
+    "n": 1524,
+    "bbox": [
+      382,
+      440,
+      477,
+      500
+    ],
+    "inBox": true
+  },
+  "pxOff": {
+    "n": 0,
+    "bbox": null,
+    "inBox": false
+  },
+  "errors": []
+}

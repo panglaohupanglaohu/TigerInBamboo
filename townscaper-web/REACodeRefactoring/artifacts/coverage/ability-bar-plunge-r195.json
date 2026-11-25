@@ -1,0 +1,445 @@
+{
+ "ok": 31,
+ "out": {
+  "entry": {
+   "present": true,
+   "visible": true,
+   "viewport": [
+    1120,
+    800
+   ],
+   "rect": [
+    457,
+    670,
+    206,
+    58
+   ],
+   "slots": [
+    {
+     "key": "plunge",
+     "enabled": true,
+     "opacity": 1,
+     "box": [
+      58,
+      58
+     ],
+     "svg": [
+      58,
+      58
+     ],
+     "bottom": 728
+    },
+    {
+     "key": "volley",
+     "enabled": false,
+     "opacity": 0.45,
+     "box": [
+      58,
+      58
+     ],
+     "svg": [
+      58,
+      58
+     ],
+     "bottom": 728
+    },
+    {
+     "key": "brace",
+     "enabled": false,
+     "opacity": 0.45,
+     "box": [
+      58,
+      58
+     ],
+     "svg": [
+      58,
+      58
+     ],
+     "bottom": 728
+    }
+   ],
+   "hlOpacity": 0,
+   "cdDash": 169.6,
+   "cdOpacity": 0,
+   "cdStroke": "#ffd34d",
+   "tagVisible": false,
+   "tagText": "Plunge"
+  },
+  "sizeRatio": 0.0518,
+  "fixture": {
+   "cell": 0,
+   "floor": 4,
+   "squads": 3,
+   "members": 3
+  },
+  "armedEmpty": {
+   "on": true,
+   "armed": true,
+   "cooldown": 0,
+   "cooldownMax": 0,
+   "hud": {
+    "present": true,
+    "visible": true,
+    "viewport": [
+     1120,
+     800
+    ],
+    "rect": [
+     457,
+     644,
+     207,
+     84
+    ],
+    "slots": [
+     {
+      "key": "plunge",
+      "enabled": true,
+      "opacity": 1,
+      "box": [
+       59,
+       84
+      ],
+      "svg": [
+       58,
+       58
+      ],
+      "bottom": 728
+     },
+     {
+      "key": "volley",
+      "enabled": false,
+      "opacity": 0.45,
+      "box": [
+       58,
+       58
+      ],
+      "svg": [
+       58,
+       58
+      ],
+      "bottom": 728
+     },
+     {
+      "key": "brace",
+      "enabled": false,
+      "opacity": 0.45,
+      "box": [
+       58,
+       58
+      ],
+      "svg": [
+       58,
+       58
+      ],
+      "bottom": 728
+     }
+    ],
+    "hlOpacity": 1,
+    "cdDash": 169.6,
+    "cdOpacity": 1,
+    "cdStroke": "#ffffff",
+    "tagVisible": true,
+    "tagText": "Plunge"
+   },
+   "banner": {
+    "text": "No valid targets",
+    "visible": true,
+    "elText": "No valid targets",
+    "t": 1.58
+   },
+   "shocks": 0,
+   "stats": {
+    "explosions": 0,
+    "scorches": 0,
+    "sparks": 0,
+    "maxFireball": 0,
+    "housesCharred": 0,
+    "charredVerts": 0,
+    "torches": 0,
+    "torchHits": 0,
+    "plunges": 0,
+    "noTargets": 1,
+    "plungeHits": 0,
+    "confirms": 0,
+    "moves": 0,
+    "swaps": 0,
+    "selects": 0,
+    "isoSegments": 0,
+    "isoLevels": 0,
+    "isoWallSegments": 0,
+    "promotions": 0,
+    "flairs": 0,
+    "wavesHeld": 0
+   }
+  },
+  "placed": {
+   "placed": true,
+   "units": 4,
+   "hp": 2
+  },
+  "foePt": {
+   "x": 560.0000000000001,
+   "y": 417.97323431681326
+  },
+  "landed": {
+   "hp": 1,
+   "dead": false,
+   "leaps": 0,
+   "stats": {
+    "explosions": 0,
+    "scorches": 0,
+    "sparks": 0,
+    "maxFireball": 0,
+    "housesCharred": 0,
+    "charredVerts": 0,
+    "torches": 0,
+    "torchHits": 0,
+    "plunges": 1,
+    "noTargets": 1,
+    "plungeHits": 1,
+    "confirms": 0,
+    "moves": 0,
+    "swaps": 0,
+    "selects": 0,
+    "isoSegments": 0,
+    "isoLevels": 0,
+    "isoWallSegments": 0,
+    "promotions": 0,
+    "flairs": 0,
+    "wavesHeld": 0
+   },
+   "shocks": 1,
+   "cooldown": 9.283,
+   "armed": false,
+   "probe": {
+    "on": true,
+    "armed": false,
+    "cooldown": 9.2833,
+    "cooldownMax": 10,
+    "hud": {
+     "present": true,
+     "visible": true,
+     "viewport": [
+      1120,
+      800
+     ],
+     "rect": [
+      457,
+      670,
+      206,
+      58
+     ],
+     "slots": [
+      {
+       "key": "plunge",
+       "enabled": true,
+       "opacity": 1,
+       "box": [
+        58,
+        58
+       ],
+       "svg": [
+        58,
+        58
+       ],
+       "bottom": 728
+      },
+      {
+       "key": "volley",
+       "enabled": false,
+       "opacity": 0.45,
+       "box": [
+        58,
+        58
+       ],
+       "svg": [
+        58,
+        58
+       ],
+       "bottom": 728
+      },
+      {
+       "key": "brace",
+       "enabled": false,
+       "opacity": 0.45,
+       "box": [
+        58,
+        58
+       ],
+       "svg": [
+        58,
+        58
+       ],
+       "bottom": 728
+      }
+     ],
+     "hlOpacity": 0,
+     "cdDash": 12.154666666667268,
+     "cdOpacity": 1,
+     "cdStroke": "#ffd34d",
+     "tagVisible": false,
+     "tagText": "Plunge"
+    },
+    "banner": {
+     "text": null,
+     "visible": false,
+     "elText": "No valid targets",
+     "t": 0
+    },
+    "shocks": 1,
+    "stats": {
+     "explosions": 0,
+     "scorches": 0,
+     "sparks": 0,
+     "maxFireball": 0,
+     "housesCharred": 0,
+     "charredVerts": 0,
+     "torches": 0,
+     "torchHits": 0,
+     "plunges": 1,
+     "noTargets": 1,
+     "plungeHits": 1,
+     "confirms": 0,
+     "moves": 0,
+     "swaps": 0,
+     "selects": 0,
+     "isoSegments": 0,
+     "isoLevels": 0,
+     "isoWallSegments": 0,
+     "promotions": 0,
+     "flairs": 0,
+     "wavesHeld": 0
+    }
+   }
+  },
+  "arcs": [
+   {
+    "cooldown": 9.2833,
+    "dash": 12.154666666667268,
+    "stroke": "#ffd34d",
+    "opacity": 1
+   },
+   {
+    "cooldown": 6.7833,
+    "dash": 54.55466666666826,
+    "stroke": "#ffd34d",
+    "opacity": 1
+   },
+   {
+    "cooldown": 4.2833,
+    "dash": 96.95466666666812,
+    "stroke": "#ffd34d",
+    "opacity": 1
+   }
+  ],
+  "recharged": {
+   "on": true,
+   "armed": false,
+   "cooldown": 0,
+   "cooldownMax": 10,
+   "hud": {
+    "present": true,
+    "visible": true,
+    "viewport": [
+     1120,
+     800
+    ],
+    "rect": [
+     457,
+     670,
+     206,
+     58
+    ],
+    "slots": [
+     {
+      "key": "plunge",
+      "enabled": true,
+      "opacity": 1,
+      "box": [
+       58,
+       58
+      ],
+      "svg": [
+       58,
+       58
+      ],
+      "bottom": 728
+     },
+     {
+      "key": "volley",
+      "enabled": false,
+      "opacity": 0.45,
+      "box": [
+       58,
+       58
+      ],
+      "svg": [
+       58,
+       58
+      ],
+      "bottom": 728
+     },
+     {
+      "key": "brace",
+      "enabled": false,
+      "opacity": 0.45,
+      "box": [
+       58,
+       58
+      ],
+      "svg": [
+       58,
+       58
+      ],
+      "bottom": 728
+     }
+    ],
+    "hlOpacity": 0,
+    "cdDash": 169.6,
+    "cdOpacity": 0,
+    "cdStroke": "#ffd34d",
+    "tagVisible": false,
+    "tagText": "Plunge"
+   },
+   "banner": {
+    "text": null,
+    "visible": false,
+    "elText": "No valid targets",
+    "t": 0
+   },
+   "shocks": 0,
+   "stats": {
+    "explosions": 0,
+    "scorches": 0,
+    "sparks": 0,
+    "maxFireball": 0,
+    "housesCharred": 0,
+    "charredVerts": 0,
+    "torches": 0,
+    "torchHits": 0,
+    "plunges": 1,
+    "noTargets": 1,
+    "plungeHits": 1,
+    "confirms": 0,
+    "moves": 0,
+    "swaps": 0,
+    "selects": 0,
+    "isoSegments": 0,
+    "isoLevels": 0,
+    "isoWallSegments": 0,
+    "promotions": 0,
+    "flairs": 0,
+    "wavesHeld": 0
+   }
+  },
+  "diff": {
+   "n": 6861,
+   "bbox": [
+    459,
+    672,
+    660,
+    725
+   ]
+  }
+ }
+}

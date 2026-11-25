@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8" />
+<title>Engine — 木框架吊脚楼：墩→柱→梁撑→墙→顶（1257213678056857600）</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #10161a; overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; gap: 16px; }
+  canvas { display: block; border-radius: 4px; }
+  #hud {
+    color: #e8ebef; font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+    white-space: pre; padding: 12px 14px; background: #14161a; border-radius: 8px;
+    border: 1px solid #262b33;
+  }
+  #hud b { color: #7fd3a0; }
+  #hud .bad { color: #e8796b; }
+  #hud .dim { color: #8b94a3; }
+</style>
+</head>
+<body>
+<canvas id="c" width="640" height="420"></canvas>
+<div id="hud">…</div>
+
+<script type="module">
+/**
+ * timberlab.html — src/timberframe.js 的验证页。
+ *
+ * 照片子 1257213678056857600 的建造顺序，把 5 个阶段并排画出来：
+ *   0 墩 → 1 柱（墙还是空的，能看穿）→ 2 梁/斜撑/栏杆 → 3 墙 → 4 屋顶
+ * 片子里最反直觉的一点就在 1→2：**框架先立完才填墙**，所以中途能看到"空架子"。
+ * 这里把五个阶段同时画出来，就是为了让这个顺序一眼可查；HUD 里给的是比例反测。
+ */
+import { buildFrame, drawFrame, verify, RATIO, STAGE } from '../src/timberframe.js';
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const hud = document.getElementById('hud');
+
+const W = cv.width, H = cv.height;
+const stages = [0, 1, 2, 3, 4];
+const labels = ['墩', '柱', '梁/撑/栏杆', '墙', '屋顶'];
+
+// 水色底（片子背景是青绿水面，带一条浅水线）
+const g = ctx.createLinearGradient(0, 0, 0, H);
+g.addColorStop(0, '#9fc4c4');
+g.addColorStop(1, '#7fa9ad');
+ctx.fillStyle = g;
+ctx.fillRect(0, 0, W, H);
+
+const SPAN = 96;              // 每架房子的跨度（px）
+const f = buildFrame(SPAN);
+const baseY = H - 96;         // 框架底（墩顶）—— 留出墩和水面的位置
+
+stages.forEach((s, i) => {
+  const ox = 64 + i * 124;
+  drawFrame(ctx, f, ox, baseY, { stage: s });
+  ctx.fillStyle = '#26323a';
+  ctx.font = '11px ui-monospace, Menlo, monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText(s + ' ' + labels[i], ox, H - 12);
+});
+
+// 水线：压在墩高的 0.85 处（墩脚被水挡住，片子里就是这样）
+const waterY = baseY + SPAN * 0.30 * 0.85;
+ctx.strokeStyle = 'rgba(255,255,255,0.55)';
+ctx.lineWidth = 2;
+ctx.beginPath();
+ctx.moveTo(0, waterY);
+ctx.lineTo(W, waterY);
+ctx.stroke();
+
+const v = verify(185);
+const ok = (a, b, tol) => (Math.abs(a - b) <= tol ? '<b>OK</b>' : '<span class="bad">✗</span>');
+hud.innerHTML = [
+  '<b>片子(f015)   模型</b>',
+  `柱宽/跨度  ${v.film.postW}   ${v.postWRatio}  ${ok(v.postWRatio, v.film.postW, 0.006)}`,
+  `框高/跨度  ${v.film.frameH}   ${v.frameHRatio}  ${ok(v.frameHRatio, v.film.frameH, 0.02)}`,
+  `栏杆/跨度  ${v.film.railH}   ${v.railHRatio}  ${ok(v.railHRatio, v.film.railH, 0.02)}`,
+  `栏杆立柱   10     ${v.balusters - 1}  ${ok(v.balusters - 1, 10, 2)}`,
+  `斜撑       2      ${v.braces}  ${ok(v.braces === 2, true, 0)}`,
+  '',
+  '<span class="dim">───────────────</span>',
+  '<span class="dim">建造顺序（片子里数出来的）</span>',
+  '<span class="dim">墩 → 柱 → 梁/撑/栏杆 → 墙 → 顶</span>',
+  '<span class="dim">f06–f13 墙是空的，能看穿</span>',
+  '<span class="dim">f18 起墙才填进来，把柱子挡掉一半</span>',
+  '<span class="dim">斜撑 1px（114 级 vs 水 150 级）</span>',
+  '<span class="dim">端点按惯例取，角度是估计值</span>',
+].join('\n');
+window.__v = v;
+</script>
+</body>
+</html>

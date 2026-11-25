@@ -35,6 +35,7 @@
   <p>1078792665980915714：视频展示连图与选路。这里保留Delaunay近似；橙色是最近邻补边，红色是连通修复，原作精确规则未知。</p>
   <label><input id="frontier" type="checkbox">边境路径 / Bezier实验</label><input id="frontier-step" type="range" min="-10" max="10" step="1" value="0" aria-label="前线位置"><p id="frontier-status">前线路径未启用。</p>
   <label><input id="frontier-fields" type="checkbox">多条前线 + 两侧场细分（1097458505315946496 第 4 步；URL <code>?fields=1</code>）</label><p id="fields-status">多条前线未启用。</p>
+  <p>1097458505315946496 第 5 步的墨层（地名 / 阶段数字 / 航路箭头 / 虚线墨色前线 / 场内波纹纹样）默认开，<code>?ink=0</code> 可整层关掉做 A/B。</p>
   <p id="graph-status"></p>
   <p>源码：<code>src/campaign/campaign.js</code></p>
 </div>
@@ -42,9 +43,15 @@
 import { generateCampaign, islandSnapshot } from './src/campaign/campaign.js';
 import { buildFrontier } from './src/core/frontier.js';
 import { campaignFrontierFields, drawFrontierFields } from './src/campaign/frontier-overlay.js';
+import { drawFieldPattern, drawFrontierInk, drawPlaceNames, drawStageMarks, drawRouteArrows, islandName } from './src/campaign/map-ink.js';
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 let seed = 4, step = 5, C = generateCampaign({ seed }), snaps = new Map();
-let F = null, MF = null;
+let F = null, MF = null, inkStats = null, lastP = null;
+// 1097458505315946496 第 5 步：片中最终地图是有「手写地名 + 小号阶段数字 + 航路箭头 + 墨线虚线前线」的，
+// ?ink=0 可整层关掉做 A/B。
+const INK_ON = (new URLSearchParams(location.search).get('ink') ?? '1') !== '0';
+// 两侧场在片中是很淡的海水色差（不是本仓原来的糖果色带），填色换低饱和海色，节点标签仍用 BAND_COLORS。
+const SEA_TINTS = ['#587f8c', '#6f98a3', '#7fa8ae', '#63828c', '#7b9aa0', '#6a8b95'];
 const FIELD_POS = (new URLSearchParams(location.search).get('fieldPos') || '-6,0,6').split(',').map(Number);
 let groupFrame = C.region.history.length - 1;
 const COLS = ['#f2c14e', '#7fd1c8', '#e98fa6', '#8fbf5a', '#b39ddb', '#f0a35e'];
@@ -60,9 +67,18 @@ function draw() {
   // 地图横过来放（长边沿屏幕宽）
   const s = Math.min((W - (wide ? 420 : 40)) / 28, (H - 60) / 8);
   const P = (x, y) => [ (wide ? 400 : 20) + (y + 13.5) * s, H / 2 + x * s ];
+  lastP = P;
   ctx.fillStyle = step === 5 ? '#6f98a3' : '#3a4247'; ctx.fillRect(0, 0, W, H);
   // r55 G3：两侧场在最底层（岛与航路画在上面）
-  if (MF?.M && step > 1) drawFrontierFields(ctx, MF.M, P, { nodes: step >= 4 ? C.nodes.map((n, i) => C.used.includes(i) ? n : null) : null, tagOffset: step === 5 ? 11 : 0 });
+  if (MF?.M && step > 1) {
+    // 第 4 步（分区调试）保留节点分带圆标与场内 wire；第 5 步的成品地图按片中去掉圆标，只留墨层。
+    drawFrontierFields(ctx, MF.M, P, { nodes: step === 4 ? C.nodes.map((n, i) => C.used.includes(i) ? n : null) : null, tagOffset: 0, palette: SEA_TINTS, curves: !INK_ON, wire: step < 5 });
+    if (INK_ON) {
+      const patterns = drawFieldPattern(ctx, MF.M, P, { spacing: 15, alpha: .1, amp: 1.4 });
+      const ink = drawFrontierInk(ctx, MF.M, P, { labels: true });
+      inkStats = { ...(inkStats || {}), patterns, frontiers: ink.curves, frontierLabels: ink.labels, frontierAnchors: ink.anchors };
+    }
+  }
   if (step === 1) { for (const p of C.spread) { ctx.strokeStyle = '#ddd'; ctx.beginPath(); ctx.arc(...P(p.x, p.y), p.r * s, 0, 7); ctx.stroke(); } return; }
   const show = step === 3 ? new Set(C.main) : step >= 4 ? new Set(C.used) : null;
   if (step >= 2 && step < 5) {
@@ -110,6 +126,13 @@ function draw() {
       ctx.drawImage(snaps.get(i), x - sz / 2, y - sz / 2, sz, sz);
       if (i === C.start || i === C.end) { ctx.fillStyle = i === C.start ? '#3fd6d0' : '#d6503c'; ctx.beginPath(); ctx.arc(x, y - sz * 0.45, 5, 0, 7); ctx.fill(); }
     }
+    if (INK_ON) {
+      // 片中最终地图的墨层：地名（岛上斜排手写体）+ 航路箭头 + 阶段小数字
+      const arrows = drawRouteArrows(ctx, P, C.nodes, C.edges, { route: C.main });
+      const names = drawPlaceNames(ctx, P, C.nodes, { seed, only: new Set(C.used), scale: s });
+      const marks = drawStageMarks(ctx, P, C.nodes, { route: C.main, scale: s });
+      inkStats = { ...(inkStats || {}), arrows: arrows.arrows, names: names.drawn, stageMarks: marks.drawn, nameAnchor: names.anchors[0] ?? null, nameAnchors: names.anchors.slice(0, 3), arrowAnchor: arrows.anchors[0] ?? null };
+    }
   }
   if(F?.ok){ctx.strokeStyle='#fff0b7';ctx.lineWidth=3;ctx.setLineDash([5,4]);ctx.beginPath();F.path.forEach((p,i)=>ctx[i?'lineTo':'moveTo'](...P(p.x,p.y)));ctx.stroke();ctx.setLineDash([]);}
 }
@@ -121,7 +144,13 @@ document.getElementById('reseed').onclick = () => { seed++; C = generateCampaign
 document.getElementById('frontier').onchange=updateFrontier;document.getElementById('frontier-fields').onchange=updateFields;if(new URLSearchParams(location.search).get('fields')==='1'){document.getElementById('frontier-fields').checked=true;}document.getElementById('frontier-step').oninput=updateFrontier;
 document.getElementById('group-frame').oninput = e => { groupFrame = +e.target.value; draw(); };
 addEventListener('resize', draw); if(document.getElementById('frontier-fields').checked)updateFields(); else draw();
-window.campaign = () => ({ nodes: C.nodes.length, used: C.used.length, main: C.main.length, edges: C.edges.length, tri: C.steps.tri.length, bridges: C.steps.bridges.length, componentsBeforeRepair: C.steps.componentsBeforeRepair, route: C.main, start: C.start, end: C.end, adjacency: C.nb, region: [...C.region], grouping: C.region.stats, historyLength: C.region.history.length, groupFrame, frontier:F, fields: MF ? (MF.summary ?? { error: MF.error }) : null });
+window.campaign = () => ({ nodes: C.nodes.length, used: C.used.length, main: C.main.length, edges: C.edges.length, tri: C.steps.tri.length, bridges: C.steps.bridges.length, componentsBeforeRepair: C.steps.componentsBeforeRepair, route: C.main, start: C.start, end: C.end, adjacency: C.nb, region: [...C.region], grouping: C.region.stats, historyLength: C.region.history.length, groupFrame, frontier:F, fields: MF ? (MF.summary ?? { error: MF.error }) : null, ink: INK_ON ? { on: true, step, ...(inkStats || {}) } : { on: false, step }, fieldPos: FIELD_POS });
+window.campaignBands = () => { if (!MF?.M || !lastP) return []; const ok = MF.M.frontiers.map((f,k)=>(f.ok&&MF.M.fields[k]?k:-1)).filter(k=>k>=0); if(!ok.length) return [];
+  const area = t => Math.abs((t[1].x-t[0].x)*(t[2].y-t[0].y)-(t[1].y-t[0].y)*(t[2].x-t[0].x))/2;
+  const pick = (tris, name) => { if (!tris || !tris.length) return null; const t = tris.reduce((a,b)=>area(b)>area(a)?b:a); const cx=(t[0].x+t[1].x+t[2].x)/3, cy=(t[0].y+t[1].y+t[2].y)/3; const [sx,sy]=lastP(cx,cy); return { name, cx: sx, cy: sy, worldArea: area(t), tris: tris.length }; };
+  return [pick(MF.M.fields[ok[0]].belowTris,'band0'), ...ok.map((k,i)=>pick(MF.M.fields[k].aboveTris,'band'+(i+1)))].filter(Boolean); };
+window.campaignNames = () => C.used.map((i) => C.nodes[i] && ({ id: i, name: islandName(seed, i) }));
+window.campaignDraw = () => draw();
 </script>
 </body>
 </html>

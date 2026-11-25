@@ -50,6 +50,12 @@ export function createStage() {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
+  // 页面被卸载（管线工坊 iframe 顺序重载 / 关页）时主动释放 GPU 资源：
+  // 重场景连换数次实测崩过渲染进程——纹理与 GL 上下文不等垃圾回收，立即归还驱动。
+  window.addEventListener("pagehide", () => {
+    try { renderer.dispose(); } catch {}
+    try { renderer.forceContextLoss(); } catch {}
+  });
 
   return { scene, camera, renderer };
 }

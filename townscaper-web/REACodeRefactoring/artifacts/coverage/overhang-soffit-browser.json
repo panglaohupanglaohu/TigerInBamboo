@@ -1,0 +1,259 @@
+{
+  "reports": [
+    {
+      "kind": "mixed",
+      "topo": {
+        "rockVoxels": 18,
+        "undersides": 1,
+        "cavityColumns": 1,
+        "unsupported": 0
+      },
+      "overhang": {
+        "overhangAboveWater": 0,
+        "soffits": 1,
+        "coveredAir": 3,
+        "reachableCoveredAir": 3,
+        "sealedAir": 0,
+        "caveDepth": 1
+      },
+      "camera": {
+        "x": 8.176,
+        "y": 0.286,
+        "z": 4.999,
+        "pitch": -0.22,
+        "distance": 9,
+        "fov": 30
+      },
+      "eaveY": 2,
+      "soffits": {
+        "count": 2,
+        "area": 0.2413,
+        "yMin": 2,
+        "yMax": 2,
+        "inFrame": 2,
+        "unoccluded": 2,
+        "samples": [
+          {
+            "inFrame": true,
+            "unoccluded": true,
+            "y": 2,
+            "x": 0.81,
+            "z": 0.25,
+            "ndc": [
+              -0.01,
+              -0.1
+            ]
+          },
+          {
+            "inFrame": true,
+            "unoccluded": true,
+            "y": 2,
+            "x": 0.69,
+            "z": 0.05,
+            "ndc": [
+              0.01,
+              -0.117
+            ]
+          }
+        ]
+      },
+      "cavity": [
+        {
+          "level": 2,
+          "y": 0.75,
+          "lipSolid": 0,
+          "hit": 3.57,
+          "clear": 0.202,
+          "reachesPillar": true
+        },
+        {
+          "level": 3,
+          "y": 1.25,
+          "lipSolid": 0,
+          "hit": 3.57,
+          "clear": 0.202,
+          "reachesPillar": true
+        },
+        {
+          "level": 4,
+          "y": 1.75,
+          "lipSolid": 0,
+          "hit": 3.565,
+          "clear": 0.207,
+          "reachesPillar": true
+        }
+      ],
+      "section": [
+        "RR",
+        ".R",
+        ".R",
+        ".R",
+        "RR"
+      ],
+      "pixels": {
+        "W": 1440,
+        "H": 741,
+        "diff": 8583,
+        "noise": 0,
+        "box": [
+          710,
+          730,
+          405,
+          417
+        ],
+        "under": 37.21,
+        "behind": 101.39,
+        "underP10": 36,
+        "behindP10": 101,
+        "underP50": 37.07,
+        "behindP50": 101.07,
+        "underMin": 35.3,
+        "underMax": 39,
+        "darkUnder": 1,
+        "darkBehind": 0,
+        "px": 273
+      },
+      "capOff": {
+        "triangles": 0,
+        "measure": 0,
+        "columns": 0
+      },
+      "thin": {
+        "guardedArea": 0.2413,
+        "unguardedArea": 0.1391,
+        "flatArea": 0.3436,
+        "guardedTris": 2,
+        "unguardedTris": 2,
+        "flatTris": 2
+      }
+    },
+    {
+      "kind": "quad",
+      "topo": {
+        "rockVoxels": 16,
+        "undersides": 1,
+        "cavityColumns": 1,
+        "unsupported": 0
+      },
+      "overhang": {
+        "overhangAboveWater": 0,
+        "soffits": 1,
+        "coveredAir": 3,
+        "reachableCoveredAir": 3,
+        "sealedAir": 0,
+        "caveDepth": 1
+      },
+      "camera": {
+        "x": 4.369,
+        "y": 0.286,
+        "z": -8.275,
+        "pitch": -0.22,
+        "distance": 9,
+        "fov": 30
+      },
+      "eaveY": 2,
+      "soffits": {
+        "count": 2,
+        "area": 0.1603,
+        "yMin": 2,
+        "yMax": 2,
+        "inFrame": 2,
+        "unoccluded": 2,
+        "samples": [
+          {
+            "inFrame": true,
+            "unoccluded": true,
+            "y": 2,
+            "x": 0.14,
+            "z": -0.4,
+            "ndc": [
+              0.011,
+              -0.114
+            ]
+          },
+          {
+            "inFrame": true,
+            "unoccluded": true,
+            "y": 2,
+            "x": 0.31,
+            "z": -0.54,
+            "ndc": [
+              -0.007,
+              -0.098
+            ]
+          }
+        ]
+      },
+      "cavity": [
+        {
+          "level": 2,
+          "y": 0.75,
+          "lipSolid": 0,
+          "hit": 3.465,
+          "clear": 0.142,
+          "reachesPillar": true
+        },
+        {
+          "level": 3,
+          "y": 1.25,
+          "lipSolid": 0,
+          "hit": 3.465,
+          "clear": 0.141,
+          "reachesPillar": true
+        },
+        {
+          "level": 4,
+          "y": 1.75,
+          "lipSolid": 0,
+          "hit": 3.461,
+          "clear": 0.145,
+          "reachesPillar": true
+        }
+      ],
+      "section": [
+        "RR",
+        ".R",
+        ".R",
+        ".R",
+        "RR"
+      ],
+      "pixels": {
+        "W": 1440,
+        "H": 741,
+        "diff": 15732,
+        "noise": 0,
+        "box": [
+          712,
+          731,
+          404,
+          416
+        ],
+        "under": 48.65,
+        "behind": 95.91,
+        "underP10": 38,
+        "behindP10": 95.07,
+        "underP50": 39,
+        "behindP50": 95.07,
+        "underMin": 38,
+        "underMax": 127.7,
+        "darkUnder": 0.915,
+        "darkBehind": 0,
+        "px": 260
+      },
+      "capOff": {
+        "triangles": 0,
+        "measure": 0,
+        "columns": 0
+      },
+      "thin": {
+        "guardedArea": 0.1603,
+        "unguardedArea": 0.0453,
+        "flatArea": 0.2032,
+        "guardedTris": 2,
+        "unguardedTris": 2,
+        "flatTris": 2
+      }
+    }
+  ],
+  "errors": []
+}

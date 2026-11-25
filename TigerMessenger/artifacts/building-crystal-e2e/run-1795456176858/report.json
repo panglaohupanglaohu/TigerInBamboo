@@ -1,0 +1,45 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/building-crystal-e2e/run-1795456176858",
+  "capabilities": [],
+  "steps": {
+    "scan": "扫描完成：1 / 3 个能力能作用。 已按「水晶城（通用插件 + 构建面板）」自动预装 1 个能力（多格 prefab 目录），点 ▶ 执行管线一键跑完整条。",
+    "terrain": "original",
+    "rootBefore": {
+      "meshes": 3340,
+      "sig": -753418.64
+    },
+    "run": {
+      "h4": "候选 · 验证未通过",
+      "checks": [
+        "✗ 建筑群计划计划里没有建筑群（联合 WFC 没解出来或没执行）"
+      ],
+      "state": {
+        "active": true,
+        "id": "crystal",
+        "previewing": false,
+        "comparing": false,
+        "inScene": false,
+        "meshes": 0,
+        "buildings": 0,
+        "roads": 0,
+        "terrain": "original",
+        "mountainPreviewing": false,
+        "terrainStale": false,
+        "adopted": false,
+        "seed": null,
+        "groups": []
+      }
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "zz-failure.png"
+  ],
+  "pass": false,
+  "failure": "Error: 水晶城没有建筑候选：{\"active\":true,\"id\":\"crystal\",\"previewing\":false,\"comparing\":false,\"inScene\":false,\"meshes\":0,\"buildings\":0,\"roads\":0,\"terrain\":\"original\",\"mountainPreviewing\":false,\"terrainStale\":false,\"adopted\":false,\"seed\":null,\"groups\":[]}\n    at expect (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:15:38)\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/building-crystal-browser.mjs:11:2\n    at async Object.finish (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/lib/building-e2e.mjs:53:8)\n    at async file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/building-crystal-browser.mjs:6:1"
+}

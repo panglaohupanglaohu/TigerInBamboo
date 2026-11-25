@@ -1,4 +1,5 @@
-// 苔庭之战 · 维京人打霸天（2026-11-10 用户：「只看到小船载着维京人到苔庭，并未见到维京人射击霸天舰队，也未见攻击重甲士兵……攻击你必须安排」）。
+// 主战场之战 · 维京人打霸天（2026-11-10 用户：「只看到小船载着维京人到苔庭，并未见到维京人射击霸天舰队，也未见攻击重甲士兵……攻击你必须安排」；
+//   2026-11-16 主战场默认改十二门徒：本层与地点无关，site 选项把霸天目标站传给船体结算通道，苔庭战役传 'moss' 行为不变）。
 // REA 战斗只有两队（维京 / 守军），霸天舰队和先锋重甲兵不在 REA 单位表里，所以这里接一层：
 //   1. 投矛打霸天舰队：上岸维京人每 2.4–3.6 s 向最近的霸天单位（aircraft / 护航舰）掷一支标枪（140 m 内；抛物线、追着目标飞）。
 //      命中走苔庭原有的弓箭 / 标枪通道：飞行中每帧 interceptSaihojiFleetProjectile（护盾拦截，有护盾火花），
@@ -14,7 +15,7 @@ const THROW_RANGE = 140, MELEE_R = 2.0, MAX_SPEARS = 70;
 const hitVanguard = (tr, kind) => tr?.userData?.saihojiReceiveHit?.(kind) || applyVanguardHit(tr, kind);
 const visibleChain = (o) => { for (let p = o; p; p = p.parent) if (!p.visible) return false; return true; };
 
-export function createVikingBatianAttack({ scene, stage, getFleet = () => scene.userData.batianFleet || null }) {
+export function createVikingBatianAttack({ scene, stage, getFleet = () => scene.userData.batianFleet || null, site = 'moss' }) {
   const b = stage.battle, inv = stage.anchor.matrixWorld.clone().invert();
   const stats = { throws: 0, shield: 0, hull: 0, missed: 0, trooperStrikes: 0, trooperWounds: 0, trooperKills: 0, vikingsCut: 0, pursuing: 0 };
   const spears = [], sparks = [];
@@ -43,7 +44,7 @@ export function createVikingBatianAttack({ scene, stage, getFleet = () => scene.
 
   function update(dt) {
     const fleet = getFleet();
-    // —— 霸天单位（只在霸天打苔庭时才算数：interceptSaihoji… 自带 commandedTarget 判定）
+    // —— 霸天单位（只在霸天打当前主战场站时才算数：interceptSaihoji… 自带 commandedTarget 判定，site 透传）
     const ships = enabled && fleet?.active ? (fleet.units?.() || []).filter((m) => m?.parent && !m.userData?.batianDisabled && visibleChain(m)) : [];
     const shipPos = ships.map((m) => m.getWorldPosition(new THREE.Vector3()));
     // —— 先锋重甲兵（落地、活着、可见）
@@ -108,10 +109,10 @@ export function createVikingBatianAttack({ scene, stage, getFleet = () => scene.
       s.g.position.copy(s.from).lerp(tgt, k).addScaledVector(up, s.arc * 4 * k * (1 - k));
       const dir = v.subVectors(s.g.position, s.prev); if (dir.lengthSq() > 1e-8) s.g.lookAt(v.copy(s.g.position).add(dir));
       const fl = getFleet();
-      const ic = fl ? interceptSaihojiFleetProjectile(fl, s.target, s.prev, s.g.position, 'javelin') : null;
+      const ic = fl ? interceptSaihojiFleetProjectile(fl, s.target, s.prev, s.g.position, 'javelin', site) : null;
       if (ic) { stats.shield++; recordSaihojiFleetContact(root, ic); s.done = true; continue; }
       if (k >= 1) {
-        const hit = fl ? applySaihojiFleetHullContact(fl, s.target, s.g.position.clone(), 'javelin') : null;
+        const hit = fl ? applySaihojiFleetHullContact(fl, s.target, s.g.position.clone(), 'javelin', site) : null;
         if (hit) { stats.hull++; recordSaihojiFleetContact(root, hit); spark(s.g.position); } else stats.missed++;
         s.done = true;
       }

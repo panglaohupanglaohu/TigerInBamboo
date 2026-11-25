@@ -3,10 +3,13 @@
  *   ⚙ 可执行能力（能力代码 / 场景现有能力）：可拖进当前工坊的管线，管线里的每个节点都能执行
  *   ● ◐ ○ 学习库方法（重构版 / 部分 / 原版占位）：只在库里占位、标来源；封装成能力代码后才可拖入
  * 同一条学习方法会出现在多个工坊（方法复用，作用范围不同）；「全部工坊」可以看到它在哪几层。
+ * R23：每个 ⚙ 能力带九级成熟度徽章（catalog/capability-maturity.json，脚本按证据判定）；顶部计数写明口径：
+ *   「场景层可执行 N」= 本工坊能拖进管线的能力（按 ID 去重）；「全系统去重 M」= 全部可执行能力的唯一对外数字。没有成熟度文件时不显示徽章和 M。
  */
 import { loadCatalog, scanCatalog, EXEC } from './catalog-view.js?v=code-r2';
 import { listSets, removeSet } from './capability-sets.js?v=sys-r4';
 import { usageFor } from './capability-usage.js?v=sys-r15';
+import { contractOf, RESOURCES, PRESERVES } from './contracts.js?v=contract-r1';
 import { buildCapabilityLineage, describeDirection } from '../../../townscaper-web/REACodeRefactoring/src/core/capability-lineage.js';
 
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
@@ -51,6 +54,17 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
   const VIEW_KEY = 'tm.capability.view.v1';
   let view = 'lineage'; try { if (localStorage.getItem(VIEW_KEY) === 'domain') view = 'domain'; } catch {}
   let lineageCache = null;
+  // R23 九级成熟度：脚本生成的证据判定结果；读不到就降级（不显示徽章，计数只写本工坊）
+  let maturity = null, matById = new Map();
+  fetch(new URL('../scene-authoring/catalog/capability-maturity.json', import.meta.url), { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => { if (Array.isArray(d?.rows)) { maturity = d; matById = new Map(d.rows.map((r) => [r.id, r])); render(); } }).catch(() => {});
+  const TIER_COUNT = { planet: '球系统层', scene: '场景层', object: '物件层' };
+  const countLabel = (tier, n, tail) => {
+    const who = scope === 'all' ? '三层' : TIER_COUNT[tier] || '本工坊', uniq = maturity?.counts?.find?.((c) => c.id === 'unique')?.value ?? maturity?.rows?.length;
+    const cnt = head.querySelector('.cap-count');
+    cnt.textContent = `${who}可执行 ${n}` + (uniq != null ? ` · 全系统去重 ${uniq}` : '（成熟度数据未生成）') + (tail ? ' · ' + tail : '');
+    cnt.title = (maturity?.counts || []).map((c) => `${c.label}：${c.value ?? '—'}${c.seen != null ? '（审计时 ' + c.seen + '）' : ''} —— ${c.basis}`).join('\n') || '「可执行」= 这一层能拖进管线的 ⚙ 能力，按能力 ID 去重。运行 tools/refactor/build-capability-maturity.mjs 生成统一口径表。';
+    cnt.dataset.unique = uniq ?? ''; cnt.dataset.tierCount = n;
+  };
   host.replaceChildren();
   const head = el('div', undefined, 'section-title'); head.append(el('h2', '能力库'), el('span', '', 'cap-count'));
   const learnRoute = el('button', '需求组合与源码缺口 → 学习工坊');learnRoute.onclick=()=>window.dispatchEvent(new Event('tm.learning.roadmap'));host.append(learnRoute);
@@ -120,12 +134,31 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
     const adapters=item.runnable?[]:['planet','scene','object'].flatMap(t=>(sources[t]?.()||[]).filter(cap=>(cap.related||[]).includes(item.id)||(item.node?.module?.adapters||[]).some(a=>a.id===cap.id&&a.tier===t)).map(cap=>({cap,tier:t})));
     c.title = item.runnable ? '拖进管线，或双击加入' : label + '：展开查看源码接口与依赖';
     const t = el('div', undefined, 'cap-item-head'); t.append(el('span', icon, 'cap-icon'), el('b', item.name), helpBadge(item));
+    const mrow = item.runnable ? matById.get(item.id) : null;
+    if (mrow) { const m = el('small', 'L' + mrow.level, 'cap-mat m' + mrow.level); m.dataset.level = mrow.level; m.title = '九级成熟度 ' + mrow.label + '\n' + Object.entries(mrow.evidence || {}).map(([k, v]) => '①②③④⑤⑥⑦⑧⑨'[k - 1] + ' ' + v).join('\n'); t.append(m); c.dataset.maturity = mrow.level; }
     if (item.shared) t.append(el('small', '公用', 'cap-tier'));
     else if (showTier || item.group === '_moved') t.append(el('small', '来自' + TIER_NAME[item.tier].replace('工坊', ''), 'cap-tier'));
     c.append(t);
     if(adapters.length)c.append(el('small','已有局部执行接口 '+adapters.length+' 项 · 展开选择','muted'));
     if (expanded === item.id) {
       if (item.desc) c.append(el('p', item.desc.slice(0, 160)));
+      // 详情抽屉：成熟度证据链 + 能力契约（数据来自 capability-maturity.json / 能力 meta，脚本每晚重算）
+      if (item.runnable && mrow) {
+        const det = el('details', undefined, 'cap-detail'); det.open = false;
+        det.append(el('summary', `详情 · ${mrow.label || 'L' + mrow.level}${mrow.file ? ' · ' + mrow.file.split('/').pop() : ''}`));
+        const rn = (x) => RESOURCES[x] || PRESERVES[x] || x;
+        for (const [k, v] of Object.entries(mrow.evidence || {})) {
+          const lv = maturity?.levels?.[k - 1]?.name || '', p = el('p', undefined, 'cap-ev');
+          p.append(el('small', '①②③④⑤⑥⑦⑧⑨'[k - 1] + ' ' + lv + ' ', 'cap-ev-lv'), el('code', String(v).slice(0, 110)));
+          if (mrow.basis?.[k]) p.title = mrow.basis[k];
+          det.append(p);
+        }
+        if (mrow.missing?.length) det.append(el('small', '中间缺级：' + mrow.missing.join('、'), 'muted'));
+        const ct = contractOf(item.cap || { id: item.id });
+        if (ct.reads.length || ct.writes.length || ct.preserves.length) det.append(el('small', `契约（${ct.source}）：读 ${ct.reads.map(rn).join('、') || '—'} → 写 ${ct.writes.map(rn).join('、') || '—'}${ct.preserves.length ? ' · 保 ' + ct.preserves.map(rn).join('、') : ''}`, 'cap-contract muted'));
+        else det.append(el('small', '契约：没写（不声明读写与保证）', 'muted'));
+        c.append(det);
+      }
       for(const {cap,tier} of adapters){const button=el('button','加入已适配部分：'+cap.name);button.type='button';button.onclick=e=>{e.stopPropagation();onActivate?.({tier,id:cap.id,name:cap.name,into:tier});};c.append(button,el('small',cap.does||cap.description||'局部适配，来源完整迁移仍待完成','muted'));}
       if(item.node?.module){const a=el('a','查看实际源码 ↗');a.href=new URL('../../../townscaper-web/REACodeRefactoring/'+item.node.module.path,import.meta.url);a.target='_blank';a.onclick=e=>e.stopPropagation();c.append(a,el('code',item.node.module.exports.join(', ')||'入口模块'));}
       if (!item.runnable) c.append(el('small', label + (item.node?.original?.where ? ' · 原版 ' + item.node.original.where.slice(0, 60) : ''), 'muted'));
@@ -189,7 +222,7 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
     }
     const rest = [...items.values()].filter((it) => !placed.has(it.id) && !model.executables.find((x) => x.id === it.id)?.lines.length && (!query || (it.name + ' ' + it.desc + ' ' + it.id).toLowerCase().includes(query)));
     if (rest.length) { const d = el('details', undefined, 'cap-line'); d.open = !!query; const s = el('summary'); s.append(el('span', '—', 'cap-line-year'), el('b', '未关联能力线'), el('small', '⚙ ' + rest.length)); d.append(s, el('small', '这些能力能执行，但没有登记来源帖子或源码模块，暂时排不进时间线。', 'muted')); for (const it of rest) d.append(card(it, scope === 'all')); list.append(d); }
-    head.querySelector('.cap-count').textContent = `可执行 ${items.size} · 能力线 ${shown}`;
+    countLabel(tier, items.size, `能力线 ${shown}`);
   }
   // 能力集合：整组拖进管线，快速搭管线（两种视图都显示）
   function renderSets(t) {
@@ -239,7 +272,7 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
         list.append(d); shown += rows.length; runnable += rows.filter((r) => r.runnable).length;
       }
     }
-    head.querySelector('.cap-count').textContent = `可执行 ${runnable} · 已有代码 ${shown-runnable}`;
+    countLabel(tier, runnable, `已有代码 ${shown-runnable}`);
   }
   window.addEventListener('tm-capability-sets-changed', () => render());
   loadCatalog().then((c) => { catalog = c; render(); }).catch(() => render());

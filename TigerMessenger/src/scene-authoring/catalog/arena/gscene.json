@@ -1,0 +1,80 @@
+{
+ "schemaVersion": 1,
+ "generatedAt": "2026-11-25T00:24:28.779Z",
+ "arena": {
+  "fixture": "MATS 8 材质（红系×2 蓝系×2 绿×1）",
+  "runner": "TigerMessenger/tools/refactor/record-gscene-arena.mjs（实算）"
+ },
+ "judge": "规则写死：match targets≥1 且全部材质拿到归位色且 moved≥1 为「擂过」。",
+ "results": [
+  {
+   "id": "scene.oklab-contrast",
+   "name": "感知明暗层次",
+   "domain": "atmosphere",
+   "targets": 1,
+   "colors": 8,
+   "moved": 7,
+   "maxMove": 8.66,
+   "ms": 0,
+   "note": "材质表OKLab明暗适配；不是三角面contrast texture",
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "scene.oklab-palette",
+   "name": "感知色板归并",
+   "domain": "style",
+   "targets": 1,
+   "colors": 8,
+   "moved": 4,
+   "maxMove": 3.32,
+   "ms": 0,
+   "note": "5组感知主色，保留材质明暗；不是World八角点色体",
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "scene.palette-unify",
+   "name": "风格统一（主色归并）",
+   "domain": "style",
+   "targets": 1,
+   "colors": 8,
+   "moved": 4,
+   "maxMove": 10.05,
+   "ms": 0,
+   "note": "6 个主色：#c04030 #3153c2 #b8382a #c04535 #42a252 #2f55b8",
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "scene.tone",
+   "name": "整体色调",
+   "domain": "atmosphere",
+   "targets": 1,
+   "colors": 8,
+   "moved": 8,
+   "maxMove": 33,
+   "ms": 1,
+   "note": null,
+   "pass": true,
+   "verdict": "擂过"
+  },
+  {
+   "id": "scene.style-pack",
+   "name": "套用风格包",
+   "domain": "style",
+   "targets": 1,
+   "colors": 8,
+   "moved": 8,
+   "maxMove": 50.54,
+   "ms": 0,
+   "note": null,
+   "pass": true,
+   "verdict": "擂过"
+  }
+ ],
+ "counts": {
+  "caps": 5,
+  "passed": 5
+ }
+}

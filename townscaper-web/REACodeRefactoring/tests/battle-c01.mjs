@@ -32,8 +32,10 @@ for (const k of C01_FLAGS) {
   const want = C01_DEFAULT_ON.includes(k);
   assert.equal(b0.c01.on[k], want, `默认档 ${k} 应为 ${want}`);
 }
-assert.deepEqual([...C01_DEFAULT_ON], ['houseChar'], '默认开的只有「失守屋体炭黑」这一层（837 原片默认观感）');
+assert.deepEqual([...C01_DEFAULT_ON], ['houseChar', 'shoreFlowers'], '默认开的：失守屋体炭黑（837）+ 岸上小花簇（9466，第 185 轮拆出 shoreFoam）');
 b0.nextWave = .5; for (let k = 0; k < 900; k++) b0.update(1 / 30);
+assert.ok(b0.c01.flowers?.visible && b0.c01.stats.flowers > 0, '默认开：岸上有花');
+assert.ok(b0.c01.flowerProbe().offLand === 0, '花全在台面上');
 assert.equal(b0.blood.instanceColor, null, '关：血迹没有逐实例颜色');
 assert.equal(b0.blood.material.color.getHexString(), '8e1f24');
 assert.equal(b0.c01.huds.size + b0.c01.diamonds.size + b0.c01.planks.size + b0.c01.glows.size, 0);

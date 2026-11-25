@@ -1,0 +1,42 @@
+{
+ "wide": {
+  "mode": "slots",
+  "drawn": 8,
+  "slotKeys": [
+   "bg",
+   "head",
+   "ear",
+   "hair",
+   "brow",
+   "eye",
+   "nose",
+   "mouth",
+   "marks"
+  ],
+  "hairVariants": [
+   "hood",
+   "receding",
+   "sidePart",
+   "buzz",
+   "bald"
+  ],
+  "diversity": 0.269,
+  "meanIoU": 0.731,
+  "canvasMaskIoU": 0.994,
+  "specs": 8
+ },
+ "narrow": {
+  "drawn": 6,
+  "ids": "0,1,2,4,5,6",
+  "canvasMaskIoU": 0.994
+ },
+ "canvas": {
+  "identity": true,
+  "across": true,
+  "home": true,
+  "ink": 225890,
+  "w": 760,
+  "h": 390,
+  "bytes": 63170
+ }
+}

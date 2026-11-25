@@ -159,7 +159,14 @@ export function insertTemplatePatch(grid, { template = 'radial', x = 0, z = 0, r
   const minR = Math.min(...boundary.map((p) => Math.hypot(p.x - x, p.z - z)));
   const holeR = hole ? Math.max(...hole.map((p) => Math.hypot(p.x - x, p.z - z))) : 0;
   if (hole && holeR >= minR * .9) throw new RangeError('hole too close to the patch boundary');
-  const R = hole ? holeR + (minR - holeR) * innerRatio : minR * innerRatio, phase = phaseOf(boundary, x, z);
+  // r143：courtyard 的环带必须**均分整个环带厚度**（boundary→hole），而不是只铺 (minR−R) 那一截。
+  // 旧式 R=holeR+(minR−holeR)·innerRatio 把 rings 条带挤进 45% 的厚度、其余 55% 再被「拉链 + 洞环四边格」
+  // 切成两条 → radius 1.9 / hole .8 / rings 5 时每条带径向厚只有 0.05 而弦长 0.45（长宽比 0.12），
+  // 细楔的**主因是过细分**（不是 r142 以为的「逐点径向投影」）。现在按
+  //   s = (minR−holeR)/(rings+2)，R = holeR + 2s
+  // 分：rings 条环带各厚 s，剩下 2s 正好给「拉链带 R→R0」与「洞环四边格 R0→洞边界」各一条 s。
+  const span = hole ? minR - holeR : minR, ringSpacing = hole ? span / (rings + 2) : (minR - minR * innerRatio) / rings;
+  const R = hole ? holeR + ringSpacing * 2 : minR * innerRatio, phase = phaseOf(boundary, x, z);
   // 目标环（N 个点，CCW）
   let target, block = null;
   if (template === 'block' || template === 'rhombus') {
@@ -175,9 +182,14 @@ export function insertTemplatePatch(grid, { template = 'radial', x = 0, z = 0, r
     target = boundary.map((p) => { const t = angOf(p, x, z); return { x: x + Math.cos(t) * R1, z: z + Math.sin(t) * R1 }; });
     block = { a, b, P };
   } else if (hole) {
-    // 环院外环：径向投影到半径 R（每格是射线楔 ∩ 两条弦外侧 → 必凸），不强行等角
+    // r143：courtyard 外环仍按**逐点径向投影**（每格 = 射线楔 ∩ 两条弦外侧 → 必凸）—— 不规则四边形边界上，
+    // 换成严格等角目标会让第一圈带翻折（radius 2.7 / 3.1 直接抛 unsafe patch geometry），且长宽比只 0.595→0.620，
+    // 故不采纳。细楔的真正来源是环带被过细分（见上面的 s=(minR−holeR)/(rings+2) 分配），不是这条投影。
     target = boundary.map((p) => { const t = angOf(p, x, z); return { x: x + Math.cos(t) * R, z: z + Math.sin(t) * R }; });
-  } else target = boundary.map((_, i) => { const t = phase + i * 2 * Math.PI / N; return { x: x + Math.cos(t) * R, z: z + Math.sin(t) * R }; });
+  } else {
+    // radial：等角目标环（中心 N/2 扇要求严格等角，也天然等价于插入放射状的环）
+    target = boundary.map((_, i) => { const t = phase + i * 2 * Math.PI / N; return { x: x + Math.cos(t) * R, z: z + Math.sin(t) * R }; });
+  }
   let outer = boundary.map(clone);
   for (let r = 1; r <= rings; r++) {
     const t = r / rings, inner = boundary.map((p, i) => add(p.x * (1 - t) + target[i].x * t, p.z * (1 - t) + target[i].z * t));
@@ -204,7 +216,7 @@ export function insertTemplatePatch(grid, { template = 'radial', x = 0, z = 0, r
   const result = finishGrid(polys, verts, { radius: grid.radius, hexSize: grid.hexSize, kind: grid.kind, triangles: polys.filter((p) => p.length === 3).length });
   const newOf = new Map(keptCells.map((c, i) => [c.id, i]));
   result.sourceCellOf = keptCells.map((c) => c.id).concat(Array(result.cells.length - outsideCount).fill(-1));
-  result.patch = { template, x, z, sourceRadius: radius, holeRadius: holed ? holeRadius : 0, rings, innerRadius: R, boundaryIds: boundary.map((p) => clone(p).id), holeBoundaryIds: hole ? hole.map((p) => clone(p).id) : [], holeCellIds: keptHole.map((id) => newOf.get(id)), lattice: block ? [block.a, block.b] : null, cellIds: result.cells.slice(outsideCount).map((c) => c.id), removedCells: removed.size, removedIds: [...removed] };
+  result.patch = { template, x, z, sourceRadius: radius, holeRadius: holed ? holeRadius : 0, rings, innerRadius: R, ringSpacing: +ringSpacing.toFixed(4), minRingRadius: +minR.toFixed(4), holeRingRadius: +(holeR).toFixed(4), boundaryIds: boundary.map((p) => clone(p).id), holeBoundaryIds: hole ? hole.map((p) => clone(p).id) : [], holeCellIds: keptHole.map((id) => newOf.get(id)), lattice: block ? [block.a, block.b] : null, cellIds: result.cells.slice(outsideCount).map((c) => c.id), removedCells: removed.size, removedIds: [...removed] };
   return result;
 }
 

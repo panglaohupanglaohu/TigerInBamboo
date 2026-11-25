@@ -1,0 +1,105 @@
+{
+  "out": "/Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/artifacts/terrain-building-chain-e2e/run-1795454861231",
+  "capabilities": [
+    {
+      "id": "mountain",
+      "status": "warn",
+      "previewed": true,
+      "terrain": null
+    },
+    {
+      "id": "building",
+      "status": "warn",
+      "previewed": true,
+      "terrain": "mountain-candidate"
+    }
+  ],
+  "steps": {
+    "scan": "扫描完成：3 / 3 个能力能作用。 已按「高山圣城（通用插件 + 构建面板）」自动预装 3 个能力（建筑选址、多格 prefab 目录、联合 WFC 摆建筑群），点 ▶ 执行管线一键跑完整条。",
+    "chain": {
+      "started": 1795454939986,
+      "steps": [
+        {
+          "layer": "mountain",
+          "status": "warn",
+          "previewed": true
+        },
+        {
+          "layer": "building",
+          "status": "warn",
+          "previewed": true,
+          "terrain": "mountain-candidate",
+          "buildings": 30
+        }
+      ],
+      "ok": true,
+      "ms": 3079
+    },
+    "mountainState": {
+      "active": true,
+      "id": "citadel",
+      "previewing": true,
+      "comparing": false,
+      "triangles": 12444,
+      "hidden": 2,
+      "vegetationMoved": 8,
+      "ground": {
+        "installed": true,
+        "active": true,
+        "queries": 444,
+        "used": 0
+      },
+      "palette": 1,
+      "paletteOverride": false,
+      "autoDeployed": false,
+      "auto": {
+        "id": "citadel",
+        "status": "skipped",
+        "reason": "没有采用记录：游戏里是原山形",
+        "tries": 0,
+        "at": 1795454935112
+      }
+    },
+    "buildingState": {
+      "active": true,
+      "id": "citadel",
+      "previewing": true,
+      "comparing": false,
+      "inScene": true,
+      "meshes": 199,
+      "buildings": 30,
+      "roads": 21,
+      "terrain": "mountain-candidate",
+      "mountainPreviewing": true,
+      "terrainStale": false,
+      "adopted": false,
+      "seed": 7,
+      "groups": [
+        {
+          "name": "building-candidate-citadel",
+          "children": 199,
+          "visible": true
+        }
+      ]
+    }
+  },
+  "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "shots": [
+    "R60-1-assemble-panel.png",
+    "R60-2-chain-oblique.png",
+    "R60-3-chain-top.png",
+    "R60-4-original-same-camera.png",
+    "R60-5-building-pane.png"
+  ],
+  "pass": true
+}
