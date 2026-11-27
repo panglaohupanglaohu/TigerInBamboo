@@ -67,6 +67,8 @@ townscaper-web/REACodeRefactoring/artifacts/coverage/**
 !townscaper-web/REACodeRefactoring/artifacts/coverage/**/*.md
 !townscaper-web/REACodeRefactoring/artifacts/coverage/**/*.json
 townscaper-web/REACodeRefactoring/gifs/
+# 学习批次的运行锁：进程活着才有意义，不入库
+townscaper-web/REACodeRefactoring/learn/.coverage.lock
 
 # 临时删除暂存区（含 108MB 打包文件，超过 GitHub 100MB 硬限）
 TigerMessenger/_to_delete/

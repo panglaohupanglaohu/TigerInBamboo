@@ -82,3 +82,48 @@ console.log('PASS Catmull-Rom 约束平滑、弧长等距、贴地含踏面、�
   assert.ok(Math.max(...ys) < .56, '洞道命令线 maxY < 0.56');
   console.log(`PASS 同层穿洞命令线钉在洞道平面（${r.points.length} 点、maxY ${Math.max(...ys).toFixed(3)}、踏面 0）`);
 }
+// ⑤ 多点过渡（r256）：两段 rise=2 楼梯 + 中间隔一格平走。楼梯在**低格**里、楼层要到洞口才变，
+//    所以固定 ±4 样本（0.6）的窗口盖不住整段楼梯进深（2·3·0.11=0.66）—— 靠里那头已经踩在踏面上却被钉回 floor*L，
+//    命令线先贴地钻进楼梯再一步跳 rise·L（改前实测单步 0.833）。判据改为「只在几何命中踏面时把窗口放到整段楼梯进深」。
+{
+  const { stripWorld } = await import('./fixtures/g5-battle.mjs');
+  const { BattleNavigation } = await import('../src/world/battle-navigation.js');
+  const S = stripWorld(6, 1);
+  // x: 0–1 = 1 层（y .5）｜2–3 = 3 层（y 1.5）｜4–5 = 5 层（y 2.5）：两段各 rise 2 的楼梯，中间 x=2→3 平走
+  for (const c of S.cells) S.world.fill(c, c.cx <= 1 ? 1 : c.cx <= 3 ? 3 : 5, { rock: true });
+  const nav = new BattleNavigation(S.world, S.index);
+  nav.refresh();
+  assert.equal(nav.stairs.length, 2, '两段楼梯');
+  assert.deepEqual(nav.stairs.map((s) => [s.low.cx, s.high.cx, s.rise]).sort((a, b) => a[0] - b[0]), [[1, 2, 2], [3, 4, 2]], '楼梯都在低格里、rise 均为 2');
+  const r = nav.commandRibbon([[0, .55, 0], [1, .55, 0], [2, 1.55, 0], [3, 1.55, 0], [4, 2.55, 0], [5, 2.55, 0]], { spacing: .1 });
+  assert.ok(r.points.length > 40, '命令线有点');
+  const TREAD = 2 * .5 / (2 * 3);            // 一级踏面 = rise·L / (rise·3) = 0.1667
+  const rows = r.points.map((p, i) => {
+    const c = S.index.cellAt(p[0], p[2]); assert.ok(c, '每点在格内');
+    const n = nav.graph.nodes[nav.graph.nearest(c, (p[1] - .05) / .5)];
+    const surf = n ? nav.surfaceHeight(p[0], p[2], n) : null;
+    return { i, x: p[0], y: p[1], floor: n?.floor ?? null, surf };
+  });
+  // ① 逐点对照真实地面：踩在踏面上就必须贴那一级踏面（不许沉到层平面），没踩踏面就必须钉本层平面
+  let treads = 0, flat = 0;
+  for (const q of rows) {
+    assert.ok(q.floor != null, '每点都有节点');
+    const onStair = Math.abs(q.surf - q.floor * .5) > 1e-9;
+    const want = (onStair ? q.surf : q.floor * .5) + .05;
+    assert.ok(Math.abs(q.y - want) < 1e-9, `f${q.i} x=${q.x.toFixed(2)} y=${q.y.toFixed(3)} 应 ${want.toFixed(3)}（踏面 ${q.surf.toFixed(3)} / 层 ${q.floor * .5}）`);
+    if (onStair) treads++; else flat++;
+  }
+  // ② 不许出现「钻进楼梯再跳上顶」：相邻样本落差 ≤ 一级踏面
+  let maxStep = 0, at = -1;
+  for (let i = 1; i < rows.length; i++) { const d = Math.abs(rows[i].y - rows[i - 1].y); if (d > maxStep) { maxStep = d; at = i; } }
+  assert.ok(maxStep <= TREAD + 1e-9, `相邻样本落差 ${maxStep.toFixed(3)} ≤ 一级踏面 ${TREAD.toFixed(3)}（改前 0.833，断在 x=${rows[at]?.x.toFixed(2)}）`);
+  // ③ 两段爬升各有踏面样本；中间平走（x 1.65–2.75）一个踏面都不许有
+  const firstRun = rows.filter((q) => q.x < 1.6 && Math.abs(q.surf - q.floor * .5) > 1e-9).length;
+  const secondRun = rows.filter((q) => q.x > 2.8 && q.x < 3.6 && Math.abs(q.surf - q.floor * .5) > 1e-9).length;
+  const midFlat = rows.filter((q) => q.x > 1.65 && q.x < 2.75);
+  assert.ok(firstRun >= 3 && secondRun >= 3, `两段爬升都要骑踏面（${firstRun} / ${secondRun}）`);
+  assert.ok(midFlat.length >= 8, '中间平走有足够样本');
+  assert.ok(midFlat.every((q) => Math.abs(q.y - 1.55) < 1e-9), `中间平走一律钉 1.55（实测 ${[...new Set(midFlat.map((q) => q.y.toFixed(3)))]}），不许被判成换层`);
+  assert.ok(midFlat.every((q) => Math.abs(q.surf - q.floor * .5) < 1e-9), '中间平走几何上确实不在踏面上');
+  console.log(`PASS 多点过渡（两段楼梯 + 中间平走）：${rows.length} 点、骑踏面 ${treads}、钉层 ${flat}、单步最大 ${maxStep.toFixed(3)}、平走 ${midFlat.length} 点全钉 1.55`);
+}

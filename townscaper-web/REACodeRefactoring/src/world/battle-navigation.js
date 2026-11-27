@@ -241,16 +241,20 @@ export class BattleNavigation {
     const nodeAt=(p)=>{const c=this.index.cellAt(p[0],p[2]);if(!c)return null;const id=this.graph.nearest(c,(p[1]-lift)/this.L),n=this.graph.nodes[id];return n&&Math.abs(n.floor*this.L-(p[1]-lift))<=this.L*2.01?n:null;};
     const smooth=smoothRoutedPath(points,{perSeg,accept:(p,i)=>{const n=nodeAt(p);if(!n)return false;const a=nodeAt(points[i]),b=nodeAt(points[i+1]??points[i]);return !!n&&(n===a||n===b)&&this.discFits(n,p[0],p[2],Math.min(halfWidth,.08));}});
     const s=samplePath(smooth,{spacing,maxSamples});
-    // 换层判据：**真实逐点楼层序列**（r255）。原来是「最近折线段两端 y 不同」的全局判据，
-    // 有两处读不准：① 一段爬升里，还没上楼梯的样本也被抬到踏面；② 两段楼梯之间隔一格平走时，
-    // 平走那一段被最近的爬升段判成换层。现在只看本样本的 navFloor 与前后 ±CLIMB_WIN 个样本是否不同：
-    // 楼层在窗口内有变化 = 正踩在楼梯上 → 骑踏面；窗口内楼层恒定 = 同层路过（洞口/平台）→ 钉 floor*L。
-    const CLIMB_WIN=4;   // ≈0.6 世界单位（spacing 0.15）：够覆盖一格楼梯，又跨不到邻段的平走
+    // 换层判据（r255 楼层序列 + r256 窗口按楼梯进深自适应）。楼层序列只看「本样本 navFloor 与前后 ±win 个样本」，
+    // 能挡住①一段爬升里还没上楼梯的样本被抬到踏面、②两段楼梯之间隔一格平走时平走段被判成换层；
+    // 但固定 win=4（0.6）比一段楼梯的进深（rise·3·0.11，rise=2 → 0.66）还短：楼梯靠里那头已经在踏面上、
+    // 楼层却要到洞口才变，于是命令线先贴地钻进楼梯、再一步跳 rise·L（r256 fixture 实测单步 0.833）。
+    // 现在只在**几何上真踩在踏面**时才把窗口放到整段楼梯进深；没踩踏面仍用短的固定窗口，
+    // 所以「同层穿过挂着楼梯的墙洞」（洞道里 floor 恒 1、窗口再宽也没有楼层变化）依旧不抬升，r254 的用例不受影响。
+    const CLIMB_WIN=4;   // 兜住偏出窄踏面宽度的爬升样本（≈0.6 世界单位 @spacing 0.15），又跨不到邻段的平走
     const nodes=s.points.map(p=>nodeAt(p));
     const fl=nodes.map(n=>n?n.floor:null);
     const climbAt=(i)=>{
-      const f=fl[i]; if(f==null)return false;
-      for(let d=1;d<=CLIMB_WIN;d++){
+      const n=nodes[i],f=fl[i]; if(f==null)return false;
+      const st=n?this.stairAt(s.points[i][0],s.points[i][2],n):null;
+      const win=st?Math.ceil(st.rise*STAIR_STEPS_PER_LEVEL*STAIR_STEP_DEPTH/spacing)+CLIMB_WIN:CLIMB_WIN;
+      for(let d=1;d<=win;d++){
         const a=fl[i-d],b=fl[i+d];
         if(a!=null&&a!==f)return true;
         if(b!=null&&b!==f)return true;
