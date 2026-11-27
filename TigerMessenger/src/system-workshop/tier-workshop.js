@@ -108,7 +108,7 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
   // R70 之前 / 之后 · 同机位对照（通用：任何层的候选都能拍；beforeAfter=false 关）
   if (beforeAfter !== false) import('./before-after-panel.js?v=ba-r70').then((m) => { const p = m.mountBeforeAfterPanel({ host: side, layer: storageKey || tier, agent }); side.insertBefore(p.root, detail); }).catch(() => {});
   // R62 多种子分布面板（创新 6）：按 seed-layers.js 登记表 opt-in；seedReport=false 关，对象 = 显式给 { layer, input }
-  if (seedReport !== false) { const so = seedReport && typeof seedReport === 'object' ? seedReport : {}; import('./seed-report-panel.js?v=seeds-r62').then((m) => { const p = m.maybeMountSeedPanel({ host: side, key: so.layer || storageKey || tier, input: so.input || null, explicit: seedReport !== 'auto' }); if (p) side.insertBefore(p.root, detail); }).catch(() => {}); }
+  if (seedReport !== false) { const so = seedReport && typeof seedReport === 'object' ? seedReport : {}; import('./seed-report-panel.js?v=seeds-r63').then((m) => { const p = m.maybeMountSeedPanel({ host: side, key: so.layer || storageKey || tier, input: so.input || null, explicit: seedReport !== 'auto' }); if (p) side.insertBefore(p.root, detail); }).catch(() => {}); }
 
   const note = el('p', '先扫描：在当前' + ({ planet: '星球', object: '场景物件', scene: '场景材质' }[tier] || '对象') + '上逐个匹配能力。', 'agent-note');
   const routeBox = el('div', undefined, 'agent-route'), result = el('div', undefined, 'agent-result'), act = el('div', undefined, 'agent-actions');

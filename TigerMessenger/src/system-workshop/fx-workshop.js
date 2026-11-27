@@ -9,7 +9,7 @@
  *   R40：「✈ 镜头飞一圈」= fx.camera 的路径真实驱动游戏镜头；「■ 停止并还原镜头」/ 回退 还原进入前的镜头。
  */
 import { describeFxCapabilities } from './fx/capabilities.js?v=fx-meta-r1';
-import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r2';
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 const ZCOL = ['#7f9bb3', '#8fae7f', '#c2a06b', '#b58a9a', '#9a90c8', '#7fb3a5'];
 const sea = '#0f1420', landC = '#26303c', houseC = '#e0b84a', frontC = '#e8625a', camC = '#5ad1e8', wakeC = 'rgba(220,235,255,.75)';

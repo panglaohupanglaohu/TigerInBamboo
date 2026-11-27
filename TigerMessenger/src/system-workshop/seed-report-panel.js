@@ -48,8 +48,16 @@ export function mountSeedReportPanel({ host, layer, input = null }) {
   root.append(head, meta, node);
   if (!L?.notRun) root.append(row, table, picks);
   host.append(root);
-  // 命令行（Node）报告：有就显示一句
-  fetch(new URL(`../../artifacts/seed-report/${layer}/latest.json`, import.meta.url)).then((r) => (r.ok ? r.json() : null)).then((r) => { if (!r) return; node.hidden = false; node.textContent = `命令行报告（Node，${r.at ? new Date(r.at).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) : '时间未知'}）：${summarizeReport(r)}`; root.dataset.nodeReport = r.status; }).catch(() => {});
+  // 命令行（Node）报告：只在用户真的点「跑种子」时探一次。页面加载即探测会在没有
+  // artifacts/seed-report/<层>/latest.json 的环境（公网 Pages 不发布 artifacts）里背一个 404，
+  // 而这条摘要本来就是可选信息。
+  let nodeProbed = false;
+  function probeNodeReport() {
+    if (nodeProbed) return;
+    nodeProbed = true;
+    fetch(new URL(`../../artifacts/seed-report/${layer}/latest.json`, import.meta.url)).then((r) => (r.ok ? r.json() : null)).then((r) => { if (!r) return; node.hidden = false; node.textContent = `命令行报告（Node，${r.at ? new Date(r.at).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' }) : '时间未知'}）：${summarizeReport(r)}`; root.dataset.nodeReport = r.status; }).catch(() => {});
+  }
+  go.addEventListener('click', probeNodeReport, { once: true });
   let worker = null, runId = 0;
   function draw(report) {
     table.replaceChildren(); picks.replaceChildren();

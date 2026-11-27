@@ -8,7 +8,7 @@
  */
 import { describeBattleCapabilities } from './battle/capabilities.js?v=contract-r2';
 import { mountNavPanel } from './battle/nav-panel.js?v=nav-r1';
-import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r2';
 import { mountDefaultsControl } from './defaults-ui.js?v=defaults-r2';
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 

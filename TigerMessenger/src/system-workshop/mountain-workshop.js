@@ -6,7 +6,7 @@
  *   预览 = mountain.preview：隐藏原地形换 low poly 山体，玩家地面随之重建（R25）；放弃恢复原样；采用存本机，之后进游戏自动换上（R28）。
  */
 import { describeMountainCapabilities } from './mountain/capabilities.js?v=contract-r2';
-import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r2';
 import { mountDefaultsControl } from './defaults-ui.js?v=defaults-r2';
 import { mountMountainEvolve } from './mountain-evolve.js?v=evolve-r25';
 import { mountMountainAccept } from './mountain-accept.js?v=accept-r28';

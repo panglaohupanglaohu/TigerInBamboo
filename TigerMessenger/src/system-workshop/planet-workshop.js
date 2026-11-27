@@ -4,7 +4,7 @@
  * 游戏的星球运行时（src/world/planetV8/runtime.js）启动时读取它。
  */
 import { describePlanetCapabilities, DEFAULT_PLANET_RECIPE, FINAL_KEY, cleanRecipe } from './planet/capabilities.js?v=contract-r3';
-import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r2';
 
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 const read = (k, d) => { try { return JSON.parse(localStorage.getItem(k) || 'null') ?? d; } catch { return d; } };

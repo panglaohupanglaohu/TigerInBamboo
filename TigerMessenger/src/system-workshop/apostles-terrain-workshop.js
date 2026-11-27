@@ -8,7 +8,7 @@
  *   采用哪套要用户点头：docs/PENDING_USER_DECISIONS.md「十二门徒采用哪套」。
  */
 import { describeApostlesTerrainCapabilities } from './apostles-terrain/capabilities.js?v=contract-r2';
-import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r2';
 import { waitForStable } from '../world/rea/stable-wait.js?v=apt-r1';
 import { SCHEMES, MANIFEST_PATH, buildComparison, schemeOfLook, schemeOfParam, surfaceLine } from './apostles-compare.js?v=apt-r1';
 import { mountMeasurePick } from './apostles-terrain/measure-pick.js?v=apt-r2';

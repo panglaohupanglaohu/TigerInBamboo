@@ -8,7 +8,7 @@
  */
 import { describeLightLifeCapabilities } from './lightlife/capabilities.js?v=light-r66';
 import { sharedPlantAtlas } from './lightlife/plant-atlas.js?v=light-r67';
-import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r2';
 
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 function ensureCss() { if (document.getElementById('lightlife-css')) return; const l = document.createElement('link'); l.id = 'lightlife-css'; l.rel = 'stylesheet'; l.href = new URL('./lightlife.css?v=light-r70', import.meta.url).href; document.head.append(l); }

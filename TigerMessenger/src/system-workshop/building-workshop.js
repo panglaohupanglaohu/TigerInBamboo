@@ -8,7 +8,7 @@
  * 侧栏：多格 prefab 目录（R54，足迹 + 门 socket 图）、联合 WFC 平面图（R55，线框平面图，不是最终效果）、契约生成的检查（R52）、整体替换 / 撤回 / 机位（R59）。
  */
 import { describeBuildingCapabilities } from './building/capabilities.js?v=building-r2';
-import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r2';
 import { mountDefaultsControl } from './defaults-ui.js?v=defaults-r2';
 import { contractOf, contractLine } from './contracts.js?v=contract-r1';
 import { checksFromPreserves } from './contract-verify.js?v=contract-r1';

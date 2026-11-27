@@ -9,7 +9,7 @@
  *   用不用这套地形要用户点头：docs/PENDING_USER_DECISIONS.md P-R49-01。
  */
 import { describeReliefCapabilities } from './relief/capabilities.js?v=relief-r2';
-import { mountTierWorkshop } from './tier-workshop.js?v=preload-r1';
+import { mountTierWorkshop } from './tier-workshop.js?v=preload-r2';
 import { arenaSite, METRIC_NAMES } from './terrain/arena-generic.js?v=relief-r1';
 import { thumbPixels, evidenceRows, directEntry, RELIEF_IDS, SCENE_LABEL } from './relief/panel-model.js?v=relief-r1';
 

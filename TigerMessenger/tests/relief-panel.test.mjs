@@ -39,7 +39,7 @@ test('页面接线：pipeline.html 有面板、studio.js 挂载、自带样式�
   assert.match(css, /body\[data-tier=scene\] #relief-workshop\{display:block/); assert.match(css, /body\[data-layer-focus\] #relief-workshop\{display:none!important\}/);
   assert.match(css, /#relief-workshop \.tier-side\[data-tier=relief\]\{display:block\}/, 'tier-side 默认是隐藏的，本面板要放出来');
   for (const id of ['relief-input', 'relief-thumbs', 'relief-scene', 'relief-evidence', 'relief-evidence-table', 'relief-run-parity', 'relief-run-arena']) assert.ok(ws.includes(`'${id}'`) || ws.includes(`= '${id}'`), id);
-  assert.ok(ws.includes("relief.css?v=relief-r1") && ws.includes("tier-workshop.js?v=preload-r1"), '和其他工坊同一份 tier-workshop 模块实例');
+  assert.ok(ws.includes("relief.css?v=relief-r1") && ws.includes("tier-workshop.js?v=preload-r2"), '和其他工坊同一份 tier-workshop 模块实例');
   assert.ok(!/localStorage\.setItem\((?!CAND_KEY)/.test(ws), '面板只写候选记录 tm.relief.candidate.v1');
   assert.ok(ws.includes("const CAND_KEY = 'tm.relief.candidate.v1'"));
 });

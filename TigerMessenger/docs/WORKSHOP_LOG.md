@@ -1908,3 +1908,9 @@ steps: []（浏览器加载 pipeline.html 时立刻崩溃，0 步截图）
 - **实测验证**（页面内复刻 deckSlots）：leebai 采样 14→186，deckY 8.66→**0.28（真甲板层）**，open 5→46；Duke deckY=1.92 最低密集层正常。
 - **两船近垂直交叉（bug 3，用户截图）**：实测船头方向差 80°——李白号 dock yaw `π/2-1.85` 与 Duke 码头弧向差近 90°。修复：grandFreighter 下 `seatTownObject` heading 0→1.339 rad，船头误差 0.2°，与码头 bbox 无交叠（5m 间隙）。
 - **苔庭不打重甲兵（bug 2）**：排查中。攻击链路 = mossBatianAttack `tmGoal`→REA 寻路→2m 近战；重甲兵须在 REA 舞台陆地格（`world.top(c)>=1`）才会被追。已挂 12 分钟实况探针验证索降落点是否在舞台格内。
+
+## 2026-11-27 十二门徒「血腥」红色修正（用户截图反馈）
+- 根因：三处红色源叠加——APOSTLE_TERRAIN.strata=#d3b4a2（鲑粉台地横条纹）、BAND_WARM=#e3c6b2（蜜桃色陡面带）、灌木垂帘 #e2723f（橙红 shrubDrape，按原片考据色但放大到岩柱上像血迹）。
+- 修复：apostlesReacode 侧 strata→#c9c2b2、BAND_WARM→#dcd3c2；terrainmesh 新增 world.shrubDrapeColor 世界级覆盖口（默认值不变），使徒世界设为 #a08d54 橄榄赭。townscaper-web LATEST 库与 vendor 副本双端同步。
+- 验证：实测探针使徒岩体红顶点 0；自渲染截图确认奶油石灰岩+草绿顶、无红斑；apostles 相关单测全绿（terrain-pipeline 11/11）。
+- 影响面：仅使徒场景；Morris 湖等仍走 #e2723f 默认（原片考据色保留）。

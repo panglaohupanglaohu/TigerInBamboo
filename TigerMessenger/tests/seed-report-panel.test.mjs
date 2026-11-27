@@ -14,7 +14,7 @@ test('要不要挂：登记了才挂；山形 auto 不挂（R28 自带）；体�
 test('tier-workshop：seedReport 默认 auto，按 storageKey || tier 找登记；面板放在侧栏「来源详情」之前', () => {
   const s = read('../src/system-workshop/tier-workshop.js');
   assert.match(s, /seedReport = 'auto' \}\) \{/);
-  assert.match(s, /import\('\.\/seed-report-panel\.js\?v=seeds-r62'\)/);
+  assert.match(s, /import\('\.\/seed-report-panel\.js\?v=seeds-r63'\)/);
   assert.match(s, /key: so\.layer \|\| storageKey \|\| tier/);
   assert.match(s, /side\.insertBefore\(p\.root, detail\)/);
 });

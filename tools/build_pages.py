@@ -28,6 +28,8 @@ artifact_allow = {
     'TigerMessenger/artifacts/pipeline/citadel-front-strata/report.json',
     'TigerMessenger/assets/models/optimized/citadel-cypress/citadel-cypress-v1.glb',
     'TigerMessenger/assets/models/optimized/citadel-boarding-r04/berth.json',
+    # 工坊「夜间晨报」面板启动即读这一份（nightly-panel.js），不发布就是每次加载一个 404
+    'TigerMessenger/artifacts/nightly/latest.json',
 }
 
 # 学习工坊运行时 fetch 的工坊快照：本地由 backend/main.py 提供，Pages 上没有后端，
