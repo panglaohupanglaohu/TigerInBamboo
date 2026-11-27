@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>模块普查 — 256 个邻居掩码在 D4 下只剩 51 类</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; padding:14px 18px 22px; background:#eef3f2; color:var(--ink);
+    font:13px/1.55 -apple-system,system-ui,"PingFang SC",sans-serif; }
+  h1 { font-size:15px; margin:0 0 4px; }
+  p.lead { margin:0 0 12px; color:var(--muted); font-size:12px; max-width:140ch; }
+  p.lead b { color:var(--hot); }
+  .wrap { display:grid; grid-template-columns: 1fr 1fr; gap:18px; }
+  h2 { font-size:12px; margin:0 0 6px; color:var(--muted); letter-spacing:.04em; }
+  table { border-collapse:collapse; width:100%; font-variant-numeric:tabular-nums; font-size:12px; }
+  th,td { text-align:left; padding:3px 6px; border-bottom:1px solid var(--line); }
+  th { font-weight:600; color:var(--muted); font-size:11px; }
+  td.n { text-align:right; }
+  .buckets { display:grid; grid-template-columns:repeat(9,1fr); gap:4px; margin:6px 0 14px; }
+  .bk { background:#fff; border:1px solid var(--line); border-radius:7px; padding:5px 3px; text-align:center; }
+  .bk b { display:block; font-size:14px; }
+  .bk span { font-size:10px; color:var(--muted); }
+  .big { font-size:22px; color:var(--hot); font-weight:650; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,7px); gap:1px; }
+  .grid3 i { width:7px; height:7px; background:#e3ecea; border-radius:1px; }
+  .grid3 i.on { background:#3f7f9c; }
+  .grid3 i.me { background:#e8a04a; }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+  .note { font-size:11.5px; color:var(--muted); margin-top:10px; }
+</style>
+</head>
+<body>
+<h1>模块普查：8 邻域 256 种掩码，在 D4（旋转 4 + 镜像 4）下只剩 <span class="big" id="nOrb">51</span> 类</h1>
+<p class="lead">原文 <b>1189109278361165825</b>（2019-10-29）："at a count of <b>378</b> I've now built enough modules to cover
+<b>all possible cases</b> in whatever funky townscape you might want to build"；<b>1279107097108635649</b>（2020-07-03）："a tour of
+the puzzle pieces … there are <b>545</b> of them"。两条合起来是一句口径：件 545 / 模块 378 / 情况有限。
+378 是他的**模块件数**（含屋顶、门窗、海岸等不是邻居掩码的维度），和"掩码类数"不是一回事 ——
+所以这里只报**我这套拓扑下算出来的真实类数**，不往 378 上凑。</p>
+
+<div class="wrap">
+  <div>
+    <h2>① 掩码类：按"有几个邻居"分桶（行求和 = 51）</h2>
+    <div class="buckets" id="buckets"></div>
+    <table id="orbitTable">
+      <thead><tr><th>邻居数</th><th>类数</th><th>说明</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="note">Burnside 校验：不加约简是 256；D4 有 8 个元素，按"斜角/4 邻"分桶后
+      1+2+6+10+13+10+6+2+1 = 51 —— 这一行的对称性本身就是个自检（k 与 8−k 的类数必须相等）。</div>
+  </div>
+  <div>
+    <h2>② 任取一座城：件数 / 连通块 / 实际用到的件级掩码类</h2>
+    <table id="townTable">
+      <thead><tr><th>测试城</th><th class="n">件</th><th class="n">连通块</th><th class="n">用到的类</th><th>构成</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="note">这张表的意义是**可证伪**：换一座城，三个数都会变。若某天所有城都报同一组数，
+      那这个 census 就是假的（第一版就是：把"模块"当成连通块，于是每座城都报 cases = 1）。</div>
+  </div>
+</div>
+<script type="module">
+import { maskOrbits, census, sampleTowns, maskLabel, EDGE } from './src/modulecensus.js';
+
+const o = maskOrbits();
+document.getElementById('nOrb').textContent = o.total;
+
+const bucketBox = document.getElementById('buckets');
+for (let k = 0; k <= 8; k++) {
+  const d = document.createElement('div');
+  d.className = 'bk';
+  d.innerHTML = `<b>${o.bySize[k] ?? 0}</b><span>${k} 邻</span>`;
+  bucketBox.appendChild(d);
+}
+
+const tb = document.querySelector('#orbitTable tbody');
+const inner = (k) => {
+  // 只画 k=0/1/2/3/4 五档里边的类（4 邻那 6 类），其余给文字
+  return '';
+};
+for (let k = 0; k <= 8; k++) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${k}</td><td class="n">${o.bySize[k] ?? 0}</td><td>${k >= 5 ? '与 ' + (8 - k) + ' 邻镜像对称' : ''}</td>`;
+  tb.appendChild(tr);
+}
+
+const t2 = document.querySelector('#townTable tbody');
+for (const [name, town] of Object.entries(sampleTowns())) {
+  const c = census(town);
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td>${name}</td><td class="n">${c.pieces}</td><td class="n">${c.clusters}</td>` +
+    `<td class="n">${c.pieceCases}</td><td>${c.hist.map((h) => h.label + '×' + h.n).join('，')}</td>`;
+  t2.appendChild(tr);
+}
+window.__report = { orbits: o.total, bySize: o.bySize, towns: Object.fromEntries(Object.entries(sampleTowns()).map(([k, t]) => [k, census(t)])) };
+window.__ok = true;
+</script>
+</body>
+</html>

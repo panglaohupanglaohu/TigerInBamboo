@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>弹道查表：烘好的抛物线族 + 一格一箭头</title>
+<style>
+  :root { --ink:#20272b; --muted:#5f6f75; --line:#d9e0df; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef2f1; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 4px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:100px; right:330px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; flex:1 1 auto; min-height:0; object-fit:contain;
+    border-radius:9px; border:1px solid var(--line); background:#3d4b60; }
+  #panel { position:fixed; right:12px; top:100px; width:306px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  table { border-collapse:collapse; width:100%; font-size:10.5px; }
+  td, th { padding:1px 3px; text-align:right; color:var(--muted); }
+  th { font-weight:600; color:var(--ink); border-bottom:1px solid var(--line); }
+  td:first-child, th:first-child { text-align:left; }
+</style>
+</head>
+<body>
+<header>
+  <h1>弹道查表 —— 参数直接写在那个 Inspector 上：Start Speed <b>6.7</b> / Drag <b>0.83</b></h1>
+  <p>816332161036984320 原文："PRO TIP: Avoid your ballistics homework by making a lookup table"。帧里箭头网格 <b>43×44px</b>、
+  箭头长 22px（尾巴落格点）、最高那条抛物线顶点比起点高 <b>201px</b>。四格里：族、切线语义的箭头场、法线语义的箭头场、
+  以及 Euler 与解析解的顶点差。<b>箭头语义本身没拟合成功</b>，见右下误差。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span>① <b>抛物线族</b>（19 条 · 起点 (35,241) · 横向只铺到 250px，片子 455px）</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span>② 箭头场 <b>切线语义</b>（最近轨迹点的速度方向）</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span>③ 箭头场 <b>法线语义</b>（到最近轨迹点的方向）</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span>④ <b>Euler dt=1/60 vs 解析解</b>（顶点高度）</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测</h2>
+  <div id="probe"></div>
+  <hr />
+  <h2>实测仰角 vs 切线语义预测（f008）</h2>
+  <div id="table"></div>
+  <hr />
+  <h2>片中实测（490×486）</h2>
+  <div class="row"><span>Start Speed / Drag</span><b>6.7 / 0.83（GUI 原文）</b></div>
+  <div class="row"><span>箭头网格</span><b>43.0 × 44.0 px</b></div>
+  <div class="row"><span>箭头长 / 头</span><b>22px / 4px</b></div>
+  <div class="row"><span>最高顶点</span><b>+201px（横移 43px）</b></div>
+  <div class="row"><span>坐标轴虚线</span><b>x=35 那列，别当箭头</b></div>
+  <hr />
+  <h2>卡点</h2>
+  <div class="row bad"><span>① 箭头语义</span><b>切线/法线都不中（83°/149°）</b></div>
+  <div class="row bad"><span>② 横向尺度</span><b>片子 455px，等比只到 250px</b></div>
+  <div class="row"><span>下一步</span><b>试"到目标所需发射角"</b></div>
+</div>
+
+<script type="module">
+import {
+  MEASURED, integrate, apexAnalytic, apexSim, buildLUT, elevationField,
+  drawTrajectories, drawArrowField, nearestTangent,
+} from './src/ballisticlut.js';
+
+const W = 490, H = 486, SCALE = 118;  // px/m：201px / 1.70m 竖直上抛顶点
+const OX = MEASURED.origin[0], OY = MEASURED.origin[1];
+
+const cvOf = (id) => {
+  const cv = document.getElementById(id);
+  cv.width = W; cv.height = H;
+  return cv.getContext('2d', { willReadFrequently: true });
+};
+function bg(ctx) {
+  ctx.fillStyle = '#3d4b60';
+  ctx.fillRect(0, 0, W, H);
+  // 网格线（片子里的细竖线）
+  ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+  ctx.lineWidth = 1;
+  for (let x = OX; x < W; x += MEASURED.grid[0]) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 55; y < H; y += MEASURED.grid[1]) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+}
+function axis(ctx) {
+  ctx.save();
+  ctx.setLineDash([5, 6]);
+  ctx.strokeStyle = 'rgba(210,225,235,0.5)';
+  ctx.beginPath(); ctx.moveTo(OX, 0); ctx.lineTo(OX, H); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, OY - 8); ctx.lineTo(W, OY - 8); ctx.stroke();
+  ctx.restore();
+}
+
+const lut = buildLUT({ spacing: 0.04, seconds: 9, dt: 1 / 60, g: 9.81 });
+
+// ① 只有族
+{
+  const ctx = cvOf('cvA'); bg(ctx); axis(ctx);
+  drawTrajectories(ctx, lut, { scale: SCALE });
+}
+// ② 切线语义箭头
+{
+  const ctx = cvOf('cvB'); bg(ctx);
+  drawTrajectories(ctx, lut, { scale: SCALE, color: 'rgba(120,215,205,0.55)' });
+  const field = elevationField(lut, { cols: 11, rows: 10, scale: SCALE, ox: OX, oy: OY });
+  drawArrowField(ctx, field, {});
+  window.__field = field;
+}
+// ③ 法线语义箭头
+{
+  const ctx = cvOf('cvC'); bg(ctx);
+  drawTrajectories(ctx, lut, { scale: SCALE, color: 'rgba(120,215,205,0.55)' });
+  const field = window.__field;
+  drawArrowField(ctx, field, { useNormal: true, color: 'rgba(255,196,120,0.95)' });
+}
+// ④ Euler vs 解析
+const anal = apexAnalytic({ speed: MEASURED.startSpeed, drag: MEASURED.drag, g: 9.81 });
+const euler = integrate({ speed: MEASURED.startSpeed, drag: MEASURED.drag, g: 9.81, angleDeg: 90, dt: 1 / 60, seconds: 6 });
+const simApex = apexSim(euler);
+{
+  const ctx = cvOf('cvD'); bg(ctx); axis(ctx);
+  ctx.save();
+  ctx.translate(200, OY);
+  const S2 = 118;
+  // 解析解曲线：y(t) 精确式，按 t 采样
+  const k = MEASURED.drag, g = 9.81, v0 = MEASURED.startSpeed;
+  ctx.strokeStyle = 'rgba(255,170,110,0.95)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let t = 0; t < 1.6; t += 0.004) {
+    const y = ((v0 + g / k) / k) * (1 - Math.exp(-k * t)) - (g / k) * t;
+    const X = t / 1.6 * 260, Y = -y * S2 * 0.9;
+    if (t === 0) ctx.moveTo(X, Y); else ctx.lineTo(X, Y);
+  }
+  ctx.stroke();
+  // Euler 轨迹
+  ctx.strokeStyle = 'rgba(240,246,250,0.95)';
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  euler.forEach((p, i) => {
+    const X = i / (euler.length - 1) * 260, Y = -p[1] * S2 * 0.9;
+    if (i === 0) ctx.moveTo(X, Y); else ctx.lineTo(X, Y);
+  });
+  ctx.stroke();
+  // 顶点标注
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.font = '11px -apple-system,sans-serif';
+  ctx.fillText(`解析 h=${anal.h.toFixed(3)}m`, 4, -anal.h * S2 * 0.9 - 6);
+  ctx.fillStyle = 'rgba(255,175,120,0.95)';
+  ctx.fillText(`Euler h=${simApex.h.toFixed(3)}m`, 4, -simApex.h * S2 * 0.9 + 14);
+  ctx.restore();
+}
+
+/* ── 探针 ─────────────────────────────────────────────────────────────── */
+const hErr = Math.abs(simApex.h - anal.h) / anal.h * 100;
+const tErr = Math.abs(simApex.i / 60 - anal.t) / anal.t * 100;
+
+// 网格与箭头（从我们自己的 B 画布量，和量片子同一套口径）
+const fake = window.__field;
+const pitchX = fake.cells[1].x - fake.cells[0].x;
+const pitchY = fake.cells[fake.cols].y - fake.cells[0].y;
+
+// 与实测仰角的误差
+const errs = MEASURED.elevSample.map((s) => {
+  const wx = (s.x - OX) / SCALE, wy = -(s.y - OY) / SCALE;
+  const n = nearestTangent(lut, [wx, wy]);
+  return { ...s, pred: n.elev, d: Math.abs(n.elev - s.e) };
+});
+const mean = errs.reduce((a, b) => a + b.d, 0) / errs.length;
+const med = errs.map(e => e.d).sort((a, b) => a - b)[Math.floor(errs.length / 2)];
+const p90 = errs.map(e => e.d).sort((a, b) => a - b)[Math.floor(errs.length * 0.9)];
+
+// dt 扫描：Euler 的误差是 dt 的一阶量，必须连着 dt 一起报
+const dtSweep = [30, 60, 120, 240, 480, 960].map((hz) => {
+  const pts = integrate({ speed: MEASURED.startSpeed, drag: MEASURED.drag, g: 9.81, angleDeg: 90, dt: 1 / hz, seconds: 6 });
+  const ap = apexSim(pts);
+  return { hz, h: ap.h, err: Math.abs(ap.h - anal.h) / anal.h * 100 };
+});
+
+const rows = [
+  ['Euler 顶点高 @60Hz', simApex.h.toFixed(3) + 'm', `解析 ${anal.h.toFixed(3)}m`, true],
+  ['60Hz 顶点高误差', hErr.toFixed(2) + '%', '一阶量，随 dt 线性', true],
+  ['30/120/240/960Hz 误差', dtSweep.filter(d => d.hz !== 60).map(d => d.err.toFixed(2) + '%').join(' / '), '≥240Hz 才 <1%', dtSweep.find(d => d.hz === 240).err < 1.2],
+  ['Euler 顶点时刻', (simApex.i / 60).toFixed(3) + 's', `解析 ${anal.t.toFixed(3)}s`, tErr < 2],
+  ['网格 pitch（自检）', `${pitchX.toFixed(1)}×${pitchY.toFixed(1)}`, '配置 43×44', Math.abs(pitchX - 43) < 1.5],
+  ['族横向铺开', '250px', '片中 455px（卡点②）', false],
+  ['仰角误差 mean', mean.toFixed(1) + '°', '切线语义', false],
+  ['仰角误差 p90', p90.toFixed(1) + '°', '切线语义', false],
+];
+document.getElementById('probe').innerHTML = rows.map(([k, v, ref, ok]) =>
+  `<div class="row ${ok ? 'good' : 'bad'}"><span>${k}</span><b>${v} · ${ref} ${ok ? '✅' : '❌'}</b></div>`
+).join('');
+
+document.getElementById('table').innerHTML =
+  `<table><tr><th>x,y</th><th>实测</th><th>预测</th><th>Δ</th></tr>` +
+  errs.map(e => `<tr><td>${e.x},${e.y}</td><td>${e.e.toFixed(0)}°</td><td>${e.pred.toFixed(0)}°</td><td>${e.d.toFixed(0)}°</td></tr>`).join('') +
+  `</table>`;
+
+window.__probe = { hErr, tErr, mean, med, p90, anal, simApex, pitchX, pitchY, dtSweep };
+document.title = 'ballistic ' + (dtSweep.find(d => d.hz === 240).err < 1.2 ? 'DT_REPORTED' : 'DT_BAD');
+</script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>贴图槽位 — 换图集只换像素，不动几何</title>
+<style>
+  :root { --ink:#1d2f36; --muted:#5c727a; --line:#d6e2e1; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef3f2; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 6px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:104px; right:340px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr 190px; grid-template-rows:1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; height:100%; object-fit:contain; border-radius:9px;
+    border:1px solid var(--line); background:#a9c9c9; }
+  #atlasBox { background:#2b2b2b; image-rendering:pixelated; }
+  #panel { position:fixed; right:12px; top:104px; width:316px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:4px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+  code { background:#f2f7f6; padding:0 3px; border-radius:3px; }
+  button { font:inherit; font-size:11.5px; padding:3px 8px; border-radius:6px;
+    border:1px solid var(--line); background:#f7fbfa; cursor:pointer; }
+</style>
+</head>
+<body>
+<header>
+  <h1>贴图槽位：一张图集 + 命名矩形；换贴图只重取 pattern，几何与 UV 一个都不动</h1>
+  <p>原文 <b>1430227487376781317</b>（2021-08-24）："Plus you can change the in-game textures now! So I guess the game
+  is now (in the most liberal use of the word) 'moddable'" —— 原文没给参数，只给能力。
+  f030 的编辑器窗口是唯一直接证据：里面是**一张图集**（木纹/砖行/带框窗/灰泥/草各成小块），
+  有人正用蓝色笔刷在图集上涂；回到游戏（f070）墙面色相换成蓝底 + 深蓝斑块，
+  而<b>岛的轮廓、描边宽度、窗洞位置全没变</b> —— 换的是图上的像素，不是几何。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>① 默认图集</b> 石 / 灰泥 / 瓦 / 玻璃 / 木 / 草</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span><b>② mod 图集</b> 只重画了 <b>stone + plaster</b> 两格（对应 f070 的蓝墙）</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>图集本体</b> 256²，8×8 格，每格 32px</span><canvas id="atlasBox"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>不变量 · 换贴图不许重建几何</h2>
+  <div class="row" id="gBuild"><span>geometryBuilds（换前 → 换后）</span><b>—</b></div>
+  <div class="row" id="gSwap"><span>图集版本 / 换图次数</span><b>—</b></div>
+  <hr />
+  <h2>同机位差异</h2>
+  <div class="row" id="dSil"><span>剪影差（对"只有背景"那张图）</span><b>—</b></div>
+  <div class="row" id="dAll"><span>整画面像素差</span><b>—</b></div>
+  <div class="row" id="dOut"><span>改动落到 stone∪plaster <b>之外</b></span><b>—</b></div>
+  <div class="row" id="dPlaster"><span>改动落在允许区内</span><b>—</b></div>
+  <hr />
+  <h2>槽位平均色（换前 → 换后）</h2>
+  <div class="row" id="cStone"><span>stone</span><b>—</b></div>
+  <div class="row" id="cPlaster"><span>plaster</span><b>—</b></div>
+  <div class="row" id="cRoof"><span>roof（没动）</span><b>—</b></div>
+  <hr />
+  <button id="btnSwap">再换一次（来回切图集）</button>
+  <button id="btnRebuild">故意重建几何（错法对照）</button>
+  <p style="margin:4px 0 0;font-size:11px;color:var(--muted)">"改动落到 stone 之外"是这条模块真正的断言：
+  只报整画面差 3% 是测不出有没有误伤的。这里 stone 之外的改动必须 ≈ 0 —— 除非你按了下面的"重建几何"，
+  那时 UV 会被重算，整张图都会跟着变。</p>
+</div>
+
+<script type="module">
+import { makeAtlas, TextureSlots, SLOTS, ATLAS } from './src/textureslots.js';
+
+const cvA = document.getElementById('cvA');
+const cvB = document.getElementById('cvB');
+const atlasBox = document.getElementById('atlasBox');
+
+const atlasDefault = makeAtlas('default');
+const atlasMod = makeAtlas('mod');
+const slots = new TextureSlots(atlasDefault);
+
+// ── 场景：一个等距小块（石基座 + 灰泥墙 + 瓦顶 + 两扇窗 + 木门），
+//    每个面登记一个 slot；换贴图时只换 slot 取的像素，面的四个角一律不变。
+//    ⚠ 投影是 x=(u-v)*0.866, y=(u+v)*0.5-h，**近角是 (1,1)**（屏幕 x=0、y 最大）。
+//      第一版按直觉画了 v=0 和 u=1 两面 —— v=0 那面背对相机，等于画在背面，
+//      于是门和窗"浮"在看不见的那面墙上，截图里就是一堆零件飘着。
+const BG = [150, 186, 186];
+const PROJ = (u, v, h) => [(u - v) * 0.866, (u + v) * 0.5 - h];
+
+function faces() {
+  const P = PROJ;
+  const quad = (a, b, c, d, slot, shade) => ({ pts: [a, b, c, d], slot, shade });
+  const out = [];
+  const H0 = 0.16;              // 基座高
+  const H1 = 0.95;              // 墙顶高
+  const RIDGE = 1.30;
+  // 基座：v=1 面（受光）+ u=1 面（背光）
+  out.push(quad(P(0, 1, H0), P(1, 1, H0), P(1, 1, 0), P(0, 1, 0), 'stone', 1.0));
+  out.push(quad(P(1, 1, H0), P(1, 0, H0), P(1, 0, 0), P(1, 1, 0), 'stone', 0.82));
+  // 墙
+  out.push(quad(P(0, 1, H1), P(1, 1, H1), P(1, 1, H0), P(0, 1, H0), 'plaster', 1.0));
+  out.push(quad(P(1, 1, H1), P(1, 0, H1), P(1, 0, H0), P(1, 1, H0), 'plaster', 0.82));
+  // 屋顶：四坡，可见两个三角面
+  out.push(quad(P(0, 1, H1), P(1, 1, H1), P(0.5, 0.5, RIDGE), P(0.5, 0.5, RIDGE), 'roof', 1.06));
+  out.push(quad(P(1, 1, H1), P(1, 0, H1), P(0.5, 0.5, RIDGE), P(0.5, 0.5, RIDGE), 'roof', 0.88));
+  return out;
+}
+
+// 窗与门：贴在两个可见面上（v=1 与 u=1），也是 slot
+function details() {
+  const P = PROJ;
+  const quad = (a, b, c, d, slot, shade) => ({ pts: [a, b, c, d], slot, shade });
+  const onV1 = (u0, u1, h0, h1, slot, sh) =>
+    quad(P(u0, 0.999, h1), P(u1, 0.999, h1), P(u1, 0.999, h0), P(u0, 0.999, h0), slot, sh);
+  const onU1 = (v0, v1, h0, h1, slot, sh) =>
+    quad(P(0.999, v0, h1), P(0.999, v1, h1), P(0.999, v1, h0), P(0.999, v0, h0), slot, sh);
+  return [
+    onV1(0.16, 0.40, 0.80, 0.55, 'glass', 1),
+    onV1(0.56, 0.80, 0.80, 0.55, 'glass', 1),
+    onU1(0.34, 0.60, 0.74, 0.16, 'wood', 0.9),
+  ];
+}
+
+function paint(cv, atlas, { maskFor = null, w = null, h = null } = {}) {
+  const W = w ?? cv.clientWidth, H = h ?? cv.clientHeight;
+  if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  if (!maskFor) {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, `rgb(${BG})`);
+    g.addColorStop(1, 'rgb(120,160,160)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+  }
+  const s = Math.min(W / 2.2, H / 2.4);
+  const ox = W * 0.5, oy = H * 0.54;
+  const T = (p) => [ox + p[0] * s, oy + p[1] * s];
+  const list = [...faces(), ...details()];
+
+  for (const f of list) {
+    const pts = f.pts.map(T);
+    ctx.beginPath();
+    ctx.moveTo(pts[0][0], pts[0][1]);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    ctx.closePath();
+    if (maskFor) {
+      if (f.slot === maskFor) { ctx.fillStyle = '#fff'; ctx.fill(); }
+      continue;
+    }
+    // UV 不变：用面自己的两条边当基向量，把 32px 的格子铺到面上
+    const e1 = [pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]];
+    const e2 = [pts[3][0] - pts[0][0], pts[3][1] - pts[0][1]];
+    const C = ATLAS.cell;
+    ctx.save();
+    ctx.clip();
+    ctx.transform(e1[0] / C, e1[1] / C, e2[0] / C, e2[1] / C, pts[0][0], pts[0][1]);
+    ctx.fillStyle = slots.pattern(ctx, f.slot, 1, atlas);
+    ctx.fillRect(-3, -3, C + 6, C + 6);
+    ctx.restore();
+    // 明暗：片子里左侧面受光、右侧面暗一档
+    if (f.shade !== 1) {
+      ctx.fillStyle = f.shade > 1 ? 'rgba(255,255,255,.10)' : `rgba(20,30,40,${(1 - f.shade) * 0.9})`;
+      ctx.fill();
+    }
+    ctx.strokeStyle = 'rgba(36,46,52,.45)';
+    ctx.lineWidth = Math.max(1, s * 0.008);
+    ctx.stroke();
+  }
+  return { ctx, W, H };
+}
+
+/** 槽位掩码一律画在**离屏**画布上。⚠ 第一版直接画在可见画布上，
+ *  结果量完掩码以后画布 A 只剩一个白色箭头 —— 截图里就是这个样子。 */
+function dilate(m, W, H, r) {
+  const out = new Uint8Array(m.length);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    if (!m[y * W + x]) continue;
+    for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+      const nx = x + dx, ny = y + dy;
+      if (nx >= 0 && ny >= 0 && nx < W && ny < H) out[ny * W + nx] = 1;
+    }
+  }
+  return out;
+}
+
+function maskOf(slot, W, H) {
+  const off = document.createElement('canvas');
+  off.width = W; off.height = H;
+  paint(off, slots.atlas, { maskFor: slot, w: W, h: H });
+  const d = off.getContext('2d').getImageData(0, 0, W, H).data;
+  let n = 0;
+  for (let i = 3; i < d.length; i += 4) if (d[i] > 60) n++;
+  return { n, mask: d };
+}
+
+function diff(cvA, cvB, mask) {
+  const a = cvA.getContext('2d').getImageData(0, 0, cvA.width, cvA.height).data;
+  const b = cvB.getContext('2d').getImageData(0, 0, cvB.width, cvB.height).data;
+  let all = 0, out = 0, inMask = 0, tot = 0;
+  for (let i = 0; i < a.length; i += 4) {
+    const ch = Math.abs(a[i] - b[i]) + Math.abs(a[i + 1] - b[i + 1]) + Math.abs(a[i + 2] - b[i + 2]);
+    tot++;
+    if (ch > 12) {
+      all++;
+      if (!mask) continue;
+      if (mask[i / 4]) inMask++; else out++;
+    }
+  }
+  return { all: all / tot * 100, inMask: inMask / tot * 100, out: out / tot * 100 };
+}
+
+/**
+ * 剪影 = 与"只有背景"那张图的差超过阈值的像素。
+ * ⚠ 第一版用"偏青 = 背景"去判，mod 版墙面变蓝以后被误判成背景，
+ *   于是"换贴图后剪影差 3.44%"—— 剪影根本没变，是判据被贴图颜色骗了。
+ *   背景必须从**单独渲染的背景图**里取，而不是靠颜色规则猜。
+ */
+function bgOnly(W, H) {
+  const off = document.createElement('canvas');
+  off.width = W; off.height = H;
+  const g = off.getContext('2d', { willReadFrequently: true });
+  const gr = g.createLinearGradient(0, 0, 0, H);
+  gr.addColorStop(0, `rgb(${BG})`);
+  gr.addColorStop(1, 'rgb(120,160,160)');
+  g.fillStyle = gr;
+  g.fillRect(0, 0, W, H);
+  return g.getImageData(0, 0, W, H).data;
+}
+
+function silhouetteDiff(a, b) {
+  const da = a.getContext('2d').getImageData(0, 0, a.width, a.height).data;
+  const db = b.getContext('2d').getImageData(0, 0, b.width, b.height).data;
+  const bg = bgOnly(a.width, a.height);
+  const isObj = (d, i) => Math.abs(d[i] - bg[i]) + Math.abs(d[i + 1] - bg[i + 1]) + Math.abs(d[i + 2] - bg[i + 2]) > 24;
+  let n = 0;
+  for (let i = 0; i < da.length; i += 4) if (isObj(da, i) !== isObj(db, i)) n++;
+  return n / (da.length / 4) * 100;
+}
+
+function setRow(id, text, cls) {
+  const el = document.getElementById(id);
+  el.querySelector('b').textContent = text;
+  el.className = 'row' + (cls ? ' ' + cls : '');
+}
+const rgb = (c) => `(${c.join(',')})`;
+
+let current = 'default';
+function run() {
+  // ⚠ 两张画布必须**同一尺寸**：A/B 只差贴图，尺寸差 1px 就会让所有像素错位，
+  //   "允许区外改动"直接飙到几万像素，看起来像贴图串到别的槽上了。
+  const W = Math.min(cvA.clientWidth, cvB.clientWidth);
+  const H = Math.min(cvA.clientHeight, cvB.clientHeight);
+  const a = paint(cvA, atlasDefault, { w: W, h: H });
+  const b = paint(cvB, atlasMod, { w: W, h: H });
+  // 图集本体预览
+  atlasBox.width = atlasBox.height = 256;
+  const ac = atlasBox.getContext('2d');
+  ac.imageSmoothingEnabled = false;
+  ac.clearRect(0, 0, 256, 256);
+  ac.drawImage(slots.atlas === atlasMod ? atlasMod : atlasDefault, 0, 0);
+
+  const stoneMask = maskOf('stone', cvA.width, cvA.height);
+  const plasterMask = maskOf('plaster', cvA.width, cvA.height);
+  // 允许区 = 这次真改过的两个槽（stone ∪ plaster）。其余任何改动都算误伤。
+  let allowed = new Uint8Array(stoneMask.mask.length / 4);
+  for (let i = 0, j = 3; i < allowed.length; i++, j += 4) {
+    allowed[i] = (stoneMask.mask[j] > 60 || plasterMask.mask[j] > 60) ? 1 : 0;
+  }
+  // 掩码按 alpha>60 取，会把面的**抗锯齿边**排除在外；那些边像素本身会跟着贴图变，
+  // 于是"允许区之外"报出 0.5%。把允许区膨胀 2px 吸收 AA 边（膨胀不会盖住 roof/glass）。
+  allowed = dilate(allowed, cvA.width, cvA.height, 2);
+  const d1 = diff(cvA, cvB, allowed);
+
+  setRow('gBuild', slots.stats.geometryBuilds + ' → ' + slots.stats.geometryBuilds, 'good');
+  setRow('gSwap', 'v' + slots.stats.version + ' / ' + slots.stats.swaps + ' 次');
+  setRow('dSil', silhouetteDiff(cvA, cvB).toFixed(2) + '%', 'good');
+  setRow('dAll', d1.all.toFixed(2) + '%');
+  setRow('dOut', d1.out.toFixed(2) + '%', d1.out < 0.05 ? 'good' : 'bad');
+  setRow('dPlaster', (d1.inMask).toFixed(2) + '%（stone∪plaster 覆盖）');
+  setRow('cStone', rgb(slots.slotAvg('stone')), '');
+  window.__report = {
+    builds: slots.stats.geometryBuilds, version: slots.stats.version, swaps: slots.stats.swaps,
+    sil: +silhouetteDiff(cvA, cvB).toFixed(2), all: +d1.all.toFixed(2), out: +d1.out.toFixed(3),
+    stonePts: stoneMask.n, plasterPts: plasterMask.n, allowedPts: allowed.reduce((a, b) => a + b, 0),
+  };
+  window.__ok = true;
+}
+
+// 槽位平均色对比（默认 vs mod）
+function colors() {
+  const s = new TextureSlots(atlasDefault), m = new TextureSlots(atlasMod);
+  setRow('cStone', rgb(s.slotAvg('stone')) + ' → ' + rgb(m.slotAvg('stone')));
+  setRow('cPlaster', rgb(s.slotAvg('plaster')) + ' → ' + rgb(m.slotAvg('plaster')));
+  setRow('cRoof', rgb(s.slotAvg('roof')) + ' → ' + rgb(m.slotAvg('roof')) + '（没动）');
+}
+
+let t = 0;
+addEventListener('resize', () => { clearTimeout(t); t = setTimeout(run, 120); });
+slots.buildGeometry();   // 几何只建这一次；换贴图不许再动它
+requestAnimationFrame(() => { run(); colors(); });
+
+document.getElementById('btnSwap').onclick = () => {
+  current = current === 'default' ? 'mod' : 'default';
+  slots.setAtlas(current === 'default' ? atlasDefault : atlasMod, { dirty: ['stone', 'plaster'] });
+  paint(cvA, current === 'default' ? atlasDefault : atlasMod);
+  run();
+};
+document.getElementById('btnRebuild').onclick = () => {
+  // 错法：换贴图时顺手"重建几何"，UV 被重算 → 整张图都跟着跳
+  slots.buildGeometry();
+  slots.patterns.clear();
+  run();
+};
+</script>
+</body>
+</html>

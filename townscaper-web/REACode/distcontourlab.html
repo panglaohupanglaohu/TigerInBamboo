@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>距离场等值线：marching squares + 先晕后芯</title>
+<style>
+  :root { --ink:#20272b; --muted:#5f6f75; --line:#d9e0df; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef2f1; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 4px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:100px; right:330px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; flex:1 1 auto; min-height:0; object-fit:contain;
+    border-radius:9px; border:1px solid var(--line); background:#97adb1; }
+  #panel { position:fixed; right:12px; top:100px; width:306px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>距离场等值线 —— 一格一箭头那位作者的"distances this time"</h1>
+  <p>902103473365417984 原文："Ok, one more visualization. Distances this time."（2017 Bad North 调试屏）。
+  竖切岸边那组平行线量到：相邻线<b>中心距 6px</b>、核心 2px 色 (234,255,250)、紧邻各 1px 降到 (198,220,218)（+40 灰阶）、再外一档 +18 的叠加晕；
+  开阔地那组张到 <b>22px</b> → 等值步长是<b>世界空间</b>定值，不是屏幕等距。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span>对照：<b>只有距离场底色</b>（看不出层次）</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span>错法：<b>round(d)==level</b> 逐像素（斜过格子的地方断成虚点）</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>正确</b>：marching squares，核心 2px</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span>正确 <b>+ 晕</b>（先晕后芯 · additive 3px）</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 从 D 画布竖切量（与片子同口径）</h2>
+  <div id="probe"></div>
+  <hr />
+  <h2>片中实测（420×420 · f007）</h2>
+  <div class="row"><span>岸边那组线距</span><b>6px</b></div>
+  <div class="row"><span>开阔地那组线距</span><b>22px</b></div>
+  <div class="row"><span>核心色 / 宽</span><b>(234,255,250) / 2px</b></div>
+  <div class="row"><span>AA 边</span><b>(198,220,218) +40</b></div>
+  <div class="row"><span>晕</span><b>+18 一档，additive</b></div>
+  <div class="row"><span>地面底色</span><b>(151,173,177)</b></div>
+  <hr />
+  <h2>结论</h2>
+  <div class="row"><span>① 3-4 chamfer 两趟</span><b>不用 BFS/EDT</b></div>
+  <div class="row"><span>② 4 角查表</span><b>不逐像素阈值</b></div>
+  <div class="row"><span>③ 先晕后芯</span><b>顺序反了峰就没了</b></div>
+  <div class="row"><span>④ 步长按格计</span><b>随地势自动张开</b></div>
+</div>
+
+<script type="module">
+import { MEASURED, chamfer, isoLines, drawContours, marchingSquares, totalLength, sampleField } from './src/distcontour.js';
+
+const CELL = 6, GW = 48, GH = 40, W = GW * CELL, H = GH * CELL;
+
+function makeCanvas(id) {
+  const cv = document.getElementById(id);
+  cv.width = W; cv.height = H;
+  return cv.getContext('2d', { willReadFrequently: true });
+}
+
+// 岛：两个圆 + 一条沙嘴，格坐标
+const occ = new Uint8Array(GW * GH);
+function inIsland(gx, gy) {
+  const a = Math.hypot(gx - 20, gy - 17) < 8.2;
+  const b = Math.hypot(gx - 32, gy - 24) < 5.6;
+  const c = Math.abs(gy - 21 - (gx - 12) * 0.22) < 1.6 && gx > 8 && gx < 34;
+  return a || b || c;
+}
+for (let y = 0; y < GH; y++) for (let x = 0; x < GW; x++) occ[y * GW + x] = inIsland(x + 0.5, y + 0.5) ? 1 : 0;
+
+const D = chamfer(occ, GW, GH);
+const lines = isoLines(D, GW, GH, { interval: 1, max: 26 });
+
+function groundBase(ctx) {
+  ctx.fillStyle = `rgb(${MEASURED.base.join(',')})`;
+  ctx.fillRect(0, 0, W, H);
+  // 陆地：沙色，比地面亮一点，保证"线亮于地"这条关系成立
+  // 陆地按 2px 细分填，边缘不跟着格子跳（否则岛像马赛克）
+  ctx.fillStyle = 'rgb(224,214,186)';
+  for (let y = 0; y < H; y += 2) for (let x = 0; x < W; x += 2) {
+    const gx = x / CELL, gy = y / CELL;
+    if (gx < 1 || gy < 1 || gx > GW - 2 || gy > GH - 2) continue; // 别把"越界=0"当成陆地
+    const d = sampleField(D, GW, GH, gx, gy);
+    if (d < 0.86) ctx.fillRect(x, y, 2, 2);
+  }
+}
+
+// A：只画底色 + 极淡的距离明暗（看得出有场，但读不出等值）
+{
+  const ctx = makeCanvas('cvA');
+  groundBase(ctx);
+  const img = ctx.getImageData(0, 0, W, H);
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const d = sampleField(D, GW, GH, x / CELL, y / CELL);
+    const k = 1 - Math.min(18, d) / 26;
+    if ((x + y) % 1 === 0) {
+      const o = (y * W + x) * 4;
+      img.data[o] = Math.min(255, img.data[o] * (0.86 + 0.14 * k));
+      img.data[o + 1] = Math.min(255, img.data[o + 1] * (0.88 + 0.12 * k));
+      img.data[o + 2] = Math.min(255, img.data[o + 2] * (0.9 + 0.1 * k));
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+// B：错法 — 逐像素 round(d)==level，斜过格子处断线
+{
+  const ctx = makeCanvas('cvB');
+  groundBase(ctx);
+  const img = ctx.getImageData(0, 0, W, H);
+  const core = MEASURED.core;
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const d = sampleField(D, GW, GH, x / CELL, y / CELL);
+    if (d > 0.5 && Math.abs(d - Math.round(d)) < 0.09) {
+      const o = (y * W + x) * 4;
+      img.data[o] = core[0]; img.data[o + 1] = core[1]; img.data[o + 2] = core[2];
+    }
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+// C：正确 — marching squares 核心
+{
+  const ctx = makeCanvas('cvC');
+  groundBase(ctx);
+  drawContours(ctx, lines, { cell: CELL, haloW: 0, haloGain: 0, coreW: 1.4 });
+}
+
+// D：正确 + 晕
+{
+  const ctx = makeCanvas('cvD');
+  groundBase(ctx);
+  drawContours(ctx, lines, { cell: CELL });
+}
+
+/* ── 探针：竖切一列，找核心亮峰，量间距 / 峰色 / 线宽 ────────────────── */
+const ctx = document.getElementById('cvD').getContext('2d', { willReadFrequently: true });
+function lum(x, y) {
+  const d = ctx.getImageData(x, y, 1, 1).data;
+  return 0.299 * d[0] + 0.587 * d[1] + 0.114 * d[2];
+}
+// 选一列穿过右侧开阔地（岛右缘外），从 y=20 扫到 y=220
+const XC = 30 * CELL;
+const prof = [];
+for (let y = 0; y < H; y++) prof.push(lum(XC, y));
+const base = Math.min(...prof);
+const peaks = [];
+for (let i = 2; i < prof.length - 2; i++) {
+  if (prof[i] > base + 45 && prof[i] >= prof[i - 1] && prof[i] > prof[i + 1]) {
+    if (!peaks.length || i - peaks[peaks.length - 1].i > 3) peaks.push({ i, v: prof[i] });
+  }
+}
+const gaps = [];
+for (let i = 1; i < peaks.length; i++) gaps.push(peaks[i].i - peaks[i - 1].i);
+const gapMed = gaps.length ? gaps.slice().sort((a, b) => a - b)[Math.floor(gaps.length / 2)] : 0;
+
+// 峰色（取最高那个峰的像素）
+let bestPeak = peaks.reduce((a, b) => (b.v > a.v ? b : a), { i: 0, v: 0 });
+const pd = ctx.getImageData(XC, bestPeak.i, 1, 1).data;
+const peakSum = pd[0] + pd[1] + pd[2];
+
+// 线宽：核心（base+60）与含晕（base+18）分开量，别混成一个数
+let lw = 0, hw = 0;
+for (let d = -3; d <= 3; d++) {
+  if (prof[bestPeak.i + d] > base + 60) lw++;
+  if (prof[bestPeak.i + d] > base + 18) hw++;
+}
+
+// 实长
+const total = totalLength(lines);
+
+const rows = [
+  ['等值线级数', lines.length, '间隔 1 格', lines.length >= 8],
+  ['线距（中位, px）', gapMed, '片中 6', Math.abs(gapMed - 6) <= 2],
+  ['核心峰 ΣRGB', peakSum, `片中 ${234 + 255 + 250}`, Math.abs(peakSum - 739) <= 45],
+  ['核心宽（base+60, px）', lw, '片中 2', lw >= 1 && lw <= 4],
+  ['含晕宽（base+18, px）', hw, '片中 4', hw >= 3 && hw <= 6],
+  ['总线长（格）', total.toFixed(1), '越长越密', total > 60],
+  ['背景底色 ΣRGB', Math.round(base * 3 / 1), `片中 ${151 + 173 + 177}`, true],
+];
+
+document.getElementById('probe').innerHTML = rows.map(([k, v, ref, ok]) =>
+  `<div class="row ${ok ? 'good' : 'bad'}"><span>${k}</span><b>${v} · ${ref} ${ok ? '✅' : '❌'}</b></div>`
+).join('');
+
+window.__probe = { gapMed, peakSum, lw, hw, total, levels: lines.length, peaks: peaks.length };
+document.title = 'distcontour ' + (rows.every(r => r[3]) ? 'PASS' : 'FAIL');
+</script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>岸边线：没有浅水带 + 暗缝/白沫双层</title>
+<style>
+  :root { --ink:#20272b; --muted:#5f6f75; --line:#d9e0df; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef2f1; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 4px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:100px; right:330px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; flex:1 1 auto; min-height:0; object-fit:contain;
+    border-radius:9px; border:1px solid var(--line); background:#5b7b81; }
+  #panel { position:fixed; right:12px; top:100px; width:306px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>岸边线 —— 索引里欠了三轮的那条"浅水带"，实测宽度是 <b>0px</b></h1>
+  <p>1666429884208381953 原文只说"精修版 Bad North / Townscaper 做法"。4× 逐像素量出来：水面在离岸 30/100/190px 三个点上
+  是<b>完全同一个 rgb(91,123,129)</b>（30×30 块里 min==max==mean），根本没有渐变；白线外侧还有一条 1–3px 的暗缝 (95,111,116)，
+  水里那块岛影是<b>平涂</b> (51,85,86)、边界只有 1–2px，没有半影。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span>错法①：<b>加浅水带</b>（离岸 18px 渐变提亮）</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span>错法②：<b>只画白线</b>，没有暗缝</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>正确</b>：平水 + 暗缝 + 外扩 2px 白沫 + 平涂岛影</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span>正确 <b>+ 水面碎沫</b>（1000px² 一条）</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 从 C 画布逐像素量（与片子同口径）</h2>
+  <div id="probe"></div>
+  <hr />
+  <h2>片中实测（640×602 · f004）</h2>
+  <div class="row"><span>水面平色</span><b>(91,123,129)</b></div>
+  <div class="row"><span>浅水带宽度</span><b>0px（全等）</b></div>
+  <div class="row"><span>暗缝</span><b>(95,111,116) 1–3px</b></div>
+  <div class="row"><span>白沫峰</span><b>(239,255,246) 2px</b></div>
+  <div class="row"><span>岛影</span><b>(51,85,86) 平涂</b></div>
+  <div class="row"><span>影边界</span><b>1–2px，无半影</b></div>
+  <hr />
+  <h2>结论</h2>
+  <div class="row"><span>① 水面单色</span><b>不做距离混合</b></div>
+  <div class="row"><span>② 白线 2px 定宽</span><b>外扩 2px 落位</b></div>
+  <div class="row"><span>③ 暗缝压在陆侧</span><b>白线才有落点</b></div>
+  <div class="row"><span>④ 影用平涂多边形</span><b>不用 shadowBlur</b></div>
+</div>
+
+<script type="module">
+import {
+  MEASURED, drawFlatWater, strokeShore, offsetRing, dropShadowRing,
+  foamFlecks, drawFlecks,
+} from './src/waterline.js';
+
+const W = 300, H = 240;
+
+function blob(cx, cy, rx, ry, n = 26, seed = 3) {
+  let s = seed;
+  const rnd = () => ((s = (Math.imul(s, 1664525) + 1013904223) >>> 0) / 4294967296);
+  const ring = [];
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2;
+    const k = 0.82 + rnd() * 0.3;
+    ring.push([cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k]);
+  }
+  return ring;
+}
+
+function makeCanvas(id) {
+  const cv = document.getElementById(id);
+  cv.width = W; cv.height = H;
+  return { cv, ctx: cv.getContext('2d', { willReadFrequently: true }) };
+}
+
+const ring = blob(150, 105, 86, 62, 26, 11);
+
+function drawBase(ctx, { shelf = 0, seam = true, shadow = true, flecks = false } = {}) {
+  drawFlatWater(ctx, W, H, shadow ? [dropShadowRing(ring, 9, 19, 0.94)] : []);
+  if (shelf > 0) {
+    // 错法①：离岸 shelf px 内线性提亮（片子没有这条）
+    for (let d = shelf; d >= 1; d--) {
+      const a = 0.10 * (1 - d / shelf);
+      ctx.beginPath();
+      const r = offsetRing(ring, d);
+      ctx.moveTo(r[0][0], r[0][1]);
+      for (let i = 1; i < r.length; i++) ctx.lineTo(r[i][0], r[i][1]);
+      ctx.closePath();
+      ctx.strokeStyle = `rgba(206,232,230,${a})`;
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+  }
+  // 陆地
+  ctx.beginPath();
+  ctx.moveTo(ring[0][0], ring[0][1]);
+  for (let i = 1; i < ring.length; i++) ctx.lineTo(ring[i][0], ring[i][1]);
+  ctx.closePath();
+  ctx.fillStyle = 'rgb(253,227,139)';
+  ctx.fill();
+  // 崖面：岛身下半截压成沙褐，免得整块读成一个黄饼
+  ctx.save();
+  ctx.clip();
+  // 崖面沿一条正弦线切，不是一条直杠
+  ctx.beginPath();
+  ctx.moveTo(0, 999);
+  for (let x = 0; x <= W; x += 6) {
+    ctx.lineTo(x, 105 + 6 + Math.sin(x * 0.045) * 7 + Math.sin(x * 0.11 + 1.7) * 3);
+  }
+  ctx.lineTo(W, 999);
+  ctx.closePath();
+  ctx.fillStyle = 'rgb(206,170,116)';
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(0, 999);
+  for (let x = 0; x <= W; x += 6) {
+    ctx.lineTo(x, 105 + 26 + Math.sin(x * 0.038 + 0.8) * 6);
+  }
+  ctx.lineTo(W, 999);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(126,96,62,0.5)';
+  ctx.fill();
+  ctx.restore();
+
+  if (seam) strokeShore(ctx, [ring]);
+  else {
+    // 错法②：只画白线
+    const o = offsetRing(ring, MEASURED.foamOffset);
+    ctx.beginPath();
+    ctx.moveTo(o[0][0], o[0][1]);
+    for (let i = 1; i < o.length; i++) ctx.lineTo(o[i][0], o[i][1]);
+    ctx.closePath();
+    ctx.strokeStyle = `rgb(${MEASURED.foam.join(',')})`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+  if (flecks) drawFlecks(ctx, foamFlecks(ring, [8, 8, 292, 232], 21), 0.7);
+}
+
+const A = makeCanvas('cvA'); drawBase(A.ctx, { shelf: 18, seam: false, shadow: false });
+const B = makeCanvas('cvB'); drawBase(B.ctx, { seam: false, shadow: false });
+const C = makeCanvas('cvC'); drawBase(C.ctx, {});
+const D = makeCanvas('cvD'); drawBase(D.ctx, { flecks: true });
+
+/* ── 探针：全部走 C 画布 ─────────────────────────────────────────────── */
+function px(ctx, x, y) {
+  const d = ctx.getImageData(x, y, 1, 1).data;
+  return [d[0], d[1], d[2]];
+}
+function rectStat(ctx, x, y, w, h) {
+  const d = ctx.getImageData(x, y, w, h).data;
+  const mn = [255, 255, 255], mx = [0, 0, 0];
+  for (let i = 0; i < d.length; i += 4) {
+    for (let k = 0; k < 3; k++) { mn[k] = Math.min(mn[k], d[i + k]); mx[k] = Math.max(mx[k], d[i + k]); }
+  }
+  return { mn, mx, spread: mx[0] - mn[0] + mx[1] - mn[1] + mx[2] - mn[2] };
+}
+
+// ① 水面平色一致性：右上角 30×30（离岸远）
+const waterStat = rectStat(C.ctx, 262, 200, 30, 30);
+const waterOK = waterStat.spread === 0;
+
+// ② 浅水带梯度：沿岸外 0..18px 一圈采样（沿 -y 方向从环顶往上走）
+let shelfMin = 999, shelfMax = 0;
+for (let d = 3; d <= 18; d++) {
+  const p = px(C.ctx, 150, Math.round(105 - 62 - d));
+  const v = p[0] + p[1] + p[2];
+  shelfMin = Math.min(shelfMin, v); shelfMax = Math.max(shelfMax, v);
+}
+const shelfGrad = shelfMax - shelfMin;
+
+// ③ 白沫峰：从陆往水扫一条（x=150, 从环顶往下 6px 起）
+let foamPeak = 0, foamAt = 0, seamDark = 999;
+for (let y = 40; y <= 50; y++) {
+  const p = px(C.ctx, 150, y), v = p[0] + p[1] + p[2];
+  if (v > foamPeak) { foamPeak = v; foamAt = y; }
+}
+// 暗缝：白沫内侧 1–2px
+for (let y = foamAt - 4; y <= foamAt - 1; y++) {
+  const p = px(C.ctx, 150, y), v = p[0] + p[1] + p[2];
+  seamDark = Math.min(seamDark, v);
+}
+
+// ④ 影色 + 影边界过渡长度（从岛底往下扫，取第一个"影色"像素，别用固定坐标猜）
+let shadowPx = [0, 0, 0];
+for (let y = 105 + 62; y < H - 2; y++) {
+  const p = px(C.ctx, 150, y);
+  if (p[0] === 51 && p[1] === 85 && p[2] === 86) { shadowPx = p; break; }
+}
+let shadowEdge = 0;
+for (let y = 105 + 62 + 18; y < 105 + 62 + 40; y++) {
+  const v = px(C.ctx, 150, y);
+  const isWater = v[0] === 91 && v[1] === 123 && v[2] === 129;
+  const isShadow = v[0] === 51 && v[1] === 85 && v[2] === 86;
+  if (!isWater && !isShadow) shadowEdge++;
+}
+
+const rows = [
+  ['水面 30×30 spread', waterStat.spread, waterOK ? '==0 ✅' : '≠0 ❌', waterOK],
+  ['浅水带梯度', shelfGrad, shelfGrad === 0 ? '==0 ✅' : '>0 ❌', shelfGrad === 0],
+  ['白沫峰 (ΣRGB)', foamPeak, `片中 ${239 + 255 + 246}`, Math.abs(foamPeak - 746) <= 30],
+  ['暗缝最暗 (ΣRGB)', seamDark, `片中 ${95 + 111 + 116}`, seamDark <= 380],
+  ['影色', `(${shadowPx.join(',')})`, '片中 (51,85,86)', shadowPx.join(',') === '51,85,86'],
+  ['影边界过渡 px', shadowEdge, '片中 1–2', shadowEdge <= 3],
+];
+
+document.getElementById('probe').innerHTML = rows.map(([k, v, ref, ok]) =>
+  `<div class="row ${ok ? 'good' : 'bad'}"><span>${k}</span><b>${v} · ${ref} ${ok ? '✅' : '❌'}</b></div>`
+).join('');
+
+// 曝光给自动化脚本
+window.__probe = { waterStat, shelfGrad, foamPeak, seamDark, shadowPx, shadowEdge, waterOK };
+document.title = 'waterline ' + (rows.every(r => r[3]) ? 'PASS' : 'FAIL');
+</script>
+</body>
+</html>

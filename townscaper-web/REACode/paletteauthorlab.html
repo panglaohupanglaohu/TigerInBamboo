@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>调色板作者工具：四角极值色 + 三角面带抖动的颜色体积</title>
+<style>
+  :root { --ink:#20272b; --muted:#5f6f75; --line:#d9e0df; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef2f1; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 4px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:100px; right:356px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  .cell canvas { display:block; flex:1 1 auto; min-height:0; width:100%;
+    border-radius:9px; border:1px solid var(--line); background:#383838; }
+  #panel { position:fixed; right:12px; top:100px; width:332px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>调色板作者工具 —— 不是取色器，是「一个特征能取到的所有颜色」的那个体积</h1>
+  <p>1712088611934371876 原文只有一句："Another take on a palette authoring tool"（2023-10-11）；
+  意图在同日前后的帖子里："properly define the whole color possibility space for each feature"。
+  帧实测：色带 <b>88×328</b>、底 <b>rgb(56,56,56)</b>、四角 <b>(93,142,100) (228,165,83) (58,131,162) (171,94,113)</b>；
+  对 6400 个带内点做双线性残差 → 均值 <b>(−7.3,−12,−9.2)</b>、标准差 <b>(34.4,27.9,22.5)</b>：
+  底是双线性，但每个顶点各带一份噪声（σ_像素 = 抖动半宽 ÷ 3）。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span>A：只有双线性（抖动量 0）——像一整块渐变，看不出三角面</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span><b>正确</b>：三角面 + 顶点抖动 ±(103,84,68)（片子里的样子）</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span>中列竖切：<b>片中 9 点</b> vs 本实现</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span>左栏读数：<b>8bit/255 再截断 5 位</b>（0.6117647 → 0.61176）</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 本页实算</h2>
+  <div id="probe"></div>
+  <hr />
+  <h2>片中实测</h2>
+  <div class="row"><span>色带 bbox</span><b>88 × 328（f014）</b></div>
+  <div class="row"><span>底色</span><b>rgb(56,56,56)</b></div>
+  <div class="row"><span>四角 TL / TR</span><b>(93,142,100) (228,165,83)</b></div>
+  <div class="row"><span>四角 BL / BR</span><b>(58,131,162) (171,94,113)</b></div>
+  <div class="row"><span>残差 均值</span><b>(−7.3, −12.0, −9.2)</b></div>
+  <div class="row"><span>残差 标准差</span><b>(34.4, 27.9, 22.5)</b></div>
+  <div class="row"><span>读数示例</span><b>0.61176 / 0.49019</b></div>
+  <hr />
+  <h2>结论</h2>
+  <div class="row"><span>① 角标 = 体积极值</span><b>角点不抖</b></div>
+  <div class="row"><span>② 面内仿射 / 面间有折</span><b>Gouraud</b></div>
+  <div class="row"><span>③ 抖动 σ=像素σ×√3</span><b>可反推</b></div>
+  <div class="row"><span>④ 读数是截断不是四舍五入</span><b>0.61176</b></div>
+</div>
+
+<script type="module">
+import { MEASURED, bilinear, buildVolume, rasterize, truncReadout, byteFloat, rgbToHsl, readChannels } from './src/paletteauthor.js';
+
+const BG = '#383838';
+function ctxOf(id) {
+  const cv = document.getElementById(id);
+  const r = cv.getBoundingClientRect();
+  cv.width = Math.max(240, Math.round(r.width));
+  cv.height = Math.max(200, Math.round(r.height));
+  const ctx = cv.getContext('2d', { willReadFrequently: true });
+  ctx.fillStyle = BG; ctx.fillRect(0, 0, cv.width, cv.height);
+  return ctx;
+}
+
+/** 把 88 宽 × (h) 的色带画在画布中央，高度吃满画布 */
+function drawStrip(ctx, { jitter, rows = 14, hRatio = 0.92 }) {
+  const W = ctx.canvas.width, H = ctx.canvas.height;
+  ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+  const h = Math.round(H * hRatio);
+  const w = Math.round(h * 88 / 328);            // 保持片子里的 88:328
+  const x = Math.round((W - w) / 2), y = Math.round((H - h) / 2);
+  const vol = buildVolume({ corners: MEASURED.corners, rows, jitter });
+  rasterize(ctx, vol, { x, y, w, h });
+  return { x, y, w, h, vol };
+}
+
+const A = (() => { const ctx = ctxOf('cvA'); return drawStrip(ctx, { jitter: [0, 0, 0], bias: [0, 0, 0] }); })();
+const B = (() => { const ctx = ctxOf('cvB'); return drawStrip(ctx, { jitter: MEASURED.jitter }); })();
+// 角标：四个小方块画在带子四角（片中在角外 2px）
+for (const [ctx, st] of [[document.getElementById('cvA').getContext('2d'), A], [document.getElementById('cvB').getContext('2d'), B]]) {
+  const marks = [['TL', st.x - 7, st.y - 7], ['TR', st.x + st.w + 1, st.y - 7], ['BL', st.x - 7, st.y + st.h + 1], ['BR', st.x + st.w + 1, st.y + st.h + 1]];
+  for (const [k, mx, my] of marks) {
+    const c = MEASURED.corners[k];
+    ctx.fillStyle = `rgb(${c.join(',')})`;
+    ctx.fillRect(mx, my, 9, 9);
+  }
+}
+
+/* ── 用渲染结果反测片中那三个数 ───────────────────────────────────── */
+function readPixels(ctx, box) {
+  const d = ctx.getImageData(box.x, box.y, box.w, box.h).data;
+  return { d, w: box.w, h: box.h };
+}
+function residVsBilinear(ctx, box) {
+  const { d, w, h } = readPixels(ctx, box);
+  const sum = [0, 0, 0], sq = [0, 0, 0];
+  let n = 0;
+  for (let y = 2; y < h - 2; y += 2) for (let x = 2; x < w - 2; x += 2) {
+    const u = x / (w - 1), v = y / (h - 1);
+    const m = bilinear(MEASURED.corners, u, v);
+    const o = (y * w + x) * 4;
+    for (let k = 0; k < 3; k++) { const e = d[o + k] - m[k]; sum[k] += e; sq[k] += e * e; }
+    n++;
+  }
+  const mean = sum.map((s) => s / n);
+  const sd = sq.map((s, k) => Math.sqrt(Math.max(0, s / n - mean[k] ** 2)));
+  return { mean, sd, n };
+}
+const RA = residVsBilinear(document.getElementById('cvA').getContext('2d'), A);
+const RB = residVsBilinear(document.getElementById('cvB').getContext('2d'), B);
+
+/* 中列竖切 vs 片中 9 点 */
+function centerProfile(ctx, box) {
+  const { d } = readPixels(ctx, box);
+  const out = [];
+  for (let k = 0; k < 9; k++) {
+    const y = Math.round((box.h - 1) * (0.1 + 0.8 * k / 8));
+    const x = Math.round(box.w / 2);
+    const o = (y * box.w + x) * 4;
+    out.push([d[o], d[o + 1], d[o + 2]]);
+  }
+  return out;
+}
+const PB = centerProfile(document.getElementById('cvB').getContext('2d'), B);
+/**
+ * 与片子对照的是**平滑成分**（双线性 + 偏置），不是渲染出来的单列像素。
+ * 理由：片中那 9 个点本身就是单列采样，单列 = 被顶点抖动污染过的值（σ≈30），
+ * 拿我这边同样被污染的一列去比，差多少都说明不了问题。
+ * 反过来，"片中 9 点 减去 平滑成分"的锯齿轮廓，正是抖动存在的证据。
+ */
+const modelProfile = Array.from({ length: 9 }, (_, k) => {
+  const v = 0.1 + 0.8 * k / 8;
+  return bilinear(MEASURED.corners, 0.5, v).map((c, ch) => c + MEASURED.bias[ch]);
+});
+const profileErr = MEASURED.centerProfile.reduce((a, p, i) =>
+  a + (Math.abs(p[0] - modelProfile[i][0]) + Math.abs(p[1] - modelProfile[i][1]) + Math.abs(p[2] - modelProfile[i][2])) / 3, 0) / 9;
+// 片中 9 点相对平滑成分的抖动幅度（应与 residSD 同量级）
+const jag = MEASURED.centerProfile.map((p, i) => (p[0] - modelProfile[i][0] + p[1] - modelProfile[i][1] + p[2] - modelProfile[i][2]) / 3);
+const jagSD = Math.sqrt(jag.reduce((a, v) => a + v * v, 0) / jag.length);
+
+/* ── C：竖切折线 ───────────────────────────────────────────────────── */
+{
+  const ctx = ctxOf('cvC');
+  const W = ctx.canvas.width, H = ctx.canvas.height;
+  ctx.fillStyle = '#f4f8f7'; ctx.fillRect(0, 0, W, H);
+  const padL = 42, padB = 30, padT = 22, padR = 12;
+  const x0 = padL, x1 = W - padR, y0 = H - padB, y1 = padT;
+  const X = (k) => x0 + (k / 8) * (x1 - x0);
+  const Y = (v) => y0 - (v / 255) * (y0 - y1);
+  ctx.strokeStyle = '#c9d3d2'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(x0, y1); ctx.lineTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+  ctx.fillStyle = '#5f6f75'; ctx.font = '11px system-ui';
+  ctx.fillText('中列 RGB 值 →', 4, 14);
+  ctx.fillText('t = 0.1 … 0.9 →', x1 - 90, H - 8);
+  const series = [
+    ['#b23a2a', MEASURED.centerProfile, '片中'],
+    ['#1d7a4f', modelProfile, '双线性+偏置'],
+  ];
+  for (const [col, pts, name] of series) {
+    for (let k = 0; k < 3; k++) {
+      ctx.strokeStyle = col; ctx.globalAlpha = k === 1 ? 0.55 : 1; ctx.lineWidth = k === 1 ? 1.2 : 2;
+      ctx.beginPath();
+      pts.forEach((p, i) => { const px = X(i), py = Y(p[k]); i ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+      ctx.stroke();
+    }
+  }
+  ctx.globalAlpha = 1;
+  ctx.fillStyle = '#b23a2a'; ctx.fillText('▬ 片中 9 点', x0 + 4, y1 + 12);
+  ctx.fillStyle = '#1d7a4f'; ctx.fillText('▬ 本实现', x0 + 84, y1 + 12);
+}
+
+/* ── D：左栏读数面板 ───────────────────────────────────────────────── */
+{
+  const ctx = ctxOf('cvD');
+  const W = ctx.canvas.width, H = ctx.canvas.height;
+  ctx.fillStyle = '#383838'; ctx.fillRect(0, 0, W, H);
+  const rows = [
+    ['RGB', MEASURED.corners.TR, readChannels(MEASURED.corners.TR, 'rgb')],
+    ['HSV', MEASURED.corners.BL, readChannels(MEASURED.corners.BL, 'hsl')],
+  ];
+  let y = 16;
+  for (const [label, rgb, ch] of rows) {
+    ctx.fillStyle = `rgb(${rgb.join(',')})`;
+    ctx.fillRect(12, y, 54, 40);
+    ctx.strokeStyle = '#6a6a6a'; ctx.lineWidth = 1; ctx.strokeRect(12.5, y + 0.5, 53, 39);
+    ctx.fillStyle = '#c9c9c9'; ctx.font = '11px system-ui';
+    ctx.fillText(label, 74, y + 12);
+    ch.forEach((v, i) => {
+      // 滑杆：底槽 + 圆钮（片中：4 个通道各一条）
+      const sy = y + 8 + i * 8;
+      ctx.fillStyle = '#555'; ctx.fillRect(96, sy + 2, 56, 2);
+      ctx.fillStyle = '#d8d8d8';
+      ctx.beginPath(); ctx.arc(96 + 56 * Math.min(1, parseFloat(v) || 0), sy + 3, 3, 0, 7); ctx.fill();
+      ctx.fillStyle = '#9ea7a6'; ctx.font = '10px ui-monospace, monospace';
+      ctx.fillText(v, 160, sy + 6);
+    });
+    y += 62;
+  }
+  // 截断 vs 四舍五入
+  // 用 152 而不是 156：156/255=0.6117647，第 6 位是 4，四舍五入与截断恰好同值，
+  // 分辨不出；152/255=0.5960784，截断 0.59607 / 四舍五入 0.59608，片子里是前者。
+  const b = 152 / 255;
+  ctx.fillStyle = '#c9c9c9'; ctx.font = '11px system-ui';
+  ctx.fillText(`152/255 = ${b.toFixed(7)}`, 12, y + 4);
+  ctx.fillStyle = '#1d7a4f';
+  ctx.fillText(`截断 → ${truncReadout(b)}  ✅ 与片中一致`, 12, y + 20);
+  ctx.fillStyle = '#b23a2a';
+  ctx.fillText(`toFixed → ${b.toFixed(5)}  ❌ 差一位`, 12, y + 36);
+}
+
+/* ── A/B 像素差 ───────────────────────────────────────────────────── */
+function diffPct(idA, idB) {
+  const a = document.getElementById(idA), b = document.getElementById(idB);
+  const ca = a.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, a.width, a.height);
+  const cb = b.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, b.width, b.height);
+  let n = 0, tot = 0;
+  for (let i = 0; i < ca.data.length; i += 4) {
+    if (ca.data[i + 3] === 0 && cb.data[i + 3] === 0) continue;
+    tot++;
+    if (Math.abs(ca.data[i] - cb.data[i]) + Math.abs(ca.data[i + 1] - cb.data[i + 1]) + Math.abs(ca.data[i + 2] - cb.data[i + 2]) > 24) n++;
+  }
+  return 100 * n / Math.max(1, tot);
+}
+const abAB = diffPct('cvA', 'cvB');
+
+const fmt = (a) => `(${a.map((v) => v.toFixed(1)).join(', ')})`;
+const rows = [
+  ['A 残差 std（无抖动）', fmt(RA.sd), '应 ≈0', Math.max(...RA.sd) < 3],
+  ['B 残差 std（带抖动）', fmt(RB.sd), '片中 (34.4,27.9,22.5)', Math.abs(RB.sd[0] - 34.4) < 8 && Math.abs(RB.sd[1] - 27.9) < 7],
+  ['B 残差 均值', fmt(RB.mean), '片中 (−7.3,−12,−9.2)·clamp 抬高', Math.abs(RB.mean[1] + 12) < 10],
+  ['竖切 9 点 平均 |Δ|', profileErr.toFixed(1), '≤ 12', profileErr <= 12],
+  ['片中 9 点 锯齿 σ', jagSD.toFixed(1) + ' 级', '非零＝确有抖动', jagSD > 8],
+  ['A vs B 像素差', abAB.toFixed(1) + '%', '同一体积，只差抖动', abAB > 8],
+  ['截断 152/255', truncReadout(byteFloat(152)), '片中 0.59607', truncReadout(byteFloat(152)) === '0.59607'],
+  ['四舍五入会得到', byteFloat(152).toFixed(5), '片子不是这个', byteFloat(152).toFixed(5) === '0.59608'],
+];
+document.getElementById('probe').innerHTML = rows.map(([k, v, ref, ok]) =>
+  `<div class="row ${ok ? 'good' : 'bad'}"><span>${k}</span><b>${v} · ${ref} ${ok ? '✅' : '❌'}</b></div>`
+).join('');
+
+window.__probe = { sdA: RA.sd, sdB: RB.sd, meanB: RB.mean, profileErr, jagSD, abAB, trunc: truncReadout(byteFloat(152)) };
+document.title = 'paletteauthor ' + (rows.every((r) => r[3]) ? 'PASS' : 'FAIL');
+</script>
+</body>
+</html>

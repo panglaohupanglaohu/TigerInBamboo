@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Burst 假 sleep：用时钟单元驱动调试可视化</title>
+<style>
+  :root { --ink:#20272b; --muted:#5f6f75; --line:#d9e0df; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef2f1; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 4px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:100px; right:356px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  canvas { display:block; width:100%; flex:1 1 auto; min-height:0; object-fit:contain;
+    border-radius:9px; border:1px solid var(--line); background:#618586; }
+  #panel { position:fixed; right:12px; top:100px; width:332px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Burst 里没有 Thread.Sleep —— 主线程写时钟、job 里读时钟</h1>
+  <p>1670064751181791233 原文："I figured out how to mimic Thread.Sleep() in Burst! Just store time in a static unsafe NativeArray!
+  Then you can write to it from the main thread and read from it inside a job!"（2023-06-17）。
+  片子 640² 实测：底色 <b>rgb(97,133,134)</b>、线 <b>rgb(174,181,115)</b>、游程中位 2px（1px+AA）；
+  三角化覆盖率 <b>0.081% → 1.791%</b>（f005→f020，3.24s），且增长**与帧率解耦**——这是"由时钟驱动"的直接证据。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span>A：<b>一次性算完</b>（调试可视化什么都看不到）</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span>B：错法 <b>每帧固定 3 步</b>（帧时间一抖，速度跟着抖）</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span><b>正确</b>：时钟单元 + deadline（8 步/秒）</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span>覆盖率 vs 步数：<b>本实现</b>（绿虚线＝片中峰值）</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 本页实算（240 帧，帧时间 16.7ms ±9ms 抖动 + 一次 500ms 挂起）</h2>
+  <div id="probe"></div>
+  <hr />
+  <h2>片中实测（640×640 · 24 帧）</h2>
+  <div class="row"><span>底色</span><b>rgb(97,133,134)</b></div>
+  <div class="row"><span>线色</span><b>rgb(174,181,115)</b></div>
+  <div class="row"><span>线宽（横扫描游程中位）</span><b>2px = 1px+AA</b></div>
+  <div class="row"><span>覆盖率 f005 → f020</span><b>0.081% → 1.791%</b></div>
+  <div class="row"><span>增长耗时</span><b>3.24s</b></div>
+  <div class="row"><span>f004 空帧</span><b>0.000%（场景清空）</b></div>
+  <hr />
+  <h2>结论</h2>
+  <div class="row"><span>① 预算按时钟差</span><b>不按帧计数</b></div>
+  <div class="row"><span>② 静态数组当时间源</span><b>job 不阻塞</b></div>
+  <div class="row"><span>③ Float64 不是 Float32</span><b>避免两帧吃一步</b></div>
+  <div class="row"><span>④ 单帧上限</span><b>防挂起后补几千步</b></div>
+</div>
+
+<script type="module">
+import { MEASURED, ClockCell, Pace, Refiner, drawWire } from './src/jobclock.js';
+
+const S = 512;
+function ctxOf(id) {
+  const cv = document.getElementById(id);
+  cv.width = S; cv.height = S;
+  return cv.getContext('2d', { willReadFrequently: true });
+}
+const bg = `rgb(${MEASURED.bg.join(',')})`;
+
+/* 岛轮廓：六边形 + 两个缺口，和片子里那块岛的剪影量级相当（占画幅 ~46%） */
+function islandPoly() {
+  // 角度必须单调递增（否则多边形自交，扇形三角化会画出交叉的边——
+  // 这正好是第一版的样子：看上去像一堆折线乱穿，而不是一块岛的三角化）
+  const cx = 256, cy = 268, R = 176, pts = [], N = 7;
+  for (let i = 0; i < N; i++) {
+    const a = (i / N) * Math.PI * 2 - Math.PI / 2;
+    // 半径只做 ±8% 的起伏：足够不像正多边形，又不至于把边凹进去
+    const r = R * (1 + 0.08 * Math.cos(i * 2.1 + 0.6));
+    pts.push([cx + Math.cos(a) * r * 1.16, cy + Math.sin(a) * r * 0.84]);
+  }
+  return pts;
+}
+
+/* ── 帧时间序列：可复现的抖动（不用 Math.random，截图才可比） ─────────── */
+const FRAMES = 240, HITCH = 100;
+function frameTimes() {
+  const dt = [];
+  let seed = 12345;
+  const rnd = () => ((seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+  for (let i = 0; i < FRAMES; i++) {
+    let d = 16.7 + (rnd() * 2 - 1) * 9;
+    if (i === HITCH) d = 500;
+    dt.push(d / 1000);
+  }
+  return dt;
+}
+
+/* ── A：一次性算完 ─────────────────────────────────────────────────── */
+{
+  const ctx = ctxOf('cvA');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, S, S);
+  const r = new Refiner(islandPoly());
+  for (let i = 0; i < 46; i++) r.splitOnce();
+  drawWire(ctx, r);
+}
+window.__A = 46;
+
+/* ── B / C：跑固定步 vs 时钟步，各留一张"同一时刻"的画面 ─────────────── */
+/**
+ * 同一段 2s 的时间轴，分别在 60fps 与 30fps 下跑一遍：
+ *   时钟档：总步数必须只由"时间"决定 → 两者相同
+ *   固定档：总步数 = 帧数 × 3 → 帧率减半，步数减半（视觉速度直接慢一半）
+ * 这是原文那个 trick 真正解决的问题，比"抖不抖"更硬：它把**速度**从帧率里摘出来了。
+ */
+function runAt(mode, fps) {
+  // 同一段真实时间轴，按 fps 重新切帧：30fps 就是把相邻两帧合并（总时长不变）
+  const src = frameTimes();
+  let dt = src;
+  if (fps === 30) {
+    dt = [];
+    for (let i = 0; i < src.length; i += 2) dt.push(src[i] + (src[i + 1] || src[i]));
+  }
+  const clock = new ClockCell();
+  const pace = new Pace(clock, { stepPerSec: 8 });
+  const r = new Refiner(islandPoly());
+  let t = 0, maxDev = 0;
+  for (let i = 0; i < dt.length; i++) {
+    t += dt[i];
+    clock.write(t);
+    const n = mode === 'clock' ? pace.advanceTo(t) : 3;
+    for (let k = 0; k < n; k++) r.splitOnce();
+    clock.bumpStep();
+    // 累计步数相对"理想 8 步/秒"的最大偏离（单位：步）
+    maxDev = Math.max(maxDev, Math.abs(r.step - 8 * t));
+  }
+  return { steps: r.step, maxDev, t, n: dt.length };
+}
+const run = (mode) => runAt(mode, 60);
+const c60 = runAt('clock', 60), c30 = runAt('clock', 30);
+const f60 = runAt('fixed', 60), f30 = runAt('fixed', 30);
+// 挂起那一帧的补步数：单独量一次
+function hitchProbe() {
+  const clock = new ClockCell(), pace = new Pace(clock, { stepPerSec: 8 });
+  clock.write(0); pace.advanceTo(0);
+  clock.write(0.0167); pace.advanceTo(0.0167);
+  clock.write(0.5167); const n = pace.advanceTo(0.5167);
+  return n;
+}
+
+const B = run('fixed'), C = run('clock');
+{
+  const ctx = ctxOf('cvB');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, S, S);
+  const r = new Refiner(islandPoly());
+  // B 在 t≈1.6s 时：每帧 3 步，约 96 帧 → 96 步
+  for (let i = 0; i < Math.round(1.6 / 0.0167) * 3; i++) r.splitOnce();
+  drawWire(ctx, r);
+}
+{
+  const ctx = ctxOf('cvC');
+  ctx.fillStyle = bg; ctx.fillRect(0, 0, S, S);
+  const r = new Refiner(islandPoly());
+  // C 在 t≈1.6s 时：8 步/秒 → 约 13 步
+  for (let i = 0; i < Math.round(1.6 * 8); i++) r.splitOnce();
+  drawWire(ctx, r);
+}
+
+/* ── D：覆盖率 vs 步数（片子只能定覆盖率峰值，步数反推不出来）─────── */
+{
+  const ctx = ctxOf('cvD');
+  const W = S, H = S;
+  ctx.fillStyle = '#f4f8f7'; ctx.fillRect(0, 0, W, H);
+  const padL = 52, padB = 34, padT = 22, padR = 16;
+  const x0 = padL, x1 = W - padR, y0 = H - padB, y1 = padT;
+  const maxStep = 72, maxCov = 2.2;
+  const X = (st) => x0 + (st / maxStep) * (x1 - x0);
+  const Y = (c) => y0 - (c / maxCov) * (y0 - y1);
+
+  ctx.strokeStyle = '#c9d3d2'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(x0, y1); ctx.lineTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+  ctx.fillStyle = '#5f6f75'; ctx.font = '11px system-ui';
+  ctx.fillText('线框覆盖率 % →', 6, 14);
+  ctx.fillText('细分步数 →', x1 - 60, H - 12);
+
+  // 片中峰值 1.791% 的水平参考线
+  ctx.strokeStyle = '#1d7a4f'; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(x0, Y(1.791)); ctx.lineTo(x1, Y(1.791)); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#1d7a4f'; ctx.font = '10px system-ui';
+  ctx.fillText('片中峰值 1.791%', x0 + 4, Y(1.791) - 4);
+
+  // 本实现曲线
+  const cov = [];
+  const r = new Refiner(islandPoly());
+  const tmp = document.createElement('canvas'); tmp.width = S; tmp.height = S;
+  const g = tmp.getContext('2d', { willReadFrequently: true });
+  for (let k = 0; k <= maxStep; k++) {
+    g.fillStyle = bg; g.fillRect(0, 0, S, S);
+    drawWire(g, r);
+    const d = g.getImageData(0, 0, S, S).data;
+    let n = 0;
+    for (let i = 0; i < d.length; i += 4) if (d[i] > 120 && d[i + 1] > 120 && d[i] - d[i + 2] > 45) n++;
+    cov.push(100 * n / (S * S));
+    if (k < maxStep) r.splitOnce();
+  }
+  ctx.strokeStyle = '#9c4720'; ctx.lineWidth = 2; ctx.beginPath();
+  cov.forEach((c, k) => { const px = X(k), py = Y(c); k ? ctx.lineTo(px, py) : ctx.moveTo(px, py); });
+  ctx.stroke();
+
+  // 与片中峰值等高的那一步
+  let cross = -1;
+  for (let k = 1; k < cov.length; k++) if (cov[k] >= 1.791 && cross < 0) cross = k;
+  if (cross > 0) {
+    ctx.fillStyle = '#9c4720';
+    ctx.beginPath(); ctx.arc(X(cross), Y(cov[cross]), 3.4, 0, 7); ctx.fill();
+    ctx.font = '10px system-ui';
+    const lx = X(cross) + 8 > x1 - 96 ? X(cross) - 96 : X(cross) + 8;
+    ctx.fillText('第 ' + cross + ' 步达到同覆盖率', lx, Y(cov[cross]) - 8);
+  }
+  window.__covAt46 = cov[46];
+  window.__crossStep = cross;
+}
+
+/* ── 探针 + A/B 像素差 ─────────────────────────────────────────────── */
+function pixels(id) {
+  const cv = document.getElementById(id);
+  return cv.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, S, S).data;
+}
+function diffPct(a, b) {
+  let n = 0;
+  for (let i = 0; i < a.length; i += 4) {
+    if (Math.abs(a[i] - b[i]) + Math.abs(a[i + 1] - b[i + 1]) + Math.abs(a[i + 2] - b[i + 2]) > 24) n++;
+  }
+  return 100 * n / (S * S);
+}
+const abBC = diffPct(pixels('cvB'), pixels('cvC'));
+
+const rows = [
+  ['时钟档 60/30fps 步数', `${c60.steps} / ${c30.steps}`, '差 0%', c60.steps === c30.steps],
+  ['固定档 60/30fps 步数', `${f60.steps} / ${f30.steps}`, '帧率减半→慢一半', f30.steps <= f60.steps * 0.55],
+  ['对 8 步/秒 最大偏离', C.maxDev.toFixed(2) + ' 步', '≤1.0', C.maxDev <= 1.0],
+  ['挂起 500ms 当帧补步', hitchProbe(), '固定档恒为 3', hitchProbe() >= 4],
+  ['到 1.791% 所需步数', window.__crossStep, '片中步数不可反推', window.__crossStep > 40],
+  ['B vs C 像素差', abBC.toFixed(2) + '%', '同帧不同步数', abBC > 5],
+  ['跨线程 SAB', (new ClockCell({ shared: true }).crossThread ? '可用' : '不可用'), 'http.server 无 COOP/COEP', true],
+];
+document.getElementById('probe').innerHTML = rows.map(([k, v, ref, ok]) =>
+  `<div class="row ${ok ? 'good' : 'bad'}"><span>${k}</span><b>${v} · ${ref} ${ok ? '✅' : '❌'}</b></div>`
+).join('');
+
+window.__probe = {
+  clock60: c60.steps, clock30: c30.steps, fixed60: f60.steps, fixed30: f30.steps,
+  maxDev: C.maxDev, hitchSteps: hitchProbe(), cov46: window.__covAt46, crossStep: window.__crossStep, abBC,
+};
+document.title = 'jobclock ' + (rows.every((r) => r[3]) ? 'PASS' : 'FAIL');
+</script>
+</body>
+</html>

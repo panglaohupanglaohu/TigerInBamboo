@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>节点值链：bool → Select → LerpTowards(20) → Compose → Event</title>
+<style>
+  :root { --ink:#20272b; --muted:#5f6f75; --line:#d9e0df; --hot:#9c4720; --ok:#1d7a4f; --bad:#b23a2a; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:#eef2f1; color:var(--ink);
+    font:13px/1.5 -apple-system,system-ui,"PingFang SC",sans-serif; overflow:hidden; }
+  header { padding:10px 16px 4px; }
+  h1 { margin:0 0 3px; font-size:14.5px; }
+  header p { margin:0; color:var(--muted); font-size:12px; max-width:150ch; }
+  header b { color:var(--hot); font-weight:650; }
+  #stage { position:fixed; left:12px; top:100px; right:356px; bottom:8px;
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:8px; }
+  .cell { display:flex; flex-direction:column; gap:3px; min-width:0; min-height:0; }
+  .cell span { font-size:11px; color:var(--muted); }
+  .cell span b { color:var(--ink); }
+  .cell canvas { display:block; flex:1 1 auto; min-height:0; width:100%;
+    border-radius:9px; border:1px solid var(--line); background:#6f9ea1; }
+  #panel { position:fixed; right:12px; top:100px; width:332px; bottom:8px; background:#fff;
+    border:1px solid var(--line); border-radius:9px; padding:9px 11px; overflow:auto;
+    display:flex; flex-direction:column; gap:5px; box-shadow:0 2px 10px rgba(20,40,45,.07); }
+  #panel h2 { margin:2px 0 0; font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.04em; }
+  .row { display:flex; justify-content:space-between; gap:8px; font-size:11.5px;
+    color:var(--muted); font-variant-numeric:tabular-nums; }
+  .row b { color:var(--ink); }
+  .row.good b { color:var(--ok); }
+  .row.bad b { color:var(--bad); }
+  hr { border:0; border-top:1px solid var(--line); margin:3px 0; }
+</style>
+</head>
+<body>
+<header>
+  <h1>一个 bool 挪动一块 UI —— FloatSelect → LerpTowards(20) → Compose → Event</h1>
+  <p>1724449858369568780 原文："The button toggles a ScriptableObject bool. The FloatSelectNode component listens to that ScriptableObject,
+  and then a series of node-like components end up moving a piece of UI"（2023-11-14）。
+  参数不在正文里，在 <b>Inspector</b> 里：On False <b>226.9</b> / On True <b>−33.8</b> / Speed <b>20</b> / In0 <b>−5</b>；
+  抓拍那一帧 Lerp 的 Output 是 <b>210.8688</b> → 已走 <b>0.8016s</b>，屏幕跨度 <b>256px</b> → 画布缩放 <b>0.982</b>。</p>
+</header>
+
+<div id="stage">
+  <div class="cell"><span><b>正确</b>：MoveTowards 定速 20（t=1.50s 抓拍）</span><canvas id="cvA"></canvas></div>
+  <div class="cell"><span>错法：指数逼近 <b>lerp(a,b,10dt)</b>（同一时刻，位置已经不一样了）</span><canvas id="cvB"></canvas></div>
+  <div class="cell"><span>位置–时间：<b>直线</b> vs 指数曲线（+ 片中那一帧的落点）</span><canvas id="cvC"></canvas></div>
+  <div class="cell"><span>调用次数：<b>Select 只在 toggle 那一下</b>，链外 0</span><canvas id="cvD"></canvas></div>
+</div>
+
+<div id="panel">
+  <h2>反测 · 本页实算</h2>
+  <div id="probe"></div>
+  <hr />
+  <h2>Inspector 读出的参数（f020）</h2>
+  <div class="row"><span>FloatSelect On False / On True</span><b>226.9 / −33.8</b></div>
+  <div class="row"><span>LerpTowards Speed</span><b>20</b></div>
+  <div class="row"><span>LerpTowards Output（抓拍）</span><b>210.8688</b></div>
+  <div class="row"><span>Vector2Compose In0</span><b>−5</b></div>
+  <div class="row"><span>Event → </span><b>anchoredPosition</b></div>
+  <hr />
+  <h2>从画面反推</h2>
+  <div class="row"><span>行程</span><b>260.7 单位</b></div>
+  <div class="row"><span>到位耗时</span><b>13.035 s</b></div>
+  <div class="row"><span>那一帧已走</span><b>0.8016 s</b></div>
+  <div class="row"><span>→ toggle 时刻</span><b>1.515 s</b></div>
+  <div class="row"><span>屏幕静止位</span><b>cy 277 → 533（256px）</b></div>
+  <div class="row"><span>画布缩放</span><b>0.982</b></div>
+</div>
+
+<script type="module">
+import { MEASURED, DERIVED, buildChain, buildExponential, settleTimeAt } from './src/bindchain.js';
+
+/**
+ * 按元素实际像素建位图：位图尺寸 == 显示尺寸，图和框就不会互相拉伸
+ * （前一版把 S=480 的方图塞进 300×220 的格子里，白底只铺了一半，看起来像画坏了）。
+ */
+function ctxOf(id) {
+  const cv = document.getElementById(id);
+  const r = cv.getBoundingClientRect();
+  cv.width = Math.max(240, Math.round(r.width));
+  cv.height = Math.max(200, Math.round(r.height));
+  return cv.getContext('2d', { willReadFrequently: true });
+}
+const sizeOf = (ctx) => ({ W: ctx.canvas.width, H: ctx.canvas.height });
+
+/** 把 anchoredPosition.y 映射到画布 y：顶位 226.9 → 120，底位 −33.8 → 400 */
+const Y_TOP = 120, Y_BOT = 400;
+const yOf = (v) => Y_TOP + (MEASURED.onFalse - v) / (MEASURED.onFalse - MEASURED.onTrue) * (Y_BOT - Y_TOP);
+
+function rounded(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r);
+  ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r);
+  ctx.arcTo(x, y, x + w, y, r);
+  ctx.closePath();
+}
+
+/** 画一块像片子里那样的 UI 面板：青底 + 两个白圆角按钮 + 一条虚线轨迹 */
+function drawPanel(ctx, y, { trail = [], label = '' } = {}) {
+  const { W, H } = sizeOf(ctx);
+  ctx.fillStyle = '#6f9ea1'; ctx.fillRect(0, 0, W, H);
+  // 轨迹虚线（顶位→底位）
+  ctx.strokeStyle = 'rgba(255,255,255,.28)'; ctx.lineWidth = 1.5; ctx.setLineDash([6, 6]);
+  ctx.beginPath(); ctx.moveTo(96, Y_TOP + 18); ctx.lineTo(96, Y_BOT + 18); ctx.stroke();
+  ctx.setLineDash([]);
+  // 已走过的点
+  for (const t of trail) {
+    ctx.fillStyle = 'rgba(255,255,255,.55)';
+    ctx.beginPath(); ctx.arc(70, yOf(t), 2, 0, 7); ctx.fill();
+  }
+  // Toggle（不动）
+  ctx.fillStyle = '#f7f4ee';
+  rounded(ctx, 40, Y_TOP - 14, 200, 26, 6); ctx.fill();
+  ctx.fillStyle = '#3b4550'; ctx.font = '13px system-ui'; ctx.textAlign = 'center';
+  ctx.fillText('Toggle', 140, Y_TOP + 4);
+  // Moving（被链挪动的那个）
+  ctx.fillStyle = '#fffdf7';
+  rounded(ctx, 40, y - 14, 176, 28, 6); ctx.fill();
+  ctx.fillStyle = '#3b4550';
+  ctx.fillText('Moving!', 128, y + 5);
+  ctx.textAlign = 'left';
+  // 当前值
+  ctx.fillStyle = '#f2efe6'; ctx.font = '11px system-ui';
+  ctx.fillText(label, 40, H - 14);
+}
+
+const T_SNAP = 1.5;
+
+/* A：定速链在 1.5s 的位置 */
+const A = buildChain();
+A.toggle(true);
+let ta = 0; const trailA = [];
+while (ta < T_SNAP - 1e-9) { A.tick(1 / 60); ta += 1 / 60; if (Math.round(ta * 60) % 6 === 0) trailA.push(A.lerp.out); }
+{
+  const ctx = ctxOf('cvA');
+  drawPanel(ctx, yOf(A.lerp.out), { trail: trailA, label: `y = ${A.lerp.out.toFixed(1)}  t = 1.50s  （Speed 20 → 30 单位）` });
+}
+
+/* B：指数逼近在 1.5s 的位置 */
+const B = buildExponential();
+B.toggle(true);
+for (let t = 0; t < T_SNAP - 1e-9; t += 1 / 60) B.tick(1 / 60);
+{
+  const ctx = ctxOf('cvB');
+  drawPanel(ctx, yOf(B.value), { label: `y = ${B.value.toFixed(1)}  t = 1.50s  （同一时刻，落后 ${(A.lerp.out - B.value).toFixed(1)} 单位）` });
+}
+
+/* C：位置–时间曲线 */
+{
+  const ctx = ctxOf('cvC');
+  const { W, H } = sizeOf(ctx);
+  ctx.fillStyle = '#f4f8f7'; ctx.fillRect(0, 0, W, H);
+  const padL = 54, padB = 34, padT = 24, padR = 16;
+  const x0 = padL, x1 = W - padR, y0 = H - padB, y1 = padT;
+  const MAXT = 16;
+  const X = (t) => x0 + (t / MAXT) * (x1 - x0);
+  const Y = (v) => y0 - ((v - MEASURED.onTrue) / (MEASURED.onFalse - MEASURED.onTrue)) * (y0 - y1);
+  ctx.strokeStyle = '#c9d3d2'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(x0, y1); ctx.lineTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+  ctx.fillStyle = '#5f6f75'; ctx.font = '11px system-ui';
+  ctx.fillText('anchoredPosition.y →', 4, 14);
+  ctx.fillText('秒 →', x1 - 30, H - 12);
+  // 两条曲线
+  const lin = buildChain(); lin.toggle(true);
+  ctx.strokeStyle = '#9c4720'; ctx.lineWidth = 2; ctx.beginPath();
+  let t = 0;
+  ctx.moveTo(X(0), Y(MEASURED.onFalse));
+  while (t < MAXT) { lin.tick(1 / 60); t += 1 / 60; ctx.lineTo(X(t), Y(lin.lerp.out)); }
+  ctx.stroke();
+  const ex = buildExponential(); ex.toggle(true);
+  ctx.strokeStyle = '#1d7a4f'; ctx.lineWidth = 2; ctx.setLineDash([5, 4]); ctx.beginPath();
+  t = 0; ctx.moveTo(X(0), Y(MEASURED.onFalse));
+  while (t < MAXT) { ex.tick(1 / 60); t += 1 / 60; ctx.lineTo(X(t), Y(ex.value)); }
+  ctx.stroke(); ctx.setLineDash([]);
+  // 片中那一帧
+  const px = X(DERIVED.elapsed), py = Y(MEASURED.lerpOutputAtFrame);
+  ctx.fillStyle = '#20272b'; ctx.beginPath(); ctx.arc(px, py, 3.6, 0, 7); ctx.fill();
+  ctx.font = '10px system-ui';
+  ctx.fillText(`片中 f020：${MEASURED.lerpOutputAtFrame} @ ${DERIVED.elapsed.toFixed(3)}s`, px + 7, py + 3);
+  // 13.035s 竖线
+  ctx.strokeStyle = '#9c4720'; ctx.setLineDash([3, 3]);
+  ctx.beginPath(); ctx.moveTo(X(DERIVED.travel), y1); ctx.lineTo(X(DERIVED.travel), y0); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#9c4720';
+  ctx.fillText('13.035s 到位', X(DERIVED.travel) - 60, y1 + 12);
+  ctx.fillStyle = '#1d7a4f';
+  ctx.fillText('指数逼近：永远差一点点', x0 + 8, y0 - 8);
+}
+
+/* D：求值次数柱状 */
+{
+  const ctx = ctxOf('cvD');
+  const { W, H } = sizeOf(ctx);
+  ctx.fillStyle = '#f4f8f7'; ctx.fillRect(0, 0, W, H);
+  const bar = [
+    ['链外·光照', 0], ['链外·草', 0], ['Select', A.evalsOnToggle > 0 ? A.select.evals : 0],
+    ['Lerp', A.lerpSteps], ['Compose', A.compose.evals], ['Event', A.event.fires],
+  ];
+  const maxV = Math.max(1, ...bar.map((b) => b[1]));
+  const bw = 40, gap = 18, x0 = 30, y0 = H - 46;
+  ctx.fillStyle = '#5f6f75'; ctx.font = '11px system-ui';
+  ctx.fillText('一次 toggle 后 1.5s 内各节点的调用次数', 12, 18);
+  bar.forEach(([name, v], i) => {
+    const h = (v / maxV) * (H - 150);
+    const x = x0 + i * (bw + gap);
+    ctx.fillStyle = v === 0 ? '#cfd8d7' : '#9c4720';
+    ctx.fillRect(x, y0 - h, bw, h);
+    ctx.fillStyle = '#3b4550'; ctx.font = '11px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText(String(v), x + bw / 2, y0 - h - 5);
+    ctx.fillStyle = '#5f6f75';
+    ctx.fillText(name, x + bw / 2, y0 + 14);
+    ctx.textAlign = 'left';
+  });
+}
+
+/* ── A/B：同一时刻两块面板的像素差 ─────────────────────────────────── */
+function diffPct(idA, idB) {
+  const a = document.getElementById(idA), b = document.getElementById(idB);
+  const ca = a.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, a.width, a.height).data;
+  const cb = b.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, b.width, b.height).data;
+  let n = 0;
+  for (let i = 0; i < ca.length; i += 4) {
+    if (Math.abs(ca[i] - cb[i]) + Math.abs(ca[i + 1] - cb[i + 1]) + Math.abs(ca[i + 2] - cb[i + 2]) > 24) n++;
+  }
+  return 100 * n / (a.width * a.height);
+}
+const abAB = diffPct('cvA', 'cvB');
+
+/* ── 探针 ─────────────────────────────────────────────────────────── */
+const t60 = settleTimeAt(60), t30 = settleTimeAt(30);
+const ex60 = B.settleTime(60), ex30 = B.settleTime(30);
+const rows = [
+  ['行程（单位）', DERIVED.span.toFixed(1), '226.9 − (−33.8)', Math.abs(DERIVED.span - 260.7) < 0.01],
+  ['解析到位 260.7/20', DERIVED.travel.toFixed(3) + 's', '= 13.035s', Math.abs(DERIVED.travel - 13.035) < 0.01],
+  ['定速链 60fps 实测', t60.toFixed(3) + 's', '误差 <1%', Math.abs(t60 - DERIVED.travel) / DERIVED.travel < 0.01],
+  ['定速链 30fps 实测', t30.toFixed(3) + 's', '帧率无关', Math.abs(t30 - t60) / t60 < 0.02],
+  ['指数逼近「看似到位」', ex60.toFixed(2) + 's', '定速要 13.04s（22×）', ex60 < 1.2],
+  ['片中反推 toggle 时刻', DERIVED.toggleAt.toFixed(3) + 's', 'f020 之前 0.80s', Math.abs(DERIVED.elapsed - 0.8016) < 0.001],
+  ['屏幕跨度 / 缩放', '256px / ' + DERIVED.canvasScale.toFixed(3), '≈0.98', Math.abs(DERIVED.canvasScale - 0.982) < 0.002],
+  ['一次 toggle 求值数', A.evalsOnToggle, '只有下游 4 个', A.evalsOnToggle === 4],
+  ['A vs B 面板像素差', abAB.toFixed(2) + '%', '同一时刻位置不同', abAB > 0.5],
+];
+document.getElementById('probe').innerHTML = rows.map(([k, v, ref, ok]) =>
+  `<div class="row ${ok ? 'good' : 'bad'}"><span>${k}</span><b>${v} · ${ref} ${ok ? '✅' : '❌'}</b></div>`
+).join('');
+
+window.__probe = {
+  span: DERIVED.span, travel: DERIVED.travel, t60, t30, ex60, ex30,
+  elapsed: DERIVED.elapsed, scale: DERIVED.canvasScale, evals: A.evalsOnToggle, abAB,
+};
+document.title = 'bindchain ' + (rows.every((r) => r[3]) ? 'PASS' : 'FAIL');
+</script>
+</body>
+</html>
