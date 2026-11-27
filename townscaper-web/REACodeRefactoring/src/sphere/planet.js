@@ -157,7 +157,7 @@ export function buildPlanet(sphere, { seed = 3, R = 4, L = 0.32, maxH = 6 } = {}
  * relax = true：有东西的格子把角点往"期望大小"拉（1769641473895432220）。
  * 返回 at(cornerId, level) → [x, y, z]
  */
-export function cornerPositions(planet, { relax = true, iters = 40, moduleCells = null, solver = 'spring', maxLean = 30, moduleGroups = null, edgeTol = Infinity, moduleCheck = false } = {}) {
+export function cornerPositions(planet, { relax = true, iters = 40, moduleCells = null, solver = 'spring', maxLean = 30, moduleGroups = null, edgeTol = Infinity, moduleCheck = false, minimax = true, minimaxIters = 60, modulePriority = 3 } = {}) {
   const { cells, corners, H, R, L } = planet;
   if (!Number.isFinite(R) || R <= 0 || !Number.isFinite(L) || L < 0 ||
       !Number.isInteger(iters) || iters < 0 || iters > 1000 || H.length !== cells.length ||
@@ -205,7 +205,7 @@ export function cornerPositions(planet, { relax = true, iters = 40, moduleCells 
   const pos = [];
   for (let l = 0; l <= maxH; l++) {
     let D = corners.map((d) => d.slice());
-    if (relax && l > 0 && solver === 'joint') D = jointGroupLevel(planet, cells, corners, pos[l - 1], (id) => active(id, l), l, { iters, maxLean, moduleGroups, edgeTol });
+    if (relax && l > 0 && solver === 'joint') D = jointGroupLevel(planet, cells, corners, pos[l - 1], (id) => active(id, l), l, { iters, maxLean, moduleGroups, edgeTol, minimax, minimaxIters, modulePriority });
     else if (relax && l > 0 && solver === 'shape') D = componentScaleLevel(cells, corners, pos[l - 1], (id) => active(id, l), R, L, l, maxLean);
     else if (relax && l > 0) {
       const r = R + l * L, s = R / r;   // 期望：这一层的格子和海平面一样大 → 单位球上的边长缩 s 倍
@@ -383,17 +383,17 @@ function componentScaleLevel(cells, base, prev, isActive, R, L, l, maxLean) {
  * 精修 + 墙倾斜上限 + edgeTol 回退）；单元之间的共享角点取各单元提案平均——多格模块
  * 内部的共享角点天然一致（同一相似变换），协商只发生在模块边界上。未被任何活动格
  * 触及的角点保持上一层位置（该层不画）。per-unit 报告挂在 D.components 供诊断。 */
-function jointGroupLevel(planet, cells, corners, prev, isActive, l, { iters, maxLean, moduleGroups, edgeTol }) {
+function jointGroupLevel(planet, cells, corners, prev, isActive, l, { iters, maxLean, moduleGroups, edgeTol, minimax = true, minimaxIters = 60, modulePriority = 3 }) {
   const D = prev.map((d) => d.slice()), seen = new Uint8Array(cells.length), reports = [];
   for (const c0 of cells) {
     if (seen[c0.id] || !isActive(c0.id)) continue;
     const comp = [], stack = [c0.id]; seen[c0.id] = 1;
     while (stack.length) { const id = stack.pop(); comp.push(id); for (const o of cells[id].nb) if (o >= 0 && !seen[o] && isActive(o)) { seen[o] = 1; stack.push(o); } }
     // 切联合单元：声明组 ∩ 组件优先，剩余格按连通性成组
-    const compSet = new Set(comp), covered = new Set(), units = [];
+    const compSet = new Set(comp), covered = new Set(), units = [], declared = new Set();
     if (moduleGroups) for (const g of moduleGroups) {
       const part = g.filter((id) => compSet.has(id));
-      if (part.length) units.push(part);
+      if (part.length) { units.push(part); for (const id of part) declared.add(id); }
       for (const id of part) covered.add(id);
     }
     const restSet = new Set(comp.filter((id) => !covered.has(id))), rseen = new Set();
@@ -405,15 +405,31 @@ function jointGroupLevel(planet, cells, corners, prev, isActive, l, { iters, max
     }
     const props = new Map();
     for (const unit of units) {
-      const res = fitModuleGroup(planet, unit, prev, { level: l, iters, maxLean, edgeTol });
-      for (const [k, d] of res.dirs) { const list = props.get(k) || []; list.push(d); props.set(k, list); }
+      const res = fitModuleGroup(planet, unit, prev, { level: l, iters, maxLean, edgeTol, minimax, minimaxIters });
+      const isDeclared = declared.has(unit[0]);
+      for (const [k, d] of res.dirs) {
+        const e = props.get(k) || { rest: [], mod: [] };
+        (isDeclared ? e.mod : e.rest).push(d);
+        props.set(k, e);
+      }
       reports.push({ level: l, cells: unit, unitCells: res.report.cells.length, f: res.report.f, want: res.report.want,
         worst: res.report.worst, mean: res.report.mean, rejected: res.report.rejected,
-        unresolved: res.report.unresolved, capped: res.report.capped, pieces: res.report.pieces });
+        unresolved: res.report.unresolved, capped: res.report.capped, pieces: res.report.pieces,
+        jacobiWorst: res.report.jacobiWorst, freeWorst: res.report.freeWorst, capPenalty: res.report.capPenalty,
+        minimaxIters: res.report.minimaxIters, minimaxStalled: res.report.minimaxStalled });
     }
-    for (const [k, ds] of props) {
-      const m = ds.reduce((a, p) => [a[0] + p[0] / ds.length, a[1] + p[1] / ds.length, a[2] + p[2] / ds.length], [0, 0, 0]);
-      D[k] = norm(m);
+    // r251：协商时**声明模块加权**。旧口径是无条件取平均，会把模块的边拉回折中位
+    // （实测 3 格 6 层组：单元内 worst 0.039 → 平均后页面最差边 0.575），而片子的主张正是
+    // 「含模块的格子保持想要的形状」。绝对优先又太硬（邻居要独自吃掉全部差额，全局最差
+    // 0.392 → 1.073）→ 用权重 w：模块提案计 w 票、其他单元各 1 票，差额按票数分摊。
+    for (const [k, e] of props) {
+      const mo = e.mod.length, re = e.rest.length;
+      if (!mo) { const m = e.rest.reduce((a, p) => [a[0] + p[0] / re, a[1] + p[1] / re, a[2] + p[2] / re], [0, 0, 0]); D[k] = norm(m); continue; }
+      const w = mo ? Math.max(1, modulePriority) : 1, tot = w * mo + re;
+      const sum = [0, 0, 0];
+      for (const p of e.mod) for (let i = 0; i < 3; i++) sum[i] += p[i] * w;
+      for (const p of e.rest) for (let i = 0; i < 3; i++) sum[i] += p[i];
+      D[k] = norm([sum[0] / tot, sum[1] / tot, sum[2] / tot]);
     }
   }
   D.components = reports;

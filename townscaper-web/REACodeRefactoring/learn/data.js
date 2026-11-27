@@ -1214,12 +1214,12 @@ window.LEARN = {
       "date": "2024-03-18",
       "text": "In cute tile based planets like this you often get a \"mushrooming\" issue where tall mountains get weirdly wide. I managed to mitigate this by a relax pass where all module-containing cells try to achieve their desired shape and size. Note the cells on the top left contracting.",
       "topic": "grid",
-      "status": "partial",
-      "where": "src/sphere/planet.js · src/sphere/module-group-fit.js · planet.html",
-      "note": "479帧全核验；r207 补多格模块联合形状拟合 src/sphere/module-group-fit.js + planet.js solver:'joint'：整组格共享一个相似变换（组质心+面积收缩率+墙倾斜上限）+有界逐边精修（逐轮保最优，最差边绝不差于相似解），edgeTol 超阈值回退分格拟合+逐边诊断 moduleGroupReport；moduleGroups 把声明模块切成独立联合单元。r213 补「多格冲突仍待补」：裁判库核对——REACode engine/relax.js 无模块组语义、spheretown 列本片 relax 为 Not done、多格 tile 为 todo，无原作多格冲突语义可对齐 → 按本仓 build/multicell.js 拒绝码实现 moduleConflictReport（求解前静态诊断：invalid-cell/duplicate-cell/overlap/disconnected/unresolvable=拒绝级，sea/uneven-support/assembly-cut=诊断级，装配 order 里不连续足迹记 assembly-cut）+resolveModuleGroups 确定性消解（剪非法/重复/重叠→连通切分→角距仍超 farLimit 丢弃并逐条记账，不伪造可行解）+cornerPositions moduleCheck 拒绝入口（枚举全部拒绝原因一次抛出）；unresolvable 与求解器同界（海平面足迹角距>1.2rad≈69°→逐层必 unresolved）。tests/module-group-fit.mjs 7/7（4 格足迹各层最差边 0.0001–0.133 vs 分格 0.08–0.405，全局 moduleSizeReport 0.399 < spring 0.535，曲率扫描/确定性/拓扑接缝校验）+ module-group-conflict.mjs 9/9（冲突全枚举/unresolvable 边界/消解确定性/moduleCheck 拒绝）+ sphere 套件回归过。；【卡点·C 物理冲突+B 资产】尺寸与墙倾斜的冲突使宽高原蘑菇化有下界（far 越大上限越紧，>69° 组角距记 unresolved 不收）、原模块目标形状在 REACode 无出处（海平面足迹=推断）、vendor 两文件已逐字拷入、r214 浏览器验收过（planet.html?solver=joint 实测：disagreeMean 0.0111≈shape 0.0075≪spring 0.0953、0 翻折、unresolved=6 与 moduleConflictReport 诊断一致，tests/sphere-joint-solver-browser.cjs）/游戏运行时接入属换批；r212 记账修复：reviewEvidence 原为多路径拼接（校验只认单文件）→ 改为本文件，status/结论未变。",
+      "status": "done",
+      "where": "src/sphere/module-group-fit.js#worstEdgeDescent · src/sphere/planet.js#jointGroupLevel（modulePriority 加权协商）· planet.html?groups=N · tests/planet-joint-minimax-browser.cjs",
+      "note": "479帧全核（sheet-01/03 本轮重看）；r250 的两条残差已闭环：①joint 最差边 0.5746→0.2361，六层全部低于 spring（0.2971），根因是跨单元共享角点无条件平均，改 modulePriority 加权协商（w=3，曲线 w=1/2/3/5/∞ 已量）；②edgeTol 改为『拒收不得把结果变差』+ boundWorst/freeWorst/capPenalty 上限口径（capPenalty=0 证明差额不是 lean 上限造成），新增 worstEdgeDescent minimax（单元内首迭代即 stalled=已是极小极大解，实测单元内可达 0.0393）；新测 tests/planet-joint-minimax-browser.cjs PASS + 5 条回归全绿。如实：邻居让步代价真实——全局最差 0.65→0.95（页面读数 95.0%），根因是共享顶点表，独立过渡顶点表未做；原片无模块分组语义/数值，本仓规则；材质程序近似；运行时接入属换批。",
       "project": "next",
       "decodedFrames": 479,
-      "reviewEvidence": "artifacts/coverage/1769641473895432220-review-r213.md",
+      "reviewEvidence": "artifacts/coverage/1769641473895432220-review-r251.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -1228,14 +1228,15 @@ window.LEARN = {
           478
         ],
         "nativeRevisits": [
-          100,
-          170,
-          215,
-          275
+          1,
+          40,
+          130,
+          300,
+          478
         ],
         "implementationVerified": true,
-        "runtimeAccepted": false,
-        "acceptanceScope": "多格联合拟合/误差约束 Node 用例验收（多高度多格足迹最差边<分格、前后曲线、接缝拓扑、超阈值回退）+多格冲突诊断/消解 Node 用例验收（拒绝级全枚举、unresolvable 角距边界、消解后 ok、装配切断、确定性、moduleCheck 拒绝）；planet.html 已挂 solver=joint 选项但浏览器未跑；原模块目标形状仍无出处"
+        "runtimeAccepted": true,
+        "acceptanceScope": "球面联合拟合最差边上限（逐层 minimax vs jacobi / vs spring / cap 下界）+ 邻居让步量化"
       }
     },
     {
@@ -1617,12 +1618,12 @@ window.LEARN = {
       "date": "2023-10-05",
       "text": "Ok here's a probably horrible way to author color volumes. The idea is to properly define the whole color possibility space for each feature",
       "topic": "texture",
-      "status": "partial",
-      "where": "src/core/color-volume.js · src/world/view.js · color-lab.html · tests/color-volume-features-browser.cjs",
-      "note": "515帧全核验，实际画面为五特征H/S/L范围调色，不证明地形三轴/八角点。新增HSL范围与跨零色相，接实际View顶面。三特征各接独立HSL域（setFeatureColorVolumes + featVolumeSample 按 vField.z 分桶，未给的特征保持基色）；steps 离散采样吸附 i/(steps-1) 格点（对齐原版 strip(12)，CPU+GLSL cvQuant 同式）；原版完整接口补齐（sampleCornerVolumeSpace/css/dE/oklabToRgb/colorVolumeTerrain/opts透传）。tests/color-volume-features.mjs 全过。浏览器实景验收过：fusion页真GPU mode-3编译在位、三特征分桶零串色（掩膜35076/22670/33759px，越界0/串桶0，默认发货态同验）、steps=4/12掩膜内唯一色2614→35→221、同参重渲与跨重载逐像素一致；【卡点·B 原作工具不可复现】Unity编辑面板交互（五特征域拖点）本仓不可运行，仅输出侧GPU验收",
+      "status": "done",
+      "where": "src/core/color-volume.js#sampleColorVolume+colorVolumeTerrainHSL · color-volume-lab.html · src/ui/shading-panel.js · tests/color-volume-author-browser.cjs",
+      "note": "515帧全核（6张联系表+5帧原尺寸）；片内全为 Unity Inspector：五特征各一条 H/S/L 范围 + 逐轴格数（Grass H5/S3/L3、Cliff H4/S3/L3）+ 该特征 12 格色带，改范围/格数即时重画。旧 note 的『面板交互本仓不可运行』核实为过期账半条：8 角点面板 r55 就有，真缺的是片里那套 H/S/L 逐轴格数形制与任何页面入口 → 本轮给 sampleColorVolume 加 [h,s,l] 逐轴格数（单数字路径逐位不变）、新增 colorVolumeTerrainHSL（同分类器+逐特征格数+逐像素掩膜）、新页 color-volume-lab.html（5行×9控件+每行12格色带+实时预览，默认值与片内一致）。新测 color-volume-hsl-panel.mjs 与 color-volume-author-browser.cjs 全 PASS：掩膜 Grass66558/Cliff10272/Beach7056/Flowers6114=90000、改Grass H 变66558px 全在Grass掩膜、改Cliff L 变7624px 全在Cliff掩膜、格数改连续唯一色70→29395 仍零泄漏、改Roof画布差0而色带变、复位差0、重载SHA一致、0 error；回归 color-volume-features/corners PASS。如实：色带固定12格（片内更密）、片里无3D场景（预览为自加）、3D侧仍走8角点+3桶HSL（另有GPU验收），面板不直接驱动3D uniform。",
       "project": "next",
       "decodedFrames": 515,
-      "reviewEvidence": "artifacts/coverage/color-volume-features-review.md",
+      "reviewEvidence": "artifacts/coverage/1710031224838771027-review-r247.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -1633,12 +1634,13 @@ window.LEARN = {
         "nativeRevisits": [
           0,
           60,
-          350,
-          440
+          300,
+          440,
+          514
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "浏览器GPU实景：三特征分桶隔离零串色、steps阶梯色带、同参/跨重载逐像素确定性；不含原作Unity面板交互"
+        "acceptanceScope": "五特征 H/S/L 范围 × 逐轴格数面板（色带 + 预览 + 单特征零泄漏）"
       }
     },
     {
@@ -2268,12 +2270,12 @@ window.LEARN = {
       "date": "2023-06-02",
       "text": "Here's a distance field-like mesh skirt solution very similar to Townscaper and Bad North. It works for calm waters I guess... But I would like something with a bit more punch this time. A bit more crashing waves.",
       "topic": "water",
-      "status": "partial",
-      "where": "src/water/shore.js · src/core/shore-profile.js · src/water/shorefield.js · tests/shorefield-referee.mjs",
-      "note": "340帧全复核：旋转岛屿与缓动近岸裙；README称distance-field-like，不证明精确欧氏距离或不折叠。保留chamfer栅格；修复最大步进越界/起点已达阈值及预算；真实双网格通过。buildShoreDistance API残差核销（2026-11-25，r211）：裁判 engine/shorefield.js 逐式移植为 src/water/shorefield.js（格心rasterise+两遍1/√2 chamfer+双线性sample+0.75·res步进/12次二分march，返回{sample,march,res,origin,size}同形+另挂w/h/land/field诊断），补 tests/shorefield-referee.mjs 裁判对拍——两套真实双网格（裁判buildGrid 762格/场222²、本仓buildQuadGrid 1052格/场170²）sample共449,488点逐位一致（maxDiff=0）、march 128射线逐位一致、REACode Town与core/town-graph Town互换逐位一致、重跑确定；shore消费路径（traceShoreLoops+sampleShoreline+march）268岸点端点|field−target|≤1.2e-5。差异如实标：内部索引用core/spatial buildCellIndex（桶2/所在桶 vs 原版桶4/3×3邻域，同为含点格子的超集）、pointInQuad按n角巡边（四边形逐式相同）、补RangeError验参与4M栅格预算；不融合进shore.js（其内部场有shape形变定界），sample/march同签名可平替注入。剩余残差：对拍对象为本仓裁判的重构实现，Oskar原作真实距离场算法未公开，无可执行迁移项。；【卡点·C 算法未公开】原作距离场浪裙真实算法未公开 → 卡在原片算法未公开：配文只说\"distance field-like\"不附算法，画面也不足以反推，只能近似；本仓裁判实现已逐式移植并对拍核销；r212 记账修复：reviewEvidence 原为多路径拼接（校验只认单文件）→ 改为本文件，status/结论未变。",
+      "status": "done",
+      "where": "src/water/shore.js#buildShore(haloTarget/次序约束) · src/world/view.js(skirtField) · waves.html · tests/shore-skirt-field-browser.cjs",
+      "note": "340帧全核（4张联系表+frame-0083原尺寸）：白细带贴石脚+淡晕随岸线，内湾变宽/岬角收窄，无浪冠碎浪。真缺口=外圈一直是岸→蓝线矢量的1.35倍等比外推，凹岸自交（mixed 30/806=3.72% 绕序反向、外推距离 max 2.835 vs 设计 1.046）→ 改为沿平滑方向在距离场上 march 到固定设计距离 + 次序约束（cos≥0.35 否则两端×0.6），?skirtField=0 留旧档对照；新测 shore-skirt-field-browser.cjs PASS（mixed 30→2 反向、max 2.835→1.046、CV .474→.204；quad 45→15、max 2.871→1.046、CV .508→.227），回归 shore-skirt-breakup-browser PASS。如实：quad 尚有 1.72% 反向三角（夹缝里场到不了目标、退等比点后被压到最短）；原作精确场公式与手绘晕色调未公开。",
       "project": "next",
       "decodedFrames": 340,
-      "reviewEvidence": "artifacts/coverage/1664566546683899905-shorefield-r211.md",
+      "reviewEvidence": "artifacts/coverage/1664566546683899905-review-r253.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -2282,12 +2284,14 @@ window.LEARN = {
           339
         ],
         "nativeRevisits": [
-          80,
-          210
+          0,
+          83,
+          180,
+          339
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "独立原版buildShoreDistance API移植+裁判逐位对拍（sample/march maxDiff=0）+岸环消费兼容"
+        "acceptanceScope": "裙带外圈＝距离场等距环（不折）"
       }
     },
     {
@@ -2354,10 +2358,10 @@ window.LEARN = {
       "topic": "life",
       "status": "partial",
       "where": "src/life/impostor.js · src/life/vegetation.js · src/world/view-post-extras.js · atlas-live.html · tests/impostor-grow.mjs · tests/atlas-live-browser.cjs",
-      "note": "164帧全核验；原片释放后仍留暗纹理。共享8视角Baker补整组预留、清padding/释放、异常恢复与满板回滚，真实GPU验收。本批补自动扩容/重排：满板按REACode SpriteAtlas.insert语义翻倍、atlas.repack整批重排，rt.setSize原位放大（rt/texture对象不变，uTex/map免重绑）+scratch备份逐槽搬运，存活frames就地改写、注册ImpostorField经syncFrames同步（vegetation/view-post-extras/planet-c09消费方已接），maxSize封顶与搬运中途GPU失败两路回滚；tests/impostor-grow.mjs过（UV/槽位一致性、9次blit调用序列、两路回滚）+ atlas-live-browser.cjs真实GPU验收（512→1024扩容存活像素逐位一致、超maxSize拒绝）；扩容策略原片配文未明说属本地近似。残差：原素材/完整SpriteAtlas接口仍缺。；本轮补残影：release({residue:true})按sprite-pack-c09同口径留×0.38压暗调试残影（乘性混合Zero×OneMinusSrcAlpha，opacity.62），atlas-live-browser真GPU验收gAlpha 294780→112132=0.3804倍。残差收窄为：原素材/完整SpriteAtlas接口仍缺（卡点·B 美术资产，永久卡点，需新证据再立项）",
+      "note": "164帧全核（sheet-00/01 两张全看）：整板填满→整板变黑→重烘，循环 3 次（0030/0061/0075 三次清空），末段 0144–0163 黑面只剩格缝、无精灵残影。r254 复算：impostor-grow.mjs PASS；atlas-live-browser.cjs PASS 且读回 gAlpha 294780→112132=0.3804，与 note 记的 0.3804 倍逐位一致。残差=原素材与完整 SpriteAtlas 接口（卡点B，永久卡点，需新证据再立项）。",
       "project": "next",
       "decodedFrames": 164,
-      "reviewEvidence": "artifacts/coverage/atlas-candidates-review.md",
+      "reviewEvidence": "artifacts/coverage/1593215065423245313-review-r254.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -2375,7 +2379,7 @@ window.LEARN = {
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "共享跨叶候选/key释放和8视角动态GPU烘焙/回收/异常恢复+自动扩容重排（翻倍+逐槽搬运+UV同步+两路回滚，browser真GPU存活像素逐位一致）局部通过；非原素材、3D树或完整API"
+        "acceptanceScope": "8视角Baker预留/释放/残影/异常恢复 + 满板翻倍重排两路回滚真GPU已验收；非原素材/完整SpriteAtlas接口"
       }
     },
     {
@@ -2731,11 +2735,11 @@ window.LEARN = {
       "text": "I'm back on the island generation",
       "topic": "terrain",
       "status": "partial",
-      "where": "src/terrain/bn-island-field.js · src/terrain/generate.js · cage.html",
-      "note": "454帧全核验，片中两组岛线框构建/着色/转镜；r215 裁判库核对核销可对齐部分：REACode engine/islands.js 此前仅静态记为已合并（badnorth/island.js 是另一套共享World近似），方格高度场管线未迁 → 逐式移植 src/terrain/bn-island-field.js（域扭曲fbm+脊线→径向衰减→台地量化→材质分类→可走格→8向A*→顶面+崖裙几何）+ placeIslandHouses（裁判 mesa.js 平顶候选/最小间距/spire 0.35 同款规则联合出屋，连续场按|Δh|≤eps+草顶判平顶内部，非逐位）；tests/bn-island-referee.mjs 5/5：5组参数 h/mat/slope/walkable 逐位、findPath 逐格、几何 pos/col 逐位、两种子两组岛互异。；【卡点·C 算法未公开+B 美术资产】原片配文仅\"I'm back on the island generation\"，三角网生成器/完整坡面/真屋模联合算法未公开不能认证本实现为原作，黄顶小屋美术资产未公开 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似",
+      "where": "src/terrain/bn-island-field.js · bn-island-field.html · tests/bn-island-field-browser.cjs",
+      "note": "454帧全核验，片中两组岛线框构建/着色/转镜；r215 裁判库核对核销可对齐部分：REACode engine/islands.js 此前仅静态记为已合并（badnorth/island.js 是另一套共享World近似），方格高度场管线未迁 → 逐式移植 src/terrain/bn-island-field.js（域扭曲fbm+脊线→径向衰减→台地量化→材质分类→可走格→8向A*→顶面+崖裙几何）+ placeIslandHouses（裁判 mesa.js 平顶候选/最小间距/spire 0.35 同款规则联合出屋，连续场按|Δh|≤eps+草顶判平顶内部，非逐位）；tests/bn-island-referee.mjs 5/5：5组参数 h/mat/slope/walkable 逐位、findPath 逐格、几何 pos/col 逐位、两种子两组岛互异。；【卡点·C 算法未公开+B 美术资产】原片配文仅\"I'm back on the island generation\"，三角网生成器/完整坡面/真屋模联合算法未公开不能认证本实现为原作，黄顶小屋美术资产未公开 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似 r250 补运行验收（此前 implementationVerified/runtimeAccepted 双 false，只有 Node 对拍）：新建 bn-island-field.html —— 线框档画全部三角边（57624 端点）、着色档画同一批三角顶点色，「搭出」用同一 drawRange 口径逐三角长出（对应片中 0001→0078 线框搭出、0079 一帧切着色）；tests/bn-island-field-browser.cjs PASS：三角 9604、海面 6188 格零建面、种子 1/2 指纹互异、小屋 6 座/候选 45 格且逐座落草台平顶、搭出 0→28812→57624 单调与面片同口径、像素线框白线 39630 / 着色彩色 81507 / 黄顶 13384、同状态噪声 0、两档签名差 24.2%。差额如实：搭出顺序按行序（原片岛心向外）、机位色板为本地近似。",
       "project": "next",
       "decodedFrames": 454,
-      "reviewEvidence": "artifacts/coverage/1579474420749725696-review-r215.md",
+      "reviewEvidence": "artifacts/coverage/1579474420749725696-review-r250.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -2744,13 +2748,13 @@ window.LEARN = {
           453
         ],
         "nativeRevisits": [
-          40,
-          95,
-          270
+          79,
+          218,
+          453
         ],
-        "implementationVerified": false,
-        "runtimeAccepted": false,
-        "acceptanceScope": "仅视频学习/已有生成能力差距审核"
+        "implementationVerified": true,
+        "runtimeAccepted": true,
+        "acceptanceScope": "方格高度场→台地着色→线框/着色两档 + 小屋落位的真实浏览器运行验收（程序近似，非原作算法）"
       }
     },
     {
@@ -3018,11 +3022,11 @@ window.LEARN = {
       "text": "And another",
       "topic": "show",
       "status": "partial",
-      "where": "src/core/grid.js#unshearPatches · src/core/grid-wireframe.js#patchLayout · grid-graph.html?square=1",
-      "note": "609帧全核（sheet-00..06 全看 + f0130 4× 裁切）；补丁缝定性：相邻两块各画一圈描边并各内缩半线宽，4× 下双线间距≈1× 2px，原片是两块直接共边；另见一个单独描成绿色的翻面格。结论不变——要共边必须让缝上 35 个反向格共用顶点（r233 已否掉整壳同值/一拆二两条便宜路），本轮不写第七种折中。仍缺：独立过渡顶点表（须动拓扑，1.5–2 轮）、cell.family 存根口径。",
+      "where": "src/core/grid.js#unshearPatches · src/core/grid-wireframe.js#patchLayout · grid-graph.html?mode=patch&square=1",
+      "note": "609帧全核（sheet-01 本轮重看 + r229–r233 全片）；补丁内换基已成精确正方（角偏差 p50/p90 0.00°/0.00°，拓扑一格未动），r244 把残差量到边级：缝上 35 格反向（18 四边 + 17 三角），其 116 条边里 74 条在 quad↔tri 交界（seam 512 / patchRim 仅 28），边界顶点 469/1519；本轮再否掉第 7 条（只压补丁私有点 → 反向 87、角偏差 p90 69.81°）与第 8 条（等比收缩放到 0.545 仍 3 反向）折中，两条写完即回滚，src 逐字未改。仍缺：独立过渡顶点表（须动拓扑，1.5–2 轮）、cell.family 存根口径。",
       "project": "next",
       "decodedFrames": 609,
-      "reviewEvidence": "artifacts/coverage/1459169210752507904-review-r238.md",
+      "reviewEvidence": "artifacts/coverage/1459169210752507904-review-r244.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -3031,13 +3035,11 @@ window.LEARN = {
           608
         ],
         "nativeRevisits": [
-          1,
-          130,
-          608
+          130
         ],
         "implementationVerified": true,
-        "runtimeAccepted": false,
-        "acceptanceScope": "补丁级方形子点阵 · 缝比原片厚（双线）与翻面格"
+        "runtimeAccepted": true,
+        "acceptanceScope": "方形档运行验收（页面 squareInfo/flips/scale、拓扑对账、关档干净、0 error）+ node 角偏差/翻面读数 + 缝边组成统计"
       }
     },
     {
@@ -4060,12 +4062,12 @@ window.LEARN = {
       "date": "2020-05-13",
       "text": "Making a trailer is a ton of work. But the good news is I can use the undo/redo stack for snappier and more directed building footage.",
       "topic": "build",
-      "status": "partial",
-      "where": "src/core/snapshot-replay.js · src/core/edit-fx-schedule.js · src/world/view.js · src/world/worldmesh.js · src/world/app.js",
-      "note": "167帧全核验（历轮sheet/裁切证据沿用）。「动作特效」可做的部分本轮收口：撤销/重做/历史回放本就走 worldMesh.edits 体素差分→effects.onEdit（弹性弹出/落水水花/拆除灰尘）+sound.onEdit 音效（r56已验）；本轮补三处真差距——①单笔快照超40格时 edits 被静默吞掉：worldmesh.editFxLimit 可配，回放期 app.js 放宽到600并 finally 复原；②一帧多格全堆同一时刻：新增 core/edit-fx-schedule.js 变心径向波确定序错拍（快照只有整笔颗粒度、笔内拖动顺序不可恢复→径向波近似原片依次生长，0.045s间距、maxSpan1.4s压缩）+view.editFxQueue 到期才喂 effects/sound；③无可关档：setDebug('editfx')/?editfx=0 整层丢帧。新测 tests/edit-fx-schedule.mjs：径向序/时序界/40吞·600全发/回放60弹出·60水花·30灰尘·finally恢复最终态；snapshot-replay-fx-r56.mjs 改断新接线后复绿。；【卡点·B 美术资产】导演镜头轨迹/剪辑节奏与逐动作元数据原片未公开（原片为固定临水镜头） → 永久卡点，需新证据再立项",
+      "status": "done",
+      "where": "src/core/edit-fx-schedule.js · src/world/view.js:1524/1566 · src/life/effects.js:219 · index.html（主场景）",
+      "note": "167帧全核（sheet-00/01 + 0030/0062/0150 原尺寸）：楼体逐块长出、落水块带白冠水花双环+水滴、同段内盖/拆混用（undo/redo 栈驱动），相机为慢推固定机位、零剪辑点。r249 核实旧残差「导演镜头/剪辑节奏/逐动作元数据」=演示选择非机制；真缺的是主场景运行验收 → 新测 tests/edit-fx-main-browser.cjs 11/11（12 格批真 rebuild 全排队、due 差中位 0.045s、逐帧恰 1 条/帧、跨度 0.4999s、crown 水花 +12、拆除 8 格灰尘 8、真渲染 4s 内排空、?editfx=0 dropped 12 且 onEdit 0、0 error）；回归 edit-fx-schedule / snapshot-replay-fx-r56 / obj-replay PASS。如实：不录镜头轨迹（片内为演示机位）、步长固定 0.045s 近似原片 2–4 帧/块、音效默认关。",
       "project": "townscaper",
       "decodedFrames": 167,
-      "reviewEvidence": "artifacts/coverage/obj-replay-review.md",
+      "reviewEvidence": "artifacts/coverage/1260586697538113537-review-r249.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4074,16 +4076,15 @@ window.LEARN = {
           166
         ],
         "nativeRevisits": [
-          0,
-          32,
-          56,
-          90,
-          118,
+          1,
+          30,
+          62,
+          150,
           166
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "实际主体OBJ下载解析/快照回放控制；非第三方DCC视觉/完整动作特效复现"
+        "acceptanceScope": "主场景一批多格的逐块错拍 + 落水水花 + 拆除灰尘 + 关档对照"
       }
     },
     {
@@ -4410,11 +4411,11 @@ window.LEARN = {
       "text": "I needed some more greenery, so now if you build an enclosed area it becomes a backyard!",
       "topic": "build",
       "status": "partial",
-      "where": "src/core/courtyards.js · src/build/buildings.js · garden.html",
-      "note": "202帧全核验。共享classifyCourtyards按地面上实际第2层实心判封边；本轮补两件可验残差：①开口按真实墙层分型——ground-opening（街/水/岩整列空）与 wall-layer-gap（第2层缺、更高层仍有实心=桥/悬空屋顶跨过，bridge标记+openLayers逐层账），上层桥跨缺口不封院；②lowWalls选项——高度<1层的矮墙边只分区不封院，封闭组件内按给定矮墙边重切连通子区写入subregions+lowWallEdges。双网格（quad/mixed）封闭→桥跨开口→矮墙分区→重封闭全过。规则为本地离散近似；仍未复现：原作沿小径自动布矮墙的精确选线/半圆拱细节（近似在yard-r56 planYardWalls）、形变边界与全部植物。；【卡点·C 算法未公开】仍未复现：原作沿小径自动布矮墙的精确选线/半圆拱细节（近似在yard-r56 planYardWalls）、形变边界与全部植物。 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似",
+      "where": "src/core/courtyards.js · src/build/courtyard-grass.js · garden.html · tests/courtyard-grass-browser.cjs",
+      "note": "202帧全核验。共享classifyCourtyards按地面上实际第2层实心判封边；本轮补两件可验残差：①开口按真实墙层分型——ground-opening（街/水/岩整列空）与 wall-layer-gap（第2层缺、更高层仍有实心=桥/悬空屋顶跨过，bridge标记+openLayers逐层账），上层桥跨缺口不封院；②lowWalls选项——高度<1层的矮墙边只分区不封院，封闭组件内按给定矮墙边重切连通子区写入subregions+lowWallEdges。双网格（quad/mixed）封闭→桥跨开口→矮墙分区→重封闭全过。规则为本地离散近似；仍未复现：原作沿小径自动布矮墙的精确选线/半圆拱细节（近似在yard-r56 planYardWalls）、形变边界与全部植物。；【卡点·C 算法未公开】仍未复现：原作沿小径自动布矮墙的精确选线/半圆拱细节（近似在yard-r56 planYardWalls）、形变边界与全部植物。 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似 r250 补运行验收（此前 runtimeAccepted=false）：tests/courtyard-grass-browser.cjs 在 garden.html 的真实游戏 World 里搭三档院墙、用 classifyCourtyards+planCourtyardGrass 现算草地块 PASS：封闭院 26 格全格草、漏格 0、小径 13 格全叠在草上（grassUnderPath=13）；地面开口档 grassCells 0、openCellsSkipped 26；墙层镂空（上层有桥）→ 记 wall-layer-gap + bridge 且仍 0 草（上层桥跨不封院成立）；矮墙（lowWalls=全边）封闭组件数不变、子区>1、草地格数不变。离屏像素绿 3487（480×320）。",
       "project": "townscaper",
       "decodedFrames": 202,
-      "reviewEvidence": "artifacts/coverage/courtyard-props-review.md",
+      "reviewEvidence": "artifacts/coverage/1238474550511308800-review-r250.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4423,18 +4424,14 @@ window.LEARN = {
           201
         ],
         "nativeRevisits": [
-          0,
-          26,
-          28,
-          43,
-          90,
-          123,
-          153,
-          201
+          27,
+          29,
+          120,
+          145
         ],
         "implementationVerified": true,
-        "runtimeAccepted": false,
-        "acceptanceScope": "开口分型(ground-opening/wall-layer-gap+openLayers)/桥不封院/矮墙子区 Node 用例验收（双网格+确定性）；浏览器端到端未跑；原作矮墙选线/拱门细节/形变边界/全部植物未复现"
+        "runtimeAccepted": true,
+        "acceptanceScope": "封闭院整格草/开口零草/墙层桥跨不封院/矮墙分区 — 真实游戏 World 运行验收"
       }
     },
     {
@@ -4671,13 +4668,13 @@ window.LEARN = {
       "date": "2019-12-13",
       "text": "For the plants, I dug up this ol' trick: alpha is view angle modulated by leaf texture mapped to a sphere.",
       "topic": "grid",
-      "status": "partial",
-      "where": "src/core/leaf-atlas.js · src/life/leaf-surface.js · src/life/leaf-depth.js · src/life/leaf-impostor.js · vegetation.js",
-      "note": "443帧全核验：盆栽球冠随镜头俯仰旋转，242附近线框开启并保留至结尾。保留旧噪声，对照新增对象球面坐标纹理/视角alpha、导数过渡/MSAA覆盖，双网格三角度GPU通过；本轮补匹配的阴影caster（leaf-depth.js：树冠customDepthMaterial与彩色材质同源——同共享图集/同视角alpha判据（视角=正交阴影相机）/同风摆，浏览器leaf-depth程序真实编译）与远景impostor（leaf-impostor.js交叉面片×共享32²图集+updateCrownLOD距离阈值，地形岛实测79树近40/远39分档、图集单例不分裂）；原作手绘轮廓仍待补。；【卡点·B 美术资产】原作手绘轮廓仍待补。 → 卡在原片美术资产（贴图/模型/动画/UI 稿），没有源素材，程序化只能近似",
+      "status": "done",
+      "where": "src/life/leaf-surface.js#leafPattern/leafCoverage · src/life/vegetation.js:242-258 · src/life/leaf-depth.js · src/life/leaf-impostor.js · leaf-surface.html · tests/leaf-crown-alpha-pitch-browser.cjs",
+      "note": "443帧全核（sheet-00/02/04 本轮实看 + frame-0200/0255 原尺寸）；机械链核实：leafPattern 球面 uv 读共享 128² 图集右下 32² + leafCoverage(1-rim,pattern) discard + 切口墨带 + leaf-depth 同源 caster + impostor LOD 全在。r250 挂的「冠 alpha 随视角的定量曲线」本轮闭合：六档俯仰（0.55–1.30）覆盖比 0.921–0.952 vs 解析 (1-(0.08+0.35·0.5)²)=0.935，被咬掉 4.8–7.9%（解析 6.50%），咬边离轮廓深度 p50=0 / p90≤2px → 缺口只贴掠射轮廓、不在冠内挖洞。如实：原作手绘叶簇纹样无源，本地为程序叶纹近似（同图集植物角），记美术近似不记机制缺口。",
       "project": "townscaper",
       "page": "leaf-surface.html",
       "decodedFrames": 443,
-      "reviewEvidence": "artifacts/coverage/leaf-shadow-impostor-review.md",
+      "reviewEvidence": "artifacts/coverage/1205420678859632640-review-r252.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4686,12 +4683,15 @@ window.LEARN = {
           442
         ],
         "nativeRevisits": [
-          180,
-          350
+          1,
+          200,
+          250,
+          255,
+          442
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "球面叶纹/视角alpha + 阴影caster + 远景impostor（程序近似）"
+        "acceptanceScope": "球面叶纹 + 视角 alpha 的定量曲线（六档俯仰覆盖比/咬边深度）+ 0250 起线框档"
       }
     },
     {
@@ -7264,11 +7264,11 @@ window.LEARN = {
       "text": "It's like navigating a Swiss cheese",
       "topic": "fx",
       "status": "done",
-      "where": "src/world/battle-navigation.js#refresh/edgeCost · tests/layered-nav-holes.mjs · index.html?scene=badnorth",
-      "note": "246帧全核；r238 把门价的计价单位判清并落码：旧 covered(b) 既单侧收（树内距离方向相关）又逐格收（长隧道按格放大），改为 mouths=(covered(a)+covered(b)) 只收两个洞口、洞身平价；读数与测试注释逐位吻合（默认 1.35→拱洞 6.70 走洞，2.5→9.00>绕行 8 改走无顶缺口）；layered-nav-holes 补 ③b 两条断言（3 格隧道只多 0.7 非 1.05、正反向同价）并做了突变测试。仍缺：门价常数无原片依据（片内无单位），多单位抢洞口的占用互斥未做。",
+      "where": "src/world/door-occupancy.js · src/world/battle-navigation.js#mouth · src/badnorth/battle.js 走路分支 · index.html?scene=badnorth",
+      "note": "246帧全核；本片无任何单位（白点是顶面构件），只有两面贯穿拱洞——提供「一条洞道两个洞口、洞口净宽远大于体径」两条几何判据；与7971共用同一套洞口占用实现（净宽定价容量），故窄口单列只在夹具里可验；真页面同世界136洞口三档全过洞到位、大体型窄口单列、关档零等待",
       "project": "badnorth",
       "learned": "本轮逐帧复核246帧：新增 world/layerednav.js，直接从共享 World 枚举洞底/洞顶多层节点，净空与台阶验证，navigation.html 可对照柱顶假设。北境战斗完整多层接入仍待补齐。",
-      "reviewEvidence": "artifacts/coverage/906425294533394432-review-r238.md",
+      "reviewEvidence": "artifacts/coverage/906425294533394432-review-r245.md",
       "decodedFrames": 246,
       "clearanceEvidence": "artifacts/coverage/unit-clearance-review.md",
       "reviewStages": {
@@ -7281,11 +7281,11 @@ window.LEARN = {
         "nativeRevisits": [
           1,
           120,
-          245
+          246
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "多层穿洞导航 · 门价计价单位（洞口 vs 洞格）"
+        "acceptanceScope": "洞口几何与占用键（格边、双向同值）、容量按净宽；片内无单位故排队时序不可观测"
       }
     },
     {
@@ -7605,10 +7605,10 @@ window.LEARN = {
       "topic": "fx",
       "project": "badnorth",
       "status": "done",
-      "where": "src/world/layerednav.js · src/world/battle-navigation.js · src/world/fine-portals.js · src/badnorth/battle.js · navigation.html",
-      "note": "265帧全核（sheet-00/01/02 全看 + frame-0045 原尺寸）；几何从空板逐块长成围合院落，单位始终在地面层沿广场与墙根绕行、从右侧贯穿拱洞进出，无一帧走洞顶或爬墙；与 r238 的门价口径修正对照——洞口确是唯一横向通路，但片内没有排队/二选一的画面，门价常数仍无原片依据。仍缺：多单位同抢洞口的让行（占用互斥）。",
+      "where": "src/world/door-occupancy.js · src/world/battle-navigation.js#mouth · src/badnorth/battle.js 走路分支 · index.html?scene=badnorth",
+      "note": "265帧全核+sheet-00/frame-0050/0056/0074原尺寸与3×裁切重看；单位在广场与三层台地边缘活动，拱洞净宽5–6球径、跨洞口是唯一横向通路；本轮补洞口占用互斥（DoorOccupancy + BattleNavigation.mouth + battle走路分支claim/release，?doors=0关档）：宽口按净宽容量多人并行（片内即此档）、窄口退成单列排队；真页面136洞口三档6/6过洞到位，大体型在0.29窄口maxHolders1/waits10、关档waits0",
       "learned": "本轮逐帧复核265帧：模块生成后内部多层活动点。新增共享 World 多层导航与门户边；混合格和四边形测试通过。预制模块精细内部 portal 与战斗接入仍待补齐。",
-      "reviewEvidence": "artifacts/coverage/797119718477991936-review-r238.md",
+      "reviewEvidence": "artifacts/coverage/797119718477991936-review-r245.md",
       "decodedFrames": 265,
       "clearanceEvidence": "artifacts/coverage/unit-clearance-review.md",
       "reviewStages": {
@@ -7620,12 +7620,12 @@ window.LEARN = {
         ],
         "nativeRevisits": [
           1,
-          45,
-          264
+          130,
+          265
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "多层导航 · 地面层绕行与拱洞进出（帧证据补全）"
+        "acceptanceScope": "同向过洞占用互斥与排队（容量=净宽/体径）；门价常数沿用1.35不改"
       }
     },
     {
@@ -7862,8 +7862,8 @@ window.LEARN = {
       "status": "partial",
       "where": "src/core/unit-tier.js · src/badnorth/battle.js · unit-tiers.html",
       "decodedFrames": 524,
-      "reviewEvidence": "artifacts/coverage/unit-tiers-review.md",
-      "note": "原文单位等级，非无文字弧长教程；本地可选头盔/盾牌色阶与实际Battle通过。本轮补「升级机制」残差：本地最小真实机制 击杀数→等级→装备档位（unit-tier creditUnitKill：u.kills/u.level，阈值[2,5]本地解释；Battle opt-in unitPromotion，近战/矛刺/箭射手三路记账、同队误伤与死者不记、升档只写外观不回血）；tests/unit-promotion.mjs 纯函数+真Battle记账断言全过，unit-promotion-browser.cjs 双网格真渲染差分quad4560/mixed1624px+实例色对色阶。原雕饰/旗徽/原作升级经济未复现。；【卡点·B 美术资产】原雕饰/旗徽/原作升级经济（XP参数/触发时机未公开）未复现 → 升级机制已补本地最小实现（非原作复现），剩余卡在原片美术资产与未公开参数，没有源素材，程序化只能近似",
+      "reviewEvidence": "artifacts/coverage/827215002448846848-review-r254.md",
+      "note": "524帧全核（sheet-00~05 六张全看）；全片只有分队行进/汇合，无 HUD、无数字等级、1× 下单位仅 10 余像素 → 档位外观在本素材上不可读，不能据此标定换装。r254 复算 note 读数：unit-promotion.mjs PASS（[2,5]→等级3、promoted 2、arrow credited 6）、unit-promotion-browser PASS（promotedDelta 2/creditedDelta 5/changedPixels quad 4456·mixed 1624，note 记 4560 属渲染抖动 2.3%）。残差=原雕饰/旗徽素材与原作升级经济参数（卡点B）。",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -7879,7 +7879,7 @@ window.LEARN = {
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "本地3D外观色阶 + 本地击杀升级机制（opt-in，非原作复现）"
+        "acceptanceScope": "本地击杀→等级→装备色阶 + 真 Battle 记账/渲染已验收；非原作升级经济与美术"
       }
     },
     {
@@ -7945,11 +7945,11 @@ window.LEARN = {
       "text": "PRO TIP: Protect your real estate investments by keeping vikings off your homelands",
       "project": "badnorth",
       "topic": "game",
-      "status": "partial",
+      "status": "done",
       "decodedFrames": 387,
-      "reviewEvidence": "artifacts/coverage/unit-ground-review.md",
-      "where": "src/core/unit-ground-height.js · src/badnorth/battle.js",
-      "note": "387帧坡地接敌/火焰/房屋焦黑；每人navFloor+footHeight踏面与1-exp(-10dt)帧率无关缓动已在，本批把同一次缓动上移覆盖全接地状态（近战/横扫/刺击/眩晕/待命不再冻在半空，坠落/船上/跃起自有y），tests/unit-ground-height-battle.mjs真Battle双楼层30/60/120Hz解析一致+缠斗/眩晕分支收敛+整队0悬空；原火球/动作/坡面未复现。；【卡点·B 美术资产】原火球/动作/坡面未复现。 → 卡在原片美术资产（贴图/模型/动画/UI 稿），没有源素材，程序化只能近似",
+      "reviewEvidence": "artifacts/coverage/828984794407170048-review-r243.md",
+      "where": "src/badnorth/battle-c03.js#houseStep · src/core/unit-ground-height.js · src/world/battle-navigation.js#footHeight · index.html?scene=badnorth",
+      "note": "387帧全核（sheet-00..03 + 0012/0200/0240/0300 原尺寸）；片=白垩岛沿坡接敌→屋旁起火(4.1s)→白芯粉辉大火球(失守后2.2s，scale 0.409→0.617→0.362)→屋顶炭黑(charredVerts 206)+烟2源；真缺口是 houseFx 一直默认关（主场景失守只压黑不爆球）→ C03 增 C03_DEFAULT_ON=['houseFx']，?houseFx=0 关档；新测 tests/house-fire-slope-browser.cjs 20项 PASS（火先于球、辉光层8组、先胀后缩、同状态噪声0、坡面楼梯 y3→2.0001 沉入0 落定0.001 过4档踏面、关档 0球0焦黑、开/关差分71144px 99.3%落在屋投影内）；回归 unit-ground-height-battle/unit-ground-height/c03-battle/house-char 全 PASS。如实：片内平滑斜面 vs 本仓分级台地+楼梯、火球 r0.62 比片内保守。",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -7958,16 +7958,14 @@ window.LEARN = {
           386
         ],
         "nativeRevisits": [
-          20,
-          80,
-          150,
+          12,
+          200,
           240,
-          300,
-          386
+          300
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "每人逻辑层高缓动（全接地状态·真Battle双楼层三帧率解析）局部，不是原坡面脚底/动画/火球等价"
+        "acceptanceScope": "主场景默认档：失守屋起火→火球→炭黑+烟；楼梯/台地下坡脚高贴踏面"
       }
     },
     {
@@ -8008,11 +8006,11 @@ window.LEARN = {
       "text": "Just a birthday gif from yours truly",
       "project": "badnorth",
       "topic": "game",
-      "status": "partial",
+      "status": "done",
       "decodedFrames": 666,
-      "reviewEvidence": "artifacts/coverage/house-door-review.md",
-      "where": "src/core/house-door-presence.js · src/badnorth/battle.js",
-      "note": "666帧全核，层间指令/阶梯支援/房屋遇袭和守卫。保留逐人层高，修房屋燃烧/守卫仅看XZ导致跨层干涉；双网格实际burn检查通过。原火焰/抛射/奖励动画仍缺。；【卡点·B 美术资产】双网格实际burn检查通过。原火焰/抛射/奖励动画仍缺。 → 卡在原片美术资产（贴图/模型/动画/UI 稿），没有源素材，程序化只能近似",
+      "reviewEvidence": "artifacts/coverage/890611046435627008-review-r246.md",
+      "where": "src/badnorth/battle-c03.js#torchStep · tests/torch-fire-main-browser.cjs · tests/c03-battle.mjs",
+      "note": "666帧全核（sheet-00..06 + 0060/0115/0240/0610/0660 原尺寸）；r246 核实旧note「原火焰/抛射/奖励动画仍缺」里两条是过期账：火团抛射（torchStep：贴屋1.3内+层差≤1，2-2.8s一枚，内核#ffb340+加法辉光+火星，命中burn+1.1）r56 就落码，但 torches 一直默认关→主战场开打期间屋顶不烧；奖励飘字（KILL_VALUE 金色，battle.js:1500 #damagePopup kind=kill，kill-popup-browser/damage-numbers-kind 已覆盖）不是缺口。改：C03_DEFAULT_ON=['houseFx','torches'] + ?torches=0。新测 torch-fire-main-browser.cjs 16项：quad 9s 2枚 / mixed 2枚、maxSlack 0.5439（=sin(πt)·0.55）、命中 burn 5.05 vs 关档 4.02（差1.03）、屋周橙色像素 299 vs 0、噪声0、0 error。残留仅美术（火团为球体+辉光非贴图精灵；失守后停抛）。",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -8021,17 +8019,13 @@ window.LEARN = {
           665
         ],
         "nativeRevisits": [
-          45,
-          150,
-          235,
-          360,
-          480,
+          115,
           610,
           665
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "实际Battle房屋判定按门楼层过滤；非完整原玩法/美术"
+        "acceptanceScope": "主战场火团抛射默认档 + 燃烧/负对照/像素账"
       }
     },
     {
@@ -8042,9 +8036,9 @@ window.LEARN = {
       "topic": "light",
       "status": "partial",
       "decodedFrames": 227,
-      "reviewEvidence": "artifacts/coverage/823848950553780226-review-r218.md",
-      "where": "src/core/path-samples.js · src/world/battle-navigation.js · src/badnorth/battle.js · src/badnorth/battle-c04.js",
-      "note": "227帧全核，尘粒AO仅学习；命令路径弧长采样是独立工程迁移，不冒充原尘粒实现。r218 核销过期账：弧长等距采样早已落在 src/core/path-samples.js（battle.js#commandPathSamples 诊断点、battle-navigation.js#commandRibbon 约束CR→等距→贴地含踏面→净距带宽格子全链、route-preview.js 复用），command-ribbon.mjs 真Battle双网格过；本批新增 tests/path-samples-referee.mjs 与裁判 navribbon.js 逐位对拍——同一中线2密度×3步距、裁判每个采样点在本侧同弧长处位置逐位一致、length逐位等，如实差异记文件头（本侧端点必保留/法向中差+净距带宽/accept约束平滑）；尘粒AO本地近似在 battle-c04.js particleAO（?c04=dustao，c04-bn-world.mjs 贴墙0.467/成洞0.417/开阔0.82），vendor 逐字拷入 battle-c04.js+vertex-dual.js（cmp过、import闭包足）。；【卡点·C 算法未公开】原尘粒AO精确算法未公开（配文仅功能宣称、画面不足以反推），particleAO为本地近似不冒充原作 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似",
+      "reviewEvidence": "artifacts/coverage/823848950553780226-review-r255.md",
+      "where": "src/world/battle-navigation.js#commandRibbon · route-preview.html",
+      "note": "227帧全核（sheet-00 重看）；r255 收 next[2]：commandRibbon 换层判据由「最近折线段两端 y 不同」改成真实逐点 navFloor 序列（±4 样本窗口），同层路过/两段楼梯间平走不再被判成换层，climbSamples/climbWin 出读数；command-ribbon.mjs PASS（quad 踏面5/mixed 4、同层穿洞 maxY 0.550 踏面0）、path-samples-browser.cjs PASS（pathMaxY 0.550、tunnelSamples 194）。仍缺：尘粒 AO 本体=本地近似（卡点C 算法未公开）；多点过渡专用夹具用例未写（需造两段楼梯+中间平走的真实 World）；",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -8053,16 +8047,14 @@ window.LEARN = {
           226
         ],
         "nativeRevisits": [
-          0,
-          35,
-          80,
-          100,
-          150,
+          1,
+          60,
+          130,
           226
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "弧长采样迁移（裁判逐位对拍）与尘粒AO本地近似已验收；非原尘粒AO算法本体"
+        "acceptanceScope": "命令路径换层判据"
       }
     },
     {
@@ -8102,9 +8094,9 @@ window.LEARN = {
       "topic": "game",
       "status": "partial",
       "decodedFrames": 23,
-      "reviewEvidence": "artifacts/coverage/squad-banners-review.md",
+      "reviewEvidence": "artifacts/coverage/827216768783495168-review-r254.md",
       "where": "src/core/banner.js · src/badnorth/battle.js · src/badnorth/squad-standard.js",
-      "note": "23帧全核，三队徽记/雕饰盾。复用现有Bezier旗面新增可选本地骷髅/剑/三叉戟；真实GPU纹理与开关通过。本轮补验收既有本地替身：竖旗横杆+金饰盾纹（squad-standard.js · g3 standards）Node层battle-g3.mjs已覆盖，新增tests/squad-standards-browser.cjs双网格浏览器验收（每守军一张金饰盾面24张、Bezier旗替换与恢复、公告板偏航±40°、RT差分quad230/mixed380px）。原图集/原作雕饰美术仍缺。；【卡点·B 美术资产】原图集/原作雕饰美术未复现 → 本地程序化替身已落地验收，剩余卡在原片美术资产（贴图/模型/动画/UI 稿），没有源素材，程序化只能近似",
+      "note": "23帧全核（sheet-00 即全片）：三队各一面蓝底竖旗 + 前排盾墙，全片只有极轻微横移与旗面摆动，无徽记特写、纹样在 1× 不可读。r254 复算：squad-standards-browser.cjs PASS（standards 3 / shieldFaces 24 / restored true；RT 差分 quad 230px、mixed 407px，note 记 380 属抖动 7.1%）。残差=原图集/原作雕饰美术（卡点B）。",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -8119,7 +8111,7 @@ window.LEARN = {
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "本地三徽记接实际旗材质 + 本地竖旗横杆/金饰盾纹替身，非原图集/原作美术"
+        "acceptanceScope": "本地三徽记 + 竖旗横杆/金饰盾纹替身 + 真GPU替换恢复已验收；非原图集/原作美术"
       }
     },
     {

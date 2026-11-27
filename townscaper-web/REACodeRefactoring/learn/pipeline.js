@@ -10402,7 +10402,7 @@ window.PIPELINE = {
         "sourceEvidence": {
           "status": "partial",
           "where": "src/life/impostor.js · src/life/vegetation.js · src/world/view-post-extras.js · atlas-live.html · tests/impostor-grow.mjs · tests/atlas-live-browser.cjs",
-          "note": "164帧全核验；原片释放后仍留暗纹理。共享8视角Baker补整组预留、清padding/释放、异常恢复与满板回滚，真实GPU验收。本批补自动扩容/重排：满板按REACode SpriteAtlas.insert语义翻倍、atlas.repack整批重排，rt.setSize原位放大（rt/texture对象不变，uTex/map免重绑）+scratch备份逐槽搬运，存活frames就地改写、注册ImpostorField经syncFrames同步（vegetation/view-post-extras/planet-c09消费方已接），maxSize封顶与搬运中途GPU失败两路回滚；tests/impostor-grow.mjs过（UV/槽位一致性、9次blit调用序列、两路回滚）+ atlas-live-browser.cjs真实GPU验收（512→1024扩容存活像素逐位一致、超maxSize拒绝）；扩容策略原片配文未明说属本地近似。残差：原素材/完整SpriteAtlas接口仍缺。；本轮补残影：release({residue:true})按sprite-pack-c09同口径留×0.38压暗调试残影（乘性混合Zero×OneMinusSrcAlpha，opacity.62），atlas-live-browser真GPU验收gAlpha 294780→112132=0.3804倍。残差收窄为：原素材/完整SpriteAtlas接口仍缺（卡点·B 美术资产，永久卡点，需新证据再立项）"
+          "note": "164帧全核（sheet-00/01 两张全看）：整板填满→整板变黑→重烘，循环 3 次（0030/0061/0075 三次清空），末段 0144–0163 黑面只剩格缝、无精灵残影。r254 复算：impostor-grow.mjs PASS；atlas-live-browser.cjs PASS 且读回 gAlpha 294780→112132=0.3804，与 note 记的 0.3804 倍逐位一致。残差=原素材与完整 SpriteAtlas 接口（卡点B，永久卡点，需新证据再立项）。"
         },
         "basis": "本次工程补全优先级判断；不更改原库 partial 状态，不代表本轮实现验收"
       },
@@ -10527,8 +10527,8 @@ window.PIPELINE = {
         "sourceGap": "engine/islands.js 方格岛场已逐式迁移并逐位核销（src/terrain/bn-island-field.js + tests/bn-island-referee.mjs）；小屋联合生成按裁判 mesa.js 平顶规则同款实现（连续场上非逐位）。残差=原片生成器算法未公开（卡点·C）+黄顶小屋美术资产未公开（卡点·B）。",
         "sourceEvidence": {
           "status": "partial",
-          "where": "src/terrain/bn-island-field.js · src/terrain/generate.js · cage.html",
-          "note": "454帧全核验，片中两组岛线框构建/着色/转镜；r215 裁判库核对核销可对齐部分：REACode engine/islands.js 此前仅静态记为已合并（badnorth/island.js 是另一套共享World近似），方格高度场管线未迁 → 逐式移植 src/terrain/bn-island-field.js（域扭曲fbm+脊线→径向衰减→台地量化→材质分类→可走格→8向A*→顶面+崖裙几何）+ placeIslandHouses（裁判 mesa.js 平顶候选/最小间距/spire 0.35 同款规则联合出屋，连续场按|Δh|≤eps+草顶判平顶内部，非逐位）；tests/bn-island-referee.mjs 5/5：5组参数 h/mat/slope/walkable 逐位、findPath 逐格、几何 pos/col 逐位、两种子两组岛互异。；【卡点·C 算法未公开+B 美术资产】原片配文仅\"I'm back on the island generation\"，三角网生成器/完整坡面/真屋模联合算法未公开不能认证本实现为原作，黄顶小屋美术资产未公开 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似"
+          "where": "src/terrain/bn-island-field.js · bn-island-field.html · tests/bn-island-field-browser.cjs",
+          "note": "454帧全核验，片中两组岛线框构建/着色/转镜；r215 裁判库核对核销可对齐部分：REACode engine/islands.js 此前仅静态记为已合并（badnorth/island.js 是另一套共享World近似），方格高度场管线未迁 → 逐式移植 src/terrain/bn-island-field.js（域扭曲fbm+脊线→径向衰减→台地量化→材质分类→可走格→8向A*→顶面+崖裙几何）+ placeIslandHouses（裁判 mesa.js 平顶候选/最小间距/spire 0.35 同款规则联合出屋，连续场按|Δh|≤eps+草顶判平顶内部，非逐位）；tests/bn-island-referee.mjs 5/5：5组参数 h/mat/slope/walkable 逐位、findPath 逐格、几何 pos/col 逐位、两种子两组岛互异。；【卡点·C 算法未公开+B 美术资产】原片配文仅\"I'm back on the island generation\"，三角网生成器/完整坡面/真屋模联合算法未公开不能认证本实现为原作，黄顶小屋美术资产未公开 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似 r250 补运行验收（此前 implementationVerified/runtimeAccepted 双 false，只有 Node 对拍）：新建 bn-island-field.html —— 线框档画全部三角边（57624 端点）、着色档画同一批三角顶点色，「搭出」用同一 drawRange 口径逐三角长出（对应片中 0001→0078 线框搭出、0079 一帧切着色）；tests/bn-island-field-browser.cjs PASS：三角 9604、海面 6188 格零建面、种子 1/2 指纹互异、小屋 6 座/候选 45 格且逐座落草台平顶、搭出 0→28812→57624 单调与面片同口径、像素线框白线 39630 / 着色彩色 81507 / 黄顶 13384、同状态噪声 0、两档签名差 24.2%。差额如实：搭出顺序按行序（原片岛心向外）、机位色板为本地近似。"
         },
         "basis": "本次工程补全优先级判断；不更改原库 partial 状态，不代表本轮实现验收"
       },
@@ -10625,8 +10625,8 @@ window.PIPELINE = {
         "sourceGap": "补丁缝 35 格反向（根因=缝上四边格未退化成三角，需重划三角过渡带，约1-1.5轮）、cell.family 仍是换基前存根（maxSpreadDeg 42.68° 失真）、偏离三族 >5° 的格 5.6%",
         "sourceEvidence": {
           "status": "partial",
-          "where": "src/core/grid.js#unshearPatches · grid-graph.html?mode=patch&rigid=20&square=1",
-          "note": "609帧全核（r229/r230 7张联系表 + 本轮 sheet-01/sheet-05 + 0300 原尺寸）；补丁内角偏差 p50/p90 0.00°/0.00°、拓扑未动（1519/1331/242/512）；方形档首次出运行读数（flips=8 页面参数 / scale 0.886 / roundErr 0，488-200-688 与关档逐项相同）；仍缺：补丁缝 35 格反向（根因=缝上四边格未退化成三角，需重划三角过渡带，约1-1.5轮）、cell.family 仍是换基前存根（maxSpreadDeg 42.68° 失真）、偏离三族>5° 占 5.6%"
+          "where": "src/core/grid.js#unshearPatches · src/core/grid-wireframe.js#patchLayout · grid-graph.html?mode=patch&square=1",
+          "note": "609帧全核（sheet-01 本轮重看 + r229–r233 全片）；补丁内换基已成精确正方（角偏差 p50/p90 0.00°/0.00°，拓扑一格未动），r244 把残差量到边级：缝上 35 格反向（18 四边 + 17 三角），其 116 条边里 74 条在 quad↔tri 交界（seam 512 / patchRim 仅 28），边界顶点 469/1519；本轮再否掉第 7 条（只压补丁私有点 → 反向 87、角偏差 p90 69.81°）与第 8 条（等比收缩放到 0.545 仍 3 反向）折中，两条写完即回滚，src 逐字未改。仍缺：独立过渡顶点表（须动拓扑，1.5–2 轮）、cell.family 存根口径。"
         },
         "basis": "本次工程补全优先级判断（2026-11-25 按上游 r231 新记录重评）；不更改原库 partial 状态，不代表本轮实现验收"
       },
@@ -11073,8 +11073,8 @@ window.PIPELINE = {
         "sourceGap": "墙层镂空/地面开口/桥跨不封院/矮墙分区记录已通过（本地离散近似）。未复现：原作矮墙自动选线与精细拱门、形变边界与全部植物（卡点·C 算法未公开 + 卡点·B 美术资产）。",
         "sourceEvidence": {
           "status": "partial",
-          "where": "src/core/courtyards.js · src/build/buildings.js · garden.html",
-          "note": "202帧全核验。共享classifyCourtyards按地面上实际第2层实心判封边；本轮补两件可验残差：①开口按真实墙层分型——ground-opening（街/水/岩整列空）与 wall-layer-gap（第2层缺、更高层仍有实心=桥/悬空屋顶跨过，bridge标记+openLayers逐层账），上层桥跨缺口不封院；②lowWalls选项——高度<1层的矮墙边只分区不封院，封闭组件内按给定矮墙边重切连通子区写入subregions+lowWallEdges。双网格（quad/mixed）封闭→桥跨开口→矮墙分区→重封闭全过。规则为本地离散近似；仍未复现：原作沿小径自动布矮墙的精确选线/半圆拱细节（近似在yard-r56 planYardWalls）、形变边界与全部植物。；【卡点·C 算法未公开】仍未复现：原作沿小径自动布矮墙的精确选线/半圆拱细节（近似在yard-r56 planYardWalls）、形变边界与全部植物。 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似"
+          "where": "src/core/courtyards.js · src/build/courtyard-grass.js · garden.html · tests/courtyard-grass-browser.cjs",
+          "note": "202帧全核验。共享classifyCourtyards按地面上实际第2层实心判封边；本轮补两件可验残差：①开口按真实墙层分型——ground-opening（街/水/岩整列空）与 wall-layer-gap（第2层缺、更高层仍有实心=桥/悬空屋顶跨过，bridge标记+openLayers逐层账），上层桥跨缺口不封院；②lowWalls选项——高度<1层的矮墙边只分区不封院，封闭组件内按给定矮墙边重切连通子区写入subregions+lowWallEdges。双网格（quad/mixed）封闭→桥跨开口→矮墙分区→重封闭全过。规则为本地离散近似；仍未复现：原作沿小径自动布矮墙的精确选线/半圆拱细节（近似在yard-r56 planYardWalls）、形变边界与全部植物。；【卡点·C 算法未公开】仍未复现：原作沿小径自动布矮墙的精确选线/半圆拱细节（近似在yard-r56 planYardWalls）、形变边界与全部植物。 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似 r250 补运行验收（此前 runtimeAccepted=false）：tests/courtyard-grass-browser.cjs 在 garden.html 的真实游戏 World 里搭三档院墙、用 classifyCourtyards+planCourtyardGrass 现算草地块 PASS：封闭院 26 格全格草、漏格 0、小径 13 格全叠在草上（grassUnderPath=13）；地面开口档 grassCells 0、openCellsSkipped 26；墙层镂空（上层有桥）→ 记 wall-layer-gap + bridge 且仍 0 草（上层桥跨不封院成立）；矮墙（lowWalls=全边）封闭组件数不变、子区>1、草地格数不变。离屏像素绿 3487（480×320）。"
         },
         "basis": "本次工程补全优先级判断；不更改原库 partial 状态，不代表本轮实现验收"
       },
@@ -11830,7 +11830,7 @@ window.PIPELINE = {
         "sourceEvidence": {
           "status": "partial",
           "where": "src/core/unit-tier.js · src/badnorth/battle.js · unit-tiers.html",
-          "note": "原文单位等级，非无文字弧长教程；本地可选头盔/盾牌色阶与实际Battle通过。本轮补「升级机制」残差：本地最小真实机制 击杀数→等级→装备档位（unit-tier creditUnitKill：u.kills/u.level，阈值[2,5]本地解释；Battle opt-in unitPromotion，近战/矛刺/箭射手三路记账、同队误伤与死者不记、升档只写外观不回血）；tests/unit-promotion.mjs 纯函数+真Battle记账断言全过，unit-promotion-browser.cjs 双网格真渲染差分quad4560/mixed1624px+实例色对色阶。原雕饰/旗徽/原作升级经济未复现。；【卡点·B 美术资产】原雕饰/旗徽/原作升级经济（XP参数/触发时机未公开）未复现 → 升级机制已补本地最小实现（非原作复现），剩余卡在原片美术资产与未公开参数，没有源素材，程序化只能近似"
+          "note": "524帧全核（sheet-00~05 六张全看）；全片只有分队行进/汇合，无 HUD、无数字等级、1× 下单位仅 10 余像素 → 档位外观在本素材上不可读，不能据此标定换装。r254 复算 note 读数：unit-promotion.mjs PASS（[2,5]→等级3、promoted 2、arrow credited 6）、unit-promotion-browser PASS（promotedDelta 2/creditedDelta 5/changedPixels quad 4456·mixed 1624，note 记 4560 属渲染抖动 2.3%）。残差=原雕饰/旗徽素材与原作升级经济参数（卡点B）。"
         },
         "basis": "本次工程补全优先级判断；不更改原库 partial 状态，不代表本轮实现验收"
       },
@@ -11913,8 +11913,8 @@ window.PIPELINE = {
         "sourceGap": "原尘粒AO精确算法未公开；本地近似 particleAO 与命令路径弧长采样迁移均已落地，不冒充原作。",
         "sourceEvidence": {
           "status": "partial",
-          "where": "src/core/path-samples.js · src/world/battle-navigation.js · src/badnorth/battle.js · src/badnorth/battle-c04.js",
-          "note": "227帧全核，尘粒AO仅学习；命令路径弧长采样是独立工程迁移，不冒充原尘粒实现。r218 核销过期账：弧长等距采样早已落在 src/core/path-samples.js（battle.js#commandPathSamples 诊断点、battle-navigation.js#commandRibbon 约束CR→等距→贴地含踏面→净距带宽格子全链、route-preview.js 复用），command-ribbon.mjs 真Battle双网格过；本批新增 tests/path-samples-referee.mjs 与裁判 navribbon.js 逐位对拍——同一中线2密度×3步距、裁判每个采样点在本侧同弧长处位置逐位一致、length逐位等，如实差异记文件头（本侧端点必保留/法向中差+净距带宽/accept约束平滑）；尘粒AO本地近似在 battle-c04.js particleAO（?c04=dustao，c04-bn-world.mjs 贴墙0.467/成洞0.417/开阔0.82），vendor 逐字拷入 battle-c04.js+vertex-dual.js（cmp过、import闭包足）。；【卡点·C 算法未公开】原尘粒AO精确算法未公开（配文仅功能宣称、画面不足以反推），particleAO为本地近似不冒充原作 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似"
+          "where": "src/world/battle-navigation.js#commandRibbon · route-preview.html",
+          "note": "227帧全核（sheet-00 重看）；r255 收 next[2]：commandRibbon 换层判据由「最近折线段两端 y 不同」改成真实逐点 navFloor 序列（±4 样本窗口），同层路过/两段楼梯间平走不再被判成换层，climbSamples/climbWin 出读数；command-ribbon.mjs PASS（quad 踏面5/mixed 4、同层穿洞 maxY 0.550 踏面0）、path-samples-browser.cjs PASS（pathMaxY 0.550、tunnelSamples 194）。仍缺：尘粒 AO 本体=本地近似（卡点C 算法未公开）；多点过渡专用夹具用例未写（需造两段楼梯+中间平走的真实 World）；"
         },
         "basis": "本次工程补全优先级判断；不更改原库 partial 状态，不代表本轮实现验收"
       },
@@ -11942,7 +11942,7 @@ window.PIPELINE = {
         "sourceEvidence": {
           "status": "partial",
           "where": "src/core/banner.js · src/badnorth/battle.js · src/badnorth/squad-standard.js",
-          "note": "23帧全核，三队徽记/雕饰盾。复用现有Bezier旗面新增可选本地骷髅/剑/三叉戟；真实GPU纹理与开关通过。本轮补验收既有本地替身：竖旗横杆+金饰盾纹（squad-standard.js · g3 standards）Node层battle-g3.mjs已覆盖，新增tests/squad-standards-browser.cjs双网格浏览器验收（每守军一张金饰盾面24张、Bezier旗替换与恢复、公告板偏航±40°、RT差分quad230/mixed380px）。原图集/原作雕饰美术仍缺。；【卡点·B 美术资产】原图集/原作雕饰美术未复现 → 本地程序化替身已落地验收，剩余卡在原片美术资产（贴图/模型/动画/UI 稿），没有源素材，程序化只能近似"
+          "note": "23帧全核（sheet-00 即全片）：三队各一面蓝底竖旗 + 前排盾墙，全片只有极轻微横移与旗面摆动，无徽记特写、纹样在 1× 不可读。r254 复算：squad-standards-browser.cjs PASS（standards 3 / shieldFaces 24 / restored true；RT 差分 quad 230px、mixed 407px，note 记 380 属抖动 7.1%）。残差=原图集/原作雕饰美术（卡点B）。"
         },
         "basis": "本次工程补全优先级判断；不更改原库 partial 状态，不代表本轮实现验收"
       },

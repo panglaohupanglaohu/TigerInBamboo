@@ -38,7 +38,10 @@ const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ side: THREE.Doubl
 const view = { scene: new THREE.Group(), levelHeight: .5, index, mesh, worldMesh: { chimneys: [], builtVersion: 0 }, navLayer: null, effects: { fireSources: [], showFire() {} }, smoke: { sources: [] }, atmosphere: { sample: () => new THREE.Vector3(1, 0, 0) }, camera: new THREE.PerspectiveCamera(), debugState: {}, goreOff: false };
 const b = new Battle(view); b.start(world); b.nextWave = 1e9;
 const c03 = b.c03;
-assert.deepEqual(Object.values(c03.on), C03_FLAGS.map(() => false), '默认全关');
+// 第 243 轮：`houseFx` 改默认开（828984794407170048 失守屋要爆火球 + 屋体焦黑）。
+// 第 246 轮：`torches` 也改默认开（890611046435627008 维京人开打期间连续朝屋顶抛火团），其余仍默认关。
+assert.deepEqual(Object.values(c03.on), C03_FLAGS.map((k) => k === 'houseFx' || k === 'torches'), '默认只开 houseFx + torches');
+c03.set('houseFx', false); c03.set('torches', false);
 const tick = (secs, dt = 1 / 30) => { for (let t = 0; t < secs; t += dt) b.update(dt); };
 const mkSquad = (id, goal) => { const sq = { id, members: [], alive: true, flag: new THREE.Group(), goal, goalFloor: 1 }; const cg = new THREE.BufferGeometry(); cg.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(12), 3)); sq.flag.userData = { cloth: new THREE.Mesh(cg), SEG: 1 }; return sq; };
 const unit = (team, squad, x, extra = {}) => ({ uid: Math.random() * 1e9 | 0, team, squad, k: 0, hp: 3, max: 3, x, z: 0, y: .5, navFloor: 1, cd: 99, dead: false, onBoat: null, face: 0, soak: 0, radius: .055, ...extra });

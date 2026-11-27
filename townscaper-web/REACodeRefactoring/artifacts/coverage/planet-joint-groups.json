@@ -1,0 +1,246 @@
+{
+  "grp": {
+    "g": [
+      7,
+      294,
+      646
+    ],
+    "H": [
+      6,
+      6,
+      6
+    ],
+    "connected": true,
+    "cells": 900,
+    "maxH": 6
+  },
+  "cmp": {
+    "top": 6,
+    "spring": {
+      "mean": 0.1379,
+      "worst": 0.2971,
+      "levels": [
+        {
+          "l": 1,
+          "mean": 0.078,
+          "worst": 0.098,
+          "edges": 14
+        },
+        {
+          "l": 2,
+          "mean": 0.146,
+          "worst": 0.178,
+          "edges": 14
+        },
+        {
+          "l": 3,
+          "mean": 0.132,
+          "worst": 0.202,
+          "edges": 14
+        },
+        {
+          "l": 4,
+          "mean": 0.181,
+          "worst": 0.269,
+          "edges": 14
+        },
+        {
+          "l": 5,
+          "mean": 0.131,
+          "worst": 0.24,
+          "edges": 14
+        },
+        {
+          "l": 6,
+          "mean": 0.16,
+          "worst": 0.297,
+          "edges": 14
+        }
+      ]
+    },
+    "shape": {
+      "mean": 0.245,
+      "worst": 0.3432,
+      "levels": [
+        {
+          "l": 1,
+          "mean": 0.08,
+          "worst": 0.08,
+          "edges": 14
+        },
+        {
+          "l": 2,
+          "mean": 0.16,
+          "worst": 0.16,
+          "edges": 14
+        },
+        {
+          "l": 3,
+          "mean": 0.24,
+          "worst": 0.24,
+          "edges": 14
+        },
+        {
+          "l": 4,
+          "mean": 0.32,
+          "worst": 0.32,
+          "edges": 14
+        },
+        {
+          "l": 5,
+          "mean": 0.331,
+          "worst": 0.334,
+          "edges": 14
+        },
+        {
+          "l": 6,
+          "mean": 0.339,
+          "worst": 0.343,
+          "edges": 14
+        }
+      ]
+    },
+    "joint": {
+      "mean": 0.0408,
+      "worst": 0.2361,
+      "levels": [
+        {
+          "l": 1,
+          "mean": 0.02,
+          "worst": 0.024,
+          "edges": 14
+        },
+        {
+          "l": 2,
+          "mean": 0.036,
+          "worst": 0.046,
+          "edges": 14
+        },
+        {
+          "l": 3,
+          "mean": 0.054,
+          "worst": 0.158,
+          "edges": 14
+        },
+        {
+          "l": 4,
+          "mean": 0.049,
+          "worst": 0.113,
+          "edges": 14
+        },
+        {
+          "l": 5,
+          "mean": 0.045,
+          "worst": 0.22,
+          "edges": 14
+        },
+        {
+          "l": 6,
+          "mean": 0.04,
+          "worst": 0.236,
+          "edges": 14
+        }
+      ]
+    },
+    "jointTol": {
+      "mean": 0.0408,
+      "worst": 0.2361,
+      "levels": [
+        {
+          "l": 1,
+          "mean": 0.02,
+          "worst": 0.024,
+          "edges": 14
+        },
+        {
+          "l": 2,
+          "mean": 0.036,
+          "worst": 0.046,
+          "edges": 14
+        },
+        {
+          "l": 3,
+          "mean": 0.054,
+          "worst": 0.158,
+          "edges": 14
+        },
+        {
+          "l": 4,
+          "mean": 0.049,
+          "worst": 0.113,
+          "edges": 14
+        },
+        {
+          "l": 5,
+          "mean": 0.045,
+          "worst": 0.22,
+          "edges": 14
+        },
+        {
+          "l": 6,
+          "mean": 0.04,
+          "worst": 0.236,
+          "edges": 14
+        }
+      ]
+    },
+    "page": {
+      "cells": [
+        7,
+        294,
+        646
+      ],
+      "levels": [
+        {
+          "level": 1,
+          "worst": 0.02412,
+          "mean": 0.02018,
+          "edges": 14
+        },
+        {
+          "level": 2,
+          "worst": 0.04572,
+          "mean": 0.03634,
+          "edges": 14
+        },
+        {
+          "level": 3,
+          "worst": 0.15751,
+          "mean": 0.05378,
+          "edges": 14
+        },
+        {
+          "level": 4,
+          "worst": 0.1135,
+          "mean": 0.04935,
+          "edges": 14
+        },
+        {
+          "level": 5,
+          "worst": 0.21997,
+          "mean": 0.04514,
+          "edges": 14
+        },
+        {
+          "level": 6,
+          "worst": 0.23611,
+          "mean": 0.04012,
+          "edges": 14
+        }
+      ],
+      "worst": 0.23611
+    }
+  },
+  "conf": {
+    "lean": 28.44,
+    "folded": 0,
+    "shapeErr": 0.029,
+    "sizeErr": 0.3257
+  },
+  "px": {
+    "green": 31478,
+    "blue": 4484,
+    "total": 230400
+  },
+  "errors": []
+}

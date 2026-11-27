@@ -110,16 +110,25 @@ test('更大足迹（8 格）与双格模块：联合仍优于分格', () => {
   }
 });
 
-// ---- 误差约束：超阈值拒绝 → 回退分格拟合 ----------------------------------------------
-test('误差约束：edgeTol 超阈值 → rejected 且 dirs 为分格拟合', () => {
+// ---- 误差约束：超阈值拒绝 → 回退分格拟合（r251：拒收不得把结果变差） --------------------
+test('误差约束：edgeTol 超阈值 → 只有分格拟合确实更好时才回退，否则如实记 edgeTolMissed', () => {
   const group = footprint(3, 4);
   const prev = prevOf(3);
   const fit = fitModuleGroup(planet, group, prev, { level: 3, edgeTol: 1e-9 });
-  assert.equal(fit.report.rejected, true);
-  assert.ok(fit.report.splitWorst > fit.report.worst);   // 拒绝原因如实记录（联合确实更好但被阈值拒）
-  assert.equal(fit.report.finalWorst, fit.report.splitWorst);
   const split = splitModuleFit(planet, group, prev, { level: 3 });
-  for (const [k, d] of split.dirs) assert.deepEqual(fit.dirs.get(k), d, 'fallback returns split fit dirs');
+  // r251 不变量：无论走哪条分支，返回解的实测最差边不得比分格拟合差
+  assert.ok(fit.report.finalWorst <= fit.report.splitWorst + 1e-12,
+    `拒收把结果变差了：final ${fit.report.finalWorst} > split ${fit.report.splitWorst}`);
+  // edgeTol=1e-9 在本层不可达 → 走哪条分支都要如实标出来
+  assert.ok(fit.report.rejected || fit.report.edgeTolMissed, '不可达阈值必须有标记');
+  if (fit.report.rejected) {
+    assert.equal(fit.report.finalWorst, fit.report.splitWorst);
+    for (const [k, d] of split.dirs) assert.deepEqual(fit.dirs.get(k), d, 'fallback returns split fit dirs');
+  } else {
+    // 阈值不可达：保留联合解（更好的那个），并记下它离阈值有多远
+    assert.ok(fit.report.worst > 1e-9, 'missed 时联合解仍应超过阈值');
+    assert.equal(fit.report.finalWorst, fit.report.worst);
+  }
 });
 
 // ---- cornerPositions solver:'joint' 端到端（多高度前后曲线） -----------------------------

@@ -1,0 +1,88 @@
+<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>重构 · 色容体面板（五特征 H/S/L 范围 × 逐轴格数）</title><style>
+body{margin:0;background:#eef4f3;color:#20343c;font:13px system-ui}header{padding:10px 14px}header p{margin:6px 0;color:#41606b}main{display:flex;align-items:flex-start;gap:14px;padding:0 14px 18px}
+#preview{width:300px;height:300px;image-rendering:pixelated;background:#dfeae8;border:1px solid #b9cdce}
+table{border-collapse:collapse;background:#fff;border:1px solid #b9cdce}th,td{padding:4px 6px;border-bottom:1px solid #dbe7e4;vertical-align:middle;text-align:left;white-space:nowrap}
+th{background:#f4faf8;font-weight:600}.fname{font-weight:600;padding-right:10px}input[type=number]{width:56px}input[type=range]{width:74px;vertical-align:middle}
+.strip{display:flex;gap:0;margin-top:3px}.strip i{display:block;width:11px;height:14px;border-right:1px solid rgba(0,0,0,.12)}
+.counts input{width:34px}.hint{color:#5b7a84;font-size:12px}code{background:#e6f0ee;padding:0 3px}
+</style>
+<header>
+<a href="index.html">← 场景</a> · <a href="pipeline.html">管线</a> · <b>色容体作者面板</b>
+<p>1710031224838771027「author color volumes … define the whole color possibility space for each feature」：片里是 Unity Inspector 里五特征（Grass/Roof/Cliff/Beach/Flowers）各一条 <b>H/S/L 范围</b> + <b>逐轴格数</b>（H 5 / S 3 / L 3），下方是该特征 12 格色带。
+本页把同一形制做成可运行的面板：改任一范围/格数 → 左侧地形预览（<code>colorVolumeTerrainHSL</code>，与 3D 场景同一分类器：Beach hh&lt;.13 / Cliff slope&gt;.55 / Flowers wob&gt;.90&amp;&amp;hh&gt;.30 / 其余 Grass）与色带立刻重画。Roof 不进地形预览（原版面板也不画屋顶），只影响自身色带。</p>
+</header>
+<main>
+<canvas id="preview" width="300" height="300"></canvas>
+<div>
+<table><thead><tr><th>特征</th><th>H 起/止</th><th>S 起/止</th><th>L 起/止</th><th>格数 H/S/L</th></tr></thead><tbody id="rows"></tbody></table>
+<p class="hint" id="status"></p>
+</div>
+</main>
+<script type="module">
+import { makeColorVolume, colorVolumeTerrainHSL, colorVolumeStrip } from './src/core/color-volume.js';
+const FEATURES = ['Grass', 'Roof', 'Cliff', 'Beach', 'Flowers'];
+// 初始值按片里首帧的五条色带定：草绿 / 屋红 / 崖青灰 / 沙米 / 花粉紫
+const DEFAULTS = {
+  Grass:   { h: [.15, .36], s: [.25, .55], l: [.30, .62], n: [5, 3, 3] },
+  Roof:    { h: [.00, .07], s: [.45, .85], l: [.35, .68], n: [5, 3, 3] },
+  Cliff:   { h: [.55, .66], s: [.05, .20], l: [.32, .55], n: [4, 3, 3] },
+  Beach:   { h: [.09, .14], s: [.25, .55], l: [.55, .80], n: [5, 3, 3] },
+  Flowers: { h: [.80, .95], s: [.40, .85], l: [.40, .65], n: [5, 3, 3] },
+};
+const params = structuredClone(DEFAULTS);
+const $ = (s) => document.querySelector(s);
+const hex = (rgb) => '#' + rgb.map((v) => Math.round(Math.max(0, Math.min(1, v)) * 255).toString(16).padStart(2, '0')).join('');
+const cvs = $('#preview'), ctx = cvs.getContext('2d'), W = cvs.width, H = cvs.height;
+
+function volumes() { return Object.fromEntries(FEATURES.map((f) => [f, makeColorVolume({ h: params[f].h, s: params[f].s, l: params[f].l })])); }
+const okN = (n) => [n[0], n[1], n[2]].every((x) => Number.isInteger(x) && (x === 0 || x >= 2));
+function steps() { return Object.fromEntries(FEATURES.map((f) => [f, okN(params[f].n) ? params[f].n : 0])); }
+
+let last = null;
+function paint() {
+  const vols = volumes(), st = steps();
+  const r = colorVolumeTerrainHSL(W, H, vols, { scale: 6, seed: 1, steps: st });
+  const img = ctx.createImageData(W, H);
+  for (let i = 0; i < W * H; i++) {
+    img.data[i * 4] = Math.round(r.rgb[i * 3] * 255); img.data[i * 4 + 1] = Math.round(r.rgb[i * 3 + 1] * 255);
+    img.data[i * 4 + 2] = Math.round(r.rgb[i * 3 + 2] * 255); img.data[i * 4 + 3] = 255;
+  }
+  ctx.putImageData(img, 0, 0);
+  last = r;
+  $('#status').textContent = `预览 ${W}×${H} · 格数 ${FEATURES.map((f) => f + (okN(params[f].n) ? params[f].n.join('/') : '连续')).join(' · ')} · 用到：` +
+    Object.entries(r.used).map(([k, v]) => `${k} ${v}`).join(' · ');
+  return r;
+}
+
+function row(f) {
+  const p = params[f], id = (k) => `cv-${f}-${k}`;
+  const num = (k, v, min, max, step) => `<input type="number" id="${id(k)}" data-f="${f}" data-k="${k}" value="${v}" min="${min}" max="${max}" step="${step}">`;
+  const strip = colorVolumeStrip(volumes()[f], 12).map((c) => `<i style="background:${hex(c)}"></i>`).join('');
+  return `<tr data-row="${f}"><td class="fname">${f}</td>
+    <td>${num('h0', p.h[0], -1, 2, .01)} / ${num('h1', p.h[1], -1, 2, .01)}</td>
+    <td>${num('s0', p.s[0], 0, 1, .01)} / ${num('s1', p.s[1], 0, 1, .01)}</td>
+    <td>${num('l0', p.l[0], 0, 1, .01)} / ${num('l1', p.l[1], 0, 1, .01)}</td>
+    <td class="counts">${num('n0', p.n[0], 0, 12, 1)} / ${num('n1', p.n[1], 0, 12, 1)} / ${num('n2', p.n[2], 0, 12, 1)}</td></tr>
+    <tr data-strip="${f}"><td></td><td colspan="4"><div class="strip">${strip}</div></td></tr>`;
+}
+function drawRows() { $('#rows').innerHTML = FEATURES.map(row).join(''); for (const inp of document.querySelectorAll('#rows input')) inp.oninput = onEdit; }
+function onEdit(e) {
+  const { f, k } = e.target.dataset, v = +e.target.value;
+  if (!Number.isFinite(v)) return;
+  if (k[0] === 'n') params[f].n[+k[1]] = Math.round(v); else params[f][k[0]][+k[1]] = v;
+  // 只重画该特征自己的色带，再整体重画预览（与片里「拖一格，色带和地形一起变」一致）
+  const strip = colorVolumeStrip(volumes()[f], 12).map((c) => `<i style="background:${hex(c)}"></i>`).join('');
+  const cell = document.querySelector(`[data-strip="${f}"] .strip`); if (cell) cell.innerHTML = strip;
+  paint();
+}
+drawRows();
+paint();
+window.colorVolumeLab = {
+  features: FEATURES, params, volumes, paint,
+  get last() { return last; },
+  strips: () => Object.fromEntries(FEATURES.map((f) => [f, colorVolumeStrip(volumes()[f], 12)])),
+  mask: () => last && last.feature,
+  pixels: () => Array.from(ctx.getImageData(0, 0, W, H).data),
+  reset: () => { for (const f of FEATURES) params[f] = structuredClone(DEFAULTS[f]); drawRows(); paint(); },
+};
+</script></html>

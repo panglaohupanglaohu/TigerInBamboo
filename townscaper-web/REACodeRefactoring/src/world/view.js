@@ -348,6 +348,9 @@ export class View {
     { const mp = new URLSearchParams(globalThis.location?.search ?? '').get('mixedPersp'); if (mp !== null) this.mixedPerspReady = import('./view-mixed-persp.js').then((m) => (this.mixedPersp = m.attachMixedPerspective(this, { k: mp === '' ? 1 : +mp }))); } // 1310503825510367232 混合透视（C05 r56，默认不加载）
     // 1215644531221311488 "(Also, the wave skirt stretches further this time)"：裙带宽度（1 = 旧窄带，原片宽档 1.6）
     { const sw = new URLSearchParams(globalThis.location?.search ?? '').get('skirtWidth'); this.skirtWidth = sw === null ? 1 : Math.max(0.5, Math.min(3, +sw || 1)); }
+    // 1664566546683899905：裙带外圈按距离场真距离落点（?skirtField=0 退回等比外推，做 A/B）
+    this.haloField = new URLSearchParams(globalThis.location?.search ?? '').get('skirtField') !== '0';
+    this.shoreRings = null;
     if (new URLSearchParams(globalThis.location?.search ?? '').get('c04') !== null) this.c04Ready = import('./view-c04.js').then((m) => m.installC04(this)); // 第 56 批 C04：?c04=dualcells,rayvis,ssao,dustao,hexslots（默认不加载）
     if (new URLSearchParams(globalThis.location?.search ?? '').get('c07') !== null) this.c07Ready = import('./view-c07.js').then((m) => m.installC07(this)); // 第 56 批 C07：?c07=townskin,decalboil,splash,gardenplots,aolayers,sungizmo（默认不加载）
     if (new URLSearchParams(globalThis.location?.search ?? '').get('c11') !== null) this.c11Ready = import('./view-c11.js').then((m) => m.installC11(this)); // 第 56 批 C11：?c11=grassline,shrubband,megagi,...（默认不加载）
@@ -1483,8 +1486,9 @@ export class View {
     if (!Number.isFinite(w) || w < 0.5 || w > 3) throw new RangeError('skirt width');
     this.skirtWidth = w;
     const shore = buildShore(this.town, this.grid, this.index, {
-      posts: this.worldMesh.posts, shape: this.worldMesh.shape, skirtWidth: w,
+      posts: this.worldMesh.posts, shape: this.worldMesh.shape, skirtWidth: w, haloField: this.haloField !== false,
     });
+    this.shoreRings = shore.rings || null;
     this.skirt.geometry.dispose();
     this.waves.geometry.dispose();
     this.shoreLine.geometry.dispose();
@@ -1547,7 +1551,8 @@ export class View {
       const t0 = performance.now();
       // 岸浪只在陆地 / 钢柱 / 海岸形状变了时重建（盖高楼、刷颜色不用）
       if (this.worldMesh.shoreDirty) {
-      const shore = buildShore(this.town, this.grid, this.index, { posts: this.worldMesh.posts, shape: this.worldMesh.shape, skirtWidth: this.skirtWidth ?? 1 });
+      const shore = buildShore(this.town, this.grid, this.index, { posts: this.worldMesh.posts, shape: this.worldMesh.shape, skirtWidth: this.skirtWidth ?? 1, haloField: this.haloField !== false });
+      this.shoreRings = shore.rings || null;
       this.skirt.geometry.dispose();
       this.waves.geometry.dispose();
       this.skirt.geometry = shore.skirt;

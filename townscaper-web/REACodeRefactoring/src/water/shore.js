@@ -104,7 +104,7 @@ function distanceField(town, grid, index, ptsOf, res = 0.07, pad = 2.5) {
 /**
  * @returns {{skirt: THREE.BufferGeometry, waves: THREE.BufferGeometry}}
  */
-export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves = 2, foot = 0.075, shape = null, skirtWidth = 1 } = {}) {
+export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves = 2, foot = 0.075, shape = null, skirtWidth = 1, haloField = true } = {}) {
   if (![reach, foot].every(Number.isFinite) || reach <= 0 || foot < 0 || !Number.isInteger(waves) || waves < 0 || waves > 32) throw new RangeError('shore options');
   // 1215644531221311488 "(Also, the wave skirt stretches further this time)"：
   // 裙带宽度是**尺度**参数（片内那圈三角裙伸到约一个建筑进深），默认 1 = 旧窄带，原片宽档约 1.6。
@@ -120,7 +120,8 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
   const yLine = [], bLine = [];   // debug: the yellow and blue lines of 1849732997945110651
   const wShore = [], wSea = [], wPhase = [], wRow = [], wIdx = [];
   const wIn = [], wOut = [], wPeriod = [], wCrest = [], wWidth = [];
-  let sv = 0, wv = 0;
+  const haloAll = [];              // 1664566546683899905：外圈真实外推距离，逐点
+  let sv = 0, wv = 0, haloTarget = 0, haloFallback = 0, haloMarched = 0;
 
   for (const loop of loops) {
     if (!field) break;
@@ -172,14 +173,63 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
     // 段与段之间留缝，缝隙随时间沿岸移动、宽度来回胀缩（分段展开 / 聚散）。
     // 故给裙带烘一个弧长相位 aArc，遮挡强度由 skirtCoverage(aArc, t) 调制（见 skirtBreakGLSL）。
     const base = sv;
+    // 1664566546683899905 "a distance field-like mesh skirt solution … it works
+    // for calm waters"：原片那圈淡色裙带的**外缘**是沿距离场等距落点的 ——
+    // 湾里变宽、岬角收紧。旧实现把外缘取成 (岸→蓝线) 矢量的 1.35 倍等比外推，
+    // 湾内相邻法线收敛时它就会自己翻过去（实测 halo 三角 30/806 反向）。
+    // 这里改成沿「平滑后的外推方向」在场上 march 到固定真距离；march 不到
+    // （细到没有水的内港）才退回旧等比点，保证不出现超远点。
+    const haloK = 1.35 * skirtWidth;
+    haloTarget = (reach + foot) * haloK;
+    const haloOffsets = new Float32Array(N);
+    const hDir = new Float64Array(N * 2), hd = new Float64Array(N);
     for (let i = 0; i < N; i++) {
       const s = shore[i], b = sea[i];
-      const dx = b.x - s.x, dz = b.z - s.z;
+      const vx = b.x - s.x, vz = b.z - s.z;
+      const len = Math.hypot(vx, vz);
+      const nx = len > 1e-9 ? vx / len : 1, nz = len > 1e-9 ? vz / len : 0;
+      hDir[i * 2] = nx; hDir[i * 2 + 1] = nz;
+      hd[i] = len * haloK;
+      if (haloField && len > 1e-6) {
+        const travelled = field.march(s.x, s.z, nx, nz, haloTarget, haloTarget * 2.5);
+        // 场没走到目标（窄内港/夹缝里场本身到不了）或 marching 撞到栅格外侧读到 99
+        // （travelled 反而极小）都退回等比点，别把外圈顶到岸上。
+        if (travelled < haloTarget * 2.5 && travelled > haloTarget * 0.5) { hd[i] = travelled; haloMarched++; } else haloFallback++;
+      }
+      if (haloField) hd[i] = Math.min(hd[i], haloTarget);   // 场档：外圈一律不越过设计距离
+    }
+    // 沿法线外推的曲线在凹岸处必然自交（片里那句 "a skirt built by offsetting
+    // along its normals breaks down in bays" 指的就是这个）。场落点只保证「距离对」，
+    // 不保证「次序对」—— 再压一道次序约束：外圈每条边的走向必须与岸线同向，
+    // 否则把两端顶点的外推量一起收回来（收到 0.35 倍仍不行就停在 0.35 倍）。
+    for (let pass = 0; haloField && pass < 32; pass++) {
+      let bad = 0;
+      for (let i = 0; i < N; i++) {
+        const j = (i + 1) % N;
+        const ax = shore[i].x + hDir[i * 2] * hd[i], az = shore[i].z + hDir[i * 2 + 1] * hd[i];
+        const bx = shore[j].x + hDir[j * 2] * hd[j], bz = shore[j].z + hDir[j * 2 + 1] * hd[j];
+        const ex = shore[j].x - shore[i].x, ez = shore[j].z - shore[i].z;
+        const fl = Math.hypot(ex, ez) || 1e-9;
+        const dot = ((bx - ax) * ex + (bz - az) * ez) / (fl * (Math.hypot(bx - ax, bz - az) || 1e-9));
+        if (dot < 0.35) {
+          const floor = 0.35 * (reach + foot) * skirtWidth;
+          hd[i] = Math.max(hd[i] * 0.6, floor);
+          hd[j] = Math.max(hd[j] * 0.6, floor);
+          bad++;
+        }
+      }
+      if (!bad) break;
+    }
+    for (let i = 0; i < N; i++) {
+      const s = shore[i], b = sea[i];
+      const vx = b.x - s.x, vz = b.z - s.z;
       const u = arc[i] / Math.max(perimeter, 1e-9) * Math.PI * 2;
-      sPos.push(s.x - dx * 0.06 * skirtWidth, 0.006, s.z - dz * 0.06 * skirtWidth); sA.push(0.95); sArc.push(u);
-      sPos.push(s.x + dx * 0.12 * skirtWidth, 0.006, s.z + dz * 0.12 * skirtWidth); sA.push(0.0); sArc.push(u);
-      sPos.push(s.x + dx * 0.04 * skirtWidth, 0.004, s.z + dz * 0.04 * skirtWidth); sA.push(-0.42); sArc.push(u);   // halo: negative = tint
-      sPos.push(s.x + dx * 1.35 * skirtWidth, 0.004, s.z + dz * 1.35 * skirtWidth); sA.push(-0.0); sArc.push(u);
+      sPos.push(s.x - vx * 0.06 * skirtWidth, 0.006, s.z - vz * 0.06 * skirtWidth); sA.push(0.95); sArc.push(u);
+      sPos.push(s.x + vx * 0.12 * skirtWidth, 0.006, s.z + vz * 0.12 * skirtWidth); sA.push(0.0); sArc.push(u);
+      sPos.push(s.x + vx * 0.04 * skirtWidth, 0.004, s.z + vz * 0.04 * skirtWidth); sA.push(-0.42); sArc.push(u);   // halo: negative = tint
+      hd[i] = Math.max(hd[i], 0.05 * (reach + foot) * skirtWidth);
+      haloOffsets[i] = hd[i]; haloAll.push(hd[i]);
+      sPos.push(s.x + hDir[i * 2] * hd[i], 0.004, s.z + hDir[i * 2 + 1] * hd[i]); sA.push(-0.0); sArc.push(u);
       sv += 4;
     }
     for (let i = 0; i < N; i++) {
@@ -267,7 +317,18 @@ export function buildShore(town, grid, index, { posts = [], reach = 0.7, waves =
     g.setAttribute('position', new THREE.Float32BufferAttribute(arr, 3));
     return g;
   };
-  return { skirt, waves: wavesGeo, shoreLine: lines(yLine), seaLine: lines(bLine) };
+  const stat = (arr) => {
+    if (!arr.length) return null;
+    const s = [...arr].sort((a, b) => a - b);
+    const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+    const sd = Math.sqrt(arr.reduce((a, b) => a + (b - mean) ** 2, 0) / arr.length);
+    return { n: arr.length, min: s[0], p50: s[s.length >> 1], max: s[s.length - 1], mean, cv: sd / mean };
+  };
+  return {
+    skirt, waves: wavesGeo, shoreLine: lines(yLine), seaLine: lines(bLine),
+    // 裙带外圈离岸距离账（1664566546683899905）：场落点时 cv→0，等比外推时 cv 大
+    rings: { haloField, haloTarget, haloOffsets: haloAll, halo: stat(haloAll), haloMarched, haloFallback },
+  };
 }
 
 export function makeSkirtMaterial(waterTint) {

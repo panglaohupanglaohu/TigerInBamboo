@@ -30,15 +30,19 @@ for (const kind of ['quad', 'mixed']) {
   const s = b.commandPathSamples;
   assert.ok(s && s.cells && s.points.length > 20, '命令路径带状格子');
   for (let i = 1; i < s.distances.length - 1; i++) assert.ok(Math.abs(s.distances[i] - s.distances[i - 1] - .15) < 1e-9, '弧长等距 0.15');
-  let onFloor = 0, treads = 0;
+  let onFloor = 0, treads = 0, offSurface = 0;
   for (const p of s.points) {
     const c = view.index.cellAt(p[0], p[2]); assert.ok(c, '每点在格内');
     const n = nav.graph.nodes[nav.graph.nearest(c, (p[1] - .05) / .5)];
     const h = nav.surfaceHeight(p[0], p[2], n);
     if (Math.abs(p[1] - .05 - h) < 1e-9) onFloor++;
-    if (Math.abs(h / .5 - Math.round(h / .5)) > .05) treads++;
+    else if (Math.abs(p[1] - .05 - n.floor * .5) > 1e-9) offSurface++;
+    // 真骑在踏面上的点：y 不在整层平面上（r255 起只允许在折线换层的那一段出现）
+    if (Math.abs((p[1] - .05) / .5 - Math.round((p[1] - .05) / .5)) > .05) treads++;
   }
-  assert.equal(onFloor, s.points.length, '每点贴实际地面（含楼梯踏面）+ 0.05');
+  assert.equal(offSurface, 0, '每点要么贴实际地面（含踏面）、要么钉在本层平面，不悬空');
+  assert.ok(onFloor > 0, '仍有贴地样本');
+  console.log(`  ${kind}: 贴地 ${onFloor}/${s.points.length}（其余钉本层平面）、骑踏面 ${treads}`);
   for (let i = 0; i + 1 < s.cells.length; i++) assert.deepEqual(s.cells[i].quad[1], s.cells[i + 1].quad[0], '首尾共享边');
   assert.ok(s.cells.every((c) => c.wA > 0 && c.wA <= .12 + 1e-9), '带宽 ≤ 0.12 且 > 0（贴封闭边时收窄）');
   // 平滑：拐角处比原折线转角小（同一条分层折线）
@@ -61,4 +65,20 @@ console.log('PASS Catmull-Rom 约束平滑、弧长等距、贴地含踏面、�
   const mid = nav.commandRibbon([[0, .55, 0], [5, .55, 0]], { spacing: .25, halfWidth: .3 });
   assert.ok(mid.cells.every((c) => Math.abs(c.wA - .3) < 1e-9), '居中：不收窄');
   console.log('PASS 带宽按格内到封闭边净距收窄');
+}
+// ④ 同层穿洞：墙上挂着 1→3 的楼梯，路线在洞道里平走 → 命令线一律钉在洞道平面，不许被抬到墙顶
+//    （r255 现场：mixed 网格洞里单位 y 恒 0.5，命令线被 surfaceHeight 的踏面分支抬到 1.217）
+{
+  const { stripWorld } = await import('./fixtures/g5-battle.mjs');
+  const { BattleNavigation } = await import('../src/world/battle-navigation.js');
+  const S = stripWorld(6, 1);
+  for (const c of S.cells) { S.world.fill(c, 1, { rock: true }); if (c.cx === 2 || c.cx === 3) S.world.setSolid(c, 3, true, { rock: true }); }
+  const nav = new BattleNavigation(S.world, S.index);
+  const r = nav.commandRibbon([[0, .55, 0], [1, .55, 0], [4, .55, 0], [5, .55, 0]], { spacing: .1 });
+  const ys = r.points.map((p) => p[1]);
+  const tread = ys.filter((y) => Math.abs((y - .05) / .5 - Math.round((y - .05) / .5)) > .02).length;
+  assert.ok(r.points.length > 20, '洞道命令线有点');
+  assert.equal(tread, 0, `同层穿洞不得骑踏面（实测最高 ${Math.max(...ys).toFixed(3)}，洞道平面应 ${.55}）`);
+  assert.ok(Math.max(...ys) < .56, '洞道命令线 maxY < 0.56');
+  console.log(`PASS 同层穿洞命令线钉在洞道平面（${r.points.length} 点、maxY ${Math.max(...ys).toFixed(3)}、踏面 0）`);
 }

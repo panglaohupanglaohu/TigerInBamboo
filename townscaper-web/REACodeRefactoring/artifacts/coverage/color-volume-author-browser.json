@@ -1,0 +1,136 @@
+{
+ "pass": true,
+ "fail": [],
+ "report": {
+  "dom": {
+   "rows": [
+    "Grass",
+    "Roof",
+    "Cliff",
+    "Beach",
+    "Flowers"
+   ],
+   "inputsPer": {
+    "Grass": [
+     "h0",
+     "h1",
+     "s0",
+     "s1",
+     "l0",
+     "l1",
+     "n0",
+     "n1",
+     "n2"
+    ],
+    "Roof": [
+     "h0",
+     "h1",
+     "s0",
+     "s1",
+     "l0",
+     "l1",
+     "n0",
+     "n1",
+     "n2"
+    ],
+    "Cliff": [
+     "h0",
+     "h1",
+     "s0",
+     "s1",
+     "l0",
+     "l1",
+     "n0",
+     "n1",
+     "n2"
+    ],
+    "Beach": [
+     "h0",
+     "h1",
+     "s0",
+     "s1",
+     "l0",
+     "l1",
+     "n0",
+     "n1",
+     "n2"
+    ],
+    "Flowers": [
+     "h0",
+     "h1",
+     "s0",
+     "s1",
+     "l0",
+     "l1",
+     "n0",
+     "n1",
+     "n2"
+    ]
+   },
+   "strips": {
+    "Grass": 12,
+    "Roof": 12,
+    "Cliff": 12,
+    "Beach": 12,
+    "Flowers": 12
+   },
+   "status": "预览 300×300 · 格数 Grass5/3/3 · Roof5/3/3 · Cliff4/3/3 · Beach5/3/3 · Flowers5/3/3 · 用到：Beach 7056 · Cliff 10272 · Grass 66558 · Flowers 6114"
+  },
+  "maskPx": {
+   "Grass": 66558,
+   "Cliff": 10272,
+   "Beach": 7056,
+   "Flowers": 6114
+  },
+  "used": {
+   "Beach": 7056,
+   "Cliff": 10272,
+   "Grass": 66558,
+   "Flowers": 6114
+  },
+  "grass": {
+   "total": 66558,
+   "by": {
+    "Grass": 66558
+   },
+   "strips": [
+    "164,70,99",
+    "164,70,96",
+    "164,70,94",
+    "164,70,92",
+    "164,70,90",
+    "164,70,88",
+    "164,70,86",
+    "164,70,84",
+    "164,70,82",
+    "164,70,80",
+    "164,70,78",
+    "164,70,76"
+   ]
+  },
+  "cliff": {
+   "total": 7624,
+   "by": {
+    "Cliff": 7624
+   }
+  },
+  "cont": {
+   "before": 73,
+   "after": 29398,
+   "total": 66541,
+   "by": {
+    "Grass": 66541
+   }
+  },
+  "roof": {
+   "canvasDiff": 0,
+   "stripChanged": true
+  },
+  "resetDiff": 0,
+  "hashes": {
+   "default": "5fdb6735a5846528",
+   "reload": "5fdb6735a5846528"
+  },
+  "errors": []
+ }
+}

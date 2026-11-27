@@ -1,0 +1,108 @@
+{
+  "closed": {
+    "yards": 26,
+    "paths": 13,
+    "components": 1,
+    "openComponents": 0,
+    "lowWallEdges": 0,
+    "openReasons": [],
+    "bridgeFlags": [],
+    "lowWallProbe": {
+      "components": 1,
+      "grass": 26,
+      "sub": [
+        26
+      ],
+      "edges": 33
+    },
+    "stats": {
+      "enclosed": 1,
+      "grassCells": 26,
+      "openComponents": 0,
+      "openCellsSkipped": 0,
+      "lowWallEdges": 0
+    },
+    "miss": 0,
+    "pathTotal": 13,
+    "pathOnGrass": 13,
+    "perComp": [
+      {
+        "n": 26,
+        "sub": 1,
+        "grass": 26,
+        "underPath": 13
+      }
+    ]
+  },
+  "lowWall": {
+    "yards": 0,
+    "paths": 0,
+    "components": 0,
+    "openComponents": 1,
+    "lowWallEdges": 0,
+    "openReasons": [
+      [
+        "wall-layer-gap"
+      ]
+    ],
+    "bridgeFlags": [
+      true
+    ],
+    "lowWallProbe": {
+      "components": 0,
+      "grass": 0,
+      "sub": [],
+      "edges": 0
+    },
+    "stats": {
+      "enclosed": 0,
+      "grassCells": 0,
+      "openComponents": 1,
+      "openCellsSkipped": 26,
+      "lowWallEdges": 0
+    },
+    "miss": 0,
+    "pathTotal": 0,
+    "pathOnGrass": 0,
+    "perComp": []
+  },
+  "open": {
+    "yards": 0,
+    "paths": 0,
+    "components": 0,
+    "openComponents": 1,
+    "lowWallEdges": 0,
+    "openReasons": [
+      [
+        "ground-opening"
+      ]
+    ],
+    "bridgeFlags": [
+      false
+    ],
+    "lowWallProbe": {
+      "components": 0,
+      "grass": 0,
+      "sub": [],
+      "edges": 0
+    },
+    "stats": {
+      "enclosed": 0,
+      "grassCells": 0,
+      "openComponents": 1,
+      "openCellsSkipped": 27,
+      "lowWallEdges": 0
+    },
+    "miss": 0,
+    "pathTotal": 0,
+    "pathOnGrass": 0,
+    "perComp": []
+  },
+  "px": {
+    "green": 3487,
+    "total": 153600,
+    "w": 480,
+    "h": 320
+  },
+  "errors": []
+}

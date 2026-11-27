@@ -1,0 +1,89 @@
+{
+  "veg": {
+    "species": 3,
+    "placements": 79,
+    "instances": [
+      36,
+      27,
+      16
+    ],
+    "shrubs": 556,
+    "shared": true,
+    "atlasOn": 1,
+    "atlasSize": 128,
+    "corner": {
+      "x": 96,
+      "y": 96,
+      "w": 32,
+      "h": 32
+    },
+    "lod": 0
+  },
+  "pitch": [
+    {
+      "v": 0.6,
+      "pitch": 0.6,
+      "camY": 16.934
+    },
+    {
+      "v": 0.95,
+      "pitch": 0.95,
+      "camY": 23.404
+    },
+    {
+      "v": 1.3,
+      "pitch": 1.3,
+      "camY": 27.308
+    }
+  ],
+  "wire": {
+    "before": {
+      "line": 5024,
+      "green": 5417,
+      "edge": 15004,
+      "filled": 101655,
+      "sig": 2604840080
+    },
+    "before2": {
+      "line": 5021,
+      "green": 5415,
+      "edge": 15014,
+      "filled": 101658,
+      "sig": 1160939729
+    },
+    "on": {
+      "line": 1579,
+      "green": 5222,
+      "edge": 30293,
+      "filled": 103106,
+      "sig": 475858752
+    },
+    "after": {
+      "line": 5029,
+      "green": 5416,
+      "edge": 15383,
+      "filled": 101874,
+      "sig": 4115336602
+    },
+    "noise": {
+      "line": 3,
+      "edge": 10
+    },
+    "restored": true,
+    "bitwise": false,
+    "changed": true
+  },
+  "closeup": {
+    "atlas": {
+      "green": 38356,
+      "mid": 13584
+    },
+    "solid": {
+      "green": 39166,
+      "mid": 11697
+    },
+    "diff": 1,
+    "samples": 1
+  },
+  "errors": []
+}

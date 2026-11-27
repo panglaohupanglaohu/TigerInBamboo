@@ -118,6 +118,51 @@ function groupSimilarity(planet, gc, ks, prev, { r, R, cap, farLimit }) {
   return { dirs, f, want, capped: f > want + 1e-9, unresolved, ctr, far };
 }
 
+/** 把一个角点沿 dir 推 amount（单位球面弦长），并把相对 prev 的侧移钳在 capU 内。 */
+function nudge(k, dir, amount, D, prev, capU) {
+  const p = D.get(k);
+  let nd = norm([p[0] + dir[0] * amount, p[1] + dir[1] * amount, p[2] + dir[2] * amount]);
+  const along = dot(nd, prev[k]);
+  const side = sub(nd, prev[k].map((x) => x * along));
+  const sl = len(side);
+  if (sl > capU && sl > 1e-12) {
+    const f2 = capU / sl;
+    nd = norm([prev[k][0] * along + side[0] * f2, prev[k][1] * along + side[1] * f2, prev[k][2] * along + side[2] * f2]);
+  }
+  return nd;
+}
+
+/**
+ * 最差边 minimax 下降（r251）：Jacobi 逐边投影求的是均值，最差边可能反而被放大
+ * （r250 实测 3 格 6 层组：joint 最差 0.568 > spring 0.297）。这里每轮只动**当前最差边**
+ * 的两端，朝期望弦长推（仍钳在墙倾斜上限内），且只在「全局最差严格下降」时接受 →
+ * 结果对 worst 单调下降，直到几何下界（cap 顶死）不再有下降方向为止。
+ * 返回 {dirs, worst, iters, stalled}。
+ */
+function worstEdgeDescent(E, rests, D, planet, r, prev, capU, { iters = 60, step = 0.5 } = {}) {
+  const st0 = edgeStats(E, D, planet, r, null);
+  let cur = D, worst = st0.worst, used = 0, stalled = false;
+  for (let it = 0; it < iters; it++) {
+    const st = edgeStats(E, cur, planet, r, null);
+    let we = 0;
+    for (let i = 1; i < st.edges.length; i++) if (st.edges[i].err > st.edges[we].err) we = i;
+    const { a, b } = st.edges[we], rest = rests[we], curLen = st.edges[we].len || 1e-9;
+    const dir = norm(sub(cur.get(b), cur.get(a)));
+    let ok = false;
+    for (let t = 0; t < 8 && !ok; t++) {
+      const need = (rest - curLen) * step * Math.pow(0.5, t);
+      const cand = new Map(cur);
+      cand.set(a, nudge(a, dir, -need / 2, cur, prev, capU));
+      cand.set(b, nudge(b, dir, need / 2, cur, prev, capU));
+      const w = edgeStats(E, cand, planet, r, null).worst;
+      if (w < worst - 1e-12) { cur = cand; worst = w; ok = true; }
+    }
+    used = it + 1;
+    if (!ok) { stalled = true; break; }
+  }
+  return { dirs: cur, worst, iters: used, stalled };
+}
+
 /** 逐边误差（D 为 Map：corner→单位方向）：{edges:[{a,b,rest,len,err,simLen}],worst,mean}；rest/len 为世界弦长。 */
 function edgeStats(E, D, planet, r, simD) {
   const edges = [];
@@ -171,12 +216,13 @@ export function splitModuleFit(planet, groupIds, prev, { level, maxLean = 30 } =
  *   edges,worst,mean,simWorst,splitWorst,iters,improved,leanMaxDeg,rejected}}。
  * dirs 只覆盖组内格触及的角点；调用方负责与其他组/邻居协商（共享角点平均）。
  */
-export function fitModuleGroup(planet, groupIds, prev, { level, iters = 40, step = 0.5, maxLean = 30, edgeTol = Infinity, farLimit = 1.2 } = {}) {
+export function fitModuleGroup(planet, groupIds, prev, { level, iters = 40, step = 0.5, maxLean = 30, edgeTol = Infinity, farLimit = 1.2, minimax = true, minimaxIters = 60 } = {}) {
   const gc = groupCells(planet, groupIds);
   const { R, L } = planet;
   if (!Number.isInteger(level) || level < 0 || !Number.isInteger(iters) || iters < 0 || iters > 1e4 ||
       !Number.isFinite(step) || step <= 0 || step > 1 || !Number.isFinite(maxLean) || maxLean < 0 || maxLean >= 90 ||
-      !(edgeTol > 0) || !Number.isFinite(farLimit) || farLimit <= 0 || farLimit > Math.PI) throw new RangeError('Invalid fitModuleGroup options');
+      !(edgeTol > 0) || !Number.isFinite(farLimit) || farLimit <= 0 || farLimit > Math.PI ||
+      typeof minimax !== 'boolean' || !Number.isInteger(minimaxIters) || minimaxIters < 0 || minimaxIters > 1e4) throw new RangeError('Invalid fitModuleGroup options');
   if (!Array.isArray(prev) || prev.length !== planet.corners.length || !prev.every((p) => Array.isArray(p) && p.length === 3 && p.every(Number.isFinite))) throw new RangeError('Invalid prev directions');
   const r = R + level * L, s = R / r, cap = Math.tan(maxLean * Math.PI / 180) * L, capU = cap / r;
   const ks = groupCorners(gc), E = groupEdgeList(gc);
@@ -216,15 +262,32 @@ export function fitModuleGroup(planet, groupIds, prev, { level, iters = 40, step
     D = cand;
     if (moved < 1e-9) break;
   }
+  const jacobiWorst = bestWorst;
+  // 2b. 最差边 minimax 下降（r251）：Jacobi 求均值，最差边可能反而放大
+  let mmIters = 0, mmStalled = false;
+  if (minimax && minimaxIters > 0 && E.length) {
+    const mm = worstEdgeDescent(E, rests, best, planet, r, prev, capU, { iters: minimaxIters, step });
+    mmIters = mm.iters; mmStalled = mm.stalled;
+    if (mm.worst < bestWorst - 1e-12) { best = mm.dirs; bestWorst = mm.worst; }
+  }
   const fitErr = edgeStats(E, best, planet, r, sim.dirs);
-  // 3. 误差约束：超阈值 → 回退分格拟合
-  let dirs = best, rejected = false, split = null, splitWorst = null;
+  // 2c. 上限探测：同口径下降但放开墙倾斜上限 → 「不受 cap 约束时的可达下界」
+  //     两者之差就是墙倾斜约束本身要付的价（把这层残差分到几何 vs 算法，而不是含糊的"没有上限"）
+  const free = minimax && minimaxIters > 0 && E.length
+    ? worstEdgeDescent(E, rests, new Map(ks.map((k) => [k, sim.dirs.get(k).slice()])), planet, r, prev, Infinity, { iters: minimaxIters, step })
+    : null;
+  const freeWorst = free ? Math.min(free.worst, fitErr.worst) : null;
+  // 3. 误差约束：超阈值 → 回退分格拟合。r251 补一条不变量：**拒收不得把结果变差** ——
+  //    分格拟合自己的最差边可能比联合解还大（r250 实测 0.554 vs 0.568 只是碰巧略好），
+  //    那就说明阈值在本层不可达（几何下界），退回更差的解只会让账面更假 → 保留联合解并记
+  //    edgeTolMissed=true，把可达上限交给 boundWorst。
+  let dirs = best, rejected = false, split = null, splitWorst = null, edgeTolMissed = false;
   if (fitErr.worst > edgeTol) {
     split = splitModuleFit(planet, groupIds, prev, { level, maxLean });
     const spErr = edgeStats(E, split.dirs, planet, r, null);
     splitWorst = spErr.worst;
-    dirs = split.dirs;
-    rejected = true;
+    if (splitWorst < fitErr.worst - 1e-12) { dirs = split.dirs; rejected = true; }
+    else edgeTolMissed = true;   // 阈值不可达：保留更好的联合解，如实记
   }
   // 墙倾斜实测量（本组角点，prev→本层）
   let leanMaxDeg = 0;
@@ -240,8 +303,13 @@ export function fitModuleGroup(planet, groupIds, prev, { level, iters = 40, step
       unresolved: sim.unresolved, pieces: groupPieces(gc, planet.cells),
       edges: fitErr.edges, worst: fitErr.worst, mean: fitErr.mean, simWorst: simErr.worst,
       splitWorst, finalWorst: rejected ? splitWorst : fitErr.worst,   // 返回 dirs 的实测最差边（拒绝时分格拟合）
+      edgeTolMissed,
       iters: itersUsed, improved: bestWorst < simErr.worst - 1e-12,
       leanMaxDeg, rejected,
+      // r251：最差边的上限口径 —— jacobi 均值解的最差 / minimax 下降后的最差 / 放开墙倾斜上限的可达下界
+      jacobiWorst, minimaxIters: mmIters, minimaxStalled: mmStalled, freeWorst,
+      capPenalty: freeWorst === null ? null : +(fitErr.worst - freeWorst).toFixed(6),
+      boundWorst: freeWorst === null ? fitErr.worst : Math.min(fitErr.worst, freeWorst),
     },
   };
 }

@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T07:18:59+08:00",
+  "updatedAt": "2026-11-27T08:55:00+08:00",
   "completed": [
     "建立原版 128 个 JS 模块逐项清单、导出接口、职责落点与已知差距。",
     "配置每30分钟承接学习任务并更新首页/管线进度。",
@@ -194,58 +194,54 @@
   ],
   "next": [
     {
-      "title": "`1459169210752507904` 补丁缝：要「两块直接共边」只能上独立过渡顶点表（缝上 35 个反向格各持一份顶点）——须动拓扑，1.5–2 整轮；累计已否 6 条折中方案。",
+      "title": "`823848950553780226` 多点过渡专用夹具：造「两段楼梯 + 中间平走」与「跨层斜切」的真实 World 几何，用逐点 navFloor 参照对拍 `climbAt` —— 断言两段爬升各有踏面样本、中间平走踏面 0、斜切段不出现楼层跳变误判（r255 只换了判据，未证多点）。",
+      "clips": [
+        "823848950553780226"
+      ],
+      "done": false,
+      "remaining": "r255：`command-ribbon.mjs` 的换层段取样 quad 5 / mixed 4，同层穿洞仍 0 踏面；多点过渡无专用用例。"
+    },
+    {
+      "title": "`1459169210752507904` 补丁缝：唯一剩余真机制=**独立过渡顶点表**（469 个边界顶点按补丁侧/三角侧各留一份 + 512 条 seam 边补一圈三角带，保持 edgeNeighbors/edgeTwins 可逆、外圈钉点不动）——须动拓扑，**必须整轮（≤90 分钟）**，别再切半轮。r255 已把第 9 条（三角侧柔性层 `smoothSeam`）实测否掉：35→35。",
       "clips": [
         "1459169210752507904"
       ],
       "done": false,
-      "remaining": "r238 已量到 4× 下双线间距≈1× 2px（原片共边）。"
+      "remaining": "r244 边级：反向 116 条边里 74 条在 quad↔tri 交界；累计已否 9 条折中（平摊50/退三角63/合用73/不收缩89/剥壳18/一拆二0/私有点87/深缩3/三角侧柔性35）。"
     },
     {
-      "title": "洞口占用互斥：多单位同抢一个洞口时的让行/排队（`BattleNavigation` 现为各自按代价寻路，不做占用）。判据用两单位对穿同一洞口的时序。",
-      "clips": [
-        "797119718477991936",
-        "906425294533394432"
-      ],
+      "title": "`tools/serve.py` 跑满 6 小时量级会开始 reset（r238、r254 各一次），门禁随机红且伪装成「测试超时」→ 给 8769 加自愈（定时重启 / 首次连接失败即重启），并在 runbook §1 健康检查里加「已运行时长 > 6h 就重启」。",
+      "clips": [],
       "done": false,
-      "remaining": "r238 判清门价计价单位（只收两个洞口），但「排队」本身仍未实现。"
+      "remaining": "r255 起服务时长为 0（刚重启），未复现；r254 现场 pid 52989 跑了 6h17m。"
     },
     {
-      "title": "`1531180281155284456` 一类「门价/绕行」口径：`tests/layered-nav-holes.mjs:43`（doorCost 2.5：拱洞 9 > 绕行 8）仍红，属本地取值还是查表权重，需半轮定性。",
-      "clips": [
-        "797119718477991936"
-      ],
+      "title": "「读数能不能复算」审计：余下 26 条 partial 里点名的 test 逐条重跑，**红的那条才立项**，别只读末句（r254 就这样抓出 path-samples 的红）。",
+      "clips": [],
       "done": false,
-      "remaining": "r237 修好穿洞门禁后剩下的既有红。"
-    },
-    {
-      "title": "`906416813810049025` 可选精修（非机制缺口）：压暗边缘想从「软过渡一格」变成片里那种硬边，需要按面二值化/逐面着色（顶点着色做不到）；另需一条能看见「整条洞由亮到暗」的机位（现洞身 0.39–1.14 格长、最暗段在拐弯后）。",
-      "clips": [
-        "906416813810049025"
-      ],
-      "done": false,
-      "remaining": "机制与像素账都已通；纯形制/机位。"
+      "remaining": "r254 已复算 4 条；r255 复算 8238 的两条（均绿）。"
     }
   ],
   "validation": {
     "framesThisBatch": 4,
-    "implementationAcceptedClipsThisBatch": 4,
-    "implementationPendingClipsThisBatch": 1,
-    "acceptanceScope": "缺口专项（r238）：门价计价单位（洞口 vs 洞格）+ 三条补丁/洞穴片的帧证据补全",
-    "logic": "tests/layered-nav-holes.mjs PASS（含新增 ③b：3 格隧道只多 0.7、正反向同价；突变测试退回 covered(b) 立刻红）；回归 battle-navigation / battle-g3 / bncaves-island-battle / cave-route-layers / fine-portals / path-samples-referee / river-nav / traffic-stress / unit-clearance / unit-foot-stairs / c02-bn-fx-b / command-ribbon 全 exit 0；grid-patch-axis-honest 18/18",
-    "browser": "tests/battle-navigation-browser.cjs PASS（quad 185/0.5、mixed 194/0.5、errors []）；截图 battle-tunnel-mixed.png 已 ViewImage 实看",
-    "environmentPanel": {
-      "scope": "运维：tools/serve.py 长跑丢连接会让门禁假超时",
-      "test": "重启 serve.py 后 tests/battle-navigation-browser.cjs",
-      "evidence": "artifacts/coverage/battle-navigation-browser.json"
-    },
-    "inventory": "161模块：34增强/88部分/39静态/0未覆盖，只说明有落点，不是全部完成",
-    "recheckedFramesThisBatch": 4,
-    "framesThisHeartbeat": 4,
-    "newClipsThisHeartbeat": 0,
-    "implementationAcceptedClipsThisHeartbeat": 4
+    "implementationAcceptedClipsThisBatch": 1,
+    "implementationPendingClipsThisBatch": 3,
+    "acceptanceScope": "r254 命令路径渲染修复（同层穿洞不抬升）+ 三条 B/C 卡点条目读数复算（单位等级/精灵图集/旗徽）",
+    "logic": "command-ribbon.mjs PASS（含新增同层穿洞用例 + 突变测试）、path-samples.mjs PASS、route-editor.mjs 37 checks ALL PASS、unit-promotion.mjs PASS、impostor-grow.mjs PASS",
+    "browser": "path-samples-browser.cjs 修前红 → PASS（pathMaxY 0.550/0.550、tunnelSamples 185/194、maxY 0.5）；shore-browser.cjs 修后 PASS（mixed 806/1612、quad 872/1744，maxBoundaryError ≤5.8e-8）；unit-promotion-browser.cjs PASS（4456/1624px）；atlas-live-browser.cjs PASS（gAlpha 294780→112132）；squad-standards-browser.cjs PASS（230/407px）",
+    "screenshots": [
+      "artifacts/coverage/battle-tunnel-quad.png",
+      "artifacts/coverage/battle-tunnel-mixed.png"
+    ],
+    "evidence": [
+      "artifacts/coverage/823848950553780226-review-r254.md",
+      "artifacts/coverage/827215002448846848-review-r254.md",
+      "artifacts/coverage/1593215065423245313-review-r254.md",
+      "artifacts/coverage/827216768783495168-review-r254.md",
+      "artifacts/coverage/shore-browser-r254.md"
+    ]
   },
-  "latest": "第 242 轮（A 类仍空 → 表外一组 `974325184525201409` 维京登陆规划盒子）→ **done，done 213→214 / partial 35→34**。全片 6 张联系表 + frame-0250 原尺寸：全片唯一运动是相机，岛周一圈短泊位盒、每个泊位牵一条贯到远处的长车道盒、按泊位分色、一次性算完，**没有船体**。核实：旧 note 的「按到达时间的动态避让仍没做」是 r56 过期账（`steerBoat` 已做让行/侧让 + 侧偏表 + 全堵 hold），片内无船故不记缺口。真形制差=候选只画泊位小盒、没有长车道盒 → 屏上读不出「一个泊位→一条车道」。改法（只动调试视图）：`battle-c01#raidBoxes` 给候选补 `seawayBox` 长盒（只给首选且可用的，否则 192 条 + depthTest:false 糊成一片）、配色改按泊位哈希分色（被拒压暗 42%）、出 `stats.raidBerths/raidLanes/raidLaneBoxes`。读数：quad 船2/泊位64/车道192/可用114/被拒78/长盒39，mixed 2/58/174/110/64/37；顶点数 ==(船×2+车道+长盒)×24 逐项相等；颜色 126/120 种；可用泊位相交 0；同状态噪声 **0 px**；开→关差分 427945 px（29.7%）/ 397925 px（27.6%）；关档不可见；0 error。新测 `raid-boxes-c01-browser.cjs`，回归 raid-planner-terrain / battle-c01 / landing-plan / landing-traffic / obb-policy 全 PASS。残留仅形制（非机制）：编辑器俯视 vs 游戏相机、raid 层 depthTest:false 透出、调色板非原色。",
+  "latest": "第 255 轮（A 类仍空 → B 一组 `823848950553780226` 收 `next[2]`）→ **总账不动 285/285，done 221 / partial 27 / ref 15 / na 22**：① 命令路径换层判据改对 —— `commandRibbon` 原 `segClimb` 是「最近折线段的两个航点 y 不同」的**全局**判据，两处读不准：一段爬升里还没上楼梯的样本被抬到踏面、两段楼梯之间隔一格平走时平走段被判成换层；改成**真实逐点 navFloor 序列**（`climbAt(i)` 只看本样本楼层与前后 ±4 样本是否不同，≈0.6 世界单位）：窗口有变化=正踩楼梯→踏面，恒定=同层路过→钉 `floor*L`，并出 `climbSamples`/`climbWin` 读数。验收：`command-ribbon.mjs` PASS（quad 165 点 treads 5 / mixed 152 点 treads 4；同层穿洞 51 点 maxY 0.550、踏面 0 → r254 的修不回归）、`path-samples-browser.cjs` PASS（两网格 pathMaxY 0.5500、mixed tunnelSamples 194）。② `next[0]` 的 `1459169210752507904` 试第 9 条路径并否掉：`unshearPatches` 里的 `smoothSeam`（三角侧纯三角顶点拉普拉斯）原来是**死代码**（`smooth` 恒 0、末尾从不调用），接上并按 `scale×smooth`（0/2/4/8/12）搜格后 mixed 反向 **35→35**、smooth 仍取 0 → 「三角侧柔性层」不成立（翻转格第 3 点也在四边格里）；验证完立即回滚，`src/core/grid.js` 与 r244 逐项相同（flips 35 / scale .886 / maxMove 3.9295）。③ 如实：8238 的片内核缺口是尘粒 AO（sheet-00 全 100 帧实看：灰模崖口喷尘团、无路径线），卡点 C，故仍 partial；多点过渡专用夹具（两段楼梯+中间平走）未写，已并入下一轮。",
   "learningPace": {
     "targetClipsPerHour": 4,
     "goalHours": 78,
@@ -257,8 +253,8 @@
     "reviewedClips": 285,
     "remainingClips": 0,
     "countBasis": "独立视频ID、对应全帧记录和学习证据；不等同全部代码验收通过",
-    "actualClipsPerHour": 0.48,
-    "measuredAt": "2026-11-26T07:20:19.918623+08:00"
+    "actualClipsPerHour": 0.46,
+    "measuredAt": "2026-11-27T08:38:48.687952+08:00"
   },
   "session": {
     "status": "paused",

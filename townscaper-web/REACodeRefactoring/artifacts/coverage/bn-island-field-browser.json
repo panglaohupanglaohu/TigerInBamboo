@@ -1,0 +1,97 @@
+{
+  "out": {
+    "field": {
+      "triangles": 9604,
+      "hashSeed1": 2529278416,
+      "hashSeed2": 4145365596,
+      "materials": {
+        "0": 6188,
+        "1": 472,
+        "2": 1722,
+        "3": 834
+      },
+      "seaCells": 6188
+    },
+    "houses": {
+      "count": 6,
+      "candidates": 45,
+      "picks": [
+        [
+          44,
+          55,
+          1.4501,
+          false
+        ],
+        [
+          35,
+          59,
+          1.384,
+          false
+        ],
+        [
+          52,
+          52,
+          1.4554,
+          true
+        ],
+        [
+          65,
+          38,
+          0.6736,
+          false
+        ],
+        [
+          57,
+          63,
+          1.3048,
+          true
+        ],
+        [
+          70,
+          54,
+          1.5064,
+          false
+        ]
+      ]
+    },
+    "reveal": {
+      "wireFull": 57624,
+      "triFull": 9604,
+      "seq": [
+        {
+          "t": 0,
+          "wire": 0
+        },
+        {
+          "t": 0.25,
+          "wire": 14406
+        },
+        {
+          "t": 0.5,
+          "wire": 28812
+        },
+        {
+          "t": 1,
+          "wire": 57624
+        }
+      ]
+    },
+    "pixels": {
+      "wire": {
+        "line": 39630,
+        "sat": 0,
+        "meanLum": 54.1
+      },
+      "shade": {
+        "line": 0,
+        "sat": 81506,
+        "warm": 13384,
+        "meanLum": 47.63
+      },
+      "noise": 0,
+      "wireShadeDiff": 2560,
+      "samples": 10557
+    }
+  },
+  "errors": []
+}

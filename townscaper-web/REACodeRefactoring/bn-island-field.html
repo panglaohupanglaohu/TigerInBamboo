@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>方格高度场岛生成 · 线框搭出 → 着色 · REACode重构版</title>
+<link rel="icon" href="data:,">
+<script type="importmap">{ "imports": { "three": "./vendor/three.module.js" } }</script>
+<style>
+body{margin:0;background:#2c4a49;color:#e9f0ea;font:14px/1.6 system-ui}
+header{padding:12px 22px;background:#223c3b}
+header b{color:#f2e6c8}
+a{color:#9fd6dc}
+label{margin-right:14px}
+canvas{display:block;width:100vw;height:calc(100vh - 148px)}
+#status{display:block;margin-top:6px;font:12px/1.5 ui-monospace,monospace;color:#bcd3cb;white-space:pre-wrap}
+button{font:inherit;padding:2px 10px;margin-right:6px}
+</style>
+<header>
+<b>岛生成 · 线框搭出 → 台地着色</b> · <a href="pipeline.html" target="_top">管线</a> ·
+<a href="cage.html">cage</a> · <a href="terrain.html">terrain</a>
+<p style="margin:6px 0 8px">
+<label>种子<select id="seed"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></label>
+<label>阶段<input id="phase" type="range" min="0" max="1" step="1" value="0"> <span id="phaseName">线框</span></label>
+<label>搭出进度<input id="reveal" type="range" min="0" max="1000" value="1000"></label>
+<label><input id="houses" type="checkbox" checked>小屋</label>
+<label><input id="spin" type="checkbox" checked>环绕镜头</label>
+<span id="status">加载…</span>
+</p>
+</header>
+<canvas id="c"></canvas>
+<script type="module">
+import * as THREE from 'three';
+import { buildIsland, buildIslandGeometry, placeIslandHouses, MATERIAL } from './src/terrain/bn-island-field.js';
+
+// 1579474420749725696：454 帧里只有一件事 —— 同一台种子化生成器把两组岛从线框搭出，再着上台地色。
+// 本页把 bn-island-field.js 的方格高度场（域扭曲 fbm + 脊线 → 径向衰减 → 台地量化 → 材质分类）
+// 渲成同一批三角：线框档画全部三角边、着色档画同一批三角的顶点色。
+// 与原片的差别：搭出顺序按三角行序（原片是自岛心向外）、机位与配色是本地近似、原生成器算法未公开。
+
+const CELL = 0.42, HS = 0.55;
+const cv = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+renderer.setPixelRatio(1);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#2c4a49');
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 400);
+
+const state = { seed: 1, phase: 0, reveal: 1, houses: true, spin: true, yaw: -0.6, pitch: 0.86 };
+let field = null, geoCache = null, surface = null, wire = null, houseGroup = null;
+const stats = { triangles: 0, wireVertices: 0, houses: 0, candidates: 0, materials: {} };
+
+function fieldFor(seed) {
+  const f = buildIsland({ size: 96, seed, terraces: 5, roughness: 0.55, coast: 0.78 });
+  f.houses = placeIslandHouses(f, { seed: seed * 7 + 3, count: 6, minH: 0.6 });
+  return f;
+}
+
+function segsFromTriangles(pos) {
+  // 每个三角 → 3 条边（6 个端点）；顺序与三角一致，才能让搭出进度对线框和面片同一口径
+  const out = new Float32Array(pos.length * 2);
+  let w = 0;
+  for (let t = 0; t < pos.length; t += 9) {
+    const p = [0, 1, 2].map((k) => [pos[t + k * 3], pos[t + k * 3 + 1], pos[t + k * 3 + 2]]);
+    for (const [a, b] of [[0, 1], [1, 2], [2, 0]]) {
+      out[w++] = p[a][0]; out[w++] = p[a][1]; out[w++] = p[a][2];
+      out[w++] = p[b][0]; out[w++] = p[b][1]; out[w++] = p[b][2];
+    }
+  }
+  return out;
+}
+
+function build(seed) {
+  for (const o of [surface, wire, houseGroup]) if (o) { scene.remove(o); o.geometry?.dispose?.(); o.material?.dispose?.(); }
+  field = fieldFor(seed);
+  const g = buildIslandGeometry(field, { cell: CELL, heightScale: HS });
+  geoCache = g;
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.Float32BufferAttribute(g.pos, 3));
+  geo.setAttribute('color', new THREE.Float32BufferAttribute(g.col, 3));
+  geo.computeVertexNormals();
+  surface = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ vertexColors: true }));
+  surface.frustumCulled = false;
+  scene.add(surface);
+
+  const wg = new THREE.BufferGeometry();
+  wg.setAttribute('position', new THREE.BufferAttribute(segsFromTriangles(g.pos), 3));
+  wire = new THREE.LineSegments(wg, new THREE.LineBasicMaterial({ color: 0xdfeae4, transparent: true, opacity: 0.92 }));
+  wire.frustumCulled = false;
+  scene.add(wire);
+
+  // 小屋：placeIslandHouses 的平顶候选（同一场、同一种子），箱体 + 黄色屋顶
+  houseGroup = new THREE.Group();
+  const off = (field.n - 1) * CELL * 0.5;
+  for (const hs of field.houses.houses) {
+    const x = hs.x * CELL - off, z = hs.z * CELL - off, y = hs.h * HS;
+    const wall = new THREE.Mesh(new THREE.BoxGeometry(CELL * 2.1, CELL * 1.5, CELL * 2.1),
+      new THREE.MeshBasicMaterial({ color: 0xd9cbae }));
+    wall.position.set(x, y + CELL * 0.75, z);
+    const roof = new THREE.Mesh(new THREE.ConeGeometry(CELL * 1.75, CELL * (hs.spire ? 2.2 : 1.0), 4),
+      new THREE.MeshBasicMaterial({ color: 0xe8c15a }));
+    roof.rotation.y = Math.PI / 4;
+    roof.position.set(x, y + CELL * 1.5 + CELL * (hs.spire ? 1.1 : 0.5), z);
+    houseGroup.add(wall, roof);
+  }
+  scene.add(houseGroup);
+
+  stats.triangles = g.pos.length / 9;
+  stats.wireVertices = segsFromTriangles(g.pos).length / 3;
+  stats.houses = field.houses.houses.length;
+  stats.candidates = field.houses.candidates;
+  const m = {};
+  for (let k = 0; k < field.h.length; k++) m[field.mat[k]] = (m[field.mat[k]] || 0) + 1;
+  stats.materials = Object.fromEntries(Object.entries(m).map(([k, v]) => [k, v]));
+  stats.sea = m[MATERIAL.SEA] || 0;
+  apply();
+}
+
+function apply() {
+  const tri = stats.triangles;
+  const frac = state.reveal;
+  surface.geometry.setDrawRange(0, Math.round(tri * 3 * frac));
+  wire.geometry.setDrawRange(0, Math.round(stats.wireVertices * frac));
+  surface.visible = state.phase === 1;
+  wire.visible = state.phase === 0;
+  if (houseGroup) houseGroup.visible = state.houses && state.phase === 1;
+  const nTriDrawn = Math.round(tri * frac);
+  status.textContent =
+    `种子 ${state.seed} · 阶段 ${state.phase ? '着色' : '线框'} · 搭出 ${(frac * 100).toFixed(0)}%` +
+    ` · 三角 ${tri}（已画 ${nTriDrawn}）· 线框端点 ${stats.wireVertices}` +
+    `\n小屋 ${stats.houses} 座 / 平顶候选 ${stats.candidates} 格 · 材质格数 ${JSON.stringify(stats.materials)}` +
+    `\n坐标：cell ${CELL} · heightScale ${HS} · 海面格 ${stats.sea}（不建面）`;
+}
+const status = document.getElementById('status');
+
+function resize() {
+  const w = cv.clientWidth || 1200, h = cv.clientHeight || 700;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+function placeCamera() {
+  const R = 46, cy = 6 + 14 * Math.cos(state.pitch), cz = R * Math.sin(state.pitch);
+  camera.position.set(Math.sin(state.yaw) * cz, cy, Math.cos(state.yaw) * cz);
+  camera.lookAt(0, 0, 0);
+}
+
+addEventListener('resize', resize);
+document.getElementById('seed').onchange = (e) => { state.seed = +e.target.value; build(state.seed); };
+document.getElementById('phase').oninput = (e) => {
+  state.phase = +e.target.value;
+  document.getElementById('phaseName').textContent = state.phase ? '着色' : '线框';
+  apply();
+};
+document.getElementById('reveal').oninput = (e) => { state.reveal = +e.target.value / 1000; apply(); };
+document.getElementById('houses').onchange = (e) => { state.houses = e.target.checked; apply(); };
+document.getElementById('spin').onchange = (e) => { state.spin = e.target.checked; };
+
+resize(); build(1); placeCamera();
+let last = performance.now();
+renderer.setAnimationLoop((now) => {
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (state.spin) state.yaw += dt * 0.22;
+  placeCamera();
+  renderer.render(scene, camera);
+});
+
+// 验收接口：测试不改状态、只读 + 显式设置阶段/进度/机位
+window.islandReview = {
+  api: {
+    get field() { return field; }, get stats() { return stats; }, get geometry() { return geoCache; },
+    camera, renderer, scene,
+    setPhase(p) { state.phase = p; document.getElementById('phase').value = p; apply(); },
+    setReveal(t) { state.reveal = t; document.getElementById('reveal').value = Math.round(t * 1000); apply(); },
+    setSeed(s) { state.seed = s; document.getElementById('seed').value = s; build(s); },
+    setHouses(on) { state.houses = on; document.getElementById('houses').checked = on; apply(); },
+    setSpin(on) { state.spin = on; document.getElementById('spin').checked = on; },
+    setView(yaw, pitch) { state.yaw = yaw; state.pitch = pitch; placeCamera(); },
+    drawn() { return { surface: surface.geometry.drawRange.count, wire: wire.geometry.drawRange.count, surfaceVisible: surface.visible, wireVisible: wire.visible, housesVisible: houseGroup.visible }; },
+    ash() { // 几何指纹：pos 的确定性 hash + 三角数
+      let hsh = 2166136261 >>> 0;
+      for (const v of geoCache.pos) { hsh ^= Math.round(v * 1e4) | 0; hsh = Math.imul(hsh, 16777619) >>> 0; }
+      return { hash: hsh, triangles: stats.triangles };
+    },
+  },
+};
+window.islandReviewReady = true;
+</script>
+</html>

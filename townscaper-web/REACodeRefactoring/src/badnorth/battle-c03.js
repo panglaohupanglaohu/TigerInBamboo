@@ -1,5 +1,5 @@
 /**
- * 第 56 批 C03：Bad North 玩法 / 展示片子的 Battle 扩展（全部默认关；URL 参数 =1 或 battle.c03.set(name, on) 打开）。
+ * 第 56 批 C03：Bad North 玩法 / 展示片子的 Battle 扩展（除 `houseFx` 默认开外其余默认关；URL 参数 =1 或 battle.c03.set(name, on) 打开）。
  *
  *   kpow     1092709665199345664「k-pow !!」：一次性爆炸编排 explodeAt（白点→亮黄白火球 2–3 帧膨胀再收缩变暗 + 正下方红色焦痕贴片
  *            渐变成焦黑 + 橙色火星 + 接上的黑烟）；演示模式每 3.5 s 在岸边炸一次，崖顶挂红底白字「k-pow !!」横幅。
@@ -26,13 +26,21 @@ import { uiRevealAt } from '../core/ui-reveal.js';
 import { charHouseVerts, restoreChar } from './house-char.js';
 
 export const C03_FLAGS = ['kpow', 'houseFx', 'torches', 'plunge', 'confirm', 'distIso', 'tierUp', 'flair'];
+/** 默认开：`houseFx`（照 C01 `houseChar` / C02 `scorch` 先例）+ `torches`（第 246 轮）。
+ *  828984794407170048「坡地接敌 + 屋旁燃烧 → 大火球 → 房屋焦黑」：失守屋不爆火球、屋体不转炭黑的默认观感与原片不符，
+ *  关法 `?houseFx=0`（或 `battle.c03.set('houseFx', false)`）。
+ *  890611046435627008「维京人贴近小屋后朝屋顶抛橙色火团，屋顶持续燃烧」：`torches` 一直默认关 →
+ *  主战场只有「失守后爆一次火球」，没有片中开打期间的连续抛火/屋顶燃烧，关法 `?torches=0`。其余 C03 开关维持默认关。 */
+export const C03_DEFAULT_ON = ['houseFx', 'torches'];
 const hasDom = () => typeof document !== 'undefined' && !!document.body?.appendChild;
 
 export class BattleC03 {
   constructor(battle) {
     this.b = battle; this.on = Object.fromEntries(C03_FLAGS.map((k) => [k, false]));
     const q = new URLSearchParams(globalThis.location?.search ?? '');
+    for (const k of C03_DEFAULT_ON) this.on[k] = true;
     for (const k of C03_FLAGS) if (q.get(k) === '1') this.on[k] = true;
+    for (const k of C03_DEFAULT_ON) if (q.get(k) === '0') this.on[k] = false;   // 显式关：?houseFx=0 / ?torches=0
     this.group = new THREE.Group(); battle.group.add(this.group);
     // 爆炸：火球（内核 + 外辉光两层球）、焦痕（贴地圆片）、火星（点）
     this.blasts = []; this.scorches = []; this.sparks = []; this.smokes = []; this.torchList = []; this.shocks = [];

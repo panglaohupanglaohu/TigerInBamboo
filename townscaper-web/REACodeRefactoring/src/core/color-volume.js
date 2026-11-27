@@ -6,7 +6,14 @@ export function makeColorVolume({h=[.18,.35],s=[.2,.5],l=[.35,.65]}={}) {
 }
 // 离散采样（queue 残差）：原作 Inspector 的每条色带是 ~12 个离散格，不是连续渐变。
 // steps>=2 时把每个坐标吸附到 i/(steps-1) 的格点上（与原版 strip(vol,12) 同一粒度）；steps=0 连续。
-export function sampleColorVolume(vol,u,v,w,{steps=0}={}){if(![u,v,w].every(Number.isFinite)||!Number.isFinite(steps)||steps<0||steps===1||!Number.isInteger(steps))throw new RangeError('finite coordinates');const q=x=>{const c=Math.max(0,Math.min(1,x));return steps>=2?Math.round(c*(steps-1))/(steps-1):c};const end=vol.h[1]<vol.h[0]?vol.h[1]+1:vol.h[1],h=(vol.h[0]+(end-vol.h[0])*q(u))%1,s=vol.s[0]+(vol.s[1]-vol.s[0])*q(v),l=vol.l[0]+(vol.l[1]-vol.l[0])*q(w);const f=n=>{const k=(n+h*12)%12;return l-s*Math.min(l,1-l)*Math.max(-1,Math.min(k-3,9-k,1))};return [f(0),f(8),f(4)];}
+// 1710031224838771027 面板实测：H/S/L 三个轴各带自己的格数（片里是 5 / 3 / 3，不是同一个数），
+// 所以 steps 也接受 [h,s,l] 逐轴格数（数组），单数字仍按三轴同一格数（向后兼容）。
+const axisSteps=(spec,i)=>{const n=Array.isArray(spec)?spec[i]:spec;if(!Number.isFinite(n)||n<0||n===1||!Number.isInteger(n))throw new RangeError('finite coordinates');return n>=2?n:0};
+export function sampleColorVolume(vol,u,v,w,{steps=0}={}){if(![u,v,w].every(Number.isFinite))throw new RangeError('finite coordinates');
+ if(Array.isArray(steps)&&steps.length!==3)throw new RangeError('finite coordinates');
+ const nH=axisSteps(steps,0),nS=axisSteps(steps,1),nL=axisSteps(steps,2);
+ const q=(x,n)=>{const c=Math.max(0,Math.min(1,x));return n>=2?Math.round(c*(n-1))/(n-1):c};
+ const end=vol.h[1]<vol.h[0]?vol.h[1]+1:vol.h[1],h=(vol.h[0]+(end-vol.h[0])*q(u,nH))%1,s=vol.s[0]+(vol.s[1]-vol.s[0])*q(v,nS),l=vol.l[0]+(vol.l[1]-vol.l[0])*q(w,nL);const f=n=>{const k=(n+h*12)%12;return l-s*Math.min(l,1-l)*Math.max(-1,Math.min(k-3,9-k,1))};return [f(0),f(8),f(4)];}
 /** 面板上那一条离散色带（HSL 版，对应原版 strip(vol,n=12,v,w)）：固定 v、w，沿 u 取 n 格。 */
 export function colorVolumeStrip(vol,n=12,v=.5,w=.5){if(!Number.isInteger(n)||n<1||n>256)throw new RangeError('strip size');return Array.from({length:n},(_,i)=>sampleColorVolume(vol,n===1?.5:i/(n-1),v,w));}
 // 其他特征（queue 残差）：色域不只属于地面顶面 —— 每个表面特征各有一段 HSL 范围。
@@ -128,3 +135,35 @@ export function colorVolumeTerrain(w,h,vols,{scale=6,seed=1,out=new Float32Array
   const[r,g,b]=sampleCornerVolume(vol,u,slope,wob),i=(y*w+x)*3;
   out[i]=r;out[i+1]=g;out[i+2]=b}
  return{rgb:out,used,w,h};}
+
+// ---------- 1710031224838771027 面板形制：五特征 H/S/L 范围 × 逐轴格数 的地形预览 ----------
+/** 与 colorVolumeTerrain 同一分类器（Beach hh<.13 / Cliff slope>.55 / Flowers wob>.90&&hh>.30 / 其余 Grass），
+ *  但取色走面板上真正的形制 —— 每特征一条 HSL 范围 + 逐轴格数（片里 H 5 / S 3 / L 3）。
+ *  Roof 不进地形预览（原版面板也没有），只影响自身的色带。 */
+export function colorVolumeTerrainHSL(w,h,vols,{scale=6,seed=1,steps=0,out=new Float32Array(w*h*3)}={}){
+ if(!Number.isInteger(w)||!Number.isInteger(h)||w<1||h<1||!vols||out.length<w*h*3)throw new RangeError('terrain args');
+ const hs=new Float32Array(w*h);let lo=1e9,hi=-1e9;
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){const nx=x/w,ny=y/h,
+  d=Math.hypot((nx-.5)*1.6,(ny-.46)*1.9),base=Math.max(0,1-d*d*1.05),
+  v=base*.9+(cvFbm(nx*scale+seed*7.3,ny*scale+seed*3.1)-.5)*.55;
+  hs[y*w+x]=v;lo=Math.min(lo,v);hi=Math.max(hi,v)}
+ const span=Math.max(1e-6,hi-lo);for(let i=0;i<hs.length;i++)hs[i]=(hs[i]-lo)/span;
+ const at=(x,y)=>hs[Math.min(h-1,Math.max(0,y))*w+Math.min(w-1,Math.max(0,x))];
+ let gmax=1e-6;
+ for(let y=0;y<h;y+=2)for(let x=0;x<w;x+=2){const gx=(at(x+1,y)-at(x-1,y))*.5,gy=(at(x,y+1)-at(x,y-1))*.5;gmax=Math.max(gmax,Math.hypot(gx,gy))}
+ const used={Beach:0,Cliff:0,Grass:0,Flowers:0},feature=new Array(w*h).fill(null);
+ for(let y=0;y<h;y++)for(let x=0;x<w;x++){const hh=at(x,y),
+  gx=(at(x+1,y)-at(x-1,y))*.5,gy=(at(x,y+1)-at(x,y-1))*.5,
+  slope=Math.min(1,Math.hypot(gx,gy)/gmax),u=hh,wob=cvHash2(x*3+seed,y*5-seed);
+  let name;
+  if(hh<.13)name='Beach';
+  else if(slope>.55)name='Cliff';
+  else if(wob>.90&&hh>.30)name='Flowers';
+  else name='Grass';
+  const vol=vols[name];if(!vol)throw new RangeError('missing volume for classified feature');
+  used[name]++;feature[y*w+x]=name;
+  // steps 可以是全局的一份，也可以按特征各给一份（面板上每行有自己的格数）
+  const st=(steps&&typeof steps==='object'&&!Array.isArray(steps))?(steps[name]??0):steps;
+  const[r,g,b]=sampleColorVolume(vol,u,slope,wob,{steps:st}),i=(y*w+x)*3;
+  out[i]=r;out[i+1]=g;out[i+2]=b}
+ return{rgb:out,used,feature,w,h};}

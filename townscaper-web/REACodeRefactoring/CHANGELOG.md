@@ -1,3 +1,178 @@
+## 2026-11-27T08:55+08:00 · 第 255 轮：`commandRibbon` 换层判据改成逐点 navFloor 序列（`next[2]`）；A 类仍空、27 条 partial 全为卡点 B/C，done 221 不动
+
+- 新增 0 条转 done、1 条重核（改码 1 条）。总账：done **221** / partial **27** / ref 15 / na 22（285/285）。
+- 取组：`coverage-lock` IDLE、8769 起服务、`--take 4` 仍 0 条；TOP 18 路径列全 ✔（A 类连续多轮为空）→ 按规则取 B 类**一组**：`823848950553780226`（227f，`next[2]`），即 r254 挂下的同一条命令路径续收。
+- 先核实再动手：`next[0]` 的 `1459169210752507904`（609f）本轮**测了一条新路径并否掉**——`unshearPatches` 里 `smoothSeam`（三角侧纯三角顶点拉普拉斯）是**死代码**（`smooth` 恒 0、final 也从不调用），本轮接上并按 scale×smooth 搜格（`SMOOTH_STEPS=[0,2,4,8,12]`），mixed 反向 **35 → 35（一格没少）**、`smooth` 仍选 0 → 「三角侧柔性层」不成立（翻转格的第 3 点也在四边格里），**验证完即回滚，`git diff src/core/grid.js` 为空**，`buildMixedGrid({rigid:20,mergeRate:.95,square:1}).square` 与 r244 逐项相同（`flips 35 / scale .886 / maxMove 3.9295`）。故仍挂 B，需整轮做独立过渡顶点表。
+- 改码：`commandRibbon` 的换层判据从「最近折线段的两个航点 y 不同」（全局）换成**真实逐点 navFloor 序列**：`climbAt(i)` 只看样本自身楼层与前后 ±4 样本（`CLIMB_WIN`，≈0.6 世界单位）是否不同 —— 窗口内有楼层变化 = 正踩楼梯 → `surfaceHeight` 取踏面；窗口内楼层恒定 = 同层路过 → 钉 `floor*L`。同时修掉「一段爬升里还没上楼梯的样本被抬」与「两段楼梯之间隔一格平走被判成换层」两个误判；新增只读读数 `climbSamples` / `climbWin`。
+- 验收：`node tests/command-ribbon.mjs` **PASS**（quad 165 点 / `treads 5`、mixed 152 点 / `treads 4`、同层穿洞 51 点 / `maxY 0.550` / 踏面 0，r254 的修不回归）；`NODE_PATH=/tmp/pw-shim:… node tests/path-samples-browser.cjs` **PASS**（两网格 `pathMaxY 0.5500`、mixed `tunnelSamples 194`、`closedTunnel {0, 0.5}`）。
+- 如实：① 本片核缺口是**尘粒 AO**（sheet-00 全 100 帧实看：灰模崖壁凹口喷尘团，无路径线），卡点·C，故仍 partial；② 多点过渡（跨层斜切 / 连续两段楼梯）只换了判据，**没写专用夹具用例**（要造「两段楼梯 + 中间平走」的真实 World 几何，本轮 60 分钟不够）——已写进 `next[0]`。
+- 证据：`artifacts/coverage/823848950553780226-review-r255.md`（含逐帧观察与两条命令输出）。未 commit。
+
+## 2026-11-27T07:30+08:00 · 第 254 轮：`823848950553780226` 修「命令线同层穿洞被抬到墙顶」+ 三条 B/C 读数复算（done 221 / partial 27 不变）
+
+- 新增 0 条转 done、4 条重核（1 条改码、3 条只复算）。总账：done **221** / partial **27** / ref 15 / na 22（285/285）。
+- 取组：`--take 4` 仍 0 条（285/285）→ 按 `next[2]`「读数能不能复算」派 4 条：`827215002448846848`（524f 单位等级）/ `823848950553780226`（227f 尘粒 AO + 命令路径）/ `1593215065423245313`（164f 精灵图集）/ `827216768783495168`（23f 旗徽）。联系表 11 张全看（含 524 帧那条的 sheet-00~05 六张）+ 截图 2 张 ViewImage 实看。
+- 真 bug（本轮唯一改码）：`commandRibbon` 的贴地分支对**每个样本**都调 `surfaceHeight`，而 `surfaceHeight` 在「本格挂着 1→3 楼梯」时直接返回踏面高度 → **同层穿洞**的命令线被抬到墙顶，mixed 实测 `pathMaxY` **1.217**（洞里单位 y 恒 0.5）。改法：只有折线相邻两航点换层（航点 y = `floor*L + lift`）时样本才骑踏面，同层一律钉 `n.floor*L`。
+- 读数：`tests/path-samples-browser.cjs` 修前红（`Tunnel battle failed … pathMaxY 1.217`）→ 修后 **PASS**，quad `pathMaxY 0.5500 / tunnelSamples 185`、mixed `0.5500 / 194`，两网格 `maxY 0.5`；`command-ribbon.mjs` 新增第 ④ 组「同层穿洞」（`stripWorld(6,1)` + 中间两格 `setSolid(3)`）：51 点、maxY **0.550**、骑踏面 **0**；突变测试（退回无条件 `surfaceHeight`）立刻红在 `1.550 / 8 点`，恢复全绿。换层段仍骑踏面 **quad 4 / mixed 3** 点，说明没把真楼梯钉平。
+- 复算三条（残差均为卡点 B/C，如实保持 partial）：`827215002448846848` unit-promotion 两测 PASS（promotedDelta 2 / creditedDelta 5 / 4456·1624px，note 记 4560 属抖动 2.3%）；`1593215065423245313` atlas-live-browser PASS 且 `gAlpha 294780→112132=0.3804` 与 note 逐位一致；`827216768783495168` squad-standards PASS（3 面旗 / 24 盾面 / 230·407px，note 记 380 属抖动 7.1%）。
+- 翻案并修绿：`next[3]` 说 `tests/shore-browser.cjs` 红是「走 localhost 30s 超时」，**不是** —— 真因是 r253 给 `buildShore` 返回值加了 `rings` 诊断对象，用例仍 `Object.values(r).forEach(g=>g.dispose())` → `g.dispose is not a function`；筛掉非 geometry 后 **PASS**（mixed 806/1612、quad 872/1744，maxBoundaryError ≤5.8e-8）。
+- 环境：8769 的 `serve.py` 跑满 **6h17m** 开始 reset（r238 同款第二次），`path-samples-browser` 一次 30s 超时，kill 重启即绿 → 「门禁超时先查服务」再记一笔。
+- 如实：本轮 27→27 条 partial 一条没转 done；剩下 23 条未审计的 partial 全是卡点 B/C（美术资产 / 算法未公开 / 源证据），转 done 的唯一路径要么是新证据、要么是把卡点降级成「本地近似已够」——后者需要逐条论证，不能靠一句「无可执行项」结案。
+- 证据：`artifacts/coverage/{823848950553780226,827215002448846848,1593215065423245313,827216768783495168}-review-r254.md`、`artifacts/coverage/shore-browser-r254.md`、`battle-tunnel-{quad,mixed}.png`。未 commit。
+
+## 2026-11-27T05:50+08:00 · 第 253 轮：`1664566546683899905` 裙带外圈由「等比外推」改为「距离场等距 + 次序约束」→ done（done 220 → 221 / partial 28 → 27）
+
+- 新增 1 条转 done、0 条新增。总账：done **221** / partial **27** / ref 15 / na 22（285/285）。
+- 取组：A 类仍空（TOP 18 路径列全 ✔）→ `next[0]` `1459169210752507904`（独立过渡顶点表，须 1.5–2 整轮）不切半轮；取表外单条 `1664566546683899905`（340 帧 / 33.33fps / 10.2s，B 类）。
+- 全片核：sheet-00/01/02/03 四张 + 原尺寸 frame-0083 本轮实看。白细带贴石脚、淡晕随岸线，内湾变宽岬角收窄；全片无浪冠/碎浪（配文里 "more punch" 是下一条的打算）。
+- 核实出真缺口（旧 note 写「无可执行迁移项」是**低估**）：`buildShore` 的 halo 外圈是 `s+(b-s)*1.35` 等比外推，凹岸必自交 —— mixed 真页面 **30/806=3.72% 三角反向**、外推 max **2.835** vs 设计 1.046。
+- 改码：`src/water/shore.js` 外圈改「场上 march 到固定设计距离 + 次序约束（cos≥0.35 否则两端×0.6，下限 0.35×，≤32 遍）」；`?skirtField=0` 旧档；`view.shoreRings` 出逐点账。
+- 读数：mixed 反向 **30→2**、max **2.835→1.046**、CV **0.474→0.204**（march 354/403）；quad **45→15**、max **2.871→1.046**、CV **0.508→0.227**。
+- 新测 `tests/shore-skirt-field-browser.cjs` PASS；回归 `tests/shore-skirt-breakup-browser.cjs` PASS；`tests/shore-browser.cjs` 红（用例走 `localhost` 等 `window.rea` 超时，与本改动无关，未计入验收）。
+- 如实：quad 余 1.72% 反向（夹缝处场到不了目标、退等比点后压到最短）；原作精确场公式/手绘晕色调未公开。
+
+## 2026-11-27T03:20+08:00 · 第 252 轮：`1205420678859632640` 冠 alpha「随视角的定量曲线」补成可复算读数 → done（done 219 → 220 / partial 29 → 28）
+
+- 新增 1 条转 done、0 条新增。总账：done **220** / partial **28** / ref 15 / na 22（285/285）。
+- 取组：A 类仍空（TOP 18 路径列全 ✔）→ `next[0]` 的 `1459169210752507904`（独立过渡顶点表，须 1.5–2 整轮）60 分钟内装不下、不切半轮；取表外单条 `1205420678859632640`（443 帧 / 28.13fps / 15.75s）。
+- 全片核：sheet-00 / sheet-02 / sheet-04 本轮 ViewImage 实看 + 原尺寸 frame-0200 / frame-0255。片内 0249→0250 一帧内整幅套三角网并保留到 0442，**冠在三角网下只有十来片三角而轮廓仍是叶簇状** → 叶簇边来自 alpha 镂空，不是几何。
+- 核实：`leafPattern`（球面 uv 读共享 128² 图集右下 32²）+ `leafCoverage(1-rim,pattern)` + 切口墨带 + `leaf-depth` 同源 caster + `leaf-impostor` 全在位（r250 已补页面俯仰/线框入口）。
+- 新测 `tests/leaf-crown-alpha-pitch-browser.cjs` **PASS**（只留树冠 + 藏墨线外壳 + 洋红底判掩膜）：六档俯仰覆盖比 **0.936/0.935/0.936/0.936/0.921/0.952** vs 解析式 (0.08+0.35·0.5)² → 0.935；被咬掉 6.4/6.5/6.4/6.4/7.9/4.8% vs 解析 6.50%；咬边离轮廓深度 **p50=0 / p90≤2px**（六档一致）→ 缺口只贴掠射轮廓、不在冠内挖洞。
+- 如实：|N·V| 径向分箱曲线很平（切口仅 0–2px，分箱分辨不出亚像素环），定量结论用面积比 + 咬边深度；原作手绘叶簇纹样无源，本地程序叶纹近似，记美术近似不记机制缺口。
+- 试错（全回退，src 零改动）：单株 InstancedMesh 隔离 → 整片被 discard（`uLeafCenter` 按原实例写死）；亮度阈值判掩膜 → 反向外壳把冠缘压暗导致「atlas 比 solid 大 7%」的反向误判；相邻档 XOR 翻转被机位平移主导。证据 `artifacts/coverage/1205420678859632640-review-r252.md`。未 commit。
+
+## 2026-11-27T01:12+08:00 · 第 251 轮：`1769641473895432220` 球面多格联合的最差边收口 —— 病根是「跨单元共享角点无条件平均」→ done（done 218 → 219 / partial 30 → 29）
+
+- 新增 1 条转 done、0 条新增。总账：done **219** / partial **29** / ref 15 / na 22（285/285）。
+- 取组：A 类仍空（TOP 18 路径列全 ✔）→ 按「A 吃完取 B、一次 1 组」取 `next[1]` = `1769641473895432220`（479 帧 / 19.35fps / 24.7s）；`next[0]` 的 `1459169210752507904`（独立过渡顶点表，需动拓扑 1.5–2 轮）本轮仍不动，60 分钟上限装不下，不切半轮。
+- 核实（关键，推翻 r250 的归因）：r250 记「joint 最差边 0.568 反比 spring 0.297 差、edgeTol=0.2 也压不住 0.554 → 没有绝对上限」。本轮把同一 prev 链拆开量：**单元内最差边只有 0.0393**，`capPenalty=0`（放开墙倾斜上限也到 0.0393）→ 差额既不是 lean 上限、也不是 fit 算法没到底，而是页面 `jointGroupLevel` 在**跨单元共享角点上无条件取平均**，把声明模块（3 格）的边往邻居大组件（不收缩）折回，拉长约 30%。
+- 改码：① `module-group-fit.js` 新增 `worstEdgeDescent`（`minimax`/`minimaxIters`，只动最差边两端、只接受全局最差下降）+ `jacobiWorst/freeWorst/capPenalty/boundWorst` 上限口径；② `edgeTol` 补不变量「**拒收不得把结果变差**」（split 更差时保留联合解并记 `edgeTolMissed`）；③ `planet.js` 的协商由平均改为 `modulePriority` 加权（模块计 w 票，默认 **w=3**），实测曲线 w=1 0.5746/0.65 → w=2 0.3351/0.8781 → **w=3 0.2361/0.95** → w=5 0.1483/1.0185 → ∞ 0.00003/1.0725（模块最差/全局最差）。绝对优先（∞）试过后否掉：邻居要独自吃掉全部差额。
+- 新测 `tests/planet-joint-minimax-browser.cjs` **PASS**：页面 `groupReport.worst` **0.57458 → 0.2361**，六层（0.0241/0.0457/0.1575/0.1135/0.2200/0.2361）**全部低于 spring**（0.0984/0.1779/0.2015/0.2689/0.2398/0.2971）且都在既有 0.35 验收线内；`lean 28.44°≤30`、`folded 0`；minimax 单元内首迭代即 stalled（=已是极小极大解，可达 0.0393）。
+- 回归：`module-group-fit.mjs` 7/7（含改写的 edgeTol 用例）/ `module-group-conflict.mjs` 9/9 / `sphere-relax.mjs` / `planet-joint-groups-browser.cjs`（joint 均 0.0562 vs spring 0.1379、最差 0.3351）/ `sphere-joint-solver-browser.cjs` 全 PASS。
+- 如实：**邻居让步代价是真的** —— 全局最差边长差 0.65 → 0.95（页面读数「最差边长差 95.0%」即此项），根因是共享顶点表本身；要两侧各自保形得上独立过渡顶点表（与 `1459169210752507904` 同类，未做）。`minimax` 在协商后不再单调（±0.012）。原片无模块分组语义/数值、材质程序近似、运行时接入属换批。证据 `artifacts/coverage/1769641473895432220-review-r251.md`，截图 `planet-joint-minimax-r251.png`（ViewImage 实看）。未 commit。
+
+## 2026-11-26T23:30+08:00 · 第 250 轮：4 条 B/C 卡点条目补「页面入口 + 运行验收」，30 条 partial 全部 runtimeAccepted（done 218 / partial 30 不动）
+
+- 新增 0 条转 done、0 条新增。总账：done **218** / partial **30** / ref 15 / na 22（285/285）；30 条 partial 里 `implementationVerified/runtimeAccepted=false` 的从 3 条 → **0 条**。
+- 取组：队列 0 条（285/285）→ 按 r249 判据「残差是不是片中机制」取四条：`1579474420749725696`（岛生成）/ `1769641473895432220`（球面多格联合）/ `1238474550511308800`（庭院草）/ `1205420678859632640`（叶片视角 alpha）。联系表 16 张 + 原尺寸 12 张全看。
+- ① **岛屿**：新建 `bn-island-field.html`（该模块此前零页面入口）——线框档画全部三角边、着色档画同一批三角顶点色，「搭出」用同一 drawRange 口径逐三角长出（对应片中 0001→0078 线框搭出、0079 一帧切着色）。`tests/bn-island-field-browser.cjs` PASS：三角 9604、海面 6188 格零建面、种子 1/2 指纹互异（2529278416 / 4145365596）、小屋 6 座/候选 45 且逐座落草台平顶、搭出 0→28812→57624 与面片同口径、像素线框 39630 / 着色 81507 / 黄顶 13384、同状态噪声 0。
+- ② **球面多格联合**：`planet.html` 新增 `?groups=N` 把「最高格+它的 N−1 个最高相邻格」声明成模块组并传入 `cornerPositions`（此前页面从不声明 moduleGroups，joint 只按连通组件退化）。`tests/planet-joint-groups-browser.cjs` PASS：组 [7,294,646] 同高 H=6 连通；1..6 层组内平均边长误差 joint **0.0881** < spring 0.1379 < shape 0.2450；lean 28.44°≤30、folded 0。**新残差**：joint 最差边第 6 层 **0.568** 反比 spring 0.297 差，`edgeTol=0.2` 压不住（0.554）→「逐边保最优/超阈回退」只保证均值更优，没有绝对上限。
+- ③ **庭院草**：`tests/courtyard-grass-browser.cjs` 在 `garden.html` 的真实游戏 World 里 PASS —— 封闭院 26 格全格草、漏格 0、小径 13 格全叠在草上；地面开口档 0 格草；墙层镂空记 `wall-layer-gap`+`bridge` 且仍 0 草；矮墙只分区（子区>1）不改草量。
+- ④ **叶片**：`leaf-surface.html` 补「俯仰」滑杆与「线框（片中 0250 起）」开关（此前页面不能改视角，而本片机制只在换视角时才看得见）。`tests/leaf-view-angle-browser.cjs` PASS：79 株/3 物种、图集 128² 植物角 (96,96,32,32) 单例、俯仰三档相机 y 16.93/23.40/27.31、线框档边缘像素 15004→30293（×2.02）且按噪声底复原、近景 atlas vs solid 方向一致。顺带修页面真 bug：ready 轮询 `r?.view.vegetation.leafSurface` 在 vegetation 未建时抛 TypeError 打断轮询（页面永远停在「加载…」）。**帧号纠正：线框在 0249→0250 一帧内开启并保留到末帧，旧记「242 附近」偏早。**
+- 回归：`bn-island-referee.mjs` / `sphere-joint-solver-browser.cjs` / `sphere-relax-browser.cjs` / `planet-assembly-browser.cjs` / `town-visual-referee.mjs` 全 exit 0。
+- 环境坑：8769 的 serve.py 又出现 `ERR_SOCKET_NOT_CONNECTED`，页面停在加载态多次误判为「测试写错」；**先 kill 重启服务**再排代码。截图 8 张全部 ViewImage 实看。未 commit。
+
+## 2026-11-26T21:35+08:00 · 第 249 轮：`1260586697538113537` 编辑特效错拍接进主场景运行验收 → done（done 218 / partial 30）
+
+- 新增 1 条转 done、0 条新增。总账：done **218** / partial **30** / ref 15 / na 22（285/285）。
+- 取组：A 类仍空（TOP 18 路径列全 ✔）→ 按「A 吃完取 B、一次 1 组」取表外单条 `1260586697538113537`（167 帧 / 33.333fps / 5.01s，"…I can use the undo/redo stack for snappier and more directed building footage"）。
+- 核实（不是过期账，是**记错了缺口类型**）：机制齐 —— `worldmesh.js:161` 体素差分出 `edits` → `view.js:1524` `editFx.push` 排程（`edit-fx-schedule.js` 径向波 + 0.045s）→ `view.js:1566` 到期 `effects.onEdit`（`effects.js:219` 弹出 / crown 水花 / 灰尘）；
+  旧 note 的残差「导演镜头轨迹 / 剪辑节奏 / 逐动作元数据」经全片复核 = **演示选择**（片内就是一台慢推的固定相机、零剪辑点），真缺的是**主场景运行验收**（此前只有 node 纯数据层测试）。
+- 新测 `tests/edit-fx-main-browser.cjs` **11/11 PASS**：12 格批真 rebuild 全排队、`due` 差中位 **0.045s**、逐帧恰 **1 条/帧**、跨度 **0.4999s**（理论 0.495）、`crown.n` **+12**、拆除 8 格灰尘 **8**、真渲染 4s 内排空、`?editfx=0` `dropped=12` 且 `onEdit 0`、0 error。
+- 回归：`edit-fx-schedule.mjs` / `snapshot-replay-fx-r56.mjs`（14 帧 → 弹出 12 / 水花 8 / 灰尘 5）/ `obj-replay.mjs` 全 PASS。
+- 如实：不录镜头轨迹（片内为演示机位）、步长固定 0.045s 近似原片 2–4 帧/块、音效默认关。证据 `artifacts/coverage/1260586697538113537-review-r249.md`，截图 `edit-fx-stagger-r249.png`（ViewImage 实看）。未 commit。
+
+## 2026-11-26T19:45+08:00 · 第 248 轮：A 类耗尽复核 + 队列尾审计，零收口（done 217 / partial 31 不动）
+
+- 新增 0 条、转 done 0 条。总账：done **217** / partial **31** / ref 15 / na 22（285/285，账面未动，不打虚账）。
+- 开工链：`lock status` IDLE → `?:8769` = 000（serve.py 停着）→ 后台起 `python3 tools/serve.py 8769` → 200 → `lock start`。
+- **队列已空**：`tools/coverage-queue.mjs` = 「视频 285 · 已核 285 · 剩 0 / 有笔记 TODO·PARTIAL 0 / 完全未登记 0 / 下一批 0 条」；
+  `learn/GAP-PRIORITIES.md` 的 TOP 18「路径」列全 ✔（A 类确认为空）。
+- 31 条 partial 逐条核卡点：30 条已标 `卡点·B/C`（美术资产 14 / 算法未公开 11 / 源证据 1 / 换批运行时 2 / 形制+美术 2），
+  唯一有可执行残差的是 `1459169210752507904`（独立过渡顶点表，须 1.5–2 整轮）；`906416813810049025` 只剩硬边形制 + 机位。
+- 本轮未取组：60 分钟窗口内没有任何一组能走完「核实 → 改码 → 测试 → 运行/像素验收 → 证据」；按红线不把 1.5–2 轮的事切半轮试错，未 commit。
+- 机械旁证：6 个 `where` 模块无页面入口（`cloud-motion` / `mesa-field` / `bn-island-field` / `edit-fx-schedule` / `leaf-depth` / `town-visual`+`courtyard-grass`），
+  但它们记录的缺口都不是「缺入口」，补页面不转 done —— 只列下一轮候选。
+- 未跑测试（零改码）；`find ../REACode` 无输出，「用旧仓图集证伪卡点·B」这条路需先确认参照仓路径。
+
+## 2026-11-26T17:48+08:00 · 第 247 轮：五特征 H/S/L 色容体作者面板落页面入口 + 逐轴格数 → `1710031224838771027` 转 done
+
+- 一组一片、1 条转 done。总账：done **216 → 217** / partial **32 → 31** / ref 15 / na 22（285/285）。
+- A 类仍空（TOP 18 路径列全 ✔）→ 按「A 吃完取 B、一次 1 组」取表外单条 `1710031224838771027`
+  （515 帧 / 16.55fps / 31.08s，"author color volumes … define the whole color possibility space for each feature"）。
+  6 张联系表全看 + 5 帧原尺寸回看（0000/0060/0300/0440/0514）。
+- **核实**：片内**全部**是 Unity Inspector（无 3D 场景）：五行 Grass/Roof/Cliff/Beach/Flowers，各一条 H/S/L 三段范围 +
+  **逐轴格数**（Grass `H 5 0.51–0.90 / S 3 / L 3`，Cliff `H 4 0.06–0.25 / S 3 / L 3`）+ 该特征 12 格色带；末段 Roof 色带整条变紫。
+  旧 note 的「Unity 编辑面板交互本仓不可运行」核到半条过期账：8 角点取色器面板 r55 就在（`src/ui/shading-panel.js`），
+  真缺的是 ① 片里那套**逐轴不同格数**（`sampleColorVolume` 只收单数字 steps）② 该形制**没有任何页面入口** ③ 从未运行验收。
+- 改码：`color-volume.js` 的 `steps` 支持 `[h,s,l]`（单数字路径逐位不变，`n===1/非整数/长度≠3` 仍抛 RangeError）+
+  新增 `colorVolumeTerrainHSL`（与 `colorVolumeTerrain` 同一分类器、按特征各给格数、返回逐像素 `feature` 掩膜）；
+  新页 `color-volume-lab.html`（5 行 × 9 控件 + 每行 12 格色带 + 300² 实时预览，默认格数与片内一致：Cliff H4）。
+- 新测：`tests/color-volume-hsl-panel.mjs` PASS（逐轴格数 5/3/3、单特征改动零泄漏、Roof 只动色带、12 格色带）；
+  `tests/color-volume-author-browser.cjs` **PASS**：掩膜 Grass 66558 / Cliff 10272 / Beach 7056 / Flowers 6114 = 90000、
+  改 Grass H 变 **66558px 全在 Grass 掩膜**、改 Cliff L 变 **7624px 全在 Cliff 掩膜**、格数改连续唯一色 **70 → 29395** 仍零泄漏、
+  改 Roof 画布差 **0**（色带变）、复位差 **0**、同参重载 SHA-256 一致、0 console error；截图两张均 ViewImage 实看。
+- 回归：`color-volume-features.mjs` / `color-volume-corners.mjs` PASS。未 commit。
+- 如实：色带固定 12 格（片内更密）、片里无 3D 场景（左侧预览为自加）、3D 侧仍走 8 角点 + 3 桶 HSL（另有 GPU 验收），面板不直接改 3D uniform。
+- 证据：`artifacts/coverage/1710031224838771027-review-r247.md`。
+
+## 2026-11-26T15:32+08:00 · 第 246 轮：火团抛射接进主场景默认档（`torches`）→ `890611046435627008` 转 done
+
+- 一组一片、1 条转 done。总账：done **215 → 216** / partial **33 → 32** / ref 15 / na 22（285/285）。
+- A 类仍空（TOP 18 路径列全 ✔）→ 按「A 吃完取 B、一次 1 组」取表外单条 `890611046435627008`
+  （666 帧 / 30.6fps / 22.2s，"Just a birthday gif from yours truly"）。7 张联系表全看 + 5 帧原尺寸回看。
+- **核实**：旧 note「原火焰/抛射/奖励动画仍缺」里两条是过期账 ——
+  `battle-c03.js#torchStep` r56 就落了「贴屋 1.3 内 + 层差 ≤1 → 2–2.8s 抛一枚（`#ffb340` 内核 + 加法辉光 + 火星），命中 `burn += 1.1`」，
+  **真缺口是 `torches` 一直默认关**：主战场开打期间屋顶不烧，只有失守后 `houseFx` 爆一次（第 2 次同型于 r243 houseFx）。
+  奖励飘字 `KILL_VALUE` 金色走同一池（`battle.js:1500 #damagePopup kind='kill'`，已有两支测试覆盖）→ 不列缺。
+- 改码：`C03_DEFAULT_ON = ['houseFx', 'torches']` + `?torches=0` 关档；`tests/c03-battle.mjs` 默认档断言同步（用例内复位）。
+- 新测 `tests/torch-fire-main-browser.cjs` **16 项 PASS**：quad 9s 抛 **2 枚** / mixed **2 枚**（屋 4s 失守后停抛）、
+  抛物线 `maxSlack 0.5439`（= `sin(πt)·0.55`）、命中 `burn 5.05` vs 关档 `4.02`（差 1.03）、屋周橙色像素 **299 vs 0**、
+  整帧差分 121859px（79.0% 落屋格）、同状态噪声 0（首跑 2px 已如实记）、0 console error。
+- 回归：`tests/c03-battle.mjs` PASS。未 commit。
+- 证据：`artifacts/coverage/890611046435627008-review-r246.md`。
+
+## 2026-11-26T12:06+08:00 · 第 245 轮：洞口占用互斥落码（容量按净宽定价、窄口单列、宽拱并行）→ `797119718477991936` + `906425294533394432` 两片 done
+
+- 一组两片、2 条转 done。总账：done **213 → 215** / partial **35 → 33** / ref 15 / na 22（285/285）。
+  （r244 头部记的 215/33 与本轮按 `learn/data.js` 实算的 213/35 差 2 —— 记账漂移，以实算为准。）
+- A 类仍空（TOP 18 路径列全 ✔）→ 按「A 吃完取 B、一次 1 组」取 `next[1]`「洞口占用互斥：多单位同抢一个洞口的让行/排队」。
+  **核实**：r238 已把门价计价单位判清（跨几个洞口、洞身平价），「谁此刻在洞口」确实没有 —— 导航层只有代价函数、无跨单位状态，判 B 成立。
+- **不发明片里没有的拥堵**：797 的拱洞净宽 **5–6 个球径**（frame-0050 原尺寸），全片无排队帧；906 全片无单位。
+  → 容量按 `floor(净宽/(2·体径+缝))` 定价：宽拱多人并行（与片内一致），只有窄口才退成单列。
+- 改码：新 `src/world/door-occupancy.js`（占用表 + FIFO + ttl + `capacity`）；`battle-navigation.js` 加
+  `mouth(a,b)`/`mouthStats()`（key 双向同值）；`battle.js` 走路分支 `claim/release`、占着挪不动 >0.3s 主动放行、
+  每帧 `sweep` 清死者、`battle.doorReport()` 只读账、`?doors=0` 关档。
+- 运行验收（真页面，同世界 136 洞口 / 最小净宽 0.292）：宽口 6 人 `waits 4 · insideMax 4 · 32.80s`；
+  大体型（体径 0.25）在 0.29 窄口 `maxHolders 1 · waits 10 · 33.47s`；关档 `waits 0 · 32.60s`。
+  定点夹具 4 档：窄口 0.34 → 2/2/2 成批（waits 4、8.27s）；宽口 1.0 → 六人一拍（waits 0、6.10s）；
+  宽口+半径 .25（容量 1）→ 单列（waits 10、12.90s）；关档 → insideMax 6、6.13s（负对照）。
+- 新测 `tests/door-occupancy.mjs` / `tests/door-queue-battle.mjs` / `tests/door-queue-browser.cjs` 全 PASS；
+  回归 `layered-nav-holes` / `battle-navigation` / `traffic-stress` / `unit-clearance` 全 exit 0。
+  截图 `door-queue-wide-r245.png` / `door-queue-big-narrow-r245.png` 均 ViewImage 看过。
+- 仍缺（写进 next）：`1459169210752507904` 独立过渡顶点表（1.5–2 整轮）；`906416813810049025` 硬边（纯形制）。
+
+## 2026-11-26T09:58+08:00 · 第 244 轮：补丁缝的残差量到边级 + 再否掉两条折中（`1459169210752507904` 仍 partial）；`layered-nav-holes` 门禁复核已绿
+
+- 一组、未转 done。总账：done **215 → 215** / partial **33 → 33** / ref 15 / na 22（285/285）。
+  A 类仍空（TOP 18 路径列全 ✔）→ 按「A 吃完取 B、一次 1 组」续收 `next[0]`：`1459169210752507904`（609 帧 · 24.4578fps · 24.9s，"And another"）。
+- **本轮的动作是「把缺口量准 + 把错路否掉」，不是又写一种折中**：
+  ① 边级归属：反向 35 格（18 四边 + 17 三角）的 116 条边里 **74 条是 quad↔tri 的 `seam`**，`patchRim`（四边↔四边跨补丁）只有 7 条 ——
+  反向在「补丁 ↔ 三角过渡带」交界，不在补丁↔补丁；全网格 seam 512 / patchRim 28 / 边界顶点 469/1519（30.9%）。
+  ② 否掉第 7 条折中「只压补丁私有点、边界顶点冻结」→ 反向 **35 → 87**、四边格角偏差 p90 **0.00° → 69.81°**（形变全挤到第一圈）。
+  ③ 否掉第 8 条折中「加大等比收缩」→ 曲线 `scale 1.000/0.886/0.785/0.695/0.603/0.545` 对 `71/35/15/3/2/3`：
+  **缩到 0.545（内缩 45%）仍有 3 格反向且在 0.603 后反弹** → 「缩一缩就压下去」定量证伪。
+  两条试错写完即回滚，`git status` 里 `src/core/grid.js` 逐字未改（现档仍 `{patches:6, applied:1, flips:35, scale:0.886, maxMove:3.9295, roundErr:0}`）。
+- 验收：`tests/grid-patch-square.mjs` **20/20**、`tests/grid-patch-rigid.mjs` **17/17**、`tests/grid-patch-square-browser.cjs` **15 项 PASS**
+  （页面 `squareInfo {patches:3, flips:8, scale:0.886}`、格 688 = 四边 488 + 三角 200、补丁 4 块、`seam 367 / patchRim 6`、`?square=0` 时 `squareInfo=null`、0 error）、
+  `tests/grid-patch-families-browser.cjs` PASS。截图 `grid-patch-square-{off,page}-r244.png` 均 ViewImage 看过。
+- 顺带复核 r237 挂下的门禁：`tests/layered-nav-holes.mjs` **PASS**（`{covered:1, components:2, route:7, gapRoute:9}`；③b「门道只算两个洞口」段已在位）→ 该红不再是红。
+- 仍缺（写进 next）：独立过渡顶点表（469 个边界顶点各留两份 + 512 条 seam 边补三角带，须动拓扑，1.5–2 整轮）、`cell.family` 换基前存根口径。
+
+## 2026-11-26T08:20+08:00 · 第 243 轮：失守小屋的火球与炭黑接线到主场景默认档（`houseFx` 默认开），补坡面下坡脚高验收
+
+- 一组、1 条转 done。总账：done **214 → 215** / partial **34 → 33** / ref 15 / na 22（285/285）。
+  A 类仍空（TOP 18 路径列全 ✔）→ 按「A 吃完取 B、一次 1 组」取 `828984794407170048`（387 帧 · 30.641fps · 12.63s，"PRO TIP: Protect your real estate investments…"）。
+- **核实**：旧 note 三条「原火球/动作/坡面未复现」拆开看 —— 火球与屋体焦黑 r56 就落在 `battle-c03.js#houseStep/#charHouse`（文件头署本片 ID），
+  坡面接敌靠 `unit-ground-height.js` + `BattleNavigation.footHeight`。真缺口只有一条：**`houseFx` 一直默认关**（`C03_FLAGS` 全 false），
+  主场景里小屋失守只被 C01 压黑顶点，不爆火球、没有辉光 —— 片 ③ 的观感在主场景根本看不到。
+- 改码：`battle-c03.js` 增 `C03_DEFAULT_ON = ['houseFx']`（照 C01 `houseChar`、C02 `scorch` 先例）+ `?houseFx=0` 关档；其余 C03 开关仍默认关。
+- 验收：新测 `tests/house-fire-slope-browser.cjs` **20 项 PASS** —— 起火 4.1s → 失守 4.02s → 2.2s 后爆（glow 层 8 组、scale 0.409→0.617→0.362 先胀后缩、
+  `maxFireball` 0.618、`charredVerts` 206、烟源 2、同状态噪声 0）；坡面楼梯 rise 2 下坡 y 3.000→2.0001、min(y−footHeight)=0、落定误差 0.001、过 4 档踏面；
+  关档 `?houseFx=0` 同夹具 0 球 0 焦黑；开/关差分 **71144px**、99.3% 落在屋投影 ±40px 内；控制台 0 error。
+  回归 `unit-ground-height-battle` / `unit-ground-height` / `c03-battle`（断言改「只开 houseFx」）/ `house-char` 全 PASS。
+- 如实：片内是平滑白垩斜面，本仓是分级台地 + 楼梯（2 层落差时缓动滞后 max 0.79 格，落定即 0）；火球 r=0.62 比片内「两倍屋高」保守。
+
 ## 2026-11-26T07:18+08:00 · 第 242 轮：登陆规划盒子把「泊位 → 长车道」画成对（候选车道盒补长盒 + 按泊位分色），出运行验收
 
 - 一组、1 条转 done。总账：done **213 → 214** / partial **35 → 34** / ref 15 / na 22（285/285）。

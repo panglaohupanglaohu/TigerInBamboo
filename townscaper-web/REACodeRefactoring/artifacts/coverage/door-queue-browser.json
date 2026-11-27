@@ -1,0 +1,182 @@
+{
+  "wide": {
+    "radius": 0.055,
+    "doorsOn": true,
+    "start": 91,
+    "goal": 1359,
+    "cells": 6,
+    "arrived": 6,
+    "arrivedAt": 32.8,
+    "crossed": 6,
+    "crossAt": [
+      16.27,
+      16.4,
+      16.7,
+      16.87,
+      17.13,
+      17.4
+    ],
+    "insideMax": 4,
+    "maxHolders": 3,
+    "maxHoldByKey": {
+      "1969>1970": 2,
+      "1120>1913": 3
+    },
+    "mouths": {
+      "mouths": 136,
+      "narrow": 0,
+      "minWidth": 0.2918803994939083,
+      "bodyDiameter": 0.11
+    },
+    "waits": 4,
+    "waitFrames": 40,
+    "stalls": 2,
+    "report": {
+      "on": true,
+      "mouths": {
+        "mouths": 136,
+        "narrow": 0,
+        "minWidth": 0.2918803994939083,
+        "bodyDiameter": 0.11
+      },
+      "occupancy": {
+        "claims": 212,
+        "granted": 14,
+        "denied": 40,
+        "released": 14,
+        "expired": 0,
+        "evicted": 0,
+        "maxQueue": 1,
+        "mouths": 0,
+        "holders": 0,
+        "queue": 0,
+        "holding": 0,
+        "ttl": 1.2
+      },
+      "unitsHolding": 0,
+      "unitsWaiting": 0,
+      "waits": 4,
+      "waitFrames": 40,
+      "lastDenied": {
+        "key": "1969>1970",
+        "holders": 2,
+        "cap": 2,
+        "queue": 1,
+        "reason": "full"
+      }
+    }
+  },
+  "big": {
+    "radius": 0.12,
+    "doorsOn": true,
+    "start": 91,
+    "goal": 1359,
+    "cells": 6,
+    "arrived": 6,
+    "arrivedAt": 33.47,
+    "crossed": 6,
+    "crossAt": [
+      15.6,
+      15.93,
+      16.3,
+      16.63,
+      17.1,
+      17.5
+    ],
+    "insideMax": 2,
+    "maxHolders": 1,
+    "maxHoldByKey": {
+      "1969>1970": 1,
+      "1120>1913": 1
+    },
+    "mouths": {
+      "mouths": 136,
+      "narrow": 0,
+      "minWidth": 0.2918803994939083,
+      "bodyDiameter": 0.11
+    },
+    "waits": 10,
+    "waitFrames": 68,
+    "stalls": 0,
+    "report": {
+      "on": true,
+      "mouths": {
+        "mouths": 136,
+        "narrow": 0,
+        "minWidth": 0.2918803994939083,
+        "bodyDiameter": 0.11
+      },
+      "occupancy": {
+        "claims": 218,
+        "granted": 12,
+        "denied": 68,
+        "released": 12,
+        "expired": 0,
+        "evicted": 0,
+        "maxQueue": 1,
+        "mouths": 0,
+        "holders": 0,
+        "queue": 0,
+        "holding": 0,
+        "ttl": 1.2
+      },
+      "unitsHolding": 0,
+      "unitsWaiting": 0,
+      "waits": 10,
+      "waitFrames": 68,
+      "lastDenied": {
+        "key": "1120>1913",
+        "holders": 1,
+        "cap": 1,
+        "queue": 1,
+        "reason": "full"
+      }
+    }
+  },
+  "off": {
+    "radius": 0.12,
+    "doorsOn": false,
+    "start": 91,
+    "goal": 1359,
+    "cells": 6,
+    "arrived": 6,
+    "arrivedAt": 32.6,
+    "crossed": 6,
+    "crossAt": [
+      15.57,
+      15.83,
+      16.13,
+      16.4,
+      16.73,
+      17.03
+    ],
+    "insideMax": 2,
+    "maxHolders": 0,
+    "maxHoldByKey": {},
+    "mouths": {
+      "mouths": 136,
+      "narrow": 0,
+      "minWidth": 0.2918803994939083,
+      "bodyDiameter": 0.11
+    },
+    "waits": 0,
+    "waitFrames": 0,
+    "stalls": 0,
+    "report": {
+      "on": false,
+      "mouths": {
+        "mouths": 136,
+        "narrow": 0,
+        "minWidth": 0.2918803994939083,
+        "bodyDiameter": 0.11
+      },
+      "occupancy": null,
+      "unitsHolding": 0,
+      "unitsWaiting": 0,
+      "waits": 0,
+      "waitFrames": 0,
+      "lastDenied": null
+    }
+  },
+  "errors": []
+}

@@ -1,0 +1,70 @@
+{
+  "ok": 16,
+  "fixture": {
+    "torches": true,
+    "houseFx": true,
+    "floor": 2,
+    "cell": 1192,
+    "burn0": 0,
+    "t0": 0,
+    "hits0": 0
+  },
+  "mid": {
+    "steps": 19,
+    "sec": 0.32,
+    "sawMid": true,
+    "inFlight": 1,
+    "torches": 1,
+    "hits": 0,
+    "burn": 0.32,
+    "lost": false,
+    "sparks": 6,
+    "blasts": 0,
+    "maxSlack": 0.5439,
+    "arcSamples": 19
+  },
+  "housePx": {
+    "x": 560,
+    "y": 389
+  },
+  "rest": {
+    "torches": 2,
+    "hits": 2,
+    "burn": 5.05,
+    "lost": true,
+    "fires": 2,
+    "smoke": 2
+  },
+  "off": {
+    "torches": false,
+    "mid": 0,
+    "rest": 0,
+    "hits": 0,
+    "burn": 4.02
+  },
+  "pixel": {
+    "box": [
+      410,
+      219,
+      710,
+      509
+    ],
+    "orangeOn": 299,
+    "orangeOff": 0,
+    "diff": 121859,
+    "bbox": [
+      158,
+      50,
+      783,
+      572
+    ]
+  },
+  "mixed": {
+    "torches": 2,
+    "hits": 2,
+    "burn": 4.02,
+    "lost": true,
+    "fires": 2,
+    "smoke": 2
+  }
+}

@@ -37,22 +37,22 @@
       },
       "pixel": {
         "noise": 0,
-        "onVsOff": 21675,
-        "diffShare": 0.655,
-        "diffRuns": 7,
+        "onVsOff": 18636,
+        "diffShare": 0.638,
+        "diffRuns": 6,
         "diffTotal": 362,
         "bucket": {
           "on": {
             "lowN": 130,
             "highN": 176,
-            "lowMean": 32.6,
-            "highMean": 98.8
+            "lowMean": 29.5,
+            "highMean": 97.9
           },
           "off": {
             "lowN": 130,
             "highN": 176,
-            "lowMean": 128.6,
-            "highMean": 115.8
+            "lowMean": 128.8,
+            "highMean": 114.9
           }
         }
       }
@@ -94,22 +94,22 @@
       },
       "pixel": {
         "noise": 0,
-        "onVsOff": 28144,
-        "diffShare": 0.651,
-        "diffRuns": 9,
+        "onVsOff": 17601,
+        "diffShare": 0.626,
+        "diffRuns": 6,
         "diffTotal": 436,
         "bucket": {
           "on": {
             "lowN": 156,
             "highN": 213,
-            "lowMean": 38.6,
-            "highMean": 105.2
+            "lowMean": 34.7,
+            "highMean": 104.2
           },
           "off": {
             "lowN": 156,
             "highN": 213,
-            "lowMean": 115,
-            "highMean": 115.6
+            "lowMean": 111.2,
+            "highMean": 114.9
           }
         }
       }

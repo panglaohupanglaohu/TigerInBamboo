@@ -13,6 +13,8 @@ import { configureCombatUnit, damageCombatUnit } from '../core/combat-profile.js
 import { beginSpearThrust, stepSpearThrust } from '../core/spear-thrust.js';
 import { hitShove, shouldFallIntoWater, beginKnockoff, beginDrown, DROWN_SINK_SEC, stepSplashes } from '../core/knockoff-water.js';   // opt-in：view.knockoffWater=true 才接击退落水（缺省行为不变）
 import { narrowCells, leftLaneTarget, passageMarkers, localSeparation, heightRaster, sightFade } from '../world/traffic.js';
+// 906425294533394432 / 797119718477991936：洞口占用互斥（窄门排队、宽拱多人）。容量按净宽定价，`?doors=0` 关档。
+import { DoorOccupancy } from '../world/door-occupancy.js';
 import { installPointFloor, syncPointFloor, pointPx } from '../world/point-floor.js';
 import { damageValue, addDamageNumber, stepDamageNumbers, styleFor, KILL_VALUE } from './damage-numbers.js';
 import { InfoGraph } from './info-graph.js';
@@ -170,6 +172,9 @@ export class Battle {
     this.footprintLines.renderOrder = 31; this.footprintLines.frustumCulled = false; this.footprintLines.visible = false;
     this.footprintNet = new THREE.Group(); this.footprintNet.add(this.footprintLines); this.group.add(this.footprintNet);
     this.footprintOn = typeof location === 'undefined' ? true : new URLSearchParams(location.search).get('footprint') !== '0';
+    // 906425294533394432 / 797119718477991936（第 245 轮）：洞口占用互斥。默认开，`?doors=0` 关档（对照组）。
+    this.doorsOn = typeof location === 'undefined' ? true : new URLSearchParams(location.search).get('doors') !== '0';
+    this.doorStats = { waits: 0, waitFrames: 0, lastDenied: null };
     this.footprintStats = null; this._fpStamp = -1e9; this._fpSel = null;
     this.path = new THREE.Points(new THREE.BufferGeometry(), new THREE.PointsMaterial({ color: '#ffffff', size: 5, sizeAttenuation: false, depthTest: false }));
     this.path.renderOrder = 30; this.group.add(this.path);
@@ -260,6 +265,15 @@ export class Battle {
     return this.c01Param;
   }
 
+  /** 906425294533394432 / 797119718477991936：洞口占用的运行读数（验收用；只读，不改任何状态）。 */
+  doorReport() {
+    const mouths = this.navigation?.mouthStats?.() ?? null;
+    const occupancy = this.doors?.summary() ?? null;
+    let unitsHolding = 0, unitsWaiting = 0;
+    for (const u of this.units) { if (u.dead) continue; if (u.doorHold) unitsHolding++; if (u.doorWaiting) unitsWaiting++; }
+    return { on: !!this.doors, mouths, occupancy, unitsHolding, unitsWaiting, waits: this.doorStats?.waits ?? 0, waitFrames: this.doorStats?.waitFrames ?? 0, lastDenied: this.doorStats?.lastDenied ?? null };
+  }
+
   /* ------------------------------------------------------------ 开局 */
   start(world) {
     this.stop();
@@ -268,6 +282,9 @@ export class Battle {
     // 原片里人群是在导航面内连续地流，不是排成一列走格心；逐面常量只剩 fallback。
     // 关掉仍可用 battle.g3.set('continuousFlow', false) 或 URL `?continuousFlow=0`。
     this.navigation = new BattleNavigation(world,this.view.index,{levelHeight:this.L,continuousFlow:true});
+    // 906425294533394432 / 797119718477991936：洞口占用表随开局重建（跨单位状态，不能挂在一棵树上）。
+    this.doors = this.doorsOn ? new DoorOccupancy() : null;
+    this.doorStats = { waits: 0, waitFrames: 0, lastDenied: null };
     this.running = true;
     this.t = 0; this.scale = 1; this.paused = false; this.wave = 0; this.nextWave = 3; this.selected = null;
     this.units = []; this.squads = []; this.boats = []; this.arrows = []; this.houses = [];
@@ -1059,6 +1076,35 @@ export class Battle {
       if (this.c01.on.column) { const st = this.c01.steer(u, plan, tx, tz, near); tx = st.tx; tz = st.tz; steerK = st.speed ?? 1; }
       const dx = tx - u.x, dz = tz - u.z, d = Math.hypot(dx, dz);
       const speed = (u.team === TEAM.DEF ? 0.9 : 0.75) * steerK;
+      // 906425294533394432 / 797119718477991936（第 245 轮）：洞口占用互斥。
+      // 这一步要跨洞口（同层、一侧头顶有实心层）→ 先申请；容量按**净宽**定价（窄门 1 人、宽拱多人）。
+      // 满员就停在洞前（这就是排队），队首先过；离开洞口 / 掉头 / 到位都会立刻放行，死亡由 sweep 兜底。
+      if (this.doors) {
+        const mouth = this.navigation.mouth(plan.from, plan.next);
+        if (!mouth) { if (u.doorHold) { this.doors.release(u.uid); u.doorHold = null; u.doorWaiting = false; } u.doorStall = 0; }
+        else {
+          // 「占着洞口却挪不动」超过 0.3s → 主动放行（对面堵死时两边互等的唯一出路；FIFO 保证让给对面排队的人）
+          const moved = u._doorX === undefined || Math.hypot(u.x - u._doorX, u.z - u._doorZ) > 1e-4;
+          u._doorX = u.x; u._doorZ = u.z;
+          u.doorStall = moved ? 0 : (u.doorStall ?? 0) + dt;
+          const cap = DoorOccupancy.capacity(mouth.width, u.radius ?? this.navigation.radius);
+          const g = this.doors.claim(u.uid, mouth.key, { t: this.t, cap });
+          if (g.granted && u.doorStall > .3) {
+            this.doors.release(u.uid); u.doorHold = null; u.doorStall = 0;
+            this.doorStats.stalls = (this.doorStats.stalls ?? 0) + 1;
+            u.face = Math.atan2(dx, dz);
+            continue;
+          }
+          if (g.granted) { u.doorHold = mouth.key; u.doorWaiting = false; }
+          else {
+            if (!u.doorWaiting) { this.doorStats.waits++; u.doorWaiting = true; }
+            this.doorStats.waitFrames++;
+            this.doorStats.lastDenied = { key: mouth.key, holders: g.holders, cap: g.cap, queue: g.queue, reason: g.reason };
+            u.face = Math.atan2(dx, dz);
+            continue;
+          }
+        }
+      }
       if (d > 0.02) {
         const s = Math.min(d, speed * dt) / d;
         // Local overlap separation supplements the stable lane target above.
@@ -1069,6 +1115,8 @@ export class Battle {
       // 828984794407170048：层高缓动已上移到本循环前段 —— 落地/近战/待命所有接地状态共用同一处，
       // 走路分支不再单写一遍（写两遍会让移动单位每帧缓动两次、等效速率翻倍，不是已验收的 exp(-10) 解析曲线）。
     }
+    // 洞口占用收尾：死者/消失者的占用与排队要立刻摘掉，否则后面的人会白等一个 ttl。
+    if (this.doors) this.doors.sweep((id) => this.units.some((u) => u.uid === id && !u.dead), this.t);
     // 小屋：维京人在门口站够 4 秒 → 着火
     for (const h of this.houses) {
       if (h.lost || !h.door) continue;

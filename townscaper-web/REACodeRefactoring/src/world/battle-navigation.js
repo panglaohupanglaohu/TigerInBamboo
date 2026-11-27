@@ -241,13 +241,57 @@ export class BattleNavigation {
     const nodeAt=(p)=>{const c=this.index.cellAt(p[0],p[2]);if(!c)return null;const id=this.graph.nearest(c,(p[1]-lift)/this.L),n=this.graph.nodes[id];return n&&Math.abs(n.floor*this.L-(p[1]-lift))<=this.L*2.01?n:null;};
     const smooth=smoothRoutedPath(points,{perSeg,accept:(p,i)=>{const n=nodeAt(p);if(!n)return false;const a=nodeAt(points[i]),b=nodeAt(points[i+1]??points[i]);return !!n&&(n===a||n===b)&&this.discFits(n,p[0],p[2],Math.min(halfWidth,.08));}});
     const s=samplePath(smooth,{spacing,maxSamples});
-    s.points=s.points.map(p=>{const n=nodeAt(p);return n?[p[0],this.surfaceHeight(p[0],p[2],n)+lift,p[2]]:p;});
+    // 换层判据：**真实逐点楼层序列**（r255）。原来是「最近折线段两端 y 不同」的全局判据，
+    // 有两处读不准：① 一段爬升里，还没上楼梯的样本也被抬到踏面；② 两段楼梯之间隔一格平走时，
+    // 平走那一段被最近的爬升段判成换层。现在只看本样本的 navFloor 与前后 ±CLIMB_WIN 个样本是否不同：
+    // 楼层在窗口内有变化 = 正踩在楼梯上 → 骑踏面；窗口内楼层恒定 = 同层路过（洞口/平台）→ 钉 floor*L。
+    const CLIMB_WIN=4;   // ≈0.6 世界单位（spacing 0.15）：够覆盖一格楼梯，又跨不到邻段的平走
+    const nodes=s.points.map(p=>nodeAt(p));
+    const fl=nodes.map(n=>n?n.floor:null);
+    const climbAt=(i)=>{
+      const f=fl[i]; if(f==null)return false;
+      for(let d=1;d<=CLIMB_WIN;d++){
+        const a=fl[i-d],b=fl[i+d];
+        if(a!=null&&a!==f)return true;
+        if(b!=null&&b!==f)return true;
+      }
+      return false;
+    };
+    s.points=s.points.map((p,i)=>{const n=nodes[i];if(!n)return p;
+      const h=climbAt(i)?this.surfaceHeight(p[0],p[2],n):n.floor*this.L;
+      return [p[0],h+lift,p[2]];});
+    s.climbSamples=s.points.reduce((c,_,i)=>c+(climbAt(i)?1:0),0);
+    s.climbWin=CLIMB_WIN;
     const width=(p)=>{const n=nodeAt(p);if(!n)return halfWidth*.5;let w=halfWidth;const c=n.cell;
       for(let i=0;i<c.n;i++){const a=c.pts[i],b=c.pts[(i+1)%c.n],open=this.graph.adj[n.id].some(e=>this.graph.nodes[e.to].cell.id===c.edgeNeighbors[i]);if(open)continue;
         const ex=b.x-a.x,ez=b.z-a.z;w=Math.min(w,Math.abs(ex*(p[2]-a.z)-ez*(p[0]-a.x))/(Math.hypot(ex,ez)||1));}
       return Math.max(.02,w);};
     s.cells=ribbonCells(s.points,{halfWidth:width});s.smoothed=smooth.length;
     return s;
+  }
+  /** 洞口 = 同层、一侧头顶还有实心层（covered）另一侧没有的格边 —— r238 的门价就是按这条边界收的。
+   *  返回 {key, edge, width, x, z, fromCovered}；key 双向同值（两个方向抢的是**同一个**洞口）。 */
+  mouth(a, b) {
+    if (!a || !b || a.floor !== b.floor) return null;
+    const w = this.world, ca = a.floor < w.top(a.cell), cb = b.floor < w.top(b.cell);
+    if (ca === cb) return null;
+    const e = this.graph.adj[a.id]?.find((x) => x.to === b.id);
+    if (!e) return null;
+    const lo = Math.min(a.cell.id, b.cell.id), hi = Math.max(a.cell.id, b.cell.id);
+    return { key: lo + '>' + hi, edge: e.portal.edge, width: e.portal.width, x: e.portal.x, z: e.portal.z, fromCovered: ca };
+  }
+  /** 906425294533394432：洞口「几个人同时在门口」的只读账（Battle 的占用表按这里的 width 定价）。 */
+  mouthStats() {
+    this.refresh();
+    const seen = new Set(); let narrow = 0, minWidth = Infinity;
+    for (const n of this.graph.nodes) for (const e of this.graph.adj[n.id]) {
+      const m = this.mouth(n, this.graph.nodes[e.to]);
+      if (!m || seen.has(m.key)) continue;
+      seen.add(m.key);
+      if (m.width < 2 * this.radius + .02) narrow++;
+      minWidth = Math.min(minWidth, m.width);
+    }
+    return { mouths: seen.size, narrow, minWidth: Number.isFinite(minWidth) ? minWidth : null, bodyDiameter: 2 * this.radius };
   }
   canMelee(a,b){return Math.abs(a.y-b.y)<this.L*.6&&this.clearSegment({x:a.x,y:a.y+.1,z:a.z},{x:b.x,y:b.y+.1,z:b.z});}
 }
