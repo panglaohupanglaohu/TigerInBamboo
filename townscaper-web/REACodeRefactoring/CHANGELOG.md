@@ -1,3 +1,15 @@
+## 2026-11-27T09:08+08:00 · 第 256 轮：`commandRibbon` 多点过渡（窗口按楼梯进深自适应）+ 8769 自愈守护（serve.py backlog） + 2 条 partial 读数复算
+
+- 新增 0 条转 done、3 条重核 + 1 条工具项（改码 1 条、工具 1 条、只复算 2 条）。总账：done **221** / partial **27** / ref 15 / na 22（285/285）。
+- 取组：`coverage-lock` IDLE、8769 在跑（1h11m，未满 6h）、`--take 4` 仍 0 条 → 按 `next` 取：`823848950553780226`（`next[0]` 多点过渡夹具）、`next[2]` 服务自愈、`next[3]` 审计两条（`1215642481162887168` / `1580835075629133825`）。
+- **环境事故（本轮现场）**：`tests/path-samples-browser.cjs` 30s 超时，`curl /index.html` 却 200 —— 抓 `requestfailed` 拿到 `net::ERR_CONNECTION_RESET` 在 `src/core/deformation-guard.js`，`window.rea` 根本不存在。`kill` 重启即绿。前两次（r238/r254）也都栽在这里，本轮把它当条目做掉。
+- 改码（①）：`commandRibbon` 换层窗口**按楼梯进深自适应**。r255 的 `±CLIMB_WIN`（4 样本 ≈0.6 世界单位）比一段楼梯进深 `rise·3·0.11`（rise=2 → 0.66）还短：楼梯靠里那头已经在踏面上、楼层却要到洞口才变，于是命令线先贴地钻进楼梯、再一步跳 `rise·L`。新判据只在**几何命中踏面**（`stairAt`）时把窗口放到「整段楼梯进深 + 原窗口」，没踩踏面仍用短窗口 —— 所以「同层穿过挂着楼梯的墙洞」依旧不抬升。
+- 验收（①）：`node tests/command-ribbon.mjs` **PASS**：quad 165 点 `treads 6`、mixed 152 点 `treads 5`、④ 同层穿洞 51 点 `maxY 0.550`/踏面 0（r254 的修不回归）、**新增 ⑤ 多点过渡** 60 点 `treads 18` / 钉层 42 / **单步最大 0.167（改前 0.833）** / 中间平走 13 点全钉 1.55。突变测试：窗口退回固定 `CLIMB_WIN` → ⑤ 立即红，还原即绿。`NODE_PATH=… node tests/path-samples-browser.cjs` **PASS**（两网格 `pathMaxY 0.550`、`tunnelSamples 185/194`、`maxY 0.5`、`errors []`），`battle-tunnel-quad.png` 已 ViewImage 实看。
+- 工具（②）：`tools/serve.py` 换 `ThreadingHTTPServer` 子类（`request_queue_size=256`、`daemon_threads`、`allow_reuse_address`，默认 backlog 只有 5，并行拉几十个 module 时被内核 reset）；新增 `tools/serve-guard.mjs`（子进程退出即重启 / 每 30s 探活连败 2 次重启 / 跑满 6h 主动重启，打 `SERVE-PID`）。`node tests/serve-guard.mjs` **PASS**：并行 40 条 module 全 200（0 失败、10.7MB）、`SIGKILL` 子进程后 454ms 换 pid、`--max-age-ms 1200` 满龄 1258ms 换 pid。runbook §1 改成「非 200 就用守护起 + 满 6h 就重启」。**未证明** backlog=5 在 macOS 必现 reset，只写归因与处置。
+- 只复算（③④）：`1215642481162887168`（330f 水上小镇）→ `tests/water-town.mjs` 四子项全绿；`1580835075629133825`（185f 拱洞峡谷）→ `tests/surface-bounce.mjs` PASS（gain1 1.296 / gain2 1.323 / warmth -0.037→-0.003 / r 0.528→0.892 / shapeErr 35%）。两条都保持 partial：岸线生长动画的定量对照、形因子接口仍未迁。
+- 旁注（如实）：本任务**没有**执行任何 `git commit/push`；但用户自己的 workshop 流水线在 09:02:46 以 `8e2797ec2 · Size the climb window to the stair depth on the command ribbon` 把本轮 `battle-navigation.js` / `command-ribbon.mjs` 的改动一起提交了（同一提交还带了它的 run 日志与截图）。改动本身是本轮的，提交动作不是本轮做的。
+- 证据：`artifacts/coverage/823848950553780226-review-r256.md`、`1215642481162887168-review-r256.md`、`1580835075629133825-review-r256.md`、`serve-guard-r256.md`。
+
 ## 2026-11-27T08:55+08:00 · 第 255 轮：`commandRibbon` 换层判据改成逐点 navFloor 序列（`next[2]`）；A 类仍空、27 条 partial 全为卡点 B/C，done 221 不动
 
 - 新增 0 条转 done、1 条重核（改码 1 条）。总账：done **221** / partial **27** / ref 15 / na 22（285/285）。

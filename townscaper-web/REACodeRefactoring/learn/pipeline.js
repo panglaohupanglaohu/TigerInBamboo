@@ -10485,8 +10485,8 @@ window.PIPELINE = {
         "sourceGap": "形因子/参考接口已核销：裁判形因子+暴力参考+audit 迁移并逐位对拍（含裁判第二跳 src===E 别名的 inPlace 复现）；残差=原片算法未公开（卡点·C，永久）、裁判演示岛/渲染器=bouncelab 专用越界项。",
         "sourceEvidence": {
           "status": "partial",
-          "where": "src/core/voxel-distance.js · src/light/lightvolume.js · src/light/surface-bounce.js · tests/surface-bounce-referee.mjs · lightvolume.html",
-          "note": "185帧全复核：拱洞峡谷的转光照，没有独立反弹开关，不能从画面证明逆平方/表面形因子。保留既有共享体素反弹，补距离场保守步进与DDA兜底对照。形因子/参考接口残差核销（2026-11-25）：裁判 bouncegi.js 本有真形因子 F=cosI·cosJ·A_j/(r²+pitch²/4)+蒙特卡洛bruteForce+audit，此前批已迁 src/light/surface-bounce.js（split校准、calibration回物理值1，已接 view-shading surfacebounce）；本轮补裁判对拍 tests/surface-bounce-referee.mjs——同一场 directLight 与 bruteForce/hitRate 逐位一致、legacy gather≤1ulp；实测发现裁判第2跳起 src===E 别名的就地Gauss–Seidel语义，bounce 加 inPlace 选项逐位复现（bounces:2 对拍≤1e-6，默认Jacobi差0.13如实记）；裁判峡谷场上 split r 0.501→0.831、形状误差90.4%→43.2%。裁判 makeCanyon 合成岛/renderRay 2.5D渲染仅 bouncelab.html 演示用，本侧由共享World surfaceFieldFromWorld 承接，无可执行迁移项。剩：原片反弹算法未公开，画面不足以证明逆平方/形因子归属。；【卡点·C 算法未公开】原片反弹算法未公开：配文只说\"first decent attempt to actually have the light *bounce*\"，画面不足以反推逆平方/形因子；裁判形因子/暴力参考已迁并对拍核销，本地近似口径如上 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似"
+          "where": "src/light 共享体素反弹 · surface-bounce",
+          "note": "185帧全核（sheet-00/01 本轮全看）；只复算不改码：tests/surface-bounce.mjs PASS（gain1 1.296/gain2 1.323/warmth -0.037→-0.003/r 0.528→0.892），片内无独立反弹开关，不能从画面证明逆平方或形因子；shapeErr 35% 仍偏，形因子接口未迁"
         },
         "basis": "本次工程补全优先级判断；不更改原库 partial 状态，不代表本轮实现验收"
       },
@@ -11101,8 +11101,8 @@ window.PIPELINE = {
         "sourceGap": "完整建造美术仍缺（卡点·B，r221 核销为永久卡点）；机制落点与真实双网格2→1闭环/恢复小镇均通过，拱底精确截面旧账已随 arch-profile 批落码。",
         "sourceEvidence": {
           "status": "partial",
-          "where": "src/water/shore.js · src/core/shore-loops.js · src/world/townDemo.js",
-          "note": "330帧全核验：空水面逐块长出码头/房屋/拱口/多塔，岸线与倒影跟随。2026-11-25残差核账（tests/water-town.mjs 四场景锁定）：水上码头=1层灰石基座自y=0入水外鼓+压顶铺地+临水栏杆；水上悬浮块=钢腿端停y=0水面、逐角posts锚点交shore.js画泡沫圈；跨水拱=两对边1层码头支撑悬浮块→archFloorBudget(floor=0)+archProfile解析椭圆，端点/拱顶精确、形变误差有界——旧账「拱底精确截面」已随arch-profile批落码属过期；种子镇seed330一次齐出码头/拱/后院/水上钢腿房。真实双网格2→1闭环及恢复小镇保留（shore-topology-review.md）。完整建造美术仍缺。；【卡点·B 美术资产】完整建造美术仍缺。 → 卡在原片美术资产（贴图/模型/动画/UI 稿），没有源素材，程序化只能近似；r221核销：tests/water-town.mjs 四场景复跑全过、机制五文件（shore/shore-loops/townDemo/arch-floor-budget/arch-profile）vendor 逐字一致；剩余残差仅「完整建造美术」=原片未公开资产，无可执行残差，永久卡点，需新证据再立项"
+          "where": "src/water/water-town.js · index.html?scene=water",
+          "note": "330帧全核（sheet-00/03 本轮重看，01/02 沿 r207）；只复算不改码：tests/water-town.mjs 四场景锁定仍全绿（水上码头/钢腿泡沫锚点/跨水拱精确拱底/种子小镇），读数可复算；仍缺原作岸线生长动画与倒影强度定量对照"
         },
         "basis": "r221 残差核销复核；不更改原库 partial 状态，不代表本轮实现验收"
       },
@@ -11913,8 +11913,8 @@ window.PIPELINE = {
         "sourceGap": "原尘粒AO精确算法未公开；本地近似 particleAO 与命令路径弧长采样迁移均已落地，不冒充原作。",
         "sourceEvidence": {
           "status": "partial",
-          "where": "src/world/battle-navigation.js#commandRibbon · route-preview.html",
-          "note": "227帧全核（sheet-00 重看）；r255 收 next[2]：commandRibbon 换层判据由「最近折线段两端 y 不同」改成真实逐点 navFloor 序列（±4 样本窗口），同层路过/两段楼梯间平走不再被判成换层，climbSamples/climbWin 出读数；command-ribbon.mjs PASS（quad 踏面5/mixed 4、同层穿洞 maxY 0.550 踏面0）、path-samples-browser.cjs PASS（pathMaxY 0.550、tunnelSamples 194）。仍缺：尘粒 AO 本体=本地近似（卡点C 算法未公开）；多点过渡专用夹具用例未写（需造两段楼梯+中间平走的真实 World）；"
+          "where": "src/world/battle-navigation.js#commandRibbon · index.html?scene=badnorth",
+          "note": "227帧全核（sheet-00 本轮重看）；r256 补多点过渡夹具：两段 rise=2 楼梯+中间平走，换层判据改为「几何命中踏面时窗口放到整段楼梯进深」，命令线单步最大 0.833→0.167（一级踏面），中间平走 13 点全钉 1.55；片内尘粒 AO 仍无独立实现"
         },
         "basis": "本次工程补全优先级判断；不更改原库 partial 状态，不代表本轮实现验收"
       },

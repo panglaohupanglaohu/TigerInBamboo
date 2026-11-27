@@ -34,4 +34,16 @@ class NoCache(http.server.SimpleHTTPRequestHandler):
         super().end_headers()
 
 port = int(sys.argv[1]) if len(sys.argv) > 1 else 8766
-http.server.ThreadingHTTPServer(('127.0.0.1', port), functools.partial(NoCache, directory=str(ROOT))).serve_forever()
+
+
+class Server(http.server.ThreadingHTTPServer):
+    # 一个页面要并行拉几十个 ES module，而 socketserver 默认 listen backlog = 5：
+    # 队列一溢出内核就直接 reset 新连接（浏览器侧 net::ERR_CONNECTION_RESET，curl 单连接却仍是 200），
+    # 门禁于是伪装成「测试超时」（r238 / r254 / r256 各踩一次）。另外进程活得越久 fd 越容易漏，
+    # daemon_threads 让线程不拖住退出，allow_reuse_address 让重启不必等 TIME_WAIT。
+    request_queue_size = 256
+    daemon_threads = True
+    allow_reuse_address = True
+
+
+Server(('127.0.0.1', port), functools.partial(NoCache, directory=str(ROOT))).serve_forever()

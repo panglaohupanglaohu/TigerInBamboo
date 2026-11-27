@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T08:55:00+08:00",
+  "updatedAt": "2026-11-27T09:08:00+08:00",
   "completed": [
     "建立原版 128 个 JS 模块逐项清单、导出接口、职责落点与已知差距。",
     "配置每30分钟承接学习任务并更新首页/管线进度。",
@@ -194,32 +194,32 @@
   ],
   "next": [
     {
-      "title": "`823848950553780226` 多点过渡专用夹具：造「两段楼梯 + 中间平走」与「跨层斜切」的真实 World 几何，用逐点 navFloor 参照对拍 `climbAt` —— 断言两段爬升各有踏面样本、中间平走踏面 0、斜切段不出现楼层跳变误判（r255 只换了判据，未证多点）。",
-      "clips": [
-        "823848950553780226"
-      ],
-      "done": false,
-      "remaining": "r255：`command-ribbon.mjs` 的换层段取样 quad 5 / mixed 4，同层穿洞仍 0 踏面；多点过渡无专用用例。"
-    },
-    {
-      "title": "`1459169210752507904` 补丁缝：唯一剩余真机制=**独立过渡顶点表**（469 个边界顶点按补丁侧/三角侧各留一份 + 512 条 seam 边补一圈三角带，保持 edgeNeighbors/edgeTwins 可逆、外圈钉点不动）——须动拓扑，**必须整轮（≤90 分钟）**，别再切半轮。r255 已把第 9 条（三角侧柔性层 `smoothSeam`）实测否掉：35→35。",
+      "title": "`1459169210752507904` 补丁缝：唯一剩余真机制=**独立过渡顶点表**（469 个边界顶点按补丁侧/三角侧各留一份 + 512 条 seam 边补一圈三角带，保持 edgeNeighbors/edgeTwins 可逆、外圈钉点不动）——须动拓扑，**必须整轮（≤90 分钟）**，别再切半轮。已否 9 条折中。",
       "clips": [
         "1459169210752507904"
       ],
       "done": false,
-      "remaining": "r244 边级：反向 116 条边里 74 条在 quad↔tri 交界；累计已否 9 条折中（平摊50/退三角63/合用73/不收缩89/剥壳18/一拆二0/私有点87/深缩3/三角侧柔性35）。"
+      "remaining": "r244 边级：反向 116 条边里 74 条在 quad↔tri 交界；累计否 9 条（平摊50/退三角63/合用73/不收缩89/剥壳18/一拆二0/私有点87/深缩3/三角侧柔性35）。"
     },
     {
-      "title": "`tools/serve.py` 跑满 6 小时量级会开始 reset（r238、r254 各一次），门禁随机红且伪装成「测试超时」→ 给 8769 加自愈（定时重启 / 首次连接失败即重启），并在 runbook §1 健康检查里加「已运行时长 > 6h 就重启」。",
-      "clips": [],
+      "title": "`823848950553780226` 片内真残差=**尘粒 AO**（贴脚接触影已有近似，独立尘团生命周期没有）：灰模崖口喷尘、强度随落脚位置变化，要落到共享 View 的 AO 缓冲才算本条收口。r256 已把命令路径多点过渡做掉，别再重复查换层判据。",
+      "clips": [
+        "823848950553780226"
+      ],
       "done": false,
-      "remaining": "r255 起服务时长为 0（刚重启），未复现；r254 现场 pid 52989 跑了 6h17m。"
+      "remaining": "r256：命令路径单步 0.833→0.167、平走 13 点钉 1.55；尘粒 AO 仍只有贴脚近似。"
     },
     {
-      "title": "「读数能不能复算」审计：余下 26 条 partial 里点名的 test 逐条重跑，**红的那条才立项**，别只读末句（r254 就这样抓出 path-samples 的红）。",
+      "title": "「读数能不能复算」审计余下 24 条 partial：逐条重跑 note 里点名的 test，**红的那条才立项**，别只读末句。r254 复算 4 条、r255 复算 2 条、r256 复算 2 条（`1215642481162887168` water-town / `1580835075629133825` surface-bounce，均绿）。",
       "clips": [],
       "done": false,
-      "remaining": "r254 已复算 4 条；r255 复算 8238 的两条（均绿）。"
+      "remaining": "已复算 8 条，仍 19 条未复算。"
+    },
+    {
+      "title": "8769 环境：backlog 已由 5 提到 256、守护已上（`tools/serve-guard.mjs`），但**未证明** backlog=5 在 macOS 必现 `ERR_CONNECTION_RESET`；另两条自动化与本任务整点同触发，共用一个 8769 与一把锁，双触发仍会互顶。要补：① backlog=5 的对照实验；② 触发分钟错峰（:00/:05）。",
+      "clips": [],
+      "done": false,
+      "remaining": "r256：并行 40 module 全 200、SIGKILL 454ms 重建、满龄 1258ms 换 pid；对照实验与错峰未做。"
     }
   ],
   "validation": {
@@ -241,7 +241,7 @@
       "artifacts/coverage/shore-browser-r254.md"
     ]
   },
-  "latest": "第 255 轮（A 类仍空 → B 一组 `823848950553780226` 收 `next[2]`）→ **总账不动 285/285，done 221 / partial 27 / ref 15 / na 22**：① 命令路径换层判据改对 —— `commandRibbon` 原 `segClimb` 是「最近折线段的两个航点 y 不同」的**全局**判据，两处读不准：一段爬升里还没上楼梯的样本被抬到踏面、两段楼梯之间隔一格平走时平走段被判成换层；改成**真实逐点 navFloor 序列**（`climbAt(i)` 只看本样本楼层与前后 ±4 样本是否不同，≈0.6 世界单位）：窗口有变化=正踩楼梯→踏面，恒定=同层路过→钉 `floor*L`，并出 `climbSamples`/`climbWin` 读数。验收：`command-ribbon.mjs` PASS（quad 165 点 treads 5 / mixed 152 点 treads 4；同层穿洞 51 点 maxY 0.550、踏面 0 → r254 的修不回归）、`path-samples-browser.cjs` PASS（两网格 pathMaxY 0.5500、mixed tunnelSamples 194）。② `next[0]` 的 `1459169210752507904` 试第 9 条路径并否掉：`unshearPatches` 里的 `smoothSeam`（三角侧纯三角顶点拉普拉斯）原来是**死代码**（`smooth` 恒 0、末尾从不调用），接上并按 `scale×smooth`（0/2/4/8/12）搜格后 mixed 反向 **35→35**、smooth 仍取 0 → 「三角侧柔性层」不成立（翻转格第 3 点也在四边格里）；验证完立即回滚，`src/core/grid.js` 与 r244 逐项相同（flips 35 / scale .886 / maxMove 3.9295）。③ 如实：8238 的片内核缺口是尘粒 AO（sheet-00 全 100 帧实看：灰模崖口喷尘团、无路径线），卡点 C，故仍 partial；多点过渡专用夹具（两段楼梯+中间平走）未写，已并入下一轮。",
+  "latest": "第 256 轮（A 类仍空、B/C 卡点续收）→ **总账不动 285/285，done 221 / partial 27 / ref 15 / na 22**：① `823848950553780226` 收 `next[0]` 的多点过渡 —— `commandRibbon` 的换层窗口从固定 ±4 样本（0.6 世界单位）改为**按楼梯进深自适应**：固定窗口比一段 rise=2 楼梯的 0.66 还短，楼梯靠里那头已在踏面上、楼层要到洞口才变，命令线于是先贴地钻进楼梯再一步跳 `rise·L`（新夹具实测 0.833）。新判据只在 `stairAt` 几何命中踏面时放大窗口，没踩踏面仍用短窗口 → 「同层穿过挂着楼梯的墙洞」不抬升（④ 仍 0 踏面）。验收：`command-ribbon.mjs` PASS（⑤ 60 点、骑踏面 18、单步最大 0.167、平走 13 点全钉 1.55；突变退回即红），`path-samples-browser.cjs` PASS（pathMaxY 0.550、tunnelSamples 185/194、errors []）。② 环境条目做掉：现场抓到 `ERR_CONNECTION_RESET`（curl 仍 200、`window.rea` 不存在），`serve.py` backlog 5→256 + 新增 `tools/serve-guard.mjs`（退出即重启/探活连败重启/满 6h 重启），`tests/serve-guard.mjs` PASS。③④ 只复算两条 partial（水上小镇 water-town 四子项全绿、峡谷反弹 surface-bounce 读数与 note 一致），均保持 partial。",
   "learningPace": {
     "targetClipsPerHour": 4,
     "goalHours": 78,
@@ -254,7 +254,7 @@
     "remainingClips": 0,
     "countBasis": "独立视频ID、对应全帧记录和学习证据；不等同全部代码验收通过",
     "actualClipsPerHour": 0.46,
-    "measuredAt": "2026-11-27T08:38:48.687952+08:00"
+    "measuredAt": "2026-11-27T09:06:54.963735+08:00"
   },
   "session": {
     "status": "paused",

@@ -1914,3 +1914,10 @@ steps: []（浏览器加载 pipeline.html 时立刻崩溃，0 步截图）
 - 修复：apostlesReacode 侧 strata→#c9c2b2、BAND_WARM→#dcd3c2；terrainmesh 新增 world.shrubDrapeColor 世界级覆盖口（默认值不变），使徒世界设为 #a08d54 橄榄赭。townscaper-web LATEST 库与 vendor 副本双端同步。
 - 验证：实测探针使徒岩体红顶点 0；自渲染截图确认奶油石灰岩+草绿顶、无红斑；apostles 相关单测全绿（terrain-pipeline 11/11）。
 - 影响面：仅使徒场景；Morris 湖等仍走 #e2723f 默认（原片考据色保留）。
+
+## 2026-11-27 能力管线工坊 10 轮重构（R1–R10 + 清爽科技按钮体系）
+- **R1–R2（资产驱动研判与 JEV 初筛）**：建立三段式「资产表 × REACode 确定性映射 → JEV 低成本初筛 → 四步契约快速重构」评判模型，生成 `src/scene-authoring/catalog/asset-capability-radar.json`（覆盖 95 游戏资产、7 类资产矩阵、171 REACode 候选扫描、30 条推荐引入与四步重构蓝图）。
+- **R3–R6（清爽浅色/深色双主题 + 全能磁吸拖放）**：新增 `theme-refresh.js` 与 `studio-refresh.css`（顶部一键切换「清爽浅色 / 深邃暗色」）；重构能力库拖拽（`#cap-magnet` 全能磁吸层 + `window.__tmDrag` 兜底 + 跨层自动路由 + 卡片 `＋ 加入` 快捷按钮 + Toast 反馈），根治「有时能拖进去有时拖不进去」。
+- **R7–R8（互动 SVG 能力星图 + 智能体资产雷达）**：新增 `tech-constellation.js`（27 节点 / 34 条依赖弧，悬停高亮上下游传导链路并同步选中能力树）与 `asset-radar-view.js`（七维覆盖/缺口雷达图、系统筛选、四步重构蓝图交互与一键复制智能体指令，顶栏 `#open-radar-btn` 直达）。
+- **R9–R10（学习工坊浅色适配 + 科技感按钮统一 + 验收）**：补齐学习工坊 4 个视图浅色变量；按用户反馈将按钮统一为「发丝边 + 墨色底青色扫描线 + 深底一律白字」的清爽科技风格（`studio-refresh.css?v=tech-r13`）。
+- **验证**：`tests/refresh-dnd-browser.mjs` 全项绿（浅色派生、磁吸拖放、`＋ 加入`、雷达 30 卡/筛选、星图悬停、暗色持久化），`tests/asset-radar.test.mjs` 绿；`test_workshops.py --skip-browser` 其余 4 套全绿（`unit` 仅存 1 条既有 `relief-evidence-registry` 数据漂移失败，与本次 UI 无关）；前后对比截图存档于 `artifacts/jev-10rounds/after/`。

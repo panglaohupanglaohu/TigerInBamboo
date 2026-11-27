@@ -20,7 +20,8 @@
 cd /Users/panglaohu/Downloads/TigerInBamboo/townscaper-web/REACodeRefactoring
 node tools/coverage-lock.mjs status      # 退出码 0 才能开跑；3 表示上一轮还在跑 → 直接结束本轮
 pmset -g | grep -E "^[[:space:]]*sleep" | sed 's/^[[:space:]]*//'   # 必须是 sleep 0；否则本轮开头就报出来
-curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8769/index.html   # 非 200 就起：python3 tools/serve.py 8769
+curl -s -o /dev/null -w "%{http_code}\n" http://127.0.0.1:8769/index.html   # 非 200 就用守护起：node tools/serve-guard.mjs 8769
+ps -eo pid,etime,command | grep "serve\.py 8769" | grep -v grep                 # 已跑满 6 小时 → 重启（跑老的 serve.py 会 reset，伪装成测试超时）
 node tools/coverage-lock.mjs start <本轮时间戳>
 node tools/coverage-queue.mjs --take 4
 ```

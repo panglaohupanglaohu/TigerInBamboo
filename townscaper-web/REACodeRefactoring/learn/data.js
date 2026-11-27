@@ -2593,11 +2593,11 @@ window.LEARN = {
       "text": "I always write my own lighting solutions. I've had some really naive ad hoc color bleeding in my (very fake) GI before, but this is my first decent attempt to actually have the light *bounce*",
       "topic": "light",
       "status": "partial",
-      "where": "src/core/voxel-distance.js · src/light/lightvolume.js · src/light/surface-bounce.js · tests/surface-bounce-referee.mjs · lightvolume.html",
-      "note": "185帧全复核：拱洞峡谷的转光照，没有独立反弹开关，不能从画面证明逆平方/表面形因子。保留既有共享体素反弹，补距离场保守步进与DDA兜底对照。形因子/参考接口残差核销（2026-11-25）：裁判 bouncegi.js 本有真形因子 F=cosI·cosJ·A_j/(r²+pitch²/4)+蒙特卡洛bruteForce+audit，此前批已迁 src/light/surface-bounce.js（split校准、calibration回物理值1，已接 view-shading surfacebounce）；本轮补裁判对拍 tests/surface-bounce-referee.mjs——同一场 directLight 与 bruteForce/hitRate 逐位一致、legacy gather≤1ulp；实测发现裁判第2跳起 src===E 别名的就地Gauss–Seidel语义，bounce 加 inPlace 选项逐位复现（bounces:2 对拍≤1e-6，默认Jacobi差0.13如实记）；裁判峡谷场上 split r 0.501→0.831、形状误差90.4%→43.2%。裁判 makeCanyon 合成岛/renderRay 2.5D渲染仅 bouncelab.html 演示用，本侧由共享World surfaceFieldFromWorld 承接，无可执行迁移项。剩：原片反弹算法未公开，画面不足以证明逆平方/形因子归属。；【卡点·C 算法未公开】原片反弹算法未公开：配文只说\"first decent attempt to actually have the light *bounce*\"，画面不足以反推逆平方/形因子；裁判形因子/暴力参考已迁并对拍核销，本地近似口径如上 → 卡在原片算法未公开：配文只说\"某算法\"，画面也不足以反推，只能近似",
+      "where": "src/light 共享体素反弹 · surface-bounce",
+      "note": "185帧全核（sheet-00/01 本轮全看）；只复算不改码：tests/surface-bounce.mjs PASS（gain1 1.296/gain2 1.323/warmth -0.037→-0.003/r 0.528→0.892），片内无独立反弹开关，不能从画面证明逆平方或形因子；shapeErr 35% 仍偏，形因子接口未迁",
       "project": "next",
       "decodedFrames": 185,
-      "reviewEvidence": "artifacts/coverage/distance-ao-review.md",
+      "reviewEvidence": "artifacts/coverage/1580835075629133825-review-r256.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -2606,15 +2606,13 @@ window.LEARN = {
           184
         ],
         "nativeRevisits": [
-          0,
-          65,
-          100,
-          145,
-          184
+          1,
+          50,
+          185
         ],
-        "implementationVerified": true,
-        "runtimeAccepted": true,
-        "acceptanceScope": "体素距离场保守步进+DDA兜底、共享体素多跳反弹保留；裁判2.5D形因子gather/暴力参考已迁并逐位对拍（inPlace复现裁判第二跳别名语义）；剩原片算法未公开永久卡点"
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "峡谷反弹读数复算"
       }
     },
     {
@@ -4526,12 +4524,12 @@ window.LEARN = {
       "text": "Ok I went ahead and put this whole project on water. Long time fans of the show know this was inevitable.",
       "topic": "water",
       "status": "partial",
-      "where": "src/water/shore.js · src/core/shore-loops.js · src/world/townDemo.js",
-      "note": "330帧全核验：空水面逐块长出码头/房屋/拱口/多塔，岸线与倒影跟随。2026-11-25残差核账（tests/water-town.mjs 四场景锁定）：水上码头=1层灰石基座自y=0入水外鼓+压顶铺地+临水栏杆；水上悬浮块=钢腿端停y=0水面、逐角posts锚点交shore.js画泡沫圈；跨水拱=两对边1层码头支撑悬浮块→archFloorBudget(floor=0)+archProfile解析椭圆，端点/拱顶精确、形变误差有界——旧账「拱底精确截面」已随arch-profile批落码属过期；种子镇seed330一次齐出码头/拱/后院/水上钢腿房。真实双网格2→1闭环及恢复小镇保留（shore-topology-review.md）。完整建造美术仍缺。；【卡点·B 美术资产】完整建造美术仍缺。 → 卡在原片美术资产（贴图/模型/动画/UI 稿），没有源素材，程序化只能近似；r221核销：tests/water-town.mjs 四场景复跑全过、机制五文件（shore/shore-loops/townDemo/arch-floor-budget/arch-profile）vendor 逐字一致；剩余残差仅「完整建造美术」=原片未公开资产，无可执行残差，永久卡点，需新证据再立项",
+      "where": "src/water/water-town.js · index.html?scene=water",
+      "note": "330帧全核（sheet-00/03 本轮重看，01/02 沿 r207）；只复算不改码：tests/water-town.mjs 四场景锁定仍全绿（水上码头/钢腿泡沫锚点/跨水拱精确拱底/种子小镇），读数可复算；仍缺原作岸线生长动画与倒影强度定量对照",
       "project": "townscaper",
       "page": "shoreloops.html",
       "decodedFrames": 330,
-      "reviewEvidence": "artifacts/coverage/1215642481162887168-review-r221.md",
+      "reviewEvidence": "artifacts/coverage/1215642481162887168-review-r256.md",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -4540,13 +4538,13 @@ window.LEARN = {
           329
         ],
         "nativeRevisits": [
-          3,
-          60,
-          160
+          1,
+          40,
+          330
         ],
-        "implementationVerified": true,
-        "runtimeAccepted": true,
-        "acceptanceScope": "水上码头/钢腿泡沫锚点/跨水拱精确拱底/岸线闭环与倒影（tests/water-town.mjs 锁定）；残差=完整建造美术（卡点·B，r221核销为永久卡点）"
+        "implementationVerified": false,
+        "runtimeAccepted": false,
+        "acceptanceScope": "水上小镇四子项读数复算"
       }
     },
     {
@@ -8036,9 +8034,9 @@ window.LEARN = {
       "topic": "light",
       "status": "partial",
       "decodedFrames": 227,
-      "reviewEvidence": "artifacts/coverage/823848950553780226-review-r255.md",
-      "where": "src/world/battle-navigation.js#commandRibbon · route-preview.html",
-      "note": "227帧全核（sheet-00 重看）；r255 收 next[2]：commandRibbon 换层判据由「最近折线段两端 y 不同」改成真实逐点 navFloor 序列（±4 样本窗口），同层路过/两段楼梯间平走不再被判成换层，climbSamples/climbWin 出读数；command-ribbon.mjs PASS（quad 踏面5/mixed 4、同层穿洞 maxY 0.550 踏面0）、path-samples-browser.cjs PASS（pathMaxY 0.550、tunnelSamples 194）。仍缺：尘粒 AO 本体=本地近似（卡点C 算法未公开）；多点过渡专用夹具用例未写（需造两段楼梯+中间平走的真实 World）；",
+      "reviewEvidence": "artifacts/coverage/823848950553780226-review-r256.md",
+      "where": "src/world/battle-navigation.js#commandRibbon · index.html?scene=badnorth",
+      "note": "227帧全核（sheet-00 本轮重看）；r256 补多点过渡夹具：两段 rise=2 楼梯+中间平走，换层判据改为「几何命中踏面时窗口放到整段楼梯进深」，命令线单步最大 0.833→0.167（一级踏面），中间平走 13 点全钉 1.55；片内尘粒 AO 仍无独立实现",
       "reviewStages": {
         "textRead": true,
         "allFramesReviewed": true,
@@ -8049,12 +8047,11 @@ window.LEARN = {
         "nativeRevisits": [
           1,
           60,
-          130,
-          226
+          227
         ],
         "implementationVerified": true,
         "runtimeAccepted": true,
-        "acceptanceScope": "命令路径换层判据"
+        "acceptanceScope": "命令路径换层判据 + 多点过渡"
       }
     },
     {
