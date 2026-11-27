@@ -95,9 +95,10 @@ export function mountTierWorkshop({ host, sideHost, tier, sideTier = tier, stora
       if (d.set) return { ok: true, lane, note: `能力集合「${d.name}」：整组进管线，每个能力进到它所属的分区泳道；${mine.length} 个可执行${ids.length > mine.length ? `，${ids.length - mine.length} 个还没做好（标为待完成，执行时跳过）` : ''}。` };
       if (!mine.length) return { ok: false, lane, note: '这不是本条管线能执行的能力。' };
       if (mine[0].domain === dom.id) return { ok: true, lane };
+      // R4 磁吸：鼠标落在别的泳道也照样接住，自动落到能力自己的分区泳道（不再要求像素级对准）
+      const homeLane = lanes.querySelector(`.tier-lane[data-domain="${CSS.escape(mine[0].domain)}"]`) || lane;
       const home = workshop.domains.find((x) => x.id === mine[0].domain)?.name || mine[0].domain;
-      const nCode = caps.filter((c) => c.domain === dom.id).length;
-      return { ok: false, lane, note: nCode ? `「${mine[0].name}」属于「${home}」分区，请拖到「${home}」泳道。` : `「${dom.name}」分区还没有可执行的能力（学习库里 ${dom.counts.refactored + dom.counts.partial + dom.counts.original} 个方法还在占位，重构并封装成能力代码后才能拖入）；「${mine[0].name}」请拖到「${home}」泳道。` };
+      return { ok: true, lane: homeLane, note: `「${mine[0].name}」→ 自动落到「${home}」泳道` };
     } });
   left.append(head, runBar, lanes);
   // 预览与来源详情放在实景浏览器旁边（同一个实景窗口下方的侧栏），只在本管线激活时显示

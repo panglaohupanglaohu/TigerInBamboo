@@ -21,7 +21,7 @@ try{
  // ── 8931 学习工坊（默认页签）
  const page=watch(await context.newPage());await page.goto('http://localhost:8931/TigerMessenger/pipeline.html#learning');await page.waitForSelector('.cmap [data-map-line]',{timeout:240000});
  // 默认：能力地图
- assert.equal(await page.locator('.learning-tabs button[aria-pressed=true]').innerText(),'能力地图');assert.equal(await page.locator('.learning-tabs button').count(),3,'常用页签只有三个');
+ assert.equal(await page.locator('.learning-tabs button[aria-pressed=true]').innerText(),'能力地图');assert.equal(await page.locator('.learning-tabs button').count(),5,'常用页签：雷达·树·地图·队列·时间线');
  assert.equal(await page.locator('.cmap [data-map-line]').count(),27);assert.match(await page.locator('.cmap-panel h2').innerText(),/整个能力库/);assert.equal(await page.locator('.cmap-todo').count(),3);
  await page.screenshot({path:path.join(out,'map-overview.png')});
  await page.getByLabel('场景',{exact:true}).selectOption('apostles');assert.match(await page.locator('.cmap-panel h2').innerText(),/十二门徒/);assert.ok(await page.locator('[data-map-note="apostles"]').count(),'显示已做过的对照结论');assert.ok(await page.locator('.cmap-node.unused').count()>5);

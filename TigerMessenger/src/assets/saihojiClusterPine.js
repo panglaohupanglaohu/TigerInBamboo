@@ -13,8 +13,9 @@ import { samplePath, smoothRoutedPath } from "../../../townscaper-web/REACodeRef
 
 /** 原苔庭古松在鲲背岛局部坐标中的实测平均高（25 株，2026-11-11 node 实测 5.4479）。 */
 export const SAIHOJI_LEGACY_PINE_MEAN_HEIGHT = 5.4479;
-/** 用户要求：新松平均高 = 原 × 2.5 */
-export const SAIHOJI_CLUSTER_PINE_HEIGHT_FACTOR = 2.5;
+/** 用户要求：新松平均高 = 原 × 2.5；2026-11-26 用户要求「松树及其之间距离等比例放大4倍」→ ×10。
+ * 簇内根距按 dx·H 布点（saihojiPineLayout.arrangeSaihojiPines），树高 ×4 时间距自动同比 ×4。 */
+export const SAIHOJI_CLUSTER_PINE_HEIGHT_FACTOR = 10;
 export const SAIHOJI_CLUSTER_PINE_MEAN_HEIGHT =
   SAIHOJI_LEGACY_PINE_MEAN_HEIGHT * SAIHOJI_CLUSTER_PINE_HEIGHT_FACTOR;
 /** 树干光秃段占树高比例（参考图约 55–60%） */

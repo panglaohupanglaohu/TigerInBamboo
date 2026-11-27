@@ -52,8 +52,11 @@ export function arrangeSaihojiPines(island, zones, whale) {
       const yaw=cluster.yaw+dyaw,roots=rootsAt(cluster.cx+ox,cluster.cz+oz,yaw),hits=[];
       let ok=true;
       for(const r of roots){
-        if((r.x/14.85)**2+(r.z/5.65)**2>.92||isSaihojiPool(r.x,r.z,.3)){ok=false;break;}
-        const p=surface(r.x,r.z);if(!p||!clearStone(p,.15)){ok=false;break;}
+        // 2026-11-26 用户要求树与间距等比 ×4：丛跨幅超岛宽，允许根探出岛缘立进水线面（y=0）、
+        // 允许落在浅池边（深水心仍避开），椭圆界放宽到 1.45。
+        if((r.x/14.85)**2+(r.z/5.65)**2>1.45||isSaihojiPool(r.x,r.z,-.2)){ok=false;break;}
+        const hitP=surface(r.x,r.z),p=hitP||new THREE.Vector3(r.x,0,r.z);
+        if(hitP&&!clearStone(p,.15)){ok=false;break;}
         if(placed.some(q=>Math.hypot(p.x-q.x,p.z-q.z)<H*.3)){ok=false;break;}
         hits.push(p);
       }

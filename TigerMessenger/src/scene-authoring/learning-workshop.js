@@ -13,11 +13,13 @@ import {createLearningCache} from './learning-cache.js';
 import {decodeLearningSnapshot} from './learning-snapshot.js';
 import {mountLearningProgress} from './learning-progress.js';
 import {scanPipelineText} from './capability-scanner.js';
+import {renderTechConstellation} from '../system-workshop/tech-constellation.js?v=tree-r7';
+import {renderAssetRadar,loadRadar} from '../system-workshop/asset-radar-view.js?v=radar-r8';
 // Reuse current REACodeRefactoring data; never copy the stale sidebar snapshot.
 export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}),onAddCapability=()=>{},onLocateCapability=()=>{},onAddCode=null,getCapabilities=()=>[],onUseCombination=()=>{},getExecutables=()=>[],getExperience=()=>({}),getDemand=()=>[],onUseExecutable=null,onUseGoal=null,experienceStore=null}={}){
- const host=document.getElementById('learning-workshop'),root=new URL('../townscaper-web/REACodeRefactoring/',location.href);const VIEWS=[['tree','能力树'],['map','能力地图'],['lineage','队列与闭环'],['evolution','时间线与能力演进'],['code','重构代码能力库'],['files','全目录重构状态'],['roadmap','需求与能力组合'],['inventory','源码归类与差距'],['architecture','系统与模块'],['pipeline','管线与能力'],['videos','视频与笔记']];
+ const host=document.getElementById('learning-workshop'),root=new URL('../townscaper-web/REACodeRefactoring/',location.href);const VIEWS=[['radar','✦ 智能体资产雷达'],['tree','能力树'],['map','能力地图'],['lineage','队列与闭环'],['evolution','时间线与能力演进'],['code','重构代码能力库'],['files','全目录重构状态'],['roadmap','需求与能力组合'],['inventory','源码归类与差距'],['architecture','系统与模块'],['pipeline','管线与能力'],['videos','视频与笔记']];
  // 默认是「能力地图」：一屏看能力网、场景差距和下一步。常用页签只有三个，其余资料收在「更多资料」里
- const PRIMARY=new Set(['tree','map','lineage','evolution']);let treeJev=null,treeMaturity=null;
+ const PRIMARY=new Set(['radar','tree','map','lineage','evolution']);let treeJev=null,treeMaturity=null,radarData=null,radarSystem='all';
  let loaded=false,mode=VIEWS.some(v=>v[0]===new URLSearchParams(location.search).get('learningView'))?new URLSearchParams(location.search).get('learningView'):'map',catalog=[],data=null,lastUpdate=0,codeCatalog=null,lineageLine=new URLSearchParams(location.search).get('lineageLine'),lineageConsumer=new URLSearchParams(location.search).get('lineageScene'),sceneConsumers=[];
  const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
  const link=(text,path)=>{const a=el('a',text);a.href=new URL(path,root).href;a.target='_blank';a.rel='noopener';return a;};
@@ -54,13 +56,18 @@ export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}
   for(const code of usage.code||[]){const x=code.exp,b=el('button',(code.present?'⚙ 定位能力代码：':'⚙ 加入能力代码：')+code.name);b.onclick=()=>{code.present?onLocateCapability(code.id):onAddCode?.(code.id);activate(false);};row.append(b,el('small',x.runs?`场景经验：执行 ${x.runs} 次 · 验证通过 ${x.passed} · 不通过 ${x.failed} · 写入 ${x.committed}${x.lastFailure?' · 最近失败：'+x.lastFailure:''}`:'场景经验：尚未执行','muted'));}
  }
  function render(){
-  if(!loaded&&mode!=='code')return;fileRender?.abort();fileRender=null;for(const [id,b]of tabs){b.classList.toggle('primary',mode===id);b.setAttribute('aria-pressed',String(mode===id));}more.value=PRIMARY.has(mode)?'':mode;more.classList.toggle('primary',!PRIMARY.has(mode));host.classList.toggle('learning-map-mode',mode==='map'||mode==='tree');for(const n of [cacheStatus,stats,progressSection])if(n)n.hidden=mode==='map'||mode==='tree';content.replaceChildren();content.classList.toggle('learning-video-grid',mode==='videos');search.hidden=['evolution','lineage','map','tree'].includes(mode);const q=search.value.trim().toLowerCase(),match=value=>JSON.stringify(value).toLowerCase().includes(q);
+  if(!loaded&&mode!=='code'&&mode!=='radar')return;fileRender?.abort();fileRender=null;for(const [id,b]of tabs){b.classList.toggle('primary',mode===id);b.setAttribute('aria-pressed',String(mode===id));}more.value=PRIMARY.has(mode)?'':mode;more.classList.toggle('primary',!PRIMARY.has(mode));host.classList.toggle('learning-map-mode',mode==='map'||mode==='tree');for(const n of [cacheStatus,stats,progressSection])if(n)n.hidden=mode==='map'||mode==='tree';content.replaceChildren();content.classList.toggle('learning-video-grid',mode==='videos');search.hidden=['evolution','lineage','map','tree'].includes(mode);const q=search.value.trim().toLowerCase(),match=value=>JSON.stringify(value).toLowerCase().includes(q);
+  if(mode==='radar'){for(const n of [cacheStatus,stats,progressSection])if(n)n.hidden=true;search.hidden=true;host.classList.add('learning-map-mode');
+   const draw=()=>renderAssetRadar(content,radarData,{system:radarSystem,onTree:d=>{mode='tree';render();},onWorkshop:d=>{radarSystem=d.targetSystem;activate(false);window.dispatchEvent(new CustomEvent('tm.system.focus',{detail:{tier:d.targetSystem==='multi'?'scene':d.targetSystem}}));}});
+   if(radarData)draw();else{content.append(el('p','正在加载智能体资产雷达…','muted'));loadRadar(new URL('./catalog/asset-capability-radar.json',import.meta.url)).then(d=>{radarData=d;if(mode==='radar')draw();}).catch(e=>{content.replaceChildren(el('p','雷达数据未生成：'+e.message+'（运行 tools/refactor/build-asset-radar.mjs）'));});}
+   return;}
   if(mode==='code'){stats.textContent='实际源码、导出接口、依赖组合与迁移差异';fileRender=new AbortController();renderCodeLibrary(content,{query:q,signal:fileRender.signal,onUse:async d=>{if(await onUseCombination(d)===false)throw Error('当前场景尚未提供这组执行接口；请先返回系统工坊选择适用场景。');activate(false);}});return;}
   stats.textContent=data.arch.layers.reduce((n,l)=>n+l.modules.length,0)+' 条模块职责 · '+data.learn.items.length+' 条学习记录（登记不等于验收）';
   const focusClip=id=>{mode='evolution';evolutionState={family:'all',phase:'all',priority:'all',query:id};render();host.querySelector('.learning-tabs')?.scrollIntoView({block:'start'});};
   if(mode==='tree'){
    renderCapabilityTree(content,{evolution:buildCapabilityEvolution(data.learn,data.pipeline),modules:codeCatalog?.modules||[],alignment:codeCatalog?.alignment||[],executables:getExecutables(),experience:getExperience(),demand:getDemand(),consumers:sceneConsumers,jev:treeJev,maturity:treeMaturity,line:lineageLine,
     onState:s=>{lineageLine=s.line;},onUse:onUseExecutable?x=>{onUseExecutable(x);}:null,onUseGoal:onUseGoal?g=>{onUseGoal(g);}:null,onOpenLine:id=>{lineageLine=id;mode='map';render();}});
+   renderTechConstellation(content,{evolution:buildCapabilityEvolution(data.learn,data.pipeline),modules:codeCatalog?.modules||[],alignment:codeCatalog?.alignment||[],executables:getExecutables(),experience:getExperience(),demand:getDemand(),consumers:sceneConsumers,jev:treeJev},{onPick:id=>{const row=content.querySelector(`.ctree [data-line="${CSS.escape(id)}"]`);row?.click();row?.scrollIntoView({block:'center',behavior:'smooth'});}});
   }else if(mode==='map'){
    renderCapabilityMap(content,{evolution:buildCapabilityEvolution(data.learn,data.pipeline),modules:codeCatalog?.modules||[],alignment:codeCatalog?.alignment||[],executables:getExecutables(),experience:getExperience(),demand:getDemand(),consumers:sceneConsumers,consumer:lineageConsumer,line:lineageLine,
     onState:s=>{lineageLine=s.line;lineageConsumer=s.consumer;},onFocus:focusClip,onUse:onUseExecutable?x=>{onUseExecutable(x);}:null,onDetail:()=>{mode='lineage';render();}});
@@ -111,6 +118,7 @@ export function mountLearningWorkshop({getUsage=()=>({present:false,adapters:[]}
  async function ensure(){if(loaded&&Date.now()-lastUpdate<60000)return;return progress.refresh();}
  const sceneTab=document.getElementById('scene-workshop-tab'),learnTab=document.getElementById('learning-workshop-tab');
  function activate(learning){for(const id of ['save-recipe','export','connection'])document.getElementById(id).hidden=learning;host.hidden=!learning;for(const node of document.querySelectorAll('#system-workshop,body>.intro,body>main'))node.hidden=learning;document.getElementById('system-tab')?.setAttribute('aria-pressed',String(!learning));learnTab.setAttribute('aria-pressed',String(learning));sceneTab.setAttribute('aria-selected',String(!learning));learnTab.setAttribute('aria-selected',String(learning));document.title=learning?'学习工坊 · 学习管线':'系统工坊 · 编辑管线';history.replaceState(null,'',learning?'#learning':'#scene');if(learning){render();ensure();}}
+ window.addEventListener('tm.learning.radar',()=>{mode='radar';activate(true);});
  window.addEventListener('tm.learning.roadmap',()=>{mode='roadmap';search.value='';activate(true);});
  sceneTab.onclick=()=>activate(false);learnTab.onclick=()=>activate(true);activate(location.hash==='#learning');
  return {async openSource(query,section='pipeline'){activate(true);await ensure();mode=section;search.value=query;render();},refresh:render,showScene:()=>activate(false)};

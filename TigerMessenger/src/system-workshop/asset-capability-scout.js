@@ -55,7 +55,9 @@ export function buildFastTrackBlueprint(entry, targetSystem) {
   const base = String(entry.source || '').replace(/^.*\//, '').replace(/\.(js|mjs|html)$/, '');
   const unmatched = (entry.unmatchedExports || entry.originalExports || []).slice(0, 6);
   const targetDir = targetSystem === 'planet' ? 'core' : targetSystem === 'object' ? 'build' : /light|shadow|reflect|outline|backlit|surface/i.test(base) ? 'light' : /water|shore|splash|river|wave/i.test(base) ? 'water' : /bird|butterfl|flag|snow|fog|canopy/i.test(base) ? 'life' : 'terrain';
-  const refPath = (entry.targets && entry.targets[0]) || `townscaper-web/REACodeRefactoring/src/${targetDir}/${base}.js`;
+  const rawTarget = entry.targets && entry.targets[0];
+  const existingPath = typeof rawTarget === 'string' ? rawTarget : rawTarget?.path;
+  const refPath = existingPath ? `townscaper-web/REACodeRefactoring/${existingPath.replace(/^townscaper-web\/REACodeRefactoring\//, '')}` : `townscaper-web/REACodeRefactoring/src/${targetDir}/${base}.js`;
   const workshopLayer = targetSystem === 'planet' ? 'planet' : targetSystem === 'object' ? 'object' : /light|shadow|reflect|backlit|bird|butterfl|snow|fog/i.test(base) ? 'lightlife' : /nav|los|path|traffic/i.test(base) ? 'battle' : /roof|wall|house|prop|cage/i.test(base) ? 'building' : 'relief';
   const effort = entry.status === 'missing-target' ? (unmatched.length >= 4 ? 'M' : 'S') : (unmatched.length <= 2 ? 'S' : 'M');
 
@@ -124,7 +126,7 @@ export function buildAssetCapabilityRadar({ inventory, alignment = [], maturityR
   const assetMatrix = buildAssetCoverageMatrix({ inventory, maturityRows, jevCategoryDecisions: catDecisions });
 
   const discDecisions = jevDiscovery?.decisions || {};
-  const jsCandidates = alignment.filter((a) => /\.(js|mjs)$/.test(a.source || '') && (a.status === 'missing-target' || (a.unmatchedExports || []).length > 0));
+  const jsCandidates = alignment.filter((a) => /\.(js|mjs)$/.test(a.source || '') && !/^vendor\//i.test(a.source || '') && (a.status === 'missing-target' || (a.unmatchedExports || []).length > 0));
 
   const scored = [];
   for (const a of jsCandidates) {

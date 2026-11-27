@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-11-24T18:06:29.104Z",
+  "generatedAt": "2026-11-26T23:23:20.120Z",
   "rubric": {
     "name": "三段式资产驱动能力研判（确定性资产映射 → JEV 低成本初筛 → 快速契约重构）",
     "formula": "Priority = (AssetLeverage × 1.4 + UnmatchedExports × 0.9 + Novelty + JEVBoost) × RefactorReadiness",
@@ -13,11 +13,11 @@
   "summary": {
     "totalAssets": 95,
     "assetCategories": 7,
-    "reacodeCandidatesScanned": 172,
+    "reacodeCandidatesScanned": 171,
     "recommendedDiscoveries": 30,
     "bySystem": {
-      "planet": 5,
-      "scene": 17,
+      "planet": 4,
+      "scene": 18,
       "object": 4,
       "multi": 4
     },
@@ -29,43 +29,6 @@
     "jevRequests": 5
   },
   "assetMatrix": [
-    {
-      "category": "圣城与建筑",
-      "assetCount": 27,
-      "reviewedCount": 3,
-      "sampleAssets": [
-        "agents__citadel__paperMesh",
-        "citadelElderTree",
-        "citadelMoat",
-        "citadelTrojanHorse",
-        "citadelWatchtower"
-      ],
-      "geometries": [
-        "BoxGeometry",
-        "CylinderGeometry",
-        "Mesh",
-        "SphereGeometry",
-        "ConeGeometry",
-        "CircleGeometry"
-      ],
-      "systems": [
-        "scene",
-        "object"
-      ],
-      "lines": [
-        "building",
-        "hallway",
-        "wfc",
-        "light"
-      ],
-      "executableCount": 10,
-      "highMaturityCount": 2,
-      "coveragePct": 77,
-      "gapScore": 18.2,
-      "strategy": "wrap-existing-refactored",
-      "jevConfidence": 0.29,
-      "jevAccepted": false
-    },
     {
       "category": "地形与场景构件",
       "assetCount": 36,
@@ -96,12 +59,49 @@
         "water-effects",
         "sphere"
       ],
-      "executableCount": 19,
-      "highMaturityCount": 7,
+      "executableCount": 27,
+      "highMaturityCount": 27,
       "coveragePct": 100,
       "gapScore": 18,
       "strategy": "refactor-reacode",
       "jevConfidence": 0.23,
+      "jevAccepted": false
+    },
+    {
+      "category": "圣城与建筑",
+      "assetCount": 27,
+      "reviewedCount": 3,
+      "sampleAssets": [
+        "agents__citadel__paperMesh",
+        "citadelElderTree",
+        "citadelMoat",
+        "citadelTrojanHorse",
+        "citadelWatchtower"
+      ],
+      "geometries": [
+        "BoxGeometry",
+        "CylinderGeometry",
+        "Mesh",
+        "SphereGeometry",
+        "ConeGeometry",
+        "CircleGeometry"
+      ],
+      "systems": [
+        "scene",
+        "object"
+      ],
+      "lines": [
+        "building",
+        "hallway",
+        "wfc",
+        "light"
+      ],
+      "executableCount": 12,
+      "highMaturityCount": 12,
+      "coveragePct": 92,
+      "gapScore": 15.1,
+      "strategy": "wrap-existing-refactored",
+      "jevConfidence": 0.29,
       "jevAccepted": false
     },
     {
@@ -137,7 +137,7 @@
         "atlas"
       ],
       "executableCount": 21,
-      "highMaturityCount": 4,
+      "highMaturityCount": 21,
       "coveragePct": 100,
       "gapScore": 4.5,
       "strategy": "wrap-existing-refactored",
@@ -174,7 +174,7 @@
         "tools"
       ],
       "executableCount": 14,
-      "highMaturityCount": 6,
+      "highMaturityCount": 14,
       "coveragePct": 100,
       "gapScore": 4,
       "strategy": "synthesize-new",
@@ -211,7 +211,7 @@
         "projectiles"
       ],
       "executableCount": 12,
-      "highMaturityCount": 8,
+      "highMaturityCount": 12,
       "coveragePct": 100,
       "gapScore": 3.5,
       "strategy": "synthesize-new",
@@ -247,7 +247,7 @@
         "shadows"
       ],
       "executableCount": 14,
-      "highMaturityCount": 3,
+      "highMaturityCount": 14,
       "coveragePct": 100,
       "gapScore": 2.5,
       "strategy": "wrap-existing-refactored",
@@ -282,7 +282,7 @@
         "smoke"
       ],
       "executableCount": 12,
-      "highMaturityCount": 3,
+      "highMaturityCount": 12,
       "coveragePct": 100,
       "gapScore": 1.5,
       "strategy": "wrap-existing-refactored",
@@ -291,94 +291,6 @@
     }
   ],
   "discoveries": [
-    {
-      "id": "vendor/three.module.js",
-      "source": "vendor/three.module.js",
-      "status": "requires-parity-review",
-      "unmatchedCount": 416,
-      "unmatchedExports": [
-        "ACESFilmicToneMapping",
-        "AddEquation",
-        "AddOperation",
-        "AdditiveAnimationBlendMode",
-        "AdditiveBlending",
-        "AgXToneMapping",
-        "AlphaFormat",
-        "AlwaysCompare"
-      ],
-      "existingTargets": [
-        {
-          "path": "vendor/three.module.js",
-          "exists": true,
-          "sha256": "76dea8151bc9352aef3528b4262e249b2604f62543828328db978d060d61a495"
-        }
-      ],
-      "targetSystem": "planet",
-      "targetSystemName": "球系统",
-      "heuristicSystem": "planet",
-      "matchedCategories": [
-        {
-          "category": "圣城与建筑",
-          "assetCount": 27,
-          "hits": [
-            "prop"
-          ]
-        },
-        {
-          "category": "地形与场景构件",
-          "assetCount": 36,
-          "hits": [
-            "slope",
-            "sphere",
-            "normal"
-          ]
-        },
-        {
-          "category": "渲染与辅助几何",
-          "assetCount": 9,
-          "hits": [
-            "light",
-            "shadow",
-            "rim",
-            "reflect",
-            "fog"
-          ]
-        }
-      ],
-      "benefitingAssets": 83,
-      "priorityScore": 82.7,
-      "jev": null,
-      "rawRisks": [
-        "有 416 个原版导出尚未对齐到重构库，接口语义未校验",
-        "直接耦合渲染状态或时间步，缺少 reads/writes/preserves 契约与确定性种子"
-      ],
-      "blueprint": {
-        "effort": "M",
-        "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "vendor/three.module.js",
-          "exists": true,
-          "sha256": "76dea8151bc9352aef3528b4262e249b2604f62543828328db978d060d61a495"
-        },
-        "workshopLayer": "planet",
-        "targetSystem": "planet",
-        "exportsToPort": [
-          "ACESFilmicToneMapping",
-          "AddEquation",
-          "AddOperation",
-          "AdditiveAnimationBlendMode",
-          "AdditiveBlending",
-          "AgXToneMapping"
-        ],
-        "steps": [
-          "1. 纯核抽取：从 REACode/vendor/three.module.js 剥离 DOM/全局状态，将 ACESFilmicToneMapping, AddEquation, AddOperation 迁入 [object Object]",
-          "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
-          "3. 挂载管线：在 src/system-workshop/planet/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
-          "4. 行为裁判：在 planet/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
-        ],
-        "agentPrompt": "请按快速重构协议将 REACode/vendor/three.module.js 的核心算法（ACESFilmicToneMapping, AddEquation, AddOperation, AdditiveAnimationBlendMode）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/planet/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
-      }
-    },
     {
       "id": "src/spheretown.js",
       "source": "src/spheretown.js",
@@ -410,19 +322,19 @@
       "heuristicSystem": "planet",
       "matchedCategories": [
         {
-          "category": "圣城与建筑",
-          "assetCount": 27,
-          "hits": [
-            "town"
-          ]
-        },
-        {
           "category": "地形与场景构件",
           "assetCount": 36,
           "hits": [
             "shore",
             "river",
             "sphere"
+          ]
+        },
+        {
+          "category": "圣城与建筑",
+          "assetCount": 27,
+          "hits": [
+            "town"
           ]
         }
       ],
@@ -436,11 +348,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "planet.html",
-          "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/planet.html",
         "workshopLayer": "planet",
         "targetSystem": "planet",
         "exportsToPort": [
@@ -452,12 +360,12 @@
           "carveRivers"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/spheretown.js 剥离 DOM/全局状态，将 SPHERE, buildSeaShell, buildShoreRibbon 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/spheretown.js 剥离 DOM/全局状态，将 SPHERE, buildSeaShell, buildShoreRibbon 迁入 townscaper-web/REACodeRefactoring/planet.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/planet/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 planet/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/spheretown.js 的核心算法（SPHERE, buildSeaShell, buildShoreRibbon, buildSphereGrid）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/planet/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/spheretown.js 的核心算法（SPHERE, buildSeaShell, buildShoreRibbon, buildSphereGrid）抽取重构到 townscaper-web/REACodeRefactoring/planet.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/planet/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -491,17 +399,17 @@
       "heuristicSystem": "scene",
       "matchedCategories": [
         {
-          "category": "圣城与建筑",
-          "assetCount": 27,
-          "hits": [
-            "socket"
-          ]
-        },
-        {
           "category": "地形与场景构件",
           "assetCount": 36,
           "hits": [
             "rock"
+          ]
+        },
+        {
+          "category": "圣城与建筑",
+          "assetCount": 27,
+          "hits": [
+            "socket"
           ]
         },
         {
@@ -522,11 +430,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/core/wfc.js",
-          "exists": true,
-          "sha256": "2e8555a477d38c860abb1b97d09aa25e2f65d692589ed009e5725571e5d6a946"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/core/wfc.js",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -538,12 +442,12 @@
           "rockSides"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/socketrock.js 剥离 DOM/全局状态，将 BASE_TILES, CAP_TILES, RIM_TILES 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/socketrock.js 剥离 DOM/全局状态，将 BASE_TILES, CAP_TILES, RIM_TILES 迁入 townscaper-web/REACodeRefactoring/src/core/wfc.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/socketrock.js 的核心算法（BASE_TILES, CAP_TILES, RIM_TILES, closure）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/socketrock.js 的核心算法（BASE_TILES, CAP_TILES, RIM_TILES, closure）抽取重构到 townscaper-web/REACodeRefactoring/src/core/wfc.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -587,11 +491,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/build/buildings.js",
-          "exists": true,
-          "sha256": "230b6451dc75be001b7053468990acb2838a60d58fd88c4752ecefe443ec344f"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/build/buildings.js",
         "workshopLayer": "object",
         "targetSystem": "object",
         "exportsToPort": [
@@ -600,12 +500,12 @@
           "wallFrame"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/engine/props.js 剥离 DOM/全局状态，将 makeHolePair, rectCorners, wallFrame 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/engine/props.js 剥离 DOM/全局状态，将 makeHolePair, rectCorners, wallFrame 迁入 townscaper-web/REACodeRefactoring/src/build/buildings.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/object/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 object/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/engine/props.js 的核心算法（makeHolePair, rectCorners, wallFrame）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/object/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/engine/props.js 的核心算法（makeHolePair, rectCorners, wallFrame）抽取重构到 townscaper-web/REACodeRefactoring/src/build/buildings.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/object/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -663,11 +563,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "planet.html",
-          "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/planet.html",
         "workshopLayer": "planet",
         "targetSystem": "planet",
         "exportsToPort": [
@@ -679,12 +575,12 @@
           "triangleStats"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/engine/sphere.js 剥离 DOM/全局状态，将 delaunay2D, normalizeAll, project 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/engine/sphere.js 剥离 DOM/全局状态，将 delaunay2D, normalizeAll, project 迁入 townscaper-web/REACodeRefactoring/planet.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/planet/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 planet/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/engine/sphere.js 的核心算法（delaunay2D, normalizeAll, project, randomSpherePoints）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/planet/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/engine/sphere.js 的核心算法（delaunay2D, normalizeAll, project, randomSpherePoints）抽取重构到 townscaper-web/REACodeRefactoring/planet.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/planet/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -811,11 +707,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/terrain/blotch-atlas.js",
-          "exists": true,
-          "sha256": "32368e30b24837b0f32281a16dfac3c3037d5bda22cb91bf27e5ab66173e1321"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/terrain/blotch-atlas.js",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -825,12 +717,12 @@
           "createRimField"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/engine/blotch.js 剥离 DOM/全局状态，将 attachBlotch, createBlotch, createBlotchAtlas 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/engine/blotch.js 剥离 DOM/全局状态，将 attachBlotch, createBlotch, createBlotchAtlas 迁入 townscaper-web/REACodeRefactoring/src/terrain/blotch-atlas.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/engine/blotch.js 的核心算法（attachBlotch, createBlotch, createBlotchAtlas, createRimField）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/engine/blotch.js 的核心算法（attachBlotch, createBlotch, createBlotchAtlas, createRimField）抽取重构到 townscaper-web/REACodeRefactoring/src/terrain/blotch-atlas.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -892,11 +784,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/life/impostor.js",
-          "exists": true,
-          "sha256": "ea875da5886e5e62ac5eff024f5a239d164a407eb3bc0be0cb470cbf661b94c4"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/life/impostor.js",
         "workshopLayer": "object",
         "targetSystem": "object",
         "exportsToPort": [
@@ -905,12 +793,12 @@
           "makeBlobTree"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/engine/impostor.js 剥离 DOM/全局状态，将 createImpostors, makeBlobCloud, makeBlobTree 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/engine/impostor.js 剥离 DOM/全局状态，将 createImpostors, makeBlobCloud, makeBlobTree 迁入 townscaper-web/REACodeRefactoring/src/life/impostor.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/object/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 object/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/engine/impostor.js 的核心算法（createImpostors, makeBlobCloud, makeBlobTree）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/object/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/engine/impostor.js 的核心算法（createImpostors, makeBlobCloud, makeBlobTree）抽取重构到 townscaper-web/REACodeRefactoring/src/life/impostor.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/object/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -948,18 +836,18 @@
       "heuristicSystem": "scene",
       "matchedCategories": [
         {
+          "category": "地形与场景构件",
+          "assetCount": 36,
+          "hits": [
+            "normal"
+          ]
+        },
+        {
           "category": "圣城与建筑",
           "assetCount": 27,
           "hits": [
             "roof",
             "tower"
-          ]
-        },
-        {
-          "category": "地形与场景构件",
-          "assetCount": 36,
-          "hits": [
-            "normal"
           ]
         }
       ],
@@ -973,11 +861,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "building-kit-r55.html",
-          "exists": true,
-          "sha256": "9a845352fb8cc90bc671cb2214186fa198dc7f9bc9079023675f5ea761949c96"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/building-kit-r55.html",
         "workshopLayer": "building",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -989,12 +873,12 @@
           "polyArea3"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/hiproof.js 剥离 DOM/全局状态，将 FLOOR_H, TOWERS, audit 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/hiproof.js 剥离 DOM/全局状态，将 FLOOR_H, TOWERS, audit 迁入 townscaper-web/REACodeRefactoring/building-kit-r55.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/building/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 building/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/hiproof.js 的核心算法（FLOOR_H, TOWERS, audit, gableRoof）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/building/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/hiproof.js 的核心算法（FLOOR_H, TOWERS, audit, gableRoof）抽取重构到 townscaper-web/REACodeRefactoring/building-kit-r55.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/building/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1024,17 +908,17 @@
       "heuristicSystem": "scene",
       "matchedCategories": [
         {
-          "category": "圣城与建筑",
-          "assetCount": 27,
-          "hits": [
-            "house"
-          ]
-        },
-        {
           "category": "地形与场景构件",
           "assetCount": 36,
           "hits": [
             "island"
+          ]
+        },
+        {
+          "category": "圣城与建筑",
+          "assetCount": 27,
+          "hits": [
+            "house"
           ]
         },
         {
@@ -1055,11 +939,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/terrain/generate.js",
-          "exists": true,
-          "sha256": "93a0bb6695bfe9a5d6ffd859d9ba58e89d6e429938873b67a4b9b2af35da88bc"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/terrain/generate.js",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -1071,12 +951,12 @@
           "minAngle"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/triisland.js 剥离 DOM/全局状态，将 buildTriIsland, extrudePrisms, footprintRadius 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/triisland.js 剥离 DOM/全局状态，将 buildTriIsland, extrudePrisms, footprintRadius 迁入 townscaper-web/REACodeRefactoring/src/terrain/generate.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/triisland.js 的核心算法（buildTriIsland, extrudePrisms, footprintRadius, heightOf）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/triisland.js 的核心算法（buildTriIsland, extrudePrisms, footprintRadius, heightOf）抽取重构到 townscaper-web/REACodeRefactoring/src/terrain/generate.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1147,11 +1027,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "garden.html",
-          "exists": true,
-          "sha256": "ea75e5a57e9adea1b2391166b0c4967c36fd13cb0f605d06b5ff01e0ea9ccc95"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/garden.html",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -1163,12 +1039,12 @@
           "renderPlan"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/edgeplant.js 剥离 DOM/全局状态，将 audit, findRims, placeGardenPath 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/edgeplant.js 剥离 DOM/全局状态，将 audit, findRims, placeGardenPath 迁入 townscaper-web/REACodeRefactoring/garden.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/edgeplant.js 的核心算法（audit, findRims, placeGardenPath, placeGrassBand）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/edgeplant.js 的核心算法（audit, findRims, placeGardenPath, placeGrassBand）抽取重构到 townscaper-web/REACodeRefactoring/garden.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1233,11 +1109,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/light/bake.js",
-          "exists": true,
-          "sha256": "0640aab717d78c3343421b961ed9ea634576fe9fb439f5bc7a71041d71db1eb7"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/light/bake.js",
         "workshopLayer": "lightlife",
         "targetSystem": "multi",
         "exportsToPort": [
@@ -1249,12 +1121,12 @@
           "buildSDF"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/lighting.js 剥离 DOM/全局状态，将 FIELD_GLSL, bakeRayBounce, bakeSixDirVolume 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/lighting.js 剥离 DOM/全局状态，将 FIELD_GLSL, bakeRayBounce, bakeSixDirVolume 迁入 townscaper-web/REACodeRefactoring/src/light/bake.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/lightlife/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 lightlife/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/lighting.js 的核心算法（FIELD_GLSL, bakeRayBounce, bakeSixDirVolume, bakeSoftNormals）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/lightlife/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/lighting.js 的核心算法（FIELD_GLSL, bakeRayBounce, bakeSixDirVolume, bakeSoftNormals）抽取重构到 townscaper-web/REACodeRefactoring/src/light/bake.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/lightlife/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1388,11 +1260,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "navigation.html",
-          "exists": true,
-          "sha256": "00a2540b31a943fd9d8c970b3667990bd7baa136dcf3605adf6cd412b0e322cf"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/navigation.html",
         "workshopLayer": "battle",
         "targetSystem": "multi",
         "exportsToPort": [
@@ -1404,12 +1272,12 @@
           "resample"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/cavepath.js 剥离 DOM/全局状态，将 CFG, archHead, inSlab 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/cavepath.js 剥离 DOM/全局状态，将 CFG, archHead, inSlab 迁入 townscaper-web/REACodeRefactoring/navigation.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/battle/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 battle/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/cavepath.js 的核心算法（CFG, archHead, inSlab, inTunnel）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/battle/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/cavepath.js 的核心算法（CFG, archHead, inSlab, inTunnel）抽取重构到 townscaper-web/REACodeRefactoring/navigation.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/battle/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1471,11 +1339,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/core/canopy.js",
-          "exists": true,
-          "sha256": "f7aefb671c7077b4b7e41ff72b897159276cb792598a6541b1546b01b8405974"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/core/canopy.js",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -1486,12 +1350,12 @@
           "relaxBlobMesh"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/blobrelax.js 剥离 DOM/全局状态，将 buildBlobCanopy, computeNormals, makeField 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/blobrelax.js 剥离 DOM/全局状态，将 buildBlobCanopy, computeNormals, makeField 迁入 townscaper-web/REACodeRefactoring/src/core/canopy.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/blobrelax.js 的核心算法（buildBlobCanopy, computeNormals, makeField, nearestBlob）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/blobrelax.js 的核心算法（buildBlobCanopy, computeNormals, makeField, nearestBlob）抽取重构到 townscaper-web/REACodeRefactoring/src/core/canopy.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1562,11 +1426,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "navigation.html",
-          "exists": true,
-          "sha256": "00a2540b31a943fd9d8c970b3667990bd7baa136dcf3605adf6cd412b0e322cf"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/navigation.html",
         "workshopLayer": "battle",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -1578,12 +1438,12 @@
           "route"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/holenav.js 剥离 DOM/全局状态，将 buildPortalGraph, doorCost, growthSeries 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/holenav.js 剥离 DOM/全局状态，将 buildPortalGraph, doorCost, growthSeries 迁入 townscaper-web/REACodeRefactoring/navigation.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/battle/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 battle/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/holenav.js 的核心算法（buildPortalGraph, doorCost, growthSeries, makeCheese）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/battle/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/holenav.js 的核心算法（buildPortalGraph, doorCost, growthSeries, makeCheese）抽取重构到 townscaper-web/REACodeRefactoring/navigation.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/battle/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1609,17 +1469,17 @@
       "heuristicSystem": "scene",
       "matchedCategories": [
         {
-          "category": "圣城与建筑",
-          "assetCount": 27,
-          "hits": [
-            "wall"
-          ]
-        },
-        {
           "category": "地形与场景构件",
           "assetCount": 36,
           "hits": [
             "mesa"
+          ]
+        },
+        {
+          "category": "圣城与建筑",
+          "assetCount": 27,
+          "hits": [
+            "wall"
           ]
         }
       ],
@@ -1633,11 +1493,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/terrain/generate.js",
-          "exists": true,
-          "sha256": "93a0bb6695bfe9a5d6ffd859d9ba58e89d6e429938873b67a4b9b2af35da88bc"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/terrain/generate.js",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -1647,12 +1503,12 @@
           "buildMesa"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/engine/mesa.js 剥离 DOM/全局状态，将 MESA_PALETTE, TOP_SLOTS, WALL_SLOTS 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/engine/mesa.js 剥离 DOM/全局状态，将 MESA_PALETTE, TOP_SLOTS, WALL_SLOTS 迁入 townscaper-web/REACodeRefactoring/src/terrain/generate.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/engine/mesa.js 的核心算法（MESA_PALETTE, TOP_SLOTS, WALL_SLOTS, buildMesa）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/engine/mesa.js 的核心算法（MESA_PALETTE, TOP_SLOTS, WALL_SLOTS, buildMesa）抽取重构到 townscaper-web/REACodeRefactoring/src/terrain/generate.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1709,11 +1565,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/light/surface-shadow.js",
-          "exists": true,
-          "sha256": "9870cc64dcd7b05c49f6be7c86a113459dac18c5e7c3b12d68d6b39b94a56b46"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/light/surface-shadow.js",
         "workshopLayer": "lightlife",
         "targetSystem": "multi",
         "exportsToPort": [
@@ -1724,12 +1576,12 @@
           "sweep"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/surfaceshadow.js 剥离 DOM/全局状态，将 buildTerrain, renderTop, shadowMap 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/surfaceshadow.js 剥离 DOM/全局状态，将 buildTerrain, renderTop, shadowMap 迁入 townscaper-web/REACodeRefactoring/src/light/surface-shadow.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/lightlife/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 lightlife/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/surfaceshadow.js 的核心算法（buildTerrain, renderTop, shadowMap, shadowStats）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/lightlife/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/surfaceshadow.js 的核心算法（buildTerrain, renderTop, shadowMap, shadowStats）抽取重构到 townscaper-web/REACodeRefactoring/src/light/surface-shadow.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/lightlife/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1866,11 +1718,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/badnorth/battle.js",
-          "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/badnorth/battle.js",
         "workshopLayer": "object",
         "targetSystem": "object",
         "exportsToPort": [
@@ -1882,12 +1730,12 @@
           "drawNaive"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/unitbatch.js 剥离 DOM/全局状态，将 SPRITE, bench, buildAtlas 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/unitbatch.js 剥离 DOM/全局状态，将 SPRITE, bench, buildAtlas 迁入 townscaper-web/REACodeRefactoring/src/badnorth/battle.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/object/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 object/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/unitbatch.js 的核心算法（SPRITE, bench, buildAtlas, drawBatch）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/object/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/unitbatch.js 的核心算法（SPRITE, bench, buildAtlas, drawBatch）抽取重构到 townscaper-web/REACodeRefactoring/src/badnorth/battle.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/object/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -1986,17 +1834,17 @@
       "heuristicSystem": "planet",
       "matchedCategories": [
         {
-          "category": "圣城与建筑",
-          "assetCount": 27,
-          "hits": [
-            "house"
-          ]
-        },
-        {
           "category": "地形与场景构件",
           "assetCount": 36,
           "hits": [
             "sphere"
+          ]
+        },
+        {
+          "category": "圣城与建筑",
+          "assetCount": 27,
+          "hits": [
+            "house"
           ]
         }
       ],
@@ -2010,11 +1858,7 @@
       "blueprint": {
         "effort": "S",
         "effortLabel": "快捷（~15分钟内核抽取）",
-        "targetModule": {
-          "path": "planet.html",
-          "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/planet.html",
         "workshopLayer": "planet",
         "targetSystem": "planet",
         "exportsToPort": [
@@ -2022,12 +1866,12 @@
           "buildSphereHouses"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/spherehouse.js 剥离 DOM/全局状态，将 HOUSE, buildSphereHouses 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/spherehouse.js 剥离 DOM/全局状态，将 HOUSE, buildSphereHouses 迁入 townscaper-web/REACodeRefactoring/planet.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/planet/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 planet/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/spherehouse.js 的核心算法（HOUSE, buildSphereHouses）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/planet/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/spherehouse.js 的核心算法（HOUSE, buildSphereHouses）抽取重构到 townscaper-web/REACodeRefactoring/planet.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/planet/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -2078,23 +1922,19 @@
       "blueprint": {
         "effort": "S",
         "effortLabel": "快捷（~15分钟内核抽取）",
-        "targetModule": {
-          "path": "contour.html",
-          "exists": true,
-          "sha256": "aaf8eaf3367bc3779bd430c5a3227af031079d478eeabcf0d1a92d8fe51522f4"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/contour.html",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
           "createCoastContour"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/engine/contour.js 剥离 DOM/全局状态，将 createCoastContour 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/engine/contour.js 剥离 DOM/全局状态，将 createCoastContour 迁入 townscaper-web/REACodeRefactoring/contour.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/engine/contour.js 的核心算法（createCoastContour）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/engine/contour.js 的核心算法（createCoastContour）抽取重构到 townscaper-web/REACodeRefactoring/contour.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -2135,23 +1975,19 @@
       "blueprint": {
         "effort": "S",
         "effortLabel": "快捷（~15分钟内核抽取）",
-        "targetModule": {
-          "path": "src/terrain/shape.js",
-          "exists": true,
-          "sha256": "9b3f1847098c047ba073ab974c43651f5a33b59fb83c35406db995d64a4a6478"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/terrain/shape.js",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
           "smoothTerrainNormals"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/engine/normalsmooth.js 剥离 DOM/全局状态，将 smoothTerrainNormals 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/engine/normalsmooth.js 剥离 DOM/全局状态，将 smoothTerrainNormals 迁入 townscaper-web/REACodeRefactoring/src/terrain/shape.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/engine/normalsmooth.js 的核心算法（smoothTerrainNormals）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/engine/normalsmooth.js 的核心算法（smoothTerrainNormals）抽取重构到 townscaper-web/REACodeRefactoring/src/terrain/shape.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -2180,17 +2016,17 @@
       "heuristicSystem": "scene",
       "matchedCategories": [
         {
-          "category": "圣城与建筑",
-          "assetCount": 27,
-          "hits": [
-            "tower"
-          ]
-        },
-        {
           "category": "地形与场景构件",
           "assetCount": 36,
           "hits": [
             "terrain"
+          ]
+        },
+        {
+          "category": "圣城与建筑",
+          "assetCount": 27,
+          "hits": [
+            "tower"
           ]
         }
       ],
@@ -2204,11 +2040,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/core/story-datum.js",
-          "exists": true,
-          "sha256": "9e6c0710ffa446fad6bbddd9c28c837a7d6eee2be6778946f61230d90dcf676a"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/core/story-datum.js",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -2220,12 +2052,12 @@
           "mulberry32"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/storydatum.js 剥离 DOM/全局状态，将 CORNICE, CORNICE_T, STOREY_H 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/storydatum.js 剥离 DOM/全局状态，将 CORNICE, CORNICE_T, STOREY_H 迁入 townscaper-web/REACodeRefactoring/src/core/story-datum.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/storydatum.js 的核心算法（CORNICE, CORNICE_T, STOREY_H, TERRACE）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/storydatum.js 的核心算法（CORNICE, CORNICE_T, STOREY_H, TERRACE）抽取重构到 townscaper-web/REACodeRefactoring/src/core/story-datum.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -2267,11 +2099,7 @@
       "blueprint": {
         "effort": "S",
         "effortLabel": "快捷（~15分钟内核抽取）",
-        "targetModule": {
-          "path": "src/build/buildings.js",
-          "exists": true,
-          "sha256": "230b6451dc75be001b7053468990acb2838a60d58fd88c4752ecefe443ec344f"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/build/buildings.js",
         "workshopLayer": "building",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -2279,12 +2107,12 @@
           "buildHouseRoofs"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/engine/roofs.js 剥离 DOM/全局状态，将 RoofBuilder, buildHouseRoofs 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/engine/roofs.js 剥离 DOM/全局状态，将 RoofBuilder, buildHouseRoofs 迁入 townscaper-web/REACodeRefactoring/src/build/buildings.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/building/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 building/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/engine/roofs.js 的核心算法（RoofBuilder, buildHouseRoofs）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/building/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/engine/roofs.js 的核心算法（RoofBuilder, buildHouseRoofs）抽取重构到 townscaper-web/REACodeRefactoring/src/build/buildings.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/building/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -2347,11 +2175,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "navigation.html",
-          "exists": true,
-          "sha256": "00a2540b31a943fd9d8c970b3667990bd7baa136dcf3605adf6cd412b0e322cf"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/navigation.html",
         "workshopLayer": "battle",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -2363,12 +2187,12 @@
           "selfCheck"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/cheesenav.js 剥离 DOM/全局状态，将 carveCheese, components, euclid 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/cheesenav.js 剥离 DOM/全局状态，将 carveCheese, components, euclid 迁入 townscaper-web/REACodeRefactoring/navigation.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/battle/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 battle/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/cheesenav.js 的核心算法（carveCheese, components, euclid, findPath）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/battle/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/cheesenav.js 的核心算法（carveCheese, components, euclid, findPath）抽取重构到 townscaper-web/REACodeRefactoring/navigation.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/battle/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -2433,11 +2257,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/badnorth/battle.js",
-          "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/badnorth/battle.js",
         "workshopLayer": "object",
         "targetSystem": "object",
         "exportsToPort": [
@@ -2449,12 +2269,12 @@
           "spreadInfo"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/infograph.js 剥离 DOM/全局状态，将 buildGraph, cohesion, componentCount 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/infograph.js 剥离 DOM/全局状态，将 buildGraph, cohesion, componentCount 迁入 townscaper-web/REACodeRefactoring/src/badnorth/battle.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/object/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 object/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/infograph.js 的核心算法（buildGraph, cohesion, componentCount, makeUnit）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/object/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/infograph.js 的核心算法（buildGraph, cohesion, componentCount, makeUnit）抽取重构到 townscaper-web/REACodeRefactoring/src/badnorth/battle.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/object/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -2504,11 +2324,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "src/build/buildings.js",
-          "exists": true,
-          "sha256": "230b6451dc75be001b7053468990acb2838a60d58fd88c4752ecefe443ec344f"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/src/build/buildings.js",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -2518,12 +2334,12 @@
           "makeDemoTown"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/looptown.js 剥离 DOM/全局状态，将 analyse, audit, findEnclosed 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/looptown.js 剥离 DOM/全局状态，将 analyse, audit, findEnclosed 迁入 townscaper-web/REACodeRefactoring/src/build/buildings.js",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/looptown.js 的核心算法（analyse, audit, findEnclosed, makeDemoTown）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/looptown.js 的核心算法（analyse, audit, findEnclosed, makeDemoTown）抽取重构到 townscaper-web/REACodeRefactoring/src/build/buildings.js，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     },
     {
@@ -2574,11 +2390,7 @@
       "blueprint": {
         "effort": "M",
         "effortLabel": "中等（~30分钟契约重构）",
-        "targetModule": {
-          "path": "slots.html",
-          "exists": true,
-          "sha256": "525b94675c759de3e44ee0e6f1c10353032ecf37ac8aa4941ece7bef90fa00e1"
-        },
+        "targetModule": "townscaper-web/REACodeRefactoring/slots.html",
         "workshopLayer": "relief",
         "targetSystem": "scene",
         "exportsToPort": [
@@ -2590,12 +2402,93 @@
           "variants"
         ],
         "steps": [
-          "1. 纯核抽取：从 REACode/src/slotsolve.js 剥离 DOM/全局状态，将 K, makeGrid, measure 迁入 [object Object]",
+          "1. 纯核抽取：从 REACode/src/slotsolve.js 剥离 DOM/全局状态，将 K, makeGrid, measure 迁入 townscaper-web/REACodeRefactoring/slots.html",
           "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
           "3. 挂载管线：在 src/system-workshop/relief/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
           "4. 行为裁判：在 relief/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
         ],
-        "agentPrompt": "请按快速重构协议将 REACode/src/slotsolve.js 的核心算法（K, makeGrid, measure, propagate）抽取重构到 [object Object]，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+        "agentPrompt": "请按快速重构协议将 REACode/src/slotsolve.js 的核心算法（K, makeGrid, measure, propagate）抽取重构到 townscaper-web/REACodeRefactoring/slots.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/relief/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
+      }
+    },
+    {
+      "id": "src/housekit.js",
+      "source": "src/housekit.js",
+      "status": "requires-parity-review",
+      "unmatchedCount": 9,
+      "unmatchedExports": [
+        "EAVE_X",
+        "EAVE_Y",
+        "FLOOR_H",
+        "TRIM",
+        "buildVillage",
+        "makeHouse",
+        "mulberry32",
+        "toWorld"
+      ],
+      "existingTargets": [
+        {
+          "path": "building-kit-r55.html",
+          "exists": true,
+          "sha256": "9a845352fb8cc90bc671cb2214186fa198dc7f9bc9079023675f5ea761949c96"
+        },
+        {
+          "path": "src/build/village.js",
+          "exists": true,
+          "sha256": "5818e86497de5bd2195733040aee21418e253d8839fd8f78aae72d37ef5afcb3"
+        },
+        {
+          "path": "src/core/house-kit.js",
+          "exists": true,
+          "sha256": "92cb7f09e0f77e044c5c7ba5f77fdd10419d6622773e71c1361ea340bd4401e7"
+        }
+      ],
+      "targetSystem": "scene",
+      "targetSystemName": "场景系统",
+      "heuristicSystem": "scene",
+      "matchedCategories": [
+        {
+          "category": "圣城与建筑",
+          "assetCount": 27,
+          "hits": [
+            "house"
+          ]
+        },
+        {
+          "category": "渲染与辅助几何",
+          "assetCount": 9,
+          "hits": [
+            "rim"
+          ]
+        }
+      ],
+      "benefitingAssets": 36,
+      "priorityScore": 22.4,
+      "jev": null,
+      "rawRisks": [
+        "有 9 个原版导出尚未对齐到重构库，接口语义未校验",
+        "缺少能力契约（保护带/净空声明）与独立验证 Worker 检查项"
+      ],
+      "blueprint": {
+        "effort": "M",
+        "effortLabel": "中等（~30分钟契约重构）",
+        "targetModule": "townscaper-web/REACodeRefactoring/building-kit-r55.html",
+        "workshopLayer": "building",
+        "targetSystem": "scene",
+        "exportsToPort": [
+          "EAVE_X",
+          "EAVE_Y",
+          "FLOOR_H",
+          "TRIM",
+          "buildVillage",
+          "makeHouse"
+        ],
+        "steps": [
+          "1. 纯核抽取：从 REACode/src/housekit.js 剥离 DOM/全局状态，将 EAVE_X, EAVE_Y, FLOOR_H 迁入 townscaper-web/REACodeRefactoring/building-kit-r55.html",
+          "2. 声明契约：补充 reads / writes / preserves 保护带契约与固定种子确定性",
+          "3. 挂载管线：在 src/system-workshop/building/capabilities.js 注册可执行 ⚙ 能力与参数滑块",
+          "4. 行为裁判：在 building/verify.js 接入独立数值核验 + 同种子原版对账（L4→L5）"
+        ],
+        "agentPrompt": "请按快速重构协议将 REACode/src/housekit.js 的核心算法（EAVE_X, EAVE_Y, FLOOR_H, TRIM）抽取重构到 townscaper-web/REACodeRefactoring/building-kit-r55.html，修复原版耦合瑕疵并补充单测；随后封装为 src/system-workshop/building/capabilities.js 的可执行 ⚙ 能力（带契约 reads/writes/preserves 与独立 verify），不直接复制原版未重构代码。"
       }
     }
   ]

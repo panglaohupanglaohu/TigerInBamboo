@@ -1902,3 +1902,9 @@ steps: []（浏览器加载 pipeline.html 时立刻崩溃，0 步截图）
 - `RESOLVED_DEFAULTS`（pending-defaults.js）P-R32-01 记录翻成 soft，note 注明 11-24 实测分属修复前旧状态。
 - 测试同步：apostles-compare-browser 初始期望 approved→soft；apostles-terrain-pipeline-browser 预检与「放弃后」期望 approved→soft；openApostles / apostles-look-browser 对 approved 也显式写 localStorage（旧代码依赖 approved 是默认）；measure-pick 断言 planId approved→soft。
 - 验证：measure-pick/defaults-registry/nav-parity/compare 全绿（20/20）。
+
+### 2026-11-25 维京登船甲板位修复 + 李白号靠泊转正（用户截图驱动）
+- **维京人站烟囱（bug 1）**：`bookshopBoarding.deckSlots` 网格射线 `ray.far = size.y+6` 用的是**船局部单位**，射线却在世界空间打——李白号 `LEEBAI_SCALE≈2.73` 放大后射线够不到甲板（196 条射线仅 14 条命中且全在 7.4–9.8 的烟囱/桅顶），聚类把烟囱顶层当成「主甲板」。修复：far 乘 `matrixWorld.getMaxScaleOnAxis()`；NOT_DECK 增加 funnel/chimney/mast/wheelhouse/bridge/cabin 等命名排除（合并网格名丢失，正则对 Duke 无效，故 far 修复才是根因）。
+- **实测验证**（页面内复刻 deckSlots）：leebai 采样 14→186，deckY 8.66→**0.28（真甲板层）**，open 5→46；Duke deckY=1.92 最低密集层正常。
+- **两船近垂直交叉（bug 3，用户截图）**：实测船头方向差 80°——李白号 dock yaw `π/2-1.85` 与 Duke 码头弧向差近 90°。修复：grandFreighter 下 `seatTownObject` heading 0→1.339 rad，船头误差 0.2°，与码头 bbox 无交叠（5m 间隙）。
+- **苔庭不打重甲兵（bug 2）**：排查中。攻击链路 = mossBatianAttack `tmGoal`→REA 寻路→2m 近战；重甲兵须在 REA 舞台陆地格（`world.top(c)>=1`）才会被追。已挂 12 分钟实况探针验证索降落点是否在舞台格内。

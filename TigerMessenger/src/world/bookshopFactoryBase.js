@@ -46,7 +46,7 @@ export function buildBookshopFactoryBase({root,districts,R,colliders}){
  // Cargo ship sits in the water, independently of the land surface.
  // 2026-11-08 主人要求：李白号（LeeBai）全长缩到 50 米（原 5 倍时实测 91.5 米，船模型本身长 18.3）。靠码头一侧的船舷位置不变（船宽 5 → 半宽 2.5×倍数），船心往外海挪。
  const LEEBAI_SCALE=grandFreighter?50/18.3:1,LEEBAI_X=grandFreighter?-35+(5-LEEBAI_SCALE)*2.5:-24;
- const ship=new THREE.Group();ship.name='bookshop-steam-parts-freighter';dock.add(ship);seatTownObject(dock,ship,LEEBAI_X,0,0,R);ship.scale.setScalar(LEEBAI_SCALE);ship.userData.scaleFromOriginal=LEEBAI_SCALE;ship.position.addScaledVector(new THREE.Vector3(0,1,0).applyQuaternion(ship.quaternion),.5);
+ const ship=new THREE.Group();ship.name='bookshop-steam-parts-freighter';dock.add(ship);seatTownObject(dock,ship,LEEBAI_X,0,grandFreighter?1.339:0,R); // 大货轮转正 ~77°：与 Duke 号平行停靠（两船原来近垂直交叉，2026-11-25 用户截图）ship.scale.setScalar(LEEBAI_SCALE);ship.userData.scaleFromOriginal=LEEBAI_SCALE;ship.position.addScaledVector(new THREE.Vector3(0,1,0).applyQuaternion(ship.quaternion),.5);
  const hullDepth=grandFreighter?3.4:1.9;
  const hg=createBookshopFreighterHull(hullDepth);
  const hullMaterial=iron.clone();hullMaterial.color.set(0xffffff);hullMaterial.vertexColors=true;

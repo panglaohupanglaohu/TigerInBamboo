@@ -259,7 +259,7 @@ export function buildTerrain(w, world, { L, shape = null }) {
     w.fieldFrame = null;
 
     // 草皮垂过崖边：草顶面、邻居更低的边，沿崖面垂下一段圆润的"舌头"
-    const shrubCol = w.c(SHRUB_DEFAULT_STYLE.color);
+    const shrubCol = w.c(world.shrubDrapeColor ?? SHRUB_DEFAULT_STYLE.color);
     if ((me.kind === 'grass' || me.kind === 'dry') && g >= 2) {
       for (let i = 0; i < c.n; i++) {
         const o = nbr(c, i);

@@ -5,7 +5,7 @@
       "grid": "quad",
       "width": 1280,
       "height": 900,
-      "changed": 61003,
+      "changed": 60983,
       "sourceMesh": true,
       "materialRestored": true,
       "geometrySame": true,
@@ -13,10 +13,10 @@
       "stats": {
         "mapSize": 128,
         "source": "core/paint-normal.js",
-        "mesh": "3e612455-a429-486a-923d-8a34f0f0c197"
+        "mesh": "bc7b54b2-3ad8-456f-b2ce-e5dd8e3aeb94"
       },
       "restored": {
-        "mismatched": 4033,
+        "mismatched": 3619,
         "disposed": 1,
         "sourceCleared": true
       }
@@ -25,7 +25,7 @@
       "grid": "mixed",
       "width": 1280,
       "height": 900,
-      "changed": 74127,
+      "changed": 73891,
       "sourceMesh": true,
       "materialRestored": true,
       "geometrySame": true,
@@ -33,10 +33,10 @@
       "stats": {
         "mapSize": 128,
         "source": "core/paint-normal.js",
-        "mesh": "7c52cb4e-7b6b-4d16-a4e2-bc898da88fb1"
+        "mesh": "3afc8099-9a80-43b6-815b-78f73ddd9fd5"
       },
       "restored": {
-        "mismatched": 4528,
+        "mismatched": 3791,
         "disposed": 1,
         "sourceCleared": true
       }
@@ -110,6 +110,9 @@
     "free": 15,
     "radial": true
   },
-  "passed": false,
-  "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n337 !== 294\n\n    at file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/source-refactor-browser.mjs:21:190"
+  "fileList": {
+    "total": 361,
+    "currentDeliveries": 4
+  },
+  "passed": true
 }

@@ -41,11 +41,11 @@ const LEVEL_M=3.2;                 // metres per refactor level (12 levels = 38.
 const FOOT_M=7;                    // wall feet carried this far below the waterline
 // Limestone theme for the refactor's terrain palette (target sheet: cream / blue-grey walls, shell
 // seams, yellow-green turf). Applied only while the apostles build, then restored.
-const APOSTLE_TERRAIN={rock:'#d8d2c2',rockShade:'#c3c8c7',rockPale:'#e7e1d1',rockDark:'#8e99a1',strata:'#d3b4a2',
+const APOSTLE_TERRAIN={rock:'#d8d2c2',rockShade:'#c3c8c7',rockPale:'#e7e1d1',rockDark:'#8e99a1',strata:'#c9c2b2',
  sand:'#d9cfb6',sandBright:'#e7ddc6',moss:'#a6bb5c',mossDeep:'#93ad52',grass:'#9fbf55',grassDeep:'#86a84a',lip:'#e6e3a8',river:'#5d9fae',riverBank:'#b9ad8c'};
 const WET=new THREE.Color('#4f5961'),WET_DEEP=new THREE.Color('#313b44');
 // wall strata of the target sheet: cream limestone with blue-grey and pale shell-coral bands (low frequency, by height)
-const BAND_COOL=new THREE.Color('#c4ccd0'),BAND_WARM=new THREE.Color('#e3c6b2'),BAND_PALE=new THREE.Color('#ece6d6');
+const BAND_COOL=new THREE.Color('#c4ccd0'),BAND_WARM=new THREE.Color('#dcd3c2'),BAND_PALE=new THREE.Color('#ece6d6');
 
 function strHash(s){let h=2166136261;for(let i=0;i<s.length;i++)h=Math.imul(h^s.charCodeAt(i),16777619);return h>>>0;}
 // Low-poly copy of life/vegetation.js SHRUB (same blobs / puffed normals / aTip, icosahedron detail 0 instead of 1:
@@ -115,7 +115,7 @@ export function* buildTwelveApostlesReacodeSteps({parent,radius=160,railCurves,r
   // ---- grid + world (deterministic per mass: the same grid comes back for saved edits)
   const ext=Math.max(...footprint.map(([cx,cz,rx,rz])=>Math.hypot(cx,cz)+Math.max(rx,rz)*1.25))+4;
   const grid=decorateCells(buildQuadGrid({radius:Math.ceil(ext/S)+3,hexSize:1,seed:strHash(id)%100000}));
-  const index=buildCellIndex(grid),world=new World(grid);world.palette=PALETTES.town;if(APOSTLES_LOOK.soft)world.softTops=true;
+  const index=buildCellIndex(grid),world=new World(grid);world.palette=PALETTES.town;if(APOSTLES_LOOK.soft)world.softTops=true;world.shrubDrapeColor='#a08d54';
   // clearance cap per cell (lazy): the highest level a column may reach without touching rail / town / protected sites
   const cap=new Int8Array(grid.cells.length).fill(-1),drop={rail:0,protected:0,town:0};
   const maxLevelAt=c=>{if(cap[c.id]>=0)return cap[c.id];const x=c.cx*S,z=c.cz*S;let hm=MAX_LEVEL;while(hm>0){const why=blockedAt(x,z,hm*LEVEL_M);if(!why)break;hm--;}return cap[c.id]=hm;};

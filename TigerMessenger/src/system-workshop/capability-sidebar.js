@@ -14,6 +14,55 @@ import { buildCapabilityLineage, describeDirection } from '../../../townscaper-w
 
 const el = (tag, text, cls) => { const n = document.createElement(tag); if (text !== undefined) n.textContent = text; if (cls) n.className = cls; return n; };
 export const DRAG_TYPE = 'application/x-tm-capability';
+// R4–R6 全能磁吸拖放：拖动一开始就在整个管线区盖一层「磁吸落点」，任意位置松手都交给同一条路由（onActivate），
+// 不再依赖鼠标正好落在某条泳道 / 某个子管线的 DOM 上；dataTransfer 读不到时退回 window.__tmDrag。
+const TIER_LABEL = { planet: '球系统管线', scene: '场景管线', object: '物件管线' };
+const DOMAIN_LABEL = { battle: '战役子管线', mountain: '山形子管线', fx: '表现层子管线', lightlife: '光影与生命子管线', 'apostles-terrain': '十二门徒地形子管线', relief: '地貌子管线', building: '建筑子管线' };
+let magnet = null, magnetRoute = null;
+function magnetTarget() { return document.querySelector('#system-workshop:not([hidden]) .pipe-region'); }
+function showMagnet(payload, into) {
+  const region = magnetTarget(); if (!region) return;
+  if (!magnet) {
+    magnet = document.createElement('div'); magnet.id = 'cap-magnet'; magnet.setAttribute('aria-hidden', 'true');
+    magnet.addEventListener('dragenter', (e) => { e.preventDefault(); magnet.classList.add('hot'); });
+    magnet.addEventListener('dragover', (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; magnet.classList.add('hot'); });
+    magnet.addEventListener('dragleave', (e) => { if (!magnet.contains(e.relatedTarget)) magnet.classList.remove('hot'); });
+    magnet.addEventListener('drop', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      let d = null; try { d = JSON.parse(e.dataTransfer.getData(DRAG_TYPE)); } catch {}
+      d ||= window.__tmDrag; const route = magnetRoute;
+      endDrag();
+      if (d && route) route(d);
+    });
+    document.body.append(magnet);
+  }
+  const r = region.getBoundingClientRect(), top = Math.max(r.top, 58), bottom = Math.min(r.bottom, innerHeight);
+  Object.assign(magnet.style, { left: r.left + 'px', top: top + 'px', width: r.width + 'px', height: Math.max(120, bottom - top) + 'px' });
+  const what = payload.set ? `能力集合「${payload.name}」· ${payload.set.length} 个` : `「${payload.name || payload.id}」`;
+  const dest = (TIER_LABEL[payload.tier || into] || '当前管线') + (payload.domain && DOMAIN_LABEL[payload.domain] ? ' › ' + DOMAIN_LABEL[payload.domain] : '');
+  magnet.replaceChildren();
+  const icon = document.createElement('div'); icon.className = 'mg-icon'; icon.textContent = '🧲';
+  const b = document.createElement('b'); b.textContent = '松手即加入 · 任意位置';
+  const route = document.createElement('span'); route.className = 'mg-route'; route.textContent = what + '  →  ' + dest;
+  const small = document.createElement('small'); small.textContent = '自动落到它所属的泳道 / 子管线；跨层能力会自动切到对应工坊。';
+  magnet.append(icon, b, route, small);
+  magnet.classList.add('on');
+}
+function endDrag() {
+  document.body.classList.remove('cap-dragging');
+  document.querySelectorAll('.cap-dragged').forEach((x) => x.classList.remove('cap-dragged'));
+  if (magnet) magnet.classList.remove('on', 'hot');
+  window.__tmDrag = null;
+}
+function startDrag(e, payload, node, into, route) {
+  window.__tmDrag = payload;
+  try { e.dataTransfer.setData(DRAG_TYPE, JSON.stringify(payload)); if (payload.id) e.dataTransfer.setData('text/x-tm-capability-id', payload.id); } catch {}
+  e.dataTransfer.effectAllowed = 'copy';
+  document.body.classList.add('cap-dragging'); node?.classList.add('cap-dragged');
+  magnetRoute = route;
+  // 下一帧再盖磁吸层：dragstart 里同步改 DOM 在部分浏览器会取消拖动
+  requestAnimationFrame(() => { if (window.__tmDrag === payload) showMagnet(payload, into); });
+}
 // 「?」怎么用：鼠标移到标签上弹出说明（浮在页面最上层，不被侧栏裁掉）
 let tip = null;
 function showUsage(anchor, item) {
@@ -54,6 +103,7 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
   const VIEW_KEY = 'tm.capability.view.v1';
   let view = 'lineage'; try { if (localStorage.getItem(VIEW_KEY) === 'domain') view = 'domain'; } catch {}
   let lineageCache = null;
+  let runOnly = false; try { runOnly = localStorage.getItem('tm.capability.runOnly.v1') === '1'; } catch {}
   // R23 九级成熟度：脚本生成的证据判定结果；读不到就降级（不显示徽章，计数只写本工坊）
   let maturity = null, matById = new Map();
   fetch(new URL('../scene-authoring/catalog/capability-maturity.json', import.meta.url), { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).then((d) => { if (Array.isArray(d?.rows)) { maturity = d; matById = new Map(d.rows.map((r) => [r.id, r])); render(); } }).catch(() => {});
@@ -92,8 +142,13 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
   const scopes = el('div', undefined, 'cap-scope');
   const b1 = el('button', '本工坊'), b2 = el('button', '全部工坊');
   for (const [b, s] of [[b1, 'tier'], [b2, 'all']]) { b.type = 'button'; b.onclick = () => { scope = s; render(); }; scopes.append(b); }
+  const filters = el('div', undefined, 'cap-filter');
+  const fAll = el('button', '全部条目'), fRun = el('button', '⚙ 只看可执行');
+  fAll.title = '列出 ⚙ 可执行能力和学习库里的源码模块'; fRun.title = '只列能直接加进管线的 ⚙ 能力';
+  for (const [b, v] of [[fAll, false], [fRun, true]]) { b.type = 'button'; b.onclick = () => { runOnly = v; try { localStorage.setItem('tm.capability.runOnly.v1', v ? '1' : '0'); } catch {} render(); }; filters.append(b); }
   const list = el('div', undefined, 'cap-list');
-  host.append(head, hint, scanNote, search, views, scopes, list);
+  host.append(head, hint, scanNote, search, views, scopes, filters, list);
+  const route = (d) => onActivate?.({ ...d, into: getTier(), via: 'magnet' });
   search.oninput = () => { query = search.value.trim().toLowerCase(); render(); };
 
   // 归属：默认按目录 / 能力代码自动划分；作者可以调配到其他工坊，或标成公用（三个工坊都列出）
@@ -132,8 +187,10 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
     const c = el('article', undefined, 'cap-item exec-' + item.exec + (item.runnable ? ' runnable' : '') + (expanded === item.id ? ' open' : ''));
     c.dataset.capabilityId=item.id;
     const adapters=item.runnable?[]:['planet','scene','object'].flatMap(t=>(sources[t]?.()||[]).filter(cap=>(cap.related||[]).includes(item.id)||(item.node?.module?.adapters||[]).some(a=>a.id===cap.id&&a.tier===t)).map(cap=>({cap,tier:t})));
-    c.title = item.runnable ? '拖进管线，或双击加入' : label + '：展开查看源码接口与依赖';
-    const t = el('div', undefined, 'cap-item-head'); t.append(el('span', icon, 'cap-icon'), el('b', item.name), helpBadge(item));
+    c.title = item.runnable ? '拖到右侧管线区任意位置 · 双击或点「＋ 加入」' : label + '：展开查看源码接口与依赖';
+    const t = el('div', undefined, 'cap-item-head'); if (item.runnable) t.append(el('span', '⋮⋮', 'cap-grip')); t.append(el('span', icon, 'cap-icon'), el('b', item.name), helpBadge(item));
+    if (item.runnable) { const q = el('button', '＋ 加入', 'cap-add'); q.type = 'button'; q.draggable = false; q.title = '一键加入管线（自动落到所属泳道 / 子管线）'; q.setAttribute('aria-label', '加入管线：' + item.name);
+      q.onmousedown = (e) => e.stopPropagation(); q.onclick = (e) => { e.stopPropagation(); onActivate?.({ tier: item.tier, id: item.id, name: item.name, into: getTier(), via: 'quick-add' }); }; c.append(q); }
     const mrow = item.runnable ? matById.get(item.id) : null;
     if (mrow) { const m = el('small', 'L' + mrow.level, 'cap-mat m' + mrow.level); m.dataset.level = mrow.level; m.title = '九级成熟度 ' + mrow.label + '\n' + Object.entries(mrow.evidence || {}).map(([k, v]) => '①②③④⑤⑥⑦⑧⑨'[k - 1] + ' ' + v).join('\n'); t.append(m); c.dataset.maturity = mrow.level; }
     if (item.shared) t.append(el('small', '公用', 'cap-tier'));
@@ -176,8 +233,8 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
     }
     if (item.runnable) {
       c.draggable = true;
-      c.ondragstart = (e) => { window.__tmDrag = { tier: item.tier, id: item.id, name: item.name }; e.dataTransfer.setData(DRAG_TYPE, JSON.stringify(window.__tmDrag)); e.dataTransfer.setData('text/plain', item.id); e.dataTransfer.effectAllowed = 'copy'; document.body.classList.add('cap-dragging'); hideUsage(); };
-      c.ondragend = () => { document.body.classList.remove('cap-dragging'); window.__tmDrag = null; };
+      c.ondragstart = (e) => { hideUsage(); startDrag(e, { tier: item.tier, id: item.id, name: item.name, domain: item.cap?.domain }, c, getTier(), route); };
+      c.ondragend = endDrag;
       c.ondblclick = () => onActivate?.({ tier: item.tier, id: item.id, name: item.name, into: getTier() });
     }
     c.onclick = () => { expanded = expanded === item.id ? null : item.id; render(); onOpen?.(item); };
@@ -236,8 +293,9 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
           c.append(h, el('p', set.desc || ''));
           if (!set.preset) { const x = el('button', '删除', 'link'); x.type = 'button'; x.onclick = (e) => { e.stopPropagation(); removeSet(t, set.id); }; c.append(x); }
           c.draggable = true; c.title = '整组拖进管线，或双击加入';
-          c.ondragstart = (e) => { window.__tmDrag = { tier: t, name: set.name, set: withInfo(set.items) }; e.dataTransfer.setData(DRAG_TYPE, JSON.stringify(window.__tmDrag)); e.dataTransfer.effectAllowed = 'copy'; document.body.classList.add('cap-dragging'); hideUsage(); };
-          c.ondragend = () => { document.body.classList.remove('cap-dragging'); window.__tmDrag = null; };
+          c.ondragstart = (e) => { hideUsage(); startDrag(e, { tier: t, name: set.name, set: withInfo(set.items) }, c, getTier(), route); };
+          c.ondragend = endDrag;
+          { const q = el('button', '＋ 整组加入', 'cap-add'); q.type = 'button'; q.draggable = false; q.onmousedown = (e) => e.stopPropagation(); q.onclick = (e) => { e.stopPropagation(); onActivate?.({ tier: t, name: set.name, set: withInfo(set.items), into: getTier(), via: 'quick-add' }); }; c.append(q); h.prepend(el('span', '⋮⋮', 'cap-grip')); }
           c.ondblclick = () => onActivate?.({ tier: t, name: set.name, set: withInfo(set.items), into: getTier() });
           d.append(c);
         }
@@ -249,6 +307,7 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
     const tier = getTier();
     b1.classList.toggle('on', scope === 'tier'); b2.classList.toggle('on', scope === 'all');
     v1.classList.toggle('on', view === 'lineage'); v2.classList.toggle('on', view === 'domain');
+    fAll.classList.toggle('on', !runOnly); fRun.classList.toggle('on', runOnly); filters.hidden = view === 'lineage';
     b1.textContent = '本工坊 · ' + (TIER_NAME[tier] || '').replace('工坊', '');
     list.replaceChildren(); list.dataset.view = view;
     if (view === 'lineage') { renderLineage(tier); return; }
@@ -256,7 +315,7 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
     const tiers = scope === 'all' ? ['planet', 'scene', 'object'] : [tier];
     let shown = 0, runnable = 0;
     for (const t of tiers) {
-      const items = itemsFor(t).filter((i) => !query || (i.name + ' ' + i.desc + ' ' + i.id).toLowerCase().includes(query));
+      const items = itemsFor(t).filter((i) => (!runOnly || i.runnable) && (!query || (i.name + ' ' + i.desc + ' ' + i.id).toLowerCase().includes(query)));
       if (scope === 'all') list.append(el('h3', TIER_NAME[t], 'cap-tier-title'));
       renderSets(t);
       for (const [gid, gname] of groupsFor(t)) {
@@ -266,8 +325,8 @@ export function mountCapabilitySidebar(host, { sources, sceneLayers, getTier, on
         const s = el('summary'); s.append(el('span', gname), el('small', `⚙ ${rows.filter((r) => r.runnable).length} · 代码 ${rows.filter((r) => !r.runnable).length}`));
         const runnableRows = rows.filter((r) => r.runnable);
         { s.draggable = runnableRows.length>0; s.title = `把「${gname}」分区整组拖进管线：${runnableRows.length} 个 ⚙ 能力可执行${rows.length > runnableRows.length ? `，${rows.length - runnableRows.length} 个源码模块独立查看` : ''}`;
-          s.ondragstart = (e) => { window.__tmDrag = { tier: t, name: gname, set: runnableRows.map((r) => ({ id: r.id, name: r.name, domain: r.cap?.domain || r.node?.domain || r.group })) }; e.dataTransfer.setData(DRAG_TYPE, JSON.stringify(window.__tmDrag)); e.dataTransfer.effectAllowed = 'copy'; document.body.classList.add('cap-dragging'); hideUsage(); };
-          s.ondragend = () => { document.body.classList.remove('cap-dragging'); window.__tmDrag = null; }; }
+          s.ondragstart = (e) => { hideUsage(); startDrag(e, { tier: t, name: gname, set: runnableRows.map((r) => ({ id: r.id, name: r.name, domain: r.cap?.domain || r.node?.domain || r.group })) }, s, getTier(), route); };
+          s.ondragend = endDrag; }
         d.append(s); for (const r of rows.slice(0, query ? 60 : 40)) d.append(card(r, scope === 'all'));
         list.append(d); shown += rows.length; runnable += rows.filter((r) => r.runnable).length;
       }
@@ -284,11 +343,11 @@ export function makeDropZone(zone, { tier, accept, acceptPending, canAccept = (d
   // acceptPending(item)：集合里还没做好的能力也整体进管线（标为待完成，执行时跳过）；没提供时照旧跳过
   // laneCheck(e, drag) → { ok, note }：鼠标所在泳道能不能接这个能力；不能接就不显示「+」，并说明原因
   let lastNote = '';
-  const clearLane = () => zone.querySelectorAll('.drop-no,.drop-yes').forEach((x) => x.classList.remove('drop-no', 'drop-yes'));
+  const clearLane = () => zone.querySelectorAll('.drop-no,.drop-yes,.drop-snap').forEach((x) => x.classList.remove('drop-no', 'drop-yes', 'drop-snap'));
   zone.addEventListener('dragover', (e) => {
-    if (!e.dataTransfer.types.includes(DRAG_TYPE)) return;
+    if (!e.dataTransfer.types.includes(DRAG_TYPE) && !window.__tmDrag) return;
     const res = laneCheck && window.__tmDrag ? laneCheck(e, window.__tmDrag) : { ok: true };
-    clearLane(); res.lane?.classList.add(res.ok ? 'drop-yes' : 'drop-no');
+    clearLane(); res.lane?.classList.add(res.ok ? 'drop-yes' : 'drop-no'); if (res.ok && res.lane) res.lane.classList.add('drop-snap');
     if (res.note && res.note !== lastNote) { lastNote = res.note; onReject?.(res.note); }
     if (!res.ok) { e.dataTransfer.dropEffect = 'none'; zone.classList.remove('drop-over'); return; }
     e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; zone.classList.add('drop-over');
@@ -296,8 +355,9 @@ export function makeDropZone(zone, { tier, accept, acceptPending, canAccept = (d
   zone.addEventListener('dragleave', (e) => { if (!zone.contains(e.relatedTarget)) { zone.classList.remove('drop-over'); clearLane(); lastNote = ''; } });
   zone.addEventListener('drop', () => { clearLane(); lastNote = ''; });
   zone.addEventListener('drop', (e) => {
-    zone.classList.remove('drop-over'); document.body.classList.remove('cap-dragging'); window.__tmDrag = null;
-    let d; try { d = JSON.parse(e.dataTransfer.getData(DRAG_TYPE)); } catch { return; }
+    zone.classList.remove('drop-over');
+    let d = null; try { d = JSON.parse(e.dataTransfer.getData(DRAG_TYPE)); } catch {}
+    d ||= window.__tmDrag; endDrag(); if (!d) return;
     e.preventDefault();
     if (Array.isArray(d.set)) {
       const ok = [], skip = [];

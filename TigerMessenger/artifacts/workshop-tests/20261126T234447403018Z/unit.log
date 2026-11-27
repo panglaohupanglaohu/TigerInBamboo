@@ -1,0 +1,753 @@
+✔ 三套方案：approved / soft / soft+palette，网址参数写法对得上 (0.833458ms)
+✔ 清单 → 每套四个机位；缺的标未拍，无效机位标出来；当前方案只标一个 (14.732958ms)
+✔ 检查一句话：变差项只对候选写，approved 不写 (0.356917ms)
+✔ 没有清单 / 清单坏了 / 路径想跳出 artifacts：不显示图，给出原因 (0.24875ms)
+✔ 页面接线：对照区在十二门徒工坊里，清单路径与端到端脚本写的一致；待决定事项已登记 (0.469708ms)
+✔ scoreLook：缺陷越少分越低；transparentRock 权重最高；比例项按 0–1 计 (0.492167ms)
+✔ rankMeasurements / pickBest：分数低者胜；并列取改动小的（approved < soft < soft,palette）；失败行垫底 (0.501958ms)
+✔ measuredView：无记录 none；pending 无 winner → 待实测选出；带 planId → winner 带时间与摘要 (16.92775ms)
+✔ PENDING_DEFAULTS：四条待决定种子（P-R32-01 已决移入 RESOLVED） (0.143833ms)
+✔ seedPendingDefaults：幂等只补缺失；RESOLVED 落实已决；不覆盖 active 用户默认；可注入 at (0.860291ms)
+✔ rowLine：有 eval 显示得分与关键指标；error 行如实写失败 (0.112ms)
+✔ 连续 need 次「同一场景 + 同样网格数」才算稳定 (0.442875ms)
+✔ 重建间隙：读到 0 / null / 场景换了 / 网格数在涨，都清零重数，不下「没有岩体」的结论 (0.145458ms)
+✔ 换候选（look 变了）也要重新数 (0.085917ms)
+✔ waitForStable：场景重建（0 → 一半 → 全部）后返回稳定的那次采样；抛错只算一次失败 (0.542917ms)
+✔ waitForStable：一直不稳定 → 超时返回 ok:false 与最后一次采样，不编数 (0.218625ms)
+✔ min：网格数低于下限不算稳定（例如只等到 1 块岩体） (0.129292ms)
+✔ sampleApostleScene：只数 userData.apostleMass 的网格，返回场景 uuid (0.11075ms)
+✔ 完整方台：水线以上没有反面三角、没有开口边（崖脚在水下的开口不算） (9.606166ms)
+✔ 翻一个顶面三角对：判出反面三角并给出位置 (2.817666ms)
+✔ 顶面挖一个洞：判出 4 条开口边 (0.296667ms)
+✔ 非有限坐标判出来 (1.115042ms)
+✔ 球面下弯：bend 把顶点加回去再比水线（下弯后 y<0 的顶面仍算水线以上） (0.557167ms)
+✔ 材质：岩体半透明判失败；白沫 / 浪 / 悬停框半透明是设计 (0.427958ms)
+✔ R30 植被：贴地 / 悬空 / 埋入 / 脚下没有岩面 四种都分得出 (2.24525ms)
+✔ R30 植被：地形变了而植物没跟 → 判出来（软坡把顶面降了 0.5，植物还在旧高度） (0.278917ms)
+✔ R30 白沫：最近距离与分级；白沫整体离岸 / 水线一半没白沫 都判出来 (4.257625ms)
+✔ 汇总 checks 与「和 approved 比有没有变差」 (0.559375ms)
+✔ §5.3 meta：id / name / domain / line=terrain / requires / modules，modules 是 run 真正 import 的库模块 (1.103459ms)
+✔ match：两块有陆地、有颜色的岩体都能作用；没有数据的岩体跳过 (0.881958ms)
+✔ 执行 + 独立验证：soft,palette 候选，不写存档，复算一致 (6.163667ms)
+✔ 只开软坡：look=soft；网址参数写法与 APOSTLES_LOOK.id 写法 (0.75025ms)
+✔ 确定性：同输入同结果；步骤乱序也按固定顺序算，报告按声明顺序 (1.977958ms)
+✔ 软坡量得出诊断结论 3：2 层起跳的平顶台地没有可融台阶，1 层台阶的才有 (1.28175ms)
+✔ 破坏判失败：改开关 / 改指标 / 打开持久化 / 夹带岩体数据 / 换场景 / 步骤对不上 (5.388834ms)
+✔ PipeLineEngine 适配器：apostles-terrain 走真实能力库，输入不被改，回执齐全 (25.025208ms)
+✔ R22 自动预装：扫描十二门徒后两个能力都进管线；清空过的不再自动填 (1.2715ms)
+✔ 岩体顺序与种子和游戏一致（seed = 7300 + 序号 × 101） (0.608667ms)
+✔ 接线：能力树 / 左栏 / 管线页 / 桥接命令都登记了 (55.181833ms)
+✔ assemble: goal parsing maps words to contract resources (1.142ms)
+✔ assemble: citadel goal → two stages, terrain first, building second (1.313583ms)
+✔ assemble: buildings only → no terrain stage (scene height field is enough) (0.251542ms)
+✔ assemble: crystal city has no terrain layer → honest unmet for the mountain part, building stage still assembled (0.148208ms)
+✔ assemble: no goal falls back to R22 preload (scan matches + requires) (0.34175ms)
+✔ assemble: contract cycles are reported, not looped (0.113125ms)
+✔ assemble: deterministic (0.423666ms)
+✔ preload: empty pipeline gets every matched capability, in registry order (1.856375ms)
+✔ preload: prerequisites come along even if they had no direct match (0.103666ms)
+✔ preload: never touches a pipeline that already has runnable nodes (0.194583ms)
+✔ preload: user clearing the pipeline is respected unless forced (0.27ms)
+✔ preload: no scan / nothing matches → nothing added (0.307792ms)
+✔ preload: note names the scene and the action (0.163708ms)
+✔ preload: real battle / mountain registries — every cap matched ⇒ all preloaded, requires satisfied (0.212333ms)
+✔ preload: scene-layer workshops opt in; planet / object do not (0.672709ms)
+✔ 能力库只含可执行条目且元数据完整 (0.755ms)
+✔ 扫描：三个能力都匹配到有陆地和小屋的采样 (0.272916ms)
+✔ 扫描：没有小屋时守军布防不匹配，没有陆地时全不匹配 (0.108542ms)
+✔ 执行：三步管线产出完整作战计划（私有副本） (0.198875ms)
+✔ 参数规范化：越界收进范围、布尔按类型取 (0.072292ms)
+✔ 验证：健全计划通过；无陆地 / 无小屋 / 参数缺失判失败 (0.314708ms)
+✔ 验证：超编守军给 warn/fail 且归责 battle.garrison (0.077792ms)
+✔ pixelDiff：全同 → 0；全不同 → changed 1；部分像素按 threshold 计 (0.746458ms)
+✔ pixelDiff：尺寸不同 / 不是 RGBA 倍数 → RangeError (0.713875ms)
+✔ pushEntry：新的在前、最多 MAX_KEEP 组、字段齐全 (0.145084ms)
+✔ diffSentence：没比 / 完全一样 / 有差异三种说法 (0.138334ms)
+✔ 面板接线：走 agent.compare(true/false) 同机位两拍、grabGame 读 #game 画布、只存内存不设默认 (0.267917ms)
+✔ candidate: one body + one roof per footprint cell, one door per building, roads drawn (3.7895ms)
+✔ candidate: bodies stand on the plan base, stories set the height, doors sit on the door edge (0.975708ms)
+✔ candidate: adopt record never auto-deploys and refuses an empty layout (0.435375ms)
+✔ candidate: game side only writes its own adopt key, marks its meshes reaIgnore, never touches user saves / lake (1.397208ms)
+✔ candidate: building workshop exposes preview / compare / revert / commit hooks to the bridge (0.344333ms)
+✔ crystal: terraces sampled, towers marked as existing buildings, lowest terrace treated as sea (0.613583ms)
+✔ crystal: the building pipeline places a group on flat terraces without touching towers (37.380708ms)
+✔ crystal: game-side probe uses canyon.js and never reads the crystal-city save (1.052833ms)
+✔ joint-wfc: solves a group with several prefab kinds, roads, and passes independent validation (69.997791ms)
+✔ joint-wfc: terrain rules — no footprint on protected / sea / steep cells, footprint height range within maxStep (83.355125ms)
+✔ joint-wfc: doors face roads (socket rule), roads never dangle (138.368833ms)
+✔ joint-wfc: placements carry stable multi-cell instance ids; same seed → same identity set (203.983916ms)
+✔ joint-wfc: building layer runs it as an executable capability; deterministic; verify passes (334.349417ms)
+✔ joint-wfc: nothing buildable → no-target and verification fails (does not invent a layout) (3.161459ms)
+✔ building layer: engine catalog / scan / run with a valid receipt (132.403791ms)
+✔ building verify: pass, deterministic, and broken plans fail (294.150792ms)
+✔ building layer: registered in worker-host, adapters, studio, lineage, bridge (§7.2 #4 #5) (1.078833ms)
+✔ prefab: library is valid, multi-cell, one door each, door turns with the prefab (0.717959ms)
+✔ prefab: every part tile pairs only with its partner (private socket labels) (0.972042ms)
+✔ prefab: building.prefabs capability selects a subset and records the catalog in the plan (0.706541ms)
+✔ prefab: meta follows §5.3 + contract, and imports the real library module (0.484125ms)
+✔ prefab: the building side panel draws the catalog (足迹 + 门 socket) (0.136458ms)
+✔ replace: a new seed replaces the whole group in the same window and still verifies (355.781333ms)
+✔ replace: relayout keeps window and prefab subset (96.177875ms)
+✔ replace / revert: page buttons and game-side functions exist and stay on candidates only (0.551667ms)
+✔ contracts: every executable capability in every layer has a valid contract, zero errors (1.478333ms)
+✔ contracts: every layer declares in meta (P-R51-01: overlay emptied into mountain / battle / fx metas) (0.261708ms)
+✔ contracts: meta fields win over the overlay (overlay now an empty shell) (0.096667ms)
+✔ contracts: the validator catches broken contracts (0.21275ms)
+✔ contracts: vocabulary is Chinese-labelled and every layer input is a known resource (0.279ms)
+✔ contracts: the pipeline page mounts the contract panel (studio → auto-assemble-panel) (0.908291ms)
+✔ all posts preserve evidence and are sorted by exact author time, never study round or scan time (65.8295ms)
+✔ same-post explanations and cross-project combinations remain distinct from scoped replacements (14.528209ms)
+✔ changed source invalidates only dependent interpretation and changes shared fingerprint (176.867375ms)
+✔ physical scan and catalog carry the same evolution fingerprint without promoting executable status (699.139208ms)
+✖ every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations (5.197542ms)
+✔ scene taxonomy groups life effects vehicles without changing execution readiness (1.203458ms)
+✔ every real scanned record has one scene category; shared algorithms stay foundational (94.60125ms)
+✔ new capability inserts after its last scene-layer node without reordering existing recipe (5.737542ms)
+✔ 代际按关系与阶段切分，方向先向前 (9.005291ms)
+✔ 模块归线、import 推断与组合前置 (0.453041ms)
+✔ 补学队列：得分、理由，以及经验 / 管线需求回流 (0.690084ms)
+✔ 被后续方案替代的缺口不进队列；先完成更新一代时旧代回补后置 (0.378125ms)
+✔ 真实资料：全部来源入线，队列覆盖全部未被替代的缺口，结果确定 (181.093ms)
+✔ 能力网分层与场景诊断：旧副本先同步，库里有而未接的再接，最后才是补学 (322.725042ms)
+✔ maturity: 九级都有证据 → L9，没有缺口 (0.7385ms)
+✔ maturity: 缺 ④ 照写 —— ①②③⑤⑥ → L6（缺 ④），连续级只到 3 (0.099083ms)
+✔ maturity: 没有证据 → L0；只认路径，true / 空串 / 对象 / 越界级都不算 (0.062584ms)
+✔ maturity: 每个达到的级都带一条证据路径 (0.075416ms)
+✔ maturity: 证据校验不过（文件删了 / 被改了）→ 那一级掉下去 (0.076959ms)
+✔ maturity: 分布合计等于能力数，谁都没到的级单独列出 (0.209583ms)
+✔ maturity: 统一计数表 —— 五个口径都写明来源代码，唯一对外数字是去重数 (0.172042ms)
+✔ maturity 证据校验器：文件、锚点、json 内容都要对，改一处就不成立 (5.986417ms)
+✔ maturity 加入日期：日志按带点 ID 找最早一段，普通词不匹配 (5.267375ms)
+✔ maturity: ⑤ 的测试清单来自 test_workshops.py，并排除本轮自己的测试 (0.581375ms)
+✔ maturity: 生成的 json（若已生成）每个达到的级都有证据且证据现在仍成立 (83.326583ms)
+✔ maturity 界面接线：能力树按级显示、左栏带徽章并写口径、缺数据时降级 (1.4165ms)
+✔ scanner reads real library, preserves distinct entries, never enables live execution (47.121791ms)
+✔ invalid format rejected without executing JS; malicious controls stripped (10.015834ms)
+✔ 每条能力线恰好挂在一个枝上，枝的合计等于各线之和 (0.564792ms)
+✔ 双源对账：每个原版叶子状态与对齐数据一致 (0.209875ms)
+✔ JEV 归线只采纳置信度 ≥ 0.85 的结果 (0.249166ms)
+✔ 嫁接队列按分排序，条目都是只在原版或接口没带全 (0.12ms)
+✔ 解锁前沿：自己不能执行、前置都能执行 (0.072959ms)
+✔ 目标路径「圣城山形」：6 个能力都挂在存在的能力线上，声明调用的库模块真实存在 (12.741583ms)
+✔ 山形：六步管线把方台变成山，保护区 / 轨道 / 海岸一格不动 (195.777833ms)
+✔ 山形：同样输入结果确定；步骤乱序也按固定顺序执行 (85.4275ms)
+✔ 验证：改动保护区 / 淹掉海岸 / 山体压到轨旁都判失败 (62.250375ms)
+✔ parser reads real exports and imports without executing source or comment examples (36.5155ms)
+✔ physical inventory preserves every module once, videos separately and no automatic executable promotion (812.039333ms)
+✔ library dependencies link only explicit implemented adapters, with palette before contrast (564.727792ms)
+✔ verify: every preserve key in the vocabulary has a generic checker (0.45ms)
+✔ verify: clean footprint on free land passes all footprint checks (3.339667ms)
+✔ verify: breaking each preserve is caught (2.717458ms)
+✔ verify: no comparable data is a warning, never a pass (0.451083ms)
+✔ verify: blame points at the capabilities that declared the preserve (1.32925ms)
+✔ verify: the building layer verify includes the generated checks (188.757541ms)
+✔ planHook：每层结果带 capabilityId / adoptedBy / state / note (0.9595ms)
+✔ applyDefaultsForScene：无场景 / 无记录 / 全 ok / 有缺失 四种 status (2.382959ms)
+✔ layerCheck：mountain 看 tm.mountain.adopted.v1，building 看 tm.building.adopted.v1，其他层 no-apply-semantics (0.140083ms)
+✔ planHook：status!==active → skipped-pending，不进 check；全 pending → apply status pending-only (0.107709ms)
+✔ set / get / list：scene:layer 记录往返，带 adoptedBy / at / plan (1.558792ms)
+✔ 同一 scene:layer 再设覆盖旧记录；不同层互不影响 (0.189708ms)
+✔ clearDefault / clearScene：撤销与场景级清空 (1.136584ms)
+✔ 坏数据兜底：坏 JSON / 缺 records / 记录缺 capabilityId 都不抛、当空表 (0.108708ms)
+✔ auto-test 来源保留；adoptedBy 非法值归一为 user；at 缺省补当前时间 (0.185833ms)
+✔ 确定性：同样操作序列两次产生逐字节相同的存储内容 (0.068208ms)
+✔ recordKey / parseDefaults 往返；defaultStorage 在 Node 里是内存表不抛 (0.068416ms)
+✔ R-A5 status / pendingRef：setDefault 透传合法值，非法 status 回退 active，pendingRef 非字符串归 null (0.12ms)
+✔ R-A5 parseDefaults：旧记录无 status 视为 active；pending-* 与 pendingRef 从存储里保留 (4.704459ms)
+✔ currentDefaultView：没有记录 → null；有记录 → 名称 / 谁定的 / 时间都在 (10.797042ms)
+✔ defaults-ui.js 接线：两个挂载函数、走 defaults.js 登记、按钮带 data 钩子、不写场景存档 (0.431125ms)
+✔ defaults-panel.js + pipeline.html：总栏挂载点、du- 前缀 request、撤销命令映射、页面有 section 与 script (0.266375ms)
+✔ 写只进 v2 键，旧分层键不动 (0.715ms)
+✔ 旧键记录合并进读侧，去重并按时间排序 (1.111875ms)
+✔ 汇总语义：失败按 blame 归属，committed 只算采用 (0.161917ms)
+✔ 导出文件导入另一台机器（全新存储）：记录与汇总一致，重复导入不产生重复 (0.329583ms)
+✔ 验证失败写入后，同一存储读出的 failed 立即 +1（队列重算的输入） (0.125875ms)
+✔ experiment restores data actual parameters and recipe; stale state cannot finalize (3.743458ms)
+✔ restore failure rolls all state back; backup quota stops before mutation (0.232708ms)
+✔ invalid snapshot parameters and codec reject before backup or scene changes (0.1235ms)
+✔ 四个新能力都在脚本口径的可执行清单里，且带 modules（归线靠它与 meta.line） (0.39275ms)
+✔ fire / hallway / sediment / projectiles 四条线各自挂上了对应能力 (0.091625ms)
+✔ 解锁前沿为空 (0.352333ms)
+✔ 27 / 27 条能力线带 ⚙ (0.091125ms)
+✔ poseAt：两端等于路径首尾，中点在两采样点之间，越界夹紧 (3.269625ms)
+✔ sweepDeg：fx.camera 一圈的路径扫过 ≈ 360°，半圈 ≈ 180°；沿路径匀速采样得到同一角度 (2.841375ms)
+✔ flightPlan：时长默认取计划、可覆盖；圈数与中心来自路径；没有路径报错 (0.547917ms)
+✔ 实景接线：fxLive.js 每帧经 applyTownCamera 驱动镜头并能还原；桥与工坊按钮已登记；单元清单已登记 (1.385625ms)
+✔ fx.fire：meta 有 §5.3 全字段，line = fire，modules 真实存在于重构库 (0.689833ms)
+✔ fx.fire：在小屋上按间隔点火，曲线等于 fire-coupling 实测点 (6.624416ms)
+✔ fx.fire：确定性 + 没有小屋时退到最高台地 (3.083958ms)
+✔ fx.fire：独立验证通过；点火处挪出格网 / 篡改火光 / 曲线反向 → 失败 (0.491875ms)
+✔ fx.fire：实景接线 —— fxLive.js 用 life/effects.js 的 Effects 点火，桥登记 fx.live.*，工坊调用，单元清单已登记 (0.544959ms)
+✔ fx.hallway：meta 全字段，line = hallway，modules 含版式与贴图两个库模块 (0.76025ms)
+✔ fx.hallway：板与纹样数等于 planHallway 直接算的结果，覆盖整面墙，落在小屋上 (37.318833ms)
+✔ fx.hallway：确定性；换种子版式变；关镜像纹样数变 (45.374042ms)
+✔ fx.hallway：独立验证通过；挪板 / 板重叠 / 落点出格网 → 失败 (18.227958ms)
+✔ fx.hallway：实景样板接线 —— fxLive.js 调 makeHallway，工坊画展开面条，单元清单已登记 (0.387417ms)
+✔ fx catalog has 9 executable capabilities mapped to adapt lines (R37–R39 add fire / hallway / sediment / projectiles) (0.750167ms)
+✔ fx runPlan executes all five capabilities on a synthetic stage (155.525167ms)
+✔ fx verify independently re-checks the produced plan (286.275ms)
+✔ fx verify fails on missing or corrupted plan (2.451583ms)
+✔ fx.sediment / fx.projectiles：meta 全字段，line 分别是 sediment / projectiles (0.826208ms)
+✔ fx.sediment：高崖面每条层带的岩性等于 bandType 查表，首尾相接盖满崖高 (10.045291ms)
+✔ fx.sediment：确定性；弯层改变层带；平地没有崖面不匹配 (18.089ms)
+✔ fx.sediment：独立验证通过；改岩性 / 改崖面总数 → 失败 (15.530458ms)
+✔ fx.projectiles：解析表弹道从射手出发、按抛体公式正好落到岸边格，顶点不低于两端 (67.18125ms)
+✔ fx.projectiles：确定性；带阻力走烘好的轨迹表且偏差 ≤ 0.06 格 (195.314541ms)
+✔ fx.projectiles：独立验证通过；篡改速度 / 落点 → 失败 (41.126334ms)
+✔ 沉积 / 弹道实景接线：fxLive.js 画层带面片与弹道，单元清单已登记 (0.285125ms)
+✔ editor dock ships on local and published pages; ?dev=0 / ?release=1 opt out (4.26425ms)
+✔ two real source-backed adapters change materials on a copy, keep actual output within color budget (5.900625ms)
+✔ all material adapters preserve manual colors by default; explicit opt-in works (0.559791ms)
+✔ verifier rejects forged locked edits and perceptual budget excess independently (0.273208ms)
+✔ reordered inputs produce identical deterministic palette results (1.014209ms)
+✔ neutral gain is a no-op, malformed params and invalid output are rejected (0.778792ms)
+✔ gamut extremes are finite and quantized output obeys the tightest budget (5.32175ms)
+✔ layer-focus: three focus layers, each bound to a real pane and supported scenes (0.64ms)
+✔ layer-focus: resolveTab maps focus names onto the scene tier (0.203084ms)
+✔ layer-focus: sceneForFocus only switches when the current scene cannot run the layer (0.156625ms)
+✔ layer-focus: pipeline.html has the three direct tabs in the sub-workshop tablist (0.484208ms)
+✔ layer-focus: focus mode hides the voxel pane and gives the focused pane a readable height (0.596875ms)
+✔ layer-focus: system-tabs wires focus tabs and exposes the focus to callers (0.413584ms)
+✔ 公式：越过阈值 2 + 10·g（封顶 6）；临界一成内 0–1；离得远 0；方向区分上限 / 下限 (0.989208ms)
+✔ 按线取最高分（不累加），只收大于 0 的 (0.866917ms)
+✔ 加分后重排：越线的线升到前面，alsoIn 交叉线也加分，原名次保留在 rankBefore (0.247666ms)
+✔ 没有指标 / 指标都没越线：队列原样（顺序、得分、名次） (0.102375ms)
+✔ export-learn-queue.mjs 接上了：读 verification-metrics.json / --metrics，写 metricFormula 与 inputs.metrics (0.259416ms)
+✔ immutable verified proof fixture separates existing frame review, delivered code, source limits and residual work (158.713375ms)
+✔ changed proof is rejected and original learning backlog remains visible (38.505625ms)
+✔ changed learning evidence or record text cannot inherit the reviewed closure (85.355708ms)
+✔ live source drift safely invalidates old proof instead of counting it as complete (10.008292ms)
+✔ all 113 records accounted, duplicate histories consolidated, closure evidence retained (57.389833ms)
+✔ reordering preserves reviewed identities and states (105.029417ms)
+✔ new or changed titles never inherit a closure from clip IDs (0.378875ms)
+✔ changed evidence reopens a historical closure (0.391833ms)
+✔ missing ledger keeps every entry visible and requires review (27.43425ms)
+✔ same clip with distinct deliverables is not collapsed (0.296417ms)
+✔ superseded DDA implementation is not scheduled twice (1.414583ms)
+✔ live source may evolve without dropping records or reusing historical positions (0.521541ms)
+✔ last successful learning cache survives new reader and revalidates hashes (257.511375ms)
+✔ quota and oversized learning payload preserve previous slot (227.3665ms)
+✔ corrupt cached data rejects instead of activating an unverified offline view (37.580917ms)
+✔ synchronous storage-open denial releases the deadline timer immediately (0.299458ms)
+✔ late storage-open result closes after timeout without starting a transaction (0.196458ms)
+✔ active storage transaction aborts and closes at deadline without publishing result (0.13075ms)
+✔ parses real ARCH single quotes comments trailing commas and real JSON declarations without execution (62.269334ms)
+✔ data escapes work; execution expressions prototypes duplicates and trailing programs are rejected (0.424875ms)
+✔ bounds malformed strings comments and nesting without accepting a partial result (0.187584ms)
+✔ reorder and rename preserve comparison identity; status or lane changes are explicit revisions (10.697791ms)
+✔ new duplicates never renumber old anchors; exact ambiguous anchors are quarantined (1.970959ms)
+✔ location edits become review conflicts; genuine additions and removals are explicit without mutating source (4.234375ms)
+✔ real library comparison is idempotent; every record is indexed or explicitly conflicted (194.34625ms)
+✔ decode real seven source files as one hash-checked data value without script execution (120.515958ms)
+✔ tamper version duplicate and missing core reject; incomplete value never commits globals (271.568ms)
+✔ optional absence explicit and accepted; supported data grammar still checks structure (86.541375ms)
+✔ video card promotes readable content title and labels rather than a source ID (0.436875ms)
+✔ review frame prefixes are removed and long descriptions stay bounded (0.202084ms)
+✔ 判定规则：守护指标退步超过容差 → 输；要变好的都没好过容差 → 输；否则赢 (0.621625ms)
+✔ 指标口径：空 plan 全 0；跑完全管线各项产出都在 (267.679416ms)
+✔ 擂台登记：9 个能力都有规则，登记表齐全、rule = ARENA_RULES、beat = 前面的能力（第一代 baseline）、种子一致 (1.380084ms)
+✔ 擂台 scene.town-graph：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (15.298917ms)
+✔ 擂台 light.voxel-ao：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (94.047333ms)
+✔ 擂台 light.bounce：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (173.4015ms)
+✔ 擂台 light.megatex：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (386.834708ms)
+✔ 擂台 life.plant-atlas：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (203.529625ms)
+✔ 擂台 life.wind：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (120.791958ms)
+✔ 擂台 life.smoke：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (143.515875ms)
+✔ 擂台 life.animals：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (107.253583ms)
+✔ 擂台 scene.plateau-diag：这一代必须赢上一代；重算与登记一致；登记过成绩的，不许比登记的差 (133.401ms)
+✔ 回归检查自己会红：把登记成绩改好一点，现在的成绩就算退步 (48.112416ms)
+✔ voxel-light：World 也能当体素集合；高塔旁边的地面被压暗，开阔处不压；空场不碰 document (19.329833ms)
+✔ voxel-light：烘顶点色确定性；多跳扩散后红塔旁的空气泛红（彩色反弹） (49.366875ms)
+✔ mega-atlas：同 n / seed 同一批面；货架与增量图集两种排布都能反查回自己的面（垫边 2 时内框反查 100%） (285.370542ms)
+✔ town-graph：Town 的体素就是传入的 World；9 层上限；区域图含走道；颜色改动让区域缓存失效 (7.396417ms)
+✔ 嫁接模块：头注释写明原版文件、帖子、与原版的不同；不 import three、不 import 原版 REACode；头注释在 import 之前结束 (0.661833ms)
+✔ 光照：同判据（同参数、同小镇）嫁接 voxel-light.js 与原版 lighting.js 单跳、多跳顶点色逐值相同 (310.086584ms)
+✔ 大纹理：货架排布下 mega-atlas.js 的整套量法与原版 megatex.js 逐值相同；增量图集的差异登记为 design (537.900208ms)
+✔ 体素图：同一串编辑之后 town-graph.js 的 Town 与原版 Town 柱子 / 区域图相同；对账别名（pointInQuad / buildCellIndex / PALETTES）成立 (5.571708ms)
+✔ 登记文件：三份完整对照 + 四个能力各一份（capability = 能力 ID，verdict 合法）+ 需求行；同输入两次结论相同 (502.801875ms)
+✔ 采用记录：v2、autoDeploy、带采用时的场景指纹；计划和网格对不上就拒绝 (0.970042ms)
+✔ 自动部署的闸门：只有 v2 采用记录 + 场景对得上才换 (0.315459ms)
+✔ 同一场景的判定：网格一致、陆地 / 建筑 / 轨道格数各差 ≤ max(2, 1%) (0.0795ms)
+✔ 游戏接线：main.js 启动时调自动部署；采用写 v2；有「回到原山形」；不碰存档与湖区 (0.884375ms)
+[R26 擂台] 中等坡占比 0.9207→0.9238（same） · 竖崖占比 0.0002→0（same） · 排水率 0.3665→0.7467（better） · 硬边位移（米） 2.7101→1.5961（better）
+✔ 测试岛固定：同种子逐格相同，换种子不同；有城、有轨道、有海 (7.314708ms)
+✔ 指标定义只看产出地形：同一张高度场，不管能力参数 / 配色 / 用了哪些步骤，指标完全相同 (40.03375ms)
+✔ 指标的已知答案：圆锥全排进海；碗底排不出；紧贴保护区抬 4 m = 硬边位移 4 m (53.914875ms)
+✔ 比较规则写死：容差不放宽；任何一项退步超过容差 = 没赢；全持平 = 没赢 (0.278625ms)
+✔ 确定性：同一代跑两次指标完全相同 (91.884583ms)
+✔ 登记表 catalog/arena/terrain.json 记的每代成绩 = 实算（不是手填） (0.17175ms)
+✔ 擂台：mountain.rolling 这一代在约定指标上必须赢上一代（规则见 arena.js 文件头，不放宽） (0.438666ms)
+✔ 变异与交叉：每个基因都落在能力声明的范围和步长上 (10.324333ms)
+✔ 第一代：基线排第一、没有重复、同种子可复现、换种子不同 (1309.342125ms)
+✔ 精英保留：留种的亲本原样进下一代，所以每代最好成绩不会倒退 (595.889708ms)
+✔ 默认参数在合成场地上通过硬检查；describeGenome 只列出变了的基因 (22.890833ms)
+[R25] 7816 个三角重心复查：地面与画面最大差 0.000 m · 洞 0 个 · 轨道 59 格地面高差 0.00 m · 保护区 501 格 0.00 m | 自由陆地 ≤45° 可走坡 92% · 最大连通片 65%
+✔ 三角剖分与实景网格 / lowpoly 同一规则：(i+j) 奇偶决定对角线 (0.926667ms)
+✔ 通过：新山形的地面与画面一致、没有洞，轨道 / 保护区地面 = 原高 (190.202458ms)
+✔ 网格节点处地面 = 节点高度；网格外 / 没有地形处返回 null（交回原地面链） (78.295542ms)
+✔ 确定性：同一计划两次重建，任意点地面高度完全相同；两次跑管线结果相同 (328.894375ms)
+✔ 坏地面判失败：对角线反了 / 挖了洞 / 轨道处被抬高 (136.925208ms)
+✔ 游戏接线：玩家地面链最后一道接新山形；工坊桥与 main.js 引用同一份山形模块 (0.86075ms)
+[R27 擂台岛] Bad North 夏季：pass · 草坡 62%（线 ≥ 45%） · 灰面 29%（线 ≤ 35%）· 草坡饱和度 0.27（线 ≥ 0.18） | Townscaper：fail · 草坡 62%（线 ≥ 45%） · 灰面 37%（线 ≤ 35%）· 草坡饱和度 0.40（线 ≥ 0.18）
+✔ 两套候选就是 Bad North 夏季（1）与 Townscaper（2），来源写在候选上 (0.792708ms)
+✔ 饱和度：灰色 = 0，纯色 = 1；两套候选的草坡 / 草丛颜色本身都不灰（≥ 判定线） (0.131667ms)
+✔ 已知答案：全草坡的山 → 草坡 100%、通过；全岩壁的山 → 草坡 0%、判失败（坏配色 / 坏着色必须红） (40.564667ms)
+✔ 配色只换颜色：两套候选的草坡面积相同（同一座山、同一张材质图），灰面与饱和度各自算 (39.534166ms)
+✔ 确定性：同一计划两次检查结果完全相同 (5.664166ms)
+✔ 实景接线：实景换配色 / 对照命令在桥上；采用时记下当前配色；不改默认配色 (0.501708ms)
+[R28 分布 · 擂台岛] 30/30 过硬检查 · 最好 1 · 最差 16 · 最典型 21 · 中等坡中位 0.9333 · 排水中位 0.7019
+✔ 种子基因：只改 massif.seed 与 rolling.seed，其余全是默认；30 个种子两两不同 (1.245625ms)
+✔ 分布与挑选（已知答案）：分位数、直方图、最好 / 最差 / 最典型 (1.876166ms)
+✔ 30 种子报告：30 座都跑完、每座都有六项指标；三张代表都在里面；同输入两次完全相同 (2078.2475ms)
+✔ keepPlans：只在要时带 plan（Worker 给三张缩略图用；报告默认不带） (72.360417ms)
+✔ 拱下几何：两个拱、门户收窄、有侧壁；穿墙探针关时放得下、开后全部拦下 (6.196584ms)
+✔ 穿拱模拟：开精细门户时斜着进拱也不擦墙、都穿过去 (3.118042ms)
+✔ 身高敏感：矮个子几乎不收窄；高到拱顶放不下时拱被封死、南北不通 (3.450292ms)
+✔ 能力元数据：§5.3 字段齐全、真实模块、在战役能力表里 (0.669583ms)
+✔ 扫描与执行：演示岛（实景同一种网格）上匹配、执行写进作战计划 (125.901291ms)
+✔ 验证：健全计划通过；关掉开关 / 改报告 判失败 (57.750833ms)
+✔ 确定性：同一采样两次执行，报告逐字相同 (230.369916ms)
+✔ 自动预装：扫描匹配到拱洞时，导航能力连同前置舞台一起预装 (25.23125ms)
+✔ 实景接线：采样带导航、开战前挖拱、开战后开精细门户；默认全关 (0.508417ms)
+✔ 洞道：三个洞底节点，脚高都在洞底；洞顶比洞底高 2.5 (5.083458ms)
+✔ 楼梯：一架，踏面一级 L/3，比不插值的一整层小 (1.183459ms)
+✔ 逐帧：穿洞那段脚贴洞底，上楼梯那段脚高的最大跳变小于不插值 (4.018916ms)
+✔ 能力：元数据；演示岛上执行写进计划；验证复算一致；改报告判失败 (176.081875ms)
+✔ 战役层导航线：三个可执行能力都挂在 navigation 线上（树上导航线 ⚙ +3） (1.340708ms)
+✔ 实景接线：画面脚高只在开了 footing 且拱洞已挖空时按洞底修正；实况报洞底画面偏差 (0.403541ms)
+✔ 原版只读：两份原版文件在，对照里写明的就是它们 (22.270333ms)
+✔ 奶酪：原版统计与原版自己的 selfCheck 对得上（换算没丢点） (60.97525ms)
+✔ 同判据：两座岛上连通块数 / 最大块占比 / 被覆盖节点数完全一致 (57.55625ms)
+✔ 战役判据：可达性与门洞代价与原版一致，差异逐条登记 (14.775ms)
+✔ 确定性：同样输入两次结果逐字相同 (40.80475ms)
+✔ 登记文件：每个导航能力一份，④ 的校验规则（capability = 能力 ID、verdict 合法）都成立 (10.225292ms)
+✔ 缺口进补学队列：demand 行格式对、export-learn-queue 会读到 (38.878458ms)
+✔ 页面接线：战役侧栏挂导航块并现算对照 (0.33525ms)
+✔ 窄道 / 弯道 / 岔口：考场上逐格数对 (1.538833ms)
+✔ 对向会车：两队（各 3 个普通兵 + 1 个大个子）全部到达、没有人卡死 (15.215833ms)
+✔ 不同体型重新选路：普通兵钻矮拱走短路，大个子放不进、改走长路 (15.820666ms)
+✔ 能力：元数据、在演示岛上执行写进计划、验证复算一致；改报告判失败 (329.491916ms)
+✔ 实景接线：大个子体型按比例换、后面波次也换；实况快照报体型与卡墙 (0.344916ms)
+✔ 换件：vendor 导航小组是新版（旧件快照还在） (1.694916ms)
+ℹ 最新库的 world/battle-navigation.js 在 R33 之后又改了（vendor 仍是 R33 拷进来的那份），要不要再同步另记
+✔ 实心柱世界：新旧导航路线逐对相同（代价 + 下一步） (85.949667ms)
+✔ 实心柱世界：旧版能走的一步新版也能走、落点相同 (298.034416ms)
+✔ 有拱的世界：doorCost=1 与旧版代价相同；默认 1.35 只会更贵 (5.783791ms)
+✔ 真实 vendor Battle：新旧导航各跑 30 秒都不出 NaN、地上的人都在图上、维京人朝小屋走 (1086.442042ms)
+✔ 步骤编排：顺序与工作目录按 Guide §5.1 / §5.2；JEV 在 ⑤ 之前；目标路径在 ⑤ 与 ⑥ 之间 (1.3345ms)
+✔ 开关：--no-jev 记为跳过；--skip-recompute 只留漂移 / 目标路径 / 测试 (0.098167ms)
+✔ 单元清单从 test_workshops.py 读，含本轮新增的测试 (0.234167ms)
+✔ TAP 解析：汇总行与 not ok 行 (0.2675ms)
+✔ 快照对比：新增能力、线升级、指标变好 / 变差按方向判断、测试红绿翻转 (0.30175ms)
+✔ 晨报一页：四块（新增能力 / 哪条线升级 / 场景候选变好变差 / 测试红绿）都在；latest.json 摘要字段齐 (0.324708ms)
+✔ 指标收集：检查项上的 metric 带线与阈值，verify.metrics 的数只做对比 (0.269042ms)
+✔ run-nightly.mjs 与 Guide §5 接线 (5.39175ms)
+✔ actual REA arc sampling redistributes interiors and passes existing verifier (1.27475ms)
+✔ manual anchors, hidden and out-of-scope objects remain untouched (0.156667ms)
+✔ over-budget or blocked segment produces no unsafe edits (0.346084ms)
+✔ source ordering does not affect stable layout results (0.13925ms)
+✔ actual material composition calls library code, preserves inputs, traces ordered steps and output (9.896792ms)
+✔ preflight rejects missing code, wrong parameter types and invalid plans before touching adapter (1.476209ms)
+✔ library schema changes invalidate catalog and plan identities; dependencies and conflicts are real (1.494041ms)
+✔ object combination executes on sequential copied layouts and returns actual edits (2.658875ms)
+✔ commit gate rejects failed checks, changed target and incomplete execution (0.236291ms)
+✔ altered Worker output cannot retain a valid execution receipt (1.106208ms)
+✔ execution failure stays on the private copy and incomplete reports cannot become candidates (0.528166ms)
+✔ missing/manual adapters cannot masquerade as complete execution (2.412166ms)
+✔ candidate preserves geometry and setting locks; manual drift and tampering reject (0.788875ms)
+✔ candidate reloads from isolated disk and preserves current snapshot (6.413708ms)
+✔ disabled and removed capabilities restore baseline; unrelated geometry never enters settings (0.608ms)
+✔ duplicate capabilities and invalid parameters reject (0.187083ms)
+✔ saved experiment retains independent recipe and baseline (3.326667ms)
+✔ legacy life recipe stays valid; new defaults separate weather vegetation animals smoke and fire (0.172041ms)
+✔ planet: 全部能力 meta 完整、有执行面、参数默认值在范围内 (1.136708ms)
+✔ planet: match 对每个能力返回带理由的目标 (0.261042ms)
+✔ planet: 全部能力走 runPlanetPlan 逐步执行，applied 且产出归位 (0.751375ms)
+✔ planet.sea-level: run 改 seaLevel 且不动锚点字段 (0.096333ms)
+✔ planet.reseed: run 改 seed 取整 (0.074333ms)
+✔ planet.weather-kind: runWeather 产出天气样式不动配方 (0.106667ms)
+✔ planet.sea-tint: runSea 产出海面样式不动配方 (0.077042ms)
+✔ planet: 参数越界被夹到 min/max，未知步骤记 missing (0.069584ms)
+✔ planet.cleanRecipe: 缺省回填、landformChain 转布尔、野字段被清掉 (0.09125ms)
+✖ whole directory has exactly one reviewed row per actual code file, including HTML and tools (1.66725ms)
+✔ source identities and all claimed target paths exist; pages cannot inherit core completion (18.766333ms)
+✔ verified deliveries are explicitly scoped with execution evidence and residual gaps (0.116583ms)
+✔ recent: 按加入日期倒序，限制条数，带能力线 / 场景 / 级别 / 日期依据 (6.286209ms)
+✔ recent: 本机首次执行只能把「上限」类日期往前提，不覆盖日志 / meta 给的日期 (1.174833ms)
+✔ recent: 没有成熟度数据时降级 —— 只列页面已登记的能力，日期未知、未评级，不编日期 (0.197916ms)
+✔ recent: 点一行去哪 —— 直达层用 R21 页签，其余去对应工坊并切到能跑的场景 (0.109417ms)
+✔ recent 页面接线：pipeline.html 有栏位，studio.js 读成熟度与经验并按目标跳转，版本号已加 (0.703417ms)
+✔ registry: 覆盖清单字面 id 与 meta.id 一一对应 (0.779875ms)
+✔ registry: 每个可执行能力都有 meta+match+run，参数默认值在范围内 (0.237375ms)
+✔ terrain.overhang: 高岩崖旁空格匹配出外伸位，run 在崖顶层补岩 (0.345291ms)
+✔ terrain.seastack: 离岸两格的全水内格立石柱+帽环 (0.255041ms)
+✔ terrain.tunnel: 同高地隔着更高岩体打洞，挖空地面上一层 (0.250041ms)
+✔ terrain.ledge: 高 ≥3 岩壁腰上贴悬空薄檐（单层、底下留空） (0.234917ms)
+✔ terrain.arch: 两根高柱隔 1–3 格低处架拱，下面留空能穿行 (0.256084ms)
+✔ build.lighthouse: 临水矮楼加高到 ≥5 层塔 (0.155583ms)
+✔ build.assembly: 3×3 铺地块内院匹配+逐块拼装落地 (1.688459ms)
+✔ LAYER_CAPS: 显示层能力 meta+match 在合成世界上可执行 (0.357042ms)
+✔ 判定规则：守护指标退步超过容差 → 输；要变好的都没好过容差 → 输；否则赢 (0.674166ms)
+✔ 指标与参数无关、已知答案：平地坡 0°、一格 3 m 高差 = 45°、保护格两侧整体抬高不算硬边位移 (1.383625ms)
+✔ 擂台岛与规则登记：每个能力都有规则，登记表的 rule = ARENA_RULES，上一代是排在它前面的能力 (1.144334ms)
+✔ 擂台 relief.soft：这一代必须赢上一代；登记过成绩的，不许比登记的差 (71.870208ms)
+✔ 擂台 relief.cliff：这一代必须赢上一代；登记过成绩的，不许比登记的差 (49.014375ms)
+✔ 擂台 relief.valley：这一代必须赢上一代；登记过成绩的，不许比登记的差 (101.652042ms)
+✔ 擂台 relief.overhang：这一代必须赢上一代；登记过成绩的，不许比登记的差 (89.182375ms)
+✔ 擂台 relief.ledge：这一代必须赢上一代；登记过成绩的，不许比登记的差 (50.854709ms)
+✔ 擂台 relief.passes：这一代必须赢上一代；登记过成绩的，不许比登记的差 (76.106042ms)
+✔ 回归检查自己会红：把登记成绩改好一点，现在的成绩就算退步 (16.083667ms)
+✔ 完整山体：一条管线跑完，四类特征都在（软坡粗糙度降、有台面、河谷后没坑、有岩檐、有梯子） (33.110667ms)
+✔ plan-mesh：高度面、岩檐盒子、梯子、等高线的数量对得上计划 (58.179042ms)
+✔ plan-mesh：坐标 = 贴球图表米制坐标（x 东、y 高、z 北，原点在采样中心），和 mountainCandidate 的 i·step − half 一致 (0.260166ms)
+✔ plan-mesh：岩檐盒子顶 = 高格顶，底 = 檐底，底面压暗（悬垂看得见） (18.554417ms)
+✔ 游戏侧只是候选：不写 localStorage / 存档，persist ≠ false 拒绝预览，能拆回，原地形只隐藏不删 (3.698458ms)
+✔ 场景 id 与游戏一致（old-port = 旧港湾、moss = 苔庭），桥接命令与游戏侧模块同一版本号（只加载一份模块） (0.708875ms)
+✔ 每个用到原版文件的地貌能力（meta.ideas 里有 REACode/）都配齐：对照 case + ④ 登记 + 擂台规则 + ⑦ 登记 (1.455167ms)
+✔ 诚实口径：verdict / pass 没实算（null）就不算 ④ / ⑦；实算过的必须是 capability-maturity.js 认的值 (0.506125ms)
+✔ 对齐别名：对照登记里的每个原版文件都在 reacode-target-aliases.json 里有落点 (0.205792ms)
+✔ 六个地貌测试都进了 test_workshops.py 单元清单（成熟度 ⑤ 只认清单里的测试） (0.233167ms)
+✔ 记录脚本是登记表唯一写入方：测试和面板都不写 catalog/parity、catalog/arena (0.52575ms)
+✔ 直达网址：?relief=old-port / moss / arena / 1；别的值一律不认（不切到未知场景） (0.793333ms)
+✔ 缩略图：尺寸 = n × scale，候选图画出河 / 岩檐 / 梯子 / 等高线（和原样图不同），只读不改采样 (48.800416ms)
+✔ 证据表：没有登记 / 已登记待实算 / 已实算 三种状态分得清，④ ⑦ 只在实算后算达到 (0.276584ms)
+✔ 页面接线：pipeline.html 有面板、studio.js 挂载、自带样式在场景管线页显示、直达页签时让位、面板里有对照 / 擂台 / 实景三块 (0.677042ms)
+✔ 待你决定：PENDING 里登记了 P-R49-01（选项、怎么看对照、不动时的现状） (0.173292ms)
+✔ 对照器：容差、NaN、缺字段 / 多字段 / 长度 / 类型都算差异 (1.305917ms)
+✔ 归类：登记外差异 → unregistered；全部登记 → diff-registered；无差异 → equivalent；kind 不符不算登记 (0.212417ms)
+✔ 截断不让结果变好：一万处差异里最后一处没登记，也判 unregistered (8.148625ms)
+✔ 六条线都有对照 case 与登记表，登记表格式对、指向的原版 / 重构文件都存在 (0.856708ms)
+✔ 对照 relief.soft：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0 (9.151708ms)
+✔ 对照 relief.cliff：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0 (7.085041ms)
+✔ 对照 relief.valley：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0 (136.015375ms)
+✔ 对照 relief.overhang：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0 (146.687916ms)
+✔ 对照 relief.ledge：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0 (5.974792ms)
+✔ 对照 relief.passes：原版 vs 重构，同一种子 / 同一份输入，登记外差异 = 0 (25.172792ms)
+✔ 悬垂：确实有悬垂（朝下面 > 0、悬出来的地板 > 0、海蚀洞走得进去），新增字段只多不少 (10.7995ms)
+✔ 河谷对照岛：最高格是孤峰（原版 DFS 走不回源头），峰高 > 3 层 (0.288583ms)
+✔ 对齐别名：六个原版文件都登记了新落点（嫁接队列按导出名对账，不再算「只在原版」） (0.2565ms)
+✔ §5.3 meta：id / name / domain / line=terrain / requires / modules，modules 是 run 真正 import 的库模块 (3.182542ms)
+✔ 擂台岛：固定种子同一座岛，有城（cls 1）和轨道（cls 2） (12.524916ms)
+✔ match：六个能力都能作用于擂台岛；坏采样不抛错 (4.133875ms)
+✔ 执行 + 独立验证：完整山体（软坡 + 硬崖 + 河谷 + 悬垂 + 梯子 + 等高线），不写存档，复算通过 (65.922875ms)
+✔ 确定性：同输入同结果；步骤乱序按固定顺序算，报告按声明顺序；requires 不满足就跳过 (34.727708ms)
+✔ 保护：建筑 / 轨道及外扩 1 圈一格不动；海陆不变 (95.157958ms)
+✔ 破坏判失败：改保护格 / 把陆地变海 / 挖坑 / 岩檐悬空错位 / 梯子够不着 / 等高线不在格边 / 打开持久化 / 换场景 / 步骤对不上 (135.37325ms)
+✔ PipeLineEngine 适配器：relief 走真实能力库，输入不被改，回执齐全 (23.483542ms)
+✔ R22 自动预装：扫描后六个能力都进管线；清空过的不再自动填 (2.099167ms)
+✔ 接线：能力树（collectExecutables）/ Worker / 左栏 / 管线页 / 桥接命令都登记了，版本号已加 (49.23175ms)
+✔ immutable experiments and explicit validated final survive reload (2.721084ms)
+✔ storage failure is surfaced and duplicate plugins rejected (0.548125ms)
+✔ exact runtime version is stable after a new final; missing versions reject (0.161375ms)
+✔ 要不要挂：登记了才挂；山形 auto 不挂（R28 自带）；体素场景层挂但写 NOT_RUN；显式给就挂 (0.629375ms)
+✔ tier-workshop：seedReport 默认 auto，按 storageKey || tier 找登记；面板放在侧栏「来源详情」之前 (0.361834ms)
+✔ 同一模块同一版本号：面板 / Worker / 登记表都引 seed-report.js?v=seeds-r61、seed-layers.js?v=seeds-r61；Worker 用 seeds-r62 (0.285458ms)
+✔ 登记表里各层模块的版本号与主线程其他引用方（worker-adapters.js / 各 verify-worker）现在用的一致（避免两份模块实例；现读不写死） (1.523541ms)
+✔ 通用分布 / 挑选 = R28 山形同一算法（同一批行，两边答案逐值相同） (1.082959ms)
+✔ 逐个种子：某个种子抛错 = 这一座判失败，整批不中断；指标缺的写 null 不编数 (0.447666ms)
+✔ 验证 → 通用分数：失败 = −1；通过 + 0.5 × 提醒；三个通用指标 (0.124375ms)
+✔ 登记表：11 层；体素场景层登记为 NOT_RUN 并写明原因；没登记的层 = NOT_RUN（blocked） (117.768875ms)
+✔ battle：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同 (6.78ms)
+✔ fx：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同 (487.936375ms)
+✔ apostles-terrain：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同 (14.227334ms)
+✔ gscene：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同 (11.987167ms)
+✔ object：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同 (6.836541ms)
+✔ relief：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同 (162.568875ms)
+✔ building：5 个种子各跑一次（合成输入）→ 分布 + 三张代表；同输入两次逐值相同 (415.101667ms)
+✔ 山形适配器复用 R28 的 mountain/seeds.js：同种子同一行 (248.256583ms)
+✔ 光影与生命：3 个合成岛各跑全部 9 个能力 + 独立验证 (151.896541ms)
+✔ 球系统：配方 seed = s，2 个种子能编译出两颗不同的星球 (1417.124292ms)
+✔ 命令行脚本：层清单来自登记表；写 artifacts/seed-report/<层>/latest.json；不 import 原版 REACode (0.363084ms)
+✔ planet: small sea-level rise passes all checks (754.662291ms)
+✔ planet: drowning a scene landmark fails verification (667.901792ms)
+✔ planet: compiler failure is a failed candidate, not a crash (76.7015ms)
+✔ object: scan finds identical trees and overlaps; router follows goal keywords (0.860084ms)
+✔ object: plan reduces overlaps, keeps manual edits, passes verification (1.196208ms)
+✔ object: touching a manual edit or exceeding the move budget fails (0.138958ms)
+✔ catalog: three workshops, every node has an execution state (7.539416ms)
+✔ actual fixed REA source executes a detached reproducible candidate with exact source revision (35.710583ms)
+✔ node target binding remains fixed and refuses another selected object or stale revision (0.972792ms)
+✔ raw leaf cards, region input and session UUID cannot masquerade as compatible canopy targets (0.125083ms)
+✔ tampered payload, algorithm identity, writeSet or params reject before execution (3.109042ms)
+✔ invalid or overbudget algorithm inputs reject, and JSON roundtrip preserves execution (5.468708ms)
+✔ chain: assembled from contracts, then run stage by stage with the mountain plan feeding the building stage (250.782792ms)
+✔ chain: the page has the one-click two-stage run and the game rejects a stale terrain (0.896167ms)
+✔ scene/object viewport orbit, pan and dolly preserve world and initial pose (3.665916ms)
+✔ ownership handoff applies stored pose and projection after a prior camera resets them (0.200875ms)
+✔ workshop-caps: 覆盖清单字面 id 与 meta.id 一一对应 (0.41ms)
+✔ mountain.erode: 自由陆地下切出沟谷，保护区与边界原高不动 (3.462083ms)
+✔ mountain.lowpoly: 逐三角面产坡度分区材质+烘焙明暗 (1.257166ms)
+✔ scene.palette-unify: k-means 主色归并，每材质拿到归并色 (0.456833ms)
+✔ scene.style-pack: 每材质靠向莫里斯色板最近色 (0.235375ms)
+✔ pipeline-model: terrain.preserve / building.edit / light.time / world.ink 注册完整且来源文件真实 (0.358792ms)
+ℹ tests 477
+ℹ suites 0
+ℹ pass 475
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4423.771167
+
+✖ failing tests:
+
+test at TigerMessenger/tests/capability-evolution.test.mjs:37:1
+✖ every partial has a current priority and explicit work, but newer evidence cannot inherit stale annotations (5.197542ms)
+  AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:
+  
+    assert.ok(partials.every(e=>e.completion.current&&['高','中','低'].includes(e.completion.priority)&&e.completion.acceptance&&e.completion.nextAction))
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/capability-evolution.test.mjs:38:221)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: false,
+    expected: true,
+    operator: '==',
+    diff: 'simple'
+  }
+
+test at TigerMessenger/tests/reacode-file-status.test.mjs:4:1
+✖ whole directory has exactly one reviewed row per actual code file, including HTML and tools (1.66725ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      'Townscaper.html',
+      'alivelab.html',
+      'archvoidlab.html',
+  -   'ballisticlab.html',
+  -   'bindchainlab.html',
+      'blobshadowlab.html',
+      'bloodfieldlab.html',
+      'blotchpaintlab.html',
+      'bouncelab.html',
+      'buildanimlab.html',
+  ...
+      'depfilllab.html',
+  -   'distcontourlab.html',
+      'engine/aoviz.html',
+      'engine/atlasorder.html',
+      'engine/backlit.js',
+      'engine/badnorth.html',
+      'engine/ballistic.html',
+  ...
+      'grassedgelab.html',
+  -   'grassplotlab.html',
+      'gridpatchlab.html',
+      'hiprooflab.html',
+      'housekitlab.html',
+      'index.html',
+      'islandpasseslab.html',
+  -   'italianwireslab.html',
+  -   'jobclocklab.html',
+      'learn.html',
+      'learn/data.js',
+      'learn/learned.js',
+      'learn/learnui.js',
+      'learn/pipeline.js',
+      'learned.html',
+      'levelfloralab.html',
+  -   'lighthousecaplab.html',
+      'looptintlab.html',
+      'lsystemlab.html',
+      'megatexlab.html',
+      'meshmergelab.html',
+      'mirrordecorlab.html',
+      'mixedwfclab.html',
+  -   'modulecensuslab.html',
+      'navribbonlab.html',
+      'occmasklab.html',
+      'oldclips.html',
+      'orderbadgelab.html',
+      'overhangterrainlab.html',
+      'overview.html',
+  -   'paletteauthorlab.html',
+      'patchclusterlab.html',
+      'penumbralab.html',
+      'piercefloorlab.html',
+      'pipeline.html',
+      'planetatmolab.html',
+  ...
+      'src/ballistic.js',
+  -   'src/ballisticlut.js',
+      'src/barycentric.js',
+  -   'src/bindchain.js',
+      'src/birds.js',
+      'src/blobrelax.js',
+      'src/blobshadow.js',
+      'src/bloodfield.js',
+      'src/borderpath.js',
+  ...
+      'src/dirsprites.js',
+  -   'src/distcontour.js',
+      'src/doodlewall.js',
+      'src/dual.js',
+      'src/edgeplant.js',
+      'src/edgesmooth.js',
+      'src/floatprobe.js',
+  ...
+      'src/grassedge.js',
+  -   'src/grassplot.js',
+      'src/grid.js',
+      'src/gridmodes.js',
+      'src/gridpatch.js',
+      'src/gridwfc.js',
+      'src/grouping.js',
+  ...
+      'src/islandpasses.js',
+  -   'src/italianwires.js',
+  -   'src/jobclock.js',
+      'src/learnpanel.js',
+      'src/levelflora.js',
+  -   'src/lightcap.js',
+      'src/lighting.js',
+      'src/lightingcache.js',
+      'src/looptint.js',
+      'src/looptown.js',
+      'src/lsystem.js',
+  ...
+      'src/mixedwfc.js',
+  -   'src/modulecensus.js',
+      'src/mountainlight.js',
+      'src/navgraph.js',
+      'src/navgrid.js',
+      'src/navribbon.js',
+      'src/occmask.js',
+  ...
+      'src/palette.js',
+  -   'src/paletteauthor.js',
+      'src/partsprites.js',
+      'src/patchblend.js',
+      'src/patchcluster.js',
+      'src/penumbra.js',
+      'src/piercefloor.js',
+  ...
+      'src/texelsnap.js',
+  -   'src/textureslots.js',
+      'src/tideflat.js',
+      'src/tileforce.js',
+      'src/tileplace.js',
+      'src/tilerepair.js',
+      'src/timberframe.js',
+  ...
+      'src/unitsnap.js',
+  -   'src/viewmodes.js',
+      'src/voxdebug.js',
+      'src/voxelao.js',
+      'src/voxelflow.js',
+      'src/voxelnav.js',
+      'src/wake.js',
+      'src/walkreach.js',
+  -   'src/waterline.js',
+      'src/wind.js',
+      'src/wobbletex.js',
+      'stiltslab.html',
+      'storydatumlab.html',
+      'terraceclifflab.html',
+      'terraceladderlab.html',
+  -   'textureslotlab.html',
+      'tmp/cap/bsheet.html',
+      'tmp/cap/bsheet2.html',
+      'tools/ab.mjs',
+      'tools/add.mjs',
+      'tools/batch-ids.mjs',
+  ...
+      'vendor/three.module.js',
+  -   'viewmodeslab.html',
+      'wakelab.html',
+      'walkreachlab.html',
+  -   'waterlinelab.html'
+    ]
+  
+      at TestContext.<anonymous> (file:///Users/panglaohu/Downloads/TigerInBamboo/TigerMessenger/tests/reacode-file-status.test.mjs:4:112)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [
+      'Townscaper.html',        'alivelab.html',           'archvoidlab.html',
+      'blobshadowlab.html',     'bloodfieldlab.html',      'blotchpaintlab.html',
+      'bouncelab.html',         'buildanimlab.html',       'campaignmaplab.html',
+      'candlelab.html',         'cavepathlab.html',        'clouddecklab.html',
+      'colorvolumelab.html',    'combatlab.html',          'compare.html',
+      'contrasttexlab.html',    'courtyardlab.html',       'darkcontourlab.html',
+      'decalboillab.html',      'decolab.html',            'depfilllab.html',
+      'engine/aoviz.html',      'engine/atlasorder.html',  'engine/backlit.js',
+      'engine/badnorth.html',   'engine/ballistic.html',   'engine/barycentric.html',
+      'engine/birds.js',        'engine/blendlab.html',    'engine/blobs.html',
+      'engine/blotch.js',       'engine/bnbrush.js',       'engine/bncanopy.js',
+      'engine/border.html',     'engine/boxtest.html',     'engine/butterflies.js',
+      'engine/cage.js',         'engine/cavenav.html',     'engine/cheese.html',
+      'engine/contour.js',      'engine/demo.html',        'engine/fitlab.html',
+      'engine/flags.js',        'engine/fog.js',           'engine/frontier.html',
+      'engine/gridmodes.html',  'engine/hallway.html',     'engine/impostor.js',
+      'engine/infograph.html',  'engine/islands.js',       'engine/lightvol.js',
+      'engine/los.js',          'engine/mandala.html',     'engine/mesa.js',
+      'engine/meshcheck.js',    'engine/mipfilter.html',   'engine/mixedpersp.html',
+      'engine/navflow.html',    'engine/navgrid.html',     'engine/noise.js',
+      'engine/normalsmooth.js', 'engine/ornament.html',    'engine/ornament.js',
+      'engine/outline.js',      'engine/piperepair.html',  'engine/portrait.html',
+      'engine/props.html',      'engine/props.js',         'engine/rayvis.html',
+      'engine/reflection.js',   'engine/relax.js',         'engine/repair.html',
+      'engine/rivers.js',       'engine/roofs.js',         'engine/shorefield.js',
+      'engine/skylab.html',     'engine/snapshot.js',      'engine/snow.js',
+      'engine/sphere.html',     'engine/sphere.js',        'engine/splash.html',
+      'engine/splash.js',       'engine/splice.html',      'engine/spritepack.js',
+      'engine/surface.js',      'engine/surfaceshadow.js', 'engine/terrain.html',
+      'engine/terrain.js',      'engine/texlab.html',      'engine/tileplace.html',
+      'engine/timberlab.html',  'engine/traffic.html',     'engine/triflow.html',
+      'engine/trigraph.html',   'engine/triisland.html',   'engine/unitbatch.html',
+      'engine/units.html',      'engine/vertexlight.js',   'engine/voxdebug.html',
+      'engine/voxelshadow.js',
+      ... 237 more items
+    ],
+    expected: [
+      'Townscaper.html',        'alivelab.html',           'archvoidlab.html',
+      'ballisticlab.html',      'bindchainlab.html',       'blobshadowlab.html',
+      'bloodfieldlab.html',     'blotchpaintlab.html',     'bouncelab.html',
+      'buildanimlab.html',      'campaignmaplab.html',     'candlelab.html',
+      'cavepathlab.html',       'clouddecklab.html',       'colorvolumelab.html',
+      'combatlab.html',         'compare.html',            'contrasttexlab.html',
+      'courtyardlab.html',      'darkcontourlab.html',     'decalboillab.html',
+      'decolab.html',           'depfilllab.html',         'distcontourlab.html',
+      'engine/aoviz.html',      'engine/atlasorder.html',  'engine/backlit.js',
+      'engine/badnorth.html',   'engine/ballistic.html',   'engine/barycentric.html',
+      'engine/birds.js',        'engine/blendlab.html',    'engine/blobs.html',
+      'engine/blotch.js',       'engine/bnbrush.js',       'engine/bncanopy.js',
+      'engine/border.html',     'engine/boxtest.html',     'engine/butterflies.js',
+      'engine/cage.js',         'engine/cavenav.html',     'engine/cheese.html',
+      'engine/contour.js',      'engine/demo.html',        'engine/fitlab.html',
+      'engine/flags.js',        'engine/fog.js',           'engine/frontier.html',
+      'engine/gridmodes.html',  'engine/hallway.html',     'engine/impostor.js',
+      'engine/infograph.html',  'engine/islands.js',       'engine/lightvol.js',
+      'engine/los.js',          'engine/mandala.html',     'engine/mesa.js',
+      'engine/meshcheck.js',    'engine/mipfilter.html',   'engine/mixedpersp.html',
+      'engine/navflow.html',    'engine/navgrid.html',     'engine/noise.js',
+      'engine/normalsmooth.js', 'engine/ornament.html',    'engine/ornament.js',
+      'engine/outline.js',      'engine/piperepair.html',  'engine/portrait.html',
+      'engine/props.html',      'engine/props.js',         'engine/rayvis.html',
+      'engine/reflection.js',   'engine/relax.js',         'engine/repair.html',
+      'engine/rivers.js',       'engine/roofs.js',         'engine/shorefield.js',
+      'engine/skylab.html',     'engine/snapshot.js',      'engine/snow.js',
+      'engine/sphere.html',     'engine/sphere.js',        'engine/splash.html',
+      'engine/splash.js',       'engine/splice.html',      'engine/spritepack.js',
+      'engine/surface.js',      'engine/surfaceshadow.js', 'engine/terrain.html',
+      'engine/terrain.js',      'engine/texlab.html',      'engine/tileplace.html',
+      'engine/timberlab.html',  'engine/traffic.html',     'engine/triflow.html',
+      'engine/trigraph.html',   'engine/triisland.html',   'engine/unitbatch.html',
+      'engine/units.html',
+      ... 261 more items
+    ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+

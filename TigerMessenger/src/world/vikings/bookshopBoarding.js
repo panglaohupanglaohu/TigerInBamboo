@@ -9,7 +9,7 @@
 import * as THREE from 'three';
 import { sfxShipWhistle } from '../../audio/worldSfx.js';
 
-const CAP = 150, DECK_SHOWN = 14, VIKING = { body: 0x8e3b3b, head: 0xe8dcc0, shield: 0xf0a35e };
+const CAP = 50, DECK_SHOWN = 14, VIKING = { body: 0x8e3b3b, head: 0xe8dcc0, shield: 0xf0a35e };   // CAP=每船定员：两船共 100（2026-11-25 用户要求 300→100）
 const UP = new THREE.Vector3(), FWD = new THREE.Vector3(), RIGHT = new THREE.Vector3(), M = new THREE.Matrix4(), Q = new THREE.Quaternion(), QB = new THREE.Quaternion();
 
 /** 把物体放在世界点 p，朝向 dir（切平面内），头朝星球外 */
@@ -29,7 +29,7 @@ function seatAt(obj, p, dir) {
  *      烟囱顶、桅杆顶这类朝上的小面也会接住人。→ 跳板、吊车 / 吊货、缆绳、旗、白汽等不参与，只认朝上的面。
  *   ② 剩下的人站在舱顶、驾驶台顶上，比码头铁轨还高。→ 在船面上铺一张网格射线，每条取最高的朝上面，
  *      找出「主甲板高度」（最低的一层、且至少占 12% 的射线），只在这层露天甲板上（−0.3…+0.6 m，舱口盖算）排人。 */
-const NOT_DECK = /gangway|ladder|crane|cargo|trolley|rope|rigging|stay|mooring|cable|wire|flag|banner|smoke|steam-puff|puff|wake|spray|foam|splash|glow|shadow/i;
+const NOT_DECK = /gangway|ladder|crane|cargo|trolley|rope|rigging|stay|mooring|cable|wire|flag|banner|smoke|steam-puff|puff|wake|spray|foam|splash|glow|shadow|funnel|chimney|smokestack|whistle|mast|boom|sail|wheelhouse|deckhouse|bridge|lifeboat|cabin|roof/i;
 function deckSlots(ship, n) {
   ship.updateWorldMatrix(true, true);
   const skip = (o) => { for (let x = o; x && x !== ship; x = x.parent) if (NOT_DECK.test(x.name || '') || x.visible === false) return true; return false; };
@@ -38,10 +38,11 @@ function deckSlots(ship, n) {
   for (const o of meshes) { const p = o.geometry.attributes.position; for (let i = 0; i < p.count; i += 7) { v.fromBufferAttribute(p, i).applyMatrix4(o.matrixWorld).applyMatrix4(inv); box.expandByPoint(v); } }
   const size = box.getSize(new THREE.Vector3()), long = size.z >= size.x ? 'z' : 'x', across = long === 'z' ? 'x' : 'z', c = box.getCenter(new THREE.Vector3());
   const ray = new THREE.Raycaster(), nrm = new THREE.Vector3();
+  const worldScale = ship.matrixWorld.getMaxScaleOnAxis();   // 射线在世界空间打：far 必须用世界单位（放大船不然够不到甲板，2026-11-25 维京人站烟囱修复）
   const topAt = (u, w) => {   // u 沿船长 −0.5…0.5，w 沿船宽；返回最高的朝上面（船局部）
     const local = new THREE.Vector3(c.x, box.max.y + 2, c.z); local[long] += u * size[long]; local[across] += w * size[across];
     const from = local.clone().applyMatrix4(ship.matrixWorld), up = from.clone().normalize();
-    ray.set(from, up.clone().negate()); ray.far = size.y + 6;
+    ray.set(from, up.clone().negate()); ray.far = (size.y + 6) * Math.max(1, worldScale);
     for (const h of ray.intersectObjects(meshes, false)) {
       if (!h.face) continue;
       nrm.copy(h.face.normal).transformDirection(h.object.matrixWorld);

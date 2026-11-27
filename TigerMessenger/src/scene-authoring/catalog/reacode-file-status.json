@@ -1,20 +1,19 @@
 {
-  "generatedAt": "2026-11-25T00:17:08.493066+00:00",
+  "generatedAt": "2026-11-27T00:43:49.725195+00:00",
   "sourceRoot": "townscaper-web/REACode",
   "scope": "所有.js/.mjs/.html文件；不含artifacts/.git/node_modules/.workbuddy；原件只读。",
   "warning": "有落点/有局部证据不等于完整重构验收；本轮通过仅对应明确交付范围，保留扩展差距。",
-  "total": 337,
+  "total": 361,
   "extensions": {
-    ".html": 126,
-    ".js": 199,
+    ".html": 138,
+    ".js": 211,
     ".mjs": 12
   },
   "states": {
-    "待页面核验": 147,
+    "待页面核验": 171,
     "待运行验收": 41,
     "已迁移待完整核验": 122,
-    "本轮代码验证通过": 3,
-    "本轮代码待复验": 1,
+    "本轮代码验证通过": 4,
     "待工具/数据核验": 16,
     "待补动作/美术": 1,
     "已迁移待跨GPU验收": 1,
@@ -24,7 +23,7 @@
     "保留第三方": 1
   },
   "kinds": {
-    "页面/内联代码": 148,
+    "页面/内联代码": 172,
     "核心模块": 170,
     "学习界面/数据": 4,
     "临时原型": 2,
@@ -79,7 +78,7 @@
         {
           "path": "leaf-surface.html",
           "exists": true,
-          "sha256": "b95f175c9e717dc01062ef5933035bd84d4c79886302fa5da730802b5f55445e"
+          "sha256": "b6337030a70021007210199356c59dcbd4be1f31c368a6ae8d74f3e80132eeae"
         },
         {
           "path": "src/build/buildings.js",
@@ -94,7 +93,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/prop-anim.js",
@@ -124,7 +123,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         },
         {
           "path": "src/world/prop-anim-layer.js",
@@ -176,6 +175,42 @@
           "sha256": "22338e6ac7e38b9441702391372cb542833fa30ad28379d83330f57c6b6830a2"
         }
       ],
+      "evidence": []
+    },
+    {
+      "source": "ballisticlab.html",
+      "sha256": "8a2fb893c5cf50d5f35f99932e4ec9288fdc9062eca6200375429efa449c61a1",
+      "bytes": 10538,
+      "lines": 219,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/ballisticlut.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
+      "evidence": []
+    },
+    {
+      "source": "bindchainlab.html",
+      "sha256": "5bba7ce089a3e395a6c70af3412c37ad3ca57e6ca4b1c06c2b9df9a1d2369f53",
+      "bytes": 12889,
+      "lines": 257,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/bindchain.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
       "evidence": []
     },
     {
@@ -277,7 +312,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         }
       ],
       "evidence": []
@@ -377,7 +412,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/layerednav.js",
@@ -435,7 +470,7 @@
         {
           "path": "src/core/color-volume.js",
           "exists": true,
-          "sha256": "8f3322ecd45320518e5a0933faf4f84cf7c02b7e52ba3cf1fab272256a6c2e74"
+          "sha256": "69ed7f6ca5d87d7064835063cf19ac3d3406f3fd0829877c2827002963ec0116"
         },
         {
           "path": "src/ui/shading-panel.js",
@@ -474,7 +509,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/melee-sweep.js",
@@ -632,7 +667,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/module-patch.js",
@@ -691,14 +726,32 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         },
         {
           "path": "terrain-r55.html",
           "exists": true,
-          "sha256": "f8d9a2f4d07b6c6f37f7e08ab2473b838ac54cbe434ebd39508001baf990b0a2"
+          "sha256": "669ebb412dc2abe6525a7cb9fc3bb52e659ed14bc9f2505c76d93f55de938ba1"
         }
       ],
+      "evidence": []
+    },
+    {
+      "source": "distcontourlab.html",
+      "sha256": "1999d2579101b1accad0dae4a7d83bf03b00b37e62c622610e67b8548f1e48b5",
+      "bytes": 9370,
+      "lines": 209,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/distcontour.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
       "evidence": []
     },
     {
@@ -721,12 +774,12 @@
         {
           "path": "ao-stages.html",
           "exists": true,
-          "sha256": "2cba0b5ee51d997b351d5917755fd972c097017dc7de64d8134e105634b4dc20"
+          "sha256": "32028b01a14077672329e2a0cac3fbc8fa78f96cb81e8e23cb128e73f2444635"
         },
         {
           "path": "src/light/bake.js",
           "exists": true,
-          "sha256": "0640aab717d78c3343421b961ed9ea634576fe9fb439f5bc7a71041d71db1eb7"
+          "sha256": "ef1930362e4fdab88584cc26f6362955cd6eb7bfb1f7077f97c8b7d967b5510b"
         },
         {
           "path": "src/light/voxel-ao.js",
@@ -741,7 +794,7 @@
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         }
       ],
       "evidence": []
@@ -835,7 +888,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/life/impostor.js",
@@ -879,7 +932,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/ballistic-table.js",
@@ -1223,12 +1276,12 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         },
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         }
       ],
       "evidence": [
@@ -1258,7 +1311,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/fine-portals.js",
@@ -1297,7 +1350,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/fine-portals.js",
@@ -1343,7 +1396,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         }
       ],
       "evidence": [
@@ -1373,7 +1426,7 @@
         {
           "path": "src/badnorth/island.js",
           "exists": true,
-          "sha256": "c33a7e53242b0871227febc53f831870e6dc59ae4fb63ba29830a892390ba3d2"
+          "sha256": "74d215b3014a1500e985e330536349312ecce66d8bb5feff36e20184af1a8728"
         }
       ],
       "evidence": []
@@ -1440,7 +1493,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/banner.js",
@@ -1526,7 +1579,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         }
       ],
       "evidence": []
@@ -1556,7 +1609,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/wfc.js",
@@ -1667,7 +1720,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/badnorth/info-graph.js",
@@ -1696,7 +1749,7 @@
         {
           "path": "src/badnorth/island.js",
           "exists": true,
-          "sha256": "c33a7e53242b0871227febc53f831870e6dc59ae4fb63ba29830a892390ba3d2"
+          "sha256": "74d215b3014a1500e985e330536349312ecce66d8bb5feff36e20184af1a8728"
         }
       ],
       "evidence": []
@@ -1740,7 +1793,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         }
       ],
       "evidence": [
@@ -1775,7 +1828,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         },
         {
           "path": "src/world/visibility.js",
@@ -1953,7 +2006,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/navmesh-flow.js",
@@ -1968,7 +2021,7 @@
         {
           "path": "terrain-r55.html",
           "exists": true,
-          "sha256": "f8d9a2f4d07b6c6f37f7e08ab2473b838ac54cbe434ebd39508001baf990b0a2"
+          "sha256": "669ebb412dc2abe6525a7cb9fc3bb52e659ed14bc9f2505c76d93f55de938ba1"
         }
       ],
       "evidence": []
@@ -2146,8 +2199,8 @@
       "bytes": 11265,
       "lines": 268,
       "kind": "核心模块",
-      "state": "本轮代码待复验",
-      "verifiedDelivery": false,
+      "state": "本轮代码验证通过",
+      "verifiedDelivery": true,
       "scope": "原描边pass保留几何模式；接共享程序笔触法线图作为主World法线缓冲线源，开关/异常恢复/双网格GLSL运行验证。",
       "gap": "原片美术/UV图块与远景投影接缝尚非精确复现。",
       "clips": [
@@ -2348,7 +2401,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         }
       ],
       "evidence": [
@@ -2378,7 +2431,7 @@
         {
           "path": "src/sphere/planet.js",
           "exists": true,
-          "sha256": "8742331599274c82d52c586939b16335441b2aa2869987ec163a773c822641fb"
+          "sha256": "27d9a587ee8218811277e22ad41c03ee6ab68e70298063b06ed878c0b101d71c"
         }
       ],
       "evidence": []
@@ -2443,7 +2496,7 @@
         {
           "path": "terrain-r55.html",
           "exists": true,
-          "sha256": "f8d9a2f4d07b6c6f37f7e08ab2473b838ac54cbe434ebd39508001baf990b0a2"
+          "sha256": "669ebb412dc2abe6525a7cb9fc3bb52e659ed14bc9f2505c76d93f55de938ba1"
         }
       ],
       "evidence": [
@@ -2506,7 +2559,7 @@
         {
           "path": "src/water/shore.js",
           "exists": true,
-          "sha256": "b6e513c26544acebf706f099da9f7b16c474d302bd880fffeb2171d93a752fbb"
+          "sha256": "61c0f9b47c403da035fb77398a4bfa9165956064a1ca65c707cc9e9ca2acbaea"
         },
         {
           "path": "src/water/shorefield.js",
@@ -2637,12 +2690,12 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/sphere/planet.js",
           "exists": true,
-          "sha256": "8742331599274c82d52c586939b16335441b2aa2869987ec163a773c822641fb"
+          "sha256": "27d9a587ee8218811277e22ad41c03ee6ab68e70298063b06ed878c0b101d71c"
         },
         {
           "path": "src/sphere/sphere-stages.js",
@@ -2672,12 +2725,12 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/sphere/planet.js",
           "exists": true,
-          "sha256": "8742331599274c82d52c586939b16335441b2aa2869987ec163a773c822641fb"
+          "sha256": "27d9a587ee8218811277e22ad41c03ee6ab68e70298063b06ed878c0b101d71c"
         },
         {
           "path": "src/sphere/sphere-stages.js",
@@ -2776,7 +2829,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         },
         {
           "path": "src/world/save.js",
@@ -2944,7 +2997,7 @@
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         }
       ],
       "evidence": []
@@ -3022,7 +3075,7 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         },
         {
           "path": "src/world/view-shading.js",
@@ -3032,7 +3085,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         }
       ],
       "evidence": []
@@ -3108,7 +3161,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/layerednav.js",
@@ -3211,7 +3264,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         },
         {
           "path": "wall-palette.html",
@@ -3240,7 +3293,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/badnorth/unit-batch-lod.js",
@@ -3275,7 +3328,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/sprite-ambiguity.js",
@@ -3314,7 +3367,7 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/core/cube-height.js",
@@ -3329,7 +3382,7 @@
         {
           "path": "src/sphere/planet.js",
           "exists": true,
-          "sha256": "8742331599274c82d52c586939b16335441b2aa2869987ec163a773c822641fb"
+          "sha256": "27d9a587ee8218811277e22ad41c03ee6ab68e70298063b06ed878c0b101d71c"
         }
       ],
       "evidence": [
@@ -3377,17 +3430,17 @@
         {
           "path": "ao-stages.html",
           "exists": true,
-          "sha256": "2cba0b5ee51d997b351d5917755fd972c097017dc7de64d8134e105634b4dc20"
+          "sha256": "32028b01a14077672329e2a0cac3fbc8fa78f96cb81e8e23cb128e73f2444635"
         },
         {
           "path": "src/light/bake.js",
           "exists": true,
-          "sha256": "0640aab717d78c3343421b961ed9ea634576fe9fb439f5bc7a71041d71db1eb7"
+          "sha256": "ef1930362e4fdab88584cc26f6362955cd6eb7bfb1f7077f97c8b7d967b5510b"
         },
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         }
       ],
       "evidence": [
@@ -3490,7 +3543,7 @@
         {
           "path": "src/water/shore.js",
           "exists": true,
-          "sha256": "b6e513c26544acebf706f099da9f7b16c474d302bd880fffeb2171d93a752fbb"
+          "sha256": "61c0f9b47c403da035fb77398a4bfa9165956064a1ca65c707cc9e9ca2acbaea"
         },
         {
           "path": "waves.html",
@@ -3558,7 +3611,7 @@
         {
           "path": "ao-stages.html",
           "exists": true,
-          "sha256": "2cba0b5ee51d997b351d5917755fd972c097017dc7de64d8134e105634b4dc20"
+          "sha256": "32028b01a14077672329e2a0cac3fbc8fa78f96cb81e8e23cb128e73f2444635"
         },
         {
           "path": "banners.html",
@@ -3598,7 +3651,7 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "reflection.html",
@@ -3623,7 +3676,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/build/buildings.js",
@@ -3663,7 +3716,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/meshwriter.js",
@@ -3733,7 +3786,7 @@
         {
           "path": "src/light/bake.js",
           "exists": true,
-          "sha256": "0640aab717d78c3343421b961ed9ea634576fe9fb439f5bc7a71041d71db1eb7"
+          "sha256": "ef1930362e4fdab88584cc26f6362955cd6eb7bfb1f7077f97c8b7d967b5510b"
         },
         {
           "path": "src/light/cube-height.js",
@@ -3753,7 +3806,7 @@
         {
           "path": "src/sphere/planet.js",
           "exists": true,
-          "sha256": "8742331599274c82d52c586939b16335441b2aa2869987ec163a773c822641fb"
+          "sha256": "27d9a587ee8218811277e22ad41c03ee6ab68e70298063b06ed878c0b101d71c"
         },
         {
           "path": "src/terrain/blotch-atlas.js",
@@ -3778,7 +3831,7 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         },
         {
           "path": "src/tools/mesh-audit.js",
@@ -3798,7 +3851,7 @@
         {
           "path": "src/water/shore.js",
           "exists": true,
-          "sha256": "b6e513c26544acebf706f099da9f7b16c474d302bd880fffeb2171d93a752fbb"
+          "sha256": "61c0f9b47c403da035fb77398a4bfa9165956064a1ca65c707cc9e9ca2acbaea"
         },
         {
           "path": "src/water/waterfall.js",
@@ -3848,7 +3901,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         },
         {
           "path": "src/world/visibility.js",
@@ -3858,12 +3911,12 @@
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         },
         {
           "path": "terrain-r55.html",
           "exists": true,
-          "sha256": "f8d9a2f4d07b6c6f37f7e08ab2473b838ac54cbe434ebd39508001baf990b0a2"
+          "sha256": "669ebb412dc2abe6525a7cb9fc3bb52e659ed14bc9f2505c76d93f55de938ba1"
         },
         {
           "path": "visibility.html",
@@ -3897,7 +3950,7 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/sphere/worldmap-material.js",
@@ -3931,7 +3984,7 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/sphere/worldmap-material.js",
@@ -4092,12 +4145,12 @@
         {
           "path": "leaf-surface.html",
           "exists": true,
-          "sha256": "b95f175c9e717dc01062ef5933035bd84d4c79886302fa5da730802b5f55445e"
+          "sha256": "b6337030a70021007210199356c59dcbd4be1f31c368a6ae8d74f3e80132eeae"
         },
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/world.js",
@@ -4115,6 +4168,24 @@
           "sha256": "9186bfc5276a96159abe42a980477121b46b1497745be1c7892f1c2ab17ff669"
         }
       ],
+      "evidence": []
+    },
+    {
+      "source": "grassplotlab.html",
+      "sha256": "3b569dc090fd58b7ae5e60c0831f05d2b4c66e4bcc68e098e8d82b4205fc46e2",
+      "bytes": 8626,
+      "lines": 197,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/grassplot.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
       "evidence": []
     },
     {
@@ -4255,7 +4326,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         }
       ],
       "evidence": []
@@ -4290,6 +4361,42 @@
       "evidence": []
     },
     {
+      "source": "italianwireslab.html",
+      "sha256": "f15d541cb8d4b25f21abe334beb5947db8ef350228c569f44f9e8665d4677365",
+      "bytes": 8299,
+      "lines": 162,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/italianwires.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
+      "evidence": []
+    },
+    {
+      "source": "jobclocklab.html",
+      "sha256": "a174784ec2118060d3ab689a63ff19ddeeb7a20877494fac9c4fb688153e0483",
+      "bytes": 12655,
+      "lines": 269,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/jobclock.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
+      "evidence": []
+    },
+    {
       "source": "learn/data.js",
       "sha256": "9aebcaad5b8784f19370ef31037b4d932365d123cb306e02e80a1158c3571c0c",
       "bytes": 132361,
@@ -4306,7 +4413,7 @@
         {
           "path": "learn/data.js",
           "exists": true,
-          "sha256": "c8bdb635e8587719e248431bd63199fa22139ffa13886d3ba6e23b1e6db79efa"
+          "sha256": "5dbcd0b665dc63a97d425b344996884d5bcf82121a5d4a870a74db00599db9e3"
         }
       ],
       "evidence": []
@@ -4328,7 +4435,7 @@
         {
           "path": "learn/data.js",
           "exists": true,
-          "sha256": "c8bdb635e8587719e248431bd63199fa22139ffa13886d3ba6e23b1e6db79efa"
+          "sha256": "5dbcd0b665dc63a97d425b344996884d5bcf82121a5d4a870a74db00599db9e3"
         }
       ],
       "evidence": []
@@ -4372,7 +4479,7 @@
         {
           "path": "learn/pipeline.js",
           "exists": true,
-          "sha256": "1ae03bfc4f1841df86803f878e0be31d358556ce67a4c3aa1a9a8e85fcfc3428"
+          "sha256": "8793d4fa59210439a9674c84bc50e3bf67e470a9bdc3e9c5642b266d00820dad"
         }
       ],
       "evidence": []
@@ -4447,6 +4554,24 @@
       "evidence": []
     },
     {
+      "source": "lighthousecaplab.html",
+      "sha256": "e57cffff0827d4c25744683c4c0c6adfab9a04ae4311b392c2a1a07b174ac7da",
+      "bytes": 12303,
+      "lines": 246,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/lightcap.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
+      "evidence": []
+    },
+    {
       "source": "looptintlab.html",
       "sha256": "3ba0dcde7eed7417e7738c813b4fe7b586e2ff4228569c7db74dd57b74c7de07",
       "bytes": 12961,
@@ -4466,7 +4591,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/halfedge.js",
@@ -4604,7 +4729,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/wfc.js",
@@ -4617,6 +4742,24 @@
           "sha256": "73ca05b44e2a2e390a74bf94ae8ccd4d0d409602e3c980ae6590dcd1b260af34"
         }
       ],
+      "evidence": []
+    },
+    {
+      "source": "modulecensuslab.html",
+      "sha256": "69f02e9db90d0dff99abb0897f4f123c3c0b2addd5230dc854af865b53f3e62d",
+      "bytes": 5090,
+      "lines": 99,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/modulecensus.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
       "evidence": []
     },
     {
@@ -4638,7 +4781,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/path-samples.js",
@@ -4648,7 +4791,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         }
       ],
       "evidence": []
@@ -4726,7 +4869,7 @@
         {
           "path": "src/terrain/soft-tops.js",
           "exists": true,
-          "sha256": "d50c66e31febf5b7fa1c57bb83c6a0d3aae2f5719d6110212c9d7052b39f9369"
+          "sha256": "d6d60ee9836fe286ad4566794d07e76da99714368878dafaff3a89ae590b65f3"
         },
         {
           "path": "src/terrain/terrain-collide.js",
@@ -4736,7 +4879,7 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         }
       ],
       "evidence": []
@@ -4754,6 +4897,24 @@
       "clips": [],
       "dependencies": [
         "learn/data.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
+      "evidence": []
+    },
+    {
+      "source": "paletteauthorlab.html",
+      "sha256": "254eecf95eff40a478db5dcac7f598ef9112494a95a839b55cf7019650cd3c99",
+      "bytes": 14176,
+      "lines": 266,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/paletteauthor.js"
       ],
       "inlineScripts": 1,
       "targets": [],
@@ -4919,7 +5080,7 @@
         {
           "path": "leaf-surface.html",
           "exists": true,
-          "sha256": "b95f175c9e717dc01062ef5933035bd84d4c79886302fa5da730802b5f55445e"
+          "sha256": "b6337030a70021007210199356c59dcbd4be1f31c368a6ae8d74f3e80132eeae"
         },
         {
           "path": "src/build/buildings.js",
@@ -5243,7 +5404,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/wfc.js",
@@ -5277,7 +5438,7 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/sphere/planet-town.js",
@@ -5451,7 +5612,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         }
       ],
       "evidence": [
@@ -5522,7 +5683,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/ballistic-table.js",
@@ -5537,6 +5698,22 @@
           "exists": true
         }
       ]
+    },
+    {
+      "source": "src/ballisticlut.js",
+      "sha256": "67965bde1903ab48838970ad240e55d84bac9910b8b8716b44992adbed29e60d",
+      "bytes": 11120,
+      "lines": 237,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
     },
     {
       "source": "src/barycentric.js",
@@ -5568,6 +5745,22 @@
           "exists": true
         }
       ]
+    },
+    {
+      "source": "src/bindchain.js",
+      "sha256": "fc6a5af3f3d6e2e147e2e44047a0f0f9a76be5962bc957cfdf65f69641893c1c",
+      "bytes": 11987,
+      "lines": 277,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
     },
     {
       "source": "src/birds.js",
@@ -5911,7 +6104,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/layerednav.js",
@@ -5953,7 +6146,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/fine-portals.js",
@@ -6050,7 +6243,7 @@
         {
           "path": "src/core/color-volume.js",
           "exists": true,
-          "sha256": "8f3322ecd45320518e5a0933faf4f84cf7c02b7e52ba3cf1fab272256a6c2e74"
+          "sha256": "69ed7f6ca5d87d7064835063cf19ac3d3406f3fd0829877c2827002963ec0116"
         },
         {
           "path": "src/ui/shading-panel.js",
@@ -6102,7 +6295,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/melee-sweep.js",
@@ -6316,12 +6509,12 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         },
         {
           "path": "terrain-r55.html",
           "exists": true,
-          "sha256": "f8d9a2f4d07b6c6f37f7e08ab2473b838ac54cbe434ebd39508001baf990b0a2"
+          "sha256": "669ebb412dc2abe6525a7cb9fc3bb52e659ed14bc9f2505c76d93f55de938ba1"
         }
       ],
       "evidence": [
@@ -6381,7 +6574,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/sprite-ambiguity.js",
@@ -6401,6 +6594,22 @@
           "exists": true
         }
       ]
+    },
+    {
+      "source": "src/distcontour.js",
+      "sha256": "95edaa310f0f948422062730900b2a656565d528f7a350799f1fd1976b0cbf8e",
+      "bytes": 8815,
+      "lines": 206,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
     },
     {
       "source": "src/doodlewall.js",
@@ -6673,7 +6882,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/navmesh-flow.js",
@@ -6826,7 +7035,7 @@
         {
           "path": "leaf-surface.html",
           "exists": true,
-          "sha256": "b95f175c9e717dc01062ef5933035bd84d4c79886302fa5da730802b5f55445e"
+          "sha256": "b6337030a70021007210199356c59dcbd4be1f31c368a6ae8d74f3e80132eeae"
         },
         {
           "path": "src/life/leaf-surface.js",
@@ -6864,6 +7073,24 @@
       "evidence": []
     },
     {
+      "source": "src/grassplot.js",
+      "sha256": "b99c9253c773d331afaa0975c190fbca11ea4e34af519f3788c3417bc04f454c",
+      "bytes": 12512,
+      "lines": 309,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/rimline.js"
+      ],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
+    },
+    {
       "source": "src/grid.js",
       "sha256": "a60736e21f3384a9dd98d15aef2dd125432ca1b9e8f393c8bd50598671b90abd",
       "bytes": 12689,
@@ -6882,7 +7109,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         }
       ],
       "evidence": []
@@ -7061,7 +7288,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/halfedge.js",
@@ -7147,7 +7374,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/fine-portals.js",
@@ -7238,7 +7465,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/badnorth/info-graph.js",
@@ -7290,6 +7517,38 @@
           "exists": true
         }
       ]
+    },
+    {
+      "source": "src/italianwires.js",
+      "sha256": "7dd3ceadfb03f584ff64079f7cc8e8b7fbefb9301f00ea875393799867d0d76c",
+      "bytes": 8908,
+      "lines": 175,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
+    },
+    {
+      "source": "src/jobclock.js",
+      "sha256": "ceb6df613fb3eebd64d9ee0b553dbe4df96934f35b2e4ea36f83c8816fb85ba5",
+      "bytes": 9891,
+      "lines": 207,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
     },
     {
       "source": "src/learnpanel.js",
@@ -7349,6 +7608,22 @@
       ]
     },
     {
+      "source": "src/lightcap.js",
+      "sha256": "55470e6d94ad616678f858e99521c93579c311b33c83a0e6d592ea716d2e5c44",
+      "bytes": 19278,
+      "lines": 406,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
+    },
+    {
       "source": "src/lighting.js",
       "sha256": "76083f5395dff4fbced6ee1de1988a10a4b04774fd2e7bd3a2c98052b57d6800",
       "bytes": 46008,
@@ -7374,7 +7649,7 @@
         {
           "path": "src/light/bake.js",
           "exists": true,
-          "sha256": "0640aab717d78c3343421b961ed9ea634576fe9fb439f5bc7a71041d71db1eb7"
+          "sha256": "ef1930362e4fdab88584cc26f6362955cd6eb7bfb1f7077f97c8b7d967b5510b"
         },
         {
           "path": "src/light/voxel-field.js",
@@ -7418,7 +7693,7 @@
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         }
       ],
       "evidence": []
@@ -7442,7 +7717,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/halfedge.js",
@@ -7629,7 +7904,7 @@
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         }
       ],
       "evidence": [
@@ -7800,7 +8075,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         },
         {
           "path": "src/core/wfc.js",
@@ -7820,6 +8095,22 @@
           "exists": true
         }
       ]
+    },
+    {
+      "source": "src/modulecensus.js",
+      "sha256": "cf1227b17635484876fbeb97d7ef6070250e17d5b172d87e28e52109d71983fa",
+      "bytes": 7669,
+      "lines": 162,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
     },
     {
       "source": "src/mountainlight.js",
@@ -7938,7 +8229,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/path-samples.js",
@@ -7948,7 +8239,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         }
       ],
       "evidence": [
@@ -8011,7 +8302,7 @@
         {
           "path": "src/terrain/soft-tops.js",
           "exists": true,
-          "sha256": "d50c66e31febf5b7fa1c57bb83c6a0d3aae2f5719d6110212c9d7052b39f9369"
+          "sha256": "d6d60ee9836fe286ad4566794d07e76da99714368878dafaff3a89ae590b65f3"
         },
         {
           "path": "src/terrain/terrain-collide.js",
@@ -8021,7 +8312,7 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         }
       ],
       "evidence": [
@@ -8121,7 +8412,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         },
         {
           "path": "wall-palette.html",
@@ -8136,6 +8427,22 @@
           "exists": true
         }
       ]
+    },
+    {
+      "source": "src/paletteauthor.js",
+      "sha256": "d1b8059a80186f7f1fe621084e1df25a70d3647685fd1639524b165e113f250c",
+      "bytes": 11783,
+      "lines": 218,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
     },
     {
       "source": "src/partsprites.js",
@@ -8403,7 +8710,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         },
         {
           "path": "src/world/prop-anim-layer.js",
@@ -8480,7 +8787,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         }
       ],
       "evidence": [
@@ -8670,7 +8977,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         }
       ],
       "evidence": []
@@ -8742,7 +9049,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         },
         {
           "path": "src/world/save.js",
@@ -8782,7 +9089,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         },
         {
           "path": "src/world/save.js",
@@ -8838,7 +9145,7 @@
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         }
       ],
       "evidence": []
@@ -8884,7 +9191,7 @@
         {
           "path": "src/water/shore.js",
           "exists": true,
-          "sha256": "b6e513c26544acebf706f099da9f7b16c474d302bd880fffeb2171d93a752fbb"
+          "sha256": "61c0f9b47c403da035fb77398a4bfa9165956064a1ca65c707cc9e9ca2acbaea"
         }
       ],
       "evidence": [
@@ -9144,7 +9451,7 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/sphere/planet-town.js",
@@ -9182,7 +9489,7 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/sphere/planet-town.js",
@@ -9224,12 +9531,12 @@
         {
           "path": "planet.html",
           "exists": true,
-          "sha256": "5aa22992bb2de1b0ffc2570218007f2053d213837c6cac6bbcdceda1345253c1"
+          "sha256": "9dc7a94c63b31a03fe80c940a61c2234f385f60d03da56119a4ec64c9b52a8c9"
         },
         {
           "path": "src/sphere/planet.js",
           "exists": true,
-          "sha256": "8742331599274c82d52c586939b16335441b2aa2869987ec163a773c822641fb"
+          "sha256": "27d9a587ee8218811277e22ad41c03ee6ab68e70298063b06ed878c0b101d71c"
         }
       ],
       "evidence": [
@@ -9269,7 +9576,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         },
         {
           "path": "src/world/save.js",
@@ -9533,7 +9840,7 @@
         {
           "path": "src/terrain/soft-tops.js",
           "exists": true,
-          "sha256": "d50c66e31febf5b7fa1c57bb83c6a0d3aae2f5719d6110212c9d7052b39f9369"
+          "sha256": "d6d60ee9836fe286ad4566794d07e76da99714368878dafaff3a89ae590b65f3"
         }
       ],
       "evidence": [
@@ -9569,7 +9876,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         }
       ],
       "evidence": [
@@ -9602,7 +9909,7 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         }
       ],
       "evidence": []
@@ -9628,7 +9935,7 @@
         {
           "path": "leaf-surface.html",
           "exists": true,
-          "sha256": "b95f175c9e717dc01062ef5933035bd84d4c79886302fa5da730802b5f55445e"
+          "sha256": "b6337030a70021007210199356c59dcbd4be1f31c368a6ae8d74f3e80132eeae"
         },
         {
           "path": "src/core/leaf-atlas.js",
@@ -9663,6 +9970,22 @@
           "exists": true
         }
       ]
+    },
+    {
+      "source": "src/textureslots.js",
+      "sha256": "1693ce8ae9ed0c7bc1e3735393147d2072b70a7c21dbab93ed1ad9b4eafe48d5",
+      "bytes": 9713,
+      "lines": 229,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
     },
     {
       "source": "src/tideflat.js",
@@ -9844,7 +10167,7 @@
         {
           "path": "src/core/grid.js",
           "exists": true,
-          "sha256": "d4b2784eb6027aee2fb63d750050af4c92eb40d6d3b17c48e0a28f92bfb52d7b"
+          "sha256": "b4141368100f444adddf34b0d0cd600b250bbfe9bb262ddab785a8f0008f48ef"
         }
       ],
       "evidence": [
@@ -9930,7 +10253,7 @@
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         }
       ],
       "evidence": [
@@ -9960,7 +10283,7 @@
         {
           "path": "src/world/app.js",
           "exists": true,
-          "sha256": "7f51b174447afc050452678a9b0aee25a3b404df0153df120702686c7fd8f1d4"
+          "sha256": "073f4749ff2ead9de9fd5ed96d8320d4e63041535dacee90c09ceb0f467c54ba"
         }
       ],
       "evidence": []
@@ -9986,7 +10309,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/layerednav.js",
@@ -10223,7 +10546,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/badnorth/unit-batch-lod.js",
@@ -10259,7 +10582,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/unit-ground-height.js",
@@ -10269,7 +10592,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         }
       ],
       "evidence": [
@@ -10279,6 +10602,22 @@
           "exists": true
         }
       ]
+    },
+    {
+      "source": "src/viewmodes.js",
+      "sha256": "fac88d7119de8a9c9655d9f27ed3f68d3c7238a410baf461f063c3d125648e56",
+      "bytes": 17358,
+      "lines": 368,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
     },
     {
       "source": "src/voxdebug.js",
@@ -10315,12 +10654,12 @@
         {
           "path": "ao-stages.html",
           "exists": true,
-          "sha256": "2cba0b5ee51d997b351d5917755fd972c097017dc7de64d8134e105634b4dc20"
+          "sha256": "32028b01a14077672329e2a0cac3fbc8fa78f96cb81e8e23cb128e73f2444635"
         },
         {
           "path": "src/light/bake.js",
           "exists": true,
-          "sha256": "0640aab717d78c3343421b961ed9ea634576fe9fb439f5bc7a71041d71db1eb7"
+          "sha256": "ef1930362e4fdab88584cc26f6362955cd6eb7bfb1f7077f97c8b7d967b5510b"
         },
         {
           "path": "src/light/voxel-ao.js",
@@ -10330,7 +10669,7 @@
         {
           "path": "src/world/worldmesh.js",
           "exists": true,
-          "sha256": "c38e8bbccde842c3f75491bfa9505e0644e270a7252aaf20140c01864fa37fd1"
+          "sha256": "7167634390d78ed7fffe5734aa99e0e829364eabea76b7f8bd9c4182acf0e822"
         }
       ],
       "evidence": [
@@ -10400,7 +10739,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         },
         {
           "path": "src/world/fine-portals.js",
@@ -10487,6 +10826,22 @@
       ]
     },
     {
+      "source": "src/waterline.js",
+      "sha256": "bea44fad967a698bfd13f1240ef4304c1f8c673c9aedc613a4a1d97dde26bd84",
+      "bytes": 8465,
+      "lines": 187,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [],
+      "inlineScripts": 0,
+      "targets": [],
+      "evidence": []
+    },
+    {
       "source": "src/wind.js",
       "sha256": "b2213f2e964b4c731c1b88ca7f3cdf89e04eefdede8e550e9e854343ec05a0fa",
       "bytes": 5164,
@@ -10552,12 +10907,12 @@
         {
           "path": "src/terrain/terrainmesh.js",
           "exists": true,
-          "sha256": "06ffd3e7e14699ce9ec85e8ae42a7e212f8901e6a47613f4142c7e40e899aca9"
+          "sha256": "84449de475fc9965c39663bcb1d8982d1ffbb0363ef1838b172530fd559d1525"
         },
         {
           "path": "src/world/view.js",
           "exists": true,
-          "sha256": "b49cb6de698869a559d5963ce933099f03f2cfb26234276e8e1c283e28be7153"
+          "sha256": "0fb4fa72cea2361301133f28546e79f0ae57e2762d3a194b98f737bb668febfc"
         }
       ],
       "evidence": [
@@ -10634,7 +10989,7 @@
         {
           "path": "src/terrain/soft-tops.js",
           "exists": true,
-          "sha256": "d50c66e31febf5b7fa1c57bb83c6a0d3aae2f5719d6110212c9d7052b39f9369"
+          "sha256": "d6d60ee9836fe286ad4566794d07e76da99714368878dafaff3a89ae590b65f3"
         }
       ],
       "evidence": []
@@ -10663,9 +11018,27 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         }
       ],
+      "evidence": []
+    },
+    {
+      "source": "textureslotlab.html",
+      "sha256": "84b05802e0fbb8394e1a01655403c8f3b6d990e03bbaee553de19a0227bfd329",
+      "bytes": 15519,
+      "lines": 325,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/textureslots.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
       "evidence": []
     },
     {
@@ -11077,7 +11450,7 @@
         {
           "path": "src/badnorth/battle.js",
           "exists": true,
-          "sha256": "5ed8fd0769e388927fdb684c1b631bd5d5b792581acb5cc7032f128243089cbe"
+          "sha256": "e72029bdfe28a44879c9cd064c5f3084993b080a66b73a51130d2c227b357756"
         },
         {
           "path": "src/core/unit-ground-height.js",
@@ -11087,7 +11460,7 @@
         {
           "path": "src/world/battle-navigation.js",
           "exists": true,
-          "sha256": "f7e985b62575e125f3b431f9c41fcf70a821ac6616e22d3b7171368567ab1417"
+          "sha256": "d1f225eb6cb7fd43d7de66803b63573b5e5123001d5d3d553202a7bdd78a69d4"
         }
       ],
       "evidence": []
@@ -11112,6 +11485,24 @@
           "sha256": "76dea8151bc9352aef3528b4262e249b2604f62543828328db978d060d61a495"
         }
       ],
+      "evidence": []
+    },
+    {
+      "source": "viewmodeslab.html",
+      "sha256": "754cbf5db1398d6d0f66baf3ed0c6c1911084024e5fe7a39fb9459867cad01ce",
+      "bytes": 9249,
+      "lines": 186,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/viewmodes.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
       "evidence": []
     },
     {
@@ -11165,6 +11556,24 @@
           "sha256": "838f426207d7776ce341e353a74ad15dc5a18bfa4b4990974b951ac5f05a7e32"
         }
       ],
+      "evidence": []
+    },
+    {
+      "source": "waterlinelab.html",
+      "sha256": "68b13b84d62c43618acd346ec8a9c8387b543626c44fc7b05a12b56873a501da",
+      "bytes": 10097,
+      "lines": 235,
+      "kind": "页面/内联代码",
+      "state": "待页面核验",
+      "verifiedDelivery": false,
+      "scope": "",
+      "gap": "静态候选关联，尚未证明页面内联控制器/交互行为已迁移；不能用依赖模块完成替代页面完成。",
+      "clips": [],
+      "dependencies": [
+        "src/waterline.js"
+      ],
+      "inlineScripts": 1,
+      "targets": [],
       "evidence": []
     }
   ]
